@@ -233,6 +233,7 @@
 				D5EF81ED1A3A174A00A38927 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

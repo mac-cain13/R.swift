@@ -58,9 +58,12 @@ struct AssetFolderInfo {
     self.codeFileURL = url.URLByDeletingLastPathComponent!.URLByAppendingPathComponent(name + ".generated", isDirectory: false).URLByAppendingPathExtension("swift")
 
     let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as [NSURL]
-    imageInfo = contents
-      .map { $0.lastPathComponent!.stringByDeletingPathExtension }
+    imageInfo = distinct(contents.map { $0.lastPathComponent!.stringByDeletingPathExtension })
       .map { (varName: sanatizeForSwiftName($0), imageName: $0) }
+
+    if imageInfo.count != contents.count {
+      println("WARN: Asset folder \(url) has \(contents.count - imageInfo.count) duplicate images.")
+    }
   }
 }
 
@@ -86,6 +89,16 @@ func generateTypedAssetCode(assetFolderInfo: AssetFolderInfo) -> String {
 func writeCode(code: String, # toURL: NSURL) {
   println("Writing \(toURL)...")
   code.writeToURL(toURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
+}
+
+func distinct<T: Equatable>(source: [T]) -> [T] {
+  var unique = [T]()
+  for item in source {
+    if !contains(unique, item) {
+      unique.append(item)
+    }
+  }
+  return unique
 }
 
 // MARK: Procedure
