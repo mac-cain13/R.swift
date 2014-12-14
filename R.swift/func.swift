@@ -51,8 +51,8 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
 }
 
 func swiftStructForAssetFolder(assetFolder: AssetFolder) -> String {
-  return assetFolder.imageAssets.reduce("  struct \(sanitizedSwiftName(assetFolder.name)) {\n") {
-    $0 + "    class var \(sanitizedSwiftName($1)): UIImage { return UIImage(named: \"\($1)\") }\n"
+  return distinct(assetFolder.imageAssets).reduce("  struct \(sanitizedSwiftName(assetFolder.name)) {\n") {
+    $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
   } + "  } \n"
 }
 
