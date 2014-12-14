@@ -25,6 +25,43 @@ struct AssetFolder {
   }
 }
 
+struct Storyboard {
+  let name: String
+  let segues: [String]
+
+  init(url: NSURL) {
+    name = url.filename!
+
+    let parserDelegate = StoryboardParserDelegate()
+    let parser = NSXMLParser(contentsOfURL: url)!
+    parser.delegate = parserDelegate
+    parser.parse()
+
+    segues = parserDelegate.segues
+  }
+}
+
+class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
+  var segues: [String]
+
+  override init() {
+    segues = []
+    super.init()
+  }
+
+  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+    switch elementName {
+    case "segue":
+      if let segueIdentifier = attributeDict["identifier"] as? String {
+        segues.append(segueIdentifier)
+      }
+
+    default:
+      break
+    }
+  }
+}
+
 // MARK: Functions
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
@@ -54,6 +91,12 @@ func swiftStructForAssetFolder(assetFolder: AssetFolder) -> String {
   return distinct(assetFolder.imageAssets).reduce("  struct \(sanitizedSwiftName(assetFolder.name)) {\n") {
     $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
   } + "  } \n"
+}
+
+func swiftStructForStoryboard(storyboard: Storyboard) -> String {
+  return distinct(storyboard.segues).reduce("  struct \(sanitizedSwiftName(storyboard.name)) {\n") {
+    $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
+    } + "  } \n"
 }
 
 func sanitizedSwiftName(name: String) -> String {
