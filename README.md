@@ -12,7 +12,7 @@ With R.swift we make sure you can use strong typed identifiers like `R.images.so
 After installing R.swift into your project you can use `R.[group].[identifier]`. If the struct is outdated just build and R.swift will correct any missing/changed/added images and segues. Below you find the different formats
 
 Type  | Format                                 | Without R.swift                   | With R.swift
-----------------------------------------------------------------------------------------------------------
+------|----------------------------------------|-----------------------------------|----------------------
 Image | `R.[xcassetsFolderName].[imageName]`   | `UIImage(named: "settings-icon")` | `R.images.settingsIcon`
 Segue | `R.[storyboardName].[segueIdentifier]` | `"openSettingsSegue"`             | `R.main.openSettingsSegue`
 
