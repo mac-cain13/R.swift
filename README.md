@@ -16,6 +16,8 @@ Type  | Format                                 | Without R.swift                
 Image | `R.[xcassetsFolderName].[imageName]`   | `UIImage(named: "settings-icon")` | `R.images.settingsIcon`
 Segue | `R.[storyboardName].[segueIdentifier]` | `"openSettingsSegue"`             | `R.main.openSettingsSegue`
 
+Validate usage of images in Storyboards with `R.validateStoryboardImages()` or to validate a specific storyboard use `R.[storyboardName].validateStoryboardImages()`. Please note that this will crash your app when an image used in a storyboard is not found, so it is advised to put this check into a `#ifdef DEBUG` block.
+
 ## Installation
 
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
