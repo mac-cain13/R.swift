@@ -93,7 +93,7 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
 func swiftStructForAssetFolder(assetFolder: AssetFolder) -> String {
   return distinct(assetFolder.imageAssets).reduce("  struct \(sanitizedSwiftName(assetFolder.name)) {\n") {
     $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
-  } + "  } \n"
+  } + "  }\n"
 }
 
 func swiftStructForStoryboard(storyboard: Storyboard) -> String {
@@ -101,11 +101,11 @@ func swiftStructForStoryboard(storyboard: Storyboard) -> String {
       $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
     }
 
-  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers).reduce("    func validateStoryboardImages() {") {
-      $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")"
-    } + "    }"
+  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers).reduce("    static func validateStoryboardImages() {\n") {
+      $0 + "      assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
+    } + "    }\n"
 
-  return "  struct \(sanitizedSwiftName(storyboard.name)) {\n" + segueIdentifiers + validateStoryboardImages + "  } \n"
+  return "  struct \(sanitizedSwiftName(storyboard.name)) {\n" + segueIdentifiers + "\n" + validateStoryboardImages + "  }\n"
 }
 
 func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {

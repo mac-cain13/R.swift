@@ -19,13 +19,15 @@ inputDirectories(NSProcessInfo.processInfo()).each { directory in
     .map { Storyboard(url: $0) }
   let storyboardStructs = storyboards.map(swiftStructForStoryboard)
   let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardImageValidation)
-    .reduce("  func validateStoryboardImages() {\n", combine: +) + "  }\n"
+    .reduce("  static func validateStoryboardImages() {\n", +) + "  }\n"
 
   // Asset folders
   let imageAssetStructs = findAllAssetsFolderURLsInDirectory(url: directory)
     .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
     .map(swiftStructForAssetFolder)
 
-  let code = (storyboardStructs + imageAssetStructs + [validateAllStoryboardsFunction]).reduce("struct R {\n", +) + "}\n"
+  // Write out the code
+  let code = (storyboardStructs + imageAssetStructs + [validateAllStoryboardsFunction])
+    .reduce("struct R {\n") { $0 + "\n" + $1 } + "}\n"
   writeResourceFile(code, toFolderURL: directory)
 }
