@@ -11,12 +11,23 @@ import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
 let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo()).each { directory in
-  let code = findAllAssetsFolderURLsInDirectory(url: directory)
+  // Storyboards
+  let storyboards = findAllStoryboardURLsInDirectory(url: directory)
+    .map { Storyboard(url: $0) }
+  let storyboardStructs = storyboards.map(swiftStructForStoryboard)
+  let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardImageValidation)
+    .reduce("  static func validateStoryboardImages() {\n", +) + "  }\n"
+
+  // Asset folders
+  let imageAssetStructs = findAllAssetsFolderURLsInDirectory(url: directory)
     .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
     .map(swiftStructForAssetFolder)
-    .reduce("struct R {\n", +) + "}\n"
 
+  // Write out the code
+  let code = (storyboardStructs + imageAssetStructs + [validateAllStoryboardsFunction])
+    .reduce("struct R {\n") { $0 + "\n" + $1 } + "}\n"
   writeResourceFile(code, toFolderURL: directory)
 }
