@@ -28,6 +28,7 @@ struct AssetFolder {
 struct Storyboard {
   let name: String
   let segues: [String]
+  let usedImageIdentifiers: [String]
 
   init(url: NSURL) {
     name = url.filename!
@@ -38,22 +39,24 @@ struct Storyboard {
     parser.parse()
 
     segues = parserDelegate.segues
+    usedImageIdentifiers = parserDelegate.usedImageIdentifiers
   }
 }
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
-  var segues: [String]
-
-  override init() {
-    segues = []
-    super.init()
-  }
+  var segues: [String] = []
+  var usedImageIdentifiers: [String] = []
 
   func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
     switch elementName {
     case "segue":
       if let segueIdentifier = attributeDict["identifier"] as? String {
         segues.append(segueIdentifier)
+      }
+
+    case "image":
+      if let imageIdentifier = attributeDict["name"] as? String {
+        usedImageIdentifiers.append(imageIdentifier)
       }
 
     default:
@@ -94,9 +97,19 @@ func swiftStructForAssetFolder(assetFolder: AssetFolder) -> String {
 }
 
 func swiftStructForStoryboard(storyboard: Storyboard) -> String {
-  return distinct(storyboard.segues).reduce("  struct \(sanitizedSwiftName(storyboard.name)) {\n") {
-    $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
-    } + "  } \n"
+  let segueIdentifiers = distinct(storyboard.segues).reduce("") {
+      $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
+    }
+
+  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers).reduce("    func validateStoryboardImages() {") {
+      $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")"
+    } + "    }"
+
+  return "  struct \(sanitizedSwiftName(storyboard.name)) {\n" + segueIdentifiers + validateStoryboardImages + "  } \n"
+}
+
+func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
+  return "    \(sanitizedSwiftName(storyboard.name)).validateStoryboardImages()\n"
 }
 
 func sanitizedSwiftName(name: String) -> String {
