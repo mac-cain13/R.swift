@@ -19,13 +19,21 @@ extension Array {
   func skip(items: Int) -> [T] {
     return Array(self[items..<count])
   }
+
+  func flatMap<U>(f: T -> [U]) -> [U] {
+    return flatten(map(f))
+  }
+}
+
+func flatten<T>(coll : [[T]]) -> [T] {
+  return coll.reduce([], combine: +)
 }
 
 func distinct<T: Equatable>(source: [T]) -> [T] {
   var unique = [T]()
-  for item in source {
-    if !contains(unique, item) {
-      unique.append(item)
+  source.each {
+    if !contains(unique, $0) {
+      unique.append($0)
     }
   }
   return unique
@@ -39,6 +47,10 @@ extension String {
     let index = advance(startIndex, 1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
+}
+
+func indentWithString(indentation: String)(string: String) -> String {
+  return string.componentsSeparatedByString("\n").reduce("") { $0 + indentation + $1 + "\n" }
 }
 
 // MARK: NSURL operations 

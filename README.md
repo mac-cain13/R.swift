@@ -5,18 +5,19 @@ _Tool to get strong typed, autocompleted images and segues in Swift_
 
 Normally you access your images, segues and Xibs based on strings. Like `UIImage(names: "settings-icon")` or `performSegueWithIdentifier("openSettingsSegue")` this is fragile since the compiler can't warn you about using the wrong identifier.
 
-With R.swift we make sure you can use strong typed identifiers like `R.images.someIcon` or `R.main.openSettingsSegue` to get your image or segue identifier, the `R` struct will be automatically update on build. So it's never outdated and you will get compiler errors if you rename or delete an image or segue.
+With R.swift we make sure you can use strong typed identifiers like `R.image.someIcon` or `R.segue.openSettingsSegue` to get your image or segue identifier, the `R` struct will be automatically update on build. So it's never outdated and you will get compiler errors if you rename or delete an image or segue.
 
 ## Usage
 
 After installing R.swift into your project you can use `R.[group].[identifier]`. If the struct is outdated just build and R.swift will correct any missing/changed/added images and segues. Below you find the different formats
 
-Type  | Format                                 | Without R.swift                   | With R.swift
-------|----------------------------------------|-----------------------------------|----------------------
-Image | `R.[xcassetsFolderName].[imageName]`   | `UIImage(named: "settings-icon")` | `R.images.settingsIcon`
-Segue | `R.[storyboardName].[segueIdentifier]` | `"openSettingsSegue"`             | `R.main.openSettingsSegue`
+Type       | Format                                  | Without R.swift                           | With R.swift
+-----------|-----------------------------------------|-------------------------------------------|----------------------
+Image      | `R.image.[imageName]`                   | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
+Segue      | `R.segue.[segueIdentifier]`             | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
+Storyboard | `R.storyboard.[storyboardName].instance | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
 
-Validate usage of images in Storyboards with `R.validateStoryboardImages()` or to validate a specific storyboard use `R.[storyboardName].validateStoryboardImages()`. Please note that this will crash your app when an image used in a storyboard is not found, so it is advised to put this check into a `#ifdef DEBUG` block.
+Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this will crash your app when an image used in a storyboard is not found and is only for debugging purposes.
 
 ## Installation
 
@@ -25,7 +26,7 @@ Validate usage of images in Storyboards with `R.validateStoryboardImages()` or t
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
-_Optional:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
 ## Tips and tricks
 
