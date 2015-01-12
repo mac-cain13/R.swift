@@ -122,12 +122,13 @@ func swiftSegueStructWithStoryboards(storyboards: [Storyboard]) -> String {
 }
 
 func swiftStructForStoryboard(storyboard: Storyboard) -> String {
+  let instanceVar = "static var instance: UIStoryboard { return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil) }"
   let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers)
     .reduce("static func validateImages() {\n") {
       $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
     } + "}"
 
-  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: validateStoryboardImages) + "}"
+  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + indent(string: validateStoryboardImages) + "}"
 }
 
 func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
