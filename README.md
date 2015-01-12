@@ -11,11 +11,11 @@ With R.swift we make sure you can use strong typed identifiers like `R.image.som
 
 After installing R.swift into your project you can use `R.[group].[identifier]`. If the struct is outdated just build and R.swift will correct any missing/changed/added images and segues. Below you find the different formats
 
-Type       | Format                                  | Without R.swift                           | With R.swift
------------|-----------------------------------------|-------------------------------------------|----------------------
-Image      | `R.image.[imageName]`                   | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
-Segue      | `R.segue.[segueIdentifier]`             | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
-Storyboard | `R.storyboard.[storyboardName].instance | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
+Type       | Format                                   | Without R.swift                           | With R.swift
+-----------|------------------------------------------|-------------------------------------------|-----------------------------
+Image      | `R.image.[imageName]`                    | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
+Segue      | `R.segue.[segueIdentifier]`              | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
+Storyboard | `R.storyboard.[storyboardName].instance` | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
 
 Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this will crash your app when an image used in a storyboard is not found and is only for debugging purposes.
 
