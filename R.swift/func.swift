@@ -34,6 +34,7 @@ struct Storyboard {
     name = url.filename!
 
     let parserDelegate = StoryboardParserDelegate()
+
     let parser = NSXMLParser(contentsOfURL: url)!
     parser.delegate = parserDelegate
     parser.parse()
@@ -65,7 +66,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 }
 
-// MARK: Functions
+// MARK: Helper functions
+
+let IndentationString = "  "
+let indent = indentWithString(IndentationString)
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
   return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as String)! }
@@ -90,28 +94,6 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
   return assetFolders
 }
 
-func swiftStructForAssetFolder(assetFolder: AssetFolder) -> String {
-  return distinct(assetFolder.imageAssets).reduce("  struct \(sanitizedSwiftName(assetFolder.name)) {\n") {
-    $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
-  } + "  }\n"
-}
-
-func swiftStructForStoryboard(storyboard: Storyboard) -> String {
-  let segueIdentifiers = distinct(storyboard.segues).reduce("") {
-      $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
-    }
-
-  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers).reduce("    static func validateStoryboardImages() {\n") {
-      $0 + "      assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
-    } + "    }\n"
-
-  return "  struct \(sanitizedSwiftName(storyboard.name)) {\n" + segueIdentifiers + "\n" + validateStoryboardImages + "  }\n"
-}
-
-func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
-  return "    \(sanitizedSwiftName(storyboard.name)).validateStoryboardImages()\n"
-}
-
 func sanitizedSwiftName(name: String) -> String {
   var components = name.componentsSeparatedByString("-")
   let firstComponent = components.removeAtIndex(0)
@@ -121,4 +103,33 @@ func sanitizedSwiftName(name: String) -> String {
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
   code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
+}
+
+// MARK: Code generator functions
+
+func swiftImageStructWithAssetFolders(assetFolders: [AssetFolder]) -> String {
+  return distinct(assetFolders.flatMap { $0.imageAssets })
+    .reduce("struct image {\n") {
+      $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
+    } + "}"
+}
+
+func swiftSegueStructWithStoryboards(storyboards: [Storyboard]) -> String {
+  return distinct(storyboards.flatMap { $0.segues })
+    .reduce("struct segue {\n") {
+      $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
+    } + "}"
+}
+
+func swiftStructForStoryboard(storyboard: Storyboard) -> String {
+  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers)
+    .reduce("static func validateImages() {\n") {
+      $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
+    } + "}"
+
+  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: validateStoryboardImages) + "}"
+}
+
+func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
+  return "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()"
 }
