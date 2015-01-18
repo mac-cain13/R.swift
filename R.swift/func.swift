@@ -28,6 +28,7 @@ struct AssetFolder {
 struct Storyboard {
   let name: String
   let segues: [String]
+  let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
 
   init(url: NSURL) {
@@ -40,12 +41,28 @@ struct Storyboard {
     parser.parse()
 
     segues = parserDelegate.segues
+    viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
+  }
+
+  struct ViewController {
+    let storyboardIdentifier: String
+    let customModule: String?
+    let customClass: String
+
+    func fullyQualifiedClass() -> String {
+      if let customModule = customModule {
+        return customModule + "." + customClass
+      }
+
+      return customClass
+    }
   }
 }
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var segues: [String] = []
+  var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
 
   func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
@@ -61,8 +78,23 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     default:
-      break
+      if let viewController = viewControllerFromAttributes(attributeDict) {
+        viewControllers.append(viewController)
+      }
     }
+  }
+
+  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject]) -> Storyboard.ViewController? {
+    if attributeDict["sceneMemberID"] as? String == "viewController" {
+      if let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String {
+        let customModule = attributeDict["customModule"] as? String
+        let customClass = attributeDict["customClass"] as? String ?? "UIViewController"
+
+        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, customModule: customModule, customClass: customClass)
+      }
+    }
+
+    return nil
   }
 }
 
@@ -123,12 +155,17 @@ func swiftSegueStructWithStoryboards(storyboards: [Storyboard]) -> String {
 
 func swiftStructForStoryboard(storyboard: Storyboard) -> String {
   let instanceVar = "static var instance: UIStoryboard { return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil) }"
+
+  let viewControllers = storyboard.viewControllers.reduce("") {
+    $0 + "static var \(sanitizedSwiftName($1.storyboardIdentifier)): \($1.fullyQualifiedClass())? { return instance.instantiateViewControllerWithIdentifier(\"\($1.storyboardIdentifier)\") as? \($1.fullyQualifiedClass()) }\n"
+  }
+
   let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers)
     .reduce("static func validateImages() {\n") {
       $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
     } + "}"
 
-  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + indent(string: validateStoryboardImages) + "}"
+  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + indent(string: viewControllers) + indent(string: validateStoryboardImages) + "}"
 }
 
 func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
