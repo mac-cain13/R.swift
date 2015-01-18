@@ -25,7 +25,7 @@ inputDirectories(NSProcessInfo.processInfo())
       .map(indent)
       .reduce("struct storyboard {\n", +) + "}"
     
-    let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardImageValidation)
+    let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardValidators)
       .map(indent)
       .reduce("static func validate() {\n", +) + "}"
 

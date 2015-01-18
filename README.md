@@ -1,23 +1,24 @@
 # R.swift
-_Tool to get strong typed, autocompleted images and segues in Swift_
+_Tool to get strong typed, autocompleted resources like images and segues in Swift_
 
 ## Why use this?
 
-Normally you access your images, segues and Xibs based on strings. Like `UIImage(names: "settings-icon")` or `performSegueWithIdentifier("openSettingsSegue")` this is fragile since the compiler can't warn you about using the wrong identifier.
+Normally you access your images, segues or storyboards based on strings, like `UIImage(names: "settings-icon")` or `performSegueWithIdentifier("openSettings")`. This is fragile since the compiler can't warn you about using the wrong identifier.
 
-With R.swift we make sure you can use strong typed identifiers like `R.image.someIcon` or `R.segue.openSettingsSegue` to get your image or segue identifier, the `R` struct will be automatically update on build. So it's never outdated and you will get compiler errors if you rename or delete an image or segue.
+With R.swift we make sure you can use strong typed identifiers like `R.image.someIcon` or `R.segue.openSettings` to get your image or segue identifier, the `R`-struct will be automatically update on build. So it's never outdated and you will get compiler errors if you rename or delete a resource.
 
 ## Usage
 
-After installing R.swift into your project you can use `R.[group].[identifier]`. If the struct is outdated just build and R.swift will correct any missing/changed/added images and segues. Below you find the different formats
+After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources. Below you find the different formats:
 
-Type       | Format                                   | Without R.swift                           | With R.swift
------------|------------------------------------------|-------------------------------------------|-----------------------------
-Image      | `R.image.[imageName]`                    | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
-Segue      | `R.segue.[segueIdentifier]`              | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
-Storyboard | `R.storyboard.[storyboardName].instance` | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
+Type           | Format                                                     | Without R.swift                           | With R.swift
+---------------|------------------------------------------------------------|-------------------------------------------|-----------------------------
+Image          | `R.image.[imageName]`                                      | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
+Segue          | `R.segue.[segueIdentifier]`                                | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
+Storyboard     | `R.storyboard.[storyboardName].instance`                   | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
+ViewController | `R.storyboard.[storyboardName].[viewControllerIdentifier]` | `UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginController") as? LoginController` | `R.storyboard.main.loginController`
 
-Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this will crash your app when an image used in a storyboard is not found and is only for debugging purposes.
+Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this uses `assert` and will only work in unoptimized debug builds.
 
 ## Installation
 
