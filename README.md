@@ -31,6 +31,10 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ## Tips and tricks
 
+*Running R.swift gives errors like `29593 Trace/BPT trap: 5`, how to fix them?*
+
+Make sure you run OS X 10.10 or higher with XCode 6.1+. Lower versions are not supported and could lead to errors like these.
+
 *R.swift also picks up asset files/storyboards from submodules and CocoaPods, can I prevent this?*
 
 You can by changing the second argument (`"$SRCROOT"` in the example) of the build phase script, this is the folder R.swift will scan through. If you make this your project folder by changing the script to `"$SRCROOT/rswift" "$SRCROOT/MyProject"` it will only scan that folder.
