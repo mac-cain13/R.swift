@@ -165,9 +165,16 @@ func swiftStructForStoryboard(storyboard: Storyboard) -> String {
       $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
     } + "}"
 
-  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + indent(string: viewControllers) + indent(string: validateStoryboardImages) + "}"
+  let validateStoryboardViewControllers = storyboard.viewControllers
+    .reduce("static func validateViewControllers() {\n") {
+      $0 + "    assert(\(sanitizedSwiftName($1.storyboardIdentifier)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($1.storyboardIdentifier))' could not be loaded from storyboard '\(storyboard.name)' as '\($1.fullyQualifiedClass())'.\")\n"
+    } + "}"
+
+  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + "\n" + indent(string: viewControllers) + indent(string: validateStoryboardImages) + "\n" + indent(string: validateStoryboardViewControllers) + "}"
 }
 
-func swiftCallStoryboardImageValidation(storyboard: Storyboard) -> String {
-  return "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()"
+func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
+  return
+    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
+    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
 }
