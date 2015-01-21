@@ -139,6 +139,10 @@ func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
 
 // MARK: Code generator functions
 
+func swiftImports() -> String {
+    return "import UIKit"
+}
+
 func swiftImageStructWithAssetFolders(assetFolders: [AssetFolder]) -> String {
   return distinct(assetFolders.flatMap { $0.imageAssets })
     .reduce("struct image {\n") {
