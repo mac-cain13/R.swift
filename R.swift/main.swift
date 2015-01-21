@@ -15,6 +15,9 @@ let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaul
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
+    // Imports
+    let imports = swiftImports()
+    
     // Storyboards
     let storyboards = findAllStoryboardURLsInDirectory(url: directory)
       .map { Storyboard(url: $0) }
@@ -37,6 +40,6 @@ inputDirectories(NSProcessInfo.processInfo())
 
     // Write out the code
     let code = [imageStruct, segueStruct, storyboardStructs, validateAllStoryboardsFunction]
-      .reduce("struct R {") { $0 + "\n" + indent(string: $1) } + "}\n"
+      .reduce("\(imports)\n\nstruct R {") { $0 + "\n" + indent(string: $1) } + "}\n"
     writeResourceFile(code, toFolderURL: directory)
   }
