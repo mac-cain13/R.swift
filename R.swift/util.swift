@@ -39,6 +39,10 @@ func distinct<T: Equatable>(source: [T]) -> [T] {
   return unique
 }
 
+func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
+  return Array(Zip2(a, b))
+}
+
 // MARK: String operations
 
 extension String {
