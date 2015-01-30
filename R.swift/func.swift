@@ -12,6 +12,28 @@ import Foundation
 // MARK: Types
 
 let ResourceFilename = "R.generated.swift"
+let ordinals = [
+  (number: 1, word: "first"),
+  (number: 2, word: "second"),
+  (number: 3, word: "third"),
+  (number: 4, word: "fourth"),
+  (number: 5, word: "fifth"),
+  (number: 6, word: "sixth"),
+  (number: 7, word: "seventh"),
+  (number: 8, word: "eighth"),
+  (number: 9, word: "ninth"),
+  (number: 10, word: "tenth"),
+  (number: 11, word: "eleventh"),
+  (number: 12, word: "twelfth"),
+  (number: 13, word: "thirteenth"),
+  (number: 14, word: "fourteenth"),
+  (number: 15, word: "fifteenth"),
+  (number: 16, word: "sixteenth"),
+  (number: 17, word: "seventeenth"),
+  (number: 18, word: "eighteenth"),
+  (number: 19, word: "nineteenth"),
+  (number: 20, word: "twentieth"),
+]
 
 struct AssetFolder {
   let name: String
@@ -98,6 +120,82 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 }
 
+struct Nib {
+  let name: String
+  let rootViews: [View]
+
+  init(url: NSURL) {
+    name = url.filename!
+
+    let parserDelegate = NibParserDelegate();
+
+    let parser = NSXMLParser(contentsOfURL: url)!
+    parser.delegate = parserDelegate
+    parser.parse()
+
+    rootViews = parserDelegate.rootViews
+  }
+
+  struct View {
+    let customModule: String?
+    let customClass: String
+
+    func fullyQualifiedClass() -> String {
+      if let customModule = customModule {
+        return customModule + "." + customClass
+      }
+
+      return customClass
+    }
+  }
+}
+
+class NibParserDelegate: NSObject, NSXMLParserDelegate {
+  let ignoredRootViewElements = ["placeholder"]
+  var rootViews: [Nib.View] = []
+
+  // State
+  var isObjectsTagOpened = false;
+  var levelSinceObjectsTagOpened = 0;
+
+  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+    switch elementName {
+    case "objects":
+      isObjectsTagOpened = true;
+
+    default:
+      if isObjectsTagOpened {
+        levelSinceObjectsTagOpened++;
+
+        if levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
+          if let rootView = viewWithAttributes(attributeDict) {
+            rootViews.append(rootView)
+          }
+        }
+      }
+    }
+  }
+
+  func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
+    switch elementName {
+    case "objects":
+      isObjectsTagOpened = false;
+
+    default:
+      if isObjectsTagOpened {
+        levelSinceObjectsTagOpened--;
+      }
+    }
+  }
+
+  func viewWithAttributes(attributeDict: [NSObject : AnyObject]) -> Nib.View? {
+    let customModule = attributeDict["customModule"] as? String
+    let customClass = attributeDict["customClass"] as? String ?? "UIView"
+
+    return Nib.View(customModule: customModule, customClass: customClass)
+  }
+}
+
 // MARK: Helper functions
 
 let IndentationString = "  "
@@ -181,4 +279,15 @@ func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
   return
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
+}
+
+func swiftStructForNib(nib: Nib) -> String {
+  let instanceVar = "static var instance: UINib { return UINib.init(nibName: \"\(nib.name)\", bundle: nil); }"
+  let instantiateFunc = "static func instantiateWithOwner(ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]?) -> [AnyObject] { return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil) }"
+
+  let viewFuncs = zip(nib.rootViews, ordinals)
+    .map { (view: $0.0, ordinal: $0.1) }
+    .reduce("") { $0 + "\nstatic func \($1.ordinal.word)View(ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]?) -> \($1.view.fullyQualifiedClass())? { return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($1.ordinal.number - 1)] as? \($1.view.fullyQualifiedClass()) }" }
+
+  return "struct \(sanitizedSwiftName(nib.name)) {\n" + indent(string: instanceVar) + indent(string: instantiateFunc) + indent(string: viewFuncs) + "\n}"
 }
