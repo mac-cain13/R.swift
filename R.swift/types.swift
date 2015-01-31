@@ -84,7 +84,7 @@ struct Function: Printable {
       let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
 
       if let localName = localName {
-      return "\(swiftName) \(localName): \(type)"
+        return "\(swiftName) \(localName): \(type)"
       }
 
       return "\(swiftName): \(type)"

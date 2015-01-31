@@ -75,7 +75,9 @@ func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
 }
 
-// MARK: Code generator functions
+// MARK: Struct/function generators
+
+// Image
 
 func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   let vars = distinct(assetFolders.flatMap { $0.imageAssets })
@@ -84,11 +86,19 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   return Struct(name: "image", vars: vars, functions: [], structs: [])
 }
 
+// Segue
+
 func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   let vars = distinct(storyboards.flatMap { $0.segues })
     .map { Var(isStatic: true, name: $0, type: Type(className: "String"), getter: "return \"\($0)\"") }
 
   return Struct(name: "segue", vars: vars, functions: [], structs: [])
+}
+
+// Storyboard
+
+func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
+  return Struct(name: "storyboard", vars: [], functions: [], structs: storyboards.map(storyboardStructForStoryboard))
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
@@ -108,6 +118,12 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   return Struct(name: storyboard.name, vars: instanceVars + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
+// Nib
+
+func nibStructFromNibs(nibs: [Nib]) -> Struct {
+  return Struct(name: "nib", vars: [], functions: [], structs: nibs.map(nibStructForNib))
+}
+
 func nibStructForNib(nib: Nib) -> Struct {
   let ownerOrNilParameter = Function.Parameter(name: "ownerOrNil", type: Type(className: "AnyObject", optional: true))
   let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(className: "[NSObject : AnyObject]", optional: true))
@@ -120,6 +136,12 @@ func nibStructForNib(nib: Nib) -> Struct {
     .map { Function(isStatic: true, name: "\($0.ordinal.word)View", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: $0.view.asOptional(), body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)") }
 
   return Struct(name: nib.name, vars: instanceVars, functions: instantiateFuncs + viewFuncs, structs: [])
+}
+
+// Validation
+
+func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
+  return Function(isStatic: true, name: "validate", parameters: [], returnType: Type(className: "Void"), body: storyboards.map(swiftCallStoryboardValidators).reduce("", combine: +))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
