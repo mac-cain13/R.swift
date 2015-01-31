@@ -11,6 +11,13 @@ import Foundation
 /// MARK: Swift types
 
 struct Type: Printable {
+  static let _Void = Type(className: "Void")
+  static let _AnyObject = Type(className: "AnyObject")
+  static let _String = Type(className: "String")
+  static let _UINib = Type(className: "UINib")
+  static let _UIImage = Type(className: "UIImage")
+  static let _UIStoryboard = Type(className: "UIStoryboard")
+
   let moduleName: String?
   let className: String
   let optional: Bool
@@ -48,22 +55,24 @@ struct Type: Printable {
   func asNonOptional() -> Type {
     return Type(moduleName: moduleName, className: className, optional: false)
   }
+
+  func isVoid() -> Bool {
+    return (moduleName == Type._Void.moduleName && className == Type._Void.className && optional == Type._Void.optional)
+  }
 }
 
 struct Var: Printable {
-  let isStatic: Bool
   let name: String
   let type: Type
   let getter: String
 
   var description: String {
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return (isStatic ? "static " : "") + "var \(swiftName): \(type) { \(getter) }"
+    return "static var \(swiftName): \(type) { \(getter) }"
   }
 }
 
 struct Function: Printable {
-  let isStatic: Bool
   let name: String
   let parameters: [Parameter]
   let returnType: Type
@@ -72,7 +81,8 @@ struct Function: Printable {
   var description: String {
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
     let parameterString = join(", ", parameters)
-    return (isStatic ? "static " : "") + "func \(swiftName)(\(parameterString)) -> \(returnType) {\n\(indent(body))\n}"
+    let returnString = returnType.isVoid() ? "" : " -> \(returnType)"
+    return "static func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
   struct Parameter: Printable {
@@ -108,12 +118,21 @@ struct Struct: Printable {
   let vars: [Var]
   let functions: [Function]
   let structs: [Struct]
+  let lowercaseFirstCharacter: Bool
+
+  init(name: String, vars: [Var], functions: [Function], structs: [Struct], lowercaseFirstCharacter: Bool = true) {
+    self.name = name
+    self.vars = vars
+    self.functions = functions
+    self.structs = structs
+    self.lowercaseFirstCharacter = lowercaseFirstCharacter
+  }
 
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: false)
-    let varsString = join("\n", vars)
-    let functionsString = join("\n\n", functions)
-    let structsString = join("\n\n", structs)
+    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: lowercaseFirstCharacter)
+    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let structsString = join("\n\n", structs.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
 
     let bodyComponents = [varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(join("\n\n", bodyComponents))
