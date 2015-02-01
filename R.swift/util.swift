@@ -39,6 +39,14 @@ func distinct<T: Equatable>(source: [T]) -> [T] {
   return unique
 }
 
+func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
+  return Array(Zip2(a, b))
+}
+
+func join<S where S: Printable>(separator: String, components: [S]) -> String {
+  return join(separator, components.map { $0.description })
+}
+
 // MARK: String operations
 
 extension String {
@@ -49,8 +57,11 @@ extension String {
   }
 }
 
-func indentWithString(indentation: String)(string: String) -> String {
-  return string.componentsSeparatedByString("\n").reduce("") { $0 + indentation + $1 + "\n" }
+func indentWithString(indentation: String) -> String -> String {
+  return { string in
+    let components = string.componentsSeparatedByString("\n")
+    return indentation + join("\n\(indentation)", components)
+  }
 }
 
 // MARK: NSURL operations 

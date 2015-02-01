@@ -11,35 +11,49 @@ import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
 let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
 let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
-    // Imports
-    let imports = swiftImports()
-    
-    // Storyboards
-    let storyboards = findAllStoryboardURLsInDirectory(url: directory)
-      .map { Storyboard(url: $0) }
 
-    let segueStruct = swiftSegueStructWithStoryboards(storyboards)
+    var error: NSError?
+    if !directory.checkResourceIsReachableAndReturnError(&error) {
+      failOnError(error)
+      return
+    }
 
-    let storyboardStructs = storyboards.map(swiftStructForStoryboard)
-      .map(indent)
-      .reduce("struct storyboard {\n", +) + "}"
-    
-    let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardValidators)
-      .map(indent)
-      .reduce("static func validate() {\n", +) + "}"
-
-    // Asset folders
+    // Get/parse all resources into our domain objects
     let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
       .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
 
-    let imageStruct = swiftImageStructWithAssetFolders(assetFolders)
+    let storyboards = findAllStoryboardURLsInDirectory(url: directory)
+      .map { Storyboard(url: $0) }
 
-    // Write out the code
-    let code = [imageStruct, segueStruct, storyboardStructs, validateAllStoryboardsFunction]
-      .reduce("\(imports)\n\nstruct R {") { $0 + "\n" + indent(string: $1) } + "}\n"
-    writeResourceFile(code, toFolderURL: directory)
+    let nibs = findAllNibURLsInDirectory(url: directory)
+      .map { Nib(url: $0) }
+
+    let reuseIdentifierContainers = nibs.map { $0 as ReuseIdentifierContainer } + storyboards.map { $0 as ReuseIdentifierContainer }
+
+    // Generate
+    let structs = [
+      imageStructFromAssetFolders(assetFolders),
+      segueStructFromStoryboards(storyboards),
+      storyboardStructFromStoryboards(storyboards),
+      nibStructFromNibs(nibs),
+      reuseIdentifierStructFromReuseIdentifierContainers(reuseIdentifierContainers)
+    ]
+
+    let functions = [
+      validateAllFunctionWithStoryboards(storyboards),
+    ]
+
+    // Generate resource file contents
+    let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
+    let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
+
+    // Write file if we have changes
+    if readResourceFile(directory) != fileContents {
+      writeResourceFile(fileContents, toFolderURL: directory)
+    }
   }
