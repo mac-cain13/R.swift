@@ -9,196 +9,8 @@
 
 import Foundation
 
-// MARK: Types
-
-let ResourceFilename = "R.generated.swift"
-let ordinals = [
-  (number: 1, word: "first"),
-  (number: 2, word: "second"),
-  (number: 3, word: "third"),
-  (number: 4, word: "fourth"),
-  (number: 5, word: "fifth"),
-  (number: 6, word: "sixth"),
-  (number: 7, word: "seventh"),
-  (number: 8, word: "eighth"),
-  (number: 9, word: "ninth"),
-  (number: 10, word: "tenth"),
-  (number: 11, word: "eleventh"),
-  (number: 12, word: "twelfth"),
-  (number: 13, word: "thirteenth"),
-  (number: 14, word: "fourteenth"),
-  (number: 15, word: "fifteenth"),
-  (number: 16, word: "sixteenth"),
-  (number: 17, word: "seventeenth"),
-  (number: 18, word: "eighteenth"),
-  (number: 19, word: "nineteenth"),
-  (number: 20, word: "twentieth"),
-]
-
-struct AssetFolder {
-  let name: String
-  let imageAssets: [String]
-
-  init(url: NSURL, fileManager: NSFileManager) {
-    name = url.filename!
-
-    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as [NSURL]
-    imageAssets = contents.map { $0.filename! }
-  }
-}
-
-struct Storyboard {
-  let name: String
-  let segues: [String]
-  let viewControllers: [ViewController]
-  let usedImageIdentifiers: [String]
-
-  init(url: NSURL) {
-    name = url.filename!
-
-    let parserDelegate = StoryboardParserDelegate()
-
-    let parser = NSXMLParser(contentsOfURL: url)!
-    parser.delegate = parserDelegate
-    parser.parse()
-
-    segues = parserDelegate.segues
-    viewControllers = parserDelegate.viewControllers
-    usedImageIdentifiers = parserDelegate.usedImageIdentifiers
-  }
-
-  struct ViewController {
-    let storyboardIdentifier: String
-    let customModule: String?
-    let customClass: String
-
-    func fullyQualifiedClass() -> String {
-      if let customModule = customModule {
-        return customModule + "." + customClass
-      }
-
-      return customClass
-    }
-  }
-}
-
-class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
-  var segues: [String] = []
-  var viewControllers: [Storyboard.ViewController] = []
-  var usedImageIdentifiers: [String] = []
-
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
-    switch elementName {
-    case "segue":
-      if let segueIdentifier = attributeDict["identifier"] as? String {
-        segues.append(segueIdentifier)
-      }
-
-    case "image":
-      if let imageIdentifier = attributeDict["name"] as? String {
-        usedImageIdentifiers.append(imageIdentifier)
-      }
-
-    default:
-      if let viewController = viewControllerFromAttributes(attributeDict) {
-        viewControllers.append(viewController)
-      }
-    }
-  }
-
-  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject]) -> Storyboard.ViewController? {
-    if attributeDict["sceneMemberID"] as? String == "viewController" {
-      if let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String {
-        let customModule = attributeDict["customModule"] as? String
-        let customClass = attributeDict["customClass"] as? String ?? "UIViewController"
-
-        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, customModule: customModule, customClass: customClass)
-      }
-    }
-
-    return nil
-  }
-}
-
-struct Nib {
-  let name: String
-  let rootViews: [View]
-
-  init(url: NSURL) {
-    name = url.filename!
-
-    let parserDelegate = NibParserDelegate();
-
-    let parser = NSXMLParser(contentsOfURL: url)!
-    parser.delegate = parserDelegate
-    parser.parse()
-
-    rootViews = parserDelegate.rootViews
-  }
-
-  struct View {
-    let customModule: String?
-    let customClass: String
-
-    func fullyQualifiedClass() -> String {
-      if let customModule = customModule {
-        return customModule + "." + customClass
-      }
-
-      return customClass
-    }
-  }
-}
-
-class NibParserDelegate: NSObject, NSXMLParserDelegate {
-  let ignoredRootViewElements = ["placeholder"]
-  var rootViews: [Nib.View] = []
-
-  // State
-  var isObjectsTagOpened = false;
-  var levelSinceObjectsTagOpened = 0;
-
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
-    switch elementName {
-    case "objects":
-      isObjectsTagOpened = true;
-
-    default:
-      if isObjectsTagOpened {
-        levelSinceObjectsTagOpened++;
-
-        if levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
-          if let rootView = viewWithAttributes(attributeDict) {
-            rootViews.append(rootView)
-          }
-        }
-      }
-    }
-  }
-
-  func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
-    switch elementName {
-    case "objects":
-      isObjectsTagOpened = false;
-
-    default:
-      if isObjectsTagOpened {
-        levelSinceObjectsTagOpened--;
-      }
-    }
-  }
-
-  func viewWithAttributes(attributeDict: [NSObject : AnyObject]) -> Nib.View? {
-    let customModule = attributeDict["customModule"] as? String
-    let customClass = attributeDict["customClass"] as? String ?? "UIView"
-
-    return Nib.View(customModule: customModule, customClass: customClass)
-  }
-}
-
 // MARK: Helper functions
 
-let IndentationString = "  "
 let indent = indentWithString(IndentationString)
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
@@ -224,10 +36,12 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
   return assetFolders
 }
 
-func sanitizedSwiftName(name: String) -> String {
+func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
   var components = name.componentsSeparatedByString("-")
   let firstComponent = components.removeAtIndex(0)
-  return components.reduce(firstComponent) { $0 + $1.capitalizedString }.lowercaseFirstCharacter
+  let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
+
+  return lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
 }
 
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
@@ -235,59 +49,77 @@ func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
 }
 
-// MARK: Code generator functions
+// MARK: Struct/function generators
 
-func swiftImports() -> String {
-    return "import UIKit"
+// Image
+
+func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
+  let vars = distinct(assetFolders.flatMap { $0.imageAssets })
+    .map { Var(name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+
+  return Struct(name: "image", vars: vars, functions: [], structs: [])
 }
 
-func swiftImageStructWithAssetFolders(assetFolders: [AssetFolder]) -> String {
-  return distinct(assetFolders.flatMap { $0.imageAssets })
-    .reduce("struct image {\n") {
-      $0 + "    static var \(sanitizedSwiftName($1)): UIImage? { return UIImage(named: \"\($1)\") }\n"
-    } + "}"
+// Segue
+
+func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
+  let vars = distinct(storyboards.flatMap { $0.segues })
+    .map { Var(name: $0, type: Type._String, getter: "return \"\($0)\"") }
+
+  return Struct(name: "segue", vars: vars, functions: [], structs: [])
 }
 
-func swiftSegueStructWithStoryboards(storyboards: [Storyboard]) -> String {
-  return distinct(storyboards.flatMap { $0.segues })
-    .reduce("struct segue {\n") {
-      $0 + "    static var \(sanitizedSwiftName($1)): String { return \"\($1)\" }\n"
-    } + "}"
+// Storyboard
+
+func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
+  return Struct(name: "storyboard", vars: [], functions: [], structs: storyboards.map(storyboardStructForStoryboard))
 }
 
-func swiftStructForStoryboard(storyboard: Storyboard) -> String {
-  let instanceVar = "static var instance: UIStoryboard { return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil) }"
+func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
+  let instanceVars = [Var(name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
 
-  let viewControllers = storyboard.viewControllers.reduce("") {
-    $0 + "static var \(sanitizedSwiftName($1.storyboardIdentifier)): \($1.fullyQualifiedClass())? { return instance.instantiateViewControllerWithIdentifier(\"\($1.storyboardIdentifier)\") as? \($1.fullyQualifiedClass()) }\n"
-  }
+  let viewControllerVars = storyboard.viewControllers
+    .map { Var(name: $0.storyboardIdentifier, type: $0.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0.storyboardIdentifier)\") as? \($0.type.asNonOptional())") }
 
-  let validateStoryboardImages = distinct(storyboard.usedImageIdentifiers)
-    .reduce("static func validateImages() {\n") {
-      $0 + "    assert(UIImage(named: \"\($1)\") != nil, \"[R.swift] Image named '\($1)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")\n"
-    } + "}"
+  let validateImagesLines = distinct(storyboard.usedImageIdentifiers)
+    .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
+  let validateImagesFunc = Function(name: "validateImages", parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
 
-  let validateStoryboardViewControllers = storyboard.viewControllers
-    .reduce("static func validateViewControllers() {\n") {
-      $0 + "    assert(\(sanitizedSwiftName($1.storyboardIdentifier)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($1.storyboardIdentifier))' could not be loaded from storyboard '\(storyboard.name)' as '\($1.fullyQualifiedClass())'.\")\n"
-    } + "}"
+  let validateViewControllersLines = storyboard.viewControllers
+    .map { "assert(\(sanitizedSwiftName($0.storyboardIdentifier)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0.storyboardIdentifier))' could not be loaded from storyboard '\(storyboard.name)' as '\($0.type)'.\")" }
+  let validateViewControllersFunc = Function(name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
-  return "struct \(sanitizedSwiftName(storyboard.name)) {\n" + indent(string: instanceVar) + "\n" + indent(string: viewControllers) + indent(string: validateStoryboardImages) + "\n" + indent(string: validateStoryboardViewControllers) + "}"
+  return Struct(name: storyboard.name, vars: instanceVars + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+}
+
+// Nib
+
+func nibStructFromNibs(nibs: [Nib]) -> Struct {
+  return Struct(name: "nib", vars: [], functions: [], structs: nibs.map(nibStructForNib))
+}
+
+func nibStructForNib(nib: Nib) -> Struct {
+  let ownerOrNilParameter = Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional())
+  let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(className: "[NSObject : AnyObject]", optional: true))
+
+  let instanceVars = [Var(name: "instance", type: Type._UINib, getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)")]
+  let instantiateFunc = Function(name: "instantiateWithOwner", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: Type(className: "[AnyObject]"), body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)")
+
+  let viewFuncs = zip(nib.rootViews, Ordinals)
+    .map { (view: $0.0, ordinal: $0.1) }
+    .map { Function(name: "\($0.ordinal.word)View", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: $0.view.asOptional(), body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)") }
+
+  return Struct(name: nib.name, vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
+}
+
+// Validation
+
+func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
+  return Function(name: "validate", parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).reduce("", combine: +))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
   return
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
-}
-
-func swiftStructForNib(nib: Nib) -> String {
-  let instanceVar = "static var instance: UINib { return UINib.init(nibName: \"\(nib.name)\", bundle: nil); }"
-  let instantiateFunc = "static func instantiateWithOwner(ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]?) -> [AnyObject] { return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil) }"
-
-  let viewFuncs = zip(nib.rootViews, ordinals)
-    .map { (view: $0.0, ordinal: $0.1) }
-    .reduce("") { $0 + "\nstatic func \($1.ordinal.word)View(ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]?) -> \($1.view.fullyQualifiedClass())? { return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($1.ordinal.number - 1)] as? \($1.view.fullyQualifiedClass()) }" }
-
-  return "struct \(sanitizedSwiftName(nib.name)) {\n" + indent(string: instanceVar) + indent(string: instantiateFunc) + indent(string: viewFuncs) + "\n}"
 }

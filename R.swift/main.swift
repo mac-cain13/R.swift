@@ -16,38 +16,30 @@ let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaul
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
-    // Imports
-    let imports = swiftImports()
 
-    // Asset folders
+    // Get/parse all resources into our domain objects
     let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
       .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
 
-    let imageStruct = swiftImageStructWithAssetFolders(assetFolders)
-    
-    // Storyboards
     let storyboards = findAllStoryboardURLsInDirectory(url: directory)
       .map { Storyboard(url: $0) }
 
-    let segueStruct = swiftSegueStructWithStoryboards(storyboards)
-
-    let storyboardStructs = storyboards.map(swiftStructForStoryboard)
-      .map(indent)
-      .reduce("struct storyboard {\n", +) + "}"
-    
-    let validateAllStoryboardsFunction = storyboards.map(swiftCallStoryboardValidators)
-      .map(indent)
-      .reduce("static func validate() {\n", +) + "}"
-
-    // Nibs
-    let nibStructs = findAllNibURLsInDirectory(url: directory)
+    let nibs = findAllNibURLsInDirectory(url: directory)
       .map { Nib(url: $0) }
-      .map(swiftStructForNib)
-      .map(indent)
-      .reduce("struct nib {\n", +) + "}"
+
+    // Generate
+    let structs = [
+      imageStructFromAssetFolders(assetFolders),
+      segueStructFromStoryboards(storyboards),
+      storyboardStructFromStoryboards(storyboards),
+      nibStructFromNibs(nibs),
+    ]
+
+    let functions = [
+      validateAllFunctionWithStoryboards(storyboards),
+    ]
 
     // Write out the code
-    let code = [imageStruct, segueStruct, storyboardStructs, validateAllStoryboardsFunction, nibStructs]
-      .reduce("\(imports)\n\nstruct R {") { $0 + "\n" + indent(string: $1) } + "}\n"
-    writeResourceFile(code, toFolderURL: directory)
+    let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
+    writeResourceFile(Header + resourceStruct.description, toFolderURL: directory)
   }
