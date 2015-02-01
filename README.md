@@ -11,12 +11,16 @@ With R.swift we make sure you can use strong typed identifiers like `R.image.som
 
 After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources. Below you find the different formats:
 
-Type           | Format                                                     | Without R.swift                           | With R.swift
----------------|------------------------------------------------------------|-------------------------------------------|-----------------------------
-Image          | `R.image.[imageName]`                                      | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
-Segue          | `R.segue.[segueIdentifier]`                                | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
-Storyboard     | `R.storyboard.[storyboardName].instance`                   | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
-ViewController | `R.storyboard.[storyboardName].[viewControllerIdentifier]` | `UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginController") as? LoginController` | `R.storyboard.main.loginController`
+Type             | Format                                                     | Without R.swift                           | With R.swift
+-----------------|------------------------------------------------------------|-------------------------------------------|-----------------------------
+Image            | `R.image.[imageName]`                                      | `UIImage(named: "settings-icon")`         | `R.image.settingsIcon`
+Segue            | `R.segue.[segueIdentifier]`                                | `"openSettingsSegue"`                     | `R.segue.openSettingsSegue`
+Storyboard       | `R.storyboard.[storyboardName].instance`                   | `UIStoryboard(name: "Main", bundle: nil)` | `R.storyboard.main.instance`
+ViewController   | `R.storyboard.[storyboardName].[viewControllerIdentifier]` | `UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginController") as? LoginController` | `R.storyboard.main.loginController`
+Nib              | `R.nib.[nibName].instance`                                 | `UINib(nibName: "TextCell", bundle: nil)` | `R.nib.textCell.instance`
+Nib all views    | `R.nib.[nibName].instantiateWithOwner(nil, options: nil)`  | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil)`  | `R.nib.textCell.instantiateWithOwner(nil, options: nil)`
+Nib first view   | `R.nib.[nibName].firstView(nil, options: nil)`             | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil).first as? TextCell` | `R.nib.textCell.firstView(nil, nil)`
+Reuse identifier | `R.reuseIdentifier.[name]`                                 | `"TextCell"`                              | `R.reuseIdentifier.textCell`
 
 Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this uses `assert` and will only work in unoptimized debug builds.
 
