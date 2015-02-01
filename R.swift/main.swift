@@ -39,7 +39,12 @@ inputDirectories(NSProcessInfo.processInfo())
       validateAllFunctionWithStoryboards(storyboards),
     ]
 
-    // Write out the code
+    // Generate resource file contents
     let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
-    writeResourceFile(Header + resourceStruct.description, toFolderURL: directory)
+    let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
+
+    // Write file if we have changes
+    if readResourceFile(directory) != fileContents { // TODO: What if file doesn't exist yet?
+      writeResourceFile(fileContents, toFolderURL: directory)
+    }
   }

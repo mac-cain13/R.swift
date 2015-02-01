@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 30-01-15.
-//  Copyright (c) 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation

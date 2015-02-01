@@ -47,6 +47,19 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
   code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
+  // TODO: Catch and print error so you see it in XCode
+}
+
+func readResourceFile(folderURL: NSURL) -> String? {
+  let inputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
+
+  var error: NSError?
+  if let resourceFileString = String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding, error: &error) {
+    return resourceFileString
+  }
+
+  // TODO: Print error so you see it in XCode
+  return nil
 }
 
 // MARK: Struct/function generators
