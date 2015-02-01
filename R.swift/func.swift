@@ -13,6 +13,20 @@ import Foundation
 
 let indent = indentWithString(IndentationString)
 
+func warn(warning: String) {
+  println("warning: \(warning)")
+}
+
+func fail(error: String) {
+  println("error: \(error)")
+}
+
+func failOnError(error: NSError?) {
+  if let error = error {
+    fail("\(error)")
+  }
+}
+
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
   return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as String)! }
 }
@@ -20,7 +34,12 @@ func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
   var assetFolders = [NSURL]()
 
-  if let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: [NSURLIsDirectoryKey], options: NSDirectoryEnumerationOptions.SkipsHiddenFiles|NSDirectoryEnumerationOptions.SkipsPackageDescendants, errorHandler: nil) {
+  let errorHandler: (NSURL!, NSError!) -> Bool = { url, error in
+    failOnError(error)
+    return true
+  }
+
+  if let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: [NSURLIsDirectoryKey], options: NSDirectoryEnumerationOptions.SkipsHiddenFiles|NSDirectoryEnumerationOptions.SkipsPackageDescendants, errorHandler: errorHandler) {
 
     while let enumeratorItem: AnyObject = enumerator.nextObject() {
       if let url = enumeratorItem as? NSURL {
@@ -46,7 +65,21 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
 
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
-  code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: nil)
+
+  var error: NSError?
+  code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
+
+  failOnError(error)
+}
+
+func readResourceFile(folderURL: NSURL) -> String? {
+  let inputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
+
+  if let resourceFileString = String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding, error: nil) {
+    return resourceFileString
+  }
+
+  return nil
 }
 
 // MARK: Struct/function generators

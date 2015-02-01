@@ -17,6 +17,12 @@ let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaul
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
 
+    var error: NSError?
+    if !directory.checkResourceIsReachableAndReturnError(&error) {
+      failOnError(error)
+      return
+    }
+
     // Get/parse all resources into our domain objects
     let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
       .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
@@ -39,7 +45,12 @@ inputDirectories(NSProcessInfo.processInfo())
       validateAllFunctionWithStoryboards(storyboards),
     ]
 
-    // Write out the code
+    // Generate resource file contents
     let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
-    writeResourceFile(Header + resourceStruct.description, toFolderURL: directory)
+    let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
+
+    // Write file if we have changes
+    if readResourceFile(directory) != fileContents {
+      writeResourceFile(fileContents, toFolderURL: directory)
+    }
   }
