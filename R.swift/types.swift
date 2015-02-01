@@ -18,6 +18,7 @@ struct Type: Printable {
   static let _UINib = Type(className: "UINib")
   static let _UIImage = Type(className: "UIImage")
   static let _UIStoryboard = Type(className: "UIStoryboard")
+  static let _UIViewController = Type(className: "UIViewController")
 
   let moduleName: String?
   let className: String
@@ -218,19 +219,21 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     default:
-      if let viewController = viewControllerFromAttributes(attributeDict) {
+      if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
         viewControllers.append(viewController)
       }
     }
   }
 
-  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject]) -> Storyboard.ViewController? {
+  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
     if attributeDict["sceneMemberID"] as? String == "viewController" {
       if let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String {
         let customModule = attributeDict["customModule"] as? String
-        let customClass = attributeDict["customClass"] as? String ?? "UIViewController"
+        let customClass = attributeDict["customClass"] as? String
+        let customType = customClass.map { Type(moduleName: customModule, className: $0, optional: false) }
 
-        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, type: Type(moduleName: customModule, className: customClass, optional: false))
+        let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, type: type)
       }
     }
     

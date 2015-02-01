@@ -42,3 +42,15 @@ let Ordinals = [
   (number: 19, word: "nineteenth"),
   (number: 20, word: "twentieth"),
 ]
+
+let ElementNameToTypeMapping = [
+  "viewController": Type._UIViewController,
+  "glkViewController": Type(className: "GLKViewController"),
+  "tabBarController": Type(className: "UITabBarController"),
+  "pageViewController": Type(className: "UIPageViewController"),
+  "tableViewController": Type(className: "UITableViewController"),
+  "splitViewController": Type(className: "UISplitViewController"),
+  "navigationController": Type(className: "UINavigationController"),
+  "avPlayerViewController": Type(className: "AVPlayerViewController"),
+  "collectionViewController": Type(className: "UICollectionViewController"),
+]
