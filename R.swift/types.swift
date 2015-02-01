@@ -144,6 +144,10 @@ struct Struct: Printable {
 
 /// MARK: Asset types
 
+protocol ReuseIdentifierContainer {
+  var reuseIdentifiers: [String] { get }
+}
+
 struct AssetFolder {
   let name: String
   let imageAssets: [String]
@@ -156,11 +160,12 @@ struct AssetFolder {
   }
 }
 
-struct Storyboard {
+struct Storyboard: ReuseIdentifierContainer {
   let name: String
   let segues: [String]
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
+  let reuseIdentifiers: [String]
 
   init(url: NSURL) {
     name = url.filename!
@@ -174,6 +179,7 @@ struct Storyboard {
     segues = parserDelegate.segues
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
+    reuseIdentifiers = parserDelegate.reuseIdentifiers
   }
 
   struct ViewController {
@@ -182,9 +188,10 @@ struct Storyboard {
   }
 }
 
-struct Nib {
+struct Nib: ReuseIdentifierContainer {
   let name: String
   let rootViews: [Type]
+  let reuseIdentifiers: [String]
 
   init(url: NSURL) {
     name = url.filename!
@@ -196,6 +203,7 @@ struct Nib {
     parser.parse()
 
     rootViews = parserDelegate.rootViews
+    reuseIdentifiers = parserDelegate.reuseIdentifiers
   }
 }
 
@@ -205,6 +213,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
+  var reuseIdentifiers: [String] = []
 
   func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
     switch elementName {
@@ -222,6 +231,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
         viewControllers.append(viewController)
       }
+    }
+
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      reuseIdentifiers.append(reuseIdentifier)
     }
   }
 
@@ -244,6 +257,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 class NibParserDelegate: NSObject, NSXMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
+  var reuseIdentifiers: [String] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -264,6 +278,10 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
           }
         }
       }
+    }
+
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      reuseIdentifiers.append(reuseIdentifier)
     }
   }
 

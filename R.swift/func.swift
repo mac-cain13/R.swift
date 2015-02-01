@@ -145,6 +145,16 @@ func nibStructForNib(nib: Nib) -> Struct {
   return Struct(name: nib.name, vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
 }
 
+// Reuse identifiers
+
+func reuseIdentifierStructFromReuseIdentifierContainers(containers: [ReuseIdentifierContainer]) -> Struct {
+  let reuseIdentifierVars = containers
+    .flatMap { $0.reuseIdentifiers }
+    .map { Var(name: $0, type: Type._String, getter: "return \"\($0)\"") }
+
+  return Struct(name: "reuseIdentifier", vars: reuseIdentifierVars, functions: [], structs: [])
+}
+
 // Validation
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {

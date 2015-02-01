@@ -33,12 +33,15 @@ inputDirectories(NSProcessInfo.processInfo())
     let nibs = findAllNibURLsInDirectory(url: directory)
       .map { Nib(url: $0) }
 
+    let reuseIdentifierContainers = nibs.map { $0 as ReuseIdentifierContainer } + storyboards.map { $0 as ReuseIdentifierContainer }
+
     // Generate
     let structs = [
       imageStructFromAssetFolders(assetFolders),
       segueStructFromStoryboards(storyboards),
       storyboardStructFromStoryboards(storyboards),
       nibStructFromNibs(nibs),
+      reuseIdentifierStructFromReuseIdentifierContainers(reuseIdentifierContainers)
     ]
 
     let functions = [
