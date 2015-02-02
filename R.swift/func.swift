@@ -45,7 +45,6 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
       if let url = enumeratorItem as? NSURL {
         if filter(url) {
           assetFolders.append(url)
-          enumerator.skipDescendants()
         }
       }
     }
