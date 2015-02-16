@@ -28,7 +28,7 @@ func failOnError(error: NSError?) {
 }
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as String)! }
+  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as! String)! }
 }
 
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {

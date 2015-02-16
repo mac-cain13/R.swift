@@ -104,6 +104,7 @@ struct Function: Printable {
 
     init(name: String, type: Type) {
       self.name = name
+      self.localName = nil
       self.type = type
     }
 
@@ -155,7 +156,7 @@ struct AssetFolder {
   init(url: NSURL, fileManager: NSFileManager) {
     name = url.filename!
 
-    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as [NSURL]
+    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as! [NSURL]
     imageAssets = contents.map { $0.filename! }
   }
 }
@@ -215,7 +216,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var usedImageIdentifiers: [String] = []
   var reuseIdentifiers: [String] = []
 
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
     case "segue":
       if let segueIdentifier = attributeDict["identifier"] as? String {
@@ -263,7 +264,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
@@ -285,7 +286,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
+  func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = false;
@@ -299,7 +300,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
   func viewWithAttributes(attributeDict: [NSObject : AnyObject]) -> Type? {
     let customModule = attributeDict["customModule"] as? String
-    let customClass = attributeDict["customClass"] as? String ?? "UIView"
+    let customClass = (attributeDict["customClass"] as? String) ?? "UIView"
     
     return Type(moduleName: customModule, className: customClass)
   }
