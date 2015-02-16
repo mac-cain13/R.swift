@@ -45,12 +45,12 @@ let Ordinals = [
 
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
-  "glkViewController": Type(className: "GLKViewController"),
-  "tabBarController": Type(className: "UITabBarController"),
-  "pageViewController": Type(className: "UIPageViewController"),
-  "tableViewController": Type(className: "UITableViewController"),
-  "splitViewController": Type(className: "UISplitViewController"),
-  "navigationController": Type(className: "UINavigationController"),
-  "avPlayerViewController": Type(className: "AVPlayerViewController"),
-  "collectionViewController": Type(className: "UICollectionViewController"),
+  "glkViewController": Type(name: "GLKViewController"),
+  "tabBarController": Type(name: "UITabBarController"),
+  "pageViewController": Type(name: "UIPageViewController"),
+  "tableViewController": Type(name: "UITableViewController"),
+  "splitViewController": Type(name: "UISplitViewController"),
+  "navigationController": Type(name: "UINavigationController"),
+  "avPlayerViewController": Type(name: "AVPlayerViewController"),
+  "collectionViewController": Type(name: "UICollectionViewController"),
 ]
