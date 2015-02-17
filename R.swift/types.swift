@@ -70,7 +70,7 @@ struct Var: Printable {
 
   var description: String {
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "static var \(swiftName): \(type) { \(getter) }"
+    return "public static var \(swiftName): \(type) { \(getter) }"
   }
 }
 
@@ -84,7 +84,7 @@ struct Function: Printable {
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
     let parameterString = join(", ", parameters)
     let returnString = returnType.isVoid() ? "" : " -> \(returnType)"
-    return "static func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
+    return "public static func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
   struct Parameter: Printable {
@@ -138,7 +138,7 @@ struct Struct: Printable {
 
     let bodyComponents = [varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(join("\n\n", bodyComponents))
-    return "struct \(swiftName) {\n\(bodyString)\n}"
+    return "public struct \(swiftName) {\n\(bodyString)\n}"
   }
 }
 
