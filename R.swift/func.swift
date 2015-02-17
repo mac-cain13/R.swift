@@ -163,5 +163,5 @@ func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
   return
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
-    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
+    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()\n"
 }
