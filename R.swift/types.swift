@@ -164,9 +164,14 @@ struct AssetFolder {
 struct Storyboard: ReuseIdentifierContainer {
   let name: String
   let segues: [String]
+  private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
   let reuseIdentifiers: [String]
+
+  var initialViewController: ViewController? {
+    return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
+  }
 
   init(url: NSURL) {
     name = url.filename!
@@ -178,13 +183,15 @@ struct Storyboard: ReuseIdentifierContainer {
     parser.parse()
 
     segues = parserDelegate.segues
+    initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     reuseIdentifiers = parserDelegate.reuseIdentifiers
   }
 
   struct ViewController {
-    let storyboardIdentifier: String
+    let id: String
+    let storyboardIdentifier: String?
     let type: Type
   }
 }
@@ -211,6 +218,7 @@ struct Nib: ReuseIdentifierContainer {
 /// MARK: Parsers
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
+  var initialViewControllerIdentifier: String?
   var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
@@ -218,6 +226,11 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
+    case "document":
+      if let initialViewController = attributeDict["initialViewController"] as? String {
+        initialViewControllerIdentifier = initialViewController
+      }
+
     case "segue":
       if let segueIdentifier = attributeDict["identifier"] as? String {
         segues.append(segueIdentifier)
@@ -241,16 +254,19 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
     if attributeDict["sceneMemberID"] as? String == "viewController" {
-      if let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String {
-        let customModule = attributeDict["customModule"] as? String
-        let customClass = attributeDict["customClass"] as? String
-        let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+        if let id = attributeDict["id"] as? String {
+            let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
-        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, type: type)
-      }
+            let customModule = attributeDict["customModule"] as? String
+            let customClass = attributeDict["customClass"] as? String
+            let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+            let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+
+            return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+        }
     }
-    
+
     return nil
   }
 }

@@ -9,6 +9,7 @@
 
 import Foundation
 
+
 // MARK: Array operations
 
 extension Array {
@@ -25,7 +26,15 @@ extension Array {
   }
 }
 
-func flatten<T>(coll : [[T]]) -> [T] {
+func catOptionals<T>(c: [T?]) -> [T] {
+  return c.flatMap(list)
+}
+
+func list<T>(x: T?) -> [T] {
+  return x.map { [$0] } ?? []
+}
+
+func flatten<T>(coll: [[T]]) -> [T] {
   return coll.reduce([], combine: +)
 }
 
