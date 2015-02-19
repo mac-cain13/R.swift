@@ -110,18 +110,31 @@ func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   let instanceVars = [Var(name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
 
-  let viewControllerVars = storyboard.viewControllers
-    .map { Var(name: $0.storyboardIdentifier, type: $0.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0.storyboardIdentifier)\") as? \($0.type.asNonOptional())") }
+
+  let initialViewControllerVar = catOptionals([storyboard.initialViewController.map {
+    Var(name: "initialViewController", type: $0.type.asOptional(), getter: "return instance.instantiateInitialViewController() as? \($0.type.asNonOptional())")
+  }])
+
+  let viewControllerVars = catOptionals(storyboard.viewControllers
+    .map { vc in
+      vc.storyboardIdentifier.map {
+        return Var(name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\") as? \(vc.type.asNonOptional())")
+      }
+    })
 
   let validateImagesLines = distinct(storyboard.usedImageIdentifiers)
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
   let validateImagesFunc = Function(name: "validateImages", parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
 
-  let validateViewControllersLines = storyboard.viewControllers
-    .map { "assert(\(sanitizedSwiftName($0.storyboardIdentifier)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0.storyboardIdentifier))' could not be loaded from storyboard '\(storyboard.name)' as '\($0.type)'.\")" }
+  let validateViewControllersLines = catOptionals(storyboard.viewControllers
+    .map { vc in
+      vc.storyboardIdentifier.map {
+        "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
+      }
+    })
   let validateViewControllersFunc = Function(name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
-  return Struct(name: storyboard.name, vars: instanceVars + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(name: storyboard.name, vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
 // Nib
