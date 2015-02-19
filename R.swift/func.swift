@@ -28,7 +28,7 @@ func failOnError(error: NSError?) {
 }
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as String)! }
+  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as! String)! }
 }
 
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
@@ -110,18 +110,31 @@ func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   let instanceVars = [Var(name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
 
-  let viewControllerVars = storyboard.viewControllers
-    .map { Var(name: $0.storyboardIdentifier, type: $0.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0.storyboardIdentifier)\") as? \($0.type.asNonOptional())") }
+
+  let initialViewControllerVar = catOptionals([storyboard.initialViewController.map {
+    Var(name: "initialViewController", type: $0.type.asOptional(), getter: "return instance.instantiateInitialViewController() as? \($0.type.asNonOptional())")
+  }])
+
+  let viewControllerVars = catOptionals(storyboard.viewControllers
+    .map { vc in
+      vc.storyboardIdentifier.map {
+        return Var(name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\") as? \(vc.type.asNonOptional())")
+      }
+    })
 
   let validateImagesLines = distinct(storyboard.usedImageIdentifiers)
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
   let validateImagesFunc = Function(name: "validateImages", parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
 
-  let validateViewControllersLines = storyboard.viewControllers
-    .map { "assert(\(sanitizedSwiftName($0.storyboardIdentifier)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0.storyboardIdentifier))' could not be loaded from storyboard '\(storyboard.name)' as '\($0.type)'.\")" }
+  let validateViewControllersLines = catOptionals(storyboard.viewControllers
+    .map { vc in
+      vc.storyboardIdentifier.map {
+        "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
+      }
+    })
   let validateViewControllersFunc = Function(name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
-  return Struct(name: storyboard.name, vars: instanceVars + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(name: storyboard.name, vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
 // Nib
@@ -132,10 +145,10 @@ func nibStructFromNibs(nibs: [Nib]) -> Struct {
 
 func nibStructForNib(nib: Nib) -> Struct {
   let ownerOrNilParameter = Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional())
-  let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(className: "[NSObject : AnyObject]", optional: true))
+  let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
 
   let instanceVars = [Var(name: "instance", type: Type._UINib, getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)")]
-  let instantiateFunc = Function(name: "instantiateWithOwner", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: Type(className: "[AnyObject]"), body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)")
+  let instantiateFunc = Function(name: "instantiateWithOwner", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: Type(name: "[AnyObject]"), body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)")
 
   let viewFuncs = zip(nib.rootViews, Ordinals)
     .map { (view: $0.0, ordinal: $0.1) }
@@ -157,7 +170,7 @@ func reuseIdentifierStructFromReuseIdentifierContainers(containers: [ReuseIdenti
 // Validation
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-  return Function(name: "validate", parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).reduce("", combine: +))
+  return Function(name: "validate", parameters: [], returnType: Type._Void, body: join("\n", storyboards.map(swiftCallStoryboardValidators)))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {

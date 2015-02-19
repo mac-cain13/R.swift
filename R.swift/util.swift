@@ -9,6 +9,7 @@
 
 import Foundation
 
+
 // MARK: Array operations
 
 extension Array {
@@ -25,7 +26,15 @@ extension Array {
   }
 }
 
-func flatten<T>(coll : [[T]]) -> [T] {
+func catOptionals<T>(c: [T?]) -> [T] {
+  return c.flatMap(list)
+}
+
+func list<T>(x: T?) -> [T] {
+  return x.map { [$0] } ?? []
+}
+
+func flatten<T>(coll: [[T]]) -> [T] {
   return coll.reduce([], combine: +)
 }
 
@@ -51,7 +60,7 @@ func join<S where S: Printable>(separator: String, components: [S]) -> String {
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if countElements(self) <= 1 { return self.lowercaseString }
+    if count(self) <= 1 { return self.lowercaseString }
     let index = advance(startIndex, 1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
@@ -71,7 +80,7 @@ extension NSURL {
     var urlIsDirectoryValue: AnyObject?
     self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey, error: nil)
 
-    return urlIsDirectoryValue as? Bool ?? false
+    return (urlIsDirectoryValue as? Bool) ?? false
   }
 
   var filename: String? {

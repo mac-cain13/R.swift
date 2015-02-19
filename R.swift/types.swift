@@ -11,56 +11,56 @@ import Foundation
 
 /// MARK: Swift types
 
-struct Type: Printable {
-  static let _Void = Type(className: "Void")
-  static let _AnyObject = Type(className: "AnyObject")
-  static let _String = Type(className: "String")
-  static let _UINib = Type(className: "UINib")
-  static let _UIImage = Type(className: "UIImage")
-  static let _UIStoryboard = Type(className: "UIStoryboard")
-  static let _UIViewController = Type(className: "UIViewController")
+struct Type: Printable, Equatable {
+  static let _Void = Type(name: "Void")
+  static let _AnyObject = Type(name: "AnyObject")
+  static let _String = Type(name: "String")
+  static let _UINib = Type(name: "UINib")
+  static let _UIImage = Type(name: "UIImage")
+  static let _UIStoryboard = Type(name: "UIStoryboard")
+  static let _UIViewController = Type(name: "UIViewController")
 
-  let moduleName: String?
-  let className: String
+  let module: String?
+  let name: String
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let moduleName = moduleName {
-      return "\(moduleName).\(className)\(optionalString)"
+    if let module = module {
+      return "\(module).\((name))\(optionalString)"
     }
 
-    return "\(className)\(optionalString)"
+    return "\(name)\(optionalString)"
   }
 
   var description: String {
     return fullyQualifiedName
   }
 
-  init(className: String, optional: Bool = false) {
-    self.moduleName = nil
-    self.className = className
+  init(name: String, optional: Bool = false) {
+    self.module = nil
+    self.name = name
     self.optional = optional
   }
 
-  init(moduleName: String?, className: String, optional: Bool = false) {
-    self.moduleName = moduleName
-    self.className = className
+  init(module: String?, name: String, optional: Bool = false) {
+    self.module = module
+    self.name = name
     self.optional = optional
   }
 
   func asOptional() -> Type {
-    return Type(moduleName: self.moduleName, className: className, optional: true)
+    return Type(module: module, name: name, optional: true)
   }
 
   func asNonOptional() -> Type {
-    return Type(moduleName: moduleName, className: className, optional: false)
+    return Type(module: module, name: name, optional: false)
   }
+}
 
-  func isVoid() -> Bool {
-    return (moduleName == Type._Void.moduleName && className == Type._Void.className && optional == Type._Void.optional)
-  }
+func ==(lhs: Type, rhs: Type) -> Bool {
+  return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
 }
 
 struct Var: Printable {
@@ -83,7 +83,7 @@ struct Function: Printable {
   var description: String {
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
     let parameterString = join(", ", parameters)
-    let returnString = returnType.isVoid() ? "" : " -> \(returnType)"
+    let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     return "static func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
@@ -104,6 +104,7 @@ struct Function: Printable {
 
     init(name: String, type: Type) {
       self.name = name
+      self.localName = nil
       self.type = type
     }
 
@@ -155,7 +156,7 @@ struct AssetFolder {
   init(url: NSURL, fileManager: NSFileManager) {
     name = url.filename!
 
-    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as [NSURL]
+    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as! [NSURL]
     imageAssets = contents.map { $0.filename! }
   }
 }
@@ -163,9 +164,14 @@ struct AssetFolder {
 struct Storyboard: ReuseIdentifierContainer {
   let name: String
   let segues: [String]
+  private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
   let reuseIdentifiers: [String]
+
+  var initialViewController: ViewController? {
+    return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
+  }
 
   init(url: NSURL) {
     name = url.filename!
@@ -177,13 +183,15 @@ struct Storyboard: ReuseIdentifierContainer {
     parser.parse()
 
     segues = parserDelegate.segues
+    initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     reuseIdentifiers = parserDelegate.reuseIdentifiers
   }
 
   struct ViewController {
-    let storyboardIdentifier: String
+    let id: String
+    let storyboardIdentifier: String?
     let type: Type
   }
 }
@@ -210,13 +218,19 @@ struct Nib: ReuseIdentifierContainer {
 /// MARK: Parsers
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
+  var initialViewControllerIdentifier: String?
   var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
   var reuseIdentifiers: [String] = []
 
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
+    case "document":
+      if let initialViewController = attributeDict["initialViewController"] as? String {
+        initialViewControllerIdentifier = initialViewController
+      }
+
     case "segue":
       if let segueIdentifier = attributeDict["identifier"] as? String {
         segues.append(segueIdentifier)
@@ -240,16 +254,19 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
     if attributeDict["sceneMemberID"] as? String == "viewController" {
-      if let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String {
-        let customModule = attributeDict["customModule"] as? String
-        let customClass = attributeDict["customClass"] as? String
-        let customType = customClass.map { Type(moduleName: customModule, className: $0, optional: false) }
+        if let id = attributeDict["id"] as? String {
+            let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
-        return Storyboard.ViewController(storyboardIdentifier: storyboardIdentifier, type: type)
-      }
+            let customModule = attributeDict["customModule"] as? String
+            let customClass = attributeDict["customClass"] as? String
+            let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+            let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+
+            return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+        }
     }
-    
+
     return nil
   }
 }
@@ -263,7 +280,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
@@ -285,7 +302,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
+  func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = false;
@@ -299,8 +316,8 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
   func viewWithAttributes(attributeDict: [NSObject : AnyObject]) -> Type? {
     let customModule = attributeDict["customModule"] as? String
-    let customClass = attributeDict["customClass"] as? String ?? "UIView"
+    let customClass = (attributeDict["customClass"] as? String) ?? "UIView"
     
-    return Type(moduleName: customModule, className: customClass)
+    return Type(module: customModule, name: customClass)
   }
 }
