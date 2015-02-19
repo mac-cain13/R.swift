@@ -170,7 +170,7 @@ func reuseIdentifierStructFromReuseIdentifierContainers(containers: [ReuseIdenti
 // Validation
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-  return Function(name: "validate", parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).reduce("", combine: +))
+  return Function(name: "validate", parameters: [], returnType: Type._Void, body: join("\n", storyboards.map(swiftCallStoryboardValidators)))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
