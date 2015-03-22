@@ -26,6 +26,19 @@ Validate usage of images in Storyboards with `R.validate()` or to validate a spe
 
 ## Installation
 
+[CocoaPods](http://cocoapods.org) is the recommended way of installation as this avoids including any binary files into your project.
+
+### CocoaPods (recommended)
+
+1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
+2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$PODS_ROOT/R.swift/rswift" "$SRCROOT"`
+4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+### Manually
+
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
 2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
