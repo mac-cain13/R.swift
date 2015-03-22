@@ -26,9 +26,11 @@ Validate usage of images in Storyboards with `R.validate()` or to validate a spe
 
 ## Installation
 
-[CocoaPods](http://cocoapods.org) is the recommended way of installation as this avoids including any binary files into your project.
+[CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
 
 ### CocoaPods (recommended)
+
+_There is also a [short video](https://vimeo.com/122888912) of this instruction._
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
