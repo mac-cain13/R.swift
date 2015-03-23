@@ -58,8 +58,9 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   var components = name.componentsSeparatedByString("-")
   let firstComponent = components.removeAtIndex(0)
   let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
+  let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
 
-  return lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
+  return contains(SwiftKeywords, capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
