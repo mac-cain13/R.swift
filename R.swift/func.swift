@@ -160,10 +160,9 @@ func nibStructForNib(nib: Nib) -> Struct {
 
 // Reuse identifiers
 
-func reuseIdentifierStructFromReuseIdentifierContainers(containers: [ReuseIdentifierContainer]) -> Struct {
-  let reuseIdentifierVars = containers
-    .flatMap { $0.reuseIdentifiers }
-    .map { Var(name: $0, type: Type._String, getter: "return \"\($0)\"") }
+func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
+  let reuseIdentifierVars = reusables
+    .map { Var(name: $0.identifier, type: Type(name: "ReuseIdentifier", genericType: $0.type, optional: false), getter: "return ReuseIdentifier(\"\($0.identifier)\")") }
 
   return Struct(name: "reuseIdentifier", vars: reuseIdentifierVars, functions: [], structs: [])
 }

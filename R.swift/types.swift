@@ -16,22 +16,32 @@ struct Type: Printable, Equatable {
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
   static let _UINib = Type(name: "UINib")
+  static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
   static let _UIStoryboard = Type(name: "UIStoryboard")
   static let _UIViewController = Type(name: "UIViewController")
 
   let module: String?
   let name: String
+  let genericTypeString: String?
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let module = module {
-      return "\(module).\((name))\(optionalString)"
+    if let genericTypeString = genericTypeString {
+      return "\(fullName)<\(genericTypeString)>\(optionalString)"
     }
 
-    return "\(name)\(optionalString)"
+    return "\(fullName)\(optionalString)"
+  }
+
+  private var fullName: String {
+    if let module = module {
+      return "\(module).\((name))"
+    }
+
+    return name
   }
 
   var description: String {
@@ -41,12 +51,28 @@ struct Type: Printable, Equatable {
   init(name: String, optional: Bool = false) {
     self.module = nil
     self.name = name
+    self.genericTypeString = nil
     self.optional = optional
   }
 
   init(module: String?, name: String, optional: Bool = false) {
     self.module = module
     self.name = name
+    self.genericTypeString = nil
+    self.optional = optional
+  }
+
+  init(name: String, genericType: Type, optional: Bool = false) {
+    self.module = nil
+    self.name = name
+    self.genericTypeString = genericType.description
+    self.optional = optional
+  }
+
+  init(module: String?, name: String, genericType: Type, optional: Bool = false) {
+    self.module = module
+    self.name = name
+    self.genericTypeString = genericType.description
     self.optional = optional
   }
 
@@ -145,8 +171,10 @@ struct Struct: Printable {
 
 /// MARK: Asset types
 
-protocol ReuseIdentifierContainer {
-  var reuseIdentifiers: [String] { get }
+typealias Reusable = (identifier: String, type: Type)
+
+protocol ReusableContainer {
+  var reusables: [Reusable] { get }
 }
 
 struct AssetFolder {
@@ -161,13 +189,13 @@ struct AssetFolder {
   }
 }
 
-struct Storyboard: ReuseIdentifierContainer {
+struct Storyboard: ReusableContainer {
   let name: String
   let segues: [String]
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
-  let reuseIdentifiers: [String]
+  let reusables: [Reusable]
 
   var initialViewController: ViewController? {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
@@ -186,7 +214,7 @@ struct Storyboard: ReuseIdentifierContainer {
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
-    reuseIdentifiers = parserDelegate.reuseIdentifiers
+    reusables = parserDelegate.reusables
   }
 
   struct ViewController {
@@ -196,10 +224,10 @@ struct Storyboard: ReuseIdentifierContainer {
   }
 }
 
-struct Nib: ReuseIdentifierContainer {
+struct Nib: ReusableContainer {
   let name: String
   let rootViews: [Type]
-  let reuseIdentifiers: [String]
+  let reusables: [Reusable]
 
   init(url: NSURL) {
     name = url.filename!
@@ -211,7 +239,7 @@ struct Nib: ReuseIdentifierContainer {
     parser.parse()
 
     rootViews = parserDelegate.rootViews
-    reuseIdentifiers = parserDelegate.reuseIdentifiers
+    reusables = parserDelegate.reusables
   }
 }
 
@@ -222,7 +250,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
-  var reuseIdentifiers: [String] = []
+  var reusables: [Reusable] = []
 
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
@@ -245,10 +273,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
         viewControllers.append(viewController)
       }
-    }
 
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      reuseIdentifiers.append(reuseIdentifier)
+      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+        reusables.append(reusable)
+      }
     }
   }
 
@@ -269,12 +297,26 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     return nil
   }
+
+  func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+      return Reusable(identifier: reuseIdentifier, type: type)
+    }
+
+    return nil
+  }
 }
 
 class NibParserDelegate: NSObject, NSXMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
-  var reuseIdentifiers: [String] = []
+  var reusables: [Reusable] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -295,10 +337,10 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
           }
         }
       }
-    }
 
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      reuseIdentifiers.append(reuseIdentifier)
+      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+        reusables.append(reusable)
+      }
     }
   }
 
@@ -319,5 +361,19 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
     let customClass = (attributeDict["customClass"] as? String) ?? "UIView"
     
     return Type(module: customModule, name: customClass)
+  }
+
+  func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+      return Reusable(identifier: reuseIdentifier, type: type)
+    }
+
+    return nil
   }
 }

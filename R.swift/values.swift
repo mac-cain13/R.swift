@@ -45,8 +45,9 @@ let Ordinals = [
 
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
-  "glkViewController": Type(name: "GLKViewController"),
+  "tableViewCell": Type(name: "UITableViewCell"),
   "tabBarController": Type(name: "UITabBarController"),
+  "glkViewController": Type(name: "GLKViewController"),
   "pageViewController": Type(name: "UIPageViewController"),
   "tableViewController": Type(name: "UITableViewController"),
   "splitViewController": Type(name: "UISplitViewController"),
