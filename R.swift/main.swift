@@ -38,7 +38,7 @@ inputDirectories(NSProcessInfo.processInfo())
 
     // Generate
     let structs = [
-      ReusableStruct,
+      ReuseIdentifier,
       imageStructFromAssetFolders(assetFolders),
       segueStructFromStoryboards(storyboards),
       storyboardStructFromStoryboards(storyboards),

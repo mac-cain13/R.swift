@@ -18,8 +18,8 @@ let Imports = join("\n", [
   "import UIKit",
   ])
 
-let ReusableStruct = Struct(
-  type: Type(name: "Reusable", genericType: Type(name: "T")),
+let ReuseIdentifier = Struct(
+  type: Type(name: "ReuseIdentifier", genericType: Type(name: "T")),
   implements: [Type(name: "Printable")],
   lets: [
     Let(

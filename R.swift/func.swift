@@ -166,8 +166,8 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
       Var(
         isStatic: true,
         name: $0.identifier,
-        type: ReusableStruct.type.withGenericType($0.type),
-        getter: "return \(ReusableStruct.type.name)(\"\($0.identifier)\")"
+        type: ReuseIdentifier.type.withGenericType($0.type),
+        getter: "return \(ReuseIdentifier.type.name)(\"\($0.identifier)\")"
       )
     }
 
