@@ -9,6 +9,22 @@
 
 import Foundation
 
+// MARK: Helper types
+
+typealias Reusable = (identifier: String, type: Type)
+
+protocol ReusableContainer {
+  var reusables: [Reusable] { get }
+}
+
+class Box<T> {
+  let value: T
+
+  init(value: T) {
+    self.value = value
+  }
+}
+
 /// MARK: Swift types
 
 struct Type: Printable, Equatable {
@@ -23,14 +39,14 @@ struct Type: Printable, Equatable {
 
   let module: String?
   let name: String
-  let genericTypeString: String?
+  let genericTypeBox: Box<Type?>
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let genericTypeString = genericTypeString {
-      return "\(fullName)<\(genericTypeString)>\(optionalString)"
+    if let genericType = genericTypeBox.value {
+      return "\(fullName)<\(genericType)>\(optionalString)"
     }
 
     return "\(fullName)\(optionalString)"
@@ -48,40 +64,30 @@ struct Type: Printable, Equatable {
     return fullyQualifiedName
   }
 
-  init(name: String, optional: Bool = false) {
+  init(name: String, genericType: Type? = nil, optional: Bool = false) {
     self.module = nil
     self.name = name
-    self.genericTypeString = nil
+    self.genericTypeBox = Box(value: genericType)
     self.optional = optional
   }
 
-  init(module: String?, name: String, optional: Bool = false) {
+  init(module: String?, name: String, genericType: Type? = nil, optional: Bool = false) {
     self.module = module
     self.name = name
-    self.genericTypeString = nil
-    self.optional = optional
-  }
-
-  init(name: String, genericType: Type, optional: Bool = false) {
-    self.module = nil
-    self.name = name
-    self.genericTypeString = genericType.description
-    self.optional = optional
-  }
-
-  init(module: String?, name: String, genericType: Type, optional: Bool = false) {
-    self.module = module
-    self.name = name
-    self.genericTypeString = genericType.description
+    self.genericTypeBox = Box(value: genericType)
     self.optional = optional
   }
 
   func asOptional() -> Type {
-    return Type(module: module, name: name, optional: true)
+    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: true)
   }
 
   func asNonOptional() -> Type {
-    return Type(module: module, name: name, optional: false)
+    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: false)
+  }
+
+  func withGenericType(genericType: Type) -> Type {
+    return Type(module: module, name: name, genericType: genericType, optional: optional)
   }
 }
 
@@ -90,13 +96,25 @@ func ==(lhs: Type, rhs: Type) -> Bool {
 }
 
 struct Var: Printable {
+  let isStatic: Bool
   let name: String
   let type: Type
   let getter: String
 
   var description: String {
+    let staticString = isStatic ? "static " : ""
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "static var \(swiftName): \(type) { \(getter) }"
+    return "\(staticString)var \(swiftName): \(type) { \(getter) }"
+  }
+}
+
+struct Let: Printable {
+  let name: String
+  let type: Type
+
+  var description: String {
+    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    return "let \(swiftName): \(type)"
   }
 }
 
@@ -143,39 +161,46 @@ struct Function: Printable {
 }
 
 struct Struct: Printable {
-  let name: String
+  let type: Type
+  let implements: [Type]
   let vars: [Var]
+  let lets: [Let]
   let functions: [Function]
   let structs: [Struct]
-  let lowercaseFirstCharacter: Bool
 
-  init(name: String, vars: [Var], functions: [Function], structs: [Struct], lowercaseFirstCharacter: Bool = true) {
-    self.name = name
+  init(type: Type, lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+    self.type = type
+    self.implements = []
+    self.lets = lets
     self.vars = vars
     self.functions = functions
     self.structs = structs
-    self.lowercaseFirstCharacter = lowercaseFirstCharacter
+  }
+
+  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+    self.type = type
+    self.implements = implements
+    self.vars = vars
+    self.lets = lets
+    self.functions = functions
+    self.structs = structs
   }
 
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: lowercaseFirstCharacter)
+    let implementsString = implements.count > 0 ? ": " + join(", ", implements) : ""
+
+    let letsString = join("\n", lets.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", structs.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let structsString = join("\n\n", structs.sorted { sanitizedSwiftName($0.type.name) < sanitizedSwiftName($1.type.name) })
 
-    let bodyComponents = [varsString, functionsString, structsString].filter { $0 != "" }
+    let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(join("\n\n", bodyComponents))
-    return "struct \(swiftName) {\n\(bodyString)\n}"
+    return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }
 
 /// MARK: Asset types
-
-typealias Reusable = (identifier: String, type: Type)
-
-protocol ReusableContainer {
-  var reusables: [Reusable] { get }
-}
 
 struct AssetFolder {
   let name: String

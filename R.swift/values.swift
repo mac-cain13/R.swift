@@ -18,6 +18,26 @@ let Imports = join("\n", [
   "import UIKit",
   ])
 
+let ReusableStruct = Struct(
+  type: Type(name: "Reusable", genericType: Type(name: "T")),
+  implements: [Type(name: "Printable")],
+  lets: [
+    Let(
+      name: "identifier",
+      type: Type(name: "String")
+    )
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type(name: "String"),
+      getter: "return identifier"
+    )
+  ],
+  functions: [],
+  structs: [])
+
 let IndentationString = "  "
 
 let Ordinals = [

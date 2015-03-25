@@ -38,11 +38,12 @@ inputDirectories(NSProcessInfo.processInfo())
 
     // Generate
     let structs = [
+      ReusableStruct,
       imageStructFromAssetFolders(assetFolders),
       segueStructFromStoryboards(storyboards),
       storyboardStructFromStoryboards(storyboards),
       nibStructFromNibs(nibs),
-      reuseIdentifierStructFromReusables(reusables)
+      reuseIdentifierStructFromReusables(reusables),
     ]
 
     let functions = [
@@ -50,7 +51,13 @@ inputDirectories(NSProcessInfo.processInfo())
     ]
 
     // Generate resource file contents
-    let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
+    let resourceStruct = Struct(
+      type: Type(name: "R"),
+      lets: [],
+      vars: [],
+      functions: functions,
+      structs: structs
+    )
     let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
 
     // Write file if we have changes

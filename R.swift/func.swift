@@ -88,38 +88,38 @@ func readResourceFile(folderURL: NSURL) -> String? {
 
 func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   let vars = distinct(assetFolders.flatMap { $0.imageAssets })
-    .map { Var(name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
 
-  return Struct(name: "image", vars: vars, functions: [], structs: [])
+  return Struct(type: Type(name: "image"), lets: [], vars: vars, functions: [], structs: [])
 }
 
 // Segue
 
 func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   let vars = distinct(storyboards.flatMap { $0.segues })
-    .map { Var(name: $0, type: Type._String, getter: "return \"\($0)\"") }
+    .map { Var(isStatic: true, name: $0, type: Type._String, getter: "return \"\($0)\"") }
 
-  return Struct(name: "segue", vars: vars, functions: [], structs: [])
+  return Struct(type: Type(name: "segue"), lets: [], vars: vars, functions: [], structs: [])
 }
 
 // Storyboard
 
 func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
-  return Struct(name: "storyboard", vars: [], functions: [], structs: storyboards.map(storyboardStructForStoryboard))
+  return Struct(type: Type(name: "storyboard"), lets: [], vars: [], functions: [], structs: storyboards.map(storyboardStructForStoryboard))
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-  let instanceVars = [Var(name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
+  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
 
 
   let initialViewControllerVar = catOptionals([storyboard.initialViewController.map {
-    Var(name: "initialViewController", type: $0.type.asOptional(), getter: "return instance.instantiateInitialViewController() as? \($0.type.asNonOptional())")
+    Var(isStatic: true, name: "initialViewController", type: $0.type.asOptional(), getter: "return instance.instantiateInitialViewController() as? \($0.type.asNonOptional())")
   }])
 
   let viewControllerVars = catOptionals(storyboard.viewControllers
     .map { vc in
       vc.storyboardIdentifier.map {
-        return Var(name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\") as? \(vc.type.asNonOptional())")
+        return Var(isStatic: true, name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\") as? \(vc.type.asNonOptional())")
       }
     })
 
@@ -135,36 +135,43 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     })
   let validateViewControllersFunc = Function(name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
-  return Struct(name: storyboard.name, vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(type: Type(name: storyboard.name), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
 // Nib
 
 func nibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(name: "nib", vars: [], functions: [], structs: nibs.map(nibStructForNib))
+  return Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib))
 }
 
 func nibStructForNib(nib: Nib) -> Struct {
   let ownerOrNilParameter = Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional())
   let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
 
-  let instanceVars = [Var(name: "instance", type: Type._UINib, getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)")]
+  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UINib, getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)")]
   let instantiateFunc = Function(name: "instantiateWithOwner", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: Type(name: "[AnyObject]"), body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)")
 
   let viewFuncs = zip(nib.rootViews, Ordinals)
     .map { (view: $0.0, ordinal: $0.1) }
     .map { Function(name: "\($0.ordinal.word)View", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: $0.view.asOptional(), body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)") }
 
-  return Struct(name: nib.name, vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
+  return Struct(type: Type(name: nib.name), lets: [], vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
 }
 
 // Reuse identifiers
 
 func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
   let reuseIdentifierVars = reusables
-    .map { Var(name: $0.identifier, type: Type(name: "ReuseIdentifier", genericType: $0.type, optional: false), getter: "return ReuseIdentifier(\"\($0.identifier)\")") }
+    .map {
+      Var(
+        isStatic: true,
+        name: $0.identifier,
+        type: ReusableStruct.type.withGenericType($0.type),
+        getter: "return \(ReusableStruct.type.name)(\"\($0.identifier)\")"
+      )
+    }
 
-  return Struct(name: "reuseIdentifier", vars: reuseIdentifierVars, functions: [], structs: [])
+  return Struct(type: Type(name: "reuseIdentifier"), lets: [], vars: reuseIdentifierVars, functions: [], structs: [])
 }
 
 // Validation
