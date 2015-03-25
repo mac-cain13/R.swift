@@ -38,7 +38,6 @@ inputDirectories(NSProcessInfo.processInfo())
 
     // Generate
     let structs = [
-      ReuseIdentifier,
       imageStructFromAssetFolders(assetFolders),
       segueStructFromStoryboards(storyboards),
       storyboardStructFromStoryboards(storyboards),
@@ -58,7 +57,13 @@ inputDirectories(NSProcessInfo.processInfo())
       functions: functions,
       structs: structs
     )
-    let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
+    let fileContents = join("\n", [
+      Header, "",
+      Imports, "",
+      resourceStruct.description, "",
+      ReuseIdentifier.description, "",
+      ReuseIdentifierUITableViewExtension.description
+    ])
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {

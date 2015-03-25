@@ -155,7 +155,7 @@ func nibStructForNib(nib: Nib) -> Struct {
     .map { (view: $0.0, ordinal: $0.1) }
     .map { Function(name: "\($0.ordinal.word)View", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: $0.view.asOptional(), body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)") }
 
-  return Struct(type: Type(name: nib.name), lets: [], vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
+  return Struct(type: Type(name: sanitizedSwiftName(nib.name)), lets: [], vars: instanceVars, functions: [instantiateFunc] + viewFuncs, structs: [])
 }
 
 // Reuse identifiers
@@ -167,7 +167,7 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
         isStatic: true,
         name: $0.identifier,
         type: ReuseIdentifier.type.withGenericType($0.type),
-        getter: "return \(ReuseIdentifier.type.name)(\"\($0.identifier)\")"
+        getter: "return \(ReuseIdentifier.type.name)(identifier: \"\($0.identifier)\")"
       )
     }
 

@@ -38,6 +38,21 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
+let ReuseIdentifierUITableViewExtension = Extension(
+  type: Type._UITableView,
+  functions: [
+    Function(
+      name: "dequeueReusableCellWithIdentifier<T : UITableViewCell>",
+      parameters: [
+        Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
+        Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
+      ],
+      returnType: Type(name: "T", genericType: nil, optional: true),
+      body: "return dequeueReusableCellWithIdentifier(identifier.value, forIndexPath: indexPath) as? T"
+    )
+  ]
+)
+
 let IndentationString = "  "
 
 let Ordinals = [

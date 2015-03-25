@@ -34,6 +34,8 @@ struct Type: Printable, Equatable {
   static let _UINib = Type(name: "UINib")
   static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
+  static let _NSIndexPath = Type(name: "NSIndexPath")
+  static let _UITableView = Type(name: "UITableView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
   static let _UIViewController = Type(name: "UIViewController")
 
@@ -160,6 +162,19 @@ struct Function: Printable {
   }
 }
 
+struct Extension: Printable {
+  let type: Type
+  let functions: [Function]
+
+  var description: String {
+    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+
+    let bodyComponents = [functionsString].filter { $0 != "" }
+    let bodyString = indent(join("\n\n", bodyComponents))
+    return "extension \(type) {\n\(bodyString)\n}"
+  }
+}
+
 struct Struct: Printable {
   let type: Type
   let implements: [Type]
@@ -192,7 +207,7 @@ struct Struct: Printable {
     let letsString = join("\n", lets.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", structs.sorted { sanitizedSwiftName($0.type.name) < sanitizedSwiftName($1.type.name) })
+    let structsString = join("\n\n", structs.sorted { $0.type.description < $1.type.description })
 
     let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(join("\n\n", bodyComponents))
