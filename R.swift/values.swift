@@ -42,6 +42,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
   type: Type._UITableView,
   functions: [
     Function(
+      isStatic: false,
       name: "dequeueReusableCellWithIdentifier<T : UITableViewCell>",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
