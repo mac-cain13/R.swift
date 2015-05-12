@@ -156,20 +156,15 @@ struct AssetFolder {
   init(url: NSURL, fileManager: NSFileManager) {
     name = url.filename!
 
-    // Authorized asset extensions
-    let assetExtensions = ["appiconset", "launchimage", "imageset"]
-
-    // Browse asset directory recursively and list the authorized assets list.
+    // Browse asset directory recursively and list only the assets folders
     var assets = [NSURL]()
-    let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil,
-        options: .SkipsHiddenFiles, errorHandler: nil)
+    let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
-        for file in enumerator {
-            let fileURL = file as! NSURL
-            if let pathExtension = fileURL.pathExtension where find(assetExtensions, pathExtension) != nil {
-                assets.append(file as! NSURL)
-            }
+      for file in enumerator {
+        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where find(AssetExtensions, pathExtension) != nil {
+          assets.append(fileURL)
         }
+      }
     }
     
     imageAssets = assets.map { $0.filename! }
