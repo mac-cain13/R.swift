@@ -43,6 +43,8 @@ let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
+let AssetExtensions = ["appiconset", "launchimage", "imageset"]
+
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
   "glkViewController": Type(name: "GLKViewController"),
