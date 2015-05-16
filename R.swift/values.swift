@@ -43,6 +43,8 @@ let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
+let AssetExtensions = ["appiconset", "launchimage", "imageset"]
+
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
   "glkViewController": Type(name: "GLKViewController"),
@@ -54,3 +56,5 @@ let ElementNameToTypeMapping = [
   "avPlayerViewController": Type(name: "AVPlayerViewController"),
   "collectionViewController": Type(name: "UICollectionViewController"),
 ]
+
+let SwiftKeywords = ["class", "deinit", "enum", "extension", "func", "import", "init", "internal", "let", "operator", "private", "protocol", "public", "static", "struct", "subscript", "typealias", "var", "break", "case", "continue", "default", "do", "else", "fallthrough", "for", "if", "in", "return", "switch", "where", "while", "as", "dynamicType", "false", "is", "nil", "self", "Self", "super", "true", "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__"]
