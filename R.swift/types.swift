@@ -226,8 +226,18 @@ struct AssetFolder {
   init(url: NSURL, fileManager: NSFileManager) {
     name = url.filename!
 
-    let contents = fileManager.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles, error: nil) as! [NSURL]
-    imageAssets = contents.map { $0.filename! }
+    // Browse asset directory recursively and list only the assets folders
+    var assets = [NSURL]()
+    let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
+    if let enumerator = enumerator {
+      for file in enumerator {
+        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where find(AssetExtensions, pathExtension) != nil {
+          assets.append(fileURL)
+        }
+      }
+    }
+    
+    imageAssets = assets.map { $0.filename! }
   }
 }
 
