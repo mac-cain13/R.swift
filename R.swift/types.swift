@@ -37,6 +37,7 @@ struct Type: Printable, Equatable {
   static let _NSIndexPath = Type(name: "NSIndexPath")
   static let _UITableView = Type(name: "UITableView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
+  static let _UICollectionView = Type(name: "UICollectionView")
   static let _UIViewController = Type(name: "UIViewController")
 
   let module: String?

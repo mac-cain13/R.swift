@@ -62,7 +62,8 @@ inputDirectories(NSProcessInfo.processInfo())
       Imports, "",
       resourceStruct.description, "",
       ReuseIdentifier.description, "",
-      ReuseIdentifierUITableViewExtension.description
+      ReuseIdentifierUITableViewExtension.description, "",
+      ReuseIdentifierUICollectionViewExtension.description,
     ])
 
     // Write file if we have changes

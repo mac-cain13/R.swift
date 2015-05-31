@@ -49,7 +49,23 @@ let ReuseIdentifierUITableViewExtension = Extension(
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
       ],
       returnType: Type(name: "T", genericType: nil, optional: true),
-      body: "return dequeueReusableCellWithIdentifier(identifier.value, forIndexPath: indexPath) as? T"
+      body: "return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? T"
+    )
+  ]
+)
+
+let ReuseIdentifierUICollectionViewExtension = Extension(
+  type: Type._UICollectionView,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "dequeueReusableCellWithReuseIdentifier<T : UICollectionViewCell>",
+      parameters: [
+        Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
+        Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
+      ],
+      returnType: Type(name: "T", genericType: nil, optional: true),
+      body: "return dequeueReusableCellWithReuseIdentifier(identifier.identifier, forIndexPath: indexPath) as? T"
     )
   ]
 )
