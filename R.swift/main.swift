@@ -62,6 +62,8 @@ inputDirectories(NSProcessInfo.processInfo())
       Imports, "",
       resourceStruct.description, "",
       ReuseIdentifier.description, "",
+      NibResourceProtocol.description, "",
+      ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
       ReuseIdentifierUICollectionViewExtension.description,
     ])

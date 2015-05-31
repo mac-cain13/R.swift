@@ -36,8 +36,12 @@ struct Type: Printable, Equatable {
   static let _UIImage = Type(name: "UIImage")
   static let _NSIndexPath = Type(name: "NSIndexPath")
   static let _UITableView = Type(name: "UITableView")
+  static let _UITableViewCell = Type(name: "UITableViewCell")
+  static let _UITableViewHeaderFooterView = Type(name: "UITableViewHeaderFooterView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
   static let _UICollectionView = Type(name: "UICollectionView")
+  static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
+  static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
   static let _UIViewController = Type(name: "UIViewController")
 
   let module: String?
@@ -96,6 +100,17 @@ struct Type: Printable, Equatable {
 
 func ==(lhs: Type, rhs: Type) -> Bool {
   return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
+}
+
+struct Typealias: Printable {
+  let alias: Type
+  let type: Type?
+
+  var description: String {
+    let typeString = type.map { " = \($0)" } ?? ""
+
+    return "typealias \(alias)\(typeString)"
+  }
 }
 
 struct Var: Printable {
@@ -162,6 +177,21 @@ struct Function: Printable {
       self.localName = localName
       self.type = type
     }
+  }
+}
+
+struct Protocol: Printable {
+  let type: Type
+  let typealiasses: [Typealias]
+  let vars: [Var]
+
+  var description: String {
+    let typealiassesString = join("\n", typealiasses.sorted { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
+    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+
+    let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
+    let bodyString = indent(join("\n\n", bodyComponents))
+    return "protocol \(type) {\n\(bodyString)\n}"
   }
 }
 
