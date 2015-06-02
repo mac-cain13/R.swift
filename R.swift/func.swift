@@ -150,29 +150,65 @@ func nibVarForNib(nib: Nib) -> Var {
 }
 
 func nibStructForNib(nib: Nib) -> Struct {
-  let ownerOrNilParameter = Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional())
-  let optionsOrNilParameter = Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
 
-  let instanceVars = [Var(isStatic: false, name: "instance", type: Type._UINib, getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)")]
-  let instantiateFunc = Function(isStatic: false, name: "instantiateWithOwner", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: Type(name: "[AnyObject]"), body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)")
+
+
+  let instantiateParameters = [
+    Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
+    Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
+  ]
+
+  let instanceVar = Var(
+    isStatic: false,
+    name: "instance",
+    type: Type._UINib,
+    getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)"
+  )
+
+  let instantiateFunc = Function(
+    isStatic: false,
+    name: "instantiateWithOwner",
+    parameters: instantiateParameters,
+    returnType: Type(name: "[AnyObject]"),
+    body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
+  )
 
   let viewFuncs = zip(nib.rootViews, Ordinals)
     .map { (view: $0.0, ordinal: $0.1) }
-    .map { Function(isStatic: false, name: "\($0.ordinal.word)View", parameters: [ownerOrNilParameter, optionsOrNilParameter], returnType: $0.view.asOptional(), body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)") }
+    .map {
+      Function(
+        isStatic: false,
+        name: "\($0.ordinal.word)View",
+        parameters: instantiateParameters,
+        returnType: $0.view.asOptional(),
+        body: "return \(instantiateFunc.swiftName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
+      )
+    }
 
-  // TODO: Refactor, ugly code :(
   let reuseIdentifierVars: [Var]
   let reuseProtocols: [Type]
   if let reusable = nib.reusables.first where nib.rootViews.count == 1 && nib.reusables.count == 1 {
     let reusableVar = varFromReusable(reusable)
-    reuseIdentifierVars = [Var(isStatic: false, name: "reuseIdentifier", type: reusableVar.type, getter: reusableVar.getter)]
+    reuseIdentifierVars = [Var(
+      isStatic: false,
+      name: "reuseIdentifier",
+      type: reusableVar.type,
+      getter: reusableVar.getter
+    )]
     reuseProtocols = [ReusableProtocol.type]
   } else {
     reuseIdentifierVars = []
     reuseProtocols = []
   }
 
-  return Struct(type: Type(name: sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)), implements: [NibResourceProtocol.type] + reuseProtocols, lets: [], vars: instanceVars + reuseIdentifierVars, functions: [instantiateFunc] + viewFuncs, structs: [])
+  return Struct(
+    type: Type(name: sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)),
+    implements: [NibResourceProtocol.type] + reuseProtocols,
+    lets: [],
+    vars: [instanceVar] + reuseIdentifierVars,
+    functions: [instantiateFunc] + viewFuncs,
+    structs: []
+  )
 }
 
 // Reuse identifiers

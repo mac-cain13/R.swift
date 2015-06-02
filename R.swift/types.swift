@@ -143,9 +143,12 @@ struct Function: Printable {
   let returnType: Type
   let body: String
 
+  var swiftName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
     let staticString = isStatic ? "static " : ""
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
     let parameterString = join(", ", parameters)
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     return "\(staticString)func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
@@ -156,14 +159,12 @@ struct Function: Printable {
     let localName: String?
     let type: Type
 
+    var swiftName: String {
+      return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    }
+
     var description: String {
-      let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-
-      if let localName = localName {
-        return "\(swiftName) \(localName): \(type)"
-      }
-
-      return "\(swiftName): \(type)"
+      return localName.map({ "\(self.swiftName) \($0): \(type)" }) ?? "\(swiftName): \(type)"
     }
 
     init(name: String, type: Type) {
