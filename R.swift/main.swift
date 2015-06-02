@@ -33,7 +33,8 @@ inputDirectories(NSProcessInfo.processInfo())
     let nibs = findAllNibURLsInDirectory(url: directory)
       .map { Nib(url: $0) }
 
-    let reuseIdentifierContainers = nibs.map { $0 as ReuseIdentifierContainer } + storyboards.map { $0 as ReuseIdentifierContainer }
+    let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
+      .flatMap { $0.reusables }
 
     // Generate
     let structs = [
@@ -41,7 +42,7 @@ inputDirectories(NSProcessInfo.processInfo())
       segueStructFromStoryboards(storyboards),
       storyboardStructFromStoryboards(storyboards),
       nibStructFromNibs(nibs),
-      reuseIdentifierStructFromReuseIdentifierContainers(reuseIdentifierContainers)
+      reuseIdentifierStructFromReusables(reusables),
     ]
 
     let functions = [
@@ -49,8 +50,23 @@ inputDirectories(NSProcessInfo.processInfo())
     ]
 
     // Generate resource file contents
-    let resourceStruct = Struct(name: "R", vars: [], functions: functions, structs: structs, lowercaseFirstCharacter: false)
-    let fileContents = join("\n", [Header, "", Imports, "", resourceStruct.description])
+    let resourceStruct = Struct(
+      type: Type(name: "R"),
+      lets: [],
+      vars: [],
+      functions: functions,
+      structs: structs
+    )
+    let fileContents = join("\n", [
+      Header, "",
+      Imports, "",
+      resourceStruct.description, "",
+      ReuseIdentifier.description, "",
+      NibResourceProtocol.description, "",
+      ReusableProtocol.description, "",
+      ReuseIdentifierUITableViewExtension.description, "",
+      ReuseIdentifierUICollectionViewExtension.description,
+    ])
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {

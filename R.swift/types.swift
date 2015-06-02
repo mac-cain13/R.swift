@@ -9,6 +9,22 @@
 
 import Foundation
 
+// MARK: Helper types
+
+typealias Reusable = (identifier: String, type: Type)
+
+protocol ReusableContainer {
+  var reusables: [Reusable] { get }
+}
+
+class Box<T> {
+  let value: T
+
+  init(value: T) {
+    self.value = value
+  }
+}
+
 /// MARK: Swift types
 
 struct Type: Printable, Equatable {
@@ -16,46 +32,69 @@ struct Type: Printable, Equatable {
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
   static let _UINib = Type(name: "UINib")
+  static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
+  static let _NSIndexPath = Type(name: "NSIndexPath")
+  static let _UITableView = Type(name: "UITableView")
+  static let _UITableViewCell = Type(name: "UITableViewCell")
+  static let _UITableViewHeaderFooterView = Type(name: "UITableViewHeaderFooterView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
+  static let _UICollectionView = Type(name: "UICollectionView")
+  static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
+  static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
   static let _UIViewController = Type(name: "UIViewController")
 
   let module: String?
   let name: String
+  let genericTypeBox: Box<Type?>
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let module = module {
-      return "\(module).\((name))\(optionalString)"
+    if let genericType = genericTypeBox.value {
+      return "\(fullName)<\(genericType)>\(optionalString)"
     }
 
-    return "\(name)\(optionalString)"
+    return "\(fullName)\(optionalString)"
+  }
+
+  private var fullName: String {
+    if let module = module {
+      return "\(module).\((name))"
+    }
+
+    return name
   }
 
   var description: String {
     return fullyQualifiedName
   }
 
-  init(name: String, optional: Bool = false) {
+  init(name: String, genericType: Type? = nil, optional: Bool = false) {
     self.module = nil
     self.name = name
+    self.genericTypeBox = Box(value: genericType)
     self.optional = optional
   }
 
-  init(module: String?, name: String, optional: Bool = false) {
+  init(module: String?, name: String, genericType: Type? = nil, optional: Bool = false) {
     self.module = module
     self.name = name
+    self.genericTypeBox = Box(value: genericType)
     self.optional = optional
   }
 
   func asOptional() -> Type {
-    return Type(module: module, name: name, optional: true)
+    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: true)
   }
 
   func asNonOptional() -> Type {
-    return Type(module: module, name: name, optional: false)
+    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: false)
+  }
+
+  func withGenericType(genericType: Type) -> Type {
+    return Type(module: module, name: name, genericType: genericType, optional: optional)
   }
 }
 
@@ -63,28 +102,56 @@ func ==(lhs: Type, rhs: Type) -> Bool {
   return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
 }
 
+struct Typealias: Printable {
+  let alias: Type
+  let type: Type?
+
+  var description: String {
+    let typeString = type.map { " = \($0)" } ?? ""
+
+    return "typealias \(alias)\(typeString)"
+  }
+}
+
 struct Var: Printable {
+  let isStatic: Bool
   let name: String
   let type: Type
   let getter: String
 
   var description: String {
+    let staticString = isStatic ? "static " : ""
     let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "static var \(swiftName): \(type) { \(getter) }"
+    return "\(staticString)var \(swiftName): \(type) { \(getter) }"
+  }
+}
+
+struct Let: Printable {
+  let name: String
+  let type: Type
+
+  var description: String {
+    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    return "let \(swiftName): \(type)"
   }
 }
 
 struct Function: Printable {
+  let isStatic: Bool
   let name: String
   let parameters: [Parameter]
   let returnType: Type
   let body: String
 
+  var swiftName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    let staticString = isStatic ? "static " : ""
     let parameterString = join(", ", parameters)
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    return "static func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
+    return "\(staticString)func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
   struct Parameter: Printable {
@@ -92,14 +159,12 @@ struct Function: Printable {
     let localName: String?
     let type: Type
 
+    var swiftName: String {
+      return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    }
+
     var description: String {
-      let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-
-      if let localName = localName {
-        return "\(swiftName) \(localName): \(type)"
-      }
-
-      return "\(swiftName): \(type)"
+      return localName.map({ "\(self.swiftName) \($0): \(type)" }) ?? "\(swiftName): \(type)"
     }
 
     init(name: String, type: Type) {
@@ -116,38 +181,75 @@ struct Function: Printable {
   }
 }
 
-struct Struct: Printable {
-  let name: String
+struct Protocol: Printable {
+  let type: Type
+  let typealiasses: [Typealias]
   let vars: [Var]
+
+  var description: String {
+    let typealiassesString = join("\n", typealiasses.sorted { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
+    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+
+    let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
+    let bodyString = indent(join("\n\n", bodyComponents))
+    return "protocol \(type) {\n\(bodyString)\n}"
+  }
+}
+
+struct Extension: Printable {
+  let type: Type
+  let functions: [Function]
+
+  var description: String {
+    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+
+    let bodyComponents = [functionsString].filter { $0 != "" }
+    let bodyString = indent(join("\n\n", bodyComponents))
+    return "extension \(type) {\n\(bodyString)\n}"
+  }
+}
+
+struct Struct: Printable {
+  let type: Type
+  let implements: [Type]
+  let vars: [Var]
+  let lets: [Let]
   let functions: [Function]
   let structs: [Struct]
-  let lowercaseFirstCharacter: Bool
 
-  init(name: String, vars: [Var], functions: [Function], structs: [Struct], lowercaseFirstCharacter: Bool = true) {
-    self.name = name
+  init(type: Type, lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+    self.type = type
+    self.implements = []
+    self.lets = lets
     self.vars = vars
     self.functions = functions
     self.structs = structs
-    self.lowercaseFirstCharacter = lowercaseFirstCharacter
+  }
+
+  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+    self.type = type
+    self.implements = implements
+    self.vars = vars
+    self.lets = lets
+    self.functions = functions
+    self.structs = structs
   }
 
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: lowercaseFirstCharacter)
+    let implementsString = implements.count > 0 ? ": " + join(", ", implements) : ""
+
+    let letsString = join("\n", lets.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
     let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", structs.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let structsString = join("\n\n", structs.sorted { $0.type.description < $1.type.description })
 
-    let bodyComponents = [varsString, functionsString, structsString].filter { $0 != "" }
+    let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(join("\n\n", bodyComponents))
-    return "struct \(swiftName) {\n\(bodyString)\n}"
+    return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }
 
 /// MARK: Asset types
-
-protocol ReuseIdentifierContainer {
-  var reuseIdentifiers: [String] { get }
-}
 
 struct AssetFolder {
   let name: String
@@ -171,13 +273,13 @@ struct AssetFolder {
   }
 }
 
-struct Storyboard: ReuseIdentifierContainer {
+struct Storyboard: ReusableContainer {
   let name: String
   let segues: [String]
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
-  let reuseIdentifiers: [String]
+  let reusables: [Reusable]
 
   var initialViewController: ViewController? {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
@@ -196,7 +298,7 @@ struct Storyboard: ReuseIdentifierContainer {
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
-    reuseIdentifiers = parserDelegate.reuseIdentifiers
+    reusables = parserDelegate.reusables
   }
 
   struct ViewController {
@@ -206,10 +308,10 @@ struct Storyboard: ReuseIdentifierContainer {
   }
 }
 
-struct Nib: ReuseIdentifierContainer {
+struct Nib: ReusableContainer {
   let name: String
   let rootViews: [Type]
-  let reuseIdentifiers: [String]
+  let reusables: [Reusable]
 
   init(url: NSURL) {
     name = url.filename!
@@ -221,7 +323,7 @@ struct Nib: ReuseIdentifierContainer {
     parser.parse()
 
     rootViews = parserDelegate.rootViews
-    reuseIdentifiers = parserDelegate.reuseIdentifiers
+    reusables = parserDelegate.reusables
   }
 }
 
@@ -232,7 +334,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
-  var reuseIdentifiers: [String] = []
+  var reusables: [Reusable] = []
 
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
     switch elementName {
@@ -255,10 +357,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
         viewControllers.append(viewController)
       }
-    }
 
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      reuseIdentifiers.append(reuseIdentifier)
+      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+        reusables.append(reusable)
+      }
     }
   }
 
@@ -279,12 +381,26 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     return nil
   }
+
+  func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+      return Reusable(identifier: reuseIdentifier, type: type)
+    }
+
+    return nil
+  }
 }
 
 class NibParserDelegate: NSObject, NSXMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
-  var reuseIdentifiers: [String] = []
+  var reusables: [Reusable] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -305,10 +421,10 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
           }
         }
       }
-    }
 
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      reuseIdentifiers.append(reuseIdentifier)
+      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+        reusables.append(reusable)
+      }
     }
   }
 
@@ -329,5 +445,19 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
     let customClass = (attributeDict["customClass"] as? String) ?? "UIView"
     
     return Type(module: customModule, name: customClass)
+  }
+
+  func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
+    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+      return Reusable(identifier: reuseIdentifier, type: type)
+    }
+
+    return nil
   }
 }
