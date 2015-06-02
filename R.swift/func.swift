@@ -135,7 +135,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     })
   let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
-  return Struct(type: Type(name: storyboard.name), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
 // Nib
