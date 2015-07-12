@@ -158,25 +158,29 @@ struct Function: Printable {
     let name: String
     let localName: String?
     let type: Type
+    let defaultValue: String?
 
     var swiftName: String {
       return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
     }
 
     var description: String {
-      return localName.map({ "\(self.swiftName) \($0): \(type)" }) ?? "\(swiftName): \(type)"
+      let definition = localName.map({ "\(self.swiftName) \($0): \(type)" }) ?? "\(swiftName): \(type)"
+      return defaultValue.map({ "\(definition) = \($0)" }) ?? definition
     }
 
-    init(name: String, type: Type) {
+    init(name: String, type: Type, defaultValue: String? = nil) {
       self.name = name
       self.localName = nil
       self.type = type
+      self.defaultValue = defaultValue
     }
 
-    init(name: String, localName: String?, type: Type) {
+    init(name: String, localName: String?, type: Type, defaultValue: String? = nil) {
       self.name = name
       self.localName = localName
       self.type = type
+      self.defaultValue = defaultValue
     }
   }
 }
