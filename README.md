@@ -1,15 +1,40 @@
 # R.swift
-_Tool to get strong typed, autocompleted resources like images and segues in Swift_
+_Tool to get strong typed, autocompleted resources like images, cells and segues in Swift_
 
 ## Why use this?
 
-Normally you access your images, segues or storyboards based on strings, like `UIImage(names: "settings-icon")` or `performSegueWithIdentifier("openSettings")`. This is fragile since the compiler can't warn you about using the wrong identifier.
+You currently type:
+```swift
+let icon = UIImage(names: "settings-icon")
+let cell = dequeueReusableCellWithReuseIdentifier("textCell", forIndexPath: indexPath) as? TextCell
+performSegueWithIdentifier("openSettings")
+```
 
-With R.swift we make sure you can use strong typed identifiers like `R.image.someIcon` or `R.segue.openSettings` to get your image or segue identifier, the `R`-struct will be automatically update on build. So it's never outdated and you will get compiler errors if you rename or delete a resource.
+With R.swift it becomes:
+```swift
+let icon = R.images.settingsIcon
+let cell = dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.textCell, forIndexPath: indexPath)
+performSegueWithIdentifier(R.segue.openSettings)
+```
+
+It makes your code that uses resources:
+- **Fully typed**, less casting and guessing what a method will return
+- **Compiletime checked**, no more incorrect strings that make your app crash on runtime
+- **Autocompleted**, never have to guess that image name again
 
 ## Usage
 
-After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources. Below you find the different formats:
+After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources.
+
+R.swift currently supports:
+- [X] Images
+- [X] Segues
+- [X] Storyboards
+- [X] Nibs
+- [X] Reusable cells
+- [ ] Files in your bundle
+
+Below you find the different formats:
 
 Type             | Format                                                     | Without R.swift                           | With R.swift
 -----------------|------------------------------------------------------------|-------------------------------------------|-----------------------------
