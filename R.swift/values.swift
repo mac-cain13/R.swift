@@ -61,7 +61,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
   functions: [
     Function(
       isStatic: false,
-      name: "dequeueReusableCellWithIdentifier<T : \(Type._UITableViewCell)>",
+      name: "dequeueReusableCellWithIdentifier",
+      generics: "T : \(Type._UITableViewCell)",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath.asOptional(), defaultValue: "nil")
@@ -72,7 +73,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "dequeueReusableCellWithIdentifier<T : \(Type._UITableViewCell)>",
+      name: "dequeueReusableCellWithIdentifier",
+      generics: "T : \(Type._UITableViewCell)",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
@@ -82,7 +84,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "dequeueReusableHeaderFooterViewWithIdentifier<T : \(Type._UITableViewHeaderFooterView)>",
+      name: "dequeueReusableHeaderFooterViewWithIdentifier",
+      generics: "T : \(Type._UITableViewHeaderFooterView)",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
@@ -92,7 +95,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNib<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UITableViewCell>",
+      name: "registerNib",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UITableViewCell",
       parameters: [
         Function.Parameter(name: "nibResource", type: Type(name: "T"))
       ],
@@ -102,7 +106,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNibs<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UITableViewCell>",
+      name: "registerNibs",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UITableViewCell",
       parameters: [
         Function.Parameter(name: "nibResources", type: Type(name: "[T]"))
       ],
@@ -112,7 +117,8 @@ let ReuseIdentifierUITableViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNibForHeaderFooterView<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UIView>",
+      name: "registerNibForHeaderFooterView",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UIView",
       parameters: [
         Function.Parameter(name: "nibResource", type: Type(name: "T"))
       ],
@@ -127,7 +133,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
   functions: [
     Function(
       isStatic: false,
-      name: "dequeueReusableCellWithReuseIdentifier<T : \(Type._UICollectionViewCell)>",
+      name: "dequeueReusableCellWithReuseIdentifier",
+      generics: "T: \(Type._UICollectionViewCell)",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
@@ -138,7 +145,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "dequeueReusableSupplementaryViewOfKind<T : \(Type._UICollectionReusableView)>",
+      name: "dequeueReusableSupplementaryViewOfKind",
+      generics: "T: \(Type._UICollectionReusableView)",
       parameters: [
         Function.Parameter(name: "elementKind", type: Type._String),
         Function.Parameter(name: "withReuseIdentifier", localName: "identifier", type: ReuseIdentifier.type),
@@ -150,7 +158,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNib<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionViewCell>",
+      name: "registerNib",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionViewCell",
       parameters: [
         Function.Parameter(name: "nibResource", type: Type(name: "T"))
       ],
@@ -160,7 +169,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNibs<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionViewCell>",
+      name: "registerNibs",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionViewCell",
       parameters: [
         Function.Parameter(name: "nibResources", type: Type(name: "[T]"))
       ],
@@ -170,7 +180,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNib<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionReusableView>",
+      name: "registerNib",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionReusableView",
       parameters: [
         Function.Parameter(name: "nibResource", type: Type(name: "T")),
         Function.Parameter(name: "forSupplementaryViewOfKind", localName: "kind", type: Type._String)
@@ -181,7 +192,8 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
 
     Function(
       isStatic: false,
-      name: "registerNibs<T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionReusableView>",
+      name: "registerNibs",
+      generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionReusableView",
       parameters: [
         Function.Parameter(name: "nibResources", type: Type(name: "[T]"))
       ],
