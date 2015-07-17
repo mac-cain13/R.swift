@@ -125,7 +125,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
   let validateImagesLines = distinct(storyboard.usedImageIdentifiers)
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
-  let validateImagesFunc = Function(isStatic: true, name: "validateImages", parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
+  let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
 
   let validateViewControllersLines = catOptionals(storyboard.viewControllers
     .map { vc in
@@ -133,7 +133,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
         "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
       }
     })
-  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
+  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
 
   return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
@@ -168,6 +168,7 @@ func nibStructForNib(nib: Nib) -> Struct {
   let instantiateFunc = Function(
     isStatic: false,
     name: "instantiateWithOwner",
+    generics: nil,
     parameters: instantiateParameters,
     returnType: Type(name: "[AnyObject]"),
     body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
@@ -179,9 +180,10 @@ func nibStructForNib(nib: Nib) -> Struct {
       Function(
         isStatic: false,
         name: "\($0.ordinal.word)View",
+        generics: nil,
         parameters: instantiateParameters,
         returnType: $0.view.asOptional(),
-        body: "return \(instantiateFunc.swiftName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
+        body: "return \(instantiateFunc.callName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
       )
     }
 
@@ -231,7 +233,7 @@ func varFromReusable(reusable: Reusable) -> Var {
 // Validation
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-  return Function(isStatic: true, name: "validate", parameters: [], returnType: Type._Void, body: join("\n", storyboards.map(swiftCallStoryboardValidators)))
+  return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", storyboards.map(swiftCallStoryboardValidators)))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {

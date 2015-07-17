@@ -3,7 +3,12 @@ _Tool to get strong typed, autocompleted resources like images, cells and segues
 
 ## Why use this?
 
-You currently type:
+It makes your code that uses resources:
+- **Fully typed**, less casting and guessing what a method will return
+- **Compiletime checked**, no more incorrect strings that make your app crash on runtime
+- **Autocompleted**, never have to guess that image name again
+
+Currently you type:
 ```swift
 let icon = UIImage(names: "settings-icon")
 let cell = dequeueReusableCellWithReuseIdentifier("textCell", forIndexPath: indexPath) as? TextCell
@@ -12,15 +17,10 @@ performSegueWithIdentifier("openSettings")
 
 With R.swift it becomes:
 ```swift
-let icon = R.images.settingsIcon
+let icon = R.image.settingsIcon
 let cell = dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.textCell, forIndexPath: indexPath)
 performSegueWithIdentifier(R.segue.openSettings)
 ```
-
-It makes your code that uses resources:
-- **Fully typed**, less casting and guessing what a method will return
-- **Compiletime checked**, no more incorrect strings that make your app crash on runtime
-- **Autocompleted**, never have to guess that image name again
 
 ## Usage
 

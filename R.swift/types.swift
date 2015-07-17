@@ -139,19 +139,21 @@ struct Let: Printable {
 struct Function: Printable {
   let isStatic: Bool
   let name: String
+  let generics: String?
   let parameters: [Parameter]
   let returnType: Type
   let body: String
 
-  var swiftName: String {
+  var callName: String {
     return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
   }
 
   var description: String {
     let staticString = isStatic ? "static " : ""
+    let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = join(", ", parameters)
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    return "\(staticString)func \(swiftName)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
+    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
   struct Parameter: Printable {
