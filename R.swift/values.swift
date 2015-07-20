@@ -65,7 +65,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
       generics: "T : \(Type._UITableViewCell)",
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
-        Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath.asOptional(), defaultValue: "nil")
+        Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath.asOptional())
       ],
       returnType: Type(name: "T", genericType: nil, optional: true),
       body: "if let indexPath = indexPath {\n  return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? T\n}\nreturn dequeueReusableCellWithIdentifier(identifier.identifier) as? T"
@@ -195,10 +195,11 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
       name: "registerNibs",
       generics: "T: \(NibResourceProtocol.type) where T: \(ReusableProtocol.type), T.T: UICollectionReusableView",
       parameters: [
-        Function.Parameter(name: "nibResources", type: Type(name: "[T]"))
+        Function.Parameter(name: "nibResources", type: Type(name: "[T]")),
+        Function.Parameter(name: "forSupplementaryViewOfKind", localName: "kind", type: Type._String)
       ],
       returnType: Type._Void,
-      body: "nibResources.map(registerNib)"
+      body: "nibResources.map { self.registerNib($0, forSupplementaryViewOfKind: kind) }"
     ),
   ]
 )
