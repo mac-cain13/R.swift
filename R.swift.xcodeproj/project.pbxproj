@@ -14,18 +14,6 @@
 		D5F105FF1A3E2BC30077263A /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F105FE1A3E2BC30077263A /* func.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		D5EA0DF21A3DF45600FFEBC4 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		D5032B681A7C1542007D1107 /* types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = types.swift; sourceTree = "<group>"; };
 		D5B53A161A7D2A9B00F64418 /* values.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = values.swift; sourceTree = "<group>"; };
@@ -34,16 +22,6 @@
 		D5EA0DFE1A3DF4E300FFEBC4 /* util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = util.swift; sourceTree = "<group>"; };
 		D5F105FE1A3E2BC30077263A /* func.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		D5EA0DF11A3DF45600FFEBC4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		D5EA0DEB1A3DF45600FFEBC4 = {
@@ -82,8 +60,7 @@
 			buildConfigurationList = D5EA0DFB1A3DF45600FFEBC4 /* Build configuration list for PBXNativeTarget "rswift" */;
 			buildPhases = (
 				D5EA0DF01A3DF45600FFEBC4 /* Sources */,
-				D5EA0DF11A3DF45600FFEBC4 /* Frameworks */,
-				D5EA0DF21A3DF45600FFEBC4 /* CopyFiles */,
+				D5DE480C1B5E1B14000F6A85 /* Install into test project */,
 			);
 			buildRules = (
 			);
@@ -125,6 +102,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D5DE480C1B5E1B14000F6A85 /* Install into test project */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Install into test project";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME\" ./ResourceApp";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D5EA0DF01A3DF45600FFEBC4 /* Sources */ = {

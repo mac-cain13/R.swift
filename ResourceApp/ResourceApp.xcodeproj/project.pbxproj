@@ -14,6 +14,7 @@
 		D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC81B5D757300301B0D /* LaunchScreen.xib */; };
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
+		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResourceAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
+		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 		D55C6CBB1B5D757300301B0D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBC1B5D757300301B0D /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -122,6 +125,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D55C6CD91B5D757300301B0D /* Build configuration list for PBXNativeTarget "ResourceApp" */;
 			buildPhases = (
+				D55C6CED1B5E172900301B0D /* R.swift */,
 				D55C6CB41B5D757300301B0D /* Sources */,
 				D55C6CB51B5D757300301B0D /* Frameworks */,
 				D55C6CB61B5D757300301B0D /* Resources */,
@@ -210,6 +214,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D55C6CED1B5E172900301B0D /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = R.swift;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D55C6CB41B5D757300301B0D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -218,6 +239,7 @@
 				D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */,
 				D55C6CBE1B5D757300301B0D /* AppDelegate.swift in Sources */,
 				D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */,
+				D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +437,7 @@
 				D55C6CDB1B5D757300301B0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D55C6CDC1B5D757300301B0D /* Build configuration list for PBXNativeTarget "ResourceAppTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +446,7 @@
 				D55C6CDE1B5D757300301B0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
