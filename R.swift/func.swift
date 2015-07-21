@@ -87,10 +87,15 @@ func readResourceFile(folderURL: NSURL) -> String? {
 // Image
 
 func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
-  let vars = distinct(assetFolders.flatMap { $0.imageAssets })
+  let vars = assetFolders
+    .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
 
-  return Struct(type: Type(name: "image"), lets: [], vars: vars, functions: [], structs: [])
+  let nameOfVar: Var -> String = { $0.callName }
+  let uniqueImages = distinct(vars, nameOfVar) {
+    fail("Name conflict for image resource named '\($0.name)', rename the image '\($0.name)' to something that does not resolve to '\($0.callName)'.")
+  }
+  return Struct(type: Type(name: "image"), lets: [], vars: uniqueImages, functions: [], structs: [])
 }
 
 // Segue

@@ -119,10 +119,13 @@ struct Var: Printable {
   let type: Type
   let getter: String
 
+  var callName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
     let staticString = isStatic ? "static " : ""
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "\(staticString)var \(swiftName): \(type) { \(getter) }"
+    return "\(staticString)var \(callName): \(type) { \(getter) }"
   }
 }
 
@@ -130,9 +133,12 @@ struct Let: Printable {
   let name: String
   let type: Type
 
+  var callName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "let \(swiftName): \(type)"
+    return "let \(callName): \(type)"
   }
 }
 

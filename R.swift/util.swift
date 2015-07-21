@@ -48,6 +48,23 @@ func distinct<T: Equatable>(source: [T]) -> [T] {
   return unique
 }
 
+func distinct<T, U where U: Equatable>(source: [T], toEquatable: T -> U, removedElement: (T -> Void)?) -> [T] {
+  var unique = [T]()
+  var duplicate = [T]()
+
+  source.each {
+    let equatable = toEquatable($0)
+    let isContained = contains(unique) { toEquatable($0) == equatable }
+
+    if isContained {
+      removedElement?($0)
+    } else {
+      unique.append($0)
+    }
+  }
+  return unique
+}
+
 func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
   return Array(Zip2(a, b))
 }
