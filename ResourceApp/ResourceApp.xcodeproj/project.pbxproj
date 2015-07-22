@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D50175BB1B5FEF6E00DB8314 /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
+		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D55C6CBE1B5D757300301B0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBD1B5D757300301B0D /* AppDelegate.swift */; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
+		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CBD1B5D757300301B0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
+				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D55C6CC81B5D757300301B0D /* LaunchScreen.xib */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
@@ -96,6 +101,7 @@
 		D55C6CBB1B5D757300301B0D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D50175BA1B5FEF6E00DB8314 /* rswift.log */,
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBC1B5D757300301B0D /* Info.plist */,
 			);
@@ -200,7 +206,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				D50175BB1B5FEF6E00DB8314 /* rswift.log in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 			);
@@ -228,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\"";
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > ./rswift.log";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -264,6 +272,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D50175BD1B5FEFD000DB8314 /* Base */,
+			);
+			name = Secondary.storyboard;
+			sourceTree = "<group>";
+		};
 		D55C6CC31B5D757300301B0D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
