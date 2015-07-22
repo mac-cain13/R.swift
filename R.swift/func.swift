@@ -14,11 +14,11 @@ import Foundation
 let indent = indentWithString(IndentationString)
 
 func warn(warning: String) {
-  println("warning: \(warning)")
+  println("warning: [R.swift] \(warning)")
 }
 
 func fail(error: String) {
-  println("error: \(error)")
+  println("error: [R.swift] \(error)")
 }
 
 func failOnError(error: NSError?) {
@@ -91,17 +91,22 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
 
-  let nameOfVar: Var -> String = { $0.callName }
-  let uniqueImages = distinct(vars, nameOfVar) {
-    fail("Name conflict for image resource named '\($0.name)', rename the image '\($0.name)' to something that does not resolve to '\($0.callName)'.")
+  let groupedVars = groupBy(vars) { $0.callName }.values.array
+  let uniqueVars = groupedVars.filter { $0.count == 1 }
+  let duplicatedVars = groupedVars.filter { $0.count > 1 }
+
+  for duplicate in duplicatedVars {
+    let names = join(", ", duplicate.map { $0.name })
+    warn("Skipping \(duplicate.count) images because same symbol '\(duplicate.first!.callName)' would be generated for these images: \(names)")
   }
-  return Struct(type: Type(name: "image"), lets: [], vars: uniqueImages, functions: [], structs: [])
+
+  return Struct(type: Type(name: "image"), lets: [], vars: flatten(uniqueVars), functions: [], structs: [])
 }
 
 // Segue
 
 func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
-  let vars = distinct(storyboards.flatMap { $0.segues })
+  let vars = Array(Set(storyboards.flatMap { $0.segues }))
     .map { Var(isStatic: true, name: $0, type: Type._String, getter: "return \"\($0)\"") }
 
   return Struct(type: Type(name: "segue"), lets: [], vars: vars, functions: [], structs: [])
@@ -128,7 +133,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
       }
     })
 
-  let validateImagesLines = distinct(storyboard.usedImageIdentifiers)
+  let validateImagesLines = Array(Set(storyboard.usedImageIdentifiers))
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
   let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
 
@@ -155,8 +160,6 @@ func nibVarForNib(nib: Nib) -> Var {
 }
 
 func nibStructForNib(nib: Nib) -> Struct {
-
-
 
   let instantiateParameters = [
     Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),

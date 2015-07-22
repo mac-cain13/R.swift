@@ -38,31 +38,19 @@ func flatten<T>(coll: [[T]]) -> [T] {
   return coll.reduce([], combine: +)
 }
 
-func distinct<T: Equatable>(source: [T]) -> [T] {
-  var unique = [T]()
-  source.each {
-    if !contains(unique, $0) {
-      unique.append($0)
-    }
-  }
-  return unique
-}
+func groupBy<T: SequenceType, U: Hashable>(sequence: T, keySelector: T.Generator.Element -> U) -> Dictionary<U, [T.Generator.Element]> {
+  var groupedBy = Dictionary<U, [T.Generator.Element]>()
 
-func distinct<T, U where U: Equatable>(source: [T], toEquatable: T -> U, removedElement: (T -> Void)?) -> [T] {
-  var unique = [T]()
-  var duplicate = [T]()
-
-  source.each {
-    let equatable = toEquatable($0)
-    let isContained = contains(unique) { toEquatable($0) == equatable }
-
-    if isContained {
-      removedElement?($0)
+  for element in sequence {
+    let key = keySelector(element)
+    if let group = groupedBy[key] {
+      groupedBy[key] = group + [element]
     } else {
-      unique.append($0)
+      groupedBy[key] = [element]
     }
   }
-  return unique
+
+  return groupedBy
 }
 
 func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
