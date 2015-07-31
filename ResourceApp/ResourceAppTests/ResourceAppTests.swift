@@ -8,17 +8,31 @@
 
 import UIKit
 import XCTest
-import ResourceApp
+@testable import ResourceApp
 
 class ResourceAppTests: XCTestCase {
-  
-  func testRunGlobalValidateMethod() {
-    R.validate()
-  }
 
-  func testRunSpecificValidateMethods() {
-    R.storyboard.main.validateImages()
-    R.storyboard.main.validateViewControllers()
+  let warningsToCheckFor = [
+    "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second"
+  ]
+  
+  func testLoggedWarnings() {
+    guard let logURL = NSBundle(forClass: ResourceAppTests.self).URLForResource("rswift", withExtension: "log") else {
+      XCTFail("File rswift.log not found")
+      return
+    }
+
+    do {
+      let logContent = try String(contentsOfURL: logURL)
+      let logLines = logContent.componentsSeparatedByString("\n")
+
+      for warning in warningsToCheckFor {
+        XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")
+      }
+
+    } catch {
+      XCTFail("Failed to read rswift.log")
+    }
   }
 
 }

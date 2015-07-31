@@ -79,10 +79,31 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Second" image="Second" id="cPa-gy-q4n"/>
+                    <connections>
+                        <segue destination="oSY-nF-Ci0" kind="show" identifier="toThird" id="yGR-hV-SHy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
+        </scene>
+        <!--Third-->
+        <scene sceneID="zpX-de-BX8">
+            <objects>
+                <viewController title="Third" id="oSY-nF-Ci0" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Igu-U9-nxk"/>
+                        <viewControllerLayoutGuide type="bottom" id="rQH-pS-9iA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xle-dW-hVf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="thV-Zl-Ztw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1587" y="360"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">

@@ -10,16 +10,17 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString.pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
 
-    var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
-      failOnError(error)
+    do {
+        try directory.checkResourceIsReachable()
+    } catch let error {
+      fail(error)
       return
     }
 
@@ -57,7 +58,7 @@ inputDirectories(NSProcessInfo.processInfo())
       functions: functions,
       structs: structs
     )
-    let fileContents = join("\n", [
+    let fileContents = "\n".join([
       Header, "",
       Imports, "",
       resourceStruct.description, "",

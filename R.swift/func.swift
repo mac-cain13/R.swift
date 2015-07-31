@@ -14,32 +14,32 @@ import Foundation
 let indent = indentWithString(IndentationString)
 
 func warn(warning: String) {
-  println("warning: [R.swift] \(warning)")
+  print("warning: [R.swift] \(warning)")
 }
 
 func fail(error: String) {
-  println("error: [R.swift] \(error)")
+  print("error: [R.swift] \(error)")
 }
 
-func failOnError(error: NSError?) {
-  if let error = error {
+func fail(error: ErrorType) {
+//  if error is CustomStringConvertible {
     fail("\(error)")
-  }
+//  }
 }
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0 as! String)! }
+  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0) }
 }
 
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
   var assetFolders = [NSURL]()
 
   let errorHandler: (NSURL!, NSError!) -> Bool = { url, error in
-    failOnError(error)
+    fail(error)
     return true
   }
 
-  if let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: [NSURLIsDirectoryKey], options: NSDirectoryEnumerationOptions.SkipsHiddenFiles|NSDirectoryEnumerationOptions.SkipsPackageDescendants, errorHandler: errorHandler) {
+  if let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: [NSURLIsDirectoryKey], options: [NSDirectoryEnumerationOptions.SkipsHiddenFiles, NSDirectoryEnumerationOptions.SkipsPackageDescendants], errorHandler: errorHandler) {
 
     while let enumeratorItem: AnyObject = enumerator.nextObject() {
       if let url = enumeratorItem as? NSURL {
@@ -60,26 +60,28 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
   let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
 
-  return contains(SwiftKeywords, capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
+  return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 
 func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
   let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
 
-  var error: NSError?
-  code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
-
-  failOnError(error)
+  do {
+    try code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding)
+  } catch let error as NSError {
+    fail(error)
+  }
 }
 
 func readResourceFile(folderURL: NSURL) -> String? {
   let inputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
 
-  if let resourceFileString = String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding, error: nil) {
+  do {
+    let resourceFileString = try String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding)
     return resourceFileString
+  } catch {
+    return nil
   }
-
-  return nil
 }
 
 // MARK: Struct/function generators
@@ -96,8 +98,8 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   let duplicatedVars = groupedVars.filter { $0.count > 1 }
 
   for duplicate in duplicatedVars {
-    let names = join(", ", duplicate.map { $0.name })
-    warn("Skipping \(duplicate.count) images because same symbol '\(duplicate.first!.callName)' would be generated for these images: \(names)")
+    let names = ", ".join(duplicate.map { $0.name })
+    warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
   }
 
   return Struct(type: Type(name: "image"), lets: [], vars: flatten(uniqueVars), functions: [], structs: [])
@@ -135,7 +137,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
   let validateImagesLines = Array(Set(storyboard.usedImageIdentifiers))
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
-  let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", validateImagesLines))
+  let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(validateImagesLines))
 
   let validateViewControllersLines = catOptionals(storyboard.viewControllers
     .map { vc in
@@ -143,7 +145,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
         "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
       }
     })
-  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", validateViewControllersLines))
+  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(validateViewControllersLines))
 
   return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
@@ -241,7 +243,7 @@ func varFromReusable(reusable: Reusable) -> Var {
 // Validation
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-  return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: join("\n", storyboards.map(swiftCallStoryboardValidators)))
+  return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(storyboards.map(swiftCallStoryboardValidators)))
 }
 
 func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {

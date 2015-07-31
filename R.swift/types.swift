@@ -27,7 +27,7 @@ class Box<T> {
 
 /// MARK: Swift types
 
-struct Type: Printable, Equatable {
+struct Type: CustomStringConvertible, Equatable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
@@ -102,7 +102,7 @@ func ==(lhs: Type, rhs: Type) -> Bool {
   return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
 }
 
-struct Typealias: Printable {
+struct Typealias: CustomStringConvertible {
   let alias: Type
   let type: Type?
 
@@ -113,7 +113,7 @@ struct Typealias: Printable {
   }
 }
 
-struct Var: Printable {
+struct Var: CustomStringConvertible {
   let isStatic: Bool
   let name: String
   let type: Type
@@ -129,7 +129,7 @@ struct Var: Printable {
   }
 }
 
-struct Let: Printable {
+struct Let: CustomStringConvertible {
   let name: String
   let type: Type
 
@@ -142,7 +142,7 @@ struct Let: Printable {
   }
 }
 
-struct Function: Printable {
+struct Function: CustomStringConvertible {
   let isStatic: Bool
   let name: String
   let generics: String?
@@ -157,12 +157,12 @@ struct Function: Printable {
   var description: String {
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = join(", ", parameters)
+    let parameterString = join(", ", components: parameters)
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
-  struct Parameter: Printable {
+  struct Parameter: CustomStringConvertible {
     let name: String
     let localName: String?
     let type: Type
@@ -193,35 +193,35 @@ struct Function: Printable {
   }
 }
 
-struct Protocol: Printable {
+struct Protocol: CustomStringConvertible {
   let type: Type
   let typealiasses: [Typealias]
   let vars: [Var]
 
   var description: String {
-    let typealiassesString = join("\n", typealiasses.sorted { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
-    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let typealiassesString = join("\n", components: typealiasses.sort { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
+    let varsString = join("\n", components: vars.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
 
     let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent("\n\n".join(bodyComponents))
     return "protocol \(type) {\n\(bodyString)\n}"
   }
 }
 
-struct Extension: Printable {
+struct Extension: CustomStringConvertible {
   let type: Type
   let functions: [Function]
 
   var description: String {
-    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let functionsString = join("\n\n", components: functions.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
 
     let bodyComponents = [functionsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent("\n\n".join(bodyComponents))
     return "extension \(type) {\n\(bodyString)\n}"
   }
 }
 
-struct Struct: Printable {
+struct Struct: CustomStringConvertible {
   let type: Type
   let implements: [Type]
   let vars: [Var]
@@ -248,15 +248,15 @@ struct Struct: Printable {
   }
 
   var description: String {
-    let implementsString = implements.count > 0 ? ": " + join(", ", implements) : ""
+    let implementsString = implements.count > 0 ? ": " + join(", ", components: implements) : ""
 
-    let letsString = join("\n", lets.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", structs.sorted { $0.type.description < $1.type.description })
+    let letsString = join("\n", components: lets.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let varsString = join("\n", components: vars.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let functionsString = join("\n\n", components: functions.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let structsString = join("\n\n", components: structs.sort { $0.type.description < $1.type.description })
 
     let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent("\n\n".join(bodyComponents))
     return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }
@@ -275,7 +275,7 @@ struct AssetFolder {
     let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
       for file in enumerator {
-        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where find(AssetExtensions, pathExtension) != nil {
+        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where AssetExtensions.indexOf(pathExtension) != nil {
           assets.append(fileURL)
         }
       }
@@ -348,20 +348,20 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
-  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "document":
-      if let initialViewController = attributeDict["initialViewController"] as? String {
+      if let initialViewController = attributeDict["initialViewController"] {
         initialViewControllerIdentifier = initialViewController
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"] as? String {
+      if let segueIdentifier = attributeDict["identifier"] {
         segues.append(segueIdentifier)
       }
 
     case "image":
-      if let imageIdentifier = attributeDict["name"] as? String {
+      if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
       }
 
@@ -418,7 +418,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
