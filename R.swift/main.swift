@@ -36,31 +36,41 @@ inputDirectories(NSProcessInfo.processInfo())
     let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
 
-    // Generate
-    let structs = [
-      imageStructFromAssetFolders(assetFolders),
-      segueStructFromStoryboards(storyboards),
-      storyboardStructFromStoryboards(storyboards),
-      nibStructFromNibs(nibs),
-      reuseIdentifierStructFromReusables(reusables),
-    ]
-
-    let functions = [
-      validateAllFunctionWithStoryboards(storyboards),
-    ]
-
     // Generate resource file contents
+    let nibStruct = nibStructFromNibs(nibs)
+
     let resourceStruct = Struct(
       type: Type(name: "R"),
       lets: [],
       vars: [],
-      functions: functions,
-      structs: structs
+      functions: [
+        validateAllFunctionWithStoryboards(storyboards),
+      ],
+      structs: [
+        imageStructFromAssetFolders(assetFolders),
+        segueStructFromStoryboards(storyboards),
+        storyboardStructFromStoryboards(storyboards),
+        nibStruct.externalR,
+        reuseIdentifierStructFromReusables(reusables),
+      ]
     )
+
+    let internalResourceStruct = Struct(
+      type: Type(name: "_R"),
+      implements: [],
+      lets: [],
+      vars: [],
+      functions: [],
+      structs: [
+        nibStruct.internalR,
+      ]
+    )
+
     let fileContents = join("\n", [
       Header, "",
       Imports, "",
       resourceStruct.description, "",
+      internalResourceStruct.description, "",
       ReuseIdentifier.description, "",
       NibResourceProtocol.description, "",
       ReusableProtocol.description, "",
