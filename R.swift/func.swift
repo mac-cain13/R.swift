@@ -140,11 +140,12 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
 // Nib
 
-func nibStructFromNibs(nibs: [Nib]) -> (internalR: Struct, externalR: Struct) {
-  return (
-    internalR: Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib)),
-    externalR: Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: [])
-  )
+func nibStructFromNibs(nibs: [Nib]) -> Struct {
+  return Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: [])
+}
+
+func internalNibStructFromNibs(nibs: [Nib]) -> Struct {
+  return Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib))
 }
 
 func nibVarForNib(nib: Nib) -> Var {
