@@ -10,7 +10,7 @@ It makes your code that uses resources:
 
 Currently you type:
 ```swift
-let icon = UIImage(names: "settings-icon")
+let icon = UIImage(named: "settings-icon")
 let cell = dequeueReusableCellWithReuseIdentifier("textCell", forIndexPath: indexPath) as? TextCell
 performSegueWithIdentifier("openSettings")
 ```
