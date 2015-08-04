@@ -153,11 +153,15 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 // Nib
 
 func nibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: nibs.map(nibStructForNib))
+  return Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: [])
+}
+
+func internalNibStructFromNibs(nibs: [Nib]) -> Struct {
+  return Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib))
 }
 
 func nibVarForNib(nib: Nib) -> Var {
-  let structType = Type(name: nib.name)
+  let structType = Type(name: "_R.nib._\(nib.name)")
   return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
 }
 
@@ -213,8 +217,9 @@ func nibStructForNib(nib: Nib) -> Struct {
     reuseProtocols = []
   }
 
+  let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
   return Struct(
-    type: Type(name: sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)),
+    type: Type(name: "_\(sanitizedName)"),
     implements: [NibResourceProtocol.type] + reuseProtocols,
     lets: [],
     vars: [instanceVar] + reuseIdentifierVars,
