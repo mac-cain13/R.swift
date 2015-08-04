@@ -229,7 +229,7 @@ let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
-let AssetExtensions = ["appiconset", "launchimage", "imageset"]
+let AssetExtensions = ["launchimage", "imageset"] // "appiconset" is not loadable by default, so it's not included here
 
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,

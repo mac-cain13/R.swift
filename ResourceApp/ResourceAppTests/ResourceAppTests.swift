@@ -12,7 +12,7 @@ import XCTest
 
 class ResourceAppTests: XCTestCase {
 
-  let warningsToCheckFor = [
+  let expectedWarnings = [
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second"
   ]
   
@@ -26,7 +26,7 @@ class ResourceAppTests: XCTestCase {
       let logContent = try String(contentsOfURL: logURL)
       let logLines = logContent.componentsSeparatedByString("\n")
 
-      for warning in warningsToCheckFor {
+      for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")
       }
 
