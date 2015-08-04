@@ -20,7 +20,7 @@ let Imports = "\n".join([
 
 let ReuseIdentifier = Struct(
   type: Type(name: "ReuseIdentifier", genericType: Type(name: "T")),
-  implements: [Type(name: "Printable")],
+  implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(
       name: "identifier",

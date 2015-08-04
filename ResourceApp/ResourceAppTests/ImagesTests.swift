@@ -13,7 +13,6 @@ import XCTest
 class ImagesTests: XCTestCase {
   
   func testNoNilImages() {
-    XCTAssertNil(R.image.appIcon) // AppIcon is not available with "imageNamed"
     XCTAssertNotNil(R.image.eerste)
     XCTAssertNotNil(R.image.first)
     XCTAssertNotNil(R.image.firstNested)

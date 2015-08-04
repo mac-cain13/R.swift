@@ -245,7 +245,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#\"$SRCROOT/rswift\" \"$SRCROOT\" > ./rswift.log";
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > ./rswift.log";
 		};
 /* End PBXShellScriptBuildPhase section */
 
