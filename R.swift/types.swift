@@ -345,17 +345,17 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "document":
-      if let initialViewController = attributeDict["initialViewController"] as? String {
+      if let initialViewController = attributeDict["initialViewController"] {
         initialViewControllerIdentifier = initialViewController
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"] as? String {
+      if let segueIdentifier = attributeDict["identifier"] {
         segues.append(segueIdentifier)
       }
 
     case "image":
-      if let imageIdentifier = attributeDict["name"] as? String {
+      if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
       }
 
