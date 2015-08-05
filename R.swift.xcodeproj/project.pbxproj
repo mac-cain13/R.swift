@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4641BF9E1B71B11100E9AB0F /* rswift-framework.h in Headers */ = {isa = PBXBuildFile; fileRef = 4641BF9D1B71B11100E9AB0F /* rswift-framework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4641BFA31B71B12A00E9AB0F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EA0DF71A3DF45600FFEBC4 /* main.swift */; };
+		4641BFA41B71B12A00E9AB0F /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F105FE1A3E2BC30077263A /* func.swift */; };
+		4641BFA51B71B12A00E9AB0F /* types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5032B681A7C1542007D1107 /* types.swift */; };
+		4641BFA61B71B12A00E9AB0F /* util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EA0DFE1A3DF4E300FFEBC4 /* util.swift */; };
+		4641BFA71B71B12A00E9AB0F /* values.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B53A161A7D2A9B00F64418 /* values.swift */; };
 		D5032B691A7C1542007D1107 /* types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5032B681A7C1542007D1107 /* types.swift */; };
 		D5B53A171A7D2A9B00F64418 /* values.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B53A161A7D2A9B00F64418 /* values.swift */; };
 		D5EA0DF81A3DF45600FFEBC4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EA0DF71A3DF45600FFEBC4 /* main.swift */; };
@@ -27,6 +33,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4641BF9B1B71B11100E9AB0F /* rwsift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = rwsift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4641BF9D1B71B11100E9AB0F /* rswift-framework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "rswift-framework.h"; sourceTree = "<group>"; };
+		4641BF9F1B71B11100E9AB0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5032B681A7C1542007D1107 /* types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = types.swift; sourceTree = "<group>"; };
 		D5B53A161A7D2A9B00F64418 /* values.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = values.swift; sourceTree = "<group>"; };
 		D5EA0DF41A3DF45600FFEBC4 /* rswift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rswift; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +45,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4641BF971B71B11100E9AB0F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5EA0DF11A3DF45600FFEBC4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,10 +62,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4641BF9C1B71B11100E9AB0F /* rswift-framework */ = {
+			isa = PBXGroup;
+			children = (
+				4641BF9D1B71B11100E9AB0F /* rswift-framework.h */,
+				4641BF9F1B71B11100E9AB0F /* Info.plist */,
+			);
+			path = "rswift-framework";
+			sourceTree = "<group>";
+		};
 		D5EA0DEB1A3DF45600FFEBC4 = {
 			isa = PBXGroup;
 			children = (
 				D5EA0DF61A3DF45600FFEBC4 /* R.swift */,
+				4641BF9C1B71B11100E9AB0F /* rswift-framework */,
 				D5EA0DF51A3DF45600FFEBC4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				D5EA0DF41A3DF45600FFEBC4 /* rswift */,
+				4641BF9B1B71B11100E9AB0F /* rwsift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,7 +103,36 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		4641BF981B71B11100E9AB0F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4641BF9E1B71B11100E9AB0F /* rswift-framework.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		4641BF9A1B71B11100E9AB0F /* rswift-framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4641BFA21B71B11100E9AB0F /* Build configuration list for PBXNativeTarget "rswift-framework" */;
+			buildPhases = (
+				4641BF961B71B11100E9AB0F /* Sources */,
+				4641BF971B71B11100E9AB0F /* Frameworks */,
+				4641BF981B71B11100E9AB0F /* Headers */,
+				4641BF991B71B11100E9AB0F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "rswift-framework";
+			productName = "rswift-framework";
+			productReference = 4641BF9B1B71B11100E9AB0F /* rwsift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		D5EA0DF31A3DF45600FFEBC4 /* rswift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D5EA0DFB1A3DF45600FFEBC4 /* Build configuration list for PBXNativeTarget "rswift" */;
@@ -105,6 +161,9 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
+					4641BF9A1B71B11100E9AB0F = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					D5EA0DF31A3DF45600FFEBC4 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
@@ -123,11 +182,34 @@
 			projectRoot = "";
 			targets = (
 				D5EA0DF31A3DF45600FFEBC4 /* rswift */,
+				4641BF9A1B71B11100E9AB0F /* rswift-framework */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		4641BF991B71B11100E9AB0F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		4641BF961B71B11100E9AB0F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4641BFA51B71B12A00E9AB0F /* types.swift in Sources */,
+				4641BFA31B71B12A00E9AB0F /* main.swift in Sources */,
+				4641BFA41B71B12A00E9AB0F /* func.swift in Sources */,
+				4641BFA71B71B12A00E9AB0F /* values.swift in Sources */,
+				4641BFA61B71B12A00E9AB0F /* util.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5EA0DF01A3DF45600FFEBC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,6 +225,57 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		4641BFA01B71B11100E9AB0F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "rswift-framework/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "tfw.rswift-framework";
+				PRODUCT_NAME = rwsift;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4641BFA11B71B11100E9AB0F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "rswift-framework/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "tfw.rswift-framework";
+				PRODUCT_NAME = rwsift;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		D5EA0DF91A3DF45600FFEBC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -236,6 +369,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4641BFA21B71B11100E9AB0F /* Build configuration list for PBXNativeTarget "rswift-framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4641BFA01B71B11100E9AB0F /* Debug */,
+				4641BFA11B71B11100E9AB0F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D5EA0DEF1A3DF45600FFEBC4 /* Build configuration list for PBXProject "R.swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
