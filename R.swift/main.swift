@@ -18,9 +18,14 @@ inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
 
     var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
+    do {
+        try directory.checkResourceIsReachableAndReturnError()
+    } catch var error1 as NSError {
+        error = error1
       failOnError(error)
       return
+    } catch {
+        fatalError()
     }
 
     // Get/parse all resources into our domain objects
@@ -64,7 +69,7 @@ inputDirectories(NSProcessInfo.processInfo())
       ]
     )
 
-    let fileContents = join("\n", [
+    let fileContents = "\n".join([
       Header, "",
       Imports, "",
       resourceStruct.description, "",
