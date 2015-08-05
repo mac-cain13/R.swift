@@ -122,14 +122,16 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
 
 
-  let initialViewControllerVar = catOptionals([storyboard.initialViewController.map {
-    Var(isStatic: true, name: "initialViewController", type: $0.type.asOptional(), getter: "return instance.instantiateInitialViewController() as? \($0.type.asNonOptional())")
+  let initialViewControllerVar = catOptionals([storyboard.initialViewController.map { (vc) -> Var in
+    let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
+    return Var(isStatic: true, name: "initialViewController", type: vc.type.asOptional(), getter: "return instance.instantiateInitialViewController()\(getterCast)")
   }])
 
   let viewControllerVars = catOptionals(storyboard.viewControllers
-    .map { vc in
-      vc.storyboardIdentifier.map {
-        return Var(isStatic: true, name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\") as? \(vc.type.asNonOptional())")
+    .map { (vc) -> Var? in
+      let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
+      return vc.storyboardIdentifier.map {
+        return Var(isStatic: true, name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)")
       }
     })
 
