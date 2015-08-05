@@ -371,18 +371,17 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
-    if attributeDict["sceneMemberID"] as? String == "viewController" {
-        if let id = attributeDict["id"] as? String {
-            let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
+    if let id = attributeDict["id"] as? String 
+      where attributeDict["sceneMemberID"] as? String == "viewController" {
+      let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
 
-            let customModule = attributeDict["customModule"] as? String
-            let customClass = attributeDict["customClass"] as? String
-            let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
-            let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
-            return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
-        }
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
     }
 
     return nil
@@ -421,10 +420,9 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
       if isObjectsTagOpened {
         levelSinceObjectsTagOpened++;
 
-        if levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
-          if let rootView = viewWithAttributes(attributeDict) {
+        if let rootView = viewWithAttributes(attributeDict)
+          where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
-          }
         }
       }
 
