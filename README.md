@@ -89,7 +89,7 @@ You can by passing multiple folders to scan through. Change the build phase scri
 
 *When I launch `rswift` from Finder I get this "Unknown developer warning"?!*
 
-For now I'm to lazy to sign my builds with a Developer ID and when running stuff from the commandline/Xcode it's not a problem. It will just work, but maybe I'll fix this. Signed releases are nice, now I only need to find some time to fix this. :)
+For now I'm too lazy to sign my builds with a Developer ID and when running stuff from the commandline/Xcode it's not a problem. It will just work, but maybe I'll fix this. Signed releases are nice, now I only need to find some time to fix this. :)
 
 ## Contribute
 
