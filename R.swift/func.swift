@@ -149,8 +149,8 @@ func internalNibStructFromNibs(nibs: [Nib]) -> Struct {
 }
 
 func nibVarForNib(nib: Nib) -> Var {
-  let structType = Type(name: "_R.nib._\(nib.name)")
-  return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
+  let structType = Type(name: "_R.nib._\(nib.symbolName)")
+  return Var(isStatic: true, name: nib.symbolName, type: structType, getter: "return \(structType)()")
 }
 
 func nibStructForNib(nib: Nib) -> Struct {

@@ -316,11 +316,13 @@ struct Storyboard: ReusableContainer {
 
 struct Nib: ReusableContainer {
   let name: String
+  let symbolName: String
   let rootViews: [Type]
   let reusables: [Reusable]
 
   init(url: NSURL) {
     name = url.filename!
+    symbolName = name.stringByReplacingOccurrencesOfString(" ", withString: "", options: nil, range: nil)
 
     let parserDelegate = NibParserDelegate();
 
