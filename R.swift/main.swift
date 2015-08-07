@@ -10,18 +10,27 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
 
-inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) {$0.isDirectory && $0.absoluteString.pathExtension == "xcassets"}
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) {!$0.isDirectory && $0.absoluteString.pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) {!$0.isDirectory && $0.absoluteString.pathExtension == "storyboard" }
+
+inputDirectories(NSProcessInfo.processInfo()).each { directory in
 
     var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
-      failOnError(error)
-      return
+    do {
+        try directory.checkResourceIsReachable()
+    } catch let error as NSError {
+        failOnError(error)
+        return
+    } catch {
+        return
     }
+//    if !directory.checkResourceIsReachableAndReturnError(&error) {
+//      failOnError(error)
+//      return
+//    }
 
     // Get/parse all resources into our domain objects
     let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
@@ -63,18 +72,16 @@ inputDirectories(NSProcessInfo.processInfo())
         internalNibStructFromNibs(nibs)
       ]
     )
-
-    let fileContents = join("\n", [
-      Header, "",
-      Imports, "",
-      resourceStruct.description, "",
-      internalResourceStruct.description, "",
-      ReuseIdentifier.description, "",
-      NibResourceProtocol.description, "",
-      ReusableProtocol.description, "",
-      ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description,
-    ])
+    
+    let fileContents = "\n".join([Header, "",
+        Imports, "",
+        resourceStruct.description, "",
+        internalResourceStruct.description, "",
+        ReuseIdentifier.description, "",
+        NibResourceProtocol.description, "",
+        ReusableProtocol.description, "",
+        ReuseIdentifierUITableViewExtension.description, "",
+        ReuseIdentifierUICollectionViewExtension.description])
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {
