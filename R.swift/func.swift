@@ -21,10 +21,8 @@ func fail(error: String) {
   print("error: [R.swift] \(error)")
 }
 
-func fail(error: ErrorType) {
-//  if error is CustomStringConvertible {
-    fail("\(error)")
-//  }
+func fail<T: ErrorType where T: CustomStringConvertible>(error: T) {
+  fail("\(error)")
 }
 
 func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
