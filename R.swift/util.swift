@@ -92,6 +92,6 @@ extension NSURL {
   }
 
   var filename: String? {
-    return lastPathComponent?.stringByDeletingPathExtension
+    return (lastPathComponent as NSString?)?.stringByDeletingPathExtension
   }
 }

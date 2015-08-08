@@ -10,16 +10,16 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "storyboard" }
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
 
-    do {
-        try directory.checkResourceIsReachable()
-    } catch let error {
+    var error: NSError?
+    directory.checkResourceIsReachableAndReturnError(&error)
+    if let error = error {
       fail(error)
       return
     }
