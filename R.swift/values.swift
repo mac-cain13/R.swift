@@ -42,6 +42,7 @@ let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
   typealiasses: [],
   vars: [
+    Var(isStatic: true, name: "name", type: Type._String, getter: "get"),
     Var(isStatic: false, name: "instance", type: Type._UINib, getter: "get")
   ]
 )
@@ -53,6 +54,19 @@ let ReusableProtocol = Protocol(
   ],
   vars: [
     Var(isStatic: false, name: "reuseIdentifier", type: ReuseIdentifier.type, getter: "get")
+  ]
+)
+
+let NibUIViewControllerExtension = Extension(
+  type: Type._UIViewController,
+  functions: [
+    Initializer(
+      type: .Convenience,
+      parameters: [
+        Function.Parameter(name: "nib", type: Type(name: "NibResource"))
+      ],
+      body: "self.init(nibName: nib.dynamicType.name, bundle: nil)"
+    ) as Func
   ]
 )
 

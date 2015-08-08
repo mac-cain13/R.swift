@@ -173,6 +173,13 @@ func nibStructForNib(nib: Nib) -> Struct {
     Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
   ]
 
+  let nameVar = Var(
+    isStatic: true,
+    name: "name",
+    type: Type._String,
+    getter: "return \"\(nib.name)\""
+  )
+
   let instanceVar = Var(
     isStatic: false,
     name: "instance",
@@ -223,7 +230,7 @@ func nibStructForNib(nib: Nib) -> Struct {
     type: Type(name: "_\(sanitizedName)"),
     implements: [NibResourceProtocol.type] + reuseProtocols,
     lets: [],
-    vars: [instanceVar] + reuseIdentifierVars,
+    vars: [nameVar, instanceVar] + reuseIdentifierVars,
     functions: [instantiateFunc] + viewFuncs,
     structs: []
   )

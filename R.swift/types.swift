@@ -142,7 +142,11 @@ struct Let: CustomStringConvertible {
   }
 }
 
-struct Function: CustomStringConvertible {
+protocol Func: CustomStringConvertible {
+  var callName: String { get }
+}
+
+struct Function: Func {
   let isStatic: Bool
   let name: String
   let generics: String?
@@ -193,6 +197,34 @@ struct Function: CustomStringConvertible {
   }
 }
 
+struct Initializer: Func {
+  let type: Type
+  let parameters: [Function.Parameter]
+  let body: String
+
+  let callName = "init"
+
+  var description: String {
+    let fullName = " ".join([type.description, callName])
+    let parameterString = join(", ", components: parameters)
+    return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
+  }
+
+  enum Type: CustomStringConvertible {
+    case Designated
+    case Required
+    case Convenience
+
+    var description: String {
+      switch self {
+      case .Designated: return ""
+      case .Required: return "required"
+      case .Convenience: return "convenience"
+      }
+    }
+  }
+}
+
 struct Protocol: CustomStringConvertible {
   let type: Type
   let typealiasses: [Typealias]
@@ -210,10 +242,10 @@ struct Protocol: CustomStringConvertible {
 
 struct Extension: CustomStringConvertible {
   let type: Type
-  let functions: [Function]
+  let functions: [Func]
 
   var description: String {
-    let functionsString = join("\n\n", components: functions.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let functionsString = join("\n\n", components: functions.sort { $0.callName < $1.callName }.map { $0.description })
 
     let bodyComponents = [functionsString].filter { $0 != "" }
     let bodyString = indent("\n\n".join(bodyComponents))

@@ -74,7 +74,8 @@ inputDirectories(NSProcessInfo.processInfo())
       NibResourceProtocol.description, "",
       ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description,
+      ReuseIdentifierUICollectionViewExtension.description, "",
+      NibUIViewControllerExtension.description
     ])
 
     // Write file if we have changes
