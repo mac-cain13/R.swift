@@ -8,78 +8,79 @@
 //
 
 import Foundation
+import Darwin
 
 let defaultFileManager = NSFileManager.defaultManager()
 let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xcassets" }
 let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xib" }
 let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "storyboard" }
 
-inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+let processInfo = NSProcessInfo.processInfo()
+let inputDirectory = verifyFileURL(argumentDirectory(processInfo, atIndex: 1))
 
-    var error: NSError?
-    directory.checkResourceIsReachableAndReturnError(&error)
-    if let error = error {
-      fail(error)
-      return
-    }
+// Get/parse all resources into our domain objects
+let assetFolders = findAllAssetsFolderURLsInDirectory(url: inputDirectory)
+    .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
 
-    // Get/parse all resources into our domain objects
-    let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
-      .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
+let storyboards = findAllStoryboardURLsInDirectory(url: inputDirectory)
+    .map { Storyboard(url: $0) }
 
-    let storyboards = findAllStoryboardURLsInDirectory(url: directory)
-      .map { Storyboard(url: $0) }
+let nibs = findAllNibURLsInDirectory(url: inputDirectory)
+    .map { Nib(url: $0) }
 
-    let nibs = findAllNibURLsInDirectory(url: directory)
-      .map { Nib(url: $0) }
+let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
+    .flatMap { $0.reusables }
 
-    let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
-      .flatMap { $0.reusables }
-
-    // Generate resource file contents
-    let resourceStruct = Struct(
-      type: Type(name: "R"),
-      lets: [],
-      vars: [],
-      functions: [
+// Generate resource file contents
+let resourceStruct = Struct(
+    type: Type(name: "R"),
+    lets: [],
+    vars: [],
+    functions: [
         validateAllFunctionWithStoryboards(storyboards),
-      ],
-      structs: [
+    ],
+    structs: [
         imageStructFromAssetFolders(assetFolders),
         segueStructFromStoryboards(storyboards),
         storyboardStructFromStoryboards(storyboards),
         nibStructFromNibs(nibs),
         reuseIdentifierStructFromReusables(reusables),
-      ]
-    )
+    ]
+)
 
-    let internalResourceStruct = Struct(
-      type: Type(name: "_R"),
-      implements: [],
-      lets: [],
-      vars: [],
-      functions: [],
-      structs: [
+let internalResourceStruct = Struct(
+    type: Type(name: "_R"),
+    implements: [],
+    lets: [],
+    vars: [],
+    functions: [],
+    structs: [
         internalNibStructFromNibs(nibs)
-      ]
-    )
+    ]
+)
 
-    let fileContents = "\n".join([
-      Header, "",
-      Imports, "",
-      resourceStruct.description, "",
-      internalResourceStruct.description, "",
-      ReuseIdentifier.description, "",
-      NibResourceProtocol.description, "",
-      ReusableProtocol.description, "",
-      ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description, "",
-      NibUIViewControllerExtension.description
+let fileContents = "\n".join([
+    Header, "",
+    Imports, "",
+    resourceStruct.description, "",
+    internalResourceStruct.description, "",
+    ReuseIdentifier.description, "",
+    NibResourceProtocol.description, "",
+    ReusableProtocol.description, "",
+    ReuseIdentifierUITableViewExtension.description, "",
+    ReuseIdentifierUICollectionViewExtension.description, "",
+    NibUIViewControllerExtension.description
     ])
 
-    // Write file if we have changes
-    if readResourceFile(directory) != fileContents {
-      writeResourceFile(fileContents, toFolderURL: directory)
-    }
-  }
+// Write file if we have changes
+let outputDirectory: NSURL
+if let secondDirectory = argumentDirectory(processInfo, atIndex: 2) {
+    outputDirectory = verifyFileURL(secondDirectory)
+}
+else {
+    outputDirectory = inputDirectory
+}
+
+if readResourceFile(outputDirectory) != fileContents {
+    writeResourceFile(fileContents, toFolderURL: outputDirectory)
+}

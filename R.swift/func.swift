@@ -25,8 +25,26 @@ func fail<T: ErrorType where T: CustomStringConvertible>(error: T) {
   fail("\(error)")
 }
 
-func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0) }
+func argumentDirectory(processInfo: NSProcessInfo, atIndex index: Int) -> NSURL? {
+  guard index >= 0 && processInfo.arguments.count > index else {
+    return nil
+  }
+
+  let argument = processInfo.arguments[index]
+  return NSURL(fileURLWithPath: argument)
+}
+
+func verifyFileURL(URL: NSURL?) -> NSURL {
+    var error: NSError?
+    guard let URL = URL
+    where URL.checkResourceIsReachableAndReturnError(&error) else {
+        if let error = error {
+            fail(error)
+        }
+        exit(1)
+    }
+    
+    return URL
 }
 
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
