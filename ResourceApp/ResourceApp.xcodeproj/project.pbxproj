@@ -17,6 +17,8 @@
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
+		D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C901B78FC0500A8B96C /* duplicate.xib */; };
+		D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
@@ -49,6 +51,8 @@
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
+		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = duplicate.xib; sourceTree = "<group>"; };
+		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTests.swift; sourceTree = "<group>"; };
@@ -94,11 +98,13 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				D5AD5C951B78FCAA00A8B96C /* Duplicates */,
 				D55C6CBD1B5D757300301B0D /* AppDelegate.swift */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D575E25C1B766CD800C22F0B /* My View.xib */,
+				D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */,
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
 				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
@@ -135,6 +141,15 @@
 				D55C6CD41B5D757300301B0D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D5AD5C951B78FCAA00A8B96C /* Duplicates */ = {
+			isa = PBXGroup;
+			children = (
+				D5AD5C901B78FC0500A8B96C /* duplicate.xib */,
+			);
+			name = Duplicates;
+			path = Duplicate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,7 +236,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
+				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
+				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
