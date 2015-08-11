@@ -38,6 +38,8 @@ inputDirectories(NSProcessInfo.processInfo())
       .flatMap { $0.reusables }
 
     // Generate resource file contents
+    let nibStructs = nibStructFromNibs(nibs)
+
     let resourceStruct = Struct(
       type: Type(name: "R"),
       lets: [],
@@ -49,7 +51,7 @@ inputDirectories(NSProcessInfo.processInfo())
         imageStructFromAssetFolders(assetFolders),
         segueStructFromStoryboards(storyboards),
         storyboardStructFromStoryboards(storyboards),
-        nibStructFromNibs(nibs),
+        nibStructs.extern,
         reuseIdentifierStructFromReusables(reusables),
       ]
     )
@@ -61,7 +63,7 @@ inputDirectories(NSProcessInfo.processInfo())
       vars: [],
       functions: [],
       structs: [
-        internalNibStructFromNibs(nibs)
+        nibStructs.intern
       ]
     )
 

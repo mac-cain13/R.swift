@@ -27,7 +27,7 @@ class Box<T> {
 
 /// MARK: Swift types
 
-struct Type: CustomStringConvertible, Equatable {
+struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
@@ -71,6 +71,11 @@ struct Type: CustomStringConvertible, Equatable {
     return fullyQualifiedName
   }
 
+  var hashValue: Int {
+    let optionalString = optional ? "?" : ""
+    return "\(fullName)\(optionalString)".hashValue
+  }
+
   init(name: String, genericType: Type? = nil, optional: Bool = false) {
     self.module = nil
     self.name = name
@@ -99,7 +104,7 @@ struct Type: CustomStringConvertible, Equatable {
 }
 
 func ==(lhs: Type, rhs: Type) -> Bool {
-  return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
+  return (lhs.hashValue == rhs.hashValue)
 }
 
 struct Typealias: CustomStringConvertible {

@@ -26,6 +26,31 @@ extension Array {
   }
 }
 
+extension SequenceType {
+  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [[Generator.Element]] {
+    var groupedBy = Dictionary<U, [Generator.Element]>()
+
+    for element in self {
+      let key = keySelector(element)
+      if let group = groupedBy[key] {
+        groupedBy[key] = group + [element]
+      } else {
+        groupedBy[key] = [element]
+      }
+    }
+
+    return groupedBy.values.array
+  }
+
+  func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
+    let groupedBy = groupBy(keySelector)
+    let uniques = flatten(groupedBy.filter { $0.count == 1 })
+    let duplicates = groupedBy.filter { $0.count > 1 }
+
+    return (uniques: uniques, duplicates: duplicates)
+  }
+}
+
 func catOptionals<T>(c: [T?]) -> [T] {
   return c.flatMap(list)
 }
@@ -36,21 +61,6 @@ func list<T>(x: T?) -> [T] {
 
 func flatten<T>(coll: [[T]]) -> [T] {
   return coll.reduce([], combine: +)
-}
-
-func groupBy<T: SequenceType, U: Hashable>(sequence: T, keySelector: T.Generator.Element -> U) -> Dictionary<U, [T.Generator.Element]> {
-  var groupedBy = Dictionary<U, [T.Generator.Element]>()
-
-  for element in sequence {
-    let key = keySelector(element)
-    if let group = groupedBy[key] {
-      groupedBy[key] = group + [element]
-    } else {
-      groupedBy[key] = [element]
-    }
-  }
-
-  return groupedBy
 }
 
 func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {

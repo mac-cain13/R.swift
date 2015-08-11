@@ -88,17 +88,14 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   let vars = assetFolders
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+    .groupUniquesAndDuplicates { $0.callName }
 
-  let groupedVars = groupBy(vars) { $0.callName }.values.array
-  let uniqueVars = groupedVars.filter { $0.count == 1 }
-  let duplicatedVars = groupedVars.filter { $0.count > 1 }
-
-  for duplicate in duplicatedVars {
+  for duplicate in vars.duplicates {
     let names = ", ".join(duplicate.map { $0.name })
     warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
   }
 
-  return Struct(type: Type(name: "image"), lets: [], vars: flatten(uniqueVars), functions: [], structs: [])
+  return Struct(type: Type(name: "image"), lets: [], vars: vars.uniques, functions: [], structs: [])
 }
 
 // Segue
@@ -150,12 +147,18 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
 // Nib
 
-func nibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: [])
-}
+func nibStructFromNibs(nibs: [Nib]) -> (intern: Struct, extern: Struct) {
+  let groupedNibs = nibs.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
 
-func internalNibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib))
+  for duplicate in groupedNibs.duplicates {
+    let names = ", ".join(duplicate.map { $0.name })
+    warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
+  }
+
+  return (
+    intern: Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: groupedNibs.uniques.map(nibStructForNib)),
+    extern: Struct(type: Type(name: "nib"), lets: [], vars: groupedNibs.uniques.map(nibVarForNib), functions: [], structs: [])
+  )
 }
 
 func nibVarForNib(nib: Nib) -> Var {
