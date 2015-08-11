@@ -13,15 +13,15 @@ import Foundation
 // MARK: Array operations
 
 extension Array {
-  func each(f: T -> Void) {
+  func each(f: Element -> Void) {
     map(f)
   }
 
-  func skip(items: Int) -> [T] {
+  func skip(items: Int) -> [Element] {
     return Array(self[items..<count])
   }
 
-  func flatMap<U>(f: T -> [U]) -> [U] {
+  func flatMap<U>(f: Element -> [U]) -> [U] {
     return flatten(map(f))
   }
 }
@@ -41,7 +41,7 @@ func flatten<T>(coll: [[T]]) -> [T] {
 func distinct<T: Equatable>(source: [T]) -> [T] {
   var unique = [T]()
   source.each {
-    if !contains(unique, $0) {
+    if !unique.contains($0) {
       unique.append($0)
     }
   }
@@ -49,18 +49,18 @@ func distinct<T: Equatable>(source: [T]) -> [T] {
 }
 
 func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
-  return Array(Zip2(a, b))
+  return Array(Zip2Sequence(a, b))
 }
 
-func join<S where S: Printable>(separator: String, components: [S]) -> String {
-  return join(separator, components.map { $0.description })
+func join<S where S: CustomStringConvertible>(separator: String, components: [S]) -> String {
+  return join(separator, components: components.map { $0.description })
 }
 
 // MARK: String operations
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if count(self) <= 1 { return self.lowercaseString }
+    if self.characters.count <= 1 { return self.lowercaseString }
     let index = advance(startIndex, 1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
@@ -69,7 +69,7 @@ extension String {
 func indentWithString(indentation: String) -> String -> String {
   return { string in
     let components = string.componentsSeparatedByString("\n")
-    return indentation + join("\n\(indentation)", components)
+    return indentation + join("\n\(indentation)", components: components)
   }
 }
 
@@ -78,7 +78,10 @@ func indentWithString(indentation: String) -> String -> String {
 extension NSURL {
   var isDirectory: Bool {
     var urlIsDirectoryValue: AnyObject?
-    self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey, error: nil)
+    do {
+        try self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
+    } catch {
+    }
 
     return (urlIsDirectoryValue as? Bool) ?? false
   }
