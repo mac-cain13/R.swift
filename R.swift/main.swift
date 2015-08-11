@@ -10,19 +10,23 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString.pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString.pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
   .each { directory in
 
     var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
-      failOnError(error)
-      return
+    do {
+        try directory.checkResourceIsReachable()
+    } catch let error as NSError {
+        failOnError(error)
+        return
+    } catch {
+        return
     }
-
+    
     // Get/parse all resources into our domain objects
     let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
       .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
@@ -64,7 +68,7 @@ inputDirectories(NSProcessInfo.processInfo())
       ]
     )
 
-    let fileContents = join("\n", [
+    let fileContents = "\n".join([
       Header, "",
       Imports, "",
       resourceStruct.description, "",
