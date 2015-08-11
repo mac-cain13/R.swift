@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
-		D55C6CBE1B5D757300301B0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBD1B5D757300301B0D /* AppDelegate.swift */; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
 		D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC31B5D757300301B0D /* Main.storyboard */; };
@@ -21,6 +20,10 @@
 		D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */; };
 		D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */; };
 		D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */; };
+		D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */; };
+		D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */; };
+		D5AD5C9F1B7A924000A8B96C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */; };
+		D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
@@ -43,7 +46,6 @@
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D55C6CBD1B5D757300301B0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D55C6CBF1B5D757300301B0D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		D55C6CC11B5D757300301B0D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		D55C6CC41B5D757300301B0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -57,6 +59,10 @@
 		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = duplicate.storyboard; sourceTree = "<group>"; };
 		D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Duplicate.storyboard; sourceTree = "<group>"; };
+		D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellView.xib; sourceTree = "<group>"; };
+		D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ADuplicateCellView.xib; path = ResourceApp/Duplicate/ADuplicateCellView.xib; sourceTree = SOURCE_ROOT; };
+		D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DuplicateCellView.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTests.swift; sourceTree = "<group>"; };
@@ -103,12 +109,14 @@
 			isa = PBXGroup;
 			children = (
 				D5AD5C951B78FCAA00A8B96C /* Duplicates */,
-				D55C6CBD1B5D757300301B0D /* AppDelegate.swift */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D575E25C1B766CD800C22F0B /* My View.xib */,
+				D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */,
 				D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */,
+				D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */,
+				D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */,
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
 				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
@@ -153,6 +161,7 @@
 			children = (
 				D5AD5C901B78FC0500A8B96C /* duplicate.xib */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
+				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
 			);
 			name = Duplicates;
 			path = Duplicate;
@@ -241,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */,
 				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
@@ -248,7 +258,9 @@
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
+				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
+				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,8 +298,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5AD5C9F1B7A924000A8B96C /* AppDelegate.swift in Sources */,
 				D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */,
-				D55C6CBE1B5D757300301B0D /* AppDelegate.swift in Sources */,
 				D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */,
 				D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */,
 				D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */,
