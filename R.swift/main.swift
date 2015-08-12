@@ -37,6 +37,8 @@ inputDirectories(NSProcessInfo.processInfo())
     let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
 
+    let fonts = Font(url: directory, fileManager: defaultFileManager)
+
     // Generate resource file contents
     let resourceStruct = Struct(
       type: Type(name: "R"),
@@ -47,6 +49,7 @@ inputDirectories(NSProcessInfo.processInfo())
       ],
       structs: [
         imageStructFromAssetFolders(assetFolders),
+        fontStructFromFonts(fonts),
         segueStructFromStoryboards(storyboards),
         storyboardStructFromStoryboards(storyboards),
         nibStructFromNibs(nibs),

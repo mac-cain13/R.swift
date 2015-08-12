@@ -32,6 +32,7 @@ R.swift currently supports:
 - [X] Storyboards
 - [X] Nibs
 - [X] Reusable cells
+- [X] Custom fonts
 - [ ] Files in your bundle
 
 Below you find the different formats:
@@ -46,6 +47,7 @@ Nib              | `R.nib.[nibName].instance`                                 | 
 Nib all views    | `R.nib.[nibName].instantiateWithOwner(nil, options: nil)`  | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil)`  | `R.nib.textCell.instantiateWithOwner(nil, options: nil)`
 Nib first view   | `R.nib.[nibName].firstView(nil, options: nil)`             | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil).first as? TextCell` | `R.nib.textCell.firstView(nil, nil)`
 Reuse identifier | `R.reuseIdentifier.[name]`                                 | `"TextCell"`                              | `R.reuseIdentifier.textCell`
+NSFont | `R.font.[name](42)`                                 | `NSFont(name: "name" size: 42)`                              | `R.reuseIdentifier.textCell`
 
 Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this uses `assert` and will only work in unoptimized debug builds.
 

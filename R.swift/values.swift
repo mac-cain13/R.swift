@@ -245,6 +245,8 @@ let Ordinals = [
 
 let AssetExtensions = ["launchimage", "imageset"] // "appiconset" is not loadable by default, so it's not included here
 
+let FontExtensions = ["ttf", "otf"] 
+
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
   "tableViewCell": Type(name: "UITableViewCell"),
