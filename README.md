@@ -1,4 +1,4 @@
-NOTE: Swift 2 support is available in the [develop branch](https://github.com/mac-cain13/R.swift/tree/develop) and will be released with version 0.9.0.
+**NOTE:** Swift 2 support is available in the [develop branch](https://github.com/mac-cain13/R.swift/tree/develop) and will be released with version 0.9.0. [Beta releases of 0.9.0](https://github.com/mac-cain13/R.swift/releases) are available!
 
 # R.swift
 _Tool to get strong typed, autocompleted resources like images, cells and segues in Swift_
