@@ -281,7 +281,7 @@ func fontStructFromFonts(fonts: Font) -> Struct {
             isStatic:true,
             name: postsScriptName,
             generics: nil,
-            parameters: [Function.Parameter(name: "size", localName: "size", type: Type._CGFloat, defaultValue: "0")],
+            parameters: [Function.Parameter(name: "size", localName: nil, type: Type._CGFloat, defaultValue: "0")],
             returnType: Type._UIFont.asOptional(),
             body:"return UIFont(name: \"\(postsScriptName)\", size: size)"
             ))
