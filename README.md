@@ -64,6 +64,21 @@ _There is also a [short video](https://vimeo.com/122888912) of this instruction.
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
+### [Carthage](https://github.com/Carthage/Carthage)
+
+This project is compatible with [Carthage](https://github.com/Carthage/Carthage) as in it won't create any issues on a `carthage build`. There are some manual steps involved since Carthage doesn't integrate `R.Swift` into the project.
+
+1. Add `github "mac-cain13/R.swift" "develop"` to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile) and run `carthage update`.
+2. Open the `R.swift.xcodeproj` inside your `PROJECT_DIR/Carthage/Checkouts/R.swift`.
+3. Build the `rswift` executable inside `R.swift.xcodeproj`
+4. Right click on the (now built) `rswift` executable and open it in finder.
+5. Drag the `rswift` executable into your Project directory
+6. Open your Xcode Project and choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+7. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
+8. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
 ### Manually
 
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
