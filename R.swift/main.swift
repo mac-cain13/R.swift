@@ -15,7 +15,7 @@ let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileMa
 let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+  .forEach { directory in
 
     var error: NSError?
     directory.checkResourceIsReachableAndReturnError(&error)
@@ -69,7 +69,7 @@ inputDirectories(NSProcessInfo.processInfo())
       ]
     )
 
-    let fileContents = "\n".join([
+    let fileContents = [
       Header, "",
       Imports, "",
       resourceStruct.description, "",
@@ -79,8 +79,8 @@ inputDirectories(NSProcessInfo.processInfo())
       ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
       ReuseIdentifierUICollectionViewExtension.description, "",
-      NibUIViewControllerExtension.description
-    ])
+      NibUIViewControllerExtension.description,
+    ].joinWithSeparator("\n")
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {

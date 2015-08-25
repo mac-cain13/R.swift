@@ -210,7 +210,7 @@ struct Initializer: Func {
   let callName = "init"
 
   var description: String {
-    let fullName = " ".join([type.description, callName])
+    let fullName = [type.description, callName].joinWithSeparator(" ")
     let parameterString = join(", ", components: parameters)
     return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
   }
@@ -240,7 +240,7 @@ struct Protocol: CustomStringConvertible {
     let varsString = join("\n", components: vars.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
 
     let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
-    let bodyString = indent("\n\n".join(bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "protocol \(type) {\n\(bodyString)\n}"
   }
 }
@@ -253,7 +253,7 @@ struct Extension: CustomStringConvertible {
     let functionsString = join("\n\n", components: functions.sort { $0.callName < $1.callName }.map { $0.description })
 
     let bodyComponents = [functionsString].filter { $0 != "" }
-    let bodyString = indent("\n\n".join(bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "extension \(type) {\n\(bodyString)\n}"
   }
 }
@@ -293,7 +293,7 @@ struct Struct: CustomStringConvertible {
     let structsString = join("\n\n", components: structs.sort { $0.type.description < $1.type.description })
 
     let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
-    let bodyString = indent("\n\n".join(bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }
