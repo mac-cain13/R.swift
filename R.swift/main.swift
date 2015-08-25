@@ -15,7 +15,7 @@ let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileMa
 let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "storyboard" }
 
 inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+  .forEach { directory in
 
     var error: NSError?
     directory.checkResourceIsReachableAndReturnError(&error)
@@ -38,18 +38,22 @@ inputDirectories(NSProcessInfo.processInfo())
       .flatMap { $0.reusables }
 
     // Generate resource file contents
+    let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(storyboards)
+
+    let nibStructs = nibStructFromNibs(nibs)
+
     let resourceStruct = Struct(
       type: Type(name: "R"),
       lets: [],
       vars: [],
       functions: [
-        validateAllFunctionWithStoryboards(storyboards),
+        storyboardStructAndFunction.1,
       ],
       structs: [
         imageStructFromAssetFolders(assetFolders),
         segueStructFromStoryboards(storyboards),
-        storyboardStructFromStoryboards(storyboards),
-        nibStructFromNibs(nibs),
+        storyboardStructAndFunction.0,
+        nibStructs.extern,
         reuseIdentifierStructFromReusables(reusables),
       ]
     )
@@ -61,11 +65,11 @@ inputDirectories(NSProcessInfo.processInfo())
       vars: [],
       functions: [],
       structs: [
-        internalNibStructFromNibs(nibs)
+        nibStructs.intern
       ]
     )
 
-    let fileContents = "\n".join([
+    let fileContents = [
       Header, "",
       Imports, "",
       resourceStruct.description, "",
@@ -75,8 +79,8 @@ inputDirectories(NSProcessInfo.processInfo())
       ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
       ReuseIdentifierUICollectionViewExtension.description, "",
-      NibUIViewControllerExtension.description
-    ])
+      NibUIViewControllerExtension.description,
+    ].joinWithSeparator("\n")
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {

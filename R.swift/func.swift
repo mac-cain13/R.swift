@@ -88,17 +88,14 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
   let vars = assetFolders
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+    .groupUniquesAndDuplicates { $0.callName }
 
-  let groupedVars = groupBy(vars) { $0.callName }.values.array
-  let uniqueVars = groupedVars.filter { $0.count == 1 }
-  let duplicatedVars = groupedVars.filter { $0.count > 1 }
-
-  for duplicate in duplicatedVars {
-    let names = ", ".join(duplicate.map { $0.name })
+  for duplicate in vars.duplicates {
+    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
     warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
   }
 
-  return Struct(type: Type(name: "image"), lets: [], vars: flatten(uniqueVars), functions: [], structs: [])
+  return Struct(type: Type(name: "image"), lets: [], vars: vars.uniques, functions: [], structs: [])
 }
 
 // Segue
@@ -112,8 +109,18 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 
 // Storyboard
 
-func storyboardStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
-  return Struct(type: Type(name: "storyboard"), lets: [], vars: [], functions: [], structs: storyboards.map(storyboardStructForStoryboard))
+func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (Struct, Function) {
+  let groupedStoryboards = storyboards.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+
+  for duplicate in groupedStoryboards.duplicates {
+    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
+  }
+
+  return (
+    Struct(type: Type(name: "storyboard"), lets: [], vars: [], functions: [], structs: groupedStoryboards.uniques.map(storyboardStructForStoryboard)),
+    validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
+  )
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
@@ -135,7 +142,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
   let validateImagesLines = Array(Set(storyboard.usedImageIdentifiers))
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
-  let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(validateImagesLines))
+  let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: validateImagesLines.joinWithSeparator("\n"))
 
   let validateViewControllersLines = catOptionals(storyboard.viewControllers
     .map { vc in
@@ -143,19 +150,35 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
         "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
       }
     })
-  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(validateViewControllersLines))
+  let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: validateViewControllersLines.joinWithSeparator("\n"))
 
   return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
 }
 
-// Nib
-
-func nibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(type: Type(name: "nib"), lets: [], vars: nibs.map(nibVarForNib), functions: [], structs: [])
+func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
+  return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).joinWithSeparator("\n"))
 }
 
-func internalNibStructFromNibs(nibs: [Nib]) -> Struct {
-  return Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: nibs.map(nibStructForNib))
+func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
+  return
+    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
+    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
+}
+
+// Nib
+
+func nibStructFromNibs(nibs: [Nib]) -> (intern: Struct, extern: Struct) {
+  let groupedNibs = nibs.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+
+  for duplicate in groupedNibs.duplicates {
+    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
+  }
+
+  return (
+    intern: Struct(type: Type(name: "nib"), lets: [], vars: [], functions: [], structs: groupedNibs.uniques.map(nibStructForNib)),
+    extern: Struct(type: Type(name: "nib"), lets: [], vars: groupedNibs.uniques.map(nibVarForNib), functions: [], structs: [])
+  )
 }
 
 func nibVarForNib(nib: Nib) -> Var {
@@ -237,8 +260,14 @@ func nibStructForNib(nib: Nib) -> Struct {
 // Reuse identifiers
 
 func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
-  let reuseIdentifierVars = reusables.map(varFromReusable)
+  let groupedReusables = reusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
 
+  for duplicate in groupedReusables.duplicates {
+    let names = duplicate.map { $0.identifier }.joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
+  }
+
+  let reuseIdentifierVars = groupedReusables.uniques.map(varFromReusable)
   return Struct(type: Type(name: "reuseIdentifier"), lets: [], vars: reuseIdentifierVars, functions: [], structs: [])
 }
 
@@ -249,16 +278,4 @@ func varFromReusable(reusable: Reusable) -> Var {
     type: ReuseIdentifier.type.withGenericType(reusable.type),
     getter: "return \(ReuseIdentifier.type.name)(identifier: \"\(reusable.identifier)\")"
   )
-}
-
-// Validation
-
-func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-  return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: "\n".join(storyboards.map(swiftCallStoryboardValidators)))
-}
-
-func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
-  return
-    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
-    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
 }

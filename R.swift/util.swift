@@ -13,16 +13,33 @@ import Foundation
 // MARK: Array operations
 
 extension Array {
-  func each(f: Element -> Void) {
-    map(f)
-  }
-
   func skip(items: Int) -> [Element] {
     return Array(self[items..<count])
   }
+}
 
-  func flatMap<U>(f: Element -> [U]) -> [U] {
-    return flatten(map(f))
+extension SequenceType {
+  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [[Generator.Element]] {
+    var groupedBy = Dictionary<U, [Generator.Element]>()
+
+    for element in self {
+      let key = keySelector(element)
+      if let group = groupedBy[key] {
+        groupedBy[key] = group + [element]
+      } else {
+        groupedBy[key] = [element]
+      }
+    }
+
+    return Array(groupedBy.values)
+  }
+
+  func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
+    let groupedBy = groupBy(keySelector)
+    let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
+    let duplicates = groupedBy.filter { $0.count > 1 }
+
+    return (uniques: uniques, duplicates: duplicates)
   }
 }
 
@@ -34,31 +51,12 @@ func list<T>(x: T?) -> [T] {
   return x.map { [$0] } ?? []
 }
 
-func flatten<T>(coll: [[T]]) -> [T] {
-  return coll.reduce([], combine: +)
-}
-
-func groupBy<T: SequenceType, U: Hashable>(sequence: T, keySelector: T.Generator.Element -> U) -> Dictionary<U, [T.Generator.Element]> {
-  var groupedBy = Dictionary<U, [T.Generator.Element]>()
-
-  for element in sequence {
-    let key = keySelector(element)
-    if let group = groupedBy[key] {
-      groupedBy[key] = group + [element]
-    } else {
-      groupedBy[key] = [element]
-    }
-  }
-
-  return groupedBy
-}
-
 func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
   return Array(Zip2Sequence(a, b))
 }
 
 func join<S where S: CustomStringConvertible>(separator: String, components: [S]) -> String {
-  return separator.join(components.map { $0.description })
+  return components.map { $0.description }.joinWithSeparator(separator)
 }
 
 // MARK: String operations
@@ -66,7 +64,7 @@ func join<S where S: CustomStringConvertible>(separator: String, components: [S]
 extension String {
   var lowercaseFirstCharacter: String {
     if self.characters.count <= 1 { return self.lowercaseString }
-    let index = advance(startIndex, 1)
+    let index = startIndex.advancedBy(1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
 }
@@ -74,7 +72,7 @@ extension String {
 func indentWithString(indentation: String) -> String -> String {
   return { string in
     let components = string.componentsSeparatedByString("\n")
-    return indentation + "\n\(indentation)".join(components)
+    return indentation + components.joinWithSeparator("\n\(indentation)")
   }
 }
 
