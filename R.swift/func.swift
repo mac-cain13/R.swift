@@ -279,3 +279,32 @@ func varFromReusable(reusable: Reusable) -> Var {
     getter: "return \(ReuseIdentifier.type.name)(identifier: \"\(reusable.identifier)\")"
   )
 }
+
+// Fonts
+
+func fontStructFromFonts(fonts: Font) -> Struct {
+    let fontNames = Type(name:"font")
+    var functions = [Function]()
+    var vars = [Var]()
+
+    for postsScriptName in fonts.customPostsciptNames {
+        vars.append(Var(
+            isStatic:true,
+            name: "\(postsScriptName.lowercaseFirstCharacter) Name",
+            type: Type._String,
+            getter: "return \"\(postsScriptName)\""
+            )
+        )
+        
+        functions.append(Function(
+            isStatic:true,
+            name: postsScriptName,
+            generics: nil,
+            parameters: [Function.Parameter(name: "size", localName: nil, type: Type._CGFloat, defaultValue: "0")],
+            returnType: Type._UIFont.asOptional(),
+            body:"return UIFont(name: \"\(postsScriptName)\", size: size)"
+            ))
+    }
+
+    return Struct(type: fontNames, implements: [], lets: [], vars: vars, functions: functions, structs: [])
+}

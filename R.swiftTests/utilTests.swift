@@ -18,7 +18,7 @@ class utilTests: XCTestCase {
       ([nil, nil], []),
     ]
 
-    testSets.each {
+    testSets.forEach {
       XCTAssertEqual(catOptionals($0.input), $0.output)
     }
   }
@@ -29,22 +29,8 @@ class utilTests: XCTestCase {
       (1, [1])
     ]
 
-    testSets.each {
+    testSets.forEach {
       XCTAssertEqual(list($0.input), $0.output)
-    }
-  }
-
-  func testFlatten() {
-    let testSets: [(input: [[Int]], output: [Int])] = [
-      ([], []),
-      ([[]], []),
-      ([[1,2,3]], [1,2,3]),
-      ([[1],[2,3]], [1,2,3]),
-      ([[1],[2],[3]], [1,2,3]),
-    ]
-
-    testSets.each {
-      XCTAssertEqual(flatten($0.input), $0.output)
     }
   }
 

@@ -43,6 +43,8 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
   static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
   static let _UIViewController = Type(name: "UIViewController")
+  static let _UIFont = Type(name: "UIFont")
+  static let _CGFloat = Type(name: "CGFloat")
 
   let module: String?
   let name: String
@@ -507,4 +509,31 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
     return nil
   }
+}
+
+
+struct Font {
+    let customPostsciptNames: [String]
+
+    init(url: NSURL, fileManager: NSFileManager) {
+        customPostsciptNames = {
+            // Browse asset directory recursively and list only the fonts files
+            var customPostsciptNames = [String]()
+            let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
+            if let enumerator = enumerator {
+                for file in enumerator {
+                    if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where FontExtensions.indexOf(pathExtension) != nil {
+                        let fontDataProvider = CGDataProviderCreateWithURL(fileURL);
+                        let customFont = CGFontCreateWithDataProvider(fontDataProvider);
+                        if let postsciptName = CGFontCopyPostScriptName(customFont) {
+                            customPostsciptNames.append(postsciptName as String)
+                        } else {
+                            print("Error: No postcriptName associated to \(fileURL)") //Should never happen anyway
+                        }
+                    }
+                }
+            }
+            return customPostsciptNames
+        }()
+    }
 }
