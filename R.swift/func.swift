@@ -195,7 +195,7 @@ func nibStructForNib(nib: Nib) -> Struct {
   ]
 
   let nameVar = Var(
-    isStatic: true,
+    isStatic: false,
     name: "name",
     type: Type._String,
     getter: "return \"\(nib.name)\""

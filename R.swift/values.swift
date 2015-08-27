@@ -45,7 +45,7 @@ let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
   typealiasses: [],
   vars: [
-    Var(isStatic: true, name: "name", type: Type._String, getter: "get"),
+    Var(isStatic: false, name: "name", type: Type._String, getter: "get"),
     Var(isStatic: false, name: "instance", type: Type._UINib, getter: "get")
   ]
 )
@@ -68,7 +68,7 @@ let NibUIViewControllerExtension = Extension(
       parameters: [
         Function.Parameter(name: "nib", type: Type(name: "NibResource"))
       ],
-      body: "self.init(nibName: nib.dynamicType.name, bundle: nil)"
+      body: "self.init(nibName: nib.name, bundle: nil)"
     ) as Func
   ]
 )
