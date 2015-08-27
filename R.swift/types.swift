@@ -324,6 +324,22 @@ struct AssetFolder {
   }
 }
 
+struct Font {
+  let name: String
+
+  init?(url: NSURL) {
+    let dataProvider = CGDataProviderCreateWithURL(url)
+    let font = CGFontCreateWithDataProvider(dataProvider)
+
+    if let postScriptName = CGFontCopyPostScriptName(font) {
+      name = postScriptName as String
+    } else {
+      warn("No postcriptName associated to font at \(url)")
+      return nil
+    }
+  }
+}
+
 struct Storyboard: ReusableContainer {
   let name: String
   let segues: [String]
@@ -509,31 +525,4 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
     return nil
   }
-}
-
-
-struct Font {
-    let customPostsciptNames: [String]
-
-    init(url: NSURL, fileManager: NSFileManager) {
-        customPostsciptNames = {
-            // Browse asset directory recursively and list only the fonts files
-            var customPostsciptNames = [String]()
-            let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
-            if let enumerator = enumerator {
-                for file in enumerator {
-                    if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where FontExtensions.indexOf(pathExtension) != nil {
-                        let fontDataProvider = CGDataProviderCreateWithURL(fileURL);
-                        let customFont = CGFontCreateWithDataProvider(fontDataProvider);
-                        if let postsciptName = CGFontCopyPostScriptName(customFont) {
-                            customPostsciptNames.append(postsciptName as String)
-                        } else {
-                            print("Error: No postcriptName associated to \(fileURL)") //Should never happen anyway
-                        }
-                    }
-                }
-            }
-            return customPostsciptNames
-        }()
-    }
 }

@@ -10,9 +10,10 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteString as NSString).pathExtension == "storyboard" }
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteURL.pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "storyboard" }
+let findAllFontURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteURL.pathExtension == "ttf" || $0.absoluteURL.pathExtension == "otf") }
 
 inputDirectories(NSProcessInfo.processInfo())
   .forEach { directory in
@@ -37,7 +38,8 @@ inputDirectories(NSProcessInfo.processInfo())
     let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
 
-    let fonts = Font(url: directory, fileManager: defaultFileManager)
+    let fonts = findAllFontURLsInDirectory(url: directory)
+      .flatMap { Font(url: $0) }
 
     // Generate resource file contents
     let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(storyboards)

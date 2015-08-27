@@ -282,29 +282,19 @@ func varFromReusable(reusable: Reusable) -> Var {
 
 // Fonts
 
-func fontStructFromFonts(fonts: Font) -> Struct {
-    let fontNames = Type(name:"font")
-    var functions = [Function]()
-    var vars = [Var]()
+func fontStructFromFonts(fonts: [Font]) -> Struct {
+  return Struct(type: Type(name: "font"), lets: [], vars: [], functions: fonts.map(fontFunctionFromFont), structs: [])
+}
 
-    for postsScriptName in fonts.customPostsciptNames {
-        vars.append(Var(
-            isStatic:true,
-            name: "\(postsScriptName.lowercaseFirstCharacter) Name",
-            type: Type._String,
-            getter: "return \"\(postsScriptName)\""
-            )
-        )
-        
-        functions.append(Function(
-            isStatic:true,
-            name: postsScriptName,
-            generics: nil,
-            parameters: [Function.Parameter(name: "size", localName: nil, type: Type._CGFloat, defaultValue: "0")],
-            returnType: Type._UIFont.asOptional(),
-            body:"return UIFont(name: \"\(postsScriptName)\", size: size)"
-            ))
-    }
-
-    return Struct(type: fontNames, implements: [], lets: [], vars: vars, functions: functions, structs: [])
+func fontFunctionFromFont(font: Font) -> Function {
+  return Function(
+    isStatic: true,
+    name: font.name,
+    generics: nil,
+    parameters: [
+      Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
+    ],
+    returnType: Type._UIFont.asOptional(),
+    body:"return UIFont(name: \"\(font.name)\", size: size)"
+  )
 }
