@@ -43,6 +43,8 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
   static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
   static let _UIViewController = Type(name: "UIViewController")
+  static let _UIFont = Type(name: "UIFont")
+  static let _CGFloat = Type(name: "CGFloat")
 
   let module: String?
   let name: String
@@ -319,6 +321,22 @@ struct AssetFolder {
     }
     
     imageAssets = assets.map { $0.filename! }
+  }
+}
+
+struct Font {
+  let name: String
+
+  init?(url: NSURL) {
+    let dataProvider = CGDataProviderCreateWithURL(url)
+    let font = CGFontCreateWithDataProvider(dataProvider)
+
+    if let postScriptName = CGFontCopyPostScriptName(font) {
+      name = postScriptName as String
+    } else {
+      warn("No postcriptName associated to font at \(url)")
+      return nil
+    }
   }
 }
 

@@ -26,6 +26,14 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AveriaLibre-B.ttf</string>
+		<string>AveriaLibre-BI.ttf</string>
+		<string>AveriaLibre-L.ttf</string>
+		<string>AveriaLibre.ttf</string>
+		<string>GdyBkltter1911.ttf</string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

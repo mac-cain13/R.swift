@@ -10,9 +10,12 @@ import UIKit
 
 class FirstViewController: UIViewController {
 
+  @IBOutlet weak var titleLabel: UILabel!
+
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
+    titleLabel.font = R.font.averiaLibreBolditalic(size: 36)
   }
 
   override func didReceiveMemoryWarning() {
