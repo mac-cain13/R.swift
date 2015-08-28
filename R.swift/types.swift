@@ -346,12 +346,12 @@ struct Font {
     let dataProvider = CGDataProviderCreateWithURL(url)
     let font = CGFontCreateWithDataProvider(dataProvider)
 
-    if let postScriptName = CGFontCopyPostScriptName(font) {
-      name = postScriptName as String
-    } else {
+    guard let postScriptName = CGFontCopyPostScriptName(font) else {
       warn("No postcriptName associated to font at \(url)")
       return nil
     }
+
+    name = postScriptName as String
   }
 }
 
