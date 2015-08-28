@@ -168,7 +168,7 @@ struct Function: Func {
   var description: String {
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = join(", ", components: parameters)
+    let parameterString = parameters.joinWithSeparator(", ")
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
@@ -213,7 +213,7 @@ struct Initializer: Func {
 
   var description: String {
     let fullName = [type.description, callName].joinWithSeparator(" ")
-    let parameterString = join(", ", components: parameters)
+    let parameterString = parameters.joinWithSeparator(", ")
     return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
   }
 
@@ -238,8 +238,12 @@ struct Protocol: CustomStringConvertible {
   let vars: [Var]
 
   var description: String {
-    let typealiassesString = join("\n", components: typealiasses.sort { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
-    let varsString = join("\n", components: vars.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let typealiassesString = typealiasses
+      .sort { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) }
+      .joinWithSeparator("\n")
+    let varsString = vars
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
 
     let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
     let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
@@ -252,7 +256,10 @@ struct Extension: CustomStringConvertible {
   let functions: [Func]
 
   var description: String {
-    let functionsString = join("\n\n", components: functions.sort { $0.callName < $1.callName }.map { $0.description })
+    let functionsString = functions
+      .sort { $0.callName < $1.callName }
+      .map { $0.description }
+      .joinWithSeparator("\n\n")
 
     let bodyComponents = [functionsString].filter { $0 != "" }
     let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
@@ -287,12 +294,20 @@ struct Struct: CustomStringConvertible {
   }
 
   var description: String {
-    let implementsString = implements.count > 0 ? ": " + join(", ", components: implements) : ""
+    let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
 
-    let letsString = join("\n", components: lets.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let varsString = join("\n", components: vars.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let functionsString = join("\n\n", components: functions.sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", components: structs.sort { $0.type.description < $1.type.description })
+    let letsString = lets
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
+    let varsString = vars
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
+    let functionsString = functions
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n\n")
+    let structsString = structs
+      .sort { $0.type.description < $1.type.description }
+      .joinWithSeparator("\n\n")
 
     let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
