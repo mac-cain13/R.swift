@@ -43,20 +43,10 @@ extension SequenceType {
   }
 }
 
-func catOptionals<T>(c: [T?]) -> [T] {
-  return c.flatMap(list)
-}
-
-func list<T>(x: T?) -> [T] {
-  return x.map { [$0] } ?? []
-}
-
-func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
-  return Array(Zip2Sequence(a, b))
-}
-
-func join<S where S: CustomStringConvertible>(separator: String, components: [S]) -> String {
-  return components.map { $0.description }.joinWithSeparator(separator)
+extension SequenceType where Generator.Element : CustomStringConvertible {
+  func joinWithSeparator(separator: String) -> String {
+    return map { $0.description }.joinWithSeparator(separator)
+  }
 }
 
 // MARK: String operations
@@ -82,9 +72,8 @@ extension NSURL {
   var isDirectory: Bool {
     var urlIsDirectoryValue: AnyObject?
     do {
-      try self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
-    } catch _ {
-    }
+      try getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
+    } catch _ {}
 
     return (urlIsDirectoryValue as? Bool) ?? false
   }
