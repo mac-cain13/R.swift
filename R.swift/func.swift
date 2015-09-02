@@ -276,7 +276,7 @@ func varFromReusable(reusable: Reusable) -> Var {
   return Var(
     isStatic: true,
     name: reusable.identifier,
-    type: ReuseIdentifier.type.withGenericType(reusable.type),
+    type: ReuseIdentifier.type.withGenericArgs([reusable.type.name]),
     getter: "return \(ReuseIdentifier.type.name)(identifier: \"\(reusable.identifier)\")"
   )
 }
