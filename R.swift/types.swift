@@ -382,6 +382,12 @@ struct Storyboard: ReusableContainer {
     let id: String
     let storyboardIdentifier: String?
     let type: Type
+    let segues: [Segue]
+  }
+
+  struct Segue {
+    let identifier: String
+    let destination: String
   }
 }
 
@@ -452,7 +458,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
       let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
     }
 
     return nil

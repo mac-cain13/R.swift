@@ -41,6 +41,47 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
+
+let StoryboardSegue = Struct(
+  type: Type(name: "StoryboardSegue", genericArgs: ["Source", "Destination"]),
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(
+      name: "identifier",
+      type: Type(name: "String")
+    )
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type(name: "String"),
+      getter: "return identifier"
+    )
+  ],
+  functions: [
+    Function(
+      isStatic: false,
+      name: "sourceViewController",
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
+      ],
+      returnType: Type(name: "Source", optional: true),
+      body: "return segue.sourceViewController as? Source"
+    ),
+    Function(
+      isStatic: false,
+      name: "destinationViewController",
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
+      ],
+      returnType: Type(name: "Destination", optional: true),
+      body: "return segue.destinationViewController as? Destination"
+    )],
+  structs: [])
+
 let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
   typealiasses: [],
