@@ -25,10 +25,6 @@ func fail<T: ErrorType where T: CustomStringConvertible>(error: T) {
   fail("\(error)")
 }
 
-func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0) }
-}
-
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
   var assetFolders = [NSURL]()
 

@@ -87,7 +87,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "$SRCROOT/ResourceApp"
+            argument = "$SRCROOT/ResourceApp/ResourceApp.xcodeproj"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "ResourceApp"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "$SRCROOT/ResourceApp/"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

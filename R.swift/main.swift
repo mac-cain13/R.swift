@@ -9,86 +9,37 @@
 
 import Foundation
 
-let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteURL.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "storyboard" }
-let findAllFontURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteURL.pathExtension == "ttf" || $0.absoluteURL.pathExtension == "otf") }
+do {
+  let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
 
-inputDirectories(NSProcessInfo.processInfo())
-  .forEach { directory in
+  let resourceURLs = try resourcePathsInXcodeproj(callInformation.xcodeprojPath, forTarget: callInformation.targetName)
+    .flatMap { NSURL(fileURLWithPath: "\(callInformation.xcodeprojPath)/..\($0)").URLByStandardizingPath }
 
-    var error: NSError?
-    directory.checkResourceIsReachableAndReturnError(&error)
-    if let error = error {
-      fail(error)
-      return
-    }
+  let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-    // Get/parse all resources into our domain objects
-    let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
-      .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
+  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources)
 
-    let storyboards = findAllStoryboardURLsInDirectory(url: directory)
-      .map { Storyboard(url: $0) }
-
-    let nibs = findAllNibURLsInDirectory(url: directory)
-      .map { Nib(url: $0) }
-
-    let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
-      .flatMap { $0.reusables }
-
-    let fonts = findAllFontURLsInDirectory(url: directory)
-      .flatMap { Font(url: $0) }
-
-    // Generate resource file contents
-    let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(storyboards)
-
-    let nibStructs = nibStructFromNibs(nibs)
-
-    let resourceStruct = Struct(
-      type: Type(name: "R"),
-      lets: [],
-      vars: [],
-      functions: [
-        storyboardStructAndFunction.1,
-      ],
-      structs: [
-        imageStructFromAssetFolders(assetFolders),
-        fontStructFromFonts(fonts),
-        segueStructFromStoryboards(storyboards),
-        storyboardStructAndFunction.0,
-        nibStructs.extern,
-        reuseIdentifierStructFromReusables(reusables),
-      ]
-    )
-
-    let internalResourceStruct = Struct(
-      type: Type(name: "_R"),
-      implements: [],
-      lets: [],
-      vars: [],
-      functions: [],
-      structs: [
-        nibStructs.intern
-      ]
-    )
-
-    let fileContents = [
-      Header, "",
-      Imports, "",
-      resourceStruct.description, "",
-      internalResourceStruct.description, "",
-      ReuseIdentifier.description, "",
-      NibResourceProtocol.description, "",
-      ReusableProtocol.description, "",
-      ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description, "",
-      NibUIViewControllerExtension.description,
+  let fileContents = [
+    Header, "",
+    Imports, "",
+    externalStruct.description, "",
+    internalStruct.description, "",
+    ReuseIdentifier.description, "",
+    NibResourceProtocol.description, "",
+    ReusableProtocol.description, "",
+    ReuseIdentifierUITableViewExtension.description, "",
+    ReuseIdentifierUICollectionViewExtension.description, "",
+    NibUIViewControllerExtension.description,
     ].joinWithSeparator("\n")
 
-    // Write file if we have changes
-    if readResourceFile(directory) != fileContents {
-      writeResourceFile(fileContents, toFolderURL: directory)
-    }
+  // Write file if we have changes
+  let outputFolderURL = NSURL(fileURLWithPath: callInformation.outputFolderPath)
+  if readResourceFile(outputFolderURL) != fileContents {
+    writeResourceFile(fileContents, toFolderURL: outputFolderURL)
   }
+
+} catch let InputParsingError.MissingArguments(humanReadableError) {
+  fail(humanReadableError)
+} catch let InputParsingError.InvalidArgument(humanReadableError) {
+  fail(humanReadableError)
+}
