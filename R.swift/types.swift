@@ -17,15 +17,9 @@ protocol ReusableContainer {
   var reusables: [Reusable] { get }
 }
 
-class Box<T> {
-  let value: T
-
-  init(value: T) {
-    self.value = value
-  }
-}
-
 /// MARK: Swift types
+
+typealias TypeVar = String
 
 struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
@@ -48,14 +42,15 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
 
   let module: String?
   let name: String
-  let genericTypeBox: Box<Type?>
+  let genericArgs: [TypeVar]
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let genericType = genericTypeBox.value {
-      return "\(fullName)<\(genericType)>\(optionalString)"
+    if genericArgs.count > 0 {
+      let args = genericArgs.joinWithSeparator(", ")
+      return "\(fullName)<\(args)>\(optionalString)"
     }
 
     return "\(fullName)\(optionalString)"
@@ -78,30 +73,30 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
     return "\(fullName)\(optionalString)".hashValue
   }
 
-  init(name: String, genericType: Type? = nil, optional: Bool = false) {
+  init(name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = nil
     self.name = name
-    self.genericTypeBox = Box(value: genericType)
+    self.genericArgs = genericArgs
     self.optional = optional
   }
 
-  init(module: String?, name: String, genericType: Type? = nil, optional: Bool = false) {
+  init(module: String?, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
-    self.genericTypeBox = Box(value: genericType)
+    self.genericArgs = genericArgs
     self.optional = optional
   }
 
   func asOptional() -> Type {
-    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: true)
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: true)
   }
 
   func asNonOptional() -> Type {
-    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: false)
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: false)
   }
 
-  func withGenericType(genericType: Type) -> Type {
-    return Type(module: module, name: name, genericType: genericType, optional: optional)
+  func withGenericArgs(genericArgs: [TypeVar]) -> Type {
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 }
 
@@ -387,6 +382,12 @@ struct Storyboard: ReusableContainer {
     let id: String
     let storyboardIdentifier: String?
     let type: Type
+    let segues: [Segue]
+  }
+
+  struct Segue {
+    let identifier: String
+    let destination: String
   }
 }
 
@@ -457,7 +458,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
       let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
     }
 
     return nil

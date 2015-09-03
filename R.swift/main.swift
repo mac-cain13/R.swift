@@ -80,6 +80,7 @@ inputDirectories(NSProcessInfo.processInfo())
       resourceStruct.description, "",
       internalResourceStruct.description, "",
       ReuseIdentifier.description, "",
+      StoryboardSegue.description, "",
       NibResourceProtocol.description, "",
       ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
