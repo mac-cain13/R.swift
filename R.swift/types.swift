@@ -27,7 +27,7 @@ class Box<T> {
 
 /// MARK: Swift types
 
-struct Type: Printable, Equatable {
+struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
@@ -43,6 +43,8 @@ struct Type: Printable, Equatable {
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
   static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
   static let _UIViewController = Type(name: "UIViewController")
+  static let _UIFont = Type(name: "UIFont")
+  static let _CGFloat = Type(name: "CGFloat")
 
   let module: String?
   let name: String
@@ -69,6 +71,11 @@ struct Type: Printable, Equatable {
 
   var description: String {
     return fullyQualifiedName
+  }
+
+  var hashValue: Int {
+    let optionalString = optional ? "?" : ""
+    return "\(fullName)\(optionalString)".hashValue
   }
 
   init(name: String, genericType: Type? = nil, optional: Bool = false) {
@@ -99,10 +106,10 @@ struct Type: Printable, Equatable {
 }
 
 func ==(lhs: Type, rhs: Type) -> Bool {
-  return (lhs.module == rhs.module && lhs.name == rhs.name && lhs.optional == rhs.optional)
+  return (lhs.hashValue == rhs.hashValue)
 }
 
-struct Typealias: Printable {
+struct Typealias: CustomStringConvertible {
   let alias: Type
   let type: Type?
 
@@ -113,30 +120,40 @@ struct Typealias: Printable {
   }
 }
 
-struct Var: Printable {
+struct Var: CustomStringConvertible {
   let isStatic: Bool
   let name: String
   let type: Type
   let getter: String
 
+  var callName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
     let staticString = isStatic ? "static " : ""
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "\(staticString)var \(swiftName): \(type) { \(getter) }"
+    return "\(staticString)var \(callName): \(type) { \(getter) }"
   }
 }
 
-struct Let: Printable {
+struct Let: CustomStringConvertible {
   let name: String
   let type: Type
 
+  var callName: String {
+    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+  }
+
   var description: String {
-    let swiftName = sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-    return "let \(swiftName): \(type)"
+    return "let \(callName): \(type)"
   }
 }
 
-struct Function: Printable {
+protocol Func: CustomStringConvertible {
+  var callName: String { get }
+}
+
+struct Function: Func {
   let isStatic: Bool
   let name: String
   let generics: String?
@@ -151,12 +168,12 @@ struct Function: Printable {
   var description: String {
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = join(", ", parameters)
+    let parameterString = parameters.joinWithSeparator(", ")
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
   }
 
-  struct Parameter: Printable {
+  struct Parameter: CustomStringConvertible {
     let name: String
     let localName: String?
     let type: Type
@@ -187,35 +204,70 @@ struct Function: Printable {
   }
 }
 
-struct Protocol: Printable {
+struct Initializer: Func {
+  let type: Type
+  let parameters: [Function.Parameter]
+  let body: String
+
+  let callName = "init"
+
+  var description: String {
+    let fullName = [type.description, callName].joinWithSeparator(" ")
+    let parameterString = parameters.joinWithSeparator(", ")
+    return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
+  }
+
+  enum Type: CustomStringConvertible {
+    case Designated
+    case Required
+    case Convenience
+
+    var description: String {
+      switch self {
+      case .Designated: return ""
+      case .Required: return "required"
+      case .Convenience: return "convenience"
+      }
+    }
+  }
+}
+
+struct Protocol: CustomStringConvertible {
   let type: Type
   let typealiasses: [Typealias]
   let vars: [Var]
 
   var description: String {
-    let typealiassesString = join("\n", typealiasses.sorted { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) })
-    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let typealiassesString = typealiasses
+      .sort { sanitizedSwiftName($0.alias.fullyQualifiedName) < sanitizedSwiftName($1.alias.fullyQualifiedName) }
+      .joinWithSeparator("\n")
+    let varsString = vars
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
 
     let bodyComponents = [typealiassesString, varsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "protocol \(type) {\n\(bodyString)\n}"
   }
 }
 
-struct Extension: Printable {
+struct Extension: CustomStringConvertible {
   let type: Type
-  let functions: [Function]
+  let functions: [Func]
 
   var description: String {
-    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
+    let functionsString = functions
+      .sort { $0.callName < $1.callName }
+      .map { $0.description }
+      .joinWithSeparator("\n\n")
 
     let bodyComponents = [functionsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "extension \(type) {\n\(bodyString)\n}"
   }
 }
 
-struct Struct: Printable {
+struct Struct: CustomStringConvertible {
   let type: Type
   let implements: [Type]
   let vars: [Var]
@@ -242,15 +294,23 @@ struct Struct: Printable {
   }
 
   var description: String {
-    let implementsString = implements.count > 0 ? ": " + join(", ", implements) : ""
+    let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
 
-    let letsString = join("\n", lets.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let varsString = join("\n", vars.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let functionsString = join("\n\n", functions.sorted { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) })
-    let structsString = join("\n\n", structs.sorted { $0.type.description < $1.type.description })
+    let letsString = lets
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
+    let varsString = vars
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n")
+    let functionsString = functions
+      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .joinWithSeparator("\n\n")
+    let structsString = structs
+      .sort { $0.type.description < $1.type.description }
+      .joinWithSeparator("\n\n")
 
     let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
-    let bodyString = indent(join("\n\n", bodyComponents))
+    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }
@@ -269,13 +329,29 @@ struct AssetFolder {
     let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
       for file in enumerator {
-        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where find(AssetExtensions, pathExtension) != nil {
+        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where AssetExtensions.indexOf(pathExtension) != nil {
           assets.append(fileURL)
         }
       }
     }
     
     imageAssets = assets.map { $0.filename! }
+  }
+}
+
+struct Font {
+  let name: String
+
+  init?(url: NSURL) {
+    let dataProvider = CGDataProviderCreateWithURL(url)
+    let font = CGFontCreateWithDataProvider(dataProvider)
+
+    guard let postScriptName = CGFontCopyPostScriptName(font) else {
+      warn("No postcriptName associated to font at \(url)")
+      return nil
+    }
+
+    name = postScriptName as String
   }
 }
 
@@ -342,20 +418,20 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
-  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "document":
-      if let initialViewController = attributeDict["initialViewController"] as? String {
+      if let initialViewController = attributeDict["initialViewController"] {
         initialViewControllerIdentifier = initialViewController
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"] as? String {
+      if let segueIdentifier = attributeDict["identifier"] {
         segues.append(segueIdentifier)
       }
 
     case "image":
-      if let imageIdentifier = attributeDict["name"] as? String {
+      if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
       }
 
@@ -371,18 +447,17 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
-    if attributeDict["sceneMemberID"] as? String == "viewController" {
-        if let id = attributeDict["id"] as? String {
-            let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
+    if let id = attributeDict["id"] as? String 
+      where attributeDict["sceneMemberID"] as? String == "viewController" {
+      let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
 
-            let customModule = attributeDict["customModule"] as? String
-            let customClass = attributeDict["customClass"] as? String
-            let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+      let customModule = attributeDict["customModule"] as? String
+      let customClass = attributeDict["customClass"] as? String
+      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
-            let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
-            return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
-        }
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
     }
 
     return nil
@@ -412,7 +487,7 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
+  func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
@@ -421,10 +496,9 @@ class NibParserDelegate: NSObject, NSXMLParserDelegate {
       if isObjectsTagOpened {
         levelSinceObjectsTagOpened++;
 
-        if levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
-          if let rootView = viewWithAttributes(attributeDict) {
+        if let rootView = viewWithAttributes(attributeDict)
+          where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
-          }
         }
       }
 

@@ -13,55 +13,48 @@ import Foundation
 // MARK: Array operations
 
 extension Array {
-  func each(f: T -> Void) {
-    map(f)
-  }
-
-  func skip(items: Int) -> [T] {
+  func skip(items: Int) -> [Element] {
     return Array(self[items..<count])
   }
-
-  func flatMap<U>(f: T -> [U]) -> [U] {
-    return flatten(map(f))
-  }
 }
 
-func catOptionals<T>(c: [T?]) -> [T] {
-  return c.flatMap(list)
-}
+extension SequenceType {
+  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [[Generator.Element]] {
+    var groupedBy = Dictionary<U, [Generator.Element]>()
 
-func list<T>(x: T?) -> [T] {
-  return x.map { [$0] } ?? []
-}
-
-func flatten<T>(coll: [[T]]) -> [T] {
-  return coll.reduce([], combine: +)
-}
-
-func distinct<T: Equatable>(source: [T]) -> [T] {
-  var unique = [T]()
-  source.each {
-    if !contains(unique, $0) {
-      unique.append($0)
+    for element in self {
+      let key = keySelector(element)
+      if let group = groupedBy[key] {
+        groupedBy[key] = group + [element]
+      } else {
+        groupedBy[key] = [element]
+      }
     }
+
+    return Array(groupedBy.values)
   }
-  return unique
+
+  func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
+    let groupedBy = groupBy(keySelector)
+    let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
+    let duplicates = groupedBy.filter { $0.count > 1 }
+
+    return (uniques: uniques, duplicates: duplicates)
+  }
 }
 
-func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
-  return Array(Zip2(a, b))
-}
-
-func join<S where S: Printable>(separator: String, components: [S]) -> String {
-  return join(separator, components.map { $0.description })
+extension SequenceType where Generator.Element : CustomStringConvertible {
+  func joinWithSeparator(separator: String) -> String {
+    return map { $0.description }.joinWithSeparator(separator)
+  }
 }
 
 // MARK: String operations
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if count(self) <= 1 { return self.lowercaseString }
-    let index = advance(startIndex, 1)
+    if self.characters.count <= 1 { return self.lowercaseString }
+    let index = startIndex.advancedBy(1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
 }
@@ -69,7 +62,7 @@ extension String {
 func indentWithString(indentation: String) -> String -> String {
   return { string in
     let components = string.componentsSeparatedByString("\n")
-    return indentation + join("\n\(indentation)", components)
+    return indentation + components.joinWithSeparator("\n\(indentation)")
   }
 }
 
@@ -78,12 +71,14 @@ func indentWithString(indentation: String) -> String -> String {
 extension NSURL {
   var isDirectory: Bool {
     var urlIsDirectoryValue: AnyObject?
-    self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey, error: nil)
+    do {
+      try getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
+    } catch _ {}
 
     return (urlIsDirectoryValue as? Bool) ?? false
   }
 
   var filename: String? {
-    return lastPathComponent?.stringByDeletingPathExtension
+    return (lastPathComponent as NSString?)?.stringByDeletingPathExtension
   }
 }

@@ -1,6 +1,5 @@
-**NOTE:** Swift 2 support is available in the [develop branch](https://github.com/mac-cain13/R.swift/tree/develop) and will be released with version 0.9.0. [Beta releases of 0.9.0](https://github.com/mac-cain13/R.swift/releases) are available!
+# R.swift ![Build status](https://www.bitrise.io/app/cef05ad300903a89.svg?token=aPVYvCoJVcdVM-Z6KekYPQ&branch=master)
 
-# R.swift
 _Tool to get strong typed, autocompleted resources like images, cells and segues in Swift_
 
 ## Why use this?
@@ -34,6 +33,7 @@ R.swift currently supports:
 - [X] Storyboards
 - [X] Nibs
 - [X] Reusable cells
+- [X] Custom fonts
 - [ ] Files in your bundle
 
 Below you find the different formats:
@@ -48,6 +48,7 @@ Nib              | `R.nib.[nibName].instance`                                 | 
 Nib all views    | `R.nib.[nibName].instantiateWithOwner(nil, options: nil)`  | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil)`  | `R.nib.textCell.instantiateWithOwner(nil, options: nil)`
 Nib first view   | `R.nib.[nibName].firstView(nil, options: nil)`             | `UINib(nibName: "TextCell", bundle: nil).instantiateWithOwner(nil, options: nil).first as? TextCell` | `R.nib.textCell.firstView(nil, nil)`
 Reuse identifier | `R.reuseIdentifier.[name]`                                 | `"TextCell"`                              | `R.reuseIdentifier.textCell`
+Font | `R.font.[name](size: [size])`                                 | `UIFont(name: "myFontName" size: 42)`                              | `R.font.myFontName(size: 42)`
 
 Validate usage of images in Storyboards with `R.validate()` or to validate a specific storyboard use `R.storyboard.[storyboardName].validateImages()`. Please note that this uses `assert` and will only work in unoptimized debug builds.
 
@@ -60,7 +61,7 @@ Validate usage of images in Storyboards with `R.validate()` or to validate a spe
 _There is also a [short video](https://vimeo.com/122888912) of this instruction._
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
-2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script: `"$PODS_ROOT/R.swift/rswift" "$SRCROOT"`
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
@@ -69,7 +70,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 ### Manually
 
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
-2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
@@ -79,7 +80,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 *Running R.swift gives errors like `29593 Trace/BPT trap: 5`, how to fix them?*
 
-Make sure you run OS X 10.10 or higher with Xcode 6.1+. Lower versions are not supported and could lead to errors like these.
+Make sure you run OS X 10.10 or higher with XCode 6.1+. Lower versions are not supported and could lead to errors like these.
 
 *R.swift also picks up asset files/storyboards from submodules and CocoaPods, can I prevent this?*
 
@@ -91,7 +92,7 @@ You can by passing multiple folders to scan through. Change the build phase scri
 
 *When I launch `rswift` from Finder I get this "Unknown developer warning"?!*
 
-For now I'm too lazy to sign my builds with a Developer ID and when running stuff from the commandline/Xcode it's not a problem. It will just work, but maybe I'll fix this. Signed releases are nice, now I only need to find some time to fix this. :)
+For now I'm to lazy to sign my builds with a Developer ID and when running stuff from the commandline/XCode it's not a problem. It will just work, but maybe I'll fix this. Signed releases are nice, now I only need to find some time to fix this. :)
 
 ## Contribute
 

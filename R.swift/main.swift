@@ -10,16 +10,18 @@
 import Foundation
 
 let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
+let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteURL.pathExtension == "xcassets" }
+let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "xib" }
+let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteURL.pathExtension == "storyboard" }
+let findAllFontURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && ($0.absoluteURL.pathExtension == "ttf" || $0.absoluteURL.pathExtension == "otf") }
 
 inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+  .forEach { directory in
 
     var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
-      failOnError(error)
+    directory.checkResourceIsReachableAndReturnError(&error)
+    if let error = error {
+      fail(error)
       return
     }
 
@@ -36,19 +38,27 @@ inputDirectories(NSProcessInfo.processInfo())
     let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
 
+    let fonts = findAllFontURLsInDirectory(url: directory)
+      .flatMap { Font(url: $0) }
+
     // Generate resource file contents
+    let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(storyboards)
+
+    let nibStructs = nibStructFromNibs(nibs)
+
     let resourceStruct = Struct(
       type: Type(name: "R"),
       lets: [],
       vars: [],
       functions: [
-        validateAllFunctionWithStoryboards(storyboards),
+        storyboardStructAndFunction.1,
       ],
       structs: [
         imageStructFromAssetFolders(assetFolders),
+        fontStructFromFonts(fonts),
         segueStructFromStoryboards(storyboards),
-        storyboardStructFromStoryboards(storyboards),
-        nibStructFromNibs(nibs),
+        storyboardStructAndFunction.0,
+        nibStructs.extern,
         reuseIdentifierStructFromReusables(reusables),
       ]
     )
@@ -60,11 +70,11 @@ inputDirectories(NSProcessInfo.processInfo())
       vars: [],
       functions: [],
       structs: [
-        internalNibStructFromNibs(nibs)
+        nibStructs.intern
       ]
     )
 
-    let fileContents = join("\n", [
+    let fileContents = [
       Header, "",
       Imports, "",
       resourceStruct.description, "",
@@ -73,8 +83,9 @@ inputDirectories(NSProcessInfo.processInfo())
       NibResourceProtocol.description, "",
       ReusableProtocol.description, "",
       ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description,
-    ])
+      ReuseIdentifierUICollectionViewExtension.description, "",
+      NibUIViewControllerExtension.description,
+    ].joinWithSeparator("\n")
 
     // Write file if we have changes
     if readResourceFile(directory) != fileContents {
