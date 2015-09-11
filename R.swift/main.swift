@@ -12,8 +12,8 @@ import Foundation
 do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
 
-  let resourceURLs = try resourcePathsInXcodeproj(callInformation.xcodeprojPath, forTarget: callInformation.targetName)
-    .flatMap { NSURL(fileURLWithPath: "\(callInformation.xcodeprojPath)/..\($0)").URLByStandardizingPath }
+  let resourceURLs = try resourceURLsInXcodeproj(callInformation.xcodeprojPath, forTarget: callInformation.targetName, pathResolver: pathResolverWithSourceTreeToPathConverter(callInformation.pathFromSourceTreeFolder))
+  print("\(resourceURLs)")
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
@@ -38,8 +38,6 @@ do {
     writeResourceFile(fileContents, toFolderURL: outputFolderURL)
   }
 
-} catch let InputParsingError.MissingArguments(humanReadableError) {
-  fail(humanReadableError)
-} catch let InputParsingError.InvalidArgument(humanReadableError) {
-  fail(humanReadableError)
+} catch let error as InputParsingError {
+  fail(error)
 }
