@@ -20,17 +20,17 @@ do {
   let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources)
 
   let fileContents = [
-    Header, "",
-    Imports, "",
-    externalStruct.description, "",
-    internalStruct.description, "",
-    ReuseIdentifier.description, "",
-    NibResourceProtocol.description, "",
-    ReusableProtocol.description, "",
-    ReuseIdentifierUITableViewExtension.description, "",
-    ReuseIdentifierUICollectionViewExtension.description, "",
+    Header,
+    Imports,
+    externalStruct.description,
+    internalStruct.description,
+    ReuseIdentifier.description,
+    NibResourceProtocol.description,
+    ReusableProtocol.description,
+    ReuseIdentifierUITableViewExtension.description,
+    ReuseIdentifierUICollectionViewExtension.description,
     NibUIViewControllerExtension.description,
-    ].joinWithSeparator("\n")
+    ].joinWithSeparator("\n\n")
 
   // Write file if we have changes
   let outputFolderURL = NSURL(fileURLWithPath: callInformation.outputFolderPath)
