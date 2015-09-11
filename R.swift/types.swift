@@ -315,13 +315,23 @@ struct Struct: CustomStringConvertible {
   }
 }
 
-/// MARK: Asset types
+/// MARK: Resource types
+
+enum ResourceParsingError: ErrorType {
+  case UnsupportedExtension
+  case ParsingFailed(String)
+}
 
 struct AssetFolder {
+  let supportedExtensions = ["xcassets"]
   let name: String
   let imageAssets: [String]
 
-  init(url: NSURL, fileManager: NSFileManager) {
+  init(url: NSURL, fileManager: NSFileManager) throws {
+    guard let pathExtension = url.pathExtension where supportedExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension
+    }
+
     name = url.filename!
 
     // Browse asset directory recursively and list only the assets folders
@@ -340,15 +350,19 @@ struct AssetFolder {
 }
 
 struct Font {
+  let supportedExtensions = ["otf", "ttf"]
   let name: String
 
-  init?(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where supportedExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension
+    }
+
     let dataProvider = CGDataProviderCreateWithURL(url)
     let font = CGFontCreateWithDataProvider(dataProvider)
 
     guard let postScriptName = CGFontCopyPostScriptName(font) else {
-      warn("No postcriptName associated to font at \(url)")
-      return nil
+      throw ResourceParsingError.ParsingFailed("No postcriptName associated to font at \(url)")
     }
 
     name = postScriptName as String
@@ -356,6 +370,7 @@ struct Font {
 }
 
 struct Storyboard: ReusableContainer {
+  let supportedExtensions = ["storyboard"]
   let name: String
   let segues: [String]
   private let initialViewControllerIdentifier: String?
@@ -367,7 +382,11 @@ struct Storyboard: ReusableContainer {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
   }
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where supportedExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension
+    }
+
     name = url.filename!
 
     let parserDelegate = StoryboardParserDelegate()
@@ -391,11 +410,16 @@ struct Storyboard: ReusableContainer {
 }
 
 struct Nib: ReusableContainer {
+  let supportedExtensions = ["xib"]
   let name: String
   let rootViews: [Type]
   let reusables: [Reusable]
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where supportedExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension
+    }
+
     name = url.filename!
 
     let parserDelegate = NibParserDelegate();

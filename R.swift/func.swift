@@ -25,10 +25,6 @@ func fail<T: ErrorType where T: CustomStringConvertible>(error: T) {
   fail("\(error)")
 }
 
-func inputDirectories(processInfo: NSProcessInfo) -> [NSURL] {
-  return processInfo.arguments.skip(1).map { NSURL(fileURLWithPath: $0) }
-}
-
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
   var assetFolders = [NSURL]()
 
@@ -91,7 +87,7 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
     .groupUniquesAndDuplicates { $0.callName }
 
   for duplicate in vars.duplicates {
-    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
+    let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
     warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
   }
 
@@ -113,7 +109,7 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
   let groupedStoryboards = storyboards.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
 
   for duplicate in groupedStoryboards.duplicates {
-    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
+    let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
     warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
   }
 
@@ -172,7 +168,7 @@ func nibStructFromNibs(nibs: [Nib]) -> (intern: Struct, extern: Struct) {
   let groupedNibs = nibs.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
 
   for duplicate in groupedNibs.duplicates {
-    let names = duplicate.map { $0.name }.joinWithSeparator(", ")
+    let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
     warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
   }
 
@@ -264,7 +260,7 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
   let groupedReusables = reusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
 
   for duplicate in groupedReusables.duplicates {
-    let names = duplicate.map { $0.identifier }.joinWithSeparator(", ")
+    let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
     warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
   }
 
