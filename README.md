@@ -65,6 +65,13 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
+## Q&A
+
+- [What are the requirements to run R.swift?](Documentation/QandA.md)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md)
+- [How does R.swift work?](Documentation/QandA.md)
+- [Why was R.swift created?](Documentation/QandA.md)
+
 ## Contribute
 
 Please post any issues, questions and compliments in the GitHub issue tracker and feel free to submit pull request with fixes and improvements. Keep in mind; a good pull request is small, forked from the `develop`-branch and well explained. It also should benefit most of the users.
