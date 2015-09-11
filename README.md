@@ -23,6 +23,8 @@ let font = R.font.sanFransisco(size: 42)
 performSegueWithIdentifier(R.segue.openSettings)
 ```
 
+Check out [more examples of R.swift based code](Documentation/Examples.md)!
+
 ## Features
 
 After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources.
@@ -37,6 +39,7 @@ R.swift currently supports these types of resources:
 
 Runtime validation with `R.validate()`:
 - If images used in storyboards are available
+- If view controllers with storyboard identifiers can be loaded
 
 ## Installation
 
