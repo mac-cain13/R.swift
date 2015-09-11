@@ -1,4 +1,5 @@
 # R.swift ![Build status](https://www.bitrise.io/app/cef05ad300903a89.svg?token=aPVYvCoJVcdVM-Z6KekYPQ&branch=master)
+
 _Tool to get strong typed, autocompleted resources like images, cells and segues in Swift_
 
 ## Why use this?
