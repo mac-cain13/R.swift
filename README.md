@@ -67,10 +67,10 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ## Q&A
 
-- [What are the requirements to run R.swift?](Documentation/QandA.md)
-- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md)
-- [How does R.swift work?](Documentation/QandA.md)
-- [Why was R.swift created?](Documentation/QandA.md)
+- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
+- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
+- [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
 
 ## Contribute
 
