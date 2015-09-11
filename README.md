@@ -28,12 +28,12 @@ performSegueWithIdentifier(R.segue.openSettings)
 After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources.
 
 R.swift currently supports these types of resources:
-- [Images](Documentation/Examples.md#Images)
-- [Storyboards](Documentation/Examples.md#Storyboards)
-- [Segues](Documentation/Examples.md#Segues)
-- [Nibs](Documentation/Examples.md#Nibs)
-- [Reusable cells](Documentation/Examples.md#Reusable-cells)
-- [Custom fonts](Documentation/Examples.md#Custom-fonts)
+- [Images](Documentation/Examples.md#images)
+- [Storyboards](Documentation/Examples.md#storyboards)
+- [Segues](Documentation/Examples.md#segues)
+- [Nibs](Documentation/Examples.md#nibs)
+- [Reusable cells](Documentation/Examples.md#reusable-cells)
+- [Custom fonts](Documentation/Examples.md#custom-fonts)
 
 Runtime validation with `R.validate()`:
 - If images used in storyboards are available
