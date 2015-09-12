@@ -25,6 +25,7 @@ do {
     externalStruct.description,
     internalStruct.description,
     ReuseIdentifier.description,
+    StoryboardSegue.description,
     NibResourceProtocol.description,
     ReusableProtocol.description,
     ReuseIdentifierUITableViewExtension.description,

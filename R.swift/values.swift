@@ -22,7 +22,7 @@ let Imports = [
 
 
 let ReuseIdentifier = Struct(
-  type: Type(name: "ReuseIdentifier", genericType: Type(name: "T")),
+  type: Type(name: "ReuseIdentifier", genericArgs: ["T"]),
   implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(
@@ -39,6 +39,47 @@ let ReuseIdentifier = Struct(
     )
   ],
   functions: [],
+  structs: [])
+
+
+let StoryboardSegue = Struct(
+  type: Type(name: "StoryboardSegue", genericArgs: ["Source", "Destination"]),
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(
+      name: "identifier",
+      type: Type(name: "String")
+    )
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type(name: "String"),
+      getter: "return identifier"
+    )
+  ],
+  functions: [
+    Function(
+      isStatic: false,
+      name: "sourceViewController",
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
+      ],
+      returnType: Type(name: "Source", optional: true),
+      body: "return segue.sourceViewController as? Source"
+    ),
+    Function(
+      isStatic: false,
+      name: "destinationViewController",
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
+      ],
+      returnType: Type(name: "Destination", optional: true),
+      body: "return segue.destinationViewController as? Destination"
+    )],
   structs: [])
 
 let NibResourceProtocol = Protocol(
@@ -84,7 +125,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath.asOptional())
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "if let indexPath = indexPath {\n  return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? T\n}\nreturn dequeueReusableCellWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -95,7 +136,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableCellWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -106,7 +147,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableHeaderFooterViewWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -156,7 +197,7 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableCellWithReuseIdentifier(identifier.identifier, forIndexPath: indexPath) as? T"
     ),
 
@@ -169,7 +210,7 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
         Function.Parameter(name: "withReuseIdentifier", localName: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableSupplementaryViewOfKind(elementKind, withReuseIdentifier: identifier.identifier, forIndexPath: indexPath) as? T"
     ),
 
