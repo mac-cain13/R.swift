@@ -97,32 +97,28 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
 // Segue
 
 func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
-  let groupedViewControllers = storyboards
+
+  let viewControllers = storyboards
     .flatMap { $0.viewControllers }
-    .groupBy { $0.id }
-    .values
 
   var structs: [Struct] = []
-  for group in groupedViewControllers {
-    if let vc = group.first {
-      var segues: [Var] = []
-      for segue in vc.segues {
-        let type = Type(name: "StoryboardSegue", genericArgs: [vc.type.name, segue.destination], optional: false)
+  for vc in viewControllers {
+    var segues: [Var] = []
+    for segue in vc.segues {
+      if let destinationVC = viewControllers.filter({ $0.id == segue.destination }).first {
+        let type = Type(name: "StoryboardSegue", genericArgs: [vc.type.name, destinationVC.type.name], optional: false)
         let _var = Var(isStatic: true, name: segue.identifier, type: type, getter: "return StoryboardSegue(identifier: \"\(segue.identifier)\")")
         segues.append(_var)
       }
+    }
 
-      if segues.count > 0 {
-        let _struct = Struct(type: Type(name: vc.type.name), lets: [], vars: segues, functions: [], structs: [])
-        structs.append(_struct)
-      }
+    if segues.count > 0 {
+      let _struct = Struct(type: Type(name: vc.type.name), lets: [], vars: segues, functions: [], structs: [])
+      structs.append(_struct)
     }
   }
 
-  let vars = Array(Set(storyboards.flatMap { $0.segues }))
-    .map { Var(isStatic: true, name: $0, type: Type._String, getter: "return \"\($0)\"") }
-
-  return Struct(type: Type(name: "segue"), lets: [], vars: vars, functions: [], structs: structs)
+  return Struct(type: Type(name: "segue"), lets: [], vars: [], functions: [], structs: structs)
 }
 
 // Storyboard

@@ -367,7 +367,6 @@ struct Font {
 struct Storyboard: ReusableContainer {
   let supportedExtensions = ["storyboard"]
   let name: String
-  let segues: [String]
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
@@ -390,7 +389,6 @@ struct Storyboard: ReusableContainer {
     parser.delegate = parserDelegate
     parser.parse()
 
-    segues = parserDelegate.segues
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
@@ -401,7 +399,11 @@ struct Storyboard: ReusableContainer {
     let id: String
     let storyboardIdentifier: String?
     let type: Type
-    let segues: [Segue]
+    private(set) var segues: [Segue]
+
+    mutating func addSegue(segue: Segue) {
+      segues.append(segue)
+    }
   }
 
   struct Segue {
@@ -438,10 +440,12 @@ struct Nib: ReusableContainer {
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var initialViewControllerIdentifier: String?
-  var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
+
+  // State
+  var currentViewController: (String, Storyboard.ViewController)?
 
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
@@ -451,8 +455,9 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"] {
-        segues.append(segueIdentifier)
+      if let segueIdentifier = attributeDict["identifier"], segueDestination = attributeDict["destination"] {
+        let segue = Storyboard.Segue(identifier: segueIdentifier, destination: segueDestination)
+        currentViewController!.1.addSegue(segue)
       }
 
     case "image":
@@ -462,7 +467,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
-        viewControllers.append(viewController)
+        currentViewController = (elementName, viewController)
       }
 
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
@@ -471,35 +476,41 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
+  func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    if let currentViewController = currentViewController where elementName == currentViewController.0 {
+      viewControllers.append(currentViewController.1)
+      self.currentViewController = nil
+    }
+  }
+
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
-    if let id = attributeDict["id"] as? String 
-      where attributeDict["sceneMemberID"] as? String == "viewController" {
-      let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
-
-      let customModule = attributeDict["customModule"] as? String
-      let customClass = attributeDict["customClass"] as? String
-      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
-
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
-
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
+    guard let id = attributeDict["id"] as? String where attributeDict["sceneMemberID"] as? String == "viewController" else {
+      return nil
     }
 
-    return nil
+    let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
+
+    let customModule = attributeDict["customModule"] as? String
+    let customClass = attributeDict["customClass"] as? String
+    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+
+    return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
   }
 
   func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      let customModule = attributeDict["customModule"] as? String
-      let customClass = attributeDict["customClass"] as? String
-      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
-
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
-
-      return Reusable(identifier: reuseIdentifier, type: type)
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] as? String else {
+      return nil
     }
 
-    return nil
+    let customModule = attributeDict["customModule"] as? String
+    let customClass = attributeDict["customClass"] as? String
+    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+    return Reusable(identifier: reuseIdentifier, type: type)
   }
 }
 
