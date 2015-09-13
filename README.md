@@ -41,6 +41,13 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
 - If images used in storyboards are available
 - If view controllers with storyboard identifiers can be loaded
 
+## Q&A
+
+- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
+- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
+- [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
+
 ## Installation
 
 [CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
@@ -64,13 +71,6 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
-
-## Q&A
-
-- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
-- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
-- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
-- [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
 
 ## Contribute
 
