@@ -24,6 +24,7 @@ private func tryResourceParsing<T>(parse: () throws -> T) -> T? {
 
 struct Resources {
   let assetFolders: [AssetFolder]
+  let images: [Image]
   let fonts: [Font]
   let nibs: [Nib]
   let storyboards: [Storyboard]
@@ -32,6 +33,7 @@ struct Resources {
 
   init(resourceURLs: [NSURL], fileManager: NSFileManager) {
     assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
+    images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
     fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
     nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
     storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
@@ -55,7 +57,7 @@ func generateResourceStructsWithResources(resources: Resources) -> (Struct, Stru
       storyboardStructAndFunction.1,
     ],
     structs: [
-      imageStructFromAssetFolders(resources.assetFolders),
+      imageStructFromAssetFolders(resources.assetFolders, andImages: resources.images),
       fontStructFromFonts(resources.fonts),
       segueStructFromStoryboards(resources.storyboards),
       storyboardStructAndFunction.0,
