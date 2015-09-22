@@ -315,13 +315,22 @@ struct Struct: CustomStringConvertible {
   }
 }
 
-/// MARK: Asset types
+/// MARK: Resource types
+
+enum ResourceParsingError: ErrorType {
+  case UnsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
+  case ParsingFailed(String)
+}
 
 struct AssetFolder {
   let name: String
   let imageAssets: [String]
 
-  init(url: NSURL, fileManager: NSFileManager) {
+  init(url: NSURL, fileManager: NSFileManager) throws {
+    guard let pathExtension = url.pathExtension where AssetFolderExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: AssetFolderExtensions)
+    }
+
     name = url.filename!
 
     // Browse asset directory recursively and list only the assets folders
@@ -339,16 +348,41 @@ struct AssetFolder {
   }
 }
 
+struct Image {
+  let name: String
+
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension?.lowercaseString where ImageExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: ImageExtensions)
+    }
+
+    guard let fileName = url.lastPathComponent else {
+      throw ResourceParsingError.ParsingFailed("Filename could not be parsed from URL: \(url.absoluteString)")
+    }
+
+    if pathExtension == "png" {
+      let regex = try! NSRegularExpression(pattern: "(@[2,3]x)?\\.png$", options: .CaseInsensitive)
+      let fullFileNameRange = NSRange(location: 0, length: fileName.characters.count)
+      name = regex.stringByReplacingMatchesInString(fileName, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
+    } else {
+      name = fileName
+    }
+  }
+}
+
 struct Font {
   let name: String
 
-  init?(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where FontExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: FontExtensions)
+    }
+
     let dataProvider = CGDataProviderCreateWithURL(url)
     let font = CGFontCreateWithDataProvider(dataProvider)
 
     guard let postScriptName = CGFontCopyPostScriptName(font) else {
-      warn("No postcriptName associated to font at \(url)")
-      return nil
+      throw ResourceParsingError.ParsingFailed("No postcriptName associated to font at \(url)")
     }
 
     name = postScriptName as String
@@ -367,7 +401,11 @@ struct Storyboard: ReusableContainer {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
   }
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where StoryboardExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: StoryboardExtensions)
+    }
+
     name = url.filename!
 
     let parserDelegate = StoryboardParserDelegate()
@@ -395,7 +433,11 @@ struct Nib: ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where NibExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: NibExtensions)
+    }
+
     name = url.filename!
 
     let parserDelegate = NibParserDelegate();

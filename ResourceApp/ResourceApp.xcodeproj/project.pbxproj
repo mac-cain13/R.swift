@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
+		D51E60C11BB13626004BB376 /* Colors.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C01BB13626004BB376 /* Colors.jpg */; settings = {ASSET_TAGS = (); }; };
 		D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F47221B8FAF9F0028BAFD /* NibTests.swift */; settings = {ASSET_TAGS = (); }; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
+		D51E60C01BB13626004BB376 /* Colors.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Colors.jpg; sourceTree = "<group>"; };
 		D51F47221B8FAF9F0028BAFD /* NibTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibTests.swift; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -101,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D51E60BF1BB13612004BB376 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				D51E60C01BB13626004BB376 /* Colors.jpg */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +132,7 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D5AD5C951B78FCAA00A8B96C /* Duplicates */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
@@ -296,6 +307,7 @@
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
+				D51E60C11BB13626004BB376 /* Colors.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +335,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > ./rswift.log";
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
