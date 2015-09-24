@@ -85,7 +85,12 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: 
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
 
-  let imageVars = images
+  let uniqueImages = images
+    .groupBy { $0.name }
+    .values
+    .flatMap { $0.first }
+
+  let imageVars = uniqueImages
     .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\")") }
 
   let vars = (assetFolderImageVars + imageVars)

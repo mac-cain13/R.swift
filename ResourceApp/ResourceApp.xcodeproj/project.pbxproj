@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D51E60C11BB13626004BB376 /* Colors.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C01BB13626004BB376 /* Colors.jpg */; settings = {ASSET_TAGS = (); }; };
+		D51E60C51BB1E600004BB376 /* User@white.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C21BB1E600004BB376 /* User@white.png */; settings = {ASSET_TAGS = (); }; };
+		D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C31BB1E600004BB376 /* User@white@2x.png */; settings = {ASSET_TAGS = (); }; };
+		D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C41BB1E600004BB376 /* User@white@3x.png */; settings = {ASSET_TAGS = (); }; };
 		D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F47221B8FAF9F0028BAFD /* NibTests.swift */; settings = {ASSET_TAGS = (); }; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
@@ -36,6 +39,7 @@
 		D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E513BF1B8E11810035ECAA /* FontsTests.swift */; settings = {ASSET_TAGS = (); }; };
 		D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
 		D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */; };
+		D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */; settings = {ASSET_TAGS = (); }; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +57,9 @@
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
 		D51E60C01BB13626004BB376 /* Colors.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Colors.jpg; sourceTree = "<group>"; };
+		D51E60C21BB1E600004BB376 /* User@white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white.png"; sourceTree = "<group>"; };
+		D51E60C31BB1E600004BB376 /* User@white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@2x.png"; sourceTree = "<group>"; };
+		D51E60C41BB1E600004BB376 /* User@white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@3x.png"; sourceTree = "<group>"; };
 		D51F47221B8FAF9F0028BAFD /* NibTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibTests.swift; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,6 +90,7 @@
 		D5E513BF1B8E11810035ECAA /* FontsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontsTests.swift; sourceTree = "<group>"; };
 		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTests.swift; sourceTree = "<group>"; };
 		D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
+		D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "The App Icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +114,11 @@
 		D51E60BF1BB13612004BB376 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
 				D51E60C01BB13626004BB376 /* Colors.jpg */,
+				D51E60C21BB1E600004BB376 /* User@white.png */,
+				D51E60C31BB1E600004BB376 /* User@white@2x.png */,
+				D51E60C41BB1E600004BB376 /* User@white@3x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -132,6 +144,7 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D5AD5C951B78FCAA00A8B96C /* Duplicates */,
@@ -146,7 +159,6 @@
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
 				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
-				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D55C6CC81B5D757300301B0D /* LaunchScreen.xib */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
 			);
@@ -298,8 +310,11 @@
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
+				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
+				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
@@ -307,6 +322,7 @@
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
+				D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */,
 				D51E60C11BB13626004BB376 /* Colors.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

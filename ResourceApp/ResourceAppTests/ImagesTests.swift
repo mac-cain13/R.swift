@@ -20,6 +20,7 @@ class ImagesTests: XCTestCase {
   }
 
   func testNoNilFilebasedImages() {
-    XCTAssertNotNil(R.image.colors)
+    XCTAssertNotNil(R.image.colorsJpg)
+    XCTAssertNotNil(R.image.userWhite)
   }
 }

@@ -356,17 +356,13 @@ struct Image {
       throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: ImageExtensions)
     }
 
-    guard let fileName = url.lastPathComponent else {
+    guard let filename = url.lastPathComponent else {
       throw ResourceParsingError.ParsingFailed("Filename could not be parsed from URL: \(url.absoluteString)")
     }
 
-    if pathExtension == "png" {
-      let regex = try! NSRegularExpression(pattern: "(@[2,3]x)?\\.png$", options: .CaseInsensitive)
-      let fullFileNameRange = NSRange(location: 0, length: fileName.characters.count)
-      name = regex.stringByReplacingMatchesInString(fileName, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
-    } else {
-      name = fileName
-    }
+    let regex = try! NSRegularExpression(pattern: "(@[2,3]x)?\\.png$", options: .CaseInsensitive)
+    let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
+    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
   }
 }
 
