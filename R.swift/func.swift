@@ -47,7 +47,7 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
 }
 
 func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -"))
+  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -.@"))
   let firstComponent = components.removeAtIndex(0)
   let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
   let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
@@ -80,10 +80,20 @@ func readResourceFile(folderURL: NSURL) -> String? {
 
 // Image
 
-func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
-  let vars = assetFolders
+func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: [Image]) -> Struct {
+  let assetFolderImageVars = assetFolders
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+
+  let uniqueImages = images
+    .groupBy { $0.name }
+    .values
+    .flatMap { $0.first }
+
+  let imageVars = uniqueImages
+    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\")") }
+
+  let vars = (assetFolderImageVars + imageVars)
     .groupUniquesAndDuplicates { $0.callName }
 
   for duplicate in vars.duplicates {
