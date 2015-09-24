@@ -31,6 +31,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
+  static let _NSURL = Type(name: "NSURL")
   static let _UINib = Type(name: "UINib")
   static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
@@ -444,6 +445,26 @@ struct Nib: ReusableContainer {
 
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
+  }
+}
+
+struct ResourceFile {
+  let fullname: String
+  let filename: String
+  let pathExtension: String?
+
+  init(url: NSURL) throws {
+    if let pathExtension = url.pathExtension where CompiledResourcesExtensions.contains(pathExtension) {
+        throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
+    }
+
+    guard let fullname = url.lastPathComponent, filename = url.filename else {
+      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+    }
+
+    self.fullname = fullname
+    self.filename = filename
+    pathExtension = url.pathExtension
   }
 }
 

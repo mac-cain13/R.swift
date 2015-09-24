@@ -305,3 +305,15 @@ func fontFunctionFromFont(font: Font) -> Function {
     body:"return UIFont(name: \"\(font.name)\", size: size)"
   )
 }
+
+// Resource files
+
+func resourceStructFromResourceFiles(resourceFiles: [ResourceFile]) -> Struct {
+  let resourceVars = resourceFiles
+    .map { resourceFile -> Var in
+      let pathExtensionOrNilString = resourceFile.pathExtension ?? "nil"
+      return Var(isStatic: true, name: resourceFile.fullname, type: Type._NSURL.asOptional(), getter: "return NSBundle.mainBundle().URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
+    }
+
+  return Struct(type: Type(name: "file"), lets: [], vars: resourceVars, functions: [], structs: [])
+}

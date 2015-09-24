@@ -28,6 +28,7 @@ struct Resources {
   let fonts: [Font]
   let nibs: [Nib]
   let storyboards: [Storyboard]
+  let resourceFiles: [ResourceFile]
 
   let reusables: [Reusable]
 
@@ -37,6 +38,7 @@ struct Resources {
     fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
     nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
     storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
+    resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
   }
@@ -62,6 +64,7 @@ func generateResourceStructsWithResources(resources: Resources) -> (Struct, Stru
       storyboardStructAndFunction.0,
       nibStructs.extern,
       reuseIdentifierStructFromReusables(resources.reusables),
+      resourceStructFromResourceFiles(resources.resourceFiles),
     ]
   )
 
