@@ -274,7 +274,10 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
     warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
   }
 
-  let reuseIdentifierVars = groupedReusables.uniques.map(varFromReusable)
+  let reuseIdentifierVars = groupedReusables
+    .uniques
+    .map(varFromReusable)
+
   return Struct(type: Type(name: "reuseIdentifier"), lets: [], vars: reuseIdentifierVars, functions: [], structs: [])
 }
 
@@ -304,4 +307,26 @@ func fontFunctionFromFont(font: Font) -> Function {
     returnType: Type._UIFont.asOptional(),
     body:"return UIFont(name: \"\(font.name)\", size: size)"
   )
+}
+
+// Resource files
+
+func resourceStructFromResourceFiles(resourceFiles: [ResourceFile]) -> Struct {
+  let groupedResourceFiles = resourceFiles.groupUniquesAndDuplicates { sanitizedSwiftName($0.fullname) }
+
+  for duplicate in groupedResourceFiles.duplicates {
+    let names = duplicate.map { $0.fullname }.sort().joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) resource files because symbol '\(sanitizedSwiftName(duplicate.first!.fullname))' would be generated for all of these files: \(names)")
+  }
+
+  let resourceVars = groupedResourceFiles
+    .uniques
+    .map(varFromResourceFile)
+
+  return Struct(type: Type(name: "file"), lets: [], vars: resourceVars, functions: [], structs: [])
+}
+
+func varFromResourceFile(resourceFile: ResourceFile) -> Var {
+  let pathExtensionOrNilString = resourceFile.pathExtension ?? "nil"
+  return Var(isStatic: true, name: resourceFile.fullname, type: Type._NSURL.asOptional(), getter: "return NSBundle.mainBundle().URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
 }

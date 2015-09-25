@@ -36,6 +36,7 @@ R.swift currently supports these types of resources:
 - [Nibs](Documentation/Examples.md#nibs)
 - [Reusable cells](Documentation/Examples.md#reusable-cells)
 - [Custom fonts](Documentation/Examples.md#custom-fonts)
+- [Resource files](Documentation/Examples.md#resource-files)
 
 Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
 - If images used in storyboards are available

@@ -40,6 +40,10 @@
 		D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
 		D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */; };
 		D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */; settings = {ASSET_TAGS = (); }; };
+		D5F05D421BB52002003AE55E /* Some.json in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D411BB52002003AE55E /* Some.json */; settings = {ASSET_TAGS = (); }; };
+		D5F05D441BB52063003AE55E /* Duplicate.json in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D431BB52063003AE55E /* Duplicate.json */; settings = {ASSET_TAGS = (); }; };
+		D5F05D461BB52078003AE55E /* duplicateJson in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D451BB52078003AE55E /* duplicateJson */; settings = {ASSET_TAGS = (); }; };
+		D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F05D471BB520B1003AE55E /* FilesTests.swift */; settings = {ASSET_TAGS = (); }; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -72,9 +76,9 @@
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
-		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = duplicate.xib; sourceTree = "<group>"; };
+		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = duplicate.xib; path = Duplicate/duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
-		D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = duplicate.storyboard; sourceTree = "<group>"; };
+		D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = duplicate.storyboard; path = Duplicate/duplicate.storyboard; sourceTree = "<group>"; };
 		D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Duplicate.storyboard; sourceTree = "<group>"; };
 		D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellView.xib; sourceTree = "<group>"; };
 		D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ADuplicateCellView.xib; path = ResourceApp/Duplicate/ADuplicateCellView.xib; sourceTree = SOURCE_ROOT; };
@@ -91,6 +95,10 @@
 		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTests.swift; sourceTree = "<group>"; };
 		D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "The App Icon.png"; sourceTree = "<group>"; };
+		D5F05D411BB52002003AE55E /* Some.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Some.json; sourceTree = "<group>"; };
+		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
+		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
+		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,18 +155,21 @@
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
-				D5AD5C951B78FCAA00A8B96C /* Duplicates */,
+				D5F05D401BB51FEA003AE55E /* Files */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D575E25C1B766CD800C22F0B /* My View.xib */,
 				D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */,
 				D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */,
+				D5AD5C901B78FC0500A8B96C /* duplicate.xib */,
 				D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */,
+				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
 				D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */,
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
 				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
+				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D55C6CC81B5D757300301B0D /* LaunchScreen.xib */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
 			);
@@ -182,6 +193,7 @@
 				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
+				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
 			path = ResourceAppTests;
@@ -196,17 +208,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D5AD5C951B78FCAA00A8B96C /* Duplicates */ = {
-			isa = PBXGroup;
-			children = (
-				D5AD5C901B78FC0500A8B96C /* duplicate.xib */,
-				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
-				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
-			);
-			name = Duplicates;
-			path = Duplicate;
-			sourceTree = "<group>";
-		};
 		D5E513B41B8E10F90035ECAA /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,6 +218,16 @@
 				D5E513B91B8E111A0035ECAA /* GdyBkltter1911.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		D5F05D401BB51FEA003AE55E /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				D5F05D451BB52078003AE55E /* duplicateJson */,
+				D5F05D431BB52063003AE55E /* Duplicate.json */,
+				D5F05D411BB52002003AE55E /* Some.json */,
+			);
+			path = Files;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +321,7 @@
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
@@ -318,6 +330,8 @@
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
+				D5F05D421BB52002003AE55E /* Some.json in Resources */,
+				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
@@ -377,6 +391,7 @@
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
 				D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */,
+				D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -254,6 +254,8 @@ let FontExtensions: Set<String> = ["otf", "ttf"]
 let StoryboardExtensions: Set<String> = ["storyboard"]
 let NibExtensions: Set<String> = ["xib"]
 
+let CompiledResourcesExtensions: Set<String> = AssetFolderExtensions.union(StoryboardExtensions).union(NibExtensions)
+
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
   "tableViewCell": Type(name: "UITableViewCell"),
