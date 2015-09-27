@@ -55,22 +55,17 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 
-func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
-  let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
-
+func writeResourceFile(code: String, toFileURL fileURL: NSURL) {
   do {
-    try code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding)
+    try code.writeToURL(fileURL, atomically: true, encoding: NSUTF8StringEncoding)
   } catch let error as NSError {
     fail(error)
   }
 }
 
-func readResourceFile(folderURL: NSURL) -> String? {
-  let inputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
-
+func readResourceFile(fileURL: NSURL) -> String? {
   do {
-    let resourceFileString = try String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding)
-    return resourceFileString
+    return try String(contentsOfURL: fileURL, encoding: NSUTF8StringEncoding)
   } catch {
     return nil
   }

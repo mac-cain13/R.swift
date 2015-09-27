@@ -323,6 +323,46 @@ enum ResourceParsingError: ErrorType {
   case ParsingFailed(String)
 }
 
+struct Xcodeproj {
+  private let projectFile: XCProjectFile
+  //let onDemandResourceTags: [String]
+
+  init(url: NSURL) throws {
+    // Parse project file
+    guard let projectFile = try? XCProjectFile(xcodeprojURL: url) else {
+      throw ResourceParsingError.ParsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
+    }
+
+    self.projectFile = projectFile
+  }
+
+  func resourceURLsForTarget(targetName: String, pathResolver: Path -> NSURL) throws -> [NSURL] {
+    // Look for target in project file
+    let allTargets = projectFile.project.targets
+    guard let target = allTargets.filter({ $0.productName == targetName }).first else {
+      let availableTargets = allTargets.map { $0.productName }.joinWithSeparator(", ")
+      throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
+    }
+
+    let resourcesFileRefs = target.buildPhases
+      .flatMap { $0 as? PBXResourcesBuildPhase }
+      .flatMap { $0.files }
+      .map { $0.fileRef }
+
+    let fileRefPaths = resourcesFileRefs
+      .flatMap { $0 as? PBXFileReference }
+      .map { $0.fullPath }
+
+    let variantGroupPaths = resourcesFileRefs
+      .flatMap { $0 as? PBXVariantGroup }
+      .flatMap { $0.fileRefs }
+      .map { $0.fullPath }
+
+    return (fileRefPaths + variantGroupPaths)
+      .map(pathResolver)
+  }
+}
+
 struct AssetFolder {
   let name: String
   let imageAssets: [String]

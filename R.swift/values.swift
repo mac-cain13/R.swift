@@ -15,7 +15,6 @@ let Header = [
 ].joinWithSeparator("\n")
 
 
-
 let Imports = [
   "import UIKit",
 ].joinWithSeparator("\n")
