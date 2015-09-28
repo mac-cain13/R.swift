@@ -87,6 +87,10 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "-t ResourceApp"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "$SRCROOT/ResourceApp"
             isEnabled = "YES">
          </CommandLineArgument>

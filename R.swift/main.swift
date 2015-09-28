@@ -13,7 +13,7 @@ do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
-  let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName, pathResolver: pathResolverWithSourceTreeToPathConverter(callInformation.pathFromSourceTreeFolder))
+  let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName, pathResolver: pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 

@@ -61,16 +61,19 @@ struct CallInformation {
   let xcodeprojURL: NSURL
   let targetName: String
 
-  private let buildProductsDir: String
-  private let developerDir: String
-  private let sourceRoot: String
-  private let sdkRoot: String
+  private let buildProductsDirURL: NSURL
+  private let developerDirURL: NSURL
+  private let sourceRootURL: NSURL
+  private let sdkRootURL: NSURL
 
   init(processInfo: NSProcessInfo) throws {
+    try self.init(arguments: processInfo.arguments, environment: processInfo.environment)
+  }
+
+  init(arguments: [String], environment: [String: String]) throws {
     let optionParser = OptionParser(definitions: AllOptions)
-    let commandName = processInfo.arguments.first.flatMap { NSURL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
-    let argumentsWithoutCall = Array(processInfo.arguments.dropFirst())
-    let environment = processInfo.environment
+    let commandName = arguments.first.flatMap { NSURL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
+    let argumentsWithoutCall = Array(arguments.dropFirst())
 
     do {
       let (options, extraArguments) = try optionParser.parse(argumentsWithoutCall)
@@ -97,27 +100,35 @@ struct CallInformation {
 
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, defaultValue: environment["PROJECT_FILE_PATH"])
       xcodeprojURL = NSURL(fileURLWithPath: xcodeprojPath)
+
       targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
 
-      buildProductsDir = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
-      developerDir = try getFirstArgumentForOption(developerDirOption, defaultValue: environment["DEVELOPER_DIR"])
-      sourceRoot = try getFirstArgumentForOption(sourceRootOption, defaultValue: environment["SOURCE_ROOT"])
-      sdkRoot = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
+      let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
+      buildProductsDirURL = NSURL(fileURLWithPath: buildProductsDirPath)
+
+      let developerDirPath = try getFirstArgumentForOption(developerDirOption, defaultValue: environment["DEVELOPER_DIR"])
+      developerDirURL = NSURL(fileURLWithPath: developerDirPath)
+
+      let sourceRootPath = try getFirstArgumentForOption(sourceRootOption, defaultValue: environment["SOURCE_ROOT"])
+      sourceRootURL = NSURL(fileURLWithPath: sourceRootPath)
+
+      let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
+      sdkRootURL = NSURL(fileURLWithPath: sdkRootPath)
     } catch OptionKitError.InvalidOption {
       throw InputParsingError.IllegalOption(optionParser.helpStringForCommandName(commandName))
     }
   }
 
-  func pathFromSourceTreeFolder(sourceTreeFolder: SourceTreeFolder) -> String {
+  func URLForSourceTreeFolder(sourceTreeFolder: SourceTreeFolder) -> NSURL {
     switch sourceTreeFolder {
     case .BuildProductsDir:
-      return buildProductsDir
+      return buildProductsDirURL
     case .DeveloperDir:
-      return developerDir
+      return developerDirURL
     case .SDKRoot:
-      return sdkRoot
+      return sdkRootURL
     case .SourceRoot:
-      return sourceRoot
+      return sourceRootURL
     }
   }
 }
@@ -130,12 +141,12 @@ private func getFirstArgumentFromOptionData(options: [Option:[String]], helpStri
   return result
 }
 
-func pathResolverWithSourceTreeToPathConverter(pathFromSourceTreeFolder: SourceTreeFolder -> String)(path: Path) -> NSURL {
+func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL)(path: Path) -> NSURL {
   switch path {
   case let .Absolute(absolutePath):
     return NSURL(fileURLWithPath: absolutePath)
   case let .RelativeTo(sourceTreeFolder, relativePath):
-    let sourceTreePath = pathFromSourceTreeFolder(sourceTreeFolder)
-    return NSURL(fileURLWithPath: sourceTreePath).URLByAppendingPathComponent(relativePath)
+    let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
+    return sourceTreeURL.URLByAppendingPathComponent(relativePath)
   }
 }
