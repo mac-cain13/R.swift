@@ -31,6 +31,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
+  static let _NSURL = Type(name: "NSURL")
   static let _UINib = Type(name: "UINib")
   static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
@@ -315,13 +316,62 @@ struct Struct: CustomStringConvertible {
   }
 }
 
-/// MARK: Asset types
+/// MARK: Resource types
+
+enum ResourceParsingError: ErrorType {
+  case UnsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
+  case ParsingFailed(String)
+}
+
+struct Xcodeproj {
+  private let projectFile: XCProjectFile
+  //let onDemandResourceTags: [String]
+
+  init(url: NSURL) throws {
+    // Parse project file
+    guard let projectFile = try? XCProjectFile(xcodeprojURL: url) else {
+      throw ResourceParsingError.ParsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
+    }
+
+    self.projectFile = projectFile
+  }
+
+  func resourceURLsForTarget(targetName: String, pathResolver: Path -> NSURL) throws -> [NSURL] {
+    // Look for target in project file
+    let allTargets = projectFile.project.targets
+    guard let target = allTargets.filter({ $0.productName == targetName }).first else {
+      let availableTargets = allTargets.map { $0.productName }.joinWithSeparator(", ")
+      throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
+    }
+
+    let resourcesFileRefs = target.buildPhases
+      .flatMap { $0 as? PBXResourcesBuildPhase }
+      .flatMap { $0.files }
+      .map { $0.fileRef }
+
+    let fileRefPaths = resourcesFileRefs
+      .flatMap { $0 as? PBXFileReference }
+      .map { $0.fullPath }
+
+    let variantGroupPaths = resourcesFileRefs
+      .flatMap { $0 as? PBXVariantGroup }
+      .flatMap { $0.fileRefs }
+      .map { $0.fullPath }
+
+    return (fileRefPaths + variantGroupPaths)
+      .map(pathResolver)
+  }
+}
 
 struct AssetFolder {
   let name: String
   let imageAssets: [String]
 
-  init(url: NSURL, fileManager: NSFileManager) {
+  init(url: NSURL, fileManager: NSFileManager) throws {
+    guard let pathExtension = url.pathExtension where AssetFolderExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: AssetFolderExtensions)
+    }
+
     name = url.filename!
 
     // Browse asset directory recursively and list only the assets folders
@@ -339,16 +389,37 @@ struct AssetFolder {
   }
 }
 
+struct Image {
+  let name: String
+
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension?.lowercaseString where ImageExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: ImageExtensions)
+    }
+
+    guard let filename = url.lastPathComponent else {
+      throw ResourceParsingError.ParsingFailed("Filename could not be parsed from URL: \(url.absoluteString)")
+    }
+
+    let regex = try! NSRegularExpression(pattern: "(@[2,3]x)?\\.png$", options: .CaseInsensitive)
+    let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
+    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
+  }
+}
+
 struct Font {
   let name: String
 
-  init?(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where FontExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: FontExtensions)
+    }
+
     let dataProvider = CGDataProviderCreateWithURL(url)
     let font = CGFontCreateWithDataProvider(dataProvider)
 
     guard let postScriptName = CGFontCopyPostScriptName(font) else {
-      warn("No postcriptName associated to font at \(url)")
-      return nil
+      throw ResourceParsingError.ParsingFailed("No postcriptName associated to font at \(url)")
     }
 
     name = postScriptName as String
@@ -367,7 +438,11 @@ struct Storyboard: ReusableContainer {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
   }
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where StoryboardExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: StoryboardExtensions)
+    }
+
     name = url.filename!
 
     let parserDelegate = StoryboardParserDelegate()
@@ -395,7 +470,11 @@ struct Nib: ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
 
-  init(url: NSURL) {
+  init(url: NSURL) throws {
+    guard let pathExtension = url.pathExtension where NibExtensions.contains(pathExtension) else {
+      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: NibExtensions)
+    }
+
     name = url.filename!
 
     let parserDelegate = NibParserDelegate();
@@ -406,6 +485,26 @@ struct Nib: ReusableContainer {
 
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
+  }
+}
+
+struct ResourceFile {
+  let fullname: String
+  let filename: String
+  let pathExtension: String?
+
+  init(url: NSURL) throws {
+    if let pathExtension = url.pathExtension where CompiledResourcesExtensions.contains(pathExtension) {
+        throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
+    }
+
+    guard let fullname = url.lastPathComponent, filename = url.filename else {
+      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+    }
+
+    self.fullname = fullname
+    self.filename = filename
+    pathExtension = url.pathExtension
   }
 }
 

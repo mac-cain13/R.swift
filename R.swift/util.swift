@@ -13,13 +13,13 @@ import Foundation
 // MARK: Array operations
 
 extension Array {
-  func skip(items: Int) -> [Element] {
-    return Array(self[items..<count])
+  subscript (safe index: Int) -> Element? {
+    return indices ~= index ? self[index] : nil
   }
 }
 
 extension SequenceType {
-  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [[Generator.Element]] {
+  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [U: [Generator.Element]] {
     var groupedBy = Dictionary<U, [Generator.Element]>()
 
     for element in self {
@@ -31,11 +31,11 @@ extension SequenceType {
       }
     }
 
-    return Array(groupedBy.values)
+    return groupedBy
   }
 
   func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
-    let groupedBy = groupBy(keySelector)
+    let groupedBy = Array(groupBy(keySelector).values)
     let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
     let duplicates = groupedBy.filter { $0.count > 1 }
 
@@ -79,6 +79,6 @@ extension NSURL {
   }
 
   var filename: String? {
-    return (lastPathComponent as NSString?)?.stringByDeletingPathExtension
+    return URLByDeletingPathExtension?.lastPathComponent
   }
 }

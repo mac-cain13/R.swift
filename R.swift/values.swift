@@ -15,7 +15,6 @@ let Header = [
 ].joinWithSeparator("\n")
 
 
-
 let Imports = [
   "import UIKit",
 ].joinWithSeparator("\n")
@@ -246,7 +245,15 @@ let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
-let AssetExtensions = ["launchimage", "imageset"] // "appiconset" is not loadable by default, so it's not included here
+// Extensions
+let AssetFolderExtensions: Set<String> = ["xcassets"]
+let AssetExtensions: Set<String> = ["launchimage", "imageset"] // Note: "appiconset" is not loadable by default, so it's not included here
+let ImageExtensions: Set<String> = ["tiff", "tif", "jpg", "jpeg", "gif", "png", "bmp", "bmpf", "ico", "cur", "xbm"] // See "Supported Image Formats" on https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/
+let FontExtensions: Set<String> = ["otf", "ttf"]
+let StoryboardExtensions: Set<String> = ["storyboard"]
+let NibExtensions: Set<String> = ["xib"]
+
+let CompiledResourcesExtensions: Set<String> = AssetFolderExtensions.union(StoryboardExtensions).union(NibExtensions)
 
 let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
