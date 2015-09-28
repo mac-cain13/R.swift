@@ -12,7 +12,8 @@ import Foundation
 do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
 
-  let resourceURLs = try resourceURLsInXcodeproj(callInformation.xcodeprojPath, forTarget: callInformation.targetName, pathResolver: pathResolverWithSourceTreeToPathConverter(callInformation.pathFromSourceTreeFolder))
+  let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+  let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName, pathResolver: pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
@@ -32,11 +33,22 @@ do {
     ].joinWithSeparator("\n\n")
 
   // Write file if we have changes
-  let outputFolderURL = NSURL(fileURLWithPath: callInformation.outputFolderPath)
-  if readResourceFile(outputFolderURL) != fileContents {
-    writeResourceFile(fileContents, toFolderURL: outputFolderURL)
+  if readResourceFile(callInformation.outputURL) != fileContents {
+    writeResourceFile(fileContents, toFileURL: callInformation.outputURL)
   }
 
-} catch let error as InputParsingError {
-  fail(error)
+} catch let InputParsingError.UserAskedForHelp(helpString: helpString) {
+  print(helpString)
+  exit(1)
+} catch let InputParsingError.IllegalOption(helpString: helpString) {
+  fail("Illegal option given.")
+  print(helpString)
+  exit(2)
+} catch let InputParsingError.MissingOption(helpString: helpString) {
+  fail("Not all mandatory option given.")
+  print(helpString)
+  exit(2)
+} catch let ResourceParsingError.ParsingFailed(description) {
+  fail(description)
+  exit(3)
 }
