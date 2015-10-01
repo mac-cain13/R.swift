@@ -404,7 +404,8 @@ struct Image {
     let extensions = ImageExtensions.joinWithSeparator("|")
     let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .CaseInsensitive)
     let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
-    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
+    let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
+    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
   }
 }
 
