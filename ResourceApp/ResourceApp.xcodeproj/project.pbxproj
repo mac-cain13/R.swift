@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
+		D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9D1BBC33680013F52A /* Colors@2x.jpg */; settings = {ASSET_TAGS = (); }; };
+		D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9F1BBC37BC0013F52A /* Colors@3x.jpg */; settings = {ASSET_TAGS = (); }; };
+		D5159EA21BBD0BB40013F52A /* Colors~ipad@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159EA11BBD0BB40013F52A /* Colors~ipad@2x.jpg */; settings = {ASSET_TAGS = (); }; };
 		D51E60C11BB13626004BB376 /* Colors.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C01BB13626004BB376 /* Colors.jpg */; settings = {ASSET_TAGS = (); }; };
 		D51E60C51BB1E600004BB376 /* User@white.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C21BB1E600004BB376 /* User@white.png */; settings = {ASSET_TAGS = (); }; };
 		D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C31BB1E600004BB376 /* User@white@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -60,6 +63,9 @@
 /* Begin PBXFileReference section */
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
+		D5159E9D1BBC33680013F52A /* Colors@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Colors@2x.jpg"; sourceTree = "<group>"; };
+		D5159E9F1BBC37BC0013F52A /* Colors@3x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Colors@3x.jpg"; sourceTree = "<group>"; };
+		D5159EA11BBD0BB40013F52A /* Colors~ipad@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Colors~ipad@2x.jpg"; sourceTree = "<group>"; };
 		D51E60C01BB13626004BB376 /* Colors.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Colors.jpg; sourceTree = "<group>"; };
 		D51E60C21BB1E600004BB376 /* User@white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white.png"; sourceTree = "<group>"; };
 		D51E60C31BB1E600004BB376 /* User@white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@2x.png"; sourceTree = "<group>"; };
@@ -124,6 +130,9 @@
 			children = (
 				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
 				D51E60C01BB13626004BB376 /* Colors.jpg */,
+				D5159E9D1BBC33680013F52A /* Colors@2x.jpg */,
+				D5159EA11BBD0BB40013F52A /* Colors~ipad@2x.jpg */,
+				D5159E9F1BBC37BC0013F52A /* Colors@3x.jpg */,
 				D51E60C21BB1E600004BB376 /* User@white.png */,
 				D51E60C31BB1E600004BB376 /* User@white@2x.png */,
 				D51E60C41BB1E600004BB376 /* User@white@3x.png */,
@@ -315,6 +324,7 @@
 			files = (
 				D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */,
 				D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */,
+				D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */,
 				D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */,
 				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
@@ -324,6 +334,7 @@
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
+				D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
@@ -332,6 +343,7 @@
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
+				D5159EA21BBD0BB40013F52A /* Colors~ipad@2x.jpg in Resources */,
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,

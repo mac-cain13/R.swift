@@ -47,7 +47,7 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
 }
 
 func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -.@"))
+  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -.@~"))
   let firstComponent = components.removeAtIndex(0)
   let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
   let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
