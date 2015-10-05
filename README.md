@@ -19,7 +19,7 @@ performSegueWithIdentifier("openSettings")
 With R.swift it becomes:
 ```swift
 let icon = R.image.settingsIcon
-let font = R.font.sanFransisco(size: 42)
+let font = R.font.sanFrancisco(size: 42)
 performSegueWithIdentifier(R.segue.openSettings)
 ```
 
