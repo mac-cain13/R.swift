@@ -22,4 +22,4 @@ Well you add R.swift as a Build phase to your target, basically this means that:
 
 Swift is a beautiful language and one of it's main advantages is that more and more is typed. This catches a lot of errors at compile time. It feels very strange to refer to resources with strings that will always compile and then fail at runtime. It makes refactoring hard and it's to easy to create bugs like missing images etc.
 
-In Android there is a generated R class that kind of solves this problem. That was why I decided to make something like it for us Swift developers and called the project R.swift. It was well received by collegues, friends and Github stargazers, so here we are now.
+In Android there is a generated R class that kind of solves this problem. That was why I decided to make something like it for us Swift developers and called the project R.swift. It was well received by colleagues, friends and Github stargazers, so here we are now.
