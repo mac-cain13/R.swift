@@ -340,7 +340,7 @@ struct Xcodeproj {
     // Look for target in project file
     let allTargets = projectFile.project.targets
     guard let target = allTargets.filter({ $0.name == targetName }).first else {
-      let availableTargets = allTargets.map { $0.productName }.joinWithSeparator(", ")
+      let availableTargets = allTargets.map { $0.name }.joinWithSeparator(", ")
       throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
     }
 
