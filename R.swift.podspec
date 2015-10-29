@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "https://twitter.com/mac_cain13"
 
   s.ios.deployment_target = '7.0'
+  s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '1.0'
 
   s.source       = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v0.10.0/rswift-0.10.0.zip" }
