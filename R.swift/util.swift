@@ -19,21 +19,6 @@ extension Array {
 }
 
 extension SequenceType {
-  func groupBy<U: Hashable>(keySelector: Generator.Element -> U) -> [U: [Generator.Element]] {
-    var groupedBy = Dictionary<U, [Generator.Element]>()
-
-    for element in self {
-      let key = keySelector(element)
-      if let group = groupedBy[key] {
-        groupedBy[key] = group + [element]
-      } else {
-        groupedBy[key] = [element]
-      }
-    }
-
-    return groupedBy
-  }
-
   func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
     let groupedBy = Array(groupBy(keySelector).values)
     let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
