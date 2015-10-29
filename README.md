@@ -12,14 +12,14 @@ It makes your code that uses resources:
 Currently you type:
 ```swift
 let icon = UIImage(named: "settings-icon")
-let font = UIFont(name: "San Fransisco", size: 42)
+let font = UIFont(name: "San Francisco", size: 42)
 performSegueWithIdentifier("openSettings")
 ```
 
 With R.swift it becomes:
 ```swift
 let icon = R.image.settingsIcon
-let font = R.font.sanFransisco(size: 42)
+let font = R.font.sanFrancisco(size: 42)
 performSegueWithIdentifier(R.segue.openSettings)
 ```
 
