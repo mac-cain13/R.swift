@@ -14,7 +14,7 @@ class FontsTests: XCTestCase {
 
     func testNoNilFonts() {
       XCTAssertNotNil(R.font.averiaLibreBold(size: 10))
-      XCTAssertNotNil(R.font.averiaLibreBolditalic(size: 20))
+      XCTAssertNotNil(R.font.averiaLibreBoldItalic(size: 20))
       XCTAssertNotNil(R.font.averiaLibreLight(size: 30))
       XCTAssertNotNil(R.font.averiaLibreRegular(size: 40))
       XCTAssertNotNil(R.font.goudyBookletter1911(size: 50))
