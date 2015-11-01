@@ -42,6 +42,12 @@ extension String {
     let index = startIndex.advancedBy(1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
   }
+
+  var uppercaseFirstCharacter: String {
+    if self.characters.count <= 1 { return self.uppercaseString }
+    let index = startIndex.advancedBy(1)
+    return substringToIndex(index).uppercaseString + substringFromIndex(index)
+  }
 }
 
 func indentWithString(indentation: String) -> String -> String {
