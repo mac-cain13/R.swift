@@ -46,12 +46,21 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
   return assetFolders
 }
 
+/*
+Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
+Special rules: Can't begin with a number
+*/
 func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -.@"))
-  let firstComponent = components.removeAtIndex(0)
-  let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
-  let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
+  var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
 
+  let firstComponent = nameComponents.removeAtIndex(0)
+  let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
+
+  let regex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
+  let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
+  let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
+
+  let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
   return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 

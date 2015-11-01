@@ -339,8 +339,8 @@ struct Xcodeproj {
   func resourceURLsForTarget(targetName: String, pathResolver: Path -> NSURL) throws -> [NSURL] {
     // Look for target in project file
     let allTargets = projectFile.project.targets
-    guard let target = allTargets.filter({ $0.productName == targetName }).first else {
-      let availableTargets = allTargets.map { $0.productName }.joinWithSeparator(", ")
+    guard let target = allTargets.filter({ $0.name == targetName }).first else {
+      let availableTargets = allTargets.map { $0.name }.joinWithSeparator(", ")
       throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
     }
 
@@ -401,9 +401,11 @@ struct Image {
       throw ResourceParsingError.ParsingFailed("Filename could not be parsed from URL: \(url.absoluteString)")
     }
 
-    let regex = try! NSRegularExpression(pattern: "(@[2,3]x)?\\.png$", options: .CaseInsensitive)
+    let extensions = ImageExtensions.joinWithSeparator("|")
+    let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .CaseInsensitive)
     let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
-    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: "")
+    let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
+    name = regex.stringByReplacingMatchesInString(filename, options: NSMatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
   }
 }
 
