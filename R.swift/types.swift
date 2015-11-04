@@ -12,7 +12,7 @@ import Foundation
 // MARK: Helper types
 
 typealias Reusable = (identifier: String, type: Type)
-
+typealias Relationship = (identifier: String, tabBarController: String, destination: String)
 protocol ReusableContainer {
   var reusables: [Reusable] { get }
 }
@@ -39,6 +39,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UITableView = Type(name: "UITableView")
   static let _UITableViewCell = Type(name: "UITableViewCell")
   static let _UITableViewHeaderFooterView = Type(name: "UITableViewHeaderFooterView")
+  static let _UITabBarController = Type(name: "UITabBarController")
   static let _UIStoryboard = Type(name: "UIStoryboard")
   static let _UICollectionView = Type(name: "UICollectionView")
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
@@ -431,8 +432,10 @@ struct Font {
 struct Storyboard: ReusableContainer {
   let name: String
   let segues: [String]
+  let relationships: [Relationship]
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
+  let tabBarViewControllers: [ViewController]
   let usedImageIdentifiers: [String]
   let reusables: [Reusable]
 
@@ -454,8 +457,10 @@ struct Storyboard: ReusableContainer {
     parser.parse()
 
     segues = parserDelegate.segues
+    relationships = parserDelegate.relationships
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
+    tabBarViewControllers = parserDelegate.tabBarViewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     reusables = parserDelegate.reusables
   }
@@ -463,6 +468,7 @@ struct Storyboard: ReusableContainer {
   struct ViewController {
     let id: String
     let storyboardIdentifier: String?
+    let superType: Type
     let type: Type
   }
 }
@@ -515,7 +521,9 @@ struct ResourceFile {
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var segues: [String] = []
+  var relationships: [Relationship] = []
   var viewControllers: [Storyboard.ViewController] = []
+  var tabBarViewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
@@ -530,6 +538,9 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       if let segueIdentifier = attributeDict["identifier"] {
         segues.append(segueIdentifier)
       }
+      if let id = attributeDict["id"], kind = attributeDict["kind"], destination = attributeDict["destination"] where kind == "relationship" {
+        relationships.append(Relationship(id, tabBarViewControllers.last!.id, destination))
+      }
 
     case "image":
       if let imageIdentifier = attributeDict["name"] {
@@ -538,7 +549,11 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
-        viewControllers.append(viewController)
+        if viewController.superType == Type._UITabBarController {
+          tabBarViewControllers.append(viewController)
+        } else {
+          viewControllers.append(viewController)
+        }
       }
 
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
@@ -556,9 +571,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       let customClass = attributeDict["customClass"] as? String
       let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+      let superType = ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+      let type = customType ?? superType
 
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, superType: superType, type: type)
     }
 
     return nil

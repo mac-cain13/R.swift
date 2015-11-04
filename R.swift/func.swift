@@ -134,7 +134,8 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
+  let storyboardConstructor = "UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)"
+  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return \(storyboardConstructor)")]
 
   let initialViewControllerVar = [storyboard.initialViewController
     .map { (vc) -> Var in
@@ -151,6 +152,48 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
       }
     }
 
+  let tabBarControllerStructs = storyboard.tabBarViewControllers
+    .flatMap { (vc) -> Struct? in
+
+      let relationships = storyboard.relationships.filter { $0.tabBarController == vc.id }
+
+      let relatedViewControllers = relationships.enumerate().flatMap { idx, relationship -> (Int, Storyboard.ViewController)? in
+        let viewController = storyboard.viewControllers.filter { $0.id == relationship.destination }.first
+        if let viewController = viewController {
+          return (idx, viewController)
+        } else {
+          return nil
+        }
+      }
+
+      let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
+
+      let typedStruct = vc.storyboardIdentifier.map { (name: String) -> Struct  in
+
+        let tabInstanceVar = Var(isStatic: true, name: "instance", type: vc.type.asOptional(), getter: "return \(storyboardConstructor).instantiateViewControllerWithIdentifier(\"\(name)\")\(getterCast)")
+
+        let relatedControllersVars = zip(relatedViewControllers, Ordinals).map { (related, ordinal) -> Var in
+          let (idx, relatedViewController) = related
+
+          let getterCast = (relatedViewController.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(relatedViewController.type.asNonOptional())"
+          return Var(isStatic: true, name: relatedViewController.storyboardIdentifier ?? "\(ordinal)ViewContoller", type: relatedViewController.type.asOptional(), getter: "return instance!.viewControllers![\(idx)]\(getterCast)")
+        }
+
+        let relationsVars = zip(relatedViewControllers, Ordinals).map { (related, ordinal) -> Var in
+          let (idx, relatedViewController) = related
+          return Var(
+            isStatic: true,
+            name: (relatedViewController.storyboardIdentifier ?? "\(ordinal)ViewContoller") + "Relation",
+            type: Type(name: "TabRelation", genericType: relatedViewController.type, optional: false),
+            getter: "return TabRelation<\(relatedViewController.type.description)>(identifier: \"asdfa\", index: \(idx))")
+        }
+
+        return Struct(type: Type(name: name), implements: [], lets: [], vars: [tabInstanceVar] + relatedControllersVars + relationsVars, functions: [], structs: [])
+      }
+
+      return typedStruct
+  }
+
   let validateImagesLines = Array(Set(storyboard.usedImageIdentifiers))
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
   let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: validateImagesLines.joinWithSeparator("\n"))
@@ -163,7 +206,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     }
   let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: validateViewControllersLines.joinWithSeparator("\n"))
 
-  return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), lets: [], vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: tabBarControllerStructs)
 }
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {

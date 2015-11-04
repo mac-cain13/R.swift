@@ -25,11 +25,13 @@ do {
     externalStruct.description,
     internalStruct.description,
     ReuseIdentifier.description,
+    TabRelation.description,
     NibResourceProtocol.description,
     ReusableProtocol.description,
     ReuseIdentifierUITableViewExtension.description,
     ReuseIdentifierUICollectionViewExtension.description,
     NibUIViewControllerExtension.description,
+    TabBarExtension.description,
     ].joinWithSeparator("\n\n")
 
   // Write file if we have changes
