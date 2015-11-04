@@ -9,75 +9,46 @@
 
 import Foundation
 
-let defaultFileManager = NSFileManager.defaultManager()
-let findAllAssetsFolderURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { $0.isDirectory && $0.absoluteString!.pathExtension == "xcassets" }
-let findAllNibURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "xib" }
-let findAllStoryboardURLsInDirectory = filterDirectoryContentsRecursively(defaultFileManager) { !$0.isDirectory && $0.absoluteString!.pathExtension == "storyboard" }
+do {
+  let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
 
-inputDirectories(NSProcessInfo.processInfo())
-  .each { directory in
+  let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+  let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName, pathResolver: pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
 
-    var error: NSError?
-    if !directory.checkResourceIsReachableAndReturnError(&error) {
-      failOnError(error)
-      return
-    }
+  let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-    // Get/parse all resources into our domain objects
-    let assetFolders = findAllAssetsFolderURLsInDirectory(url: directory)
-      .map { AssetFolder(url: $0, fileManager: defaultFileManager) }
+  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources)
 
-    let storyboards = findAllStoryboardURLsInDirectory(url: directory)
-      .map { Storyboard(url: $0) }
+  let fileContents = [
+    Header,
+    Imports,
+    externalStruct.description,
+    internalStruct.description,
+    ReuseIdentifier.description,
+    NibResourceProtocol.description,
+    ReusableProtocol.description,
+    ReuseIdentifierUITableViewExtension.description,
+    ReuseIdentifierUICollectionViewExtension.description,
+    NibUIViewControllerExtension.description,
+    ].joinWithSeparator("\n\n")
 
-    let nibs = findAllNibURLsInDirectory(url: directory)
-      .map { Nib(url: $0) }
-
-    let reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
-      .flatMap { $0.reusables }
-
-    // Generate resource file contents
-    let resourceStruct = Struct(
-      type: Type(name: "R"),
-      lets: [],
-      vars: [],
-      functions: [
-        validateAllFunctionWithStoryboards(storyboards),
-      ],
-      structs: [
-        imageStructFromAssetFolders(assetFolders),
-        segueStructFromStoryboards(storyboards),
-        storyboardStructFromStoryboards(storyboards),
-        nibStructFromNibs(nibs),
-        reuseIdentifierStructFromReusables(reusables),
-      ]
-    )
-
-    let internalResourceStruct = Struct(
-      type: Type(name: "_R"),
-      implements: [],
-      lets: [],
-      vars: [],
-      functions: [],
-      structs: [
-        internalNibStructFromNibs(nibs)
-      ]
-    )
-
-    let fileContents = join("\n", [
-      Header, "",
-      Imports, "",
-      resourceStruct.description, "",
-      internalResourceStruct.description, "",
-      ReuseIdentifier.description, "",
-      NibResourceProtocol.description, "",
-      ReusableProtocol.description, "",
-      ReuseIdentifierUITableViewExtension.description, "",
-      ReuseIdentifierUICollectionViewExtension.description,
-    ])
-
-    // Write file if we have changes
-    if readResourceFile(directory) != fileContents {
-      writeResourceFile(fileContents, toFolderURL: directory)
-    }
+  // Write file if we have changes
+  if readResourceFile(callInformation.outputURL) != fileContents {
+    writeResourceFile(fileContents, toFileURL: callInformation.outputURL)
   }
+
+} catch let InputParsingError.UserAskedForHelp(helpString: helpString) {
+  print(helpString)
+  exit(1)
+} catch let InputParsingError.IllegalOption(helpString: helpString) {
+  fail("Illegal option given.")
+  print(helpString)
+  exit(2)
+} catch let InputParsingError.MissingOption(helpString: helpString) {
+  fail("Not all mandatory option given.")
+  print(helpString)
+  exit(2)
+} catch let ResourceParsingError.ParsingFailed(description) {
+  fail(description)
+  exit(3)
+}

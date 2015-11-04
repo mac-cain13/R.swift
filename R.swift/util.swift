@@ -13,63 +13,47 @@ import Foundation
 // MARK: Array operations
 
 extension Array {
-  func each(f: T -> Void) {
-    map(f)
-  }
-
-  func skip(items: Int) -> [T] {
-    return Array(self[items..<count])
-  }
-
-  func flatMap<U>(f: T -> [U]) -> [U] {
-    return flatten(map(f))
+  subscript (safe index: Int) -> Element? {
+    return indices ~= index ? self[index] : nil
   }
 }
 
-func catOptionals<T>(c: [T?]) -> [T] {
-  return c.flatMap(list)
-}
+extension SequenceType {
+  func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
+    let groupedBy = Array(groupBy(keySelector).values)
+    let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
+    let duplicates = groupedBy.filter { $0.count > 1 }
 
-func list<T>(x: T?) -> [T] {
-  return x.map { [$0] } ?? []
-}
-
-func flatten<T>(coll: [[T]]) -> [T] {
-  return coll.reduce([], combine: +)
-}
-
-func distinct<T: Equatable>(source: [T]) -> [T] {
-  var unique = [T]()
-  source.each {
-    if !contains(unique, $0) {
-      unique.append($0)
-    }
+    return (uniques: uniques, duplicates: duplicates)
   }
-  return unique
 }
 
-func zip<T, U>(a: [T], b: [U]) -> [(T, U)] {
-  return Array(Zip2(a, b))
-}
-
-func join<S where S: Printable>(separator: String, components: [S]) -> String {
-  return join(separator, components.map { $0.description })
+extension SequenceType where Generator.Element : CustomStringConvertible {
+  func joinWithSeparator(separator: String) -> String {
+    return map { $0.description }.joinWithSeparator(separator)
+  }
 }
 
 // MARK: String operations
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if count(self) <= 1 { return self.lowercaseString }
-    let index = advance(startIndex, 1)
+    if self.characters.count <= 1 { return self.lowercaseString }
+    let index = startIndex.advancedBy(1)
     return substringToIndex(index).lowercaseString + substringFromIndex(index)
+  }
+
+  var uppercaseFirstCharacter: String {
+    if self.characters.count <= 1 { return self.uppercaseString }
+    let index = startIndex.advancedBy(1)
+    return substringToIndex(index).uppercaseString + substringFromIndex(index)
   }
 }
 
 func indentWithString(indentation: String) -> String -> String {
   return { string in
     let components = string.componentsSeparatedByString("\n")
-    return indentation + join("\n\(indentation)", components)
+    return indentation + components.joinWithSeparator("\n\(indentation)")
   }
 }
 
@@ -78,12 +62,14 @@ func indentWithString(indentation: String) -> String -> String {
 extension NSURL {
   var isDirectory: Bool {
     var urlIsDirectoryValue: AnyObject?
-    self.getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey, error: nil)
+    do {
+      try getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
+    } catch _ {}
 
     return (urlIsDirectoryValue as? Bool) ?? false
   }
 
   var filename: String? {
-    return lastPathComponent?.stringByDeletingPathExtension
+    return URLByDeletingPathExtension?.lastPathComponent
   }
 }
