@@ -109,7 +109,7 @@ let TabBarExtension = Extension(
         Function.Parameter(name: "tabRelation", type: TabRelation.type)
       ],
       returnType: Type(name: "T", optional: true),
-      body: "return self.viewControllers?[tabRelation.index] as? T"
+      body: "let idx = tabRelation.index\nlet arr = self.viewControllers\nreturn arr.flatMap { $0.indices ~= idx ? $0[idx] as? T : nil }"
     )
   ]
 )

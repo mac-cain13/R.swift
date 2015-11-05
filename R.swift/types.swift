@@ -25,6 +25,13 @@ class Box<T> {
   }
 }
 
+protocol ViewControllerProtocol {
+  var id: String { get }
+  var storyboardIdentifier: String? { get }
+  var cocoaType: Type { get }
+  var type: Type { get }
+}
+
 /// MARK: Swift types
 
 struct Type: CustomStringConvertible, Equatable, Hashable {
@@ -434,12 +441,12 @@ struct Storyboard: ReusableContainer {
   let segues: [String]
   let relationships: [Relationship]
   private let initialViewControllerIdentifier: String?
-  let viewControllers: [ViewController]
-  let tabBarViewControllers: [ViewController]
+  let viewControllers: [ViewControllerProtocol]
+  let tabBarControllers: [TabBarController]
   let usedImageIdentifiers: [String]
   let reusables: [Reusable]
 
-  var initialViewController: ViewController? {
+  var initialViewController: ViewControllerProtocol? {
     return viewControllers.filter { $0.id == self.initialViewControllerIdentifier }.first
   }
 
@@ -460,15 +467,22 @@ struct Storyboard: ReusableContainer {
     relationships = parserDelegate.relationships
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
-    tabBarViewControllers = parserDelegate.tabBarViewControllers
+    tabBarControllers = parserDelegate.tabBarControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     reusables = parserDelegate.reusables
   }
 
-  struct ViewController {
+  struct ViewController: ViewControllerProtocol {
     let id: String
     let storyboardIdentifier: String?
-    let superType: Type
+    let cocoaType: Type
+    let type: Type
+  }
+
+  struct TabBarController: ViewControllerProtocol {
+    let id: String
+    let storyboardIdentifier: String?
+    let cocoaType: Type
     let type: Type
   }
 }
@@ -522,8 +536,10 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var segues: [String] = []
   var relationships: [Relationship] = []
-  var viewControllers: [Storyboard.ViewController] = []
-  var tabBarViewControllers: [Storyboard.ViewController] = []
+  var viewControllers: [ViewControllerProtocol] = []
+  var tabBarControllers: [Storyboard.TabBarController] {
+    return viewControllers.filter { $0 is Storyboard.TabBarController }.map { $0 as! Storyboard.TabBarController }
+  }
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
@@ -538,8 +554,8 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       if let segueIdentifier = attributeDict["identifier"] {
         segues.append(segueIdentifier)
       }
-      if let id = attributeDict["id"], kind = attributeDict["kind"], destination = attributeDict["destination"] where kind == "relationship" {
-        relationships.append(Relationship(id, tabBarViewControllers.last!.id, destination))
+      if let id = attributeDict["id"], kind = attributeDict["kind"], destination = attributeDict["destination"], lastIteratedTabController = tabBarControllers.last where kind == "relationship" {
+        relationships.append(Relationship(id, lastIteratedTabController.id, destination))
       }
 
     case "image":
@@ -549,11 +565,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
-        if viewController.superType == Type._UITabBarController {
-          tabBarViewControllers.append(viewController)
-        } else {
-          viewControllers.append(viewController)
-        }
+        viewControllers.append(viewController)
       }
 
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
@@ -562,7 +574,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
+  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> ViewControllerProtocol? {
     if let id = attributeDict["id"] as? String 
       where attributeDict["sceneMemberID"] as? String == "viewController" {
       let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
@@ -571,10 +583,14 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       let customClass = attributeDict["customClass"] as? String
       let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
-      let superType = ElementNameToTypeMapping[elementName] ?? Type._UIViewController
-      let type = customType ?? superType
+      let cocoaType = ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+      let type = customType ?? cocoaType
 
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, superType: superType, type: type)
+      if cocoaType == Type._UITabBarController {
+        return Storyboard.TabBarController(id: id, storyboardIdentifier: storyboardIdentifier, cocoaType: cocoaType, type: type)
+      }
+
+      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, cocoaType: cocoaType, type: type)
     }
 
     return nil

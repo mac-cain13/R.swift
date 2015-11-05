@@ -11,7 +11,7 @@ import XCTest
 
 class RelationsTests: XCTestCase {
   func testTabRelation() {
-    let dat = R.storyboard.main.mainTabBarController.instance?.viewController(R.storyboard.main.mainTabBarController.firstViewContollerRelation)
+    let dat = R.storyboard.main.mainTabBarController.instance?.viewController(R.storyboard.main.mainTabBarController.someSecondController)
     XCTAssertNotNil(dat)
   }
 }

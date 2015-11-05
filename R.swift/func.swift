@@ -144,20 +144,21 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     }
   ].flatMap { $0 }
 
-  let viewControllerVars = storyboard.viewControllers
+  let viewControllerVars = storyboard.viewControllers.filter { $0.cocoaType == Type._UIViewController }
     .flatMap { (vc) -> Var? in
+
       let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
       return vc.storyboardIdentifier.map {
         return Var(isStatic: true, name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)")
       }
     }
 
-  let tabBarControllerStructs = storyboard.tabBarViewControllers
+  let tabBarControllerStructs = storyboard.tabBarControllers
     .flatMap { (vc) -> Struct? in
 
       let relationships = storyboard.relationships.filter { $0.tabBarController == vc.id }
 
-      let relatedViewControllers = relationships.enumerate().flatMap { idx, relationship -> (Int, Storyboard.ViewController)? in
+      let relatedViewControllers = relationships.enumerate().flatMap { idx, relationship -> (Int, ViewControllerProtocol)? in
         let viewController = storyboard.viewControllers.filter { $0.id == relationship.destination }.first
         if let viewController = viewController {
           return (idx, viewController)
@@ -172,23 +173,16 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
         let tabInstanceVar = Var(isStatic: true, name: "instance", type: vc.type.asOptional(), getter: "return \(storyboardConstructor).instantiateViewControllerWithIdentifier(\"\(name)\")\(getterCast)")
 
-        let relatedControllersVars = zip(relatedViewControllers, Ordinals).map { (related, ordinal) -> Var in
-          let (idx, relatedViewController) = related
-
-          let getterCast = (relatedViewController.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(relatedViewController.type.asNonOptional())"
-          return Var(isStatic: true, name: relatedViewController.storyboardIdentifier ?? "\(ordinal)ViewContoller", type: relatedViewController.type.asOptional(), getter: "return instance!.viewControllers![\(idx)]\(getterCast)")
-        }
-
         let relationsVars = zip(relatedViewControllers, Ordinals).map { (related, ordinal) -> Var in
           let (idx, relatedViewController) = related
           return Var(
             isStatic: true,
-            name: (relatedViewController.storyboardIdentifier ?? "\(ordinal)ViewContoller") + "Relation",
+            name: (relatedViewController.storyboardIdentifier ?? "\(ordinal)ViewController"),
             type: Type(name: "TabRelation", genericType: relatedViewController.type, optional: false),
-            getter: "return TabRelation<\(relatedViewController.type.description)>(identifier: \"asdfa\", index: \(idx))")
+            getter: "return TabRelation<\(relatedViewController.type.description)>(identifier: \"\(relatedViewController.id)\", index: \(idx))")
         }
 
-        return Struct(type: Type(name: name), implements: [], lets: [], vars: [tabInstanceVar] + relatedControllersVars + relationsVars, functions: [], structs: [])
+        return Struct(type: Type(name: name), implements: [], lets: [], vars: [tabInstanceVar] + relationsVars, functions: [], structs: [])
       }
 
       return typedStruct
@@ -198,7 +192,7 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
   let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: validateImagesLines.joinWithSeparator("\n"))
 
-  let validateViewControllersLines = storyboard.viewControllers
+  let validateViewControllersLines = storyboard.viewControllers.filter { $0.cocoaType == Type._UIViewController }
     .flatMap { vc in
       vc.storyboardIdentifier.map {
         "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
