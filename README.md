@@ -25,6 +25,16 @@ performSegueWithIdentifier(R.segue.openSettings)
 
 Check out [more examples of R.swift based code](Documentation/Examples.md)!
 
+## Demo
+
+**Autocompleted images:**
+![Autocompleted images](Documentation/Images/DemoUseImage.gif)
+
+**Compiletime checked images:**
+![Compiletime checked images](Documentation/Images/DemoRenameImage.gif)
+
+This is only the beginning, check out [more examples](Documentation/Examples.md)!
+
 ## Features
 
 After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources.
