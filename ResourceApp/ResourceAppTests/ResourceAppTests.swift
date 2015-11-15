@@ -21,7 +21,7 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
     "warning: [R.swift] Skipping 2 resource files because symbol 'duplicateJson' would be generated for all of these files: Duplicate.json, duplicateJson"
   ]
-  
+
   func testWarningsAreLogged() {
     guard let logURL = NSBundle(forClass: ResourceAppTests.self).URLForResource("rswift", withExtension: "log") else {
       XCTFail("File rswift.log not found")

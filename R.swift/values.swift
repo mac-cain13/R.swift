@@ -42,6 +42,30 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
+let TabRelation = Struct(
+  type: Type(name: "TabRelation", genericType: Type(name: "T")),
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(
+      name: "identifier",
+      type: Type(name: "String")
+    ),
+    Let(
+      name: "index",
+      type: Type(name: "Int")
+    )
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type(name: "String"),
+      getter: "return identifier"
+    )
+  ],
+  functions: [],
+  structs: [])
+
 let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
   typealiasses: [],
@@ -71,6 +95,22 @@ let NibUIViewControllerExtension = Extension(
       ],
       body: "self.init(nibName: nib.name, bundle: nil)"
     ) as Func
+  ]
+)
+
+let TabBarExtension = Extension(
+  type: Type._UITabBarController,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "viewController",
+      generics: "T: UIViewController",
+      parameters: [
+        Function.Parameter(name: "tabRelation", type: TabRelation.type)
+      ],
+      returnType: Type(name: "T", optional: true),
+      body: "let idx = tabRelation.index\nlet arr = self.viewControllers\nreturn arr.flatMap { $0.indices ~= idx ? $0[idx] as? T : nil }"
+    )
   ]
 )
 
