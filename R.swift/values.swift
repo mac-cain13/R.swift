@@ -69,7 +69,7 @@ let NibUIViewControllerExtension = Extension(
       parameters: [
         Function.Parameter(name: "nib", type: Type(name: "NibResource"))
       ],
-      body: "self.init(nibName: nib.name, bundle: nil)"
+      body: "self.init(nibName: nib.name, bundle: _R.hostingBundle)"
     ) as Func
   ]
 )
