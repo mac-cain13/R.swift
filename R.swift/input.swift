@@ -25,6 +25,11 @@ private let targetOption = Option(
   numberOfParameters: 1,
   helpDescription: "Target the R-file should be generated for, if non given R.swift will use the environment variable TARGET_NAME."
 )
+private let bundleIdentifierOption = Option(
+  trigger: .Long("bundleIdentifier"),
+  numberOfParameters: 1,
+  helpDescription: "Bundle identifier the R-file should be generated for, if non given R.swift will use the environment variable PRODUCT_BUNDLE_IDENTIFIER."
+)
 private let buildProductsDirOption = Option(
   trigger: .Long("buildProductsDir"), 
   numberOfParameters: 1, 
@@ -60,6 +65,7 @@ struct CallInformation {
 
   let xcodeprojURL: NSURL
   let targetName: String
+  let bundleIdentifier: String
 
   private let buildProductsDirURL: NSURL
   private let developerDirURL: NSURL
@@ -102,6 +108,8 @@ struct CallInformation {
       xcodeprojURL = NSURL(fileURLWithPath: xcodeprojPath)
 
       targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
+
+      bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, defaultValue: environment["PRODUCT_BUNDLE_IDENTIFIER"])
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = NSURL(fileURLWithPath: buildProductsDirPath)

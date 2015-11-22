@@ -44,7 +44,7 @@ struct Resources {
   }
 }
 
-func generateResourceStructsWithResources(resources: Resources) -> (Struct, Struct) {
+func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
   // Generate resource file contents
   let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(resources.storyboards)
 
@@ -72,7 +72,9 @@ func generateResourceStructsWithResources(resources: Resources) -> (Struct, Stru
     type: Type(name: "_R"),
     implements: [],
     lets: [],
-    vars: [],
+    vars: [
+      Var(isStatic: true, name: "hostingBundle", type: Type._NSBundle.asOptional(), getter: "return NSBundle(identifier: \"\(bundleIdentifier)\")")
+    ],
     functions: [],
     structs: [
       nibStructs.intern
