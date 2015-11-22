@@ -216,7 +216,7 @@ func nibStructForNib(nib: Nib) -> Struct {
     isStatic: false,
     name: "instance",
     type: Type._UINib,
-    getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)"
+    getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
   )
 
   let instantiateFunc = Function(
