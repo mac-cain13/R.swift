@@ -17,7 +17,7 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources)
+  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
 
   let fileContents = [
     Header,

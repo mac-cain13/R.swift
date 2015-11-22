@@ -35,6 +35,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UINib = Type(name: "UINib")
   static let _UIView = Type(name: "UIView")
   static let _UIImage = Type(name: "UIImage")
+  static let _NSBundle = Type(name: "NSBundle")
   static let _NSIndexPath = Type(name: "NSIndexPath")
   static let _UITableView = Type(name: "UITableView")
   static let _UITableViewCell = Type(name: "UITableViewCell")
