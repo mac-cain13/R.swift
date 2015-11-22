@@ -134,7 +134,7 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
+  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)")]
 
   let initialViewControllerVar = [storyboard.initialViewController
     .map { (vc) -> Var in
