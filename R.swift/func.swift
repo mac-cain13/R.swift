@@ -87,7 +87,7 @@ func readResourceFile(fileURL: NSURL) -> String? {
 func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: [Image]) -> Struct {
   let assetFolderImageVars = assetFolders
     .flatMap { $0.imageAssets }
-    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
 
   let uniqueImages = images
     .groupBy { $0.name }
@@ -95,7 +95,7 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: 
     .flatMap { $0.first }
 
   let imageVars = uniqueImages
-    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\")") }
+    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
 
   let vars = (assetFolderImageVars + imageVars)
     .groupUniquesAndDuplicates { $0.callName }
