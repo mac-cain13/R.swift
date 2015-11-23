@@ -23,12 +23,17 @@ private let xcodeprojOption = Option(
 private let targetOption = Option(
   trigger: .Mixed("t", "target"),
   numberOfParameters: 1,
-  helpDescription: "Target the R-file should be generated for, if non given R.swift will use the environment variable TARGET_NAME."
+  helpDescription: "Target the R-file should be generated for, if none given R.swift will use the environment variable TARGET_NAME."
 )
 private let bundleIdentifierOption = Option(
   trigger: .Long("bundleIdentifier"),
   numberOfParameters: 1,
-  helpDescription: "Bundle identifier the R-file should be generated for, if non given R.swift will use the environment variable PRODUCT_BUNDLE_IDENTIFIER."
+  helpDescription: "Bundle identifier the R-file is be generated for, if none given R.swift will use the environment variable PRODUCT_BUNDLE_IDENTIFIER."
+)
+private let productModuleNameOption = Option(
+  trigger: .Long("productModuleName"),
+  numberOfParameters: 1,
+  helpDescription: "Product module name the R-file is generated for, is none given R.swift will use the environment variable PRODUCT_MODULE_NAME"
 )
 private let buildProductsDirOption = Option(
   trigger: .Long("buildProductsDir"), 
@@ -66,6 +71,7 @@ struct CallInformation {
   let xcodeprojURL: NSURL
   let targetName: String
   let bundleIdentifier: String
+  let productModuleName: String
 
   private let buildProductsDirURL: NSURL
   private let developerDirURL: NSURL
@@ -110,6 +116,8 @@ struct CallInformation {
       targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
 
       bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, defaultValue: environment["PRODUCT_BUNDLE_IDENTIFIER"])
+
+      productModuleName = try getFirstArgumentForOption(productModuleNameOption, defaultValue: environment["PRODUCT_MODULE_NAME"])
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = NSURL(fileURLWithPath: buildProductsDirPath)

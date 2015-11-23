@@ -72,7 +72,11 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   }
 
   var description: String {
-    return fullyQualifiedName
+    if module == productModuleName {
+      return Type(module: nil, name: name, genericType: genericTypeBox.value, optional: optional).fullyQualifiedName
+    } else {
+      return fullyQualifiedName
+    }
   }
 
   var hashValue: Int {
@@ -105,6 +109,8 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   func withGenericType(genericType: Type) -> Type {
     return Type(module: module, name: name, genericType: genericType, optional: optional)
   }
+
+
 }
 
 func ==(lhs: Type, rhs: Type) -> Bool {

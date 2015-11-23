@@ -9,8 +9,11 @@
 
 import Foundation
 
+let productModuleName: String?
+
 do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
+  productModuleName = callInformation.productModuleName
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
   let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName, pathResolver: pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
