@@ -23,3 +23,8 @@ During installation you add R.swift as a Build phase to your target, basically t
 - Every time you build R.swift will be runned
 - It takes a look at your Xcode project file and inspects all resources linked with the target currently build
 - It generates a `R.generated.swift` file that contains a struct with types references to all resources
+
+## Does R.swift work for iOS7?
+
+R.swift does also work for iOS7, with one caveat though: 
+- Images can only be loaded from the main bundle
