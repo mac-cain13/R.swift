@@ -101,19 +101,28 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   let viewControllers = storyboards
     .flatMap { $0.viewControllers }
 
+  let viewControllerTuples = viewControllers
+    .groupBy { $0.type.name }
+    .map { (typeName, viewControllers) -> (typeName: String, segues: [Storyboard.Segue]) in
+      return (
+        typeName,
+        viewControllers.reduce([]) { $0 + $1.segues }
+      )
+    }
+
   var structs: [Struct] = []
-  for vc in viewControllers {
+  for (typeName, storyboardSegues) in viewControllerTuples {
     var segues: [Var] = []
-    for segue in vc.segues {
-      if let destinationVC = viewControllers.filter({ $0.id == segue.destination }).first {
-        let type = Type(name: "StoryboardSegue", genericArgs: [vc.type.name, destinationVC.type.name], optional: false)
-        let _var = Var(isStatic: true, name: segue.identifier, type: type, getter: "return StoryboardSegue(identifier: \"\(segue.identifier)\")")
-        segues.append(_var)
-      }
+    for segue in storyboardSegues {
+      guard let destinationVC = viewControllers.filter({ $0.id == segue.destination }).first else { continue }
+
+      let type = Type(name: "StoryboardSegue", genericArgs: [typeName, destinationVC.type.name], optional: false)
+      let _var = Var(isStatic: true, name: segue.identifier, type: type, getter: "return StoryboardSegue(identifier: \"\(segue.identifier)\")")
+      segues.append(_var)
     }
 
     if segues.count > 0 {
-      let _struct = Struct(type: Type(name: vc.type.name), lets: [], vars: segues, functions: [], structs: [])
+      let _struct = Struct(type: Type(name: typeName.lowercaseFirstCharacter), lets: [], vars: segues, functions: [], structs: [])
       structs.append(_struct)
     }
   }
