@@ -41,9 +41,10 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
+let StoryboardSegueType = Type(name: "StoryboardSegue", genericArgs: ["Source", "Destination"])
 
 let StoryboardSegue = Struct(
-  type: Type(name: "StoryboardSegue", genericArgs: ["Source", "Destination"]),
+  type: StoryboardSegueType,
   implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(
@@ -111,6 +112,23 @@ let NibUIViewControllerExtension = Extension(
       ],
       body: "self.init(nibName: nib.name, bundle: nil)"
     ) as Func
+  ]
+)
+
+let SegueUIViewControllerExtension = Extension(
+  type: Type._UIViewController,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "performSegue",
+      generics: StoryboardSegueType.genericArgs.joinWithSeparator(","),
+      parameters: [
+        Function.Parameter(name: "segue", type: StoryboardSegueType),
+        Function.Parameter(name: "sender", type: Type._AnyObject.asOptional())
+      ],
+      returnType: Type._Void,
+      body: "performSegueWithIdentifier(segue.identifier, sender: sender)"
+    ),
   ]
 )
 
