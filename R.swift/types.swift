@@ -33,6 +33,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UITableViewCell = Type(name: "UITableViewCell")
   static let _UITableViewHeaderFooterView = Type(name: "UITableViewHeaderFooterView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
+  static let _UIStoryboardSegue = Type(name: "UIStoryboardSegue")
   static let _UICollectionView = Type(name: "UICollectionView")
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
   static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
@@ -408,6 +409,7 @@ struct Storyboard: ReusableContainer {
 
   struct Segue {
     let identifier: String
+    let type: Type
     let destination: String
   }
 }
@@ -456,7 +458,13 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     case "segue":
       if let segueIdentifier = attributeDict["identifier"], segueDestination = attributeDict["destination"] {
-        let segue = Storyboard.Segue(identifier: segueIdentifier, destination: segueDestination)
+        let customModule = attributeDict["customModule"]
+        let customClass = attributeDict["customClass"]
+        let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+        let type = customType ?? Type._UIStoryboardSegue
+
+        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: segueDestination)
         currentViewController!.1.addSegue(segue)
       }
 

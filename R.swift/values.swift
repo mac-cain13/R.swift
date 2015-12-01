@@ -41,7 +41,7 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
-let StoryboardSegueType = Type(name: "StoryboardSegue", genericArgs: ["Source", "Destination"])
+let StoryboardSegueType = Type(name: "StoryboardSegue", genericArgs: ["Segue", "Source", "Destination"])
 
 let StoryboardSegue = Struct(
   type: StoryboardSegueType,
@@ -61,6 +61,16 @@ let StoryboardSegue = Struct(
     )
   ],
   functions: [
+    Function(
+      isStatic: false,
+      name: "segue",
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
+      ],
+      returnType: Type(name: "Segue", optional: true),
+      body: "return segue as? Segue"
+    ),
     Function(
       isStatic: false,
       name: "sourceViewController",

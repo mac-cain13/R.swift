@@ -101,37 +101,45 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   let viewControllers = storyboards
     .flatMap { $0.viewControllers }
 
-  let viewControllerTuples = viewControllers
-    .groupBy { $0.type.name }
-    .map { (typeName, viewControllers) -> (typeName: String, segues: [Storyboard.Segue]) in
-      let groupedSegues = viewControllers
-        .reduce([]) { $0 + $1.segues }
+  let seguesPerSourceType = Array(viewControllers
+    .groupBy { $0.type }
+    .values)
+    .map { viewControllers in
+      (
+        sourceType: viewControllers.first!.type,
+        segues: viewControllers.reduce([]) { $0 + $1.segues }
+      )
+    }
+    .map { (sourceType: Type, segues: Array<Storyboard.Segue>) -> (sourceType: Type, segues: Array<Storyboard.Segue>) in
+      let groupedSegues = segues
+        .groupBy { "\($0.identifier)|\($0.type)|\($0.identifier)" }
+        .flatMap { (_, segues) in segues.first }
         .groupUniquesAndDuplicates { $0.identifier }
 
       for duplicate in groupedSegues.duplicates {
         let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
-        warn("Skipping \(duplicate.count) segues for '\(typeName)' because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these segues: \(names)")
+        warn("Skipping \(duplicate.count) segues for '\(sourceType.fullyQualifiedName)' because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these segues: \(names)")
       }
 
       return (
-        typeName,
-        groupedSegues.uniques
+        sourceType: sourceType,
+        segues: groupedSegues.uniques
       )
     }
 
   var structs: [Struct] = []
-  for (typeName, storyboardSegues) in viewControllerTuples {
-    var segues: [Var] = []
-    for segue in storyboardSegues {
+  for (sourceType: sourceType, segues: segues) in seguesPerSourceType {
+    var segueVars: [Var] = []
+    for segue in segues {
       guard let destinationVC = viewControllers.filter({ $0.id == segue.destination }).first else { continue }
 
-      let type = Type(name: "StoryboardSegue", genericArgs: [typeName, destinationVC.type.name], optional: false)
+      let type = Type(name: "StoryboardSegue", genericArgs: [segue.type.fullyQualifiedName, sourceType.fullyQualifiedName, destinationVC.type.fullyQualifiedName], optional: false)
       let _var = Var(isStatic: true, name: segue.identifier, type: type, getter: "return StoryboardSegue(identifier: \"\(segue.identifier)\")")
-      segues.append(_var)
+      segueVars.append(_var)
     }
 
-    if segues.count > 0 {
-      let _struct = Struct(type: Type(name: typeName.lowercaseFirstCharacter), lets: [], vars: segues, functions: [], structs: [])
+    if segueVars.count > 0 {
+      let _struct = Struct(type: Type(name: sourceType.name.lowercaseFirstCharacter), lets: [], vars: segueVars, functions: [], structs: [])
       structs.append(_struct)
     }
   }
