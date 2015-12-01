@@ -104,9 +104,18 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   let viewControllerTuples = viewControllers
     .groupBy { $0.type.name }
     .map { (typeName, viewControllers) -> (typeName: String, segues: [Storyboard.Segue]) in
+      let groupedSegues = viewControllers
+        .reduce([]) { $0 + $1.segues }
+        .groupUniquesAndDuplicates { $0.identifier }
+
+      for duplicate in groupedSegues.duplicates {
+        let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
+        warn("Skipping \(duplicate.count) segues for '\(typeName)' because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these segues: \(names)")
+      }
+
       return (
         typeName,
-        viewControllers.reduce([]) { $0 + $1.segues }
+        groupedSegues.uniques
       )
     }
 

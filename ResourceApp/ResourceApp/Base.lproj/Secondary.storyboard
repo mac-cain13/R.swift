@@ -93,12 +93,32 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Second" image="Second" id="cPa-gy-q4n"/>
                     <connections>
-                        <segue destination="9pv-A4-QxB" kind="show" identifier="toFourth" id="5ku-Ut-hbZ"/>
+                        <segue destination="9pv-A4-QxB" kind="show" identifier="toFirst" id="5ku-Ut-hbZ"/>
+                        <segue destination="E90-AR-qIH" kind="show" identifier="toThird" id="yat-aF-1Zf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750" y="360"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="878-Xp-6kA">
+            <objects>
+                <viewController id="E90-AR-qIH" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YHM-2b-2Nq"/>
+                        <viewControllerLayoutGuide type="bottom" id="92K-h3-nh7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dIi-AZ-ZFQ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BaU-p5-xPk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1522" y="369"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">

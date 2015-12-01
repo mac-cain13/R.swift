@@ -17,6 +17,7 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these xibs: Duplicate, duplicate",
     "warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these storyboards: Duplicate, duplicate",
     "warning: [R.swift] Skipping 2 reuseIdentifiers because symbol 'duplicateCellView' would be generated for all of these reuseIdentifiers: DuplicateCellView, duplicateCellView",
+    "warning: [R.swift] Skipping 2 segues for 'SecondViewController' because symbol 'toThird' would be generated for all of these segues: toThird, toThird",
   ]
   
   func testLoggedWarnings() {
