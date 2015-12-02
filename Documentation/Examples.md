@@ -1,19 +1,21 @@
 # Examples
 
-On this page you'll find examples of the kind of resources R.swift supports and how you can use them. We aim to keep this page up to date and complete so this should be a overview of all posibillities.
+On this page you'll find examples of the kind of resources R.swift supports and how you can use them. We aim to keep this page up to date and complete so this should be a overview of all possibilities.
 
 ## Images
 
-R.swift will find images available in Asset Catalogs in your project.
+R.swift will find both images from Asset Catalogs and image files in your bundle.
 
 *Vanilla*
 ```swift
-let image = UIImage(named: "settings-icon")
+let settingsIcon = UIImage(named: "settings-icon")
+let gradientBackground = UIImage(named: "gradient.jpg")
 ```
 
 *With R.swift*
 ```swift
-let image = R.image.settingsIcon
+let settingsIcon = R.image.settingsIcon
+let gradientBackground = R.image.gradientJpg
 ```
 
 ## Storyboards
@@ -121,4 +123,16 @@ let lightFontTitle = UIFont(name: "Acme-Light", size: 22)
 *With R.swift*
 ```swift
 let lightFontTitle = R.font.acmeLight(size: 22)
+```
+
+## Resource files
+
+*Vanilla*
+```swift
+let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
+```
+
+*With R.swift*
+```swift
+let jsonURL = R.file.seedDataJson
 ```

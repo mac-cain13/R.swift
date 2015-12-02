@@ -24,24 +24,27 @@ private func tryResourceParsing<T>(parse: () throws -> T) -> T? {
 
 struct Resources {
   let assetFolders: [AssetFolder]
+  let images: [Image]
   let fonts: [Font]
   let nibs: [Nib]
   let storyboards: [Storyboard]
+  let resourceFiles: [ResourceFile]
 
   let reusables: [Reusable]
 
   init(resourceURLs: [NSURL], fileManager: NSFileManager) {
     assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
+    images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
     fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
     nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
     storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
-
+    resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
   }
 }
 
-func generateResourceStructsWithResources(resources: Resources) -> (Struct, Struct) {
+func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
   // Generate resource file contents
   let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(resources.storyboards)
 
@@ -55,12 +58,13 @@ func generateResourceStructsWithResources(resources: Resources) -> (Struct, Stru
       storyboardStructAndFunction.1,
     ],
     structs: [
-      imageStructFromAssetFolders(resources.assetFolders),
+      imageStructFromAssetFolders(resources.assetFolders, andImages: resources.images),
       fontStructFromFonts(resources.fonts),
       segueStructFromStoryboards(resources.storyboards),
       storyboardStructAndFunction.0,
       nibStructs.extern,
       reuseIdentifierStructFromReusables(resources.reusables),
+      resourceStructFromResourceFiles(resources.resourceFiles),
     ]
   )
 
@@ -68,7 +72,9 @@ func generateResourceStructsWithResources(resources: Resources) -> (Struct, Stru
     type: Type(name: "_R"),
     implements: [],
     lets: [],
-    vars: [],
+    vars: [
+      Var(isStatic: true, name: "hostingBundle", type: Type._NSBundle.asOptional(), getter: "return NSBundle(identifier: \"\(bundleIdentifier)\")")
+    ],
     functions: [],
     structs: [
       nibStructs.intern

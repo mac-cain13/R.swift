@@ -12,18 +12,28 @@ It makes your code that uses resources:
 Currently you type:
 ```swift
 let icon = UIImage(named: "settings-icon")
-let font = UIFont(name: "San Fransisco", size: 42)
+let font = UIFont(name: "San Francisco", size: 42)
 performSegueWithIdentifier("openSettings")
 ```
 
 With R.swift it becomes:
 ```swift
 let icon = R.image.settingsIcon
-let font = R.font.sanFransisco(size: 42)
+let font = R.font.sanFrancisco(size: 42)
 performSegueWithIdentifier(R.segue.openSettings)
 ```
 
 Check out [more examples of R.swift based code](Documentation/Examples.md)!
+
+## Demo
+
+**Autocompleted images:**
+![Autocompleted images](Documentation/Images/DemoUseImage.gif)
+
+**Compiletime checked images:**
+![Compiletime checked images](Documentation/Images/DemoRenameImage.gif)
+
+This is only the beginning, check out [more examples](Documentation/Examples.md)!
 
 ## Features
 
@@ -36,10 +46,18 @@ R.swift currently supports these types of resources:
 - [Nibs](Documentation/Examples.md#nibs)
 - [Reusable cells](Documentation/Examples.md#reusable-cells)
 - [Custom fonts](Documentation/Examples.md#custom-fonts)
+- [Resource files](Documentation/Examples.md#resource-files)
 
 Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
 - If images used in storyboards are available
 - If view controllers with storyboard identifiers can be loaded
+
+## Q&A
+
+- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
+- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
+- [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
 
 ## Installation
 
@@ -64,13 +82,6 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
-
-## Q&A
-
-- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
-- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
-- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
-- [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
 
 ## Contribute
 

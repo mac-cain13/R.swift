@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -38,17 +38,23 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="User@white.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZJc-88-QRk">
+                                <rect key="frame" x="214.5" y="52" width="170" height="170"/>
+                                <animations/>
+                            </imageView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="KQZ-1w-vlD" secondAttribute="centerX" id="6BV-lF-sBN"/>
+                            <constraint firstItem="ZJc-88-QRk" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="32" id="9B5-tH-201"/>
                             <constraint firstItem="A5M-7J-77L" firstAttribute="top" secondItem="KQZ-1w-vlD" secondAttribute="bottom" constant="8" symbolic="YES" id="cfb-er-3JN"/>
                             <constraint firstItem="A5M-7J-77L" firstAttribute="centerX" secondItem="KQZ-1w-vlD" secondAttribute="centerX" id="e1l-AV-tCB"/>
                             <constraint firstAttribute="centerY" secondItem="KQZ-1w-vlD" secondAttribute="centerY" id="exm-UA-ej4"/>
+                            <constraint firstItem="ZJc-88-QRk" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="vaM-po-q6m"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="First" image="First" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="First" image="User@white" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="titleLabel" destination="KQZ-1w-vlD" id="ngg-aK-i8U"/>
                     </connections>
@@ -164,7 +170,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="First" width="30" height="30"/>
         <image name="Second" width="30" height="30"/>
+        <image name="User@white" width="30" height="30"/>
+        <image name="User@white.png" width="170" height="170"/>
     </resources>
 </document>

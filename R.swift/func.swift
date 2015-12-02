@@ -46,31 +46,35 @@ func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSU
   return assetFolders
 }
 
+/*
+Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
+Special rules: Can't begin with a number
+*/
 func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var components = name.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: " -"))
-  let firstComponent = components.removeAtIndex(0)
-  let swiftName = components.reduce(firstComponent) { $0 + $1.capitalizedString }
-  let capitalizedSwiftName = lowercaseFirstCharacter ? swiftName.lowercaseFirstCharacter : swiftName
+  var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
 
+  let firstComponent = nameComponents.removeAtIndex(0)
+  let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
+
+  let regex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
+  let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
+  let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
+
+  let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
   return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 
-func writeResourceFile(code: String, toFolderURL folderURL: NSURL) {
-  let outputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
-
+func writeResourceFile(code: String, toFileURL fileURL: NSURL) {
   do {
-    try code.writeToURL(outputURL, atomically: true, encoding: NSUTF8StringEncoding)
+    try code.writeToURL(fileURL, atomically: true, encoding: NSUTF8StringEncoding)
   } catch let error as NSError {
     fail(error)
   }
 }
 
-func readResourceFile(folderURL: NSURL) -> String? {
-  let inputURL = folderURL.URLByAppendingPathComponent(ResourceFilename)
-
+func readResourceFile(fileURL: NSURL) -> String? {
   do {
-    let resourceFileString = try String(contentsOfURL: inputURL, encoding: NSUTF8StringEncoding)
-    return resourceFileString
+    return try String(contentsOfURL: fileURL, encoding: NSUTF8StringEncoding)
   } catch {
     return nil
   }
@@ -80,10 +84,20 @@ func readResourceFile(folderURL: NSURL) -> String? {
 
 // Image
 
-func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
-  let vars = assetFolders
+func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: [Image]) -> Struct {
+  let assetFolderImageVars = assetFolders
     .flatMap { $0.imageAssets }
-    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\")") }
+    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
+
+  let uniqueImages = images
+    .groupBy { $0.name }
+    .values
+    .flatMap { $0.first }
+
+  let imageVars = uniqueImages
+    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
+
+  let vars = (assetFolderImageVars + imageVars)
     .groupUniquesAndDuplicates { $0.callName }
 
   for duplicate in vars.duplicates {
@@ -178,7 +192,7 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
 }
 
 func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: nil)")]
+  let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)")]
 
   let initialViewControllerVar = [storyboard.initialViewController
     .map { (vc) -> Var in
@@ -260,7 +274,7 @@ func nibStructForNib(nib: Nib) -> Struct {
     isStatic: false,
     name: "instance",
     type: Type._UINib,
-    getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: nil)"
+    getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
   )
 
   let instantiateFunc = Function(
@@ -322,7 +336,10 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
     warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
   }
 
-  let reuseIdentifierVars = groupedReusables.uniques.map(varFromReusable)
+  let reuseIdentifierVars = groupedReusables
+    .uniques
+    .map(varFromReusable)
+
   return Struct(type: Type(name: "reuseIdentifier"), lets: [], vars: reuseIdentifierVars, functions: [], structs: [])
 }
 
@@ -352,4 +369,26 @@ func fontFunctionFromFont(font: Font) -> Function {
     returnType: Type._UIFont.asOptional(),
     body:"return UIFont(name: \"\(font.name)\", size: size)"
   )
+}
+
+// Resource files
+
+func resourceStructFromResourceFiles(resourceFiles: [ResourceFile]) -> Struct {
+  let groupedResourceFiles = resourceFiles.groupUniquesAndDuplicates { sanitizedSwiftName($0.fullname) }
+
+  for duplicate in groupedResourceFiles.duplicates {
+    let names = duplicate.map { $0.fullname }.sort().joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) resource files because symbol '\(sanitizedSwiftName(duplicate.first!.fullname))' would be generated for all of these files: \(names)")
+  }
+
+  let resourceVars = groupedResourceFiles
+    .uniques
+    .map(varFromResourceFile)
+
+  return Struct(type: Type(name: "file"), lets: [], vars: resourceVars, functions: [], structs: [])
+}
+
+func varFromResourceFile(resourceFile: ResourceFile) -> Var {
+  let pathExtensionOrNilString = resourceFile.pathExtension ?? "nil"
+  return Var(isStatic: true, name: resourceFile.fullname, type: Type._NSURL.asOptional(), getter: "return _R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
 }
