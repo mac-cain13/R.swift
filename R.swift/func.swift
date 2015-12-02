@@ -115,7 +115,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 
   let deduplicatedSeguesWithInfo = seguesWithInfo
     .groupBy { segue, sourceType, destinationType in
-      "\(segue.identifier)|\(segue.type.hashValue)|\(sourceType.hashValue)|\(destinationType.hashValue)"
+      "\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
     }
     .values
     .flatMap { $0.first }
@@ -126,7 +126,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
   for duplicate in groupedSeguesWithInfo.duplicates {
     let anySegueWithInfo = duplicate.first!
     let names = duplicate.map { $0.segue.identifier }.sort().joinWithSeparator(", ")
-    warn("Skipping \(duplicate.count) segues for '\(anySegueWithInfo.sourceType.fullyQualifiedName)' because symbol '\(sanitizedSwiftName(anySegueWithInfo.segue.identifier))' would be generated for all of these segues, but with a different destination or segue type: \(names)")
+    warn("Skipping \(duplicate.count) segues for '\(anySegueWithInfo.sourceType)' because symbol '\(sanitizedSwiftName(anySegueWithInfo.segue.identifier))' would be generated for all of these segues, but with a different destination or segue type: \(names)")
   }
 
   let structs = groupedSeguesWithInfo.uniques
@@ -136,7 +136,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
       let vars = seguesWithInfoForSourceType.map { segueWithInfo -> Var in
         let type = Type(
           name: "StoryboardSegue",
-          genericArgs: [segueWithInfo.segue.type.fullyQualifiedName, segueWithInfo.sourceType.fullyQualifiedName, segueWithInfo.destinationType.fullyQualifiedName],
+          genericArgs: [segueWithInfo.segue.type.description, segueWithInfo.sourceType.description, segueWithInfo.destinationType.description],
           optional: false
         )
         return Var(
@@ -150,7 +150,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
       guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where vars.count > 0 else { return nil }
 
       return Struct(
-        type: Type(name: sanitizedSwiftName(sourceType.fullyQualifiedName)),
+        type: Type(name: sanitizedSwiftName(sourceType.description)),
         lets: [],
         vars: vars,
         functions: [],
