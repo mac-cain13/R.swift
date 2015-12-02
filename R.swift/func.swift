@@ -96,53 +96,67 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder]) -> Struct {
 
 // Segue
 
+typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
+
 func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 
-  let viewControllers = storyboards
-    .flatMap { $0.viewControllers }
+  let seguesWithInfo = storyboards.flatMap { storyboard in
+    storyboard.viewControllers.flatMap { viewController in
+      viewController.segues.flatMap { segue -> SegueWithInfo? in
+        guard let destinationType = storyboard.viewControllers.filter({ $0.id == segue.destination }).first?.type else {
+          warn("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
+          return nil
+        }
 
-  let seguesPerSourceType = Array(viewControllers
-    .groupBy { $0.type }
-    .values)
-    .map { viewControllers in
-      (
-        sourceType: viewControllers.first!.type,
-        segues: viewControllers.reduce([]) { $0 + $1.segues }
-      )
-    }
-    .map { (sourceType: Type, segues: Array<Storyboard.Segue>) -> (sourceType: Type, segues: Array<Storyboard.Segue>) in
-      let groupedSegues = segues
-        .groupBy { "\($0.identifier)|\($0.type)|\($0.identifier)" }
-        .flatMap { (_, segues) in segues.first }
-        .groupUniquesAndDuplicates { $0.identifier }
-
-      for duplicate in groupedSegues.duplicates {
-        let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
-        warn("Skipping \(duplicate.count) segues for '\(sourceType.fullyQualifiedName)' because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these segues: \(names)")
+        return (segue: segue, sourceType: viewController.type, destinationType: destinationType)
       }
-
-      return (
-        sourceType: sourceType,
-        segues: groupedSegues.uniques
-      )
-    }
-
-  var structs: [Struct] = []
-  for (sourceType: sourceType, segues: segues) in seguesPerSourceType {
-    var segueVars: [Var] = []
-    for segue in segues {
-      guard let destinationVC = viewControllers.filter({ $0.id == segue.destination }).first else { continue }
-
-      let type = Type(name: "StoryboardSegue", genericArgs: [segue.type.fullyQualifiedName, sourceType.fullyQualifiedName, destinationVC.type.fullyQualifiedName], optional: false)
-      let _var = Var(isStatic: true, name: segue.identifier, type: type, getter: "return StoryboardSegue(identifier: \"\(segue.identifier)\")")
-      segueVars.append(_var)
-    }
-
-    if segueVars.count > 0 {
-      let _struct = Struct(type: Type(name: sourceType.name.lowercaseFirstCharacter), lets: [], vars: segueVars, functions: [], structs: [])
-      structs.append(_struct)
     }
   }
+
+  let deduplicatedSeguesWithInfo = seguesWithInfo
+    .groupBy { segue, sourceType, destinationType in
+      "\(segue.identifier)|\(segue.type.hashValue)|\(sourceType.hashValue)|\(destinationType.hashValue)"
+    }
+    .values
+    .flatMap { $0.first }
+
+  let groupedSeguesWithInfo = deduplicatedSeguesWithInfo
+    .groupUniquesAndDuplicates { $0.segue.identifier }
+
+  for duplicate in groupedSeguesWithInfo.duplicates {
+    let anySegueWithInfo = duplicate.first!
+    let names = duplicate.map { $0.segue.identifier }.sort().joinWithSeparator(", ")
+    warn("Skipping \(duplicate.count) segues for '\(anySegueWithInfo.sourceType.fullyQualifiedName)' because symbol '\(sanitizedSwiftName(anySegueWithInfo.segue.identifier))' would be generated for all of these segues, but with a different destination or segue type: \(names)")
+  }
+
+  let structs = groupedSeguesWithInfo.uniques
+    .groupBy { $0.sourceType }
+    .values
+    .flatMap { seguesWithInfoForSourceType -> Struct? in
+      let vars = seguesWithInfoForSourceType.map { segueWithInfo -> Var in
+        let type = Type(
+          name: "StoryboardSegue",
+          genericArgs: [segueWithInfo.segue.type.fullyQualifiedName, segueWithInfo.sourceType.fullyQualifiedName, segueWithInfo.destinationType.fullyQualifiedName],
+          optional: false
+        )
+        return Var(
+          isStatic: true,
+          name: segueWithInfo.segue.identifier,
+          type: type,
+          getter: "return StoryboardSegue(identifier: \"\(segueWithInfo.segue.identifier)\")"
+        )
+      }
+
+      guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where vars.count > 0 else { return nil }
+
+      return Struct(
+        type: Type(name: sanitizedSwiftName(sourceType.fullyQualifiedName)),
+        lets: [],
+        vars: vars,
+        functions: [],
+        structs: []
+      )
+    }
 
   return Struct(type: Type(name: "segue"), lets: [], vars: [], functions: [], structs: structs)
 }
