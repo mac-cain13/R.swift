@@ -69,7 +69,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
 
   var description: String {
     if module == productModuleName {
-      return Type(module: nil, name: name, genericType: genericTypeBox.value, optional: optional).fullyQualifiedName
+      return Type(module: nil, name: name, genericArgs: genericArgs, optional: optional).fullyQualifiedName
     } else {
       return fullyQualifiedName
     }
