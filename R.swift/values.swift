@@ -42,57 +42,74 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
-let StoryboardSegueType = Type(name: "StoryboardSegue", genericArgs: ["Segue", "Source", "Destination"])
+let StoryboardSegueIdentifierType = Type(name: "StoryboardSegue", genericArgs: ["Segue: UIStoryboardSegue", "Source: UIViewController", "Destination: UIViewController"])
 
-let StoryboardSegue = Struct(
-  type: StoryboardSegueType,
+let StoryboardSegueIdentifier = Struct(
+  type: StoryboardSegueIdentifierType,
   implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(
       name: "identifier",
-      type: Type(name: "String")
+      type: Type._String
     )
   ],
   vars: [
     Var(
       isStatic: false,
       name: "description",
-      type: Type(name: "String"),
+      type: Type._String,
       getter: "return identifier"
     )
   ],
   functions: [
     Function(
       isStatic: false,
-      name: "segue",
+      name: "typeSegue",
       generics: nil,
       parameters: [
         Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
       ],
-      returnType: Type(name: "Segue", optional: true),
-      body: "return segue as? Segue"
+      returnType: Type(name: "TypedStoryboardSegue", genericArgs: ["Segue","Source","Destination"], optional: true),
+      body: "return TypedStoryboardSegue(segue: segue)"
     ),
-    Function(
-      isStatic: false,
-      name: "sourceViewController",
-      generics: nil,
-      parameters: [
-        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
-      ],
-      returnType: Type(name: "Source", optional: true),
-      body: "return segue.sourceViewController as? Source"
-    ),
-    Function(
-      isStatic: false,
-      name: "destinationViewController",
-      generics: nil,
-      parameters: [
-        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
-      ],
-      returnType: Type(name: "Destination", optional: true),
-      body: "return segue.destinationViewController as? Destination"
-    )],
+  ],
   structs: [])
+
+let TypedStoryboardSegue = Struct(
+  type: Type(name: "TypedStoryboardSegue", genericArgs: StoryboardSegueIdentifierType.genericArgs),
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(name: "segue", type: Type(name: "Segue")),
+    Let(name: "identifier", type: Type._String.asOptional()),
+    Let(name: "sourceViewController", type: Type(name: "Source")),
+    Let(name: "destinationViewController", type: Type(name: "Destination")),
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type._String,
+      getter: "return identifier ?? \"\""
+    )
+  ],
+  functions: [
+    Initializer(
+      type: .Designated,
+      isFailable: true,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type._UIStoryboardSegue)
+      ],
+      body: [
+        "guard let segue = segue as? Segue, sourceViewController = segue.sourceViewController as? Source, destinationViewController = segue.destinationViewController as? Destination else { return nil }",
+        "self.segue = segue",
+        "self.identifier = segue.identifier",
+        "self.sourceViewController = sourceViewController",
+        "self.destinationViewController = destinationViewController",
+        ].joinWithSeparator("\n")
+    ) as Func
+  ],
+  structs: []
+)
 
 let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
@@ -118,6 +135,7 @@ let NibUIViewControllerExtension = Extension(
   functions: [
     Initializer(
       type: .Convenience,
+      isFailable: false,
       parameters: [
         Function.Parameter(name: "nib", type: Type(name: "NibResource"))
       ],
@@ -132,9 +150,9 @@ let SegueUIViewControllerExtension = Extension(
     Function(
       isStatic: false,
       name: "performSegue",
-      generics: StoryboardSegueType.genericArgs.joinWithSeparator(","),
+      generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
       parameters: [
-        Function.Parameter(name: "segue", type: StoryboardSegueType),
+        Function.Parameter(name: "segue", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"])),
         Function.Parameter(name: "sender", type: Type._AnyObject.asOptional())
       ],
       returnType: Type._Void,

@@ -284,7 +284,7 @@ func nibStructForNib(nib: Nib) -> Struct {
     parameters: instantiateParameters,
     returnType: Type(name: "[AnyObject]"),
     body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
-  )
+  ) as Func
 
   let viewFuncs = zip(nib.rootViews, Ordinals)
     .map { (view: $0.0, ordinal: $0.1) }
@@ -296,7 +296,7 @@ func nibStructForNib(nib: Nib) -> Struct {
         parameters: instantiateParameters,
         returnType: $0.view.asOptional(),
         body: "return \(instantiateFunc.callName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
-      )
+      ) as Func
     }
 
   let reuseIdentifierVars: [Var]

@@ -210,6 +210,7 @@ struct Function: Func {
 
 struct Initializer: Func {
   let type: Type
+  let isFailable: Bool
   let parameters: [Function.Parameter]
   let body: String
 
@@ -217,8 +218,9 @@ struct Initializer: Func {
 
   var description: String {
     let fullName = [type.description, callName].joinWithSeparator(" ")
+    let optionalString = isFailable ? "?" : ""
     let parameterString = parameters.joinWithSeparator(", ")
-    return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
+    return "\(fullName)\(optionalString)(\(parameterString)) {\n\(indent(body))\n}"
   }
 
   enum Type: CustomStringConvertible {
@@ -276,10 +278,10 @@ struct Struct: CustomStringConvertible {
   let implements: [Type]
   let vars: [Var]
   let lets: [Let]
-  let functions: [Function]
+  let functions: [Func]
   let structs: [Struct]
 
-  init(type: Type, lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+  init(type: Type, lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = []
     self.lets = lets
@@ -288,7 +290,7 @@ struct Struct: CustomStringConvertible {
     self.structs = structs
   }
 
-  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = implements
     self.vars = vars
@@ -307,7 +309,8 @@ struct Struct: CustomStringConvertible {
       .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
       .joinWithSeparator("\n")
     let functionsString = functions
-      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .sort { $0.callName < $1.callName }
+      .map { $0.description }
       .joinWithSeparator("\n\n")
     let structsString = structs
       .sort { $0.type.description < $1.type.description }
