@@ -142,7 +142,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="First" width="30" height="30"/>
+        <image name="First" width="170" height="170"/>
         <image name="Second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
