@@ -23,7 +23,7 @@ let Imports = [
 
 
 let ReuseIdentifier = Struct(
-  type: Type(name: "ReuseIdentifier", genericType: Type(name: "T")),
+  type: Type(name: "ReuseIdentifier", genericArgs: ["T"]),
   implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(
@@ -41,6 +41,83 @@ let ReuseIdentifier = Struct(
   ],
   functions: [],
   structs: [])
+
+let StoryboardSegueIdentifierType = Type(name: "StoryboardSegueIdentifier", genericArgs: ["Segue: UIStoryboardSegue", "Source: UIViewController", "Destination: UIViewController"])
+
+let StoryboardSegueIdentifier = Struct(
+  type: StoryboardSegueIdentifierType,
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(
+      name: "identifier",
+      type: Type._String
+    )
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type._String,
+      getter: "return identifier"
+    )
+  ],
+  functions: [],
+  structs: [])
+
+let TypedStoryboardSegueInfo = Struct(
+  type: Type(name: "TypedStoryboardSegueInfo", genericArgs: StoryboardSegueIdentifierType.genericArgs),
+  implements: [Type(name: "CustomStringConvertible")],
+  lets: [
+    Let(name: "segue", type: Type(name: "Segue")),
+    Let(name: "identifier", type: Type._String.asOptional()),
+    Let(name: "sourceViewController", type: Type(name: "Source")),
+    Let(name: "destinationViewController", type: Type(name: "Destination")),
+  ],
+  vars: [
+    Var(
+      isStatic: false,
+      name: "description",
+      type: Type._String,
+      getter: "return identifier ?? \"\""
+    )
+  ],
+  functions: [
+    Initializer(
+      type: .Designated,
+      isFailable: true,
+      parameters: [
+        Function.Parameter(name: "segue", type: Type._UIStoryboardSegue)
+      ],
+      body: [
+        "guard let segue = segue as? Segue, sourceViewController = segue.sourceViewController as? Source, destinationViewController = segue.destinationViewController as? Destination else { return nil }",
+        "self.segue = segue",
+        "self.identifier = segue.identifier",
+        "self.sourceViewController = sourceViewController",
+        "self.destinationViewController = destinationViewController",
+        ].joinWithSeparator("\n")
+    ) as Func
+  ],
+  structs: []
+)
+
+let UIStoryboardSegueExtension = Extension(
+  type: Type._UIStoryboardSegue,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "typedInfoWithIdentifier",
+      generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
+      parameters: [
+        Function.Parameter(name: "identifier", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"]))
+      ],
+      returnType: Type(name: "TypedStoryboardSegueInfo", genericArgs: ["Segue","Source","Destination"], optional: true),
+      body: [
+        "guard self.identifier == identifier.identifier else { return nil }",
+        "return TypedStoryboardSegueInfo(segue: self)",
+        ].joinWithSeparator("\n")
+    ),
+  ]
+)
 
 let NibResourceProtocol = Protocol(
   type: Type(name: "NibResource"),
@@ -66,11 +143,29 @@ let NibUIViewControllerExtension = Extension(
   functions: [
     Initializer(
       type: .Convenience,
+      isFailable: false,
       parameters: [
         Function.Parameter(name: "nib", type: Type(name: "NibResource"))
       ],
       body: "self.init(nibName: nib.name, bundle: _R.hostingBundle)"
     ) as Func
+  ]
+)
+
+let SegueUIViewControllerExtension = Extension(
+  type: Type._UIViewController,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "performSegueWithIdentifier",
+      generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
+      parameters: [
+        Function.Parameter(name: "identifier", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"])),
+        Function.Parameter(name: "sender", type: Type._AnyObject.asOptional())
+      ],
+      returnType: Type._Void,
+      body: "performSegueWithIdentifier(identifier.identifier, sender: sender)"
+    ),
   ]
 )
 
@@ -85,7 +180,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath.asOptional())
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "if let indexPath = indexPath {\n  return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? T\n}\nreturn dequeueReusableCellWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -96,7 +191,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableCellWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -107,7 +202,7 @@ let ReuseIdentifierUITableViewExtension = Extension(
       parameters: [
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableHeaderFooterViewWithIdentifier(identifier.identifier) as? T"
     ),
 
@@ -157,7 +252,7 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
         Function.Parameter(name: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableCellWithReuseIdentifier(identifier.identifier, forIndexPath: indexPath) as? T"
     ),
 
@@ -170,7 +265,7 @@ let ReuseIdentifierUICollectionViewExtension = Extension(
         Function.Parameter(name: "withReuseIdentifier", localName: "identifier", type: ReuseIdentifier.type),
         Function.Parameter(name: "forIndexPath", localName: "indexPath", type: Type._NSIndexPath)
       ],
-      returnType: Type(name: "T", genericType: nil, optional: true),
+      returnType: Type(name: "T", optional: true),
       body: "return dequeueReusableSupplementaryViewOfKind(elementKind, withReuseIdentifier: identifier.identifier, forIndexPath: indexPath) as? T"
     ),
 

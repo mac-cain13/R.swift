@@ -28,11 +28,15 @@ do {
     externalStruct.description,
     internalStruct.description,
     ReuseIdentifier.description,
+    StoryboardSegueIdentifier.description,
+    TypedStoryboardSegueInfo.description,
     NibResourceProtocol.description,
     ReusableProtocol.description,
     ReuseIdentifierUITableViewExtension.description,
     ReuseIdentifierUICollectionViewExtension.description,
     NibUIViewControllerExtension.description,
+    SegueUIViewControllerExtension.description,
+    UIStoryboardSegueExtension.description,
     ].joinWithSeparator("\n\n")
 
   // Write file if we have changes
