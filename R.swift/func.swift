@@ -149,7 +149,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
     .flatMap { seguesWithInfoForSourceType -> Struct? in
       let vars = seguesWithInfoForSourceType.map { segueWithInfo -> Var in
         let type = Type(
-          name: "StoryboardSegue",
+          name: "StoryboardSegueIdentifier",
           genericArgs: [segueWithInfo.segue.type.description, segueWithInfo.sourceType.description, segueWithInfo.destinationType.description],
           optional: false
         )
@@ -157,7 +157,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
           isStatic: true,
           name: segueWithInfo.segue.identifier,
           type: type,
-          getter: "return StoryboardSegue(identifier: \"\(segueWithInfo.segue.identifier)\")"
+          getter: "return StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
         )
       }
 

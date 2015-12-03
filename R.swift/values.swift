@@ -42,7 +42,7 @@ let ReuseIdentifier = Struct(
   functions: [],
   structs: [])
 
-let StoryboardSegueIdentifierType = Type(name: "StoryboardSegue", genericArgs: ["Segue: UIStoryboardSegue", "Source: UIViewController", "Destination: UIViewController"])
+let StoryboardSegueIdentifierType = Type(name: "StoryboardSegueIdentifier", genericArgs: ["Segue: UIStoryboardSegue", "Source: UIViewController", "Destination: UIViewController"])
 
 let StoryboardSegueIdentifier = Struct(
   type: StoryboardSegueIdentifierType,
@@ -152,7 +152,7 @@ let SegueUIViewControllerExtension = Extension(
   functions: [
     Function(
       isStatic: false,
-      name: "performSegue",
+      name: "performSegueWithIdentifier",
       generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
       parameters: [
         Function.Parameter(name: "segue", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"])),
