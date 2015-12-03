@@ -164,7 +164,7 @@ let SegueUIViewControllerExtension = Extension(
         Function.Parameter(name: "sender", type: Type._AnyObject.asOptional())
       ],
       returnType: Type._Void,
-      body: "performSegueWithIdentifier(segue.identifier, sender: sender)"
+      body: "performSegueWithIdentifier(identifier.identifier, sender: sender)"
     ),
   ]
 )
