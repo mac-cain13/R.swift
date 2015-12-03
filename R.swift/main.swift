@@ -36,6 +36,7 @@ do {
     ReuseIdentifierUICollectionViewExtension.description,
     NibUIViewControllerExtension.description,
     SegueUIViewControllerExtension.description,
+    UIStoryboardSegueExtension.description,
     ].joinWithSeparator("\n\n")
 
   // Write file if we have changes

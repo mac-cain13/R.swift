@@ -61,21 +61,7 @@ let StoryboardSegueIdentifier = Struct(
       getter: "return identifier"
     )
   ],
-  functions: [
-    Function(
-      isStatic: false,
-      name: "typeSegue",
-      generics: nil,
-      parameters: [
-        Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
-      ],
-      returnType: Type(name: "TypedStoryboardSegue", genericArgs: ["Segue","Source","Destination"], optional: true),
-      body: [
-        "guard segue.identifier == identifier else { return nil }",
-        "return TypedStoryboardSegue(segue: segue)",
-      ].joinWithSeparator("\n")
-    ),
-  ],
+  functions: [],
   structs: [])
 
 let TypedStoryboardSegue = Struct(
@@ -112,6 +98,25 @@ let TypedStoryboardSegue = Struct(
     ) as Func
   ],
   structs: []
+)
+
+let UIStoryboardSegueExtension = Extension(
+  type: Type._UIStoryboardSegue,
+  functions: [
+    Function(
+      isStatic: false,
+      name: "typeWithIdentifier",
+      generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
+      parameters: [
+        Function.Parameter(name: "identifier", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"]))
+      ],
+      returnType: Type(name: "TypedStoryboardSegue", genericArgs: ["Segue","Source","Destination"], optional: true),
+      body: [
+        "guard self.identifier == identifier.identifier else { return nil }",
+        "return TypedStoryboardSegue(segue: self)",
+        ].joinWithSeparator("\n")
+    ),
+  ]
 )
 
 let NibResourceProtocol = Protocol(
