@@ -69,8 +69,8 @@ performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self
 
 // And then prepare it:
 override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-	if let typedInfo = segue.typedInfoWithIdentifierR.segue.overviewController.openSettings) {
-		typedInfo.segue.animationType = .LockAnimation
+  if let typedInfo = segue.typedInfoWithIdentifier(R.segue.overviewController.openSettings) {
+    typedInfo.segue.animationType = .LockAnimation
     typedInfo.destinationViewController.lockSettings = true
   }
 }
@@ -103,33 +103,33 @@ let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 *Vanilla*
 ```swift
 class FaqAnswerController: UITableViewController {
-	override func viewDidLoad() {
-	    super.viewDidLoad()
-	    let textCellNib = UINib(nibName: "TextCell", bundle: nil)
-	    tableView.registerNib(textCellNib, forCellReuseIdentifier: "TextCellIdentifier")
-	}
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let textCellNib = UINib(nibName: "TextCell", bundle: nil)
+    tableView.registerNib(textCellNib, forCellReuseIdentifier: "TextCellIdentifier")
+  }
 
-	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    	let textCell = tableView.dequeueReusableCellWithIdentifier("TextCellIdentifier", forIndexPath: indexPath) as? TextCell
-    	textCell?.mainLabel.text = "Hello World"
-    	return textCell
-  	}
+  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    let textCell = tableView.dequeueReusableCellWithIdentifier("TextCellIdentifier", forIndexPath: indexPath) as! TextCell
+    textCell.mainLabel.text = "Hello World"
+    return textCell
+  }
 }
 ```
 
 *With R.swift*
 ```swift
 class FaqAnswerController: UITableViewController {
-	override func viewDidLoad() {
-	    super.viewDidLoad()
-	    tableView.registerNib(R.nib.textCell)
-	}
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    tableView.registerNib(R.nib.textCell)
+  }
 
-	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    	let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.reuseIdentifier, forIndexPath: indexPath)
-    	textCell?.mainLabel.text = "Hello World"
-    	return textCell
-  	}
+  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.reuseIdentifier, forIndexPath: indexPath)!
+    textCell.mainLabel.text = "Hello World"
+    return textCell
+  }
 }
 ```
 
