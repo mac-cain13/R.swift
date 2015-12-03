@@ -29,7 +29,7 @@ do {
     internalStruct.description,
     ReuseIdentifier.description,
     StoryboardSegueIdentifier.description,
-    TypedStoryboardSegue.description,
+    TypedStoryboardSegueInfo.description,
     NibResourceProtocol.description,
     ReusableProtocol.description,
     ReuseIdentifierUITableViewExtension.description,

@@ -64,8 +64,8 @@ let StoryboardSegueIdentifier = Struct(
   functions: [],
   structs: [])
 
-let TypedStoryboardSegue = Struct(
-  type: Type(name: "TypedStoryboardSegue", genericArgs: StoryboardSegueIdentifierType.genericArgs),
+let TypedStoryboardSegueInfo = Struct(
+  type: Type(name: "TypedStoryboardSegueInfo", genericArgs: StoryboardSegueIdentifierType.genericArgs),
   implements: [Type(name: "CustomStringConvertible")],
   lets: [
     Let(name: "segue", type: Type(name: "Segue")),
@@ -105,15 +105,15 @@ let UIStoryboardSegueExtension = Extension(
   functions: [
     Function(
       isStatic: false,
-      name: "typeWithIdentifier",
+      name: "typedInfoWithIdentifier",
       generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
       parameters: [
         Function.Parameter(name: "identifier", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"]))
       ],
-      returnType: Type(name: "TypedStoryboardSegue", genericArgs: ["Segue","Source","Destination"], optional: true),
+      returnType: Type(name: "TypedStoryboardSegueInfo", genericArgs: ["Segue","Source","Destination"], optional: true),
       body: [
         "guard self.identifier == identifier.identifier else { return nil }",
-        "return TypedStoryboardSegue(segue: self)",
+        "return TypedStoryboardSegueInfo(segue: self)",
         ].joinWithSeparator("\n")
     ),
   ]
@@ -160,7 +160,7 @@ let SegueUIViewControllerExtension = Extension(
       name: "performSegueWithIdentifier",
       generics: StoryboardSegueIdentifierType.genericArgs.joinWithSeparator(","),
       parameters: [
-        Function.Parameter(name: "segue", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"])),
+        Function.Parameter(name: "identifier", type: StoryboardSegueIdentifierType.withGenericArgs(["Segue", "Source", "Destination"])),
         Function.Parameter(name: "sender", type: Type._AnyObject.asOptional())
       ],
       returnType: Type._Void,

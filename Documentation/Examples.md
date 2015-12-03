@@ -69,7 +69,7 @@ performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self
 
 // And then prepare it:
 override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-	if let typedInfo = segue.typeWithIdentifier(R.segue.overviewController.openSettings) {
+	if let typedInfo = segue.typedInfoWithIdentifierR.segue.overviewController.openSettings) {
 		typedInfo.segue.animationType = .LockAnimation
     typedInfo.destinationViewController.lockSettings = true
   }
