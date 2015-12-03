@@ -48,12 +48,32 @@ R.storyboard.main.validateViewControllers()
 
 *Vanilla*
 ```swift
-performSegueWithIdentifier("openSettings")
+// Trigger segue with:
+performSegueWithIdentifier("openSettings", sender: self)
+
+// And then prepare it:
+override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+  if let settingsController = segue.destinationViewController as? SettingsController,
+    segue = segue as? CustomSettingsSegue
+    where segue.identifier == "openSettings" {
+      segue.animationType = .LockAnimation
+      settingsController.lockSettings = true
+  }
+}
 ```
 
 *With R.swift*
 ```swift
-performSegueWithIdentifier(R.segue.openSettings)
+// Trigger segue with:
+performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self)
+
+// And then prepare it:
+override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+	if let typedInfo = segue.typeWithIdentifier(R.segue.overviewController.openSettings) {
+		typedInfo.segue.animationType = .LockAnimation
+    typedInfo.destinationViewController.lockSettings = true
+  }
+}
 ```
 
 ## Nibs
