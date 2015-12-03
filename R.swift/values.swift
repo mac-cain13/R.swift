@@ -70,7 +70,10 @@ let StoryboardSegueIdentifier = Struct(
         Function.Parameter(name: "segue", type: Type(name: "UIStoryboardSegue"))
       ],
       returnType: Type(name: "TypedStoryboardSegue", genericArgs: ["Segue","Source","Destination"], optional: true),
-      body: "return TypedStoryboardSegue(segue: segue)"
+      body: [
+        "guard segue.identifier == identifier else { return nil }",
+        "return TypedStoryboardSegue(segue: segue)",
+      ].joinWithSeparator("\n")
     ),
   ],
   structs: [])
