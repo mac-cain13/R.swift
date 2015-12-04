@@ -43,6 +43,10 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UIFont = Type(name: "UIFont")
   static let _CGFloat = Type(name: "CGFloat")
 
+  static let ReuseIdentifier = Type(name: "ReuseIdentifier", genericArgs: ["T"])
+  static let ReusableProtocol = Type(name: "Reusable")
+  static let NibResourceProtocol = Type(name: "NibResource")
+
   let module: String?
   let name: String
   let genericArgs: [TypeVar]

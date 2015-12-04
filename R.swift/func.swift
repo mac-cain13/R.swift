@@ -315,7 +315,7 @@ func nibStructForNib(nib: Nib) -> Struct {
       type: reusableVar.type,
       getter: reusableVar.getter
     )]
-    reuseProtocols = [ReusableProtocol.type]
+    reuseProtocols = [Type.ReusableProtocol]
   } else {
     reuseIdentifierVars = []
     reuseProtocols = []
@@ -324,7 +324,7 @@ func nibStructForNib(nib: Nib) -> Struct {
   let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
   return Struct(
     type: Type(name: "_\(sanitizedName)"),
-    implements: [NibResourceProtocol.type] + reuseProtocols,
+    implements: [Type.NibResourceProtocol] + reuseProtocols,
     lets: [],
     vars: [bundleVar, nameVar, instanceVar] + reuseIdentifierVars,
     functions: [instantiateFunc] + viewFuncs,
@@ -353,8 +353,8 @@ func varFromReusable(reusable: Reusable) -> Var {
   return Var(
     isStatic: true,
     name: reusable.identifier,
-    type: ReuseIdentifier.type.withGenericArgs([reusable.type.name]),
-    getter: "return \(ReuseIdentifier.type.name)(identifier: \"\(reusable.identifier)\")"
+    type: Type.ReuseIdentifier.withGenericArgs([reusable.type.name]),
+    getter: "return \(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
   )
 }
 

@@ -22,45 +22,6 @@ let Imports = [
   "import Rswift",
 ].joinWithSeparator("\n")
 
-let ReuseIdentifier = Struct(
-  type: Type(name: "ReuseIdentifier", genericArgs: ["T"]),
-  implements: [Type(name: "CustomStringConvertible")],
-  lets: [
-    Let(
-      name: "identifier",
-      type: Type(name: "String")
-    )
-  ],
-  vars: [
-    Var(
-      isStatic: false,
-      name: "description",
-      type: Type(name: "String"),
-      getter: "return identifier"
-    )
-  ],
-  functions: [],
-  structs: [])
-
-let ReusableProtocol = Protocol(
-  type: Type(name: "Reusable"),
-  typealiasses: [
-    Typealias(alias: Type(name: "T"), type: nil)
-  ],
-  vars: [
-    Var(isStatic: false, name: "reuseIdentifier", type: ReuseIdentifier.type, getter: "get")
-  ]
-)
-
-let NibResourceProtocol = Protocol(
-  type: Type(name: "NibResource"),
-  typealiasses: [],
-  vars: [
-    Var(isStatic: false, name: "name", type: Type._String, getter: "get"),
-    Var(isStatic: false, name: "instance", type: Type._UINib, getter: "get")
-  ]
-)
-
 let IndentationString = "  "
 
 let Ordinals = [
