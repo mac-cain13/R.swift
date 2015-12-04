@@ -1,30 +1,31 @@
-Pod::Spec.new do |s|
+Pod::Spec.new do |spec|
 
-  s.name         = "R.swift"
-  s.version      = "0.12.0"
-  s.summary      = "Get strong typed, autocompleted resources like images, fonts and segues in Swift projects"
+  spec.name         = "R.swift"
+  spec.version      = "0.12.0"
+  spec.license      = "MIT"
 
-  s.description  = <<-DESC
+  spec.summary      = "Get strong typed, autocompleted resources like images, fonts and segues in Swift projects"
+  spec.description  = <<-DESC
                    R.swift is a tool to get strong typed, autocompleted resources like images, fonts and segues in Swift projects.
 
                    * Never type string identifiers again
                    * Supports images, fonts, storyboards, nibs, segues, reuse identifiers and more
                    * Compile time checks and errors instead of runtime crashes
                    DESC
+  spec.homepage     = "https://github.com/mac-cain13/R.swift"
+  spec.documentation_url = "https://github.com/mac-cain13/R.swift/tree/master/Documentation"
+  spec.screenshots  = [ "https://raw.githubusercontent.com/mac-cain13/R.swift/master/Documentation/Images/DemoUseImage.gif",
+                        "https://raw.githubusercontent.com/mac-cain13/R.swift/master/Documentation/Images/DemoRenameImage.gif" ]
 
-  s.homepage     = "https://github.com/mac-cain13/R.swift"
+  spec.author             = { "Mathijs Kadijk" => "mkadijk@gmail.com" }
+  spec.social_media_url   = "https://twitter.com/mac_cain13"
 
-  s.license      = "MIT"
+  spec.requires_arc = true
+  spec.source = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v#{spec.version}/rswift-#{spec.version}.zip" }
 
-  s.author             = { "Mathijs Kadijk" => "mkadijk@gmail.com" }
-  s.social_media_url   = "https://twitter.com/mac_cain13"
+  spec.ios.deployment_target     = '7.0'
+  spec.tvos.deployment_target    = '9.0'
 
-  s.ios.deployment_target = '7.0'
-  s.tvos.deployment_target = '9.0'
-  s.watchos.deployment_target = '1.0'
-
-  s.source       = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v0.12.0/rswift-0.12.0.zip" }
-
-  s.preserve_paths = "rswift"
+  spec.preserve_paths = "rswift"
 
 end
