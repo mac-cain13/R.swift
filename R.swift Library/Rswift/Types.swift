@@ -29,7 +29,13 @@ extension Identifier {
   }
 }
 
-public struct ReuseIdentifier<T>: Identifier {
+public protocol ReuseIdentifierProtocol: Identifier {
+  typealias ReusableType
+}
+
+public struct ReuseIdentifier<Reusable>: ReuseIdentifierProtocol {
+  public typealias ReusableType = Reusable
+
   public let identifier: String
 
   public init(identifier: String) {
@@ -88,63 +94,57 @@ public protocol NibResource {
   var name: String { get }
 }
 
-public protocol Reusable {
-  typealias T
-
-  var reuseIdentifier: ReuseIdentifier<T> { get }
-}
-
 public extension UITableView {
-  public func dequeueReusableCellWithIdentifier<T : UITableViewCell>(identifier: ReuseIdentifier<T>, forIndexPath indexPath: NSIndexPath?) -> T? {
+  public func dequeueReusableCellWithIdentifier<Identifier: ReuseIdentifierProtocol where Identifier.ReusableType: UITableViewCell>(identifier: Identifier, forIndexPath indexPath: NSIndexPath?) -> Identifier.ReusableType? {
     if let indexPath = indexPath {
-      return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? T
+      return dequeueReusableCellWithIdentifier(identifier.identifier, forIndexPath: indexPath) as? Identifier.ReusableType
     }
-    return dequeueReusableCellWithIdentifier(identifier.identifier) as? T
+    return dequeueReusableCellWithIdentifier(identifier.identifier) as? Identifier.ReusableType
   }
 
-  public func dequeueReusableCellWithIdentifier<T : UITableViewCell>(identifier: ReuseIdentifier<T>) -> T? {
-    return dequeueReusableCellWithIdentifier(identifier.identifier) as? T
+  public func dequeueReusableCellWithIdentifier<Identifier: ReuseIdentifierProtocol where Identifier.ReusableType: UITableViewCell>(identifier: Identifier) -> Identifier.ReusableType? {
+    return dequeueReusableCellWithIdentifier(identifier.identifier) as? Identifier.ReusableType
   }
 
-  public func dequeueReusableHeaderFooterViewWithIdentifier<T : UITableViewHeaderFooterView>(identifier: ReuseIdentifier<T>) -> T? {
-    return dequeueReusableHeaderFooterViewWithIdentifier(identifier.identifier) as? T
+  public func dequeueReusableHeaderFooterViewWithIdentifier<Identifier: ReuseIdentifierProtocol where Identifier.ReusableType: UITableViewCell>(identifier: Identifier) -> Identifier.ReusableType? {
+    return dequeueReusableHeaderFooterViewWithIdentifier(identifier.identifier) as? Identifier.ReusableType
   }
 
-  public func registerNib<T: NibResource where T: Reusable, T.T: UITableViewCell>(nibResource: T) {
-    registerNib(nibResource.instance, forCellReuseIdentifier: nibResource.reuseIdentifier.identifier)
+  public func registerNib<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UITableViewCell>(nibResource: Resource) {
+    registerNib(nibResource.instance, forCellReuseIdentifier: nibResource.identifier)
   }
 
-  public func registerNibForHeaderFooterView<T: NibResource where T: Reusable, T.T: UIView>(nibResource: T) {
-    registerNib(nibResource.instance, forHeaderFooterViewReuseIdentifier: nibResource.reuseIdentifier.identifier)
+  public func registerNibForHeaderFooterView<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UIView>(nibResource: Resource) {
+    registerNib(nibResource.instance, forHeaderFooterViewReuseIdentifier: nibResource.identifier)
   }
 
-  public func registerNibs<T: NibResource where T: Reusable, T.T: UITableViewCell>(nibResources: [T]) {
+  public func registerNibs<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UITableViewCell>(nibResources: [Resource]) {
     nibResources.forEach(registerNib)
   }
 }
 
 public extension UICollectionView {
-  public func dequeueReusableCellWithReuseIdentifier<T: UICollectionViewCell>(identifier: ReuseIdentifier<T>, forIndexPath indexPath: NSIndexPath) -> T? {
-    return dequeueReusableCellWithReuseIdentifier(identifier.identifier, forIndexPath: indexPath) as? T
+  public func dequeueReusableCellWithReuseIdentifier<Identifier: ReuseIdentifierProtocol where Identifier.ReusableType: UICollectionReusableView>(identifier: Identifier, forIndexPath indexPath: NSIndexPath) -> Identifier.ReusableType? {
+    return dequeueReusableCellWithReuseIdentifier(identifier.identifier, forIndexPath: indexPath) as? Identifier.ReusableType
   }
 
-  public func dequeueReusableSupplementaryViewOfKind<T: UICollectionReusableView>(elementKind: String, withReuseIdentifier identifier: ReuseIdentifier<T>, forIndexPath indexPath: NSIndexPath) -> T? {
-    return dequeueReusableSupplementaryViewOfKind(elementKind, withReuseIdentifier: identifier.identifier, forIndexPath: indexPath) as? T
+  public func dequeueReusableSupplementaryViewOfKind<Identifier: ReuseIdentifierProtocol where Identifier.ReusableType: UICollectionReusableView>(elementKind: String, withReuseIdentifier identifier: Identifier, forIndexPath indexPath: NSIndexPath) -> Identifier.ReusableType? {
+    return dequeueReusableSupplementaryViewOfKind(elementKind, withReuseIdentifier: identifier.identifier, forIndexPath: indexPath) as? Identifier.ReusableType
   }
 
-  public func registerNib<T: NibResource where T: Reusable, T.T: UICollectionViewCell>(nibResource: T) {
-    registerNib(nibResource.instance, forCellWithReuseIdentifier: nibResource.reuseIdentifier.identifier)
+  public func registerNib<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UICollectionViewCell>(nibResource: Resource) {
+    registerNib(nibResource.instance, forCellWithReuseIdentifier: nibResource.identifier)
   }
 
-  public func registerNib<T: NibResource where T: Reusable, T.T: UICollectionReusableView>(nibResource: T, forSupplementaryViewOfKind kind: String) {
-    registerNib(nibResource.instance, forSupplementaryViewOfKind: kind, withReuseIdentifier: nibResource.reuseIdentifier.identifier)
+  public func registerNib<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UICollectionReusableView>(nibResource: Resource, forSupplementaryViewOfKind kind: String) {
+    registerNib(nibResource.instance, forSupplementaryViewOfKind: kind, withReuseIdentifier: nibResource.identifier)
   }
 
-  public func registerNibs<T: NibResource where T: Reusable, T.T: UICollectionViewCell>(nibResources: [T]) {
+  public func registerNibs<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UICollectionViewCell>(nibResources: [Resource]) {
     nibResources.forEach(registerNib)
   }
 
-  public func registerNibs<T: NibResource where T: Reusable, T.T: UICollectionReusableView>(nibResources: [T], forSupplementaryViewOfKind kind: String) {
+  public func registerNibs<Resource: NibResource where Resource: ReuseIdentifierProtocol, Resource.ReusableType: UICollectionReusableView>(nibResources: [Resource], forSupplementaryViewOfKind kind: String) {
     nibResources.forEach { self.registerNib($0, forSupplementaryViewOfKind: kind) }
   }
 }

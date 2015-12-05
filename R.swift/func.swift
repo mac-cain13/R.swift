@@ -307,17 +307,19 @@ func nibStructForNib(nib: Nib) -> Struct {
 
   let reuseIdentifierVars: [Var]
   let reuseProtocols: [Type]
+  let reuseTypealiasses: [Typealias]
   if let reusable = nib.reusables.first where nib.rootViews.count == 1 && nib.reusables.count == 1 {
-    let reusableVar = varFromReusable(reusable)
     reuseIdentifierVars = [Var(
       isStatic: false,
-      name: "reuseIdentifier",
-      type: reusableVar.type,
-      getter: reusableVar.getter
+      name: "identifier",
+      type: Type._String,
+      getter: "return \"\(reusable.identifier)\""
     )]
-    reuseProtocols = [Type.ReusableProtocol]
+    reuseTypealiasses = [Typealias(alias: Type(name: "ReusableType"), type: reusable.type)]
+    reuseProtocols = [Type.ReuseIdentifierProtocol]
   } else {
     reuseIdentifierVars = []
+    reuseTypealiasses = []
     reuseProtocols = []
   }
 
@@ -325,6 +327,7 @@ func nibStructForNib(nib: Nib) -> Struct {
   return Struct(
     type: Type(name: "_\(sanitizedName)"),
     implements: [Type.NibResourceProtocol] + reuseProtocols,
+    typealiasses: reuseTypealiasses,
     lets: [],
     vars: [bundleVar, nameVar, instanceVar] + reuseIdentifierVars,
     functions: [instantiateFunc] + viewFuncs,

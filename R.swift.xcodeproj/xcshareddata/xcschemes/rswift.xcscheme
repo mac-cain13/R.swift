@@ -102,6 +102,11 @@
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
+            key = "PRODUCT_MODULE_NAME"
+            value = "ResourceApp"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
             key = "TARGET_NAME"
             value = "ResourceApp"
             isEnabled = "YES">

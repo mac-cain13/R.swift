@@ -44,7 +44,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _CGFloat = Type(name: "CGFloat")
 
   static let ReuseIdentifier = Type(name: "ReuseIdentifier", genericArgs: ["T"])
-  static let ReusableProtocol = Type(name: "Reusable")
+  static let ReuseIdentifierProtocol = Type(name: "ReuseIdentifierProtocol")
   static let NibResourceProtocol = Type(name: "NibResource")
 
   let module: String?
@@ -280,6 +280,7 @@ struct Extension: CustomStringConvertible {
 struct Struct: CustomStringConvertible {
   let type: Type
   let implements: [Type]
+  let typealiasses: [Typealias]
   let vars: [Var]
   let lets: [Let]
   let functions: [Func]
@@ -288,6 +289,7 @@ struct Struct: CustomStringConvertible {
   init(type: Type, lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = []
+    self.typealiasses = []
     self.lets = lets
     self.vars = vars
     self.functions = functions
@@ -297,6 +299,17 @@ struct Struct: CustomStringConvertible {
   init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = implements
+    self.typealiasses = []
+    self.vars = vars
+    self.lets = lets
+    self.functions = functions
+    self.structs = structs
+  }
+
+  init(type: Type, implements: [Type], typealiasses: [Typealias], lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
+    self.type = type
+    self.implements = implements
+    self.typealiasses = typealiasses
     self.vars = vars
     self.lets = lets
     self.functions = functions
@@ -305,6 +318,10 @@ struct Struct: CustomStringConvertible {
 
   var description: String {
     let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
+
+    let typealiasString = typealiasses
+      .sort { $0.alias.description < $1.alias.description }
+      .joinWithSeparator("\n")
 
     let letsString = lets
       .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
@@ -320,7 +337,7 @@ struct Struct: CustomStringConvertible {
       .sort { $0.type.description < $1.type.description }
       .joinWithSeparator("\n\n")
 
-    let bodyComponents = [letsString, varsString, functionsString, structsString].filter { $0 != "" }
+    let bodyComponents = [typealiasString, letsString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
     return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
