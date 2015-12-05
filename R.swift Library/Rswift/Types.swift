@@ -19,33 +19,51 @@ extension UIImage {
   }
 }
 
-public struct ReuseIdentifier<T>: CustomStringConvertible {
-  public let identifier: String
+public protocol Identifier: CustomStringConvertible {
+  var identifier: String { get }
+}
 
-  public var description: String { return identifier }
+extension Identifier {
+  public var description: String {
+    return identifier
+  }
+}
+
+public struct ReuseIdentifier<T>: Identifier {
+  public let identifier: String
 
   public init(identifier: String) {
     self.identifier = identifier
   }
 }
 
-public struct StoryboardSegueIdentifier<Segue, Source, Destination>: CustomStringConvertible {
-  public let identifier: String
+public protocol StoryboardSegueIdentifierProtocol: Identifier {
+  typealias SegueType
+  typealias SourceType
+  typealias DestinationType
+}
 
-  public var description: String { return identifier }
+public struct StoryboardSegueIdentifier<Segue, Source, Destination>: StoryboardSegueIdentifierProtocol {
+  public typealias SegueType = Segue
+  public typealias SourceType = Source
+  public typealias DestinationType = Destination
+
+  public let identifier: String
 
   public init(identifier: String) {
     self.identifier = identifier
   }
 }
 
-public struct TypedStoryboardSegueInfo<Segue, Source, Destination>: CustomStringConvertible {
+public struct TypedStoryboardSegueInfo<Segue, Source, Destination>: StoryboardSegueIdentifierProtocol {
+  public typealias SegueType = Segue
+  public typealias SourceType = Source
+  public typealias DestinationType = Destination
+
   public let destinationViewController: Destination
   public let identifier: String
   public let segue: Segue
   public let sourceViewController: Source
-
-  public var description: String { return identifier }
 
   public init?(segue: UIStoryboardSegue) {
     guard let identifier = segue.identifier,
@@ -138,13 +156,13 @@ public extension UIViewController {
 }
 
 public extension UIViewController {
-  public func performSegueWithIdentifier<Segue: UIStoryboardSegue,Source: UIViewController,Destination: UIViewController>(identifier: StoryboardSegueIdentifier<Segue, Source, Destination>, sender: AnyObject?) {
+  public func performSegueWithIdentifier<Identifier: StoryboardSegueIdentifierProtocol>(identifier: Identifier, sender: AnyObject?) {
     performSegueWithIdentifier(identifier.identifier, sender: sender)
   }
 }
 
 public extension UIStoryboardSegue {
-  func typedInfoWithIdentifier<Segue: UIStoryboardSegue,Source: UIViewController,Destination: UIViewController>(identifier: StoryboardSegueIdentifier<Segue, Source, Destination>) -> TypedStoryboardSegueInfo<Segue, Source, Destination>? {
+  func typedInfoWithIdentifier<Identifier: StoryboardSegueIdentifierProtocol, Segue, Source, Destination where Segue == Identifier.SegueType, Source == Identifier.SourceType, Destination == Identifier.DestinationType>(identifier: Identifier) -> TypedStoryboardSegueInfo<Segue, Source, Destination>? {
     guard self.identifier == identifier.identifier else { return nil }
     return TypedStoryboardSegueInfo(segue: self)
   }
