@@ -9,16 +9,6 @@
 import Foundation
 import UIKit
 
-extension UIImage {
-  public convenience init?(named name: String, inBundle bundle: NSBundle?) {
-    if #available(iOS 8.0, *) {
-      self.init(named: name, inBundle: bundle, compatibleWithTraitCollection: nil)
-    } else {
-      self.init(named: name)
-    }
-  }
-}
-
 public protocol Identifier: CustomStringConvertible {
   var identifier: String { get }
 }
