@@ -29,7 +29,7 @@ public struct ReuseIdentifier<T>: CustomStringConvertible {
   }
 }
 
-public struct StoryboardSegueIdentifier<Segue: UIStoryboardSegue, Source: UIViewController, Destination: UIViewController>: CustomStringConvertible {
+public struct StoryboardSegueIdentifier<Segue, Source, Destination>: CustomStringConvertible {
   public let identifier: String
 
   public var description: String { return identifier }
@@ -39,21 +39,29 @@ public struct StoryboardSegueIdentifier<Segue: UIStoryboardSegue, Source: UIView
   }
 }
 
-public struct TypedStoryboardSegueInfo<Segue: UIStoryboardSegue, Source: UIViewController, Destination: UIViewController>: CustomStringConvertible {
+public struct TypedStoryboardSegueInfo<Segue, Source, Destination>: CustomStringConvertible {
   public let destinationViewController: Destination
-  public let identifier: String?
+  public let identifier: String
   public let segue: Segue
   public let sourceViewController: Source
 
-  public var description: String { return identifier ?? "" }
+  public var description: String { return identifier }
 
   public init?(segue: UIStoryboardSegue) {
-    guard let segue = segue as? Segue, sourceViewController = segue.sourceViewController as? Source, destinationViewController = segue.destinationViewController as? Destination else { return nil }
+    guard let identifier = segue.identifier,
+      sourceViewController = segue.sourceViewController as? Source,
+      destinationViewController = segue.destinationViewController as? Destination,
+      segue = segue as? Segue
+      else {
+        return nil
+    }
+
     self.segue = segue
-    self.identifier = segue.identifier
+    self.identifier = identifier
     self.sourceViewController = sourceViewController
     self.destinationViewController = destinationViewController
   }
+
 }
 
 public protocol NibResource {
