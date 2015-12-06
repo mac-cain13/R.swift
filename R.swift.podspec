@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "R.swift"
-  s.version      = "0.13.0.beta.1"
+  s.version      = "0.13.0.beta.2"
   s.summary      = "Get strong typed, autocompleted resources like images, fonts and segues in Swift projects"
 
   s.description  = <<-DESC
@@ -21,9 +21,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '7.0'
   s.tvos.deployment_target = '9.0'
-  s.watchos.deployment_target = '1.0'
 
-  s.source       = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v0.13.0.beta.1/rswift-0.13.0.beta.1.zip" }
+  s.source       = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v0.13.0.beta.2/rswift-0.13.0.beta.2.zip" }
 
   s.preserve_paths = "rswift"
 
