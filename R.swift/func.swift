@@ -84,17 +84,26 @@ func readResourceFile(fileURL: NSURL) -> String? {
 
 // Image
 
+// FIXME: Ugly workaround, but iOS 7 will be dropped in next release and this function can be removed by then
+private func imageVarGetter(imageName: String) -> String {
+  if let target = NSProcessInfo.processInfo().environment["IPHONEOS_DEPLOYMENT_TARGET"] where Double(target) < 8.0 {
+    return "if #available(iOS 8.0, *) { return UIImage(named: \"\(imageName)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil) } else { return UIImage(named: \"\(imageName)\") }"
+  } else {
+    return "return UIImage(named: \"\(imageName)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)"
+  }
+}
+
 func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: [Image]) -> Struct {
   let assetFolderImageVars = assetFolders
     .flatMap { $0.imageAssets }
-    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "if #available(iOS 8.0, *) { return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil) } else { return UIImage(named: \"\($0)\") }") }
+    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: imageVarGetter($0)) }
   let uniqueImages = images
     .groupBy { $0.name }
     .values
     .flatMap { $0.first }
 
   let imageVars = uniqueImages
-    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "if #available(iOS 8.0, *) { return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil) } else { return UIImage(named: \"\($0.name)\") }") }
+    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: imageVarGetter($0.name)) }
 
   let vars = (assetFolderImageVars + imageVars)
     .groupUniquesAndDuplicates { $0.callName }
