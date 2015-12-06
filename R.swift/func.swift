@@ -134,7 +134,7 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
     .flatMap { $0.first }
 
   let groupedSeguesWithInfo = deduplicatedSeguesWithInfo
-    .groupUniquesAndDuplicates { $0.segue.identifier }
+    .groupUniquesAndDuplicates { "\($0.segue.identifier)|\($0.sourceType)" }
 
   for duplicate in groupedSeguesWithInfo.duplicates {
     let anySegueWithInfo = duplicate.first!
