@@ -35,20 +35,4 @@ public struct TypedStoryboardSegueInfo<Segue, Source, Destination>: StoryboardSe
   public let identifier: String
   public let segue: Segue
   public let sourceViewController: Source
-
-  public init?(segue: UIStoryboardSegue) {
-    guard let identifier = segue.identifier,
-      sourceViewController = segue.sourceViewController as? Source,
-      destinationViewController = segue.destinationViewController as? Destination,
-      segue = segue as? Segue
-      else {
-        return nil
-    }
-
-    self.segue = segue
-    self.identifier = identifier
-    self.sourceViewController = sourceViewController
-    self.destinationViewController = destinationViewController
-  }
-  
 }
