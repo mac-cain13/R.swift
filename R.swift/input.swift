@@ -62,7 +62,8 @@ private let AllOptions = [
   buildProductsDirOption,
   developerDirOption,
   sourceRootOption,
-  sdkRootOption
+  sdkRootOption,
+  productModuleNameOption,
 ]
 
 struct CallInformation {

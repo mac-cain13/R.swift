@@ -17,15 +17,9 @@ protocol ReusableContainer {
   var reusables: [Reusable] { get }
 }
 
-class Box<T> {
-  let value: T
-
-  init(value: T) {
-    self.value = value
-  }
-}
-
 /// MARK: Swift types
+
+typealias TypeVar = String
 
 struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _Void = Type(name: "Void")
@@ -41,6 +35,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let _UITableViewCell = Type(name: "UITableViewCell")
   static let _UITableViewHeaderFooterView = Type(name: "UITableViewHeaderFooterView")
   static let _UIStoryboard = Type(name: "UIStoryboard")
+  static let _UIStoryboardSegue = Type(name: "UIStoryboardSegue")
   static let _UICollectionView = Type(name: "UICollectionView")
   static let _UICollectionViewCell = Type(name: "UICollectionViewCell")
   static let _UICollectionReusableView = Type(name: "UICollectionReusableView")
@@ -50,14 +45,15 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
 
   let module: String?
   let name: String
-  let genericTypeBox: Box<Type?>
+  let genericArgs: [TypeVar]
   let optional: Bool
 
   var fullyQualifiedName: String {
     let optionalString = optional ? "?" : ""
 
-    if let genericType = genericTypeBox.value {
-      return "\(fullName)<\(genericType)>\(optionalString)"
+    if genericArgs.count > 0 {
+      let args = genericArgs.joinWithSeparator(", ")
+      return "\(fullName)<\(args)>\(optionalString)"
     }
 
     return "\(fullName)\(optionalString)"
@@ -73,7 +69,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
 
   var description: String {
     if module == productModuleName {
-      return Type(module: nil, name: name, genericType: genericTypeBox.value, optional: optional).fullyQualifiedName
+      return Type(module: nil, name: name, genericArgs: genericArgs, optional: optional).fullyQualifiedName
     } else {
       return fullyQualifiedName
     }
@@ -84,30 +80,30 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
     return "\(fullName)\(optionalString)".hashValue
   }
 
-  init(name: String, genericType: Type? = nil, optional: Bool = false) {
+  init(name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = nil
     self.name = name
-    self.genericTypeBox = Box(value: genericType)
+    self.genericArgs = genericArgs
     self.optional = optional
   }
 
-  init(module: String?, name: String, genericType: Type? = nil, optional: Bool = false) {
+  init(module: String?, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
-    self.genericTypeBox = Box(value: genericType)
+    self.genericArgs = genericArgs
     self.optional = optional
   }
 
   func asOptional() -> Type {
-    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: true)
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: true)
   }
 
   func asNonOptional() -> Type {
-    return Type(module: module, name: name, genericType: genericTypeBox.value, optional: false)
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: false)
   }
 
-  func withGenericType(genericType: Type) -> Type {
-    return Type(module: module, name: name, genericType: genericType, optional: optional)
+  func withGenericArgs(genericArgs: [TypeVar]) -> Type {
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 
 
@@ -214,6 +210,7 @@ struct Function: Func {
 
 struct Initializer: Func {
   let type: Type
+  let isFailable: Bool
   let parameters: [Function.Parameter]
   let body: String
 
@@ -221,8 +218,9 @@ struct Initializer: Func {
 
   var description: String {
     let fullName = [type.description, callName].joinWithSeparator(" ")
+    let optionalString = isFailable ? "?" : ""
     let parameterString = parameters.joinWithSeparator(", ")
-    return "\(fullName)(\(parameterString)) {\n\(indent(body))\n}"
+    return "\(fullName)\(optionalString)(\(parameterString)) {\n\(indent(body))\n}"
   }
 
   enum Type: CustomStringConvertible {
@@ -280,10 +278,10 @@ struct Struct: CustomStringConvertible {
   let implements: [Type]
   let vars: [Var]
   let lets: [Let]
-  let functions: [Function]
+  let functions: [Func]
   let structs: [Struct]
 
-  init(type: Type, lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+  init(type: Type, lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = []
     self.lets = lets
@@ -292,7 +290,7 @@ struct Struct: CustomStringConvertible {
     self.structs = structs
   }
 
-  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Function], structs: [Struct]) {
+  init(type: Type, implements: [Type], lets: [Let], vars: [Var], functions: [Func], structs: [Struct]) {
     self.type = type
     self.implements = implements
     self.vars = vars
@@ -311,7 +309,8 @@ struct Struct: CustomStringConvertible {
       .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
       .joinWithSeparator("\n")
     let functionsString = functions
-      .sort { sanitizedSwiftName($0.name) < sanitizedSwiftName($1.name) }
+      .sort { $0.callName < $1.callName }
+      .map { $0.description }
       .joinWithSeparator("\n\n")
     let structsString = structs
       .sort { $0.type.description < $1.type.description }
@@ -437,7 +436,6 @@ struct Font {
 
 struct Storyboard: ReusableContainer {
   let name: String
-  let segues: [String]
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let usedImageIdentifiers: [String]
@@ -460,7 +458,6 @@ struct Storyboard: ReusableContainer {
     parser.delegate = parserDelegate
     parser.parse()
 
-    segues = parserDelegate.segues
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
@@ -471,6 +468,17 @@ struct Storyboard: ReusableContainer {
     let id: String
     let storyboardIdentifier: String?
     let type: Type
+    private(set) var segues: [Segue]
+
+    mutating func addSegue(segue: Segue) {
+      segues.append(segue)
+    }
+  }
+
+  struct Segue {
+    let identifier: String
+    let type: Type
+    let destination: String
   }
 }
 
@@ -521,10 +529,12 @@ struct ResourceFile {
 
 class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var initialViewControllerIdentifier: String?
-  var segues: [String] = []
   var viewControllers: [Storyboard.ViewController] = []
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
+
+  // State
+  var currentViewController: (String, Storyboard.ViewController)?
 
   func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
@@ -534,8 +544,15 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"] {
-        segues.append(segueIdentifier)
+      if let segueIdentifier = attributeDict["identifier"], segueDestination = attributeDict["destination"] {
+        let customModule = attributeDict["customModule"]
+        let customClass = attributeDict["customClass"]
+        let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+        let type = customType ?? Type._UIStoryboardSegue
+
+        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: segueDestination)
+        currentViewController!.1.addSegue(segue)
       }
 
     case "image":
@@ -545,7 +562,7 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
-        viewControllers.append(viewController)
+        currentViewController = (elementName, viewController)
       }
 
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
@@ -554,35 +571,41 @@ class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
+  func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    if let currentViewController = currentViewController where elementName == currentViewController.0 {
+      viewControllers.append(currentViewController.1)
+      self.currentViewController = nil
+    }
+  }
+
   func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
-    if let id = attributeDict["id"] as? String 
-      where attributeDict["sceneMemberID"] as? String == "viewController" {
-      let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
-
-      let customModule = attributeDict["customModule"] as? String
-      let customClass = attributeDict["customClass"] as? String
-      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
-
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
-
-      return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type)
+    guard let id = attributeDict["id"] as? String where attributeDict["sceneMemberID"] as? String == "viewController" else {
+      return nil
     }
 
-    return nil
+    let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
+
+    let customModule = attributeDict["customModule"] as? String
+    let customClass = attributeDict["customClass"] as? String
+    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
+
+    return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
   }
 
   func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] as? String {
-      let customModule = attributeDict["customModule"] as? String
-      let customClass = attributeDict["customClass"] as? String
-      let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
-
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
-
-      return Reusable(identifier: reuseIdentifier, type: type)
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] as? String else {
+      return nil
     }
 
-    return nil
+    let customModule = attributeDict["customModule"] as? String
+    let customClass = attributeDict["customClass"] as? String
+    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+    return Reusable(identifier: reuseIdentifier, type: type)
   }
 }
 
