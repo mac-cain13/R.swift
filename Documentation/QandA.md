@@ -15,7 +15,7 @@ There are many nice R.swift alternatives like [Shark](https://github.com/kaanded
 
 ## What are the requirements to run R.swift?
 
-Recommended is the latest stable version of OS X, Xcode with the app targeting iOS 8 or higher. But OS X 10.10 with Xcode 7 while targeting iOS 7 or higher should work. R.swift should also always be runned within the Xcode build process since it needs some of the environment variables. Otherwise it could throw errors at you.
+Recommended is the latest stable version of OS X, Xcode with the app targeting iOS 8 or higher. But OS X 10.10 with Xcode 7 while targeting iOS 7 or higher should work. Run R.swift from within the Xcode build so it can use the available environment variables. Otherwise you have to provide them yourself with the available commandline flags.
 
 ## How does R.swift work?
 
