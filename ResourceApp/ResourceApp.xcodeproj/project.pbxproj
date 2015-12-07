@@ -24,7 +24,6 @@
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
-		D592466D1C117B50007F94C7 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D592466C1C117B50007F94C7 /* Rswift.framework */; };
 		D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C901B78FC0500A8B96C /* duplicate.xib */; };
 		D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */; };
 		D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */; };
@@ -33,6 +32,7 @@
 		D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */; };
 		D5AD5C9F1B7A924000A8B96C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */; };
 		D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */; };
+		D5C0F0731C15666900F0DA05 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C0F0721C15666900F0DA05 /* Rswift.framework */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */; };
@@ -83,7 +83,6 @@
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
-		D592466C1C117B50007F94C7 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../../R.swift Library/build/Debug-iphoneos/Rswift.framework"; sourceTree = "<group>"; };
 		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = duplicate.xib; path = Duplicate/duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = duplicate.storyboard; path = Duplicate/duplicate.storyboard; sourceTree = "<group>"; };
@@ -92,6 +91,7 @@
 		D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ADuplicateCellView.xib; path = ResourceApp/Duplicate/ADuplicateCellView.xib; sourceTree = SOURCE_ROOT; };
 		D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DuplicateCellView.xib; sourceTree = "<group>"; };
+		D5C0F0721C15666900F0DA05 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../../../../Library/Developer/Xcode/DerivedData/R.swift-ebhidqkrisjzvjhaxtjbgjdicfcj/Build/Products/Debug-iphoneos/Rswift.framework"; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-B.ttf"; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D592466D1C117B50007F94C7 /* Rswift.framework in Frameworks */,
+				D5C0F0731C15666900F0DA05 /* Rswift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
-				D592466C1C117B50007F94C7 /* Rswift.framework */,
+				D5C0F0721C15666900F0DA05 /* Rswift.framework */,
 				D55C6CBC1B5D757300301B0D /* Info.plist */,
 			);
 			name = "Supporting Files";
