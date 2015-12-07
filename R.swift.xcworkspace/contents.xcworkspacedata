@@ -5,6 +5,12 @@
       location = "container:R.swift.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:/Users/mathijs/Development/R.swift/R.swift.Library/R.swift.Library.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:ResourceApp/ResourceApp.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

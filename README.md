@@ -58,7 +58,6 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
 - [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
-- [Does R.swift work for iOS7?](Documentation/QandA.md#does-rswift-work-for-ios7)
 
 ## Installation
 
@@ -77,6 +76,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ### Manually
 
+0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library) to your project
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
 2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`

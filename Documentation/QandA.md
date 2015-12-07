@@ -15,7 +15,7 @@ There are many nice R.swift alternatives like [Shark](https://github.com/kaanded
 
 ## What are the requirements to run R.swift?
 
-Recommended is the latest stable version of OS X, Xcode with the app targeting iOS 8 or higher. But OS X 10.10 with Xcode 7 while targeting iOS 7 or higher should work. Run R.swift from within the Xcode build so it can use the available environment variables. Otherwise you have to provide them yourself with the available commandline flags.
+R.swift works with OS X 10.11 with Xcode 7.0 while targeting iOS 8.0 or higher. It's also recommended to run R.swift from within the Xcode build so it can use the available environment variables. Otherwise you have to provide them yourself with the available commandline flags.
 
 ## How does R.swift work?
 
@@ -24,7 +24,3 @@ During installation you add R.swift as a Build phase to your target, basically t
 - It takes a look at your Xcode project file and inspects all resources linked with the target currently build
 - It generates a `R.generated.swift` file that contains a struct with types references to all resources
 
-## Does R.swift work for iOS7?
-
-R.swift does also work for iOS7, with one caveat though: 
-- Images can only be loaded from the main bundle
