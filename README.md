@@ -58,7 +58,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
 - [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
-- [Does R.swift work for iOS7?](Documentation/QandA.md#does_rswift_work_for_ios7)
+- [Does R.swift work for iOS7?](Documentation/QandA.md#does-rswift-work-for-ios7)
 
 ## Installation
 
