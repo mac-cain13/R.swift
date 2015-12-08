@@ -28,9 +28,11 @@ Check out [more examples of R.swift based code](Documentation/Examples.md)!
 ## Demo
 
 **Autocompleted images:**
+
 ![Autocompleted images](Documentation/Images/DemoUseImage.gif)
 
 **Compiletime checked images:**
+
 ![Compiletime checked images](Documentation/Images/DemoRenameImage.gif)
 
 This is only the beginning, check out [more examples](Documentation/Examples.md)!
