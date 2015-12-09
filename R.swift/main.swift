@@ -38,12 +38,12 @@ do {
 } catch let InputParsingError.UserAskedForHelp(helpString: helpString) {
   print(helpString)
   exit(1)
-} catch let InputParsingError.IllegalOption(helpString: helpString) {
-  fail("Illegal option given.")
+} catch let InputParsingError.IllegalOption(error: error, helpString: helpString) {
+  fail(error)
   print(helpString)
   exit(2)
-} catch let InputParsingError.MissingOption(helpString: helpString) {
-  fail("Not all mandatory option given.")
+} catch let InputParsingError.MissingOption(error: error, helpString: helpString) {
+  fail(error)
   print(helpString)
   exit(2)
 } catch let ResourceParsingError.ParsingFailed(description) {

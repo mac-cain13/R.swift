@@ -10,9 +10,9 @@
 import Foundation
 
 enum InputParsingError: ErrorType {
-  case IllegalOption(String)
-  case MissingOption(String)
-  case UserAskedForHelp(String)
+  case IllegalOption(error: String, helpString: String)
+  case MissingOption(error: String, helpString: String)
+  case UserAskedForHelp(helpString: String)
 }
 
 private let xcodeprojOption = Option(
@@ -92,11 +92,14 @@ struct CallInformation {
       let (options, extraArguments) = try optionParser.parse(argumentsWithoutCall)
 
       if options[optionParser.helpOption] != nil {
-        throw InputParsingError.UserAskedForHelp(optionParser.helpStringForCommandName(commandName))
+        throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
       }
 
       guard let outputPath = extraArguments.first where extraArguments.count == 1 else {
-        throw InputParsingError.IllegalOption(optionParser.helpStringForCommandName(commandName))
+        throw InputParsingError.IllegalOption(
+          error: "Output folder for the 'R.generated.swift' file is mandatory as last argument.",
+          helpString: optionParser.helpStringForCommandName(commandName)
+        )
       }
 
       let outputURL = NSURL(fileURLWithPath: outputPath)
@@ -131,8 +134,11 @@ struct CallInformation {
 
       let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
       sdkRootURL = NSURL(fileURLWithPath: sdkRootPath)
-    } catch OptionKitError.InvalidOption {
-      throw InputParsingError.IllegalOption(optionParser.helpStringForCommandName(commandName))
+    } catch let OptionKitError.InvalidOption(invalidOption) {
+      throw InputParsingError.IllegalOption(
+        error: "The option '\(invalidOption)' is invalid.",
+        helpString: optionParser.helpStringForCommandName(commandName)
+      )
     }
   }
 
@@ -152,7 +158,7 @@ struct CallInformation {
 
 private func getFirstArgumentFromOptionData(options: [Option:[String]], helpString: String)(_ option: Option, defaultValue: String?) throws -> String {
   guard let result = options[option]?.first ?? defaultValue else {
-    throw InputParsingError.MissingOption(helpString)
+    throw InputParsingError.MissingOption(error: "Missing option: \(option) ", helpString: helpString)
   }
 
   return result
