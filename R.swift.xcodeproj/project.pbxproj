@@ -32,6 +32,22 @@
 		D5F12D481BDACB8E009A2C88 /* XCProjectFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579466A1B9347C20044D2FC /* XCProjectFile.swift */; };
 		D5F12D491BDACB90009A2C88 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C5A8EE1BB7196000163E71 /* Core.swift */; };
 		D5F795C11BB9983900844EA2 /* MainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F795C01BB9983900844EA2 /* MainTests.swift */; };
+		D5F97E381C178A4F0066D7C0 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E371C178A4F0066D7C0 /* Resources.swift */; };
+		D5F97E3A1C1812AE0066D7C0 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E391C1812AE0066D7C0 /* Font.swift */; };
+		D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */; };
+		D5F97E3E1C1815780066D7C0 /* Xcodeproj.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */; };
+		D5F97E401C1815E70066D7C0 /* AssetFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */; };
+		D5F97E421C1816360066D7C0 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E411C1816360066D7C0 /* Image.swift */; };
+		D5F97E441C1816790066D7C0 /* ResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E431C1816790066D7C0 /* ResourceFile.swift */; };
+		D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E451C18169E0066D7C0 /* Nib.swift */; };
+		D5F97E471C1819160066D7C0 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E371C178A4F0066D7C0 /* Resources.swift */; };
+		D5F97E481C1819160066D7C0 /* Xcodeproj.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */; };
+		D5F97E491C1819160066D7C0 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E391C1812AE0066D7C0 /* Font.swift */; };
+		D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */; };
+		D5F97E4B1C1819160066D7C0 /* AssetFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */; };
+		D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E411C1816360066D7C0 /* Image.swift */; };
+		D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E431C1816790066D7C0 /* ResourceFile.swift */; };
+		D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E451C18169E0066D7C0 /* Nib.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +67,14 @@
 		D5EA0DFE1A3DF4E300FFEBC4 /* util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = util.swift; sourceTree = "<group>"; };
 		D5F105FE1A3E2BC30077263A /* func.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
 		D5F795C01BB9983900844EA2 /* MainTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTests.swift; sourceTree = "<group>"; };
+		D5F97E371C178A4F0066D7C0 /* Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
+		D5F97E391C1812AE0066D7C0 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storyboard.swift; sourceTree = "<group>"; };
+		D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Xcodeproj.swift; sourceTree = "<group>"; };
+		D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetFolder.swift; sourceTree = "<group>"; };
+		D5F97E411C1816360066D7C0 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		D5F97E431C1816790066D7C0 /* ResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFile.swift; sourceTree = "<group>"; };
+		D5F97E451C18169E0066D7C0 /* Nib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +141,7 @@
 		D5EA0DF61A3DF45600FFEBC4 /* R.swift */ = {
 			isa = PBXGroup;
 			children = (
+				D5F97E361C1789E50066D7C0 /* Collector */,
 				D5EA0DF71A3DF45600FFEBC4 /* main.swift */,
 				D5CD9B3B1B98258700C85F8C /* input.swift */,
 				D5DA249C1B9CB1BF00AAA43E /* processing.swift */,
@@ -126,6 +151,21 @@
 				D5B53A161A7D2A9B00F64418 /* values.swift */,
 			);
 			path = R.swift;
+			sourceTree = "<group>";
+		};
+		D5F97E361C1789E50066D7C0 /* Collector */ = {
+			isa = PBXGroup;
+			children = (
+				D5F97E371C178A4F0066D7C0 /* Resources.swift */,
+				D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */,
+				D5F97E391C1812AE0066D7C0 /* Font.swift */,
+				D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */,
+				D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */,
+				D5F97E411C1816360066D7C0 /* Image.swift */,
+				D5F97E431C1816790066D7C0 /* ResourceFile.swift */,
+				D5F97E451C18169E0066D7C0 /* Nib.swift */,
+			);
+			path = Collector;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,13 +276,21 @@
 				D5F12D461BDACB87009A2C88 /* util.swift in Sources */,
 				D5F12D441BDACB87009A2C88 /* func.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* processing.swift in Sources */,
+				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
 				D586D1C71BE20D8600F18FEC /* PBXObject.swift in Sources */,
+				D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */,
+				D5F97E481C1819160066D7C0 /* Xcodeproj.swift in Sources */,
 				D5F12D411BDACB87009A2C88 /* main.swift in Sources */,
 				D5F12D451BDACB87009A2C88 /* types.swift in Sources */,
+				D5F97E4B1C1819160066D7C0 /* AssetFolder.swift in Sources */,
 				D5F12D421BDACB87009A2C88 /* input.swift in Sources */,
 				D5F795C11BB9983900844EA2 /* MainTests.swift in Sources */,
 				D5F12D481BDACB8E009A2C88 /* XCProjectFile.swift in Sources */,
+				D5F97E471C1819160066D7C0 /* Resources.swift in Sources */,
+				D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */,
 				D5F12D491BDACB90009A2C88 /* Core.swift in Sources */,
+				D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */,
+				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
 				D5F12D471BDACB87009A2C88 /* values.swift in Sources */,
 				D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */,
@@ -254,17 +302,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5C5A8EF1BB7196000163E71 /* Core.swift in Sources */,
+				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,
+				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
+				D5F97E401C1815E70066D7C0 /* AssetFolder.swift in Sources */,
+				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
 				D5DA249D1B9CB1BF00AAA43E /* processing.swift in Sources */,
+				D5F97E3A1C1812AE0066D7C0 /* Font.swift in Sources */,
 				D5EA0DF81A3DF45600FFEBC4 /* main.swift in Sources */,
 				D5EA0DFF1A3DF4E300FFEBC4 /* util.swift in Sources */,
 				D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */,
 				D5F105FF1A3E2BC30077263A /* func.swift in Sources */,
+				D5F97E441C1816790066D7C0 /* ResourceFile.swift in Sources */,
+				D5F97E3E1C1815780066D7C0 /* Xcodeproj.swift in Sources */,
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B53A171A7D2A9B00F64418 /* values.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
 				D579466B1B9347C20044D2FC /* XCProjectFile.swift in Sources */,
 				D5CD9B3C1B98258700C85F8C /* input.swift in Sources */,
 				D5032B691A7C1542007D1107 /* types.swift in Sources */,
+				D5F97E381C178A4F0066D7C0 /* Resources.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

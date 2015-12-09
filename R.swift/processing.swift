@@ -9,41 +9,6 @@
 
 import Foundation
 
-private func tryResourceParsing<T>(parse: () throws -> T) -> T? {
-  do {
-    return try parse()
-  } catch let ResourceParsingError.ParsingFailed(humanReadableError) {
-    warn(humanReadableError)
-    return nil
-  } catch ResourceParsingError.UnsupportedExtension {
-    return nil
-  } catch {
-    return nil
-  }
-}
-
-struct Resources {
-  let assetFolders: [AssetFolder]
-  let images: [Image]
-  let fonts: [Font]
-  let nibs: [Nib]
-  let storyboards: [Storyboard]
-  let resourceFiles: [ResourceFile]
-
-  let reusables: [Reusable]
-
-  init(resourceURLs: [NSURL], fileManager: NSFileManager) {
-    assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
-    images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
-    fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
-    nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
-    storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
-    resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
-    reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
-      .flatMap { $0.reusables }
-  }
-}
-
 func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
   // Generate resource file contents
   let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(resources.storyboards)
