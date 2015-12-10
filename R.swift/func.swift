@@ -21,15 +21,11 @@ func fail(error: String) {
   print("error: [R.swift] \(error)")
 }
 
-func fail<T: ErrorType where T: CustomStringConvertible>(error: T) {
-  fail("\(error)")
-}
-
 func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
   var assetFolders = [NSURL]()
 
   let errorHandler: (NSURL!, NSError!) -> Bool = { url, error in
-    fail(error)
+    fail(error.description)
     return true
   }
 
@@ -68,7 +64,7 @@ func writeResourceFile(code: String, toFileURL fileURL: NSURL) {
   do {
     try code.writeToURL(fileURL, atomically: true, encoding: NSUTF8StringEncoding)
   } catch let error as NSError {
-    fail(error)
+    fail(error.description)
   }
 }
 
