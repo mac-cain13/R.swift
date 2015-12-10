@@ -8,19 +8,20 @@
 
 import Foundation
 
-struct Image {
+struct Image: WhiteListedExtensionsResourceType {
+  // See "Supported Image Formats" on https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/
+  static let supportedExtensions: Set<String> = ["tiff", "tif", "jpg", "jpeg", "gif", "png", "bmp", "bmpf", "ico", "cur", "xbm"]
+
   let name: String
 
   init(url: NSURL) throws {
-    guard let pathExtension = url.pathExtension?.lowercaseString where ImageExtensions.contains(pathExtension) else {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: ImageExtensions)
+    try Image.throwIfUnsupportedExtension(url.pathExtension)
+
+    guard let filename = url.lastPathComponent, pathExtension = url.pathExtension else {
+      throw ResourceParsingError.ParsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
-    guard let filename = url.lastPathComponent else {
-      throw ResourceParsingError.ParsingFailed("Filename could not be parsed from URL: \(url.absoluteString)")
-    }
-
-    let extensions = ImageExtensions.joinWithSeparator("|")
+    let extensions = Image.supportedExtensions.joinWithSeparator("|")
     let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .CaseInsensitive)
     let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
     let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"

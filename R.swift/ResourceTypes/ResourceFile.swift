@@ -9,12 +9,20 @@
 import Foundation
 
 struct ResourceFile {
+  // These are all extensions of resources that are passed to some special compiler step and not directly available runtime
+  static let unsupportedExtensions: Set<String> = [
+      AssetFolder.supportedExtensions,
+      Storyboard.supportedExtensions,
+      Nib.supportedExtensions
+    ]
+    .reduce([]) { $0.union($1) }
+
   let fullname: String
   let filename: String
   let pathExtension: String?
 
   init(url: NSURL) throws {
-    if let pathExtension = url.pathExtension where CompiledResourcesExtensions.contains(pathExtension) {
+    if let pathExtension = url.pathExtension where ResourceFile.unsupportedExtensions.contains(pathExtension) {
       throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
     }
 

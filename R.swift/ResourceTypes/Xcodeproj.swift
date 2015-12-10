@@ -8,10 +8,14 @@
 
 import Foundation
 
-struct Xcodeproj {
+struct Xcodeproj: WhiteListedExtensionsResourceType {
+  static let supportedExtensions: Set<String> = ["xcodeproj"]
+
   private let projectFile: XCProjectFile
 
   init(url: NSURL) throws {
+    try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)
+
     // Parse project file
     guard let projectFile = try? XCProjectFile(xcodeprojURL: url) else {
       throw ResourceParsingError.ParsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")

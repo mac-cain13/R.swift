@@ -8,14 +8,17 @@
 
 import Foundation
 
-struct AssetFolder {
+struct AssetFolder: WhiteListedExtensionsResourceType {
+  static let supportedExtensions: Set<String> = ["xcassets"]
+
+  // Note: "appiconset" is not loadable by default, so it's not included here
+  private static let AssetExtensions: Set<String> = ["launchimage", "imageset"]
+
   let name: String
   let imageAssets: [String]
 
   init(url: NSURL, fileManager: NSFileManager) throws {
-    guard let pathExtension = url.pathExtension where AssetFolderExtensions.contains(pathExtension) else {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: AssetFolderExtensions)
-    }
+    try AssetFolder.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
@@ -24,7 +27,7 @@ struct AssetFolder {
     let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
       for file in enumerator {
-        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where AssetExtensions.indexOf(pathExtension) != nil {
+        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where AssetFolder.AssetExtensions.indexOf(pathExtension) != nil {
           assets.append(fileURL)
         }
       }

@@ -21,7 +21,9 @@ private let ElementNameToTypeMapping = [
   "collectionViewController": Type(name: "UICollectionViewController"),
 ]
 
-struct Storyboard: ReusableContainer {
+struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
+  static let supportedExtensions: Set<String> = ["storyboard"]
+
   let name: String
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
@@ -35,9 +37,7 @@ struct Storyboard: ReusableContainer {
   }
 
   init(url: NSURL) throws {
-    guard let pathExtension = url.pathExtension where StoryboardExtensions.contains(pathExtension) else {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: StoryboardExtensions)
-    }
+    try Storyboard.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 

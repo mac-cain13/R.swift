@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct Font {
+struct Font: WhiteListedExtensionsResourceType {
+  static let supportedExtensions: Set<String> = ["otf", "ttf"]
+
   let name: String
 
   init(url: NSURL) throws {
-    guard let pathExtension = url.pathExtension where FontExtensions.contains(pathExtension) else {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: FontExtensions)
-    }
+    try Font.throwIfUnsupportedExtension(url.pathExtension)
 
     let dataProvider = CGDataProviderCreateWithURL(url)
     let font = CGFontCreateWithDataProvider(dataProvider)

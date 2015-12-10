@@ -72,14 +72,4 @@ let BlacklistedCharacters = { () -> NSCharacterSet in
   return blacklist
 }()
 
-// Extensions
-let AssetFolderExtensions: Set<String> = ["xcassets"]
-let AssetExtensions: Set<String> = ["launchimage", "imageset"] // Note: "appiconset" is not loadable by default, so it's not included here
-let ImageExtensions: Set<String> = ["tiff", "tif", "jpg", "jpeg", "gif", "png", "bmp", "bmpf", "ico", "cur", "xbm"] // See "Supported Image Formats" on https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/
-let FontExtensions: Set<String> = ["otf", "ttf"]
-let StoryboardExtensions: Set<String> = ["storyboard"]
-let NibExtensions: Set<String> = ["xib"]
-
-let CompiledResourcesExtensions: Set<String> = AssetFolderExtensions.union(StoryboardExtensions).union(NibExtensions)
-
 let SwiftKeywords = ["class", "deinit", "enum", "extension", "func", "import", "init", "internal", "let", "operator", "private", "protocol", "public", "static", "struct", "subscript", "typealias", "var", "break", "case", "continue", "default", "do", "else", "fallthrough", "for", "if", "in", "return", "switch", "where", "while", "as", "dynamicType", "false", "is", "nil", "self", "Self", "super", "true", "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__"]

@@ -13,15 +13,15 @@ private let ElementNameToTypeMapping = [
   "view": Type._UIView
 ]
 
-struct Nib: ReusableContainer {
+struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
+  static let supportedExtensions: Set<String> = ["xib"]
+
   let name: String
   let rootViews: [Type]
   let reusables: [Reusable]
 
   init(url: NSURL) throws {
-    guard let pathExtension = url.pathExtension where NibExtensions.contains(pathExtension) else {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: NibExtensions)
-    }
+    try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
