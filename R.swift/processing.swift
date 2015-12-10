@@ -17,7 +17,6 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
 
   let externalResourceStruct = Struct(
     type: Type(name: "R"),
-    lets: [],
     vars: [],
     functions: [
       storyboardStructAndFunction.1,
@@ -36,7 +35,6 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   let internalResourceStruct = Struct(
     type: Type(name: "_R"),
     implements: [],
-    lets: [],
     vars: [
       Var(isStatic: true, name: "hostingBundle", type: Type._NSBundle.asOptional(), getter: "return NSBundle(identifier: \"\(bundleIdentifier)\")")
     ],

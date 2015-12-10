@@ -9,7 +9,6 @@
 
 import Foundation
 
-
 // MARK: Array operations
 
 extension Array {
