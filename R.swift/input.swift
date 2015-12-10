@@ -59,6 +59,7 @@ private let sdkRootOption = Option(
 private let AllOptions = [
   xcodeprojOption,
   targetOption,
+  bundleIdentifierOption,
   buildProductsDirOption,
   developerDirOption,
   sourceRootOption,
