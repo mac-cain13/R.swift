@@ -20,7 +20,7 @@ struct Font {
     let font = CGFontCreateWithDataProvider(dataProvider)
 
     guard let postScriptName = CGFontCopyPostScriptName(font) else {
-      throw ResourceParsingError.ParsingFailed("No postcriptName associated to font at \(url)")
+      throw ResourceParsingError.ParsingFailed("No postscriptName associated to font at \(url)")
     }
 
     name = postScriptName as String
