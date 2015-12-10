@@ -24,15 +24,20 @@ do {
   let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
 
   let fileContents = [
-    Header,
-    Imports,
-    externalStruct.description,
-    internalStruct.description,
+      Header,
+      Imports,
+      externalStruct.description,
+      internalStruct.description,
     ].joinWithSeparator("\n\n")
 
   // Write file if we have changes
-  if readResourceFile(callInformation.outputURL) != fileContents {
-    writeResourceFile(fileContents, toFileURL: callInformation.outputURL)
+  let currentFileContents = try? String(contentsOfURL: callInformation.outputURL, encoding: NSUTF8StringEncoding)
+  if currentFileContents != fileContents  {
+    do {
+      try fileContents.writeToURL(callInformation.outputURL, atomically: true, encoding: NSUTF8StringEncoding)
+    } catch let error as NSError {
+      fail(error.description)
+    }
   }
 
 } catch let InputParsingError.UserAskedForHelp(helpString: helpString) {

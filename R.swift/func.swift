@@ -38,19 +38,3 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
   return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
-
-func writeResourceFile(code: String, toFileURL fileURL: NSURL) {
-  do {
-    try code.writeToURL(fileURL, atomically: true, encoding: NSUTF8StringEncoding)
-  } catch let error as NSError {
-    fail(error.description)
-  }
-}
-
-func readResourceFile(fileURL: NSURL) -> String? {
-  do {
-    return try String(contentsOfURL: fileURL, encoding: NSUTF8StringEncoding)
-  } catch {
-    return nil
-  }
-}
