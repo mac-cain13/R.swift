@@ -21,27 +21,6 @@ func fail(error: String) {
   print("error: [R.swift] \(error)")
 }
 
-func filterDirectoryContentsRecursively(fileManager: NSFileManager, filter: (NSURL) -> Bool)(url: NSURL) -> [NSURL] {
-  var assetFolders = [NSURL]()
-
-  let errorHandler: (NSURL!, NSError!) -> Bool = { url, error in
-    fail(error.description)
-    return true
-  }
-
-  if let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: [NSURLIsDirectoryKey], options: [NSDirectoryEnumerationOptions.SkipsHiddenFiles, NSDirectoryEnumerationOptions.SkipsPackageDescendants], errorHandler: errorHandler) {
-
-    while let enumeratorItem: AnyObject = enumerator.nextObject() {
-      if let url = enumeratorItem as? NSURL where filter(url) {
-        assetFolders.append(url)
-      }
-    }
-
-  }
-
-  return assetFolders
-}
-
 /*
 Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
 Special rules: Can't begin with a number
