@@ -98,8 +98,6 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   func withGenericArgs(genericArgs: [TypeVar]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
-
-
 }
 
 func ==(lhs: Type, rhs: Type) -> Bool {
