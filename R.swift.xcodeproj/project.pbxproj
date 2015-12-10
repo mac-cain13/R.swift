@@ -156,12 +156,12 @@
 		D5EA0DF61A3DF45600FFEBC4 /* R.swift */ = {
 			isa = PBXGroup;
 			children = (
-				D5F97E501C18D5EF0066D7C0 /* Generator */,
 				D5F97E361C1789E50066D7C0 /* Collector */,
-				D5EA0DF71A3DF45600FFEBC4 /* main.swift */,
-				D5CD9B3B1B98258700C85F8C /* input.swift */,
-				D5DA249C1B9CB1BF00AAA43E /* processing.swift */,
+				D5F97E501C18D5EF0066D7C0 /* Generator */,
 				D5F105FE1A3E2BC30077263A /* func.swift */,
+				D5CD9B3B1B98258700C85F8C /* input.swift */,
+				D5EA0DF71A3DF45600FFEBC4 /* main.swift */,
+				D5DA249C1B9CB1BF00AAA43E /* processing.swift */,
 				D5EA0DFE1A3DF4E300FFEBC4 /* util.swift */,
 				D5B53A161A7D2A9B00F64418 /* values.swift */,
 			);
@@ -171,15 +171,15 @@
 		D5F97E361C1789E50066D7C0 /* Collector */ = {
 			isa = PBXGroup;
 			children = (
-				D5F97E371C178A4F0066D7C0 /* Resources.swift */,
-				D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */,
-				D5F97E391C1812AE0066D7C0 /* Font.swift */,
-				D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */,
 				D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */,
+				D5F97E391C1812AE0066D7C0 /* Font.swift */,
 				D5F97E411C1816360066D7C0 /* Image.swift */,
-				D5F97E431C1816790066D7C0 /* ResourceFile.swift */,
 				D5F97E451C18169E0066D7C0 /* Nib.swift */,
+				D5F97E431C1816790066D7C0 /* ResourceFile.swift */,
+				D5F97E371C178A4F0066D7C0 /* Resources.swift */,
 				D59F723E1C19651F0089767C /* ReusableContainer.swift */,
+				D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */,
+				D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */,
 			);
 			path = Collector;
 			sourceTree = "<group>";
@@ -187,11 +187,11 @@
 		D5F97E501C18D5EF0066D7C0 /* Generator */ = {
 			isa = PBXGroup;
 			children = (
-				D59F72251C1963DA0089767C /* Type.swift */,
-				D59F72281C1963EA0089767C /* Struct.swift */,
 				D59F722F1C19644F0089767C /* Function.swift */,
-				D59F72381C1964950089767C /* Var.swift */,
+				D59F72281C1963EA0089767C /* Struct.swift */,
+				D59F72251C1963DA0089767C /* Type.swift */,
 				D59F723B1C1964B20089767C /* Typealias.swift */,
+				D59F72381C1964950089767C /* Var.swift */,
 			);
 			path = Generator;
 			sourceTree = "<group>";
