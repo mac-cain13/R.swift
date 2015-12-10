@@ -12,6 +12,7 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: 
   let assetFolderImageVars = assetFolders
     .flatMap { $0.imageAssets }
     .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
+
   let uniqueImages = images
     .groupBy { $0.name }
     .values

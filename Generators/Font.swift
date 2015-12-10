@@ -19,7 +19,7 @@ func fontStructFromFonts(fonts: [Font]) -> Struct {
   )
 }
 
-func fontFunctionFromFont(font: Font) -> Function {
+private func fontFunctionFromFont(font: Font) -> Function {
   return Function(
     isStatic: true,
     name: font.name,

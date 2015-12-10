@@ -30,7 +30,7 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
   )
 }
 
-func varFromReusable(reusable: Reusable) -> Var {
+private func varFromReusable(reusable: Reusable) -> Var {
   return Var(
     isStatic: true,
     name: reusable.identifier,

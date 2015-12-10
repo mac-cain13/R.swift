@@ -29,7 +29,7 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
   )
 }
 
-func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
+private func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)")]
 
   let initialViewControllerVar = [storyboard.initialViewController
@@ -69,11 +69,11 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
   )
 }
 
-func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
+private func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
   return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).joinWithSeparator("\n"))
 }
 
-func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
+private func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
   return
     "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
   "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"

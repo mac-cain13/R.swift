@@ -30,7 +30,7 @@ func resourceStructFromResourceFiles(resourceFiles: [ResourceFile]) -> Struct {
   )
 }
 
-func varFromResourceFile(resourceFile: ResourceFile) -> Var {
+private func varFromResourceFile(resourceFile: ResourceFile) -> Var {
   let pathExtensionOrNilString = resourceFile.pathExtension ?? "nil"
   return Var(isStatic: true, name: resourceFile.fullname, type: Type._NSURL.asOptional(), getter: "return _R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
 }

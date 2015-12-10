@@ -36,13 +36,13 @@ func nibStructFromNibs(nibs: [Nib]) -> (intern: Struct, extern: Struct) {
   )
 }
 
-func nibVarForNib(nib: Nib) -> Var {
+private func nibVarForNib(nib: Nib) -> Var {
   let nibStructName = sanitizedSwiftName("_\(nib.name)")
   let structType = Type(name: "_R.nib.\(nibStructName)")
   return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
 }
 
-func nibStructForNib(nib: Nib) -> Struct {
+private func nibStructForNib(nib: Nib) -> Struct {
 
   let instantiateParameters = [
     Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
