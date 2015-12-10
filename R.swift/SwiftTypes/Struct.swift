@@ -44,7 +44,7 @@ struct Struct: CustomStringConvertible {
       .joinWithSeparator("\n\n")
 
     let bodyComponents = [typealiasString, varsString, functionsString, structsString].filter { $0 != "" }
-    let bodyString = indent(bodyComponents.joinWithSeparator("\n\n"))
+    let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
     return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }

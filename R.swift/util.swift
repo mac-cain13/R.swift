@@ -47,11 +47,9 @@ extension String {
     let index = startIndex.advancedBy(1)
     return substringToIndex(index).uppercaseString + substringFromIndex(index)
   }
-}
 
-func indentWithString(indentation: String) -> String -> String {
-  return { string in
-    let components = string.componentsSeparatedByString("\n")
+  func indentWithString(indentation: String) -> String {
+    let components = componentsSeparatedByString("\n")
     return indentation + components.joinWithSeparator("\n\(indentation)")
   }
 }

@@ -25,7 +25,8 @@ struct Function {
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(indent(body))\n}"
+    let bodyString = body.indentWithString(IndentationString)
+    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: CustomStringConvertible {

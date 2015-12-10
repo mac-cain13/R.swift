@@ -11,8 +11,6 @@ import Foundation
 
 // MARK: Helper functions
 
-let indent = indentWithString(IndentationString)
-
 func warn(warning: String) {
   print("warning: [R.swift] \(warning)")
 }
