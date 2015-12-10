@@ -20,7 +20,7 @@ struct Xcodeproj {
     self.projectFile = projectFile
   }
 
-  func resourceURLsForTarget(targetName: String) throws -> [Path] {
+  func resourcePathsForTarget(targetName: String) throws -> [Path] {
     // Look for target in project file
     let allTargets = projectFile.project.targets
     guard let target = allTargets.filter({ $0.name == targetName }).first else {

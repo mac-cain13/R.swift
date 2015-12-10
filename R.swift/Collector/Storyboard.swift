@@ -46,7 +46,7 @@ struct Storyboard: ReusableContainer {
     let type: Type
     private(set) var segues: [Segue]
 
-    mutating func addSegue(segue: Segue) {
+    private mutating func addSegue(segue: Segue) {
       segues.append(segue)
     }
   }

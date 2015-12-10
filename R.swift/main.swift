@@ -16,7 +16,7 @@ do {
   productModuleName = callInformation.productModuleName
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
-  let resourceURLs = try xcodeproj.resourceURLsForTarget(callInformation.targetName)
+  let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
