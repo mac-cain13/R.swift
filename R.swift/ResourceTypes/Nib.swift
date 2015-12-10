@@ -8,6 +8,11 @@
 
 import Foundation
 
+private let ElementNameToTypeMapping = [
+  // TODO: Should contain all standard view elements, like button -> UIButton, view -> UIView etc
+  "view": Type._UIView
+]
+
 struct Nib: ReusableContainer {
   let name: String
   let rootViews: [Type]

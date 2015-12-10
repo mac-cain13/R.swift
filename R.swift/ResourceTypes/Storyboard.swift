@@ -8,6 +8,19 @@
 
 import Foundation
 
+private let ElementNameToTypeMapping = [
+  "viewController": Type._UIViewController,
+  "tableViewCell": Type(name: "UITableViewCell"),
+  "tabBarController": Type(name: "UITabBarController"),
+  "glkViewController": Type(name: "GLKViewController"),
+  "pageViewController": Type(name: "UIPageViewController"),
+  "tableViewController": Type(name: "UITableViewController"),
+  "splitViewController": Type(name: "UISplitViewController"),
+  "navigationController": Type(name: "UINavigationController"),
+  "avPlayerViewController": Type(name: "AVPlayerViewController"),
+  "collectionViewController": Type(name: "UICollectionViewController"),
+]
+
 struct Storyboard: ReusableContainer {
   let name: String
   private let initialViewControllerIdentifier: String?
