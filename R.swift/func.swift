@@ -104,7 +104,14 @@ func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: 
     warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
   }
 
-  return Struct(type: Type(name: "image"), vars: vars.uniques, functions: [], structs: [])
+  return Struct(
+    type: Type(name: "image"),
+    implements: [],
+    typealiasses: [],
+    vars: vars.uniques,
+    functions: [],
+    structs: []
+  )
 }
 
 // Segue
@@ -164,13 +171,22 @@ func segueStructFromStoryboards(storyboards: [Storyboard]) -> Struct {
 
       return Struct(
         type: Type(name: sanitizedSwiftName(sourceType.description)),
+        implements: [],
+        typealiasses: [],
         vars: vars,
         functions: [],
         structs: []
       )
     }
 
-  return Struct(type: Type(name: "segue"), vars: [], functions: [], structs: structs)
+  return Struct(
+    type: Type(name: "segue"),
+    implements: [],
+    typealiasses: [],
+    vars: [],
+    functions: [],
+    structs: structs
+  )
 }
 
 // Storyboard
@@ -184,7 +200,14 @@ func storyboardStructAndFunctionFromStoryboards(storyboards: [Storyboard]) -> (S
   }
 
   return (
-    Struct(type: Type(name: "storyboard"), vars: [], functions: [], structs: groupedStoryboards.uniques.map(storyboardStructForStoryboard)),
+    Struct(
+      type: Type(name: "storyboard"),
+      implements: [],
+      typealiasses: [],
+      vars: [],
+      functions: [],
+      structs: groupedStoryboards.uniques.map(storyboardStructForStoryboard)
+    ),
     validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
   )
 }
@@ -219,7 +242,14 @@ func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
     }
   let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: validateViewControllersLines.joinWithSeparator("\n"))
 
-  return Struct(type: Type(name: sanitizedSwiftName(storyboard.name)), vars: instanceVars + initialViewControllerVar + viewControllerVars, functions: [validateImagesFunc, validateViewControllersFunc], structs: [])
+  return Struct(
+    type: Type(name: sanitizedSwiftName(storyboard.name)),
+    implements: [],
+    typealiasses: [],
+    vars: instanceVars + initialViewControllerVar + viewControllerVars,
+    functions: [validateImagesFunc, validateViewControllersFunc],
+    structs: []
+  )
 }
 
 func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
@@ -243,8 +273,22 @@ func nibStructFromNibs(nibs: [Nib]) -> (intern: Struct, extern: Struct) {
   }
 
   return (
-    intern: Struct(type: Type(name: "nib"), vars: [], functions: [], structs: groupedNibs.uniques.map(nibStructForNib)),
-    extern: Struct(type: Type(name: "nib"), vars: groupedNibs.uniques.map(nibVarForNib), functions: [], structs: [])
+    intern: Struct(
+      type: Type(name: "nib"),
+      implements: [],
+      typealiasses: [],
+      vars: [],
+      functions: [],
+      structs: groupedNibs.uniques.map(nibStructForNib)
+    ),
+    extern: Struct(
+      type: Type(name: "nib"),
+      implements: [],
+      typealiasses: [],
+      vars: groupedNibs.uniques.map(nibVarForNib),
+      functions: [],
+      structs: []
+    )
   )
 }
 
@@ -347,7 +391,14 @@ func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
     .uniques
     .map(varFromReusable)
 
-  return Struct(type: Type(name: "reuseIdentifier"), vars: reuseIdentifierVars, functions: [], structs: [])
+  return Struct(
+    type: Type(name: "reuseIdentifier"),
+    implements: [],
+    typealiasses: [],
+    vars: reuseIdentifierVars,
+    functions: [],
+    structs: []
+  )
 }
 
 func varFromReusable(reusable: Reusable) -> Var {
@@ -362,7 +413,14 @@ func varFromReusable(reusable: Reusable) -> Var {
 // Fonts
 
 func fontStructFromFonts(fonts: [Font]) -> Struct {
-  return Struct(type: Type(name: "font"), vars: [], functions: fonts.map(fontFunctionFromFont), structs: [])
+  return Struct(
+    type: Type(name: "font"),
+    implements: [],
+    typealiasses: [],
+    vars: [],
+    functions: fonts.map(fontFunctionFromFont),
+    structs: []
+  )
 }
 
 func fontFunctionFromFont(font: Font) -> Function {
@@ -392,7 +450,14 @@ func resourceStructFromResourceFiles(resourceFiles: [ResourceFile]) -> Struct {
     .uniques
     .map(varFromResourceFile)
 
-  return Struct(type: Type(name: "file"), vars: resourceVars, functions: [], structs: [])
+  return Struct(
+    type: Type(name: "file"),
+    implements: [],
+    typealiasses: [],
+    vars: resourceVars,
+    functions: [],
+    structs: []
+  )
 }
 
 func varFromResourceFile(resourceFile: ResourceFile) -> Var {

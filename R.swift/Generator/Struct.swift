@@ -15,25 +15,7 @@ struct Struct: CustomStringConvertible {
   let vars: [Var]
   let functions: [Function]
   let structs: [Struct]
-
-  init(type: Type, vars: [Var], functions: [Function], structs: [Struct]) {
-    self.type = type
-    self.implements = []
-    self.typealiasses = []
-    self.vars = vars
-    self.functions = functions
-    self.structs = structs
-  }
-
-  init(type: Type, implements: [Type], vars: [Var], functions: [Function], structs: [Struct]) {
-    self.type = type
-    self.implements = implements
-    self.typealiasses = []
-    self.vars = vars
-    self.functions = functions
-    self.structs = structs
-  }
-
+  
   init(type: Type, implements: [Type], typealiasses: [Typealias], vars: [Var], functions: [Function], structs: [Struct]) {
     self.type = type
     self.implements = implements
