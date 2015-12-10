@@ -27,13 +27,20 @@
 		D59F723F1C19651F0089767C /* ReusableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723E1C19651F0089767C /* ReusableContainer.swift */; };
 		D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723E1C19651F0089767C /* ReusableContainer.swift */; };
 		D5B53A171A7D2A9B00F64418 /* values.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B53A161A7D2A9B00F64418 /* values.swift */; };
-		D5B799641C19937C009EA901 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799631C19937C009EA901 /* Image.swift */; };
-		D5B799661C19939D009EA901 /* Segue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799651C19939D009EA901 /* Segue.swift */; };
-		D5B799681C1993B7009EA901 /* Storyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799671C1993B7009EA901 /* Storyboard.swift */; };
-		D5B7996A1C1993E3009EA901 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799691C1993E3009EA901 /* Nib.swift */; };
-		D5B7996C1C1993F8009EA901 /* ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996B1C1993F8009EA901 /* ReuseIdentifier.swift */; };
-		D5B7996E1C19940F009EA901 /* ResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996D1C19940F009EA901 /* ResourceFile.swift */; };
-		D5B799701C199420009EA901 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996F1C199420009EA901 /* Font.swift */; };
+		D5B799641C19937C009EA901 /* ImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799631C19937C009EA901 /* ImageGenerator.swift */; };
+		D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799651C19939D009EA901 /* SegueGenerator.swift */; };
+		D5B799681C1993B7009EA901 /* StoryboardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */; };
+		D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799691C1993E3009EA901 /* NibGenerator.swift */; };
+		D5B7996C1C1993F8009EA901 /* ReuseIdentifierGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996B1C1993F8009EA901 /* ReuseIdentifierGenerator.swift */; };
+		D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996D1C19940F009EA901 /* ResourceFileGenerator.swift */; };
+		D5B799701C199420009EA901 /* FontGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996F1C199420009EA901 /* FontGenerator.swift */; };
+		D5B799711C199755009EA901 /* FontGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996F1C199420009EA901 /* FontGenerator.swift */; };
+		D5B799721C199755009EA901 /* ImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799631C19937C009EA901 /* ImageGenerator.swift */; };
+		D5B799731C199755009EA901 /* NibGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799691C1993E3009EA901 /* NibGenerator.swift */; };
+		D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996D1C19940F009EA901 /* ResourceFileGenerator.swift */; };
+		D5B799751C199755009EA901 /* ReuseIdentifierGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7996B1C1993F8009EA901 /* ReuseIdentifierGenerator.swift */; };
+		D5B799761C199755009EA901 /* SegueGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799651C19939D009EA901 /* SegueGenerator.swift */; };
+		D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */; };
 		D5C5A8EF1BB7196000163E71 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C5A8EE1BB7196000163E71 /* Core.swift */; };
 		D5CD9B3C1B98258700C85F8C /* input.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CD9B3B1B98258700C85F8C /* input.swift */; };
 		D5DA249D1B9CB1BF00AAA43E /* processing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DA249C1B9CB1BF00AAA43E /* processing.swift */; };
@@ -79,13 +86,13 @@
 		D59F723B1C1964B20089767C /* Typealias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D59F723E1C19651F0089767C /* ReusableContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableContainer.swift; sourceTree = "<group>"; };
 		D5B53A161A7D2A9B00F64418 /* values.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = values.swift; sourceTree = "<group>"; };
-		D5B799631C19937C009EA901 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		D5B799651C19939D009EA901 /* Segue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segue.swift; sourceTree = "<group>"; };
-		D5B799671C1993B7009EA901 /* Storyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storyboard.swift; sourceTree = "<group>"; };
-		D5B799691C1993E3009EA901 /* Nib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nib.swift; sourceTree = "<group>"; };
-		D5B7996B1C1993F8009EA901 /* ReuseIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReuseIdentifier.swift; sourceTree = "<group>"; };
-		D5B7996D1C19940F009EA901 /* ResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFile.swift; sourceTree = "<group>"; };
-		D5B7996F1C199420009EA901 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		D5B799631C19937C009EA901 /* ImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGenerator.swift; sourceTree = "<group>"; };
+		D5B799651C19939D009EA901 /* SegueGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueGenerator.swift; sourceTree = "<group>"; };
+		D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardGenerator.swift; sourceTree = "<group>"; };
+		D5B799691C1993E3009EA901 /* NibGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibGenerator.swift; sourceTree = "<group>"; };
+		D5B7996B1C1993F8009EA901 /* ReuseIdentifierGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReuseIdentifierGenerator.swift; sourceTree = "<group>"; };
+		D5B7996D1C19940F009EA901 /* ResourceFileGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFileGenerator.swift; sourceTree = "<group>"; };
+		D5B7996F1C199420009EA901 /* FontGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontGenerator.swift; sourceTree = "<group>"; };
 		D5C4227D1B711FDF004EA9B9 /* rswiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rswiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5C422811B711FDF004EA9B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5C5A8EE1BB7196000163E71 /* Core.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
@@ -132,13 +139,13 @@
 		D5B799611C1992A7009EA901 /* Generators */ = {
 			isa = PBXGroup;
 			children = (
-				D5B7996F1C199420009EA901 /* Font.swift */,
-				D5B799631C19937C009EA901 /* Image.swift */,
-				D5B799691C1993E3009EA901 /* Nib.swift */,
-				D5B7996D1C19940F009EA901 /* ResourceFile.swift */,
-				D5B7996B1C1993F8009EA901 /* ReuseIdentifier.swift */,
-				D5B799651C19939D009EA901 /* Segue.swift */,
-				D5B799671C1993B7009EA901 /* Storyboard.swift */,
+				D5B7996F1C199420009EA901 /* FontGenerator.swift */,
+				D5B799631C19937C009EA901 /* ImageGenerator.swift */,
+				D5B799691C1993E3009EA901 /* NibGenerator.swift */,
+				D5B7996D1C19940F009EA901 /* ResourceFileGenerator.swift */,
+				D5B7996B1C1993F8009EA901 /* ReuseIdentifierGenerator.swift */,
+				D5B799651C19939D009EA901 /* SegueGenerator.swift */,
+				D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */,
 			);
 			name = Generators;
 			path = ../Generators;
@@ -332,10 +339,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5F12D461BDACB87009A2C88 /* util.swift in Sources */,
+				D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5F12D441BDACB87009A2C88 /* func.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* processing.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
 				D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */,
+				D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */,
+				D5B799751C199755009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
 				D586D1C71BE20D8600F18FEC /* PBXObject.swift in Sources */,
 				D59F72271C1963DA0089767C /* Type.swift in Sources */,
 				D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */,
@@ -352,11 +362,15 @@
 				D5F12D491BDACB90009A2C88 /* Core.swift in Sources */,
 				D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */,
 				D59F72311C19644F0089767C /* Function.swift in Sources */,
+				D5B799721C199755009EA901 /* ImageGenerator.swift in Sources */,
 				D59F722A1C1963EA0089767C /* Struct.swift in Sources */,
+				D5B799731C199755009EA901 /* NibGenerator.swift in Sources */,
 				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
+				D5B799711C199755009EA901 /* FontGenerator.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
 				D5F12D471BDACB87009A2C88 /* values.swift in Sources */,
 				D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */,
+				D5B799761C199755009EA901 /* SegueGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,17 +382,17 @@
 				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,
 				D59F72391C1964950089767C /* Var.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
-				D5B7996E1C19940F009EA901 /* ResourceFile.swift in Sources */,
+				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
 				D5F97E401C1815E70066D7C0 /* AssetFolder.swift in Sources */,
 				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
 				D59F723C1C1964B20089767C /* Typealias.swift in Sources */,
-				D5B799661C19939D009EA901 /* Segue.swift in Sources */,
+				D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */,
 				D5DA249D1B9CB1BF00AAA43E /* processing.swift in Sources */,
 				D5F97E3A1C1812AE0066D7C0 /* Font.swift in Sources */,
 				D5EA0DF81A3DF45600FFEBC4 /* main.swift in Sources */,
 				D5EA0DFF1A3DF4E300FFEBC4 /* util.swift in Sources */,
 				D59F723F1C19651F0089767C /* ReusableContainer.swift in Sources */,
-				D5B7996C1C1993F8009EA901 /* ReuseIdentifier.swift in Sources */,
+				D5B7996C1C1993F8009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
 				D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */,
 				D59F72291C1963EA0089767C /* Struct.swift in Sources */,
 				D5F105FF1A3E2BC30077263A /* func.swift in Sources */,
@@ -386,13 +400,13 @@
 				D5F97E441C1816790066D7C0 /* ResourceFile.swift in Sources */,
 				D59F72301C19644F0089767C /* Function.swift in Sources */,
 				D5F97E3E1C1815780066D7C0 /* Xcodeproj.swift in Sources */,
-				D5B799641C19937C009EA901 /* Image.swift in Sources */,
+				D5B799641C19937C009EA901 /* ImageGenerator.swift in Sources */,
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B53A171A7D2A9B00F64418 /* values.swift in Sources */,
-				D5B7996A1C1993E3009EA901 /* Nib.swift in Sources */,
+				D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
-				D5B799681C1993B7009EA901 /* Storyboard.swift in Sources */,
-				D5B799701C199420009EA901 /* Font.swift in Sources */,
+				D5B799681C1993B7009EA901 /* StoryboardGenerator.swift in Sources */,
+				D5B799701C199420009EA901 /* FontGenerator.swift in Sources */,
 				D579466B1B9347C20044D2FC /* XCProjectFile.swift in Sources */,
 				D5CD9B3C1B98258700C85F8C /* input.swift in Sources */,
 				D5F97E381C178A4F0066D7C0 /* Resources.swift in Sources */,
