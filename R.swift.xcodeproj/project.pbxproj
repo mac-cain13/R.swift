@@ -157,7 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				D5F97E361C1789E50066D7C0 /* Collector */,
-				D5F97E501C18D5EF0066D7C0 /* Generator */,
+				D5F97E501C18D5EF0066D7C0 /* SwiftTypes */,
 				D5F105FE1A3E2BC30077263A /* func.swift */,
 				D5CD9B3B1B98258700C85F8C /* input.swift */,
 				D5EA0DF71A3DF45600FFEBC4 /* main.swift */,
@@ -184,7 +184,7 @@
 			path = Collector;
 			sourceTree = "<group>";
 		};
-		D5F97E501C18D5EF0066D7C0 /* Generator */ = {
+		D5F97E501C18D5EF0066D7C0 /* SwiftTypes */ = {
 			isa = PBXGroup;
 			children = (
 				D59F722F1C19644F0089767C /* Function.swift */,
@@ -193,7 +193,7 @@
 				D59F723B1C1964B20089767C /* Typealias.swift */,
 				D59F72381C1964950089767C /* Var.swift */,
 			);
-			path = Generator;
+			path = SwiftTypes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
