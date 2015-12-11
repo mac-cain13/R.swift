@@ -1,23 +1,12 @@
 //
-//  func.swift
+//  SanitizedSwiftName.swift
 //  R.swift
 //
-//  Created by Mathijs Kadijk on 14-12-14.
-//  From: https://github.com/mac-cain13/R.swift
-//  License: MIT License
+//  Created by Mathijs Kadijk on 11-12-15.
+//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
 //
 
 import Foundation
-
-// MARK: Helper functions
-
-func warn(warning: String) {
-  print("warning: [R.swift] \(warning)")
-}
-
-func fail(error: String) {
-  print("error: [R.swift] \(error)")
-}
 
 /*
 Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
@@ -63,3 +52,4 @@ private let BlacklistedCharacters = { () -> NSCharacterSet in
 }()
 
 private let SwiftKeywords = ["class", "deinit", "enum", "extension", "func", "import", "init", "internal", "let", "operator", "private", "protocol", "public", "static", "struct", "subscript", "typealias", "var", "break", "case", "continue", "default", "do", "else", "fallthrough", "for", "if", "in", "return", "switch", "where", "while", "as", "dynamicType", "false", "is", "nil", "self", "Self", "super", "true", "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__"]
+

@@ -1,5 +1,5 @@
 //
-//  processing.swift
+//  ResourceStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 06-09-15.
