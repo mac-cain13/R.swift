@@ -150,8 +150,14 @@
 				D5B799651C19939D009EA901 /* SegueGenerator.swift */,
 				D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */,
 			);
-			name = Generators;
-			path = ../Generators;
+			path = Generators;
+			sourceTree = "<group>";
+		};
+		D5B7997B1C1B06F5009EA901 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		D5C4227E1B711FDF004EA9B9 /* R.swiftTests */ = {
@@ -195,6 +201,7 @@
 		D5EA0DF61A3DF45600FFEBC4 /* R.swift */ = {
 			isa = PBXGroup;
 			children = (
+				D5B7997B1C1B06F5009EA901 /* Util */,
 				D5B799611C1992A7009EA901 /* Generators */,
 				D5F97E361C1789E50066D7C0 /* ResourceTypes */,
 				D5F97E501C18D5EF0066D7C0 /* SwiftTypes */,
