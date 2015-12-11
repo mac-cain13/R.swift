@@ -9,7 +9,13 @@
 import Foundation
 
 func reuseIdentifierStructFromReusables(reusables: [Reusable]) -> Struct {
-  let groupedReusables = reusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
+
+  let deduplicatedReusables = reusables
+    .groupBy { $0.hashValue }
+    .values
+    .flatMap { $0.first }
+
+  let groupedReusables = deduplicatedReusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
 
   for duplicate in groupedReusables.duplicates {
     let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")

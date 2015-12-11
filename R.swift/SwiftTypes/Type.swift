@@ -69,8 +69,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   }
 
   var hashValue: Int {
-    let optionalString = optional ? "?" : ""
-    return "\(fullName)\(optionalString)".hashValue
+    return fullyQualifiedName.hashValue
   }
 
   init(name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
