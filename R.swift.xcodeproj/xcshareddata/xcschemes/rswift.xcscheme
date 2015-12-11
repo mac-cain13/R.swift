@@ -87,7 +87,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-t ResourceApp"
+            argument = "--bundleIdentifier nl.mathijskadijk.ResourceApp"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

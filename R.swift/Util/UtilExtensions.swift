@@ -9,14 +9,7 @@
 
 import Foundation
 
-
 // MARK: Array operations
-
-extension Array {
-  subscript (safe index: Int) -> Element? {
-    return indices ~= index ? self[index] : nil
-  }
-}
 
 extension SequenceType {
   func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
@@ -48,11 +41,9 @@ extension String {
     let index = startIndex.advancedBy(1)
     return substringToIndex(index).uppercaseString + substringFromIndex(index)
   }
-}
 
-func indentWithString(indentation: String) -> String -> String {
-  return { string in
-    let components = string.componentsSeparatedByString("\n")
+  func indentWithString(indentation: String) -> String {
+    let components = componentsSeparatedByString("\n")
     return indentation + components.joinWithSeparator("\n\(indentation)")
   }
 }
@@ -60,15 +51,6 @@ func indentWithString(indentation: String) -> String -> String {
 // MARK: NSURL operations 
 
 extension NSURL {
-  var isDirectory: Bool {
-    var urlIsDirectoryValue: AnyObject?
-    do {
-      try getResourceValue(&urlIsDirectoryValue, forKey: NSURLIsDirectoryKey)
-    } catch _ {}
-
-    return (urlIsDirectoryValue as? Bool) ?? false
-  }
-
   var filename: String? {
     return URLByDeletingPathExtension?.lastPathComponent
   }
