@@ -1,5 +1,5 @@
 //
-//  ResourceStructGenerator.swift
+//  ResourceGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 06-09-15.
