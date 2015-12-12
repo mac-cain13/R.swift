@@ -13,7 +13,8 @@ struct ResourceFile {
   static let unsupportedExtensions: Set<String> = [
       AssetFolder.supportedExtensions,
       Storyboard.supportedExtensions,
-      Nib.supportedExtensions
+      Nib.supportedExtensions,
+      ["strings"] // Strings files are also precompiled resources, but we don't have support for them yet.
     ]
     .reduce([]) { $0.union($1) }
 
