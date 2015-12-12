@@ -11,7 +11,7 @@ import Foundation
 
 let IndentationString = "  "
 
-let productModuleName: String?
+let productModuleName: String
 
 let ResourceFilename = "R.generated.swift"
 
@@ -40,7 +40,7 @@ do {
 
   let fileContents = [
       Header,
-      (DefaultModules + usingModules).map { "import \($0)" }.joinWithSeparator("\n"),
+      (DefaultModules + usingModules.subtract([productModuleName])).map { "import \($0)" }.joinWithSeparator("\n"),
       externalStruct.description,
       internalStruct.description,
     ].joinWithSeparator("\n\n")
