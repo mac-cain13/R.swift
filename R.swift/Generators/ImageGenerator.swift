@@ -8,33 +8,40 @@
 
 import Foundation
 
-func imageStructFromAssetFolders(assetFolders: [AssetFolder], andImages images: [Image]) -> Struct {
-  let assetFolderImageVars = assetFolders
-    .flatMap { $0.imageAssets }
-    .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
+struct ImageGenerator: Generator {
+  let usingModules: Set<Module> = []
+  let externalFunction: Function? = nil
+  let externalStruct: Struct?
+  let internalStruct: Struct? = nil
 
-  let uniqueImages = images
-    .groupBy { $0.name }
-    .values
-    .flatMap { $0.first }
+  init(assetFolders: [AssetFolder], images: [Image]) {
+    let assetFolderImageVars = assetFolders
+      .flatMap { $0.imageAssets }
+      .map { Var(isStatic: true, name: $0, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
 
-  let imageVars = uniqueImages
-    .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
+    let uniqueImages = images
+      .groupBy { $0.name }
+      .values
+      .flatMap { $0.first }
 
-  let vars = (assetFolderImageVars + imageVars)
-    .groupUniquesAndDuplicates { $0.callName }
+    let imageVars = uniqueImages
+      .map { Var(isStatic: true, name: $0.name, type: Type._UIImage.asOptional(), getter: "return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: nil)") }
 
-  for duplicate in vars.duplicates {
-    let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-    warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
+    let vars = (assetFolderImageVars + imageVars)
+      .groupUniquesAndDuplicates { $0.callName }
+
+    for duplicate in vars.duplicates {
+      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
+    }
+
+    externalStruct = Struct(
+      type: Type(name: "image"),
+      implements: [],
+      typealiasses: [],
+      vars: vars.uniques,
+      functions: [],
+      structs: []
+    )
   }
-
-  return Struct(
-    type: Type(name: "image"),
-    implements: [],
-    typealiasses: [],
-    vars: vars.uniques,
-    functions: [],
-    structs: []
-  )
 }

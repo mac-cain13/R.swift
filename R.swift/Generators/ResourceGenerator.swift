@@ -9,29 +9,60 @@
 
 import Foundation
 
-func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
-  // Generate resource file contents
-  let storyboardStructAndFunction = storyboardStructAndFunctionFromStoryboards(resources.storyboards)
+protocol Generator {
+  var usingModules: Set<Module> { get }
+  var externalFunction: Function? { get }
+  var externalStruct: Struct? { get }
+  var internalStruct: Struct? { get }
+}
 
-  let nibStructs = nibStructFromNibs(resources.nibs)
+private struct GeneratorResults {
+  var usingModules: Set<Module> = []
+  var externalFunctions: [Function] = []
+  var externalStructs: [Struct] = []
+  var internalStructs: [Struct] = []
+
+  init() {}
+
+  mutating func addGenerator(generator: Generator) {
+    usingModules = usingModules.union(generator.usingModules)
+
+    if let externalFunction = generator.externalFunction {
+      externalFunctions.append(externalFunction)
+    }
+
+    if let externalStruct = generator.externalStruct {
+      externalStructs.append(externalStruct)
+    }
+
+    if let internalStruct = generator.internalStruct {
+      internalStructs.append(internalStruct)
+    }
+  }
+}
+
+func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Set<Module>, Struct, Struct) {
+
+  let generators: [Generator] = [
+      ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
+      FontGenerator(fonts: resources.fonts),
+      SegueGenerator(storyboards: resources.storyboards),
+      StoryboardGenerator(storyboards: resources.storyboards),
+      NibGenerator(nibs: resources.nibs),
+      ReuseIdentifierGenerator(reusables: resources.reusables),
+      ResourceFileGenerator(resourceFiles: resources.resourceFiles),
+    ]
+
+  var generatorResults = GeneratorResults()
+  generators.forEach { generatorResults.addGenerator($0) }
 
   let externalResourceStruct = Struct(
     type: Type(name: "R"),
     implements: [],
     typealiasses: [],
     vars: [],
-    functions: [
-      storyboardStructAndFunction.1,
-    ],
-    structs: [
-      imageStructFromAssetFolders(resources.assetFolders, andImages: resources.images),
-      fontStructFromFonts(resources.fonts),
-      segueStructFromStoryboards(resources.storyboards),
-      storyboardStructAndFunction.0,
-      nibStructs.extern,
-      reuseIdentifierStructFromReusables(resources.reusables),
-      resourceStructFromResourceFiles(resources.resourceFiles),
-    ]
+    functions: generatorResults.externalFunctions,
+    structs: generatorResults.externalStructs
   )
 
   let internalResourceStruct = Struct(
@@ -42,10 +73,8 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       Var(isStatic: true, name: "hostingBundle", type: Type._NSBundle.asOptional(), getter: "return NSBundle(identifier: \"\(bundleIdentifier)\")")
     ],
     functions: [],
-    structs: [
-      nibStructs.intern
-    ]
+    structs: generatorResults.internalStructs
   )
 
-  return (internalResourceStruct, externalResourceStruct)
+  return (generatorResults.usingModules, internalResourceStruct, externalResourceStruct)
 }

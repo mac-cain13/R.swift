@@ -21,10 +21,10 @@ private let Header = [
   ].joinWithSeparator("\n")
 
 
-private let Imports = [
-  "import UIKit",
-  "import Rswift",
-  ].joinWithSeparator("\n")
+private let DefaultModules = [
+  "UIKit",
+  "Rswift",
+  ]
 
 do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
@@ -36,11 +36,11 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
+  let (usingModules, internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
 
   let fileContents = [
       Header,
-      Imports,
+      (DefaultModules + usingModules).map { "import \($0)" }.joinWithSeparator("\n"),
       externalStruct.description,
       internalStruct.description,
     ].joinWithSeparator("\n\n")
