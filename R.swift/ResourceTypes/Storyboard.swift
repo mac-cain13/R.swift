@@ -129,7 +129,8 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
 
-    let customModule = attributeDict["customModule"] as? String
+    let customModuleProvider = attributeDict["customModuleProvider"] as? String
+    let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"] as? String
     let customClass = attributeDict["customClass"] as? String
     let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
