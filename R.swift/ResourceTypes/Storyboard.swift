@@ -89,7 +89,8 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     case "segue":
       if let segueIdentifier = attributeDict["identifier"], segueDestination = attributeDict["destination"] {
-        let customModule = attributeDict["customModule"]
+        let customModuleProvider = attributeDict["customModuleProvider"]
+        let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
         let customClass = attributeDict["customClass"]
         let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
@@ -122,16 +123,16 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func viewControllerFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Storyboard.ViewController? {
-    guard let id = attributeDict["id"] as? String where attributeDict["sceneMemberID"] as? String == "viewController" else {
+  func viewControllerFromAttributes(attributeDict: [String : String], elementName: String) -> Storyboard.ViewController? {
+    guard let id = attributeDict["id"] where attributeDict["sceneMemberID"] == "viewController" else {
       return nil
     }
 
-    let storyboardIdentifier = attributeDict["storyboardIdentifier"] as? String
+    let storyboardIdentifier = attributeDict["storyboardIdentifier"]
 
-    let customModuleProvider = attributeDict["customModuleProvider"] as? String
-    let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"] as? String
-    let customClass = attributeDict["customClass"] as? String
+    let customModuleProvider = attributeDict["customModuleProvider"]
+    let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
+    let customClass = attributeDict["customClass"]
     let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
@@ -139,13 +140,14 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
   }
 
-  func reusableFromAttributes(attributeDict: [NSObject : AnyObject], elementName: String) -> Reusable? {
-    guard let reuseIdentifier = attributeDict["reuseIdentifier"] as? String else {
+  func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] else {
       return nil
     }
 
-    let customModule = attributeDict["customModule"] as? String
-    let customClass = attributeDict["customClass"] as? String
+    let customModuleProvider = attributeDict["customModuleProvider"]
+    let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
+    let customClass = attributeDict["customClass"]
     let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
