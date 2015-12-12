@@ -23,6 +23,7 @@ struct StoryboardGenerator: Generator {
     }
 
     usingModules = Set(storyboards.flatMap { $0.viewControllers.flatMap({ $0.type.module }) })
+      .union(["UIKit"])
 
     externalFunction = StoryboardGenerator.validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
     externalStruct = Struct(

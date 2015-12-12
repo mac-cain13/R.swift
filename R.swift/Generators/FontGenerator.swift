@@ -9,7 +9,7 @@
 import Foundation
 
 struct FontGenerator: Generator {
-  let usingModules: Set<Module> = []
+  let usingModules: Set<Module> = ["UIKit"]
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil

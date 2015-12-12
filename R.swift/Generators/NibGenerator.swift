@@ -54,7 +54,7 @@ struct NibGenerator: Generator {
         )
       }
 
-    usingModules = result.usedModules
+    usingModules = result.usedModules.union(["UIKit", "Rswift"])
 
     internalStruct = Struct(
         type: Type(name: "nib"),

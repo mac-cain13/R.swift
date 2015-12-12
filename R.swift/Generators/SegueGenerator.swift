@@ -48,6 +48,7 @@ struct SegueGenerator: Generator {
 
     usingModules = Set(Array(groupedSeguesWithInfo.uniques)
       .flatMap { [$0.segue.type.module, $0.sourceType.module, $0.destinationType.module].flatMap({$0}) })
+      .union(["Rswift"])
 
     let structs = groupedSeguesWithInfo.uniques
       .groupBy { $0.sourceType }

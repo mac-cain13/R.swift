@@ -30,6 +30,7 @@ struct ReuseIdentifierGenerator: Generator {
     usingModules = Set(Array(groupedReusables
       .uniques)
       .flatMap { $0.type.module })
+      .union(["Rswift"])
 
     let reuseIdentifierVars = groupedReusables
       .uniques
