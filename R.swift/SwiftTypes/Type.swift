@@ -29,7 +29,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   static let ReuseIdentifierProtocol = Type(name: "ReuseIdentifierProtocol")
   static let NibResourceProtocol = Type(name: "NibResource")
 
-  let module: String?
+  let module: Module?
   let name: String
   let genericArgs: [TypeVar]
   let optional: Bool
@@ -72,7 +72,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
     self.optional = optional
   }
 
-  init(module: String?, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
+  init(module: Module?, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
     self.genericArgs = genericArgs

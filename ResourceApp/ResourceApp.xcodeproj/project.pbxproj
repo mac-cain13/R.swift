@@ -32,6 +32,8 @@
 		D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */; };
 		D5AD5C9F1B7A924000A8B96C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */; };
 		D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */; };
+		D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5B799841C1B8DB6009EA901 /* Settings.bundle */; };
+		D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5B799861C1B8DD2009EA901 /* Specials.storyboard */; };
 		D5C0F0731C15666900F0DA05 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C0F0721C15666900F0DA05 /* Rswift.framework */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
@@ -95,6 +97,9 @@
 		D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ADuplicateCellView.xib; path = ResourceApp/Duplicate/ADuplicateCellView.xib; sourceTree = SOURCE_ROOT; };
 		D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DuplicateCellView.xib; sourceTree = "<group>"; };
+		D5B799841C1B8DB6009EA901 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		D5B799861C1B8DD2009EA901 /* Specials.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Specials.storyboard; sourceTree = "<group>"; };
+		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		D5C0F0721C15666900F0DA05 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../../../../Library/Developer/Xcode/DerivedData/R.swift-ebhidqkrisjzvjhaxtjbgjdicfcj/Build/Products/Debug-iphoneos/Rswift.framework"; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
@@ -136,6 +141,7 @@
 		065D32753EEB6C7AE2FA201F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D5B799881C1B8F0C009EA901 /* AVKit.framework */,
 				AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */,
 			);
 			name = Frameworks;
@@ -204,10 +210,12 @@
 				D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */,
 				D55C6CC31B5D757300301B0D /* Main.storyboard */,
 				D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */,
+				D5B799861C1B8DD2009EA901 /* Specials.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D55C6CC81B5D757300301B0D /* LaunchScreen.xib */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
+				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";
@@ -364,6 +372,8 @@
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
+				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
+				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
 				D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,

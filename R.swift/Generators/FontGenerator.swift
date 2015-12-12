@@ -8,26 +8,33 @@
 
 import Foundation
 
-func fontStructFromFonts(fonts: [Font]) -> Struct {
-  return Struct(
-    type: Type(name: "font"),
-    implements: [],
-    typealiasses: [],
-    vars: [],
-    functions: fonts.map(fontFunctionFromFont),
-    structs: []
-  )
-}
+struct FontGenerator: Generator {
+  let usingModules: Set<Module> = ["UIKit"]
+  let externalFunction: Function? = nil
+  let externalStruct: Struct?
+  let internalStruct: Struct? = nil
 
-private func fontFunctionFromFont(font: Font) -> Function {
-  return Function(
-    isStatic: true,
-    name: font.name,
-    generics: nil,
-    parameters: [
-      Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
-    ],
-    returnType: Type._UIFont.asOptional(),
-    body:"return UIFont(name: \"\(font.name)\", size: size)"
-  )
+  init(fonts: [Font]) {
+    externalStruct = Struct(
+      type: Type(name: "font"),
+      implements: [],
+      typealiasses: [],
+      vars: [],
+      functions: fonts.map(FontGenerator.fontFunctionFromFont),
+      structs: []
+    )
+  }
+
+  private static func fontFunctionFromFont(font: Font) -> Function {
+    return Function(
+      isStatic: true,
+      name: font.name,
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
+      ],
+      returnType: Type._UIFont.asOptional(),
+      body:"return UIFont(name: \"\(font.name)\", size: size)"
+    )
+  }
 }
