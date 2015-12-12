@@ -102,11 +102,13 @@ struct NibGenerator: Generator {
       getter: "return \"\(nib.name)\""
     )
 
-    let instanceVar = Var(
+    let instantiate = Function(
       isStatic: false,
-      name: "instance",
-      type: Type._UINib,
-      getter: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
+      name: "initialize",
+      generics: nil,
+      parameters: [],
+      returnType: Type._UINib,
+      body: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
     )
 
     let instantiateFunc = Function(
@@ -115,7 +117,7 @@ struct NibGenerator: Generator {
       generics: nil,
       parameters: instantiateParameters,
       returnType: Type(name: "[AnyObject]"),
-      body: "return instance.instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
+      body: "return initialize().instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
     )
 
     let viewFuncs = zip(nib.rootViews, Ordinals)
@@ -164,8 +166,8 @@ struct NibGenerator: Generator {
         type: Type(name: "_\(sanitizedName)"),
         implements: [Type.NibResourceProtocol] + reuseProtocols,
         typealiasses: reuseTypealiasses,
-        vars: [bundleVar, nameVar, instanceVar] + reuseIdentifierVars,
-        functions: [instantiateFunc] + viewFuncs,
+        vars: [bundleVar, nameVar] + reuseIdentifierVars,
+        functions: [instantiate, instantiateFunc] + viewFuncs,
         structs: []
       )
     )
