@@ -76,6 +76,8 @@ override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 }
 ```
 
+**Tip:** Take a look at the [SegueManager](https://github.com/tomlokhorst/SegueManager) library, it makes segues block based and is compatible with R.swift.
+
 ## Nibs
 
 *Vanilla*
@@ -99,6 +101,8 @@ let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 ```
 
 ## Reusable cells
+
+**Note:** This is a table view example, R.swift also supports collection views in the same way.
 
 *Vanilla*
 ```swift

@@ -6,7 +6,7 @@ _Get strong typed, autocompleted resources like images, fonts and segues in Swif
 
 It makes your code that uses resources:
 - **Fully typed**, less casting and guessing what a method will return
-- **Compiletime checked**, no more incorrect strings that make your app crash at runtime
+- **Compile time checked**, no more incorrect strings that make your app crash at runtime
 - **Autocompleted**, never have to guess that image name again
 
 Currently you type:
