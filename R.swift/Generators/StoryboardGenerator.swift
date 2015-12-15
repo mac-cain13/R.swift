@@ -37,41 +37,83 @@ struct StoryboardGenerator: Generator {
   }
 
   private static func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-    let instanceVars = [Var(isStatic: true, name: "instance", type: Type._UIStoryboard, getter: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)")]
 
-    let initialViewControllerVar = [storyboard.initialViewController
-      .map { (vc) -> Var in
+    let instanceFunction = Function(
+      isStatic: true,
+      name: "instance",
+      generics: nil,
+      parameters: [],
+      returnType: Type._UIStoryboard,
+      body: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)"
+    )
+
+    let initialViewControllerFunction = storyboard.initialViewController
+      .map { (vc) -> Function in
         let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
-        return Var(isStatic: true, name: "initialViewController", type: vc.type.asOptional(), getter: "return instance.instantiateInitialViewController()\(getterCast)")
+        return Function(
+          isStatic: true,
+          name: "initialViewController",
+          generics: nil,
+          parameters: [],
+          returnType: vc.type.asOptional(),
+          body: "return instance().instantiateInitialViewController()\(getterCast)"
+        )
       }
-      ].flatMap { $0 }
 
-    let viewControllerVars = storyboard.viewControllers
-      .flatMap { (vc) -> Var? in
+    let instantiateViewControllerFunctions = storyboard.viewControllers
+      .flatMap { (vc) -> Function? in
         let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
         return vc.storyboardIdentifier.map {
-          return Var(isStatic: true, name: $0, type: vc.type.asOptional(), getter: "return instance.instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)")
+          Function(
+            isStatic: true,
+            name: $0,
+            generics: nil,
+            parameters: [],
+            returnType: vc.type.asOptional(),
+            body: "return instance().instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
+          )
         }
-    }
+      }
 
-    let validateImagesLines = Array(Set(storyboard.usedImageIdentifiers))
-      .map { "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")" }
-    let validateImagesFunc = Function(isStatic: true, name: "validateImages", generics: nil, parameters: [], returnType: Type._Void, body: validateImagesLines.joinWithSeparator("\n"))
+    let validateImagesLines = Set(storyboard.usedImageIdentifiers)
+      .map {
+        "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")"
+      }
+    let validateImagesFunction = Function(
+      isStatic: true,
+      name: "validateImages",
+      generics: nil,
+      parameters: [],
+      returnType: Type._Void,
+      body: validateImagesLines.joinWithSeparator("\n")
+    )
 
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
         vc.storyboardIdentifier.map {
-          "assert(\(sanitizedSwiftName($0)) != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
+          "assert(\(sanitizedSwiftName($0))() != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
         }
-    }
-    let validateViewControllersFunc = Function(isStatic: true, name: "validateViewControllers", generics: nil, parameters: [], returnType: Type._Void, body: validateViewControllersLines.joinWithSeparator("\n"))
+      }
+    let validateViewControllersFunction = Function(
+      isStatic: true,
+      name: "validateViewControllers",
+      generics: nil,
+      parameters: [],
+      returnType: Type._Void,
+      body: validateViewControllersLines.joinWithSeparator("\n")
+    )
 
     return Struct(
       type: Type(name: sanitizedSwiftName(storyboard.name)),
       implements: [],
       typealiasses: [],
-      vars: instanceVars + initialViewControllerVar + viewControllerVars,
-      functions: [validateImagesFunc, validateViewControllersFunc],
+      vars: [],
+      functions: [
+        instanceFunction,
+        initialViewControllerFunction,
+        validateImagesFunction,
+        validateViewControllersFunction
+        ].flatMap{$0} + instantiateViewControllerFunctions,
       structs: []
     )
   }
