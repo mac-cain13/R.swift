@@ -27,7 +27,7 @@ struct ResourceFileGenerator: Generator {
       .map(ResourceFileGenerator.varFromResourceFile)
 
     externalStruct = Struct(
-      type: Type(name: "file"),
+      type: Type(module: nil, name: "file"),
       implements: [],
       typealiasses: [],
       vars: resourceVars,

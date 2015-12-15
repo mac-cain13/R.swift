@@ -11,25 +11,25 @@ import Foundation
 typealias TypeVar = String
 
 struct Type: CustomStringConvertible, Hashable {
-  static let _Void = Type(name: "Void")
-  static let _AnyObject = Type(name: "AnyObject")
-  static let _String = Type(name: "String")
-  static let _NSURL = Type(name: "NSURL")
-  static let _UINib = Type(name: "UINib")
-  static let _UIView = Type(name: "UIView")
-  static let _UIImage = Type(name: "UIImage")
-  static let _NSBundle = Type(name: "NSBundle")
-  static let _UIStoryboard = Type(name: "UIStoryboard")
-  static let _UIStoryboardSegue = Type(name: "UIStoryboardSegue")
-  static let _UIViewController = Type(name: "UIViewController")
-  static let _UIFont = Type(name: "UIFont")
-  static let _CGFloat = Type(name: "CGFloat")
+  static let _Void = Type(module: nil, name: "Void")
+  static let _AnyObject = Type(module: nil, name: "AnyObject")
+  static let _String = Type(module: nil, name: "String")
+  static let _NSURL = Type(module: "Foundation", name: "NSURL")
+  static let _UINib = Type(module: "UIKit", name: "UINib")
+  static let _UIView = Type(module: "UIKit", name: "UIView")
+  static let _UIImage = Type(module: "UIKit", name: "UIImage")
+  static let _NSBundle = Type(module: "Foundation", name: "NSBundle")
+  static let _UIStoryboard = Type(module: "UIKit", name: "UIStoryboard")
+  static let _UIStoryboardSegue = Type(module: "UIKit", name: "UIStoryboardSegue")
+  static let _UIViewController = Type(module: "UIKit", name: "UIViewController")
+  static let _UIFont = Type(module: "UIKit", name: "UIFont")
+  static let _CGFloat = Type(module: nil, name: "CGFloat")
 
-  static let ReuseIdentifier = Type(name: "ReuseIdentifier", genericArgs: ["T"])
-  static let ReuseIdentifierProtocol = Type(name: "ReuseIdentifierProtocol")
-  static let NibResourceProtocol = Type(name: "NibResource")
+  static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: ["T"])
+  static let ReuseIdentifierProtocol = Type(module: "Rswift", name: "ReuseIdentifierProtocol")
+  static let NibResourceProtocol = Type(module: "Rswift", name: "NibResource")
 
-  let module: Module?
+  let module: Module
   let name: String
   let genericArgs: [TypeVar]
   let optional: Bool
@@ -46,33 +46,22 @@ struct Type: CustomStringConvertible, Hashable {
   }
 
   private var fullName: String {
-    if let module = module {
-      return "\(module).\((name))"
+    if case let	.Custom(name: moduleName) = module {
+      return "\(moduleName).\((name))"
     }
 
     return name
   }
 
   var description: String {
-    if module == productModule {
-      return Type(module: nil, name: name, genericArgs: genericArgs, optional: optional).fullyQualifiedName
-    } else {
-      return fullyQualifiedName
-    }
+    return fullyQualifiedName
   }
 
   var hashValue: Int {
     return fullyQualifiedName.hashValue
   }
 
-  init(name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
-    self.module = nil
-    self.name = name
-    self.genericArgs = genericArgs
-    self.optional = optional
-  }
-
-  init(module: Module?, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
+  init(module: Module, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
     self.genericArgs = genericArgs

@@ -37,7 +37,7 @@ struct ReuseIdentifierGenerator: Generator {
       .map(ReuseIdentifierGenerator.varFromReusable)
 
     externalStruct = Struct(
-      type: Type(name: "reuseIdentifier"),
+      type: Type(module: nil, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
       vars: reuseIdentifierVars,

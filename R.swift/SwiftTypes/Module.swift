@@ -8,34 +8,48 @@
 
 import Foundation
 
-struct Module: StringLiteralConvertible, Hashable, CustomStringConvertible {
+enum Module: StringLiteralConvertible, NilLiteralConvertible, CustomStringConvertible, Hashable {
+  case Host
+  case Custom(name: String)
+
   typealias UnicodeScalarLiteralType = StringLiteralType
   typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
-  let name: String
+  var hashValue: Int {
+    switch self {
+    case .Host: return "".hashValue
+    case let .Custom(name: name): return name.hashValue
+    }
+  }
 
   var description: String {
-    return name
+    switch self {
+    case .Host: return ""
+    case let .Custom(name: name): return name
+    }
   }
 
-  var hashValue: Int {
-    return name.hashValue
-  }
-
-  init(name: String) {
-    self.name = name
+  init(name: String?) {
+    switch name {
+    case .None: self = .Host
+    case let .Some(name): self = .Custom(name: name)
+    }
   }
 
   init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-    name = "\(value)"
+    self = .Custom(name: value)
   }
 
   init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-    name = value
+    self = .Custom(name: value)
   }
 
   init(stringLiteral value: StringLiteralType) {
-    name = value
+    self = .Custom(name: value)
+  }
+
+  init(nilLiteral: ()) {
+    self = .Host
   }
 }
 

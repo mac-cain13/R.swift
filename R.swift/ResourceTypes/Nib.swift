@@ -82,10 +82,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = (attributeDict["customClass"]) ?? "UIView"
-
-    let module = customModule.map { Module(name: $0) }
-
-    return Type(module: module, name: customClass)
+    return Type(module: Module(name: customModule), name: customClass)
   }
 
   func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
@@ -93,9 +90,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
       let customModuleProvider = attributeDict["customModuleProvider"]
       let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
       let customClass = attributeDict["customClass"]
-
-      let module = customModule.map { Module(name: $0) }
-      let customType = customClass.map { Type(module: module, name: $0, optional: false) }
+      let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
       let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
 

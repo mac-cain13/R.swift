@@ -36,7 +36,7 @@ struct ImageGenerator: Generator {
     }
 
     externalStruct = Struct(
-      type: Type(name: "image"),
+      type: Type(module: nil, name: "image"),
       implements: [],
       typealiasses: [],
       vars: vars.uniques,
