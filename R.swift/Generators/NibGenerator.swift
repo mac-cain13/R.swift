@@ -57,7 +57,7 @@ struct NibGenerator: Generator {
     usingModules = result.usedModules.union(["UIKit", "Rswift"])
 
     internalStruct = Struct(
-        type: Type(name: "nib"),
+        type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
         vars: [],
@@ -66,7 +66,7 @@ struct NibGenerator: Generator {
       )
 
     externalStruct = Struct(
-        type: Type(name: "nib"),
+        type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
         vars: groupedNibs.uniques.map(NibGenerator.nibVarForNib),
@@ -77,7 +77,7 @@ struct NibGenerator: Generator {
 
   private static func nibVarForNib(nib: Nib) -> Var {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
-    let structType = Type(name: "_R.nib.\(nibStructName)")
+    let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
     return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
   }
 
@@ -85,7 +85,7 @@ struct NibGenerator: Generator {
 
     let instantiateParameters = [
       Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
-      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(name: "[NSObject : AnyObject]", optional: true))
+      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true))
     ]
 
     let bundleVar = Var(
@@ -116,7 +116,7 @@ struct NibGenerator: Generator {
       name: "instantiateWithOwner",
       generics: nil,
       parameters: instantiateParameters,
-      returnType: Type(name: "[AnyObject]"),
+      returnType: Type(module: .StdLib, name: "[AnyObject]"),
       body: "return initialize().instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
     )
 
@@ -144,14 +144,9 @@ struct NibGenerator: Generator {
         type: Type._String,
         getter: "return \"\(reusable.identifier)\""
         )]
-      reuseTypealiasses = [Typealias(alias: Type(name: "ReusableType"), type: reusable.type)]
+      reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
       reuseProtocols = [Type.ReuseIdentifierProtocol]
-
-      if let module = reusable.type.module {
-        usedModules = [module]
-      } else {
-        usedModules = []
-      }
+      usedModules = [reusable.type.module]
     } else {
       reuseIdentifierVars = []
       reuseTypealiasses = []
@@ -163,7 +158,7 @@ struct NibGenerator: Generator {
     return (
       usedModules,
       Struct(
-        type: Type(name: "_\(sanitizedName)"),
+        type: Type(module: .Host, name: "_\(sanitizedName)"),
         implements: [Type.NibResourceProtocol] + reuseProtocols,
         typealiasses: reuseTypealiasses,
         vars: [bundleVar, nameVar] + reuseIdentifierVars,

@@ -29,7 +29,7 @@ struct Struct: CustomStringConvertible {
     let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
 
     let typealiasString = typealiasses
-      .sort { $0.alias.description < $1.alias.description }
+      .sort { $0.alias < $1.alias }
       .joinWithSeparator("\n")
 
     let varsString = vars

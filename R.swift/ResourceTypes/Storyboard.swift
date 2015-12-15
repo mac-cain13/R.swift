@@ -10,15 +10,15 @@ import Foundation
 
 private let ElementNameToTypeMapping = [
   "viewController": Type._UIViewController,
-  "tableViewCell": Type(name: "UITableViewCell"),
-  "tabBarController": Type(name: "UITabBarController"),
+  "tableViewCell": Type(module: "UIKit", name: "UITableViewCell"),
+  "tabBarController": Type(module: "UIKit", name: "UITabBarController"),
   "glkViewController": Type(module: "GLKit", name: "GLKViewController"),
-  "pageViewController": Type(name: "UIPageViewController"),
-  "tableViewController": Type(name: "UITableViewController"),
-  "splitViewController": Type(name: "UISplitViewController"),
-  "navigationController": Type(name: "UINavigationController"),
+  "pageViewController": Type(module: "UIKit", name: "UIPageViewController"),
+  "tableViewController": Type(module: "UIKit", name: "UITableViewController"),
+  "splitViewController": Type(module: "UIKit", name: "UISplitViewController"),
+  "navigationController": Type(module: "UIKit", name: "UINavigationController"),
   "avPlayerViewController": Type(module: "AVKit", name: "AVPlayerViewController"),
-  "collectionViewController": Type(name: "UICollectionViewController"),
+  "collectionViewController": Type(module: "UIKit", name: "UICollectionViewController"),
 ]
 
 struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
@@ -92,9 +92,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         let customModuleProvider = attributeDict["customModuleProvider"]
         let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
         let customClass = attributeDict["customClass"]
-
-        let module = customModule.map { Module(name: $0) }
-        let customType = customClass.map { Type(module: module, name: $0, optional: false) }
+        let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
         let type = customType ?? Type._UIStoryboardSegue
 
@@ -135,9 +133,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-
-    let module = customModule.map { Module(name: $0) }
-    let customType = customClass.map { Type(module: module, name: $0, optional: false) }
+    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
@@ -152,9 +148,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-
-    let module = customModule.map { Module(name: $0) }
-    let customType = customClass.map { Type(module: module, name: $0, optional: false) }
+    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
     
