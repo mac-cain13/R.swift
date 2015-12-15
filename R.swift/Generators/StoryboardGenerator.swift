@@ -40,7 +40,7 @@ struct StoryboardGenerator: Generator {
 
     let instanceFunction = Function(
       isStatic: true,
-      name: "instance",
+      name: "instantiate",
       generics: nil,
       parameters: [],
       returnType: Type._UIStoryboard,
@@ -56,7 +56,7 @@ struct StoryboardGenerator: Generator {
           generics: nil,
           parameters: [],
           returnType: vc.type.asOptional(),
-          body: "return instance().instantiateInitialViewController()\(getterCast)"
+          body: "return instantiate().instantiateInitialViewController()\(getterCast)"
         )
       }
 
@@ -70,7 +70,7 @@ struct StoryboardGenerator: Generator {
             generics: nil,
             parameters: [],
             returnType: vc.type.asOptional(),
-            body: "return instance().instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
+            body: "return instantiate().instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
           )
         }
       }
