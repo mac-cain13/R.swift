@@ -8,11 +8,15 @@
 
 import Foundation
 
-struct Module: StringLiteralConvertible, Hashable {
+struct Module: StringLiteralConvertible, Hashable, CustomStringConvertible {
   typealias UnicodeScalarLiteralType = StringLiteralType
   typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
   let name: String
+
+  var description: String {
+    return name
+  }
 
   var hashValue: Int {
     return name.hashValue
