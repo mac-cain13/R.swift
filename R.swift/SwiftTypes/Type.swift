@@ -10,7 +10,7 @@ import Foundation
 
 typealias TypeVar = String
 
-struct Type: CustomStringConvertible, Equatable, Hashable {
+struct Type: CustomStringConvertible, Hashable {
   static let _Void = Type(name: "Void")
   static let _AnyObject = Type(name: "AnyObject")
   static let _String = Type(name: "String")
@@ -54,7 +54,7 @@ struct Type: CustomStringConvertible, Equatable, Hashable {
   }
 
   var description: String {
-    if module == productModuleName {
+    if module == productModule {
       return Type(module: nil, name: name, genericArgs: genericArgs, optional: optional).fullyQualifiedName
     } else {
       return fullyQualifiedName

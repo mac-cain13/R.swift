@@ -92,7 +92,9 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         let customModuleProvider = attributeDict["customModuleProvider"]
         let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
         let customClass = attributeDict["customClass"]
-        let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+        let module = customModule.map { Module(name: $0) }
+        let customType = customClass.map { Type(module: module, name: $0, optional: false) }
 
         let type = customType ?? Type._UIStoryboardSegue
 
@@ -133,7 +135,9 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let module = customModule.map { Module(name: $0) }
+    let customType = customClass.map { Type(module: module, name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
 
@@ -148,7 +152,9 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-    let customType = customClass.map { Type(module: customModule, name: $0, optional: false) }
+
+    let module = customModule.map { Module(name: $0) }
+    let customType = customClass.map { Type(module: module, name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
     
