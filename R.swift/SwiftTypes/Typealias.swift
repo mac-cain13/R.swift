@@ -9,7 +9,7 @@
 import Foundation
 
 struct Typealias: CustomStringConvertible {
-  let alias: Type
+  let alias: String
   let type: Type?
 
   var description: String {

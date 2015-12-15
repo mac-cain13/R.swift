@@ -8,8 +8,9 @@
 
 import Foundation
 
-enum Module: StringLiteralConvertible, NilLiteralConvertible, CustomStringConvertible, Hashable {
+enum Module: StringLiteralConvertible, CustomStringConvertible, Hashable {
   case Host
+  case StdLib
   case Custom(name: String)
 
   typealias UnicodeScalarLiteralType = StringLiteralType
@@ -17,7 +18,8 @@ enum Module: StringLiteralConvertible, NilLiteralConvertible, CustomStringConver
 
   var hashValue: Int {
     switch self {
-    case .Host: return "".hashValue
+    case .Host: return "--HOSTINGBUNDLE".hashValue
+    case .StdLib: return "--STDLIB".hashValue
     case let .Custom(name: name): return name.hashValue
     }
   }
@@ -25,6 +27,7 @@ enum Module: StringLiteralConvertible, NilLiteralConvertible, CustomStringConver
   var description: String {
     switch self {
     case .Host: return ""
+    case .StdLib: return ""
     case let .Custom(name: name): return name
     }
   }
@@ -46,10 +49,6 @@ enum Module: StringLiteralConvertible, NilLiteralConvertible, CustomStringConver
 
   init(stringLiteral value: StringLiteralType) {
     self = .Custom(name: value)
-  }
-
-  init(nilLiteral: ()) {
-    self = .Host
   }
 }
 

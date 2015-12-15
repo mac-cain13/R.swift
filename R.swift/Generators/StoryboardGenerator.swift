@@ -27,7 +27,7 @@ struct StoryboardGenerator: Generator {
 
     externalFunction = StoryboardGenerator.validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
     externalStruct = Struct(
-        type: Type(module: nil, name: "storyboard"),
+        type: Type(module: .Host, name: "storyboard"),
         implements: [],
         typealiasses: [],
         vars: [],
@@ -104,7 +104,7 @@ struct StoryboardGenerator: Generator {
     )
 
     return Struct(
-      type: Type(module: nil, name: sanitizedSwiftName(storyboard.name)),
+      type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
       implements: [],
       typealiasses: [],
       vars: [],

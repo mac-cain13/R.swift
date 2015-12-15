@@ -56,7 +56,7 @@ struct SegueGenerator: Generator {
       .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
 
     externalStruct = Struct(
-      type: Type(module: nil, name: "segue"),
+      type: Type(module: .Host, name: "segue"),
       implements: [],
       typealiasses: [],
       vars: [],
@@ -68,7 +68,7 @@ struct SegueGenerator: Generator {
   private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
     let vars = seguesWithInfoForSourceType.map { segueWithInfo -> Var in
       let type = Type(
-        module: nil,
+        module: "Rswift",
         name: "StoryboardSegueIdentifier",
         genericArgs: [segueWithInfo.segue.type.description, segueWithInfo.sourceType.description, segueWithInfo.destinationType.description],
         optional: false
@@ -84,7 +84,7 @@ struct SegueGenerator: Generator {
     guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where vars.count > 0 else { return nil }
 
     return Struct(
-      type: Type(module: nil, name: sanitizedSwiftName(sourceType.description)),
+      type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
       implements: [],
       typealiasses: [],
       vars: vars,

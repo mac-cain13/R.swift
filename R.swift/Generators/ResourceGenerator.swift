@@ -57,7 +57,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   generators.forEach { generatorResults.addGenerator($0) }
 
   let externalResourceStruct = Struct(
-    type: Type(module: nil, name: "R"),
+    type: Type(module: .Host, name: "R"),
     implements: [],
     typealiasses: [],
     vars: [],
@@ -66,7 +66,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   )
 
   let internalResourceStruct = Struct(
-    type: Type(module: nil, name: "_R"),
+    type: Type(module: .Host, name: "_R"),
     implements: [],
     typealiasses: [],
     vars: [

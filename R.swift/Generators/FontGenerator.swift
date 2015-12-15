@@ -16,7 +16,7 @@ struct FontGenerator: Generator {
 
   init(fonts: [Font]) {
     externalStruct = Struct(
-      type: Type(module: nil, name: "font"),
+      type: Type(module: .Host, name: "font"),
       implements: [],
       typealiasses: [],
       vars: [],
