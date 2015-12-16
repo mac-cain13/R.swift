@@ -88,12 +88,18 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     case "segue":
-      if let segueIdentifier = attributeDict["identifier"], segueDestination = attributeDict["destination"] {
-        let customModuleProvider = attributeDict["customModuleProvider"]
-        let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
-        let customClass = attributeDict["customClass"]
-        let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
+      let customModuleProvider = attributeDict["customModuleProvider"]
+      let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
+      let customClass = attributeDict["customClass"]
+      let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
+      if let customType = customType where attributeDict["kind"] != "custom" {
+        warn("Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
+      }
+
+      if let segueIdentifier = attributeDict["identifier"],
+        segueDestination = attributeDict["destination"]
+      {
         let type = customType ?? Type._UIStoryboardSegue
 
         let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: segueDestination)
