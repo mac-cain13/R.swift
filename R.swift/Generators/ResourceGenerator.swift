@@ -10,14 +10,12 @@
 import Foundation
 
 protocol Generator {
-  var usingModules: Set<Module> { get }
   var externalFunction: Function? { get }
   var externalStruct: Struct? { get }
   var internalStruct: Struct? { get }
 }
 
 private struct GeneratorResults {
-  var usingModules: Set<Module> = []
   var externalFunctions: [Function] = []
   var externalStructs: [Struct] = []
   var internalStructs: [Struct] = []
@@ -25,8 +23,6 @@ private struct GeneratorResults {
   init() {}
 
   mutating func addGenerator(generator: Generator) {
-    usingModules = usingModules.union(generator.usingModules)
-
     if let externalFunction = generator.externalFunction {
       externalFunctions.append(externalFunction)
     }
@@ -41,7 +37,7 @@ private struct GeneratorResults {
   }
 }
 
-func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Set<Module>, Struct, Struct) {
+func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
 
   let generators: [Generator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
@@ -76,5 +72,5 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
     structs: generatorResults.internalStructs
   )
 
-  return (generatorResults.usingModules, internalResourceStruct, externalResourceStruct)
+  return (internalResourceStruct, externalResourceStruct)
 }

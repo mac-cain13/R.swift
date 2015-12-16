@@ -32,7 +32,6 @@ private let Ordinals = [
 ]
 
 struct NibGenerator: Generator {
-  let usingModules: Set<Module>
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct?
@@ -53,8 +52,6 @@ struct NibGenerator: Generator {
           nibStructs: current.nibStructs + [value.nibStruct]
         )
       }
-
-    usingModules = result.usedModules.union(["UIKit", "Rswift"])
 
     internalStruct = Struct(
         type: Type(module: .Host, name: "nib"),

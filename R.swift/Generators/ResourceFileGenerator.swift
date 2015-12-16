@@ -9,7 +9,6 @@
 import Foundation
 
 struct ResourceFileGenerator: Generator {
-  let usingModules: Set<Module> = []
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil

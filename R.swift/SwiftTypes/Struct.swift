@@ -8,14 +8,25 @@
 
 import Foundation
 
-struct Struct: CustomStringConvertible {
+struct Struct: TypeSequenceProvider, CustomStringConvertible {
   let type: Type
   let implements: [Type]
   let typealiasses: [Typealias]
   let vars: [Var]
   let functions: [Function]
   let structs: [Struct]
-  
+
+  var usedTypes: [Type] {
+    return [
+      [type],
+      implements,
+      typealiasses.flatMap(getUsedTypes),
+      vars.flatMap(getUsedTypes),
+      functions.flatMap(getUsedTypes),
+      structs.flatMap(getUsedTypes),
+      ].flatten()
+  }
+
   init(type: Type, implements: [Type], typealiasses: [Typealias], vars: [Var], functions: [Function], structs: [Struct]) {
     self.type = type
     self.implements = implements

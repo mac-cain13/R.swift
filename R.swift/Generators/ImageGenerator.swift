@@ -9,7 +9,6 @@
 import Foundation
 
 struct ImageGenerator: Generator {
-  let usingModules: Set<Module> = ["UIKit"]
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil

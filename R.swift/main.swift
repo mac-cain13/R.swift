@@ -30,11 +30,22 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-  let (usingModules, internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
+  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
+
+  let usedModules = [internalStruct, externalStruct]
+    .flatMap(getUsedTypes)
+    .map { $0.module }
+
+  let imports = Set(usedModules)
+    .subtract([Module.Custom(name: productModuleName), Module.Host, Module.StdLib])
+    .sortBy { $0.description }
+    .map { "import \($0)" }
+    .joinWithSeparator("\n")
+
 
   let fileContents = [
       Header,
-      usingModules.subtract([Module(name: productModuleName), Module.Host]).map { "import \($0)" }.joinWithSeparator("\n"),
+      imports,
       externalStruct.description,
       internalStruct.description,
     ].joinWithSeparator("\n\n")

@@ -10,7 +10,7 @@ import Foundation
 
 typealias TypeVar = String
 
-struct Type: CustomStringConvertible, Hashable {
+struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let _Void = Type(module: .StdLib, name: "Void")
   static let _AnyObject = Type(module: .StdLib, name: "AnyObject")
   static let _String = Type(module: .StdLib, name: "String")
@@ -34,31 +34,23 @@ struct Type: CustomStringConvertible, Hashable {
   let genericArgs: [TypeVar]
   let optional: Bool
 
-  var fullyQualifiedName: String {
+  var usedTypes: [Type] {
+    return [self]
+  }
+
+  var description: String {
     let optionalString = optional ? "?" : ""
 
     if genericArgs.count > 0 {
       let args = genericArgs.joinWithSeparator(", ")
-      return "\(fullName)<\(args)>\(optionalString)"
+      return "\(name)<\(args)>\(optionalString)"
     }
 
-    return "\(fullName)\(optionalString)"
-  }
-
-  private var fullName: String {
-    if case let	.Custom(name: moduleName) = module {
-      return "\(moduleName).\((name))"
-    }
-
-    return name
-  }
-
-  var description: String {
-    return fullyQualifiedName
+    return "\(name)\(optionalString)"
   }
 
   var hashValue: Int {
-    return fullyQualifiedName.hashValue
+    return description.hashValue
   }
 
   init(module: Module, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {

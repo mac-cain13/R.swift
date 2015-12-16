@@ -9,7 +9,6 @@
 import Foundation
 
 struct ReuseIdentifierGenerator: Generator {
-  let usingModules: Set<Module>
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
@@ -26,11 +25,6 @@ struct ReuseIdentifierGenerator: Generator {
       let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
       warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
     }
-
-    usingModules = Set(Array(groupedReusables
-      .uniques)
-      .flatMap { $0.type.module })
-      .union(["Rswift"])
 
     let reuseIdentifierVars = groupedReusables
       .uniques

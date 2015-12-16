@@ -11,7 +11,6 @@ import Foundation
 typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
 
 struct SegueGenerator: Generator {
-  let usingModules: Set<Module>
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
@@ -45,10 +44,6 @@ struct SegueGenerator: Generator {
       let names = duplicate.map { $0.segue.identifier }.sort().joinWithSeparator(", ")
       warn("Skipping \(duplicate.count) segues for '\(anySegueWithInfo.sourceType)' because symbol '\(sanitizedSwiftName(anySegueWithInfo.segue.identifier))' would be generated for all of these segues, but with a different destination or segue type: \(names)")
     }
-
-    usingModules = Set(Array(groupedSeguesWithInfo.uniques)
-      .flatMap { [$0.segue.type.module, $0.sourceType.module, $0.destinationType.module].flatMap({$0}) })
-      .union(["Rswift"])
 
     let structs = groupedSeguesWithInfo.uniques
       .groupBy { $0.sourceType }

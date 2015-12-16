@@ -8,13 +8,20 @@
 
 import Foundation
 
-struct Function {
+struct Function: TypeSequenceProvider {
   let isStatic: Bool
   let name: String
   let generics: String?
   let parameters: [Parameter]
   let returnType: Type
   let body: String
+
+  var usedTypes: [Type] {
+    return [
+      [returnType],
+      parameters.flatMap(getUsedTypes),
+    ].flatten()
+  }
 
   var callName: String {
     return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
@@ -29,11 +36,15 @@ struct Function {
     return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(bodyString)\n}"
   }
 
-  struct Parameter: CustomStringConvertible {
+  struct Parameter: TypeSequenceProvider, CustomStringConvertible {
     let name: String
     let localName: String?
     let type: Type
     let defaultValue: String?
+
+    var usedTypes: [Type] {
+      return [type]
+    }
 
     var swiftName: String {
       return sanitizedSwiftName(name, lowercaseFirstCharacter: true)

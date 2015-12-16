@@ -9,7 +9,6 @@
 import Foundation
 
 struct FontGenerator: Generator {
-  let usingModules: Set<Module> = ["UIKit"]
   let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
@@ -34,7 +33,7 @@ struct FontGenerator: Generator {
         Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
       ],
       returnType: Type._UIFont.asOptional(),
-      body:"return UIFont(name: \"\(font.name)\", size: size)"
+      body: "return UIFont(name: \"\(font.name)\", size: size)"
     )
   }
 }

@@ -27,6 +27,12 @@ extension SequenceType where Generator.Element : CustomStringConvertible {
   }
 }
 
+extension SequenceType where Generator.Element : SequenceType {
+  func flatten() -> [Generator.Element.Generator.Element] {
+    return flatMap { $0 }
+  }
+}
+
 // MARK: String operations
 
 extension String {

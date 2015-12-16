@@ -9,7 +9,6 @@
 import Foundation
 
 struct StoryboardGenerator: Generator {
-  let usingModules: Set<Module>
   let externalFunction: Function?
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
@@ -21,9 +20,6 @@ struct StoryboardGenerator: Generator {
       let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
       warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
     }
-
-    usingModules = Set(storyboards.flatMap { $0.viewControllers.flatMap({ $0.type.module }) })
-      .union(["UIKit"])
 
     externalFunction = StoryboardGenerator.validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
     externalStruct = Struct(
@@ -119,7 +115,14 @@ struct StoryboardGenerator: Generator {
   }
 
   private static func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-    return Function(isStatic: true, name: "validate", generics: nil, parameters: [], returnType: Type._Void, body: storyboards.map(swiftCallStoryboardValidators).joinWithSeparator("\n"))
+    return Function(
+      isStatic: true,
+      name: "validate",
+      generics: nil,
+      parameters: [],
+      returnType: Type._Void,
+      body: storyboards.map(swiftCallStoryboardValidators).joinWithSeparator("\n")
+    )
   }
 
   private static func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {

@@ -8,9 +8,13 @@
 
 import Foundation
 
-struct Typealias: CustomStringConvertible {
+struct Typealias: TypeSequenceProvider, CustomStringConvertible {
   let alias: String
   let type: Type?
+
+  var usedTypes: [Type] {
+    return [type].flatMap { $0 }
+  }
 
   var description: String {
     let typeString = type.map { " = \($0)" } ?? ""
