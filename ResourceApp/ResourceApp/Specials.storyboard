@@ -28,11 +28,7 @@
         <!--AV Player View Controller-->
         <scene sceneID="zIo-74-upb">
             <objects>
-                <avPlayerViewController storyboardIdentifier="avpVC" videoGravity="AVLayerVideoGravityResizeAspect" id="XiG-bv-YXF" sceneMemberID="viewController">
-                    <connections>
-                        <segue destination="dwB-A3-SIq" kind="show" identifier="mySegue" customClass="Pleh" customModule="Plah" id="Eiw-ot-UTa"/>
-                    </connections>
-                </avPlayerViewController>
+                <avPlayerViewController storyboardIdentifier="avpVC" videoGravity="AVLayerVideoGravityResizeAspect" id="XiG-bv-YXF" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xw8-wH-Wfi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="768" y="421"/>
