@@ -40,7 +40,6 @@ struct ReuseIdentifierGenerator: Generator {
   }
 
   private static func varFromReusable(reusable: Reusable) -> Var {
-    // TODO: Report the generic arguments as used types of this var, now we're missing a module!
     return Var(
       isStatic: true,
       name: reusable.identifier,
