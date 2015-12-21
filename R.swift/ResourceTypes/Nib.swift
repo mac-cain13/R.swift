@@ -88,17 +88,17 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
-    if let reuseIdentifier = attributeDict["reuseIdentifier"] {
-      let customModuleProvider = attributeDict["customModuleProvider"]
-      let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
-      let customClass = attributeDict["customClass"]
-      let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
-
-      let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
-
-      return Reusable(identifier: reuseIdentifier, type: type)
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] where reuseIdentifier != "" else {
+      return nil
     }
-    
-    return nil
+
+    let customModuleProvider = attributeDict["customModuleProvider"]
+    let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
+    let customClass = attributeDict["customClass"]
+    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
+
+    let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
+
+    return Reusable(identifier: reuseIdentifier, type: type)
   }
 }

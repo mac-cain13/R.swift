@@ -147,7 +147,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
-    guard let reuseIdentifier = attributeDict["reuseIdentifier"] else {
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] where reuseIdentifier != "" else {
       return nil
     }
 
