@@ -34,7 +34,7 @@ do {
 
   let usedModules = [internalStruct, externalStruct]
     .flatMap(getUsedTypes)
-    .map { $0.module }
+    .map { $0.type.module }
 
   let imports = Set(usedModules)
     .subtract([Module.Custom(name: productModuleName), Module.Host, Module.StdLib])

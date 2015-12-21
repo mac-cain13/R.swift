@@ -8,7 +8,36 @@
 
 import Foundation
 
-typealias TypeVar = String
+struct TypeVar: TypeSequenceProvider, CustomStringConvertible {
+  let description: String
+  let usedTypes: [UsedType]
+
+  init(type: Type) {
+    assert(type.genericArgs.count == 0, "TypeVars may not have generic args")
+
+    description = type.description
+    usedTypes = [type]
+      .map { $0.withGenericArgs([] as [TypeVar]) } // Defensively handle if there are generic types
+      .flatMap(getUsedTypes)
+  }
+
+  init(description: String, usedTypes: [Type]) {
+    assert(usedTypes.flatMap { $0.genericArgs }.count == 0, "TypeVars may not have generic args")
+
+    self.description = description
+    self.usedTypes = usedTypes
+      .map { $0.withGenericArgs([] as [TypeVar]) } // Defensively handle if there are generic types
+      .flatMap(getUsedTypes)
+  }
+}
+
+struct UsedType {
+  let type: Type
+
+  private init(type: Type) {
+    self.type = type
+  }
+}
 
 struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let _Void = Type(module: .StdLib, name: "Void")
@@ -25,7 +54,7 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let _UIFont = Type(module: "UIKit", name: "UIFont")
   static let _CGFloat = Type(module: .StdLib, name: "CGFloat")
 
-  static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: ["T"])
+  static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierProtocol = Type(module: "Rswift", name: "ReuseIdentifierProtocol")
   static let NibResourceProtocol = Type(module: "Rswift", name: "NibResource")
 
@@ -34,8 +63,8 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   let genericArgs: [TypeVar]
   let optional: Bool
 
-  var usedTypes: [Type] {
-    return [self]
+  var usedTypes: [UsedType] {
+    return [UsedType(type: self)] + genericArgs.flatMap(getUsedTypes)
   }
 
   var description: String {
@@ -60,6 +89,13 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
     self.optional = optional
   }
 
+  init(module: Module, name: String, genericArgs: [Type], optional: Bool = false) {
+    self.module = module
+    self.name = name
+    self.genericArgs = genericArgs.map { TypeVar(type: $0) }
+    self.optional = optional
+  }
+
   func asOptional() -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: true)
   }
@@ -69,6 +105,10 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   }
 
   func withGenericArgs(genericArgs: [TypeVar]) -> Type {
+    return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
+  }
+
+  func withGenericArgs(genericArgs: [Type]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 }

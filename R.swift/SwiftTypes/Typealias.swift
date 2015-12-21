@@ -12,8 +12,8 @@ struct Typealias: TypeSequenceProvider, CustomStringConvertible {
   let alias: String
   let type: Type?
 
-  var usedTypes: [Type] {
-    return [type].flatMap { $0 }
+  var usedTypes: [UsedType] {
+    return type?.usedTypes ?? []
   }
 
   var description: String {

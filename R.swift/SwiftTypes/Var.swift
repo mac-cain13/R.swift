@@ -14,8 +14,8 @@ struct Var: TypeSequenceProvider, CustomStringConvertible {
   let type: Type
   let getter: String
 
-  var usedTypes: [Type] {
-    return [type]
+  var usedTypes: [UsedType] {
+    return type.usedTypes
   }
 
   var callName: String {

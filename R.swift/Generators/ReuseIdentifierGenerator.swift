@@ -44,7 +44,7 @@ struct ReuseIdentifierGenerator: Generator {
     return Var(
       isStatic: true,
       name: reusable.identifier,
-      type: Type.ReuseIdentifier.withGenericArgs([reusable.type.name]),
+      type: Type.ReuseIdentifier.withGenericArgs([reusable.type]),
       getter: "return \(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )
   }

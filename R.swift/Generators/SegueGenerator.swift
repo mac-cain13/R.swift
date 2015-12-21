@@ -65,7 +65,7 @@ struct SegueGenerator: Generator {
       let type = Type(
         module: "Rswift",
         name: "StoryboardSegueIdentifier",
-        genericArgs: [segueWithInfo.segue.type.description, segueWithInfo.sourceType.description, segueWithInfo.destinationType.description],
+        genericArgs: [segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType],
         optional: false
       )
       return Var(

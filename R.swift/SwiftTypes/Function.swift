@@ -16,9 +16,9 @@ struct Function: TypeSequenceProvider {
   let returnType: Type
   let body: String
 
-  var usedTypes: [Type] {
+  var usedTypes: [UsedType] {
     return [
-      [returnType],
+      returnType.usedTypes,
       parameters.flatMap(getUsedTypes),
     ].flatten()
   }
@@ -42,8 +42,8 @@ struct Function: TypeSequenceProvider {
     let type: Type
     let defaultValue: String?
 
-    var usedTypes: [Type] {
-      return [type]
+    var usedTypes: [UsedType] {
+      return type.usedTypes
     }
 
     var swiftName: String {

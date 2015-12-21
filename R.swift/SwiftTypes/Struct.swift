@@ -16,14 +16,14 @@ struct Struct: TypeSequenceProvider, CustomStringConvertible {
   let functions: [Function]
   let structs: [Struct]
 
-  var usedTypes: [Type] {
+  var usedTypes: [UsedType] {
     return [
-      [type],
-      implements,
-      typealiasses.flatMap(getUsedTypes),
-      vars.flatMap(getUsedTypes),
-      functions.flatMap(getUsedTypes),
-      structs.flatMap(getUsedTypes),
+        type.usedTypes,
+        implements.flatMap(getUsedTypes),
+        typealiasses.flatMap(getUsedTypes),
+        vars.flatMap(getUsedTypes),
+        functions.flatMap(getUsedTypes),
+        structs.flatMap(getUsedTypes),
       ].flatten()
   }
 

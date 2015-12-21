@@ -9,9 +9,9 @@
 import Foundation
 
 protocol TypeSequenceProvider {
-  var usedTypes: [Type] { get }
+  var usedTypes: [UsedType] { get }
 }
 
-func getUsedTypes(provider: TypeSequenceProvider) -> [Type] {
+func getUsedTypes(provider: TypeSequenceProvider) -> [UsedType] {
   return provider.usedTypes
 }
