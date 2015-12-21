@@ -9,7 +9,6 @@
 import Foundation
 
 struct StoryboardGenerator: Generator {
-  let externalFunction: Function?
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
 
@@ -21,7 +20,6 @@ struct StoryboardGenerator: Generator {
       warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
     }
 
-    externalFunction = StoryboardGenerator.validateAllFunctionWithStoryboards(groupedStoryboards.uniques)
     externalStruct = Struct(
         type: Type(module: .Host, name: "storyboard"),
         implements: [],
@@ -39,6 +37,7 @@ struct StoryboardGenerator: Generator {
       name: "instantiate",
       generics: nil,
       parameters: [],
+      doesThrow: false,
       returnType: Type._UIStoryboard,
       body: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)"
     )
@@ -51,6 +50,7 @@ struct StoryboardGenerator: Generator {
           name: "initialViewController",
           generics: nil,
           parameters: [],
+          doesThrow: false,
           returnType: vc.type.asOptional(),
           body: "return instantiate().instantiateInitialViewController()\(getterCast)"
         )
@@ -65,6 +65,7 @@ struct StoryboardGenerator: Generator {
             name: $0,
             generics: nil,
             parameters: [],
+            doesThrow: false,
             returnType: vc.type.asOptional(),
             body: "return instantiate().instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
           )
@@ -73,55 +74,35 @@ struct StoryboardGenerator: Generator {
 
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
-        "assert(UIImage(named: \"\($0)\") != nil, \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\")"
+        "if UIImage(named: \"\($0)\") == nil { throw ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
-    let validateImagesFunction = Function(
-      isStatic: true,
-      name: "validateImages",
-      generics: nil,
-      parameters: [],
-      returnType: Type._Void,
-      body: validateImagesLines.joinWithSeparator("\n")
-    )
-
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
         vc.storyboardIdentifier.map {
-          "assert(\(sanitizedSwiftName($0))() != nil, \"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\")"
+          "if \(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
-      }
-    let validateViewControllersFunction = Function(
+    }
+    let validateFunction = Function(
       isStatic: true,
-      name: "validateViewControllers",
+      name: "validate",
       generics: nil,
       parameters: [],
+      doesThrow: true,
       returnType: Type._Void,
-      body: validateViewControllersLines.joinWithSeparator("\n")
+      body: (validateImagesLines + validateViewControllersLines).joinWithSeparator("\n")
     )
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
-      implements: [],
+      implements: [Type.Validatable],
       typealiasses: [],
       vars: [],
       functions: [
         instanceFunction,
         initialViewControllerFunction,
-        validateImagesFunction,
-        validateViewControllersFunction
+        validateFunction,
         ].flatMap{$0} + instantiateViewControllerFunctions,
       structs: []
-    )
-  }
-
-  private static func validateAllFunctionWithStoryboards(storyboards: [Storyboard]) -> Function {
-    return Function(
-      isStatic: true,
-      name: "validate",
-      generics: nil,
-      parameters: [],
-      returnType: Type._Void,
-      body: storyboards.map(swiftCallStoryboardValidators).joinWithSeparator("\n")
     )
   }
 

@@ -11,7 +11,6 @@ import Foundation
 typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
 
 struct SegueGenerator: Generator {
-  let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
 

@@ -10,23 +10,17 @@
 import Foundation
 
 protocol Generator {
-  var externalFunction: Function? { get }
   var externalStruct: Struct? { get }
   var internalStruct: Struct? { get }
 }
 
 private struct GeneratorResults {
-  var externalFunctions: [Function] = []
   var externalStructs: [Struct] = []
   var internalStructs: [Struct] = []
 
   init() {}
 
   mutating func addGenerator(generator: Generator) {
-    if let externalFunction = generator.externalFunction {
-      externalFunctions.append(externalFunction)
-    }
-
     if let externalStruct = generator.externalStruct {
       externalStructs.append(externalStruct)
     }
@@ -57,7 +51,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
     implements: [],
     typealiasses: [],
     vars: [],
-    functions: generatorResults.externalFunctions,
+    functions: [], // TODO: generatorResults.externalFunctions,
     structs: generatorResults.externalStructs
   )
 

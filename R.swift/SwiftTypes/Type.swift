@@ -59,6 +59,7 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierProtocol = Type(module: "Rswift", name: "ReuseIdentifierProtocol")
   static let NibResourceProtocol = Type(module: "Rswift", name: "NibResource")
+  static let Validatable = Type(module: "Rswift", name: "Validatable")
 
   let module: Module
   let name: String

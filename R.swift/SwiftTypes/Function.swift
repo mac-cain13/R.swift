@@ -13,6 +13,7 @@ struct Function: TypeSequenceProvider {
   let name: String
   let generics: String?
   let parameters: [Parameter]
+  let doesThrow: Bool
   let returnType: Type
   let body: String
 
@@ -31,9 +32,10 @@ struct Function: TypeSequenceProvider {
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")
+    let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indentWithString(IndentationString)
-    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(returnString) {\n\(bodyString)\n}"
+    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: TypeSequenceProvider, CustomStringConvertible {
