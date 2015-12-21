@@ -10,7 +10,9 @@ import Foundation
 
 private let ElementNameToTypeMapping = [
   // TODO: Should contain all standard view elements, like button -> UIButton, view -> UIView etc
-  "view": Type._UIView
+  "view": Type._UIView,
+  "tableViewCell": Type._UITableViewCell,
+  "collectionViewCell": Type._UICollectionViewCell,
 ]
 
 struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {

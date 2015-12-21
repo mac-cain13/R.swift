@@ -49,6 +49,8 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let _UIImage = Type(module: "UIKit", name: "UIImage")
   static let _NSBundle = Type(module: "Foundation", name: "NSBundle")
   static let _UIStoryboard = Type(module: "UIKit", name: "UIStoryboard")
+  static let _UITableViewCell = Type(module: "UIKit", name: "UITableViewCell")
+  static let _UICollectionViewCell = Type(module: "UIKit", name: "UICollectionViewCell")
   static let _UIStoryboardSegue = Type(module: "UIKit", name: "UIStoryboardSegue")
   static let _UIViewController = Type(module: "UIKit", name: "UIViewController")
   static let _UIFont = Type(module: "UIKit", name: "UIFont")
