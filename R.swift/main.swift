@@ -11,8 +11,6 @@ import Foundation
 
 let IndentationString = "  "
 
-let productModuleName: String
-
 let ResourceFilename = "R.generated.swift"
 
 private let Header = [
@@ -22,7 +20,6 @@ private let Header = [
 
 do {
   let callInformation = try CallInformation(processInfo: NSProcessInfo.processInfo())
-  productModuleName = callInformation.productModuleName
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
@@ -37,11 +34,10 @@ do {
     .map { $0.type.module }
 
   let imports = Set(usedModules)
-    .subtract([Module.Custom(name: productModuleName), Module.Host, Module.StdLib])
+    .subtract([Module.Custom(name: callInformation.productModuleName), Module.Host, Module.StdLib])
     .sortBy { $0.description }
     .map { "import \($0)" }
     .joinWithSeparator("\n")
-
 
   let fileContents = [
       Header,
