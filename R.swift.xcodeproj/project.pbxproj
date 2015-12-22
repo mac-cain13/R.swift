@@ -10,6 +10,8 @@
 		D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
 		D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE21BE2016E0034F4D7 /* PBXObject.swift */; };
 		D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
+		D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
+		D56F923F1C2942B400177FF7 /* Struct+ChildValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */; };
 		D579466B1B9347C20044D2FC /* XCProjectFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579466A1B9347C20044D2FC /* XCProjectFile.swift */; };
 		D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
 		D586724A1C21FF7D00A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
@@ -84,6 +86,8 @@
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D5646DE21BE2016E0034F4D7 /* PBXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBXObject.swift; sourceTree = "<group>"; };
 		D5646DE31BE2016E0034F4D7 /* Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
+		D56F923C1C29421600177FF7 /* TypeVar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeVar.swift; sourceTree = "<group>"; };
+		D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Struct+ChildValidation.swift"; sourceTree = "<group>"; };
 		D579466A1B9347C20044D2FC /* XCProjectFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCProjectFile.swift; sourceTree = "<group>"; };
 		D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeSequenceProvider.swift; sourceTree = "<group>"; };
 		D59F72251C1963DA0089767C /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 				D5B7997C1C1B07C3009EA901 /* SanitizedSwiftName.swift */,
 				D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */,
 				D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */,
+				D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -246,6 +251,7 @@
 				D59F72281C1963EA0089767C /* Struct.swift */,
 				D59F72251C1963DA0089767C /* Type.swift */,
 				D59F723B1C1964B20089767C /* Typealias.swift */,
+				D56F923C1C29421600177FF7 /* TypeVar.swift */,
 				D59F72381C1964950089767C /* Var.swift */,
 				D5B799821C1B8C78009EA901 /* Module.swift */,
 			);
@@ -407,6 +413,7 @@
 				D59F72391C1964950089767C /* Var.swift in Sources */,
 				D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
+				D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */,
 				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
 				D5F97E401C1815E70066D7C0 /* AssetFolder.swift in Sources */,
 				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
@@ -420,6 +427,7 @@
 				D5B7996C1C1993F8009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
 				D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */,
 				D59F72291C1963EA0089767C /* Struct.swift in Sources */,
+				D56F923F1C2942B400177FF7 /* Struct+ChildValidation.swift in Sources */,
 				D59F72261C1963DA0089767C /* Type.swift in Sources */,
 				D5F97E441C1816790066D7C0 /* ResourceFile.swift in Sources */,
 				D5B799791C19C082009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */,

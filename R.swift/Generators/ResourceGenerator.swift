@@ -47,15 +47,14 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   generators.forEach { generatorResults.addGenerator($0) }
 
   let externalResourceStruct = Struct(
-    type: Type(module: .Host, name: "R"),
-    implements: [],
-    typealiasses: [],
-    vars: [],
-    functions: [],
-    structs: generatorResults.externalStructs
-  )
-
-  let externalResourceStructWithValidation = addChildStructValidationMethods(externalResourceStruct)
+      type: Type(module: .Host, name: "R"),
+      implements: [],
+      typealiasses: [],
+      vars: [],
+      functions: [],
+      structs: generatorResults.externalStructs
+    )
+    .addChildStructValidationMethods()
 
   let internalResourceStruct = Struct(
     type: Type(module: .Host, name: "_R"),
@@ -68,38 +67,5 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
     structs: generatorResults.internalStructs
   )
 
-  return (internalResourceStruct, externalResourceStructWithValidation)
-}
-
-private func addChildStructValidationMethods(origStruct: Struct) -> Struct {
-  if origStruct.implements.contains(Type.Validatable) {
-    return origStruct
-  }
-
-  let innerStructs = origStruct.structs.map(addChildStructValidationMethods)
-
-  let validatableStructs = innerStructs
-    .filter{ $0.implements.contains(Type.Validatable) }
-
-  var outputStruct = origStruct
-  outputStruct.structs = innerStructs
-
-  if validatableStructs.count > 0 {
-    outputStruct.implements.append(Type.Validatable)
-    outputStruct.functions.append(
-      Function(
-        isStatic: true,
-        name: "validate",
-        generics: nil,
-        parameters: [],
-        doesThrow: true,
-        returnType: Type._Void,
-        body: validatableStructs
-          .map { "try \($0.type).validate()" }
-          .joinWithSeparator("\n")
-      )
-    )
-  }
-
-  return outputStruct
+  return (internalResourceStruct, externalResourceStruct)
 }
