@@ -32,7 +32,6 @@ private let Ordinals = [
 ]
 
 struct NibGenerator: Generator {
-  let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct?
 
@@ -104,6 +103,7 @@ struct NibGenerator: Generator {
       name: "initialize",
       generics: nil,
       parameters: [],
+      doesThrow: false,
       returnType: Type._UINib,
       body: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
     )
@@ -113,6 +113,7 @@ struct NibGenerator: Generator {
       name: "instantiateWithOwner",
       generics: nil,
       parameters: instantiateParameters,
+      doesThrow: false,
       returnType: Type(module: .StdLib, name: "[AnyObject]"),
       body: "return initialize().instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
     )
@@ -125,6 +126,7 @@ struct NibGenerator: Generator {
           name: "\($0.ordinal.word)View",
           generics: nil,
           parameters: instantiateParameters,
+          doesThrow: false,
           returnType: $0.view.asOptional(),
           body: "return \(instantiateFunc.callName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
         )

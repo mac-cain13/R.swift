@@ -10,11 +10,11 @@ import Foundation
 
 struct Struct: TypeSequenceProvider, CustomStringConvertible {
   let type: Type
-  let implements: [Type]
+  var implements: [Type]
   let typealiasses: [Typealias]
   let vars: [Var]
-  let functions: [Function]
-  let structs: [Struct]
+  var functions: [Function]
+  var structs: [Struct]
 
   var usedTypes: [UsedType] {
     return [

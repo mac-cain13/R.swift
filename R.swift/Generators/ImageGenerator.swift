@@ -9,7 +9,6 @@
 import Foundation
 
 struct ImageGenerator: Generator {
-  let externalFunction: Function? = nil
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
 
