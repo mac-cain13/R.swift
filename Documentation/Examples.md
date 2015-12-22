@@ -33,16 +33,17 @@ let storyboard = R.storyboard.main.instance
 let initialTabBarController = R.storyboard.main.initialViewController
 let settingsController = R.storyboard.main.settingsController
 
-// Validate at runtime if all images used in the storyboard can be loaded.
-// Uses assertions and only has effect when your app is in debug mode.
-R.storyboard.main.validateImages()
+// Validate at runtime if all images used in the storyboard can be loaded
+// and checks if view controllers with identifiers can be loaded. If not
+// It will assert if something is wrong, only when running in debug mode.
+R.storyboard.main.assertValid()
 
-// Validate if view controllers with identifiers can be loaded
-// Uses assertions and only has effect when your app is in debug mode.
-R.storyboard.main.validateViewControllers()
+// If you want more control you can also use the validate method that
+// throws it's error and always runs even in release builds.
+try R.storyboard.main.validate()
 ```
 
-**Tip:** Use `R.validate()` to call all validation methods at once and put it somewhere into you `AppDelegate`.
+**Tip:** Use `R.assertValid()` to call all validation methods at once and put it somewhere into you `AppDelegate`.
 
 ## Segues
 
