@@ -43,29 +43,24 @@ struct NibGenerator: Generator {
       warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
     }
 
-    let result = groupedNibs.uniques
-      .map(NibGenerator.nibStructForNib)
-      .reduce((usedModules: Set<Module>(), nibStructs: Array<Struct>())) { current, value in
-        (
-          usedModules: current.usedModules.union(value.usedModules),
-          nibStructs: current.nibStructs + [value.nibStruct]
-        )
-      }
-
     internalStruct = Struct(
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
         vars: [],
         functions: [],
-        structs: result.nibStructs
+        structs: groupedNibs
+          .uniques
+          .map(NibGenerator.nibStructForNib)
       )
 
     externalStruct = Struct(
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        vars: groupedNibs.uniques.map(NibGenerator.nibVarForNib),
+        vars: groupedNibs
+          .uniques
+          .map(NibGenerator.nibVarForNib),
         functions: [],
         structs: []
       )
@@ -77,7 +72,7 @@ struct NibGenerator: Generator {
     return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
   }
 
-  private static func nibStructForNib(nib: Nib) -> (usedModules: Set<Module>, nibStruct: Struct) {
+  private static func nibStructForNib(nib: Nib) -> Struct {
 
     let instantiateParameters = [
       Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
@@ -98,26 +93,6 @@ struct NibGenerator: Generator {
       getter: "return \"\(nib.name)\""
     )
 
-    let instantiate = Function(
-      isStatic: false,
-      name: "initialize",
-      generics: nil,
-      parameters: [],
-      doesThrow: false,
-      returnType: Type._UINib,
-      body: "return UINib.init(nibName: \"\(nib.name)\", bundle: _R.hostingBundle)"
-    )
-
-    let instantiateFunc = Function(
-      isStatic: false,
-      name: "instantiateWithOwner",
-      generics: nil,
-      parameters: instantiateParameters,
-      doesThrow: false,
-      returnType: Type(module: .StdLib, name: "[AnyObject]"),
-      body: "return initialize().instantiateWithOwner(ownerOrNil, options: optionsOrNil)"
-    )
-
     let viewFuncs = zip(nib.rootViews, Ordinals)
       .map { (view: $0.0, ordinal: $0.1) }
       .map {
@@ -128,7 +103,7 @@ struct NibGenerator: Generator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: $0.view.asOptional(),
-          body: "return \(instantiateFunc.callName)(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
+          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
         )
     }
 
@@ -154,16 +129,13 @@ struct NibGenerator: Generator {
     }
 
     let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
-    return (
-      usedModules,
-      Struct(
+    return Struct(
         type: Type(module: .Host, name: "_\(sanitizedName)"),
         implements: [Type.NibResourceProtocol] + reuseProtocols,
         typealiasses: reuseTypealiasses,
         vars: [bundleVar, nameVar] + reuseIdentifierVars,
-        functions: [instantiate, instantiateFunc] + viewFuncs,
+        functions: viewFuncs,
         structs: []
       )
-    )
   }
 }
