@@ -12,6 +12,8 @@
 		D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
 		D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
 		D56F923F1C2942B400177FF7 /* Struct+ChildValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */; };
+		D56F92401C29475F00177FF7 /* Struct+ChildValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */; };
+		D56F92411C29476700177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
 		D579466B1B9347C20044D2FC /* XCProjectFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579466A1B9347C20044D2FC /* XCProjectFile.swift */; };
 		D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
 		D586724A1C21FF7D00A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
@@ -364,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5F12D461BDACB87009A2C88 /* UtilExtensions.swift in Sources */,
+				D56F92411C29476700177FF7 /* TypeVar.swift in Sources */,
 				D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* ResourceGenerator.swift in Sources */,
@@ -384,6 +387,7 @@
 				D5B7998A1C1B91A9009EA901 /* Module.swift in Sources */,
 				D5F97E471C1819160066D7C0 /* Resources.swift in Sources */,
 				D59F723A1C1964950089767C /* Var.swift in Sources */,
+				D56F92401C29475F00177FF7 /* Struct+ChildValidation.swift in Sources */,
 				D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */,
 				D5F12D491BDACB90009A2C88 /* Core.swift in Sources */,
 				D586724A1C21FF7D00A760EC /* TypeSequenceProvider.swift in Sources */,
