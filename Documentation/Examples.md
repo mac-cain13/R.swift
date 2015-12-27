@@ -143,12 +143,12 @@ class FaqAnswerController: UITableViewController {
 class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    let talkCellNib = UINib(nibName: "TalkCollectionViewCell", bundle: nil)
-    collectionView?.registerNib(talkCellNib, forCellWithReuseIdentifier: "TalkCollectionViewCell")
+    let talkCellNib = UINib(nibName: "TalkCell", bundle: nil)
+    collectionView?.registerNib(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
   }
 
   override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCollectionViewCell", forIndexPath: indexPath) as! TalkCollectionViewCell
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCellIdentifier", forIndexPath: indexPath) as! TalkCell
     cell.configureCell("Item \(indexPath.item)")
     return cell
   }
@@ -160,11 +160,11 @@ class RecentsController: UICollectionViewController {
 class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    collectionView?.registerNib(R.nib.talkCollectionViewCell)
+    collectionView?.registerNib(R.nib.talkCell)
   }
 
   override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCollectionViewCell, forIndexPath: indexPath)!
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCell, forIndexPath: indexPath)!
     cell.configureCell("Item \(indexPath.item)")
     return cell
   }
