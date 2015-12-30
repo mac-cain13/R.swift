@@ -419,7 +419,7 @@ struct Font {
   let name: String
 
   init(url: NSURL) throws {
-    guard let pathExtension = url.pathExtension where FontExtensions.contains(pathExtension) else {
+    guard let pathExtension = url.pathExtension?.lowercaseString where FontExtensions.contains(pathExtension) else {
       throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: FontExtensions)
     }
 
