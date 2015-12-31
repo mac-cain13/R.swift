@@ -17,7 +17,7 @@ extension WhiteListedExtensionsResourceType {
   static func throwIfUnsupportedExtension(pathExtension: String?) throws {
     let pathExtension = pathExtension ?? ""
     
-    if !supportedExtensions.contains(pathExtension) {
+    if !supportedExtensions.contains(pathExtension.lowercaseString) {
       throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: supportedExtensions)
     }
   }
