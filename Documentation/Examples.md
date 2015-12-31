@@ -101,9 +101,7 @@ let customView = R.nib.customView.firstView(nil, options: nil)
 let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 ```
 
-## Reusable cells
-
-**Note:** This is a table view example, R.swift also supports collection views in the same way.
+## Reusable table view cells
 
 *Vanilla*
 ```swift
@@ -134,6 +132,41 @@ class FaqAnswerController: UITableViewController {
     let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.reuseIdentifier, forIndexPath: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
+  }
+}
+```
+
+## Reusable collection view cells
+
+*Vanilla*
+```swift
+class RecentsController: UICollectionViewController {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let talkCellNib = UINib(nibName: "TalkCell", bundle: nil)
+    collectionView?.registerNib(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
+  }
+
+  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCellIdentifier", forIndexPath: indexPath) as! TalkCell
+    cell.configureCell("Item \(indexPath.item)")
+    return cell
+  }
+}
+```
+
+*With R.swift*
+```swift
+class RecentsController: UICollectionViewController {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    collectionView?.registerNib(R.nib.talkCell)
+  }
+
+  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCell, forIndexPath: indexPath)!
+    cell.configureCell("Item \(indexPath.item)")
+    return cell
   }
 }
 ```
