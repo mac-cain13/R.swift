@@ -110,7 +110,6 @@ struct NibGenerator: Generator {
     let reuseIdentifierVars: [Var]
     let reuseProtocols: [Type]
     let reuseTypealiasses: [Typealias]
-    let usedModules: Set<Module>
     if let reusable = nib.reusables.first where nib.rootViews.count == 1 && nib.reusables.count == 1 {
       reuseIdentifierVars = [Var(
         isStatic: false,
@@ -120,12 +119,10 @@ struct NibGenerator: Generator {
         )]
       reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
       reuseProtocols = [Type.ReuseIdentifierProtocol]
-      usedModules = [reusable.type.module]
     } else {
       reuseIdentifierVars = []
       reuseTypealiasses = []
       reuseProtocols = []
-      usedModules = []
     }
 
     let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
