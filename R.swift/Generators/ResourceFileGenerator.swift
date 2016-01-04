@@ -20,22 +20,32 @@ struct ResourceFileGenerator: Generator {
       warn("Skipping \(duplicate.count) resource files because symbol '\(sanitizedSwiftName(duplicate.first!.fullname))' would be generated for all of these files: \(names)")
     }
 
-    let resourceVars = groupedResourceFiles
+    let resourceStructs = groupedResourceFiles
       .uniques
-      .map(ResourceFileGenerator.varFromResourceFile)
+      .map(ResourceFileGenerator.structFromResourceFile)
 
     externalStruct = Struct(
       type: Type(module: .Host, name: "file"),
       implements: [],
       typealiasses: [],
-      vars: resourceVars,
+      vars: [],
       functions: [],
-      structs: []
+      structs: resourceStructs
     )
   }
 
-  private static func varFromResourceFile(resourceFile: ResourceFile) -> Var {
+  private static func structFromResourceFile(resourceFile: ResourceFile) -> Struct {
     let pathExtensionOrNilString = resourceFile.pathExtension ?? "nil"
-    return Var(isStatic: true, name: resourceFile.fullname, type: Type._NSURL.asOptional(), getter: "return _R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
+
+    return Struct(
+      type: Type(module: .Host, name: sanitizedSwiftName(resourceFile.fullname, lowercaseFirstCharacter: true)),
+      implements: [],
+      typealiasses: [],
+      vars: [
+        Var(isStatic: true, name: "url", type: Type._NSURL.asOptional(), getter: "return _R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
+      ],
+      functions: [],
+      structs: []
+    )
   }
 }

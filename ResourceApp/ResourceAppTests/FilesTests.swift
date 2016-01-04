@@ -13,6 +13,6 @@ import XCTest
 class FilesTests: XCTestCase {
 
   func testNoNilResourceFiles() {
-    XCTAssertNotNil(R.file.someJson)
+    XCTAssertNotNil(R.file.someJson.url)
   }
 }
