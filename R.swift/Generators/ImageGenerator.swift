@@ -71,7 +71,7 @@ struct ImageGenerator: Generator {
       type: Type(module: .Host, name: "image"),
       implements: [],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: functions.uniques,
       structs: []
     )

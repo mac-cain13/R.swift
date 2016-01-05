@@ -47,7 +47,7 @@ struct NibGenerator: Generator {
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        vars: [],
+        properties: [],
         functions: [],
         structs: groupedNibs
           .uniques
@@ -58,7 +58,7 @@ struct NibGenerator: Generator {
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        vars: groupedNibs
+        properties: groupedNibs
           .uniques
           .map(NibGenerator.nibVarForNib),
         functions: [],
@@ -66,10 +66,10 @@ struct NibGenerator: Generator {
       )
   }
 
-  private static func nibVarForNib(nib: Nib) -> Var {
+  private static func nibVarForNib(nib: Nib) -> Let {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
     let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
-    return Var(isStatic: true, name: nib.name, type: structType, getter: "return \(structType)()")
+    return Let(isStatic: true, name: nib.name, type: nil, value: "\(structType)()")
   }
 
   private static func nibStructForNib(nib: Nib) -> Struct {
@@ -79,18 +79,18 @@ struct NibGenerator: Generator {
       Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true))
     ]
 
-    let bundleVar = Var(
+    let bundleLet: Property = Let(
       isStatic: false,
       name: "bundle",
-      type: Type._NSBundle.asOptional(),
-      getter: "return _R.hostingBundle"
+      type: nil,
+      value: "_R.hostingBundle"
     )
 
-    let nameVar = Var(
+    let nameVar: Property = Let(
       isStatic: false,
       name: "name",
-      type: Type._String,
-      getter: "return \"\(nib.name)\""
+      type: nil,
+      value: "\"\(nib.name)\""
     )
 
     let viewFuncs = zip(nib.rootViews, Ordinals)
@@ -105,22 +105,22 @@ struct NibGenerator: Generator {
           returnType: $0.view.asOptional(),
           body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
         )
-    }
+      }
 
-    let reuseIdentifierVars: [Var]
+    let reuseIdentifierProperties: [Property]
     let reuseProtocols: [Type]
     let reuseTypealiasses: [Typealias]
     if let reusable = nib.reusables.first where nib.rootViews.count == 1 && nib.reusables.count == 1 {
-      reuseIdentifierVars = [Var(
+      reuseIdentifierProperties = [Let(
         isStatic: false,
         name: "identifier",
-        type: Type._String,
-        getter: "return \"\(reusable.identifier)\""
+        type: nil,
+        value: "\"\(reusable.identifier)\""
         )]
       reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
       reuseProtocols = [Type.ReuseIdentifierProtocol]
     } else {
-      reuseIdentifierVars = []
+      reuseIdentifierProperties = []
       reuseTypealiasses = []
       reuseProtocols = []
     }
@@ -130,7 +130,7 @@ struct NibGenerator: Generator {
         type: Type(module: .Host, name: "_\(sanitizedName)"),
         implements: [Type.NibResourceProtocol] + reuseProtocols,
         typealiasses: reuseTypealiasses,
-        vars: [bundleVar, nameVar] + reuseIdentifierVars,
+        properties: [bundleLet, nameVar] + reuseIdentifierProperties,
         functions: viewFuncs,
         structs: []
       )

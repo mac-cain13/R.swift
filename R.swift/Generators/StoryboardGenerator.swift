@@ -24,7 +24,7 @@ struct StoryboardGenerator: Generator {
         type: Type(module: .Host, name: "storyboard"),
         implements: [],
         typealiasses: [],
-        vars: [],
+        properties: [],
         functions: [],
         structs: groupedStoryboards.uniques.map(StoryboardGenerator.storyboardStructForStoryboard)
       )
@@ -96,7 +96,7 @@ struct StoryboardGenerator: Generator {
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
       implements: [Type.Validatable],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: [
         instanceFunction,
         initialViewControllerFunction,

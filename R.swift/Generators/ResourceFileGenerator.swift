@@ -28,7 +28,7 @@ struct ResourceFileGenerator: Generator {
       type: Type(module: .Host, name: "file"),
       implements: [],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: [],
       structs: resourceStructs
     )
@@ -41,8 +41,8 @@ struct ResourceFileGenerator: Generator {
       type: Type(module: .Host, name: sanitizedSwiftName(resourceFile.fullname, lowercaseFirstCharacter: true)),
       implements: [],
       typealiasses: [],
-      vars: [
-        Var(isStatic: true, name: "url", type: Type._NSURL.asOptional(), getter: "return _R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
+      properties: [
+        Let(isStatic: true, name: "url", type: nil, value: "_R.hostingBundle?.URLForResource(\"\(resourceFile.filename)\", withExtension: \"\(pathExtensionOrNilString)\")")
       ],
       functions: [],
       structs: []

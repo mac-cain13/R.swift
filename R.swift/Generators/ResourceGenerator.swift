@@ -50,7 +50,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       type: Type(module: .Host, name: "R"),
       implements: [],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: [],
       structs: generatorResults.externalStructs
     )
@@ -60,8 +60,8 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
     type: Type(module: .Host, name: "_R"),
     implements: [],
     typealiasses: [],
-    vars: [
-      Var(isStatic: true, name: "hostingBundle", type: Type._NSBundle.asOptional(), getter: "return NSBundle(identifier: \"\(bundleIdentifier)\")")
+    properties: [
+      Let(isStatic: true, name: "hostingBundle", type: nil, value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
     ],
     functions: [],
     structs: generatorResults.internalStructs

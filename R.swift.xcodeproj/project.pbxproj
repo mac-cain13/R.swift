@@ -32,6 +32,10 @@
 		D59F723D1C1964B20089767C /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723B1C1964B20089767C /* Typealias.swift */; };
 		D59F723F1C19651F0089767C /* ReusableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723E1C19651F0089767C /* ReusableContainer.swift */; };
 		D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723E1C19651F0089767C /* ReusableContainer.swift */; };
+		D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129AE1C3BA5F900A1C5FC /* Let.swift */; };
+		D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129B01C3BA65C00A1C5FC /* Property.swift */; };
+		D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129B01C3BA65C00A1C5FC /* Property.swift */; };
+		D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129AE1C3BA5F900A1C5FC /* Let.swift */; };
 		D5B799641C19937C009EA901 /* ImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799631C19937C009EA901 /* ImageGenerator.swift */; };
 		D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799651C19939D009EA901 /* SegueGenerator.swift */; };
 		D5B799681C1993B7009EA901 /* StoryboardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */; };
@@ -98,6 +102,8 @@
 		D59F72381C1964950089767C /* Var.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Var.swift; sourceTree = "<group>"; };
 		D59F723B1C1964B20089767C /* Typealias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D59F723E1C19651F0089767C /* ReusableContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableContainer.swift; sourceTree = "<group>"; };
+		D5B129AE1C3BA5F900A1C5FC /* Let.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Let.swift; sourceTree = "<group>"; };
+		D5B129B01C3BA65C00A1C5FC /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		D5B799631C19937C009EA901 /* ImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGenerator.swift; sourceTree = "<group>"; };
 		D5B799651C19939D009EA901 /* SegueGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueGenerator.swift; sourceTree = "<group>"; };
 		D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardGenerator.swift; sourceTree = "<group>"; };
@@ -254,6 +260,8 @@
 				D59F72251C1963DA0089767C /* Type.swift */,
 				D59F723B1C1964B20089767C /* Typealias.swift */,
 				D56F923C1C29421600177FF7 /* TypeVar.swift */,
+				D5B129B01C3BA65C00A1C5FC /* Property.swift */,
+				D5B129AE1C3BA5F900A1C5FC /* Let.swift */,
 				D59F72381C1964950089767C /* Var.swift */,
 				D5B799821C1B8C78009EA901 /* Module.swift */,
 			);
@@ -371,6 +379,7 @@
 				D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* ResourceGenerator.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
+				D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */,
 				D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */,
 				D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */,
 				D5B799751C199755009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
@@ -397,6 +406,7 @@
 				D5B7997A1C19C1BD009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */,
 				D59F722A1C1963EA0089767C /* Struct.swift in Sources */,
 				D5B799731C199755009EA901 /* NibGenerator.swift in Sources */,
+				D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */,
 				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
 				D5B799801C1B0943009EA901 /* SanitizedSwiftName.swift in Sources */,
 				D5B799711C199755009EA901 /* FontGenerator.swift in Sources */,
@@ -416,6 +426,7 @@
 				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,
 				D59F72391C1964950089767C /* Var.swift in Sources */,
 				D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */,
+				D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
 				D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */,
 				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
@@ -441,6 +452,7 @@
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
+				D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */,
 				D5B7997D1C1B07C3009EA901 /* SanitizedSwiftName.swift in Sources */,
 				D5B799681C1993B7009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5B799701C199420009EA901 /* FontGenerator.swift in Sources */,

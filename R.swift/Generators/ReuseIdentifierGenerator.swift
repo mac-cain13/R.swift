@@ -25,26 +25,26 @@ struct ReuseIdentifierGenerator: Generator {
       warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
     }
 
-    let reuseIdentifierVars = groupedReusables
+    let reuseIdentifierProperties: [Property] = groupedReusables
       .uniques
-      .map(ReuseIdentifierGenerator.varFromReusable)
+      .map(ReuseIdentifierGenerator.letFromReusable)
 
     externalStruct = Struct(
       type: Type(module: .Host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      vars: reuseIdentifierVars,
+      properties: reuseIdentifierProperties,
       functions: [],
       structs: []
     )
   }
 
-  private static func varFromReusable(reusable: Reusable) -> Var {
-    return Var(
+  private static func letFromReusable(reusable: Reusable) -> Let {
+    return Let(
       isStatic: true,
       name: reusable.identifier,
       type: Type.ReuseIdentifier.withGenericArgs([reusable.type]),
-      getter: "return \(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
+      value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )
   }
 }

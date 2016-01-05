@@ -17,7 +17,7 @@ struct FontGenerator: Generator {
       type: Type(module: .Host, name: "font"),
       implements: [],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: fonts.map(FontGenerator.fontFunctionFromFont),
       structs: []
     )

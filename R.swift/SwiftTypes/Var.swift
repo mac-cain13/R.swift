@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Var: TypeSequenceProvider, CustomStringConvertible {
+struct Var: Property {
   let isStatic: Bool
   let name: String
   let type: Type
@@ -16,10 +16,6 @@ struct Var: TypeSequenceProvider, CustomStringConvertible {
 
   var usedTypes: [UsedType] {
     return type.usedTypes
-  }
-
-  var callName: String {
-    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
   }
 
   var description: String {

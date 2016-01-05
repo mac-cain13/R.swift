@@ -53,35 +53,35 @@ struct SegueGenerator: Generator {
       type: Type(module: .Host, name: "segue"),
       implements: [],
       typealiasses: [],
-      vars: [],
+      properties: [],
       functions: [],
       structs: structs
     )
   }
 
   private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
-    let vars = seguesWithInfoForSourceType.map { segueWithInfo -> Var in
+    let properties: [Property] = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
       let type = Type(
         module: "Rswift",
         name: "StoryboardSegueIdentifier",
         genericArgs: [segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType],
         optional: false
       )
-      return Var(
+      return Let(
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         type: type,
-        getter: "return StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
+        value: "StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
       )
     }
 
-    guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where vars.count > 0 else { return nil }
+    guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where properties.count > 0 else { return nil }
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
       implements: [],
       typealiasses: [],
-      vars: vars,
+      properties: properties,
       functions: [],
       structs: []
     )
