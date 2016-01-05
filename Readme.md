@@ -18,7 +18,7 @@ let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
 
 With R.swift it becomes:
 ```swift
-let icon = R.image.settingsIcon
+let icon = R.image.settingsIcon()
 let font = R.font.sanFrancisco(size: 42)
 let viewController = CustomViewController(nib: R.nib.customView)
 ```

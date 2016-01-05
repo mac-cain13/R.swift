@@ -14,8 +14,8 @@ let gradientBackground = UIImage(named: "gradient.jpg")
 
 *With R.swift*
 ```swift
-let settingsIcon = R.image.settingsIcon
-let gradientBackground = R.image.gradientJpg
+let settingsIcon = R.image.settingsIcon()
+let gradientBackground = R.image.gradientJpg()
 ```
 
 ## Storyboards
@@ -94,7 +94,7 @@ let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: 
 *With R.swift*
 ```swift
 let nameOfNib = R.nib.customView.name
-let customViewNib = R.nib.customView
+let customViewNib = R.nib.customView.initialize()
 let rootViews = R.nib.customView.instantiateWithOwner(nil, options: nil)
 let customView = R.nib.customView.firstView(nil, options: nil)
 
