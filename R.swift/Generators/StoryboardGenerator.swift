@@ -81,7 +81,8 @@ struct StoryboardGenerator: Generator {
         vc.storyboardIdentifier.map {
           "if \(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
-    }
+      }
+
     let validateFunction = Function(
       isStatic: true,
       name: "validate",
@@ -104,11 +105,5 @@ struct StoryboardGenerator: Generator {
         ].flatMap{$0} + instantiateViewControllerFunctions,
       structs: []
     )
-  }
-
-  private static func swiftCallStoryboardValidators(storyboard: Storyboard) -> String {
-    return
-      "storyboard.\(sanitizedSwiftName(storyboard.name)).validateImages()\n" +
-    "storyboard.\(sanitizedSwiftName(storyboard.name)).validateViewControllers()"
   }
 }
