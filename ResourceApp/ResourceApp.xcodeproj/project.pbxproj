@@ -171,6 +171,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
 				D55C6CB91B5D757300301B0D /* Products */,
@@ -220,7 +221,6 @@
 		D55C6CBB1B5D757300301B0D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBC1B5D757300301B0D /* Info.plist */,
 			);
 			name = "Supporting Files";
