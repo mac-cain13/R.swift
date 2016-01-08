@@ -129,7 +129,7 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.reuseIdentifier, forIndexPath: indexPath)!
+    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.identifier, forIndexPath: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
   }
