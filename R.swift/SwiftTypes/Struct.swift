@@ -9,6 +9,7 @@
 import Foundation
 
 struct Struct: TypeSequenceProvider, CustomStringConvertible {
+  var accessModifier: AccessModifier = .Internal
   let type: Type
   var implements: [Type]
   let typealiasses: [Typealias]
@@ -27,6 +28,16 @@ struct Struct: TypeSequenceProvider, CustomStringConvertible {
       ].flatten()
   }
 
+  init(accessModifier: AccessModifier, type: Type, implements: [Type], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+    self.accessModifier = accessModifier
+    self.type = type
+    self.implements = implements
+    self.typealiasses = typealiasses
+    self.properties = properties
+    self.functions = functions
+    self.structs = structs
+  }
+
   init(type: Type, implements: [Type], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
     self.type = type
     self.implements = implements
@@ -37,6 +48,7 @@ struct Struct: TypeSequenceProvider, CustomStringConvertible {
   }
 
   var description: String {
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
 
     let typealiasString = typealiasses
@@ -57,6 +69,6 @@ struct Struct: TypeSequenceProvider, CustomStringConvertible {
 
     let bodyComponents = [typealiasString, varsString, functionsString, structsString].filter { $0 != "" }
     let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
-    return "struct \(type)\(implementsString) {\n\(bodyString)\n}"
+    return "\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }

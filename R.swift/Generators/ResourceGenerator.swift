@@ -46,26 +46,47 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   var generatorResults = GeneratorResults()
   generators.forEach { generatorResults.addGenerator($0) }
 
+  let internalResourceStruct = Struct(
+      type: Type(module: .Host, name: "_R"),
+      implements: [],
+      typealiasses: [],
+      properties: [
+        Let(isStatic: true, name: "hostingBundle", type: nil, value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
+      ],
+      functions: [],
+      structs: generatorResults.internalStructs
+    )
+    .addChildStructValidationMethods()
+
+  let privateValidationStruct = Struct(
+    accessModifier: .Private,
+    type: Type(module: .Host, name: "intern"),
+    implements: [Type.Validatable],
+    typealiasses: [],
+    properties: [],
+    functions: [
+      Function(
+        isStatic: true,
+        name: "validate",
+        generics: nil,
+        parameters: [],
+        doesThrow: true,
+        returnType: Type._Void,
+        body: "try \(internalResourceStruct.type).validate()"
+      )
+    ],
+    structs: []
+  )
+
   let externalResourceStruct = Struct(
       type: Type(module: .Host, name: "R"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: generatorResults.externalStructs
+      structs: generatorResults.externalStructs + [privateValidationStruct]
     )
     .addChildStructValidationMethods()
-
-  let internalResourceStruct = Struct(
-    type: Type(module: .Host, name: "_R"),
-    implements: [],
-    typealiasses: [],
-    properties: [
-      Let(isStatic: true, name: "hostingBundle", type: nil, value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
-    ],
-    functions: [],
-    structs: generatorResults.internalStructs
-  )
 
   return (internalResourceStruct, externalResourceStruct)
 }

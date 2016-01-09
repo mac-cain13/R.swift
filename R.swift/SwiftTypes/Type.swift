@@ -36,6 +36,8 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
 
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierProtocol = Type(module: "Rswift", name: "ReuseIdentifierProtocol")
+  static let StoryboardResource = Type(module: "Rswift", name: "StoryboardResource")
+  static let StoryboardResourceWithInitialControllerProtocol = Type(module: "Rswift", name: "StoryboardResourceWithInitialController")
   static let NibResourceProtocol = Type(module: "Rswift", name: "NibResource")
   static let FileResourceProtocol = Type(module: "Rswift", name: "FileResource")
   static let FontResourceProtocol = Type(module: "Rswift", name: "FontResource")

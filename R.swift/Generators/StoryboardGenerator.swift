@@ -10,7 +10,7 @@ import Foundation
 
 struct StoryboardGenerator: Generator {
   let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+  let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
     let groupedStoryboards = storyboards.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
@@ -20,54 +20,45 @@ struct StoryboardGenerator: Generator {
       warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
     }
 
+    let storyboardStructs = groupedStoryboards
+      .uniques
+      .map(StoryboardGenerator.storyboardStructForStoryboard)
+
     externalStruct = Struct(
         type: Type(module: .Host, name: "storyboard"),
         implements: [],
         typealiasses: [],
-        properties: [],
+        properties: storyboardStructs.map {
+          Let(isStatic: false, name: $0.type.name, type: nil, value: "_R.storyboard.\($0.type.name)()")
+        },
         functions: [],
-        structs: groupedStoryboards.uniques.map(StoryboardGenerator.storyboardStructForStoryboard)
+        structs: []
       )
+
+    internalStruct = Struct(
+      type: Type(module: .Host, name: "storyboard"),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: [],
+      structs: storyboardStructs
+    )
   }
 
   private static func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
-
-    let instanceFunction = Function(
-      isStatic: true,
-      name: "instantiate",
-      generics: nil,
-      parameters: [],
-      doesThrow: false,
-      returnType: Type._UIStoryboard,
-      body: "return UIStoryboard(name: \"\(storyboard.name)\", bundle: _R.hostingBundle)"
-    )
-
-    let initialViewControllerFunction = storyboard.initialViewController
-      .map { (vc) -> Function in
-        let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
-        return Function(
-          isStatic: true,
-          name: "initialViewController",
-          generics: nil,
-          parameters: [],
-          doesThrow: false,
-          returnType: vc.type.asOptional(),
-          body: "return instantiate().instantiateInitialViewController()\(getterCast)"
-        )
-      }
 
     let instantiateViewControllerFunctions = storyboard.viewControllers
       .flatMap { (vc) -> Function? in
         let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
         return vc.storyboardIdentifier.map {
           Function(
-            isStatic: true,
+            isStatic: false,
             name: $0,
             generics: nil,
             parameters: [],
             doesThrow: false,
             returnType: vc.type.asOptional(),
-            body: "return instantiate().instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
+            body: "return UIStoryboard(resource: self).instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
           )
         }
       }
@@ -79,9 +70,18 @@ struct StoryboardGenerator: Generator {
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
         vc.storyboardIdentifier.map {
-          "if \(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
+          "if \(sanitizedSwiftName(storyboard.name))().\(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
       }
+
+    var implements = [Type.Validatable]
+    var typealiasses: [Typealias] = []
+    if let initialViewController = storyboard.initialViewController {
+      implements.append(Type.StoryboardResourceWithInitialControllerProtocol)
+      typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
+    } else {
+      implements.append(Type.StoryboardResource)
+    }
 
     let validateFunction = Function(
       isStatic: true,
@@ -95,14 +95,15 @@ struct StoryboardGenerator: Generator {
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
-      implements: [Type.Validatable],
-      typealiasses: [],
-      properties: [],
+      implements: implements,
+      typealiasses: typealiasses,
+      properties: [
+        Let(isStatic: false, name: "name", type: nil, value: "\"\(storyboard.name)\""),
+        Let(isStatic: false, name: "bundle", type: nil, value: "_R.hostingBundle"),
+      ],
       functions: [
-        instanceFunction,
-        initialViewControllerFunction,
         validateFunction,
-        ].flatMap{$0} + instantiateViewControllerFunctions,
+        ] + instantiateViewControllerFunctions,
       structs: []
     )
   }
