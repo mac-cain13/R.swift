@@ -29,7 +29,7 @@ struct StoryboardGenerator: Generator {
         implements: [],
         typealiasses: [],
         properties: storyboardStructs.map {
-          Let(isStatic: false, name: $0.type.name, type: nil, value: "_R.storyboard.\($0.type.name)()")
+          Let(isStatic: true, name: $0.type.name, type: nil, value: "_R.storyboard.\($0.type.name)()")
         },
         functions: [],
         structs: []
