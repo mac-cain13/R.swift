@@ -22,6 +22,7 @@
 		D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC81B5D757300301B0D /* LaunchScreen.xib */; };
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
+		D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76F1C42A5E700623437 /* StoryboardTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
 		D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C901B78FC0500A8B96C /* duplicate.xib */; };
@@ -87,6 +88,7 @@
 		D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResourceAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
+		D56DC76F1C42A5E700623437 /* StoryboardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
 		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = duplicate.xib; path = Duplicate/duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
@@ -229,12 +231,13 @@
 		D55C6CD21B5D757300301B0D /* ResourceAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
-				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
-				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
-				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
-				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
+				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
+				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
+				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
+				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
+				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
+				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
 			path = ResourceAppTests;
@@ -481,6 +484,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
+				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
