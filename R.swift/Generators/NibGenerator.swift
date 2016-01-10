@@ -91,7 +91,7 @@ struct NibGenerator: Generator {
   private static func nibStructForNib(nib: Nib) -> Struct {
 
     let instantiateParameters = [
-      Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
+      Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
       Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true), defaultValue: "nil")
     ]
 
