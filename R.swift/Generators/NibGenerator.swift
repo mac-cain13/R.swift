@@ -92,7 +92,7 @@ struct NibGenerator: Generator {
 
     let instantiateParameters = [
       Function.Parameter(name: "ownerOrNil", type: Type._AnyObject.asOptional()),
-      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true))
+      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true), defaultValue: "nil")
     ]
 
     let bundleLet: Property = Let(

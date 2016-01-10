@@ -93,9 +93,9 @@ let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: 
 *With R.swift*
 ```swift
 let nameOfNib = R.nib.customView.name
-let customViewNib = R.nib.customView.initialize()
-let rootViews = R.nib.customView.instantiateWithOwner(nil, options: nil)
-let customView = R.nib.customView.firstView(nil, options: nil)
+let customViewNib = R.nib.customView()
+let rootViews = R.nib.customView.instantiateWithOwner(nil)
+let customView = R.nib.customView.firstView(nil)
 
 let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 ```
