@@ -187,9 +187,11 @@ let lightFontTitle = R.font.acmeLight(size: 22)
 *Vanilla*
 ```swift
 let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
+let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension: "json")
 ```
 
 *With R.swift*
 ```swift
-let jsonURL = R.file.seedDataJson
+let jsonURL: NSURL = R.file.seedDataJson()
+let jsonPath: String = R.file.seedDataJson()
 ```
