@@ -31,7 +31,19 @@ struct StoryboardGenerator: Generator {
         properties: storyboardStructs.map {
           Let(isStatic: true, name: $0.type.name, type: nil, value: "_R.storyboard.\($0.type.name)()")
         },
-        functions: [],
+        functions: storyboardStructs.map {
+          Function(
+            isStatic: true,
+            name: $0.type.name,
+            generics: nil,
+            parameters: [
+              Function.Parameter(name: "_", type: Type._Void)
+            ],
+            doesThrow: false,
+            returnType: Type._UIStoryboard,
+            body: "return UIStoryboard(resource: R.storyboard.\($0.type.name))"
+          )
+        },
         structs: []
       )
 

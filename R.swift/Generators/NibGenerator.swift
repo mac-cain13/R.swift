@@ -61,9 +61,25 @@ struct NibGenerator: Generator {
         properties: groupedNibs
           .uniques
           .map(NibGenerator.nibVarForNib),
-        functions: [],
+      functions: groupedNibs
+        .uniques
+        .map(NibGenerator.nibFuncForNib),
         structs: []
       )
+  }
+
+  private static func nibFuncForNib(nib: Nib) -> Function {
+    return Function(
+      isStatic: true,
+      name: nib.name,
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "_", type: Type._Void)
+      ],
+      doesThrow: false,
+      returnType: Type._UINib,
+      body: "return UINib(resource: R.nib.\(sanitizedSwiftName(nib.name)))"
+    )
   }
 
   private static func nibVarForNib(nib: Nib) -> Let {

@@ -31,7 +31,34 @@ struct ResourceFileGenerator: Generator {
           let pathExtensionOrNilString = $0.pathExtension.map { "\"\($0)\"" } ?? "nil"
           return Let(isStatic: true, name: $0.fullname, type: nil, value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))")
         },
-      functions: [],
+      functions: groupedResourceFiles
+        .uniques
+        .flatMap {
+          [
+            Function(
+              isStatic: true,
+              name: $0.fullname,
+              generics: nil,
+              parameters: [
+                Function.Parameter(name: "_", type: Type._Void)
+              ],
+              doesThrow: false,
+              returnType: Type._NSURL.asOptional(),
+              body: "return R.file.\(sanitizedSwiftName($0.fullname)).bundle?.URLForResource(R.file.\(sanitizedSwiftName($0.fullname)))"
+            ),
+            Function(
+              isStatic: true,
+              name: $0.fullname,
+              generics: nil,
+              parameters: [
+                Function.Parameter(name: "_", type: Type._Void)
+              ],
+              doesThrow: false,
+              returnType: Type._String.asOptional(),
+              body: "return R.file.\(sanitizedSwiftName($0.fullname)).bundle?.pathForResource(R.file.\(sanitizedSwiftName($0.fullname)))"
+            )
+          ]
+        },
       structs: []
     )
   }
