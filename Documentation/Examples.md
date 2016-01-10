@@ -2,6 +2,16 @@
 
 On this page you'll find examples of the kind of resources R.swift supports and how you can use them. We aim to keep this page up to date and complete so this should be a overview of all possibilities.
 
+## Runtime validation
+
+Call `R.assertValid()` to call all validation methods that R.swift generates, this will check:
+- If all images used in storyboards are available
+- If all view controllers with storyboard identifiers can be loaded
+
+The `assertValid()` method does nothing when in release mode, only in debug mode it will perform checks and assert if a check fails. If you want more control you can also use `try R.validate()` which will throw a detailed error about the problems that occur and will always perform checks, even in release builds.
+
+_Note:_ The validation methods are there to perform checks that can't be done at compile time, it's recommended to put `R.assertValid()` in your `AppDelegate`.
+
 ## Images
 
 R.swift will find both images from Asset Catalogs and image files in your bundle.
@@ -29,21 +39,10 @@ let settingsController = self.instantiateViewControllerWithIdentifier("settingsC
 
 *With R.swift*
 ```swift
-let storyboard = R.storyboard.main.instance
-let initialTabBarController = R.storyboard.main.initialViewController
-let settingsController = R.storyboard.main.settingsController
-
-// Validate at runtime if all images used in the storyboard can be loaded
-// and checks if view controllers with identifiers can be loaded. If not
-// It will assert if something is wrong, only when running in debug mode.
-R.storyboard.main.assertValid()
-
-// If you want more control you can also use the validate method that
-// throws it's error and always runs even in release builds.
-try R.storyboard.main.validate()
+let storyboard = R.storyboard.main.instance()
+let initialTabBarController = R.storyboard.main.initialViewController()
+let settingsController = R.storyboard.main.settingsController()
 ```
-
-**Tip:** Use `R.assertValid()` to call all validation methods at once and put it somewhere into you `AppDelegate`.
 
 ## Segues
 
