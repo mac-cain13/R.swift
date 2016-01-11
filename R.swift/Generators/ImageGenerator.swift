@@ -30,7 +30,7 @@ struct ImageGenerator: Generator {
           ],
           doesThrow: false,
           returnType: Type._UIImage.asOptional(),
-          body: "return UIImage(named: \"\($0)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: traitCollection)"
+          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0)), compatibleWithTraitCollection: traitCollection)"
         )
       }
 
@@ -55,7 +55,7 @@ struct ImageGenerator: Generator {
           ],
           doesThrow: false,
           returnType: Type._UIImage.asOptional(),
-          body: "return UIImage(named: \"\($0.name)\", inBundle: _R.hostingBundle, compatibleWithTraitCollection: traitCollection)"
+          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0.name)), compatibleWithTraitCollection: traitCollection)"
         )
       }
 
@@ -67,11 +67,21 @@ struct ImageGenerator: Generator {
       warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
     }
 
+    let imageLets: [Property] = functions.uniques
+      .map {
+        Let(
+          isStatic: true,
+          name: $0.name,
+          type: Type.ImageResource,
+          value: "ImageResource(bundle: _R.hostingBundle, name: \"\($0.name)\")"
+        )
+    }
+
     externalStruct = Struct(
       type: Type(module: .Host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: [],
+      properties: imageLets,
       functions: functions.uniques,
       structs: []
     )

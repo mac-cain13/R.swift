@@ -44,7 +44,7 @@ struct ResourceFileGenerator: Generator {
               ],
               doesThrow: false,
               returnType: Type._NSURL.asOptional(),
-              body: "return R.file.\(sanitizedSwiftName($0.fullname)).bundle?.URLForResource(R.file.\(sanitizedSwiftName($0.fullname)))"
+              body: "let fileResource = R.file.\(sanitizedSwiftName($0.fullname))\nreturn fileResource.bundle?.URLForResource(fileResource)"
             ),
             Function(
               isStatic: true,
@@ -55,7 +55,7 @@ struct ResourceFileGenerator: Generator {
               ],
               doesThrow: false,
               returnType: Type._String.asOptional(),
-              body: "return R.file.\(sanitizedSwiftName($0.fullname)).bundle?.pathForResource(R.file.\(sanitizedSwiftName($0.fullname)))"
+              body: "let fileResource = R.file.\(sanitizedSwiftName($0.fullname))\nreturn fileResource.bundle?.pathForResource(fileResource)"
             )
           ]
         },
