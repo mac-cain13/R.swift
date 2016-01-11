@@ -42,6 +42,7 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
   static let FileResourceProtocol = Type(module: "Rswift", name: "FileResource")
   static let FontResourceProtocol = Type(module: "Rswift", name: "FontResource")
   static let Validatable = Type(module: "Rswift", name: "Validatable")
+  static let TypedStoryboardSegueInfo = Type(module: "Rswift", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
 
   let module: Module
   let name: String

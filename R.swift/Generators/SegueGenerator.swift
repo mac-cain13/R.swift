@@ -36,7 +36,7 @@ struct SegueGenerator: Generator {
       .flatMap { $0.first }
 
     let groupedSeguesWithInfo = deduplicatedSeguesWithInfo
-      .groupUniquesAndDuplicates { "\($0.segue.identifier)|\($0.sourceType)" }
+      .groupUniquesAndDuplicates { "\(sanitizedSwiftName($0.segue.identifier))|\($0.sourceType)" }
 
     for duplicate in groupedSeguesWithInfo.duplicates {
       let anySegueWithInfo = duplicate.first!
@@ -60,6 +60,8 @@ struct SegueGenerator: Generator {
   }
 
   private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
+    guard let sourceType = seguesWithInfoForSourceType.first?.sourceType else { return nil }
+
     let properties: [Property] = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
       let type = Type(
         module: "Rswift",
@@ -75,14 +77,26 @@ struct SegueGenerator: Generator {
       )
     }
 
-    guard let sourceType = seguesWithInfoForSourceType.first?.sourceType where properties.count > 0 else { return nil }
+    let functions = seguesWithInfoForSourceType.map { segueWithInfo -> Function in
+      Function(
+        isStatic: true,
+        name: segueWithInfo.segue.identifier,
+        generics: "Identifier: StoryboardSegueIdentifierProtocol, Segue, Source, Destination where Segue == Identifier.SegueType, Source == Identifier.SourceType, Destination == Identifier.DestinationType",
+        parameters: [
+          Function.Parameter.init(name: "segue", localName: "segue", type: Type._UIStoryboardSegue)
+        ],
+        doesThrow: false,
+        returnType: Type.TypedStoryboardSegueInfo.asOptional(),
+        body: "guard let identifier = segue.identifier where identifier == R.segue.\(sanitizedSwiftName(sourceType.description)).\(segueWithInfo.segue.identifier).identifier else { return nil }\nreturn TypedStoryboardSegueInfo(segue: segue)"
+      )
+    }
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
       implements: [],
       typealiasses: [],
       properties: properties,
-      functions: [],
+      functions: functions,
       structs: []
     )
   }
