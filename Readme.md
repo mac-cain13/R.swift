@@ -56,10 +56,11 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 
 ## Q&A
 
-- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
-- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
-- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
+- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
+- [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
+- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 
 ## Installation
 

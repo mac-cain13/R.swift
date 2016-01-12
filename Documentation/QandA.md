@@ -17,7 +17,7 @@ There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliS
 
 R.swift works with iOS 8 and tvOS 9 and higher, your development machine should be on OS X 10.11 with Xcode 7 or higher.
 
-# How to use methods with a `Void` argument?
+## How to use methods with a `Void` argument?
 
 Xcode might autocomplete a function with a `Void` argument (`R.image.settingsIcon(Void)`), just remove the `Void` argument and you're good to go: `R.image.settingsIcon()`.
 
