@@ -8,14 +8,20 @@ In Android there is a generated R class that kind of solves this problem. That w
 
 ## Why should I choose R.swift over alternative X or Y?
 
-There are many nice R.swift alternatives like [Shark](https://github.com/kaandedeoglu/Shark), [Natalie](https://github.com/krzyzanowskim/Natalie) and [SwiftGen](https://github.com/AliSoftware/SwiftGen). I believe R.swift has important advantages over all of them:
+There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliSoftware/SwiftGen), [Shark](https://github.com/kaandedeoglu/Shark) and [Natalie](https://github.com/krzyzanowskim/Natalie). I believe R.swift has important advantages over all of them:
 - R.swift inspects your Xcodeproj file for resources instead of scanning folders or asking you for files
 - R.swift supports a lot of different assets
 - R.swift stays very close to the vanilla Apple API's, it's a minimal code change with maximum impact
 
 ## What are the requirements to run R.swift?
 
-R.swift works with OS X 10.11 with Xcode 7.0 while targeting iOS 8.0 or higher. It's also recommended to run R.swift from within the Xcode build so it can use the available environment variables. Otherwise you have to provide them yourself with the available command line flags.
+R.swift works with iOS 8 and tvOS 9 and higher, your development machine should be on OS X 10.11 with Xcode 7 or higher.
+
+# How to use methods with a `Void` argument?
+
+Xcode might autocomplete a function with a `Void` argument (`R.image.settingsIcon(Void)`), just remove the `Void` argument and you're good to go: `R.image.settingsIcon()`.
+
+The reason this happens is because of the availability of the var `R.image.settingsIcon.*` for information about the image and also having a function with named the same name.
 
 ## How does R.swift work?
 
