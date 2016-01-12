@@ -81,7 +81,7 @@ struct SegueGenerator: Generator {
       Function(
         isStatic: true,
         name: segueWithInfo.segue.identifier,
-        generics: "Identifier: StoryboardSegueIdentifierProtocol, Segue, Source, Destination where Segue == Identifier.SegueType, Source == Identifier.SourceType, Destination == Identifier.DestinationType",
+        generics: "Identifier: StoryboardSegueIdentifierType, Segue, Source, Destination where Segue == Identifier.SegueType, Source == Identifier.SourceType, Destination == Identifier.DestinationType",
         parameters: [
           Function.Parameter.init(name: "segue", localName: "segue", type: Type._UIStoryboardSegue)
         ],

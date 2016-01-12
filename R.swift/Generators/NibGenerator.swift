@@ -134,7 +134,7 @@ struct NibGenerator: Generator {
         value: "\"\(reusable.identifier)\""
         )]
       reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
-      reuseProtocols = [Type.ReuseIdentifierProtocol]
+      reuseProtocols = [Type.ReuseIdentifierType]
     } else {
       reuseIdentifierProperties = []
       reuseTypealiasses = []
@@ -144,7 +144,7 @@ struct NibGenerator: Generator {
     let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
     return Struct(
         type: Type(module: .Host, name: "_\(sanitizedName)"),
-        implements: [Type.NibResource] + reuseProtocols,
+        implements: [Type.NibResourceType] + reuseProtocols,
         typealiasses: reuseTypealiasses,
         properties: [bundleLet, nameVar] + reuseIdentifierProperties,
         functions: viewFuncs,

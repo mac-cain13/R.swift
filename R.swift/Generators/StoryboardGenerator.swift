@@ -89,10 +89,10 @@ struct StoryboardGenerator: Generator {
     var implements = [Type.Validatable]
     var typealiasses: [Typealias] = []
     if let initialViewController = storyboard.initialViewController {
-      implements.append(Type.StoryboardResourceWithInitialControllerProtocol)
+      implements.append(Type.StoryboardResourceWithInitialControllerType)
       typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
     } else {
-      implements.append(Type.StoryboardResource)
+      implements.append(Type.StoryboardResourceType)
     }
 
     let validateFunction = Function(
