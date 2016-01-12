@@ -89,7 +89,7 @@ struct SegueGenerator: Generator {
         returnType: Type.TypedStoryboardSegueInfo
           .asOptional()
           .withGenericArgs([segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType]),
-        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(sanitizedSwiftName(sourceType.description)).\(segueWithInfo.segue.identifier), segue: segue)"
+        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(sanitizedSwiftName(sourceType.description)).\(sanitizedSwiftName(segueWithInfo.segue.identifier)), segue: segue)"
       )
     }
 
