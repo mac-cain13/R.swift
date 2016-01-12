@@ -39,7 +39,7 @@ let settingsController = self.instantiateViewControllerWithIdentifier("settingsC
 
 *With R.swift*
 ```swift
-let storyboard = R.storyboard.main.instance()
+let storyboard = R.storyboard.main()
 let initialTabBarController = R.storyboard.main.initialViewController()
 let settingsController = R.storyboard.main.settingsController()
 ```
@@ -69,7 +69,7 @@ performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self
 
 // And then prepare it:
 override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-  if let typedInfo = segue.typedInfoWithIdentifier(R.segue.overviewController.openSettings) {
+  if let typedInfo = R.segue.overviewController.openSettings(segue: segue) {
     typedInfo.segue.animationType = .LockAnimation
     typedInfo.destinationViewController.lockSettings = true
   }
@@ -95,7 +95,7 @@ let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: 
 let nameOfNib = R.nib.customView.name
 let customViewNib = R.nib.customView()
 let rootViews = R.nib.customView.instantiateWithOwner(nil)
-let customView = R.nib.customView.firstView(nil)
+let customView = R.nib.customView.firstView(owner: nil)
 
 let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 ```
