@@ -81,13 +81,15 @@ struct SegueGenerator: Generator {
       Function(
         isStatic: true,
         name: segueWithInfo.segue.identifier,
-        generics: "Identifier: StoryboardSegueIdentifierType, Segue, Source, Destination where Segue == Identifier.SegueType, Source == Identifier.SourceType, Destination == Identifier.DestinationType",
+        generics: nil,
         parameters: [
           Function.Parameter.init(name: "segue", localName: "segue", type: Type._UIStoryboardSegue)
         ],
         doesThrow: false,
-        returnType: Type.TypedStoryboardSegueInfo.asOptional(),
-        body: "guard let identifier = segue.identifier where identifier == R.segue.\(sanitizedSwiftName(sourceType.description)).\(segueWithInfo.segue.identifier).identifier else { return nil }\nreturn TypedStoryboardSegueInfo(segue: segue)"
+        returnType: Type.TypedStoryboardSegueInfo
+          .asOptional()
+          .withGenericArgs([segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType]),
+        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(sanitizedSwiftName(sourceType.description)).\(segueWithInfo.segue.identifier), segue: segue)"
       )
     }
 
