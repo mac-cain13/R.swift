@@ -87,7 +87,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-t ResourceApp"
+            argument = "--bundleIdentifier nl.mathijskadijk.ResourceApp"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -99,6 +99,11 @@
          <EnvironmentVariable
             key = "PROJECT_FILE_PATH"
             value = "$SRCROOT/ResourceApp/ResourceApp.xcodeproj"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "PRODUCT_MODULE_NAME"
+            value = "ResourceApp"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable

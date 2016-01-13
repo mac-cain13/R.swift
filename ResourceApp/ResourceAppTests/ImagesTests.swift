@@ -13,14 +13,14 @@ import XCTest
 class ImagesTests: XCTestCase {
   
   func testNoNilAssetImages() {
-    XCTAssertNotNil(R.image.eerste)
-    XCTAssertNotNil(R.image.first)
-    XCTAssertNotNil(R.image.firstNested)
-    XCTAssertNotNil(R.image.secondNested)
+    XCTAssertNotNil(R.image.eerste())
+    XCTAssertNotNil(R.image.first())
+    XCTAssertNotNil(R.image.firstNested())
+    XCTAssertNotNil(R.image.secondNested())
   }
 
   func testNoNilFilebasedImages() {
-    XCTAssertNotNil(R.image.colorsJpg)
-    XCTAssertNotNil(R.image.userWhite)
+    XCTAssertNotNil(R.image.colorsJpg())
+    XCTAssertNotNil(R.image.userWhite())
   }
 }

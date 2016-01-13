@@ -1,0 +1,14 @@
+PODS:
+  - R.swift.Library (1.0.0.beta.6)
+
+DEPENDENCIES:
+  - R.swift.Library (from `./R.swift.Library`)
+
+EXTERNAL SOURCES:
+  R.swift.Library:
+    :path: ./R.swift.Library
+
+SPEC CHECKSUMS:
+  R.swift.Library: 3247d9ea0da3d583f3e42571adba4dbd76b58ef1
+
+COCOAPODS: 0.39.0

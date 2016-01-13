@@ -1,4 +1,4 @@
-# R.swift ![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat) ![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat) ![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat) ![Build status](https://www.bitrise.io/app/cef05ad300903a89.svg?token=aPVYvCoJVcdVM-Z6KekYPQ&branch=master)
+# R.swift [![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat)](http://cocoapods.org/?q=R.swift) [![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat)](blob/master/License) ![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat) ![Build status](https://www.bitrise.io/app/cef05ad300903a89.svg?token=aPVYvCoJVcdVM-Z6KekYPQ&branch=master)
 
 _Get strong typed, autocompleted resources like images, fonts and segues in Swift projects_
 
@@ -6,7 +6,7 @@ _Get strong typed, autocompleted resources like images, fonts and segues in Swif
 
 It makes your code that uses resources:
 - **Fully typed**, less casting and guessing what a method will return
-- **Compiletime checked**, no more incorrect strings that make your app crash at runtime
+- **Compile time checked**, no more incorrect strings that make your app crash at runtime
 - **Autocompleted**, never have to guess that image name again
 
 Currently you type:
@@ -18,7 +18,7 @@ let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
 
 With R.swift it becomes:
 ```swift
-let icon = R.image.settingsIcon
+let icon = R.image.settingsIcon()
 let font = R.font.sanFrancisco(size: 42)
 let viewController = CustomViewController(nib: R.nib.customView)
 ```
@@ -50,17 +50,17 @@ R.swift currently supports these types of resources:
 - [Custom fonts](Documentation/Examples.md#custom-fonts)
 - [Resource files](Documentation/Examples.md#resource-files)
 
-Runtime validation with [`R.validate()`](Documentation/Examples.md#storyboards):
-- If images used in storyboards are available
-- If view controllers with storyboard identifiers can be loaded
+Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-validation):
+- If all images used in storyboards are available
+- If all view controllers with storyboard identifiers can be loaded
 
 ## Q&A
 
-- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
-- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
-- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
-- [Does R.swift work for iOS7?](Documentation/QandA.md#does-rswift-work-for-ios7)
+- [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
+- [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
+- [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
+- [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 
 ## Installation
 
@@ -79,6 +79,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ### Manually
 
+0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library#Installation) to your project
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
 2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
@@ -92,4 +93,4 @@ Please post any issues, questions and compliments in the GitHub issue tracker an
 
 ## License
 
-R.swift is created by [Mathijs Kadijk](https://github.com/mac-cain13) and released under a [MIT License](License).
+[R.swift](https://github.com/mac-cain13/R.swift) and [R.swift.Library](https://github.com/mac-cain13/R.swift.Library) are created by [Mathijs Kadijk](https://github.com/mac-cain13) and released under a [MIT License](License).

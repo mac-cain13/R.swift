@@ -8,23 +8,25 @@ In Android there is a generated R class that kind of solves this problem. That w
 
 ## Why should I choose R.swift over alternative X or Y?
 
-There are many nice R.swift alternatives like [Shark](https://github.com/kaandedeoglu/Shark), [Natalie](https://github.com/krzyzanowskim/Natalie) and [SwiftGen](https://github.com/AliSoftware/SwiftGen). I believe R.swift has important advantages over all of them:
+There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliSoftware/SwiftGen), [Shark](https://github.com/kaandedeoglu/Shark) and [Natalie](https://github.com/krzyzanowskim/Natalie). I believe R.swift has important advantages over all of them:
 - R.swift inspects your Xcodeproj file for resources instead of scanning folders or asking you for files
 - R.swift supports a lot of different assets
 - R.swift stays very close to the vanilla Apple API's, it's a minimal code change with maximum impact
 
 ## What are the requirements to run R.swift?
 
-Recommended is the latest stable version of OS X, Xcode with the app targeting iOS 8 or higher. But OS X 10.10 with Xcode 7 while targeting iOS 7 or higher should work. Run R.swift from within the Xcode build so it can use the available environment variables. Otherwise you have to provide them yourself with the available commandline flags.
+R.swift works with iOS 8 and tvOS 9 and higher, your development machine should be on OS X 10.11 with Xcode 7 or higher.
+
+## How to use methods with a `Void` argument?
+
+Xcode might autocomplete a function with a `Void` argument (`R.image.settingsIcon(Void)`), just remove the `Void` argument and you're good to go: `R.image.settingsIcon()`.
+
+The reason this happens is because of the availability of the var `R.image.settingsIcon.*` for information about the image and also having a function with named the same name.
 
 ## How does R.swift work?
 
 During installation you add R.swift as a Build phase to your target, basically this means that:
-- Every time you build R.swift will be runned
+- Every time you build R.swift will run
 - It takes a look at your Xcode project file and inspects all resources linked with the target currently build
-- It generates a `R.generated.swift` file that contains a struct with types references to all resources
+- It generates a `R.generated.swift` file that contains a struct with types references to all of your resources
 
-## Does R.swift work for iOS7?
-
-R.swift does also work for iOS7, with one caveat though: 
-- Images can only be loaded from the main bundle

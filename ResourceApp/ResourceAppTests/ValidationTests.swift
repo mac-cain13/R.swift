@@ -8,20 +8,37 @@
 
 import UIKit
 import XCTest
+import Rswift
 @testable import ResourceApp
 
 class ValidationTests: XCTestCase {
   
   func testRunGlobalValidateMethod() {
-//    R.validate()
+    do {
+      try R.validate()
+      XCTFail("No error thrown")
+    } catch let error as ValidationError {
+      XCTAssertEqual(error.description, "[R.swift] Image named 'First' is used in storyboard 'Secondary', but couldn't be loaded.")
+    } catch {
+      XCTFail("Wrong error thrown")
+    }
   }
 
   func testRunSpecificValidateMethods() {
-//    R.storyboard.main.validateImages()
-    R.storyboard.main.validateViewControllers()
+    do {
+      try _R.storyboard.main.validate()
+    } catch {
+      XCTFail("Wrong error thrown")
+    }
 
-//    R.storyboard.secondary.validateImages()
-    R.storyboard.secondary.validateViewControllers()
+    do {
+      try _R.storyboard.secondary.validate()
+      XCTFail("No error thrown")
+    } catch let error as ValidationError {
+      XCTAssertEqual(error.description, "[R.swift] Image named 'First' is used in storyboard 'Secondary', but couldn't be loaded.")
+    } catch {
+      XCTFail("Wrong error thrown")
+    }
   }
 
 }

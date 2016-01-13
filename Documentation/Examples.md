@@ -2,6 +2,16 @@
 
 On this page you'll find examples of the kind of resources R.swift supports and how you can use them. We aim to keep this page up to date and complete so this should be a overview of all possibilities.
 
+## Runtime validation
+
+Call `R.assertValid()` to call all validation methods that R.swift generates, this will check:
+- If all images used in storyboards are available
+- If all view controllers with storyboard identifiers can be loaded
+
+The `assertValid()` method does nothing when in release mode, only in debug mode it will perform checks and assert if a check fails. If you want more control you can also use `try R.validate()` which will throw a detailed error about the problems that occur and will always perform checks, even in release builds.
+
+_Note:_ The validation methods are there to perform checks that can't be done at compile time, it's recommended to put `R.assertValid()` in your `AppDelegate`.
+
 ## Images
 
 R.swift will find both images from Asset Catalogs and image files in your bundle.
@@ -14,8 +24,8 @@ let gradientBackground = UIImage(named: "gradient.jpg")
 
 *With R.swift*
 ```swift
-let settingsIcon = R.image.settingsIcon
-let gradientBackground = R.image.gradientJpg
+let settingsIcon = R.image.settingsIcon()
+let gradientBackground = R.image.gradientJpg()
 ```
 
 ## Storyboards
@@ -29,20 +39,10 @@ let settingsController = self.instantiateViewControllerWithIdentifier("settingsC
 
 *With R.swift*
 ```swift
-let storyboard = R.storyboard.main.instance
-let initialTabBarController = R.storyboard.main.initialViewController
-let settingsController = R.storyboard.main.settingsController
-
-// Validate at runtime if all images used in the storyboard can be loaded.
-// Uses assertions and only has effect when your app is in debug mode.
-R.storyboard.main.validateImages()
-
-// Validate if view controllers with identifiers can be loaded
-// Uses assertions and only has effect when your app is in debug mode.
-R.storyboard.main.validateViewControllers()
+let storyboard = R.storyboard.main()
+let initialTabBarController = R.storyboard.main.initialViewController()
+let settingsController = R.storyboard.main.settingsController()
 ```
-
-**Tip:** Use `R.validate()` to call all validation methods at once and put it somewhere into you `AppDelegate`.
 
 ## Segues
 
@@ -69,12 +69,14 @@ performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self
 
 // And then prepare it:
 override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-  if let typedInfo = segue.typedInfoWithIdentifier(R.segue.overviewController.openSettings) {
+  if let typedInfo = R.segue.overviewController.openSettings(segue: segue) {
     typedInfo.segue.animationType = .LockAnimation
     typedInfo.destinationViewController.lockSettings = true
   }
 }
 ```
+
+**Tip:** Take a look at the [SegueManager](https://github.com/tomlokhorst/SegueManager) library, it makes segues block based and is compatible with R.swift.
 
 ## Nibs
 
@@ -91,14 +93,14 @@ let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: 
 *With R.swift*
 ```swift
 let nameOfNib = R.nib.customView.name
-let customViewNib = R.nib.customView
-let rootViews = R.nib.customView.instantiateWithOwner(nil, options: nil)
-let customView = R.nib.customView.firstView(nil, options: nil)
+let customViewNib = R.nib.customView()
+let rootViews = R.nib.customView.instantiateWithOwner(nil)
+let customView = R.nib.customView.firstView(owner: nil)
 
 let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
 ```
 
-## Reusable cells
+## Reusable table view cells
 
 *Vanilla*
 ```swift
@@ -126,9 +128,44 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.reuseIdentifier, forIndexPath: indexPath)!
+    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.identifier, forIndexPath: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
+  }
+}
+```
+
+## Reusable collection view cells
+
+*Vanilla*
+```swift
+class RecentsController: UICollectionViewController {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let talkCellNib = UINib(nibName: "TalkCell", bundle: nil)
+    collectionView?.registerNib(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
+  }
+
+  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCellIdentifier", forIndexPath: indexPath) as! TalkCell
+    cell.configureCell("Item \(indexPath.item)")
+    return cell
+  }
+}
+```
+
+*With R.swift*
+```swift
+class RecentsController: UICollectionViewController {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    collectionView?.registerNib(R.nib.talkCell)
+  }
+
+  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCell, forIndexPath: indexPath)!
+    cell.configureCell("Item \(indexPath.item)")
+    return cell
   }
 }
 ```
@@ -150,9 +187,11 @@ let lightFontTitle = R.font.acmeLight(size: 22)
 *Vanilla*
 ```swift
 let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
+let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension: "json")
 ```
 
 *With R.swift*
 ```swift
-let jsonURL = R.file.seedDataJson
+let jsonURL: NSURL? = R.file.seedDataJson()
+let jsonPath: String? = R.file.seedDataJson()
 ```
