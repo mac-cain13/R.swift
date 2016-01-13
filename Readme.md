@@ -61,6 +61,7 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 - [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
 - [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
+- [How to upgrade to 1.0?](Documentation/Migration.md)
 
 ## Installation
 
