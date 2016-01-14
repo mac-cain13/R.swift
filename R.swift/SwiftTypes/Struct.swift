@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Struct: TypeSequenceProvider, CustomStringConvertible {
+struct Struct: UsedTypesProvider, CustomStringConvertible {
   var accessModifier: AccessModifier = .Internal
   let type: Type
   var implements: [Type]

@@ -16,7 +16,7 @@ struct UsedType {
   }
 }
 
-struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
+struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Void = Type(module: .StdLib, name: "Void")
   static let _AnyObject = Type(module: .StdLib, name: "AnyObject")
   static let _String = Type(module: .StdLib, name: "String")
@@ -52,7 +52,7 @@ struct Type: TypeSequenceProvider, CustomStringConvertible, Hashable {
 
   var usedTypes: [UsedType] {
     return [UsedType(type: self)] + genericArgs.flatMap(getUsedTypes)
-  }
+  } 
 
   var description: String {
     let optionalString = optional ? "?" : ""

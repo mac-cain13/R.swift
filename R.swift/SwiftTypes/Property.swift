@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Property: TypeSequenceProvider, CustomStringConvertible {
+protocol Property: UsedTypesProvider, CustomStringConvertible {
   var name: String { get }
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Function: TypeSequenceProvider {
+struct Function: UsedTypesProvider {
   let isStatic: Bool
   let name: String
   let generics: String?
@@ -38,7 +38,7 @@ struct Function: TypeSequenceProvider {
     return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
-  struct Parameter: TypeSequenceProvider, CustomStringConvertible {
+  struct Parameter: UsedTypesProvider, CustomStringConvertible {
     let name: String
     let localName: String?
     let type: Type

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TypeVar: TypeSequenceProvider, CustomStringConvertible {
+struct TypeVar: UsedTypesProvider, CustomStringConvertible {
   let description: String
   let usedTypes: [UsedType]
 

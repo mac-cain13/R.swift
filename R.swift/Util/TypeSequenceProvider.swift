@@ -1,5 +1,5 @@
 //
-//  TypeSequenceProvider.swift
+//  UsedTypesProvider.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 16-12-15.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-protocol TypeSequenceProvider {
+protocol UsedTypesProvider {
   var usedTypes: [UsedType] { get }
 }
 
-func getUsedTypes(provider: TypeSequenceProvider) -> [UsedType] {
+func getUsedTypes(provider: UsedTypesProvider) -> [UsedType] {
   return provider.usedTypes
 }

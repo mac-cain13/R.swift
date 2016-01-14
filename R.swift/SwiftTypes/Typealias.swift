@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Typealias: TypeSequenceProvider, CustomStringConvertible {
+struct Typealias: UsedTypesProvider, CustomStringConvertible {
   let alias: String
   let type: Type?
 
