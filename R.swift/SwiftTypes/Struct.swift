@@ -11,7 +11,7 @@ import Foundation
 struct Struct: UsedTypesProvider, CustomStringConvertible {
   var accessModifier: AccessModifier = .Internal
   let type: Type
-  var implements: [Type]
+  var implements: [TypePrinter]
   let typealiasses: [Typealias]
   let properties: [Property]
   var functions: [Function]
@@ -28,7 +28,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       ].flatten()
   }
 
-  init(accessModifier: AccessModifier, type: Type, implements: [Type], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+  init(accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
     self.accessModifier = accessModifier
     self.type = type
     self.implements = implements
@@ -38,7 +38,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
     self.structs = structs
   }
 
-  init(type: Type, implements: [Type], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+  init(type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
     self.type = type
     self.implements = implements
     self.typealiasses = typealiasses
@@ -49,7 +49,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
 
   var description: String {
     let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
-    let implementsString = implements.count > 0 ? ": " + implements.joinWithSeparator(", ") : ""
+    let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joinWithSeparator(", ") : ""
 
     let typealiasString = typealiasses
       .sort { $0.alias < $1.alias }

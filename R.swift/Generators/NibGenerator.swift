@@ -144,7 +144,7 @@ struct NibGenerator: Generator {
     let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
     return Struct(
         type: Type(module: .Host, name: "_\(sanitizedName)"),
-        implements: [Type.NibResourceType] + reuseProtocols,
+        implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
         typealiasses: reuseTypealiasses,
         properties: [bundleLet, nameVar] + reuseIdentifierProperties,
         functions: viewFuncs,

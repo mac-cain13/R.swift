@@ -107,7 +107,7 @@ struct StoryboardGenerator: Generator {
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
-      implements: implements,
+      implements: implements.map(TypePrinter.init),
       typealiasses: typealiasses,
       properties: [
         Let(isStatic: false, name: "name", type: nil, value: "\"\(storyboard.name)\""),

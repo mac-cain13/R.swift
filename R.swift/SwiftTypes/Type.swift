@@ -52,17 +52,10 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
 
   var usedTypes: [UsedType] {
     return [UsedType(type: self)] + genericArgs.flatMap(getUsedTypes)
-  } 
+  }
 
   var description: String {
-    let optionalString = optional ? "?" : ""
-
-    if genericArgs.count > 0 {
-      let args = genericArgs.joinWithSeparator(", ")
-      return "\(name)<\(args)>\(optionalString)"
-    }
-
-    return "\(name)\(optionalString)"
+    return TypePrinter(type: self).swiftCode
   }
 
   var hashValue: Int {
@@ -79,7 +72,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   init(module: Module, name: String, genericArgs: [Type], optional: Bool = false) {
     self.module = module
     self.name = name
-    self.genericArgs = genericArgs.map { TypeVar(type: $0) }
+    self.genericArgs = genericArgs.map(TypeVar.init)
     self.optional = optional
   }
 

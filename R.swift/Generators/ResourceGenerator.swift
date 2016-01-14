@@ -61,7 +61,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   let privateValidationStruct = Struct(
     accessModifier: .Private,
     type: Type(module: .Host, name: "intern"),
-    implements: [Type.Validatable],
+    implements: [TypePrinter(type: Type.Validatable, style: .FullyQualified)],
     typealiasses: [],
     properties: [],
     functions: [

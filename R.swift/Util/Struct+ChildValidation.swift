@@ -12,7 +12,7 @@ extension Struct {
   /// Implements the Validatable protocol on this and child struct if one or more childs already implement the 
   /// Validatable protocol. The newly created validate methods will call their child validate methods.
   func addChildStructValidationMethods() -> Struct {
-    if implements.contains(Type.Validatable) {
+    if implements.map({ $0.type }).contains(Type.Validatable) {
       return self
     }
 
@@ -20,7 +20,7 @@ extension Struct {
       .map { $0.addChildStructValidationMethods() }
 
     let validatableStructs = childStructs
-      .filter { $0.implements.contains(Type.Validatable) }
+      .filter { $0.implements.map({ $0.type }).contains(Type.Validatable) }
 
     guard validatableStructs.count > 0 else {
       return self
@@ -28,7 +28,7 @@ extension Struct {
 
     var outputStruct = self
     outputStruct.structs = childStructs
-    outputStruct.implements.append(Type.Validatable)
+    outputStruct.implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
     outputStruct.functions.append(
       Function(
         isStatic: true,
