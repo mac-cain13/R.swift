@@ -43,7 +43,7 @@ struct ReuseIdentifierGenerator: Generator {
     return Let(
       isStatic: true,
       name: reusable.identifier,
-      type: Type.ReuseIdentifier.withGenericArgs([reusable.type]),
+      typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
       value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )
   }

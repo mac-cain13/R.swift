@@ -85,7 +85,7 @@ struct NibGenerator: Generator {
   private static func nibVarForNib(nib: Nib) -> Let {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
     let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
-    return Let(isStatic: true, name: nib.name, type: nil, value: "\(structType)()")
+    return Let(isStatic: true, name: nib.name, typeDefinition: .Inferred(structType), value: "\(structType)()")
   }
 
   private static func nibStructForNib(nib: Nib) -> Struct {
@@ -98,14 +98,14 @@ struct NibGenerator: Generator {
     let bundleLet: Property = Let(
       isStatic: false,
       name: "bundle",
-      type: nil,
+      typeDefinition: .Inferred(Type._NSBundle),
       value: "_R.hostingBundle"
     )
 
     let nameVar: Property = Let(
       isStatic: false,
       name: "name",
-      type: nil,
+      typeDefinition: .Inferred(Type._String),
       value: "\"\(nib.name)\""
     )
 
@@ -130,7 +130,7 @@ struct NibGenerator: Generator {
       reuseIdentifierProperties = [Let(
         isStatic: false,
         name: "identifier",
-        type: nil,
+        typeDefinition: .Inferred(Type._String),
         value: "\"\(reusable.identifier)\""
         )]
       reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]

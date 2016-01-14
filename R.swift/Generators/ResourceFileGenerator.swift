@@ -29,7 +29,7 @@ struct ResourceFileGenerator: Generator {
         .uniques
         .map {
           let pathExtensionOrNilString = $0.pathExtension.map { "\"\($0)\"" } ?? "nil"
-          return Let(isStatic: true, name: $0.fullname, type: nil, value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))")
+          return Let(isStatic: true, name: $0.fullname, typeDefinition: .Inferred(Type.FileResource), value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))")
         },
       functions: groupedResourceFiles
         .uniques

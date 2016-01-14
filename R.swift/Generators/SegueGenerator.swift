@@ -72,7 +72,7 @@ struct SegueGenerator: Generator {
       return Let(
         isStatic: true,
         name: segueWithInfo.segue.identifier,
-        type: type,
+        typeDefinition: .Specified(type),
         value: "StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
       )
     }

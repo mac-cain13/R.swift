@@ -18,7 +18,7 @@ struct FontGenerator: Generator {
       implements: [],
       typealiasses: [],
       properties: fonts.map {
-        Let(isStatic: true, name: $0.name, type: nil, value: "FontResource(fontName: \"\($0.name)\")")
+        Let(isStatic: true, name: $0.name, typeDefinition: .Inferred(Type.FontResource), value: "FontResource(fontName: \"\($0.name)\")")
       },
       functions: fonts.map(FontGenerator.fontFunctionFromFont),
       structs: []

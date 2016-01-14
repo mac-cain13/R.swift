@@ -72,7 +72,7 @@ struct ImageGenerator: Generator {
         Let(
           isStatic: true,
           name: $0.name,
-          type: nil,
+          typeDefinition: .Inferred(Type.ImageResource),
           value: "ImageResource(bundle: _R.hostingBundle, name: \"\($0.name)\")"
         )
     }

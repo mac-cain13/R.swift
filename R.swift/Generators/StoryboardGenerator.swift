@@ -29,7 +29,7 @@ struct StoryboardGenerator: Generator {
         implements: [],
         typealiasses: [],
         properties: storyboardStructs.map {
-          Let(isStatic: true, name: $0.type.name, type: nil, value: "_R.storyboard.\($0.type.name)()")
+          Let(isStatic: true, name: $0.type.name, typeDefinition: .Inferred(Type.StoryboardResourceType), value: "_R.storyboard.\($0.type.name)()")
         },
         functions: storyboardStructs.map {
           Function(
@@ -110,8 +110,8 @@ struct StoryboardGenerator: Generator {
       implements: implements.map(TypePrinter.init),
       typealiasses: typealiasses,
       properties: [
-        Let(isStatic: false, name: "name", type: nil, value: "\"\(storyboard.name)\""),
-        Let(isStatic: false, name: "bundle", type: nil, value: "_R.hostingBundle"),
+        Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
+        Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle"),
       ],
       functions: [
         validateFunction,

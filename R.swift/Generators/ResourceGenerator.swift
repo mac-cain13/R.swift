@@ -51,32 +51,37 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       implements: [],
       typealiasses: [],
       properties: [
-        Let(isStatic: true, name: "hostingBundle", type: nil, value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
+        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
       ],
       functions: [],
       structs: generatorResults.internalStructs
     )
     .addChildStructValidationMethods()
 
-  let privateValidationStruct = Struct(
-    accessModifier: .Private,
-    type: Type(module: .Host, name: "intern"),
-    implements: [TypePrinter(type: Type.Validatable, style: .FullyQualified)],
-    typealiasses: [],
-    properties: [],
-    functions: [
-      Function(
-        isStatic: true,
-        name: "validate",
-        generics: nil,
-        parameters: [],
-        doesThrow: true,
-        returnType: Type._Void,
-        body: "try \(internalResourceStruct.type).validate()"
+  var externalStructs = generatorResults.externalStructs
+
+  if internalResourceStruct.implements.map({ $0.type }).contains(Type.Validatable) {
+    externalStructs.append(Struct(
+        accessModifier: .Private,
+        type: Type(module: .Host, name: "intern"),
+        implements: [TypePrinter(type: Type.Validatable, style: .FullyQualified)],
+        typealiasses: [],
+        properties: [],
+        functions: [
+          Function(
+            isStatic: true,
+            name: "validate",
+            generics: nil,
+            parameters: [],
+            doesThrow: true,
+            returnType: Type._Void,
+            body: "try \(internalResourceStruct.type).validate()"
+          )
+        ],
+        structs: []
       )
-    ],
-    structs: []
-  )
+    )
+  }
 
   let externalResourceStruct = Struct(
       type: Type(module: .Host, name: "R"),
@@ -84,7 +89,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: generatorResults.externalStructs + [privateValidationStruct]
+      structs: externalStructs
     )
     .addChildStructValidationMethods()
 
