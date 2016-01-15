@@ -86,13 +86,13 @@ struct StoryboardGenerator: Generator {
         }
       }
 
-    var implements = [Type.Validatable]
+    var implements = [TypePrinter(type: Type.Validatable, style: .FullyQualified)]
     var typealiasses: [Typealias] = []
     if let initialViewController = storyboard.initialViewController {
-      implements.append(Type.StoryboardResourceWithInitialControllerType)
+      implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
       typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
     } else {
-      implements.append(Type.StoryboardResourceType)
+      implements.append(TypePrinter(type: Type.StoryboardResourceType))
     }
 
     let validateFunction = Function(
@@ -107,7 +107,7 @@ struct StoryboardGenerator: Generator {
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
-      implements: implements.map(TypePrinter.init),
+      implements: implements,
       typealiasses: typealiasses,
       properties: [
         Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
