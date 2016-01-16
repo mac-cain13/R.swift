@@ -16,6 +16,7 @@
 		D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C31BB1E600004BB376 /* User@white@2x.png */; };
 		D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C41BB1E600004BB376 /* User@white@3x.png */; };
 		D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F47221B8FAF9F0028BAFD /* NibTests.swift */; };
+		D52725FC1C4A7C6A0005C8D4 /* Sky.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
 		D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC31B5D757300301B0D /* Main.storyboard */; };
@@ -78,6 +79,7 @@
 		D51E60C31BB1E600004BB376 /* User@white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@2x.png"; sourceTree = "<group>"; };
 		D51E60C41BB1E600004BB376 /* User@white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@3x.png"; sourceTree = "<group>"; };
 		D51F47221B8FAF9F0028BAFD /* NibTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibTests.swift; sourceTree = "<group>"; };
+		D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Sky.tiff; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CBF1B5D757300301B0D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		D51E60BF1BB13612004BB376 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */,
 				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
 				D51E60C01BB13626004BB376 /* Colors.jpg */,
 				D5159E9D1BBC33680013F52A /* Colors@2x.jpg */,
@@ -387,6 +390,7 @@
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
+				D52725FC1C4A7C6A0005C8D4 /* Sky.tiff in Resources */,
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
 				D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */,
 				D51E60C11BB13626004BB376 /* Colors.jpg in Resources */,

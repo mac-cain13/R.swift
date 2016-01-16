@@ -17,6 +17,7 @@ class ImagesTests: XCTestCase {
     XCTAssertNotNil(R.image.first())
     XCTAssertNotNil(R.image.firstNested())
     XCTAssertNotNil(R.image.secondNested())
+    XCTAssertNotNil(R.image.skyTiff())
   }
 
   func testNoNilFilebasedImages() {
