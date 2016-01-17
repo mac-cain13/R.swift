@@ -67,28 +67,39 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   }
 
   struct ViewControllerPlaceholder {
+    enum ResolvedResult {
+      case CustomBundle
+      case Resolved(ViewController?)
+    }
+
     let id: String
     let storyboardName: String?
     let referencedIdentifier: String?
     let bundleIdentifier: String?
 
-    func resolveWithStoryboards(storyboards: [Storyboard]) -> ViewController? {
-      guard let storyboardName = storyboardName where bundleIdentifier == nil else {
-        return nil
+    func resolveWithStoryboards(storyboards: [Storyboard]) -> ResolvedResult {
+      if nil != bundleIdentifier {
+        // Can't resolve storyboard in other bundles
+        return .CustomBundle
+      }
+
+      guard let storyboardName = storyboardName else {
+        // Storyboard reference without a storyboard defined?!
+        return .Resolved(nil)
       }
 
       let storyboard = storyboards
         .filter { $0.name == storyboardName }
 
       guard let referencedIdentifier = referencedIdentifier else {
-        return storyboard.first?.initialViewController
+        return .Resolved(storyboard.first?.initialViewController)
       }
 
-      return storyboard
+      return .Resolved(storyboard
         .flatMap {
           $0.viewControllers.filter { $0.storyboardIdentifier == referencedIdentifier }
         }
-        .first
+        .first)
     }
   }
 
