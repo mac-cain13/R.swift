@@ -17,6 +17,7 @@
 		D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51E60C41BB1E600004BB376 /* User@white@3x.png */; };
 		D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51F47221B8FAF9F0028BAFD /* NibTests.swift */; };
 		D52725FC1C4A7C6A0005C8D4 /* Sky.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */; };
+		D52725FE1C4BB6BC0005C8D4 /* References.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D52725FD1C4BB6BC0005C8D4 /* References.storyboard */; };
 		D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CBF1B5D757300301B0D /* FirstViewController.swift */; };
 		D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CC11B5D757300301B0D /* SecondViewController.swift */; };
 		D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC31B5D757300301B0D /* Main.storyboard */; };
@@ -80,6 +81,7 @@
 		D51E60C41BB1E600004BB376 /* User@white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "User@white@3x.png"; sourceTree = "<group>"; };
 		D51F47221B8FAF9F0028BAFD /* NibTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibTests.swift; sourceTree = "<group>"; };
 		D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Sky.tiff; sourceTree = "<group>"; };
+		D52725FD1C4BB6BC0005C8D4 /* References.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = References.storyboard; sourceTree = "<group>"; };
 		D55C6CB81B5D757300301B0D /* ResourceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CBC1B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CBF1B5D757300301B0D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D55C6CC81B5D757300301B0D /* LaunchScreen.xib */,
+				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 			);
@@ -377,6 +380,7 @@
 				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
+				D52725FE1C4BB6BC0005C8D4 /* References.storyboard in Resources */,
 				D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
@@ -572,7 +576,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -611,7 +615,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -625,6 +629,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResourceApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -637,6 +642,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResourceApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -27,6 +27,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   let name: String
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
+  let viewControllerPlaceholders: [ViewControllerPlaceholder]
   let usedImageIdentifiers: [String]
   let reusables: [Reusable]
 
@@ -49,6 +50,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
 
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
+    viewControllerPlaceholders = parserDelegate.viewControllerPlaceholders
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     reusables = parserDelegate.reusables
   }
@@ -64,6 +66,32 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     }
   }
 
+  struct ViewControllerPlaceholder {
+    let id: String
+    let storyboardName: String?
+    let referencedIdentifier: String?
+    let bundleIdentifier: String?
+
+    func resolveWithStoryboards(storyboards: [Storyboard]) -> ViewController? {
+      guard let storyboardName = storyboardName where bundleIdentifier == nil else {
+        return nil
+      }
+
+      let storyboard = storyboards
+        .filter { $0.name == storyboardName }
+
+      guard let referencedIdentifier = referencedIdentifier else {
+        return storyboard.first?.initialViewController
+      }
+
+      return storyboard
+        .flatMap {
+          $0.viewControllers.filter { $0.storyboardIdentifier == referencedIdentifier }
+        }
+        .first
+    }
+  }
+
   struct Segue {
     let identifier: String
     let type: Type
@@ -74,6 +102,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
 private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var viewControllers: [Storyboard.ViewController] = []
+  var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
   var usedImageIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
@@ -109,6 +138,17 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
+      }
+
+    case "viewControllerPlaceholder":
+      if let id = attributeDict["id"] where attributeDict["sceneMemberID"] == "viewController" {
+        let placeholder = Storyboard.ViewControllerPlaceholder(
+          id: id,
+          storyboardName: attributeDict["storyboardName"],
+          referencedIdentifier: attributeDict["referencedIdentifier"],
+          bundleIdentifier: attributeDict["bundleIdentifier"]
+        )
+        viewControllerPlaceholders.append(placeholder)
       }
 
     default:

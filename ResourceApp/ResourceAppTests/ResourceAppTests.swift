@@ -21,6 +21,8 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 images because symbol 'theAppIcon' would be generated for all of these images: The App Icon, TheAppIcon",
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
     "warning: [R.swift] Skipping 2 resource files because symbol 'duplicateJson' would be generated for all of these files: Duplicate.json, duplicateJson",
+    "warning: [R.swift] Destination view controller with id kne-1k-ozT for segue toSomeStoryboard in FirstViewController not found in storyboard References. Is this storyboard corrupt?",
+    "warning: [R.swift] Destination view controller with id Zbd-89-K73 for segue toUnknown in FirstViewController not found in storyboard References. Is this storyboard corrupt?",
   ]
 
   func testWarningsAreLogged() {
