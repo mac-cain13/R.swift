@@ -103,7 +103,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         let type = customType ?? Type._UIStoryboardSegue
 
         let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: segueDestination)
-        currentViewController!.1.addSegue(segue)
+        currentViewController?.1.addSegue(segue)
       }
 
     case "image":
