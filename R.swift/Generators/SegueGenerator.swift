@@ -18,7 +18,22 @@ struct SegueGenerator: Generator {
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in
-          guard let destinationType = storyboard.viewControllers.filter({ $0.id == segue.destination }).first?.type else {
+          let destinationViewControllerType = storyboard.viewControllers
+            .filter { $0.id == segue.destination }
+            .first?
+            .type
+
+          let destinationViewControllerPlaceholderType = storyboard.viewControllerPlaceholders
+            .filter { $0.id == segue.destination }
+            .first
+            .flatMap { storyboard -> Type? in
+              switch storyboard.resolveWithStoryboards(storyboards) {
+                case .CustomBundle: return Type._UIViewController // Not supported, fallback to UIViewController
+                case let .Resolved(vc): return vc?.type
+              }
+            }
+
+          guard let destinationType = destinationViewControllerType ?? destinationViewControllerPlaceholderType else {
             warn("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
             return nil
           }
