@@ -106,7 +106,8 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   struct Segue {
     let identifier: String
     let type: Type
-    let destination: String?
+    let destination: String
+    let kind: String
   }
 }
 
@@ -137,11 +138,13 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         warn("Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
       }
 
-      if let segueIdentifier = attributeDict["identifier"]
+      if let segueIdentifier = attributeDict["identifier"],
+        destination = attributeDict["destination"],
+        kind = attributeDict["kind"]
       {
         let type = customType ?? Type._UIStoryboardSegue
 
-        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: attributeDict["destination"])
+        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
         currentViewController?.1.addSegue(segue)
       }
 
