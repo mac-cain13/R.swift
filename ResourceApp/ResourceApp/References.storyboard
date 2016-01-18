@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="IfC-nk-yIu">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <scenes>
+        <!--First View Controller-->
+        <scene sceneID="Ec6-ap-ExA">
+            <objects>
+                <viewController id="IfC-nk-yIu" customClass="FirstViewController" customModule="ResourceApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gMc-Wp-NdB"/>
+                        <viewControllerLayoutGuide type="bottom" id="fBR-5G-wqf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fBs-Rf-9GL">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="pmI-7c-sCm" kind="show" identifier="toMain" id="8v0-IP-YL0"/>
+                        <segue destination="IcN-B5-zUv" kind="show" identifier="toAVPlayerController" id="5eO-0j-fVU"/>
+                        <segue destination="kne-1k-ozT" kind="show" identifier="toSomeStoryboard" id="b6z-Sc-6eL"/>
+                        <segue destination="Zbd-89-K73" kind="show" identifier="toUnknown" id="6N8-Dg-FOm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H3t-vu-4W6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="245" y="-158"/>
+        </scene>
+        <!--Main-->
+        <scene sceneID="86e-Pp-WWd">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" id="pmI-7c-sCm" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pxH-tw-N3D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="717" y="-158"/>
+        </scene>
+        <!--avpVC-->
+        <scene sceneID="Evt-JE-8Jh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Specials" referencedIdentifier="avpVC" id="IcN-B5-zUv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ur6-Tt-rn7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="721.5" y="-68"/>
+        </scene>
+        <!--SomeStoryboard-->
+        <scene sceneID="Sxb-ap-wVJ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SomeStoryboard" bundleIdentifier="com.example.someBundle" id="kne-1k-ozT" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1gs-Cr-B2I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="753.5" y="31"/>
+        </scene>
+        <!--Storyboard Reference-->
+        <scene sceneID="IO1-Rw-OzQ">
+            <objects>
+                <viewControllerPlaceholder id="Zbd-89-K73" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eMh-8l-g71" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="768.5" y="121"/>
+        </scene>
+    </scenes>
+</document>
