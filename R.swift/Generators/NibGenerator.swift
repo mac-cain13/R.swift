@@ -111,15 +111,17 @@ struct NibGenerator: Generator {
 
     let viewFuncs = zip(nib.rootViews, Ordinals)
       .map { (view: $0.0, ordinal: $0.1) }
-      .map {
-        Function(
+      .map { viewInfo -> Function in
+        let viewIndex = viewInfo.ordinal.number - 1
+        let viewTypeString = viewInfo.view.description
+        return Function(
           isStatic: false,
-          name: "\($0.ordinal.word)View",
+          name: "\(viewInfo.ordinal.word)View",
           generics: nil,
           parameters: instantiateParameters,
           doesThrow: false,
-          returnType: $0.view.asOptional(),
-          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\($0.ordinal.number - 1)] as? \($0.view)"
+          returnType: viewInfo.view.asOptional(),
+          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
         )
       }
 
