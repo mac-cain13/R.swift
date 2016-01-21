@@ -599,6 +599,7 @@
 		D5EA0DFC1A3DF45600FFEBC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -606,6 +607,7 @@
 		D5EA0DFD1A3DF45600FFEBC4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
