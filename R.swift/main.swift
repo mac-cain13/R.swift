@@ -58,7 +58,7 @@ do {
 
 } catch let InputParsingError.UserAskedForHelp(helpString: helpString) {
   print(helpString)
-  exit(1)
+  exit(0)
 } catch let InputParsingError.IllegalOption(error: error, helpString: helpString) {
   fail(error)
   print(helpString)
