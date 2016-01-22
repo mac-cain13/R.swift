@@ -59,7 +59,18 @@ struct StoryboardGenerator: Generator {
 
   private static func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
 
-    let instantiateViewControllerFunctions = storyboard.viewControllers
+    var implements: [TypePrinter] = []
+    var typealiasses: [Typealias] = []
+    var functions: [Function] = []
+
+    if let initialViewController = storyboard.initialViewController {
+      implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
+      typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
+    } else {
+      implements.append(TypePrinter(type: Type.StoryboardResourceType))
+    }
+
+    storyboard.viewControllers
       .flatMap { (vc) -> Function? in
         let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
         return vc.storyboardIdentifier.map {
@@ -74,6 +85,7 @@ struct StoryboardGenerator: Generator {
           )
         }
       }
+      .forEach { functions.append($0) }
 
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
@@ -85,25 +97,21 @@ struct StoryboardGenerator: Generator {
           "if _R.storyboard.\(sanitizedSwiftName(storyboard.name))().\(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
       }
+    let validateLines = validateImagesLines + validateViewControllersLines
 
-    var implements = [TypePrinter(type: Type.Validatable, style: .FullyQualified)]
-    var typealiasses: [Typealias] = []
-    if let initialViewController = storyboard.initialViewController {
-      implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
-      typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
-    } else {
-      implements.append(TypePrinter(type: Type.StoryboardResourceType))
+    if validateLines.count > 0 {
+      let validateFunction = Function(
+        isStatic: true,
+        name: "validate",
+        generics: nil,
+        parameters: [],
+        doesThrow: true,
+        returnType: Type._Void,
+        body: validateLines.joinWithSeparator("\n")
+      )
+      functions.append(validateFunction)
+      implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
     }
-
-    let validateFunction = Function(
-      isStatic: true,
-      name: "validate",
-      generics: nil,
-      parameters: [],
-      doesThrow: true,
-      returnType: Type._Void,
-      body: (validateImagesLines + validateViewControllersLines).joinWithSeparator("\n")
-    )
 
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
@@ -113,9 +121,7 @@ struct StoryboardGenerator: Generator {
         Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
         Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle"),
       ],
-      functions: [
-        validateFunction,
-        ] + instantiateViewControllerFunctions,
+      functions: functions,
       structs: []
     )
   }
