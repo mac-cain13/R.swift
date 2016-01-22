@@ -107,6 +107,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let identifier: String
     let type: Type
     let destination: String
+    let kind: String
   }
 }
 
@@ -138,11 +139,12 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
       if let segueIdentifier = attributeDict["identifier"],
-        segueDestination = attributeDict["destination"]
+        destination = attributeDict["destination"],
+        kind = attributeDict["kind"]
       {
         let type = customType ?? Type._UIStoryboardSegue
 
-        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: segueDestination)
+        let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
         currentViewController?.1.addSegue(segue)
       }
 

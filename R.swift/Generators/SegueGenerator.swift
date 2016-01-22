@@ -18,22 +18,13 @@ struct SegueGenerator: Generator {
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in
-          let destinationViewControllerType = storyboard.viewControllers
-            .filter { $0.id == segue.destination }
-            .first?
-            .type
-
-          let destinationViewControllerPlaceholderType = storyboard.viewControllerPlaceholders
-            .filter { $0.id == segue.destination }
-            .first
-            .flatMap { storyboard -> Type? in
-              switch storyboard.resolveWithStoryboards(storyboards) {
-                case .CustomBundle: return Type._UIViewController // Not supported, fallback to UIViewController
-                case let .Resolved(vc): return vc?.type
-              }
-            }
-
-          guard let destinationType = destinationViewControllerType ?? destinationViewControllerPlaceholderType else {
+          guard let destinationType = SegueGenerator.resolveDestinationTypeForSegue(
+            segue,
+            inViewController: viewController,
+            inStoryboard: storyboard,
+            allStoryboards: storyboards)
+            else
+          {
             warn("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
             return nil
           }
@@ -72,6 +63,31 @@ struct SegueGenerator: Generator {
       functions: [],
       structs: structs
     )
+  }
+
+  private static func resolveDestinationTypeForSegue(segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
+    if segue.kind == "unwind" {
+      return Type._UIViewController
+    }
+
+    let destinationViewControllerType = storyboard.viewControllers
+      .filter { $0.id == segue.destination }
+      .first?
+      .type
+
+    let destinationViewControllerPlaceholderType = storyboard.viewControllerPlaceholders
+      .filter { $0.id == segue.destination }
+      .first
+      .flatMap { storyboard -> Type? in
+        switch storyboard.resolveWithStoryboards(storyboards) {
+        case .CustomBundle:
+          return Type._UIViewController // Not supported, fallback to UIViewController
+        case let .Resolved(vc):
+          return vc?.type
+        }
+      }
+
+    return destinationViewControllerType ?? destinationViewControllerPlaceholderType
   }
 
   private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
