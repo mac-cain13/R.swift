@@ -23,6 +23,10 @@ Xcode might autocomplete a function with a `Void` argument (`R.image.settingsIco
 
 The reason this happens is because of the availability of the var `R.image.settingsIcon.*` for information about the image and also having a function with named the same name.
 
+## How to fix missing imports in the generated file?
+
+If you get errors like `Use of undeclared type 'SomeType'` in the `R.generated.swift` file most of the time this can be fixed by [explicitly stating the module in your xib or storyboard](Images/ExplicitCustomModule.png). This will make R.swift recognize that an import is necessary.
+
 ## How does R.swift work?
 
 During installation you add R.swift as a Build phase to your target, basically this means that:
