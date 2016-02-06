@@ -17,3 +17,8 @@ extension Property {
     return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
   }
 }
+
+/// Type-erasure function
+func anyProperty(property: Property) -> Property {
+  return property
+}
