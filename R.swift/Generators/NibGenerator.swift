@@ -95,14 +95,14 @@ struct NibGenerator: Generator {
       Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true), defaultValue: "nil")
     ]
 
-    let bundleLet: Property = Let(
+    let bundleLet = Let(
       isStatic: false,
       name: "bundle",
       typeDefinition: .Inferred(Type._NSBundle),
       value: "_R.hostingBundle"
     )
 
-    let nameVar: Property = Let(
+    let nameVar = Let(
       isStatic: false,
       name: "name",
       typeDefinition: .Inferred(Type._String),

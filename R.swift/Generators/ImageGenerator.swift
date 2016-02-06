@@ -67,7 +67,7 @@ struct ImageGenerator: Generator {
       warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
     }
 
-    let imageLets: [Property] = functions.uniques
+    let imageLets = functions.uniques
       .map {
         Let(
           isStatic: true,
@@ -81,7 +81,7 @@ struct ImageGenerator: Generator {
       type: Type(module: .Host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: imageLets,
+      properties: imageLets.map(anyProperty),
       functions: functions.uniques,
       structs: []
     )

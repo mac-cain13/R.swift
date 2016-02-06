@@ -25,7 +25,7 @@ struct ReuseIdentifierGenerator: Generator {
       warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
     }
 
-    let reuseIdentifierProperties: [Property] = groupedReusables
+    let reuseIdentifierProperties = groupedReusables
       .uniques
       .map(ReuseIdentifierGenerator.letFromReusable)
 
@@ -33,7 +33,7 @@ struct ReuseIdentifierGenerator: Generator {
       type: Type(module: .Host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      properties: reuseIdentifierProperties,
+      properties: reuseIdentifierProperties.map(anyProperty),
       functions: [],
       structs: []
     )

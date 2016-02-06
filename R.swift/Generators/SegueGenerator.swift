@@ -93,7 +93,7 @@ struct SegueGenerator: Generator {
   private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
     guard let sourceType = seguesWithInfoForSourceType.first?.sourceType else { return nil }
 
-    let properties: [Property] = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
+    let properties = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
       let type = Type(
         module: "Rswift",
         name: "StoryboardSegueIdentifier",
@@ -128,7 +128,7 @@ struct SegueGenerator: Generator {
       type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
       implements: [],
       typealiasses: [],
-      properties: properties,
+      properties: properties.map(anyProperty),
       functions: functions,
       structs: []
     )
