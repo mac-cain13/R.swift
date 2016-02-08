@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9D1BBC33680013F52A /* Colors@2x.jpg */; };
 		D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9F1BBC37BC0013F52A /* Colors@3x.jpg */; };
@@ -70,6 +71,7 @@
 		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
 		9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
 		AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
 		D5159E9D1BBC33680013F52A /* Colors@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Colors@2x.jpg"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
+				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
+				C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */,
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,

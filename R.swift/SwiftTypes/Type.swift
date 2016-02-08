@@ -28,6 +28,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UIStoryboard = Type(module: "UIKit", name: "UIStoryboard")
   static let _UITableViewCell = Type(module: "UIKit", name: "UITableViewCell")
   static let _UICollectionViewCell = Type(module: "UIKit", name: "UICollectionViewCell")
+  static let _UICollectionReusableView = Type(module: "UIKit", name: "UICollectionReusableView")
   static let _UIStoryboardSegue = Type(module: "UIKit", name: "UIStoryboardSegue")
   static let _UITraitCollection = Type(module: "UIKit", name: "UITraitCollection")
   static let _UIViewController = Type(module: "UIKit", name: "UIViewController")
