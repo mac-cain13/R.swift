@@ -13,6 +13,7 @@ private let ElementNameToTypeMapping = [
   "view": Type._UIView,
   "tableViewCell": Type._UITableViewCell,
   "collectionViewCell": Type._UICollectionViewCell,
+  "collectionReusableView": Type._UICollectionReusableView
 ]
 
 struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
