@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.3.0
+New features:
+- `R.file.*.path()` and `R.file.*.url()` are now available
+
+Fixed issues:
+- It was possible to invoke segues that didn’t match the source view controller, this is fixed now by restricting some types
+- Support `UICollectionReusableView` as root view in a nib
+
+## 1.2.0
+New features:
+- Unwind segues are now supported
+
+Fixed issues:
+- Avoid creation of empty validate methods
+
+## 1.1.1
+
+Fixed issues:
+- Validate methods could have invalid code in their body
+- Help exited with code 1, should be 0
+- Also; Improved compile time by 7 seconds with some small code changes
+
+## 1.1.0
+
+New features:
+- Storyboard references are now supported
+
+Fixed issues:
+- Segues from views did crash R.swift
+
 ## 1.0.2
 
 Fixed issues:
