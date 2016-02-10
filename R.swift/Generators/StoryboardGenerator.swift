@@ -89,7 +89,7 @@ struct StoryboardGenerator: Generator {
 
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
-        "if UIImage(named: \"\($0)\") == nil { throw ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+        "if R.image.\(sanitizedSwiftName($0, lowercaseFirstCharacter: true))() == nil { throw ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
