@@ -91,7 +91,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ### Homebrew
 
-`R.swift`'s binary is also available via homebrew. [Homebrew](http://brew.sh) is a packagemanager for OSX.Install it via the following command: 
+`R.swift`'s binary is also available via homebrew. [Homebrew](http://brew.sh) is a packagemanager for OSX. Install it via the following command: 
 
 ```
 $ brew install rswift
