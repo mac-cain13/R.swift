@@ -26,7 +26,7 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
 }
 
-private let BlacklistedCharacters = { () -> NSCharacterSet in
+private let BlacklistedCharacters: NSCharacterSet = {
   let blacklist = NSMutableCharacterSet(charactersInString: "")
   blacklist.formUnionWithCharacterSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
   blacklist.formUnionWithCharacterSet(NSCharacterSet.punctuationCharacterSet())
