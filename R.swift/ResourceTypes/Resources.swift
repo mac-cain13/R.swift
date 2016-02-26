@@ -20,7 +20,8 @@ struct Resources {
   let nibs: [Nib]
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
-
+  let strings: Strings?
+    
   let reusables: [Reusable]
 
   init(resourceURLs: [NSURL], fileManager: NSFileManager) {
@@ -32,6 +33,9 @@ struct Resources {
     resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
+    strings = resourceURLs.flatMap { url in tryResourceParsing { try Strings(url: url) } }
+      .reduce(StringValidator(), combine: StringValidator.combine)
+      .validStrings()
   }
 }
 

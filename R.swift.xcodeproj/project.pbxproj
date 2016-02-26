@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D997C951C7C291900B2F376 /* StringsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsGenerator.swift */; };
+		5D997C971C7C2BEE00B2F376 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C961C7C2BEE00B2F376 /* Strings.swift */; };
 		D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
 		D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE21BE2016E0034F4D7 /* PBXObject.swift */; };
 		D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
@@ -95,6 +97,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D997C941C7C291900B2F376 /* StringsGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsGenerator.swift; sourceTree = "<group>"; };
+		5D997C961C7C2BEE00B2F376 /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D5646DE21BE2016E0034F4D7 /* PBXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBXObject.swift; sourceTree = "<group>"; };
 		D5646DE31BE2016E0034F4D7 /* Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 				D5B7996B1C1993F8009EA901 /* ReuseIdentifierGenerator.swift */,
 				D5B799651C19939D009EA901 /* SegueGenerator.swift */,
 				D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */,
+				5D997C941C7C291900B2F376 /* StringsGenerator.swift */,
 			);
 			path = Generators;
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 				D5F97E371C178A4F0066D7C0 /* Resources.swift */,
 				D59F723E1C19651F0089767C /* ReusableContainer.swift */,
 				D5F97E3B1C1813A70066D7C0 /* Storyboard.swift */,
+				5D997C961C7C2BEE00B2F376 /* Strings.swift */,
 				D5B799781C19C082009EA901 /* WhiteListedExtensionsResourceType.swift */,
 				D5F97E3D1C1815780066D7C0 /* Xcodeproj.swift */,
 			);
@@ -443,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D997C951C7C291900B2F376 /* StringsGenerator.swift in Sources */,
 				D5B799831C1B8C78009EA901 /* Module.swift in Sources */,
 				D5C5A8EF1BB7196000163E71 /* Core.swift in Sources */,
 				D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */,
@@ -476,6 +483,7 @@
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
+				5D997C971C7C2BEE00B2F376 /* Strings.swift in Sources */,
 				D56DC76D1C41758800623437 /* AccessModifier.swift in Sources */,
 				D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */,
 				D5B7997D1C1B07C3009EA901 /* SanitizedSwiftName.swift in Sources */,
