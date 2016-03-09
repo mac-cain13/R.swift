@@ -57,7 +57,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
       if isObjectsTagOpened {
         levelSinceObjectsTagOpened++;
 
-        if let rootView = viewWithAttributes(attributeDict)
+        if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
           where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
         }
@@ -81,11 +81,13 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func viewWithAttributes(attributeDict: [String : String]) -> Type? {
+  func viewWithAttributes(attributeDict: [String : String], elementName: String) -> Type? {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
-    let customClass = (attributeDict["customClass"]) ?? "UIView"
-    return Type(module: Module(name: customModule), name: customClass)
+    let customClass = attributeDict["customClass"]
+    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
+
+    return customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
   }
 
   func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {

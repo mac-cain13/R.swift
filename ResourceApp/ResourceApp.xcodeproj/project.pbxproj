@@ -38,6 +38,7 @@
 		D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */; };
 		D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5B799841C1B8DB6009EA901 /* Settings.bundle */; };
 		D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5B799861C1B8DD2009EA901 /* Specials.storyboard */; };
+		D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */; };
@@ -107,6 +108,7 @@
 		D5B799841C1B8DB6009EA901 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D5B799861C1B8DD2009EA901 /* Specials.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Specials.storyboard; sourceTree = "<group>"; };
 		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellCollectionView.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-B.ttf"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D575E25C1B766CD800C22F0B /* My View.xib */,
 				D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */,
+				D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */,
 				D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */,
 				D5AD5C901B78FC0500A8B96C /* duplicate.xib */,
 				D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */,
@@ -391,6 +394,7 @@
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */,
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
+				D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
