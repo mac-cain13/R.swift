@@ -47,8 +47,7 @@ struct SegueGenerator: Generator {
       let gropuedSeguesWithInfo = seguesBySourceType.groupBySwiftNames { $0.segue.identifier }
 
       for (name, duplicates) in gropuedSeguesWithInfo.duplicates {
-        let names = duplicates.map { $0.segue.identifier }.sort().joinWithSeparator(", ")
-        warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(names)")
+        warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joinWithSeparator(", "))")
       }
 
       let sts = gropuedSeguesWithInfo

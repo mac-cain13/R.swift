@@ -16,8 +16,7 @@ struct ResourceFileGenerator: Generator {
     let groupedResourceFiles = resourceFiles.groupBySwiftNames { $0.fullname }
 
     for (name, duplicates) in groupedResourceFiles.duplicates {
-      let names = duplicates.map { $0.fullname }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(names)")
+      warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(duplicates.joinWithSeparator(", "))")
     }
 
     externalStruct = Struct(

@@ -16,8 +16,7 @@ struct StoryboardGenerator: Generator {
     let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
 
     for (name, duplicates) in groupedStoryboards.duplicates {
-      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(names)")
+      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
     }
 
     let storyboardStructs = groupedStoryboards

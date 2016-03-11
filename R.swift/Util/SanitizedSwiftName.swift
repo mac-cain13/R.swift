@@ -32,18 +32,20 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
 
 struct SwiftNameGroups<T> {
   let uniques: [T]
-  let duplicates: [(String, [T])]
-  let empties: [T]
+  let duplicates: [(String, [String])] // Identifiers that result in duplicate Swift names
+  let empties: [String] // Identifiers that result in empty swift names
 }
 
 extension SequenceType {
   func groupBySwiftNames(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
     var groupedBy = groupBy { sanitizedSwiftName(identifierSelector($0)) }
-    let empties = groupedBy[""]
+    let empties = groupedBy[""]?.map { identifierSelector($0) }
     groupedBy[""] = nil
 
     let uniques = groupedBy.values.filter { $0.count == 1 }.flatten()
-    let duplicates = groupedBy.filter { $0.1.count > 1 }
+    let duplicates = groupedBy
+      .filter { $0.1.count > 1 }
+      .map { ($0.0, $0.1.map(identifierSelector).sort()) }
 
     return SwiftNameGroups(uniques: Array(uniques), duplicates: duplicates, empties: empties ?? [])
   }

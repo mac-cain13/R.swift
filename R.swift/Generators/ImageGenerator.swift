@@ -63,8 +63,7 @@ struct ImageGenerator: Generator {
     let groupedFunctions = allFunctions.groupBySwiftNames { $0.callName }
 
     for (sanitizedName, duplicates) in groupedFunctions.duplicates {
-      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(names)")
+      warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(duplicates.joinWithSeparator(", "))")
     }
 
     let imageLets = groupedFunctions

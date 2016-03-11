@@ -39,8 +39,7 @@ struct NibGenerator: Generator {
     let groupedNibs = nibs.groupBySwiftNames { $0.name }
 
     for (name, duplicates) in groupedNibs.duplicates {
-      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(names)")
+      warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(duplicates.joinWithSeparator(", "))")
     }
 
     internalStruct = Struct(
