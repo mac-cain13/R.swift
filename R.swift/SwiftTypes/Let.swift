@@ -25,16 +25,34 @@ enum TypeDefinition: UsedTypesProvider {
 }
 
 struct Let: Property {
+  let comments: [String]
   let isStatic: Bool
   let name: String
   let typeDefinition: TypeDefinition
   let value: String
+
+  init(isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
+    self.comments = []
+    self.isStatic = isStatic
+    self.name = name
+    self.typeDefinition = typeDefinition
+    self.value = value
+  }
+
+  init(comments: [String], isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
+    self.comments = comments
+    self.isStatic = isStatic
+    self.name = name
+    self.typeDefinition = typeDefinition
+    self.value = value
+  }
 
   var usedTypes: [UsedType] {
     return typeDefinition.usedTypes
   }
 
   var description: String {
+    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
     let staticString = isStatic ? "static " : ""
 
     let typeString: String
@@ -43,6 +61,6 @@ struct Let: Property {
     case .Inferred: typeString = ""
     }
 
-    return "\(staticString)let \(callName)\(typeString) = \(value)"
+    return "\(commentsString)\(staticString)let \(callName)\(typeString) = \(value)"
   }
 }
