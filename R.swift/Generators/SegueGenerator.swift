@@ -128,6 +128,7 @@ struct SegueGenerator: Generator {
     let typeName = sanitizedSwiftName(sourceType.description)
 
     return Struct(
+      comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],
       type: Type(module: .Host, name: typeName),
       implements: [],
       typealiasses: [],
