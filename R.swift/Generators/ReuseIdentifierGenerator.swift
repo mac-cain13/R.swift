@@ -24,6 +24,14 @@ struct ReuseIdentifierGenerator: Generator {
       warn("Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(duplicates.joinWithSeparator(", "))")
     }
 
+    let empties = groupedReusables.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) reuseIdentifiers because no swift identifier can be generated for all of these reuseIdentifiers: \(empties.joinWithSeparator(", "))")
+    }
+
     let reuseIdentifierProperties = groupedReusables
       .uniques
       .map(ReuseIdentifierGenerator.letFromReusable)

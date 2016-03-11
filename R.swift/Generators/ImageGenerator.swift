@@ -66,6 +66,14 @@ struct ImageGenerator: Generator {
       warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(duplicates.joinWithSeparator(", "))")
     }
 
+    let empties = groupedFunctions.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 image because no swift identifier can be generated for image: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) images because no swift identifier can be generated for all of these images: \(empties.joinWithSeparator(", "))")
+    }
+
     let imageLets = groupedFunctions
       .uniques
       .map {

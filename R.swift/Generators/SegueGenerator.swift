@@ -50,6 +50,14 @@ struct SegueGenerator: Generator {
         warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joinWithSeparator(", "))")
       }
 
+      let empties = gropuedSeguesWithInfo.empties
+      if let empty = empties.first where empties.count == 1 {
+        warn("Skipping 1 segue for '\(sourceType)' because no swift identifier can be generated for segue: \(empty)")
+      }
+      else if empties.count > 1 {
+        warn("Skipping \(empties.count) segues for '\(sourceType)' because no swift identifier can be generated for all of these segues: \(empties.joinWithSeparator(", "))")
+      }
+
       let sts = gropuedSeguesWithInfo
         .uniques
         .groupBy { $0.sourceType }

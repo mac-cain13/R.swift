@@ -42,6 +42,14 @@ struct NibGenerator: Generator {
       warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(duplicates.joinWithSeparator(", "))")
     }
 
+    let empties = groupedNibs.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 xib because no swift identifier can be generated for xib: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) xibs because no swift identifier can be generated for all of these xibs: \(empties.joinWithSeparator(", "))")
+    }
+
     internalStruct = Struct(
         type: Type(module: .Host, name: "nib"),
         implements: [],

@@ -19,6 +19,14 @@ struct ResourceFileGenerator: Generator {
       warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(duplicates.joinWithSeparator(", "))")
     }
 
+    let empties = groupedResourceFiles.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 resource file because no swift identifier can be generated for file: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) resource files because no swift identifier can be generated for all of these files: \(empties.joinWithSeparator(", "))")
+    }
+
     externalStruct = Struct(
       type: Type(module: .Host, name: "file"),
       implements: [],
