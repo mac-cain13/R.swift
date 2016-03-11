@@ -36,11 +36,11 @@ struct NibGenerator: Generator {
   let internalStruct: Struct?
 
   init(nibs: [Nib]) {
-    let groupedNibs = nibs.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+    let groupedNibs = nibs.groupBySwiftNames { $0.name }
 
-    for duplicate in groupedNibs.duplicates {
-      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
+    for (name, duplicates) in groupedNibs.duplicates {
+      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(names)")
     }
 
     internalStruct = Struct(

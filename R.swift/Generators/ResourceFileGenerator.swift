@@ -13,12 +13,11 @@ struct ResourceFileGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(resourceFiles: [ResourceFile]) {
-    let groupedResourceFiles = resourceFiles
-      .groupUniquesAndDuplicates { sanitizedSwiftName($0.fullname) }
+    let groupedResourceFiles = resourceFiles.groupBySwiftNames { $0.fullname }
 
-    for duplicate in groupedResourceFiles.duplicates {
-      let names = duplicate.map { $0.fullname }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) resource files because symbol '\(sanitizedSwiftName(duplicate.first!.fullname))' would be generated for all of these files: \(names)")
+    for (name, duplicates) in groupedResourceFiles.duplicates {
+      let names = duplicates.map { $0.fullname }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(names)")
     }
 
     externalStruct = Struct(

@@ -13,11 +13,11 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+    let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
 
-    for duplicate in groupedStoryboards.duplicates {
-      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
+    for (name, duplicates) in groupedStoryboards.duplicates {
+      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(names)")
     }
 
     let storyboardStructs = groupedStoryboards

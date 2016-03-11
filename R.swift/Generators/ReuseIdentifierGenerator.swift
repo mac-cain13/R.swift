@@ -18,11 +18,11 @@ struct ReuseIdentifierGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
+    let groupedReusables = deduplicatedReusables.groupBySwiftNames { $0.identifier }
 
-    for duplicate in groupedReusables.duplicates {
-      let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
+    for (name, duplicates) in groupedReusables.duplicates {
+      let names = duplicates.map { $0.identifier }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(names)")
     }
 
     let reuseIdentifierProperties = groupedReusables

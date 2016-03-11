@@ -59,15 +59,16 @@ struct ImageGenerator: Generator {
         )
       }
 
-    let functions = (assetFolderImageFunctions + imageFunctions)
-      .groupUniquesAndDuplicates { $0.callName }
+    let allFunctions = assetFolderImageFunctions + imageFunctions
+    let groupedFunctions = allFunctions.groupBySwiftNames { $0.callName }
 
-    for duplicate in functions.duplicates {
-      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
+    for (sanitizedName, duplicates) in groupedFunctions.duplicates {
+      let names = duplicates.map { $0.name }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(names)")
     }
 
-    let imageLets = functions.uniques
+    let imageLets = groupedFunctions
+      .uniques
       .map {
         Let(
           isStatic: true,
@@ -82,7 +83,7 @@ struct ImageGenerator: Generator {
       implements: [],
       typealiasses: [],
       properties: imageLets.map(anyProperty),
-      functions: functions.uniques,
+      functions: groupedFunctions.uniques,
       structs: []
     )
   }

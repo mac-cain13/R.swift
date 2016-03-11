@@ -23,7 +23,30 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
 
   let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
-  return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
+  if SwiftKeywords.contains(capitalizedSwiftName) {
+    return "`\(capitalizedSwiftName)`"
+  }
+
+  return capitalizedSwiftName // .isEmpty ? nil : capitalizedSwiftName
+}
+
+struct SwiftNameGroups<T> {
+  let uniques: [T]
+  let duplicates: [(String, [T])]
+  let empties: [T]
+}
+
+extension SequenceType {
+  func groupBySwiftNames(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
+    var groupedBy = groupBy { sanitizedSwiftName(identifierSelector($0)) }
+    let empties = groupedBy[""]
+    groupedBy[""] = nil
+
+    let uniques = groupedBy.values.filter { $0.count == 1 }.flatten()
+    let duplicates = groupedBy.filter { $0.1.count > 1 }
+
+    return SwiftNameGroups(uniques: Array(uniques), duplicates: duplicates, empties: empties ?? [])
+  }
 }
 
 private let BlacklistedCharacters: NSCharacterSet = {
