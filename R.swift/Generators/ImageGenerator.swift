@@ -17,6 +17,7 @@ struct ImageGenerator: Generator {
       .flatMap { $0.imageAssets }
       .map {
         Function(
+          comments: ["`UIImage(named: \"\($0)\", bundle: ..., traitCollection: ...)`"],
           isStatic: true,
           name: $0,
           generics: nil,
@@ -42,6 +43,7 @@ struct ImageGenerator: Generator {
     let imageFunctions = uniqueImages
       .map {
         Function(
+          comments: ["`UIImage(named: \"\($0.name)\", bundle: ..., traitCollection: ...)`"],
           isStatic: true,
           name: $0.name,
           generics: nil,
@@ -67,9 +69,10 @@ struct ImageGenerator: Generator {
       warn("Skipping \(duplicate.count) images because symbol '\(duplicate.first!.callName)' would be generated for all of these images: \(names)")
     }
 
-    let imageLets = functions.uniques
+    let imageLets: [Property] = functions.uniques
       .map {
         Let(
+          comments: ["Image `\($0.name)`."],
           isStatic: true,
           name: $0.name,
           typeDefinition: .Inferred(Type.ImageResource),
@@ -82,7 +85,7 @@ struct ImageGenerator: Generator {
       type: Type(module: .Host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: imageLets.map(anyProperty),
+      properties: imageLets,
       functions: functions.uniques,
       structs: []
     )
