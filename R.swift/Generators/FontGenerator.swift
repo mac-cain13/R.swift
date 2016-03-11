@@ -14,6 +14,7 @@ struct FontGenerator: Generator {
 
   init(fonts: [Font]) {
     externalStruct = Struct(
+      comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
       type: Type(module: .Host, name: "font"),
       implements: [],
       typealiasses: [],

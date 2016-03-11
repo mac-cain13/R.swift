@@ -78,6 +78,7 @@ struct ImageGenerator: Generator {
     }
 
     externalStruct = Struct(
+      comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
       type: Type(module: .Host, name: "image"),
       implements: [],
       typealiasses: [],

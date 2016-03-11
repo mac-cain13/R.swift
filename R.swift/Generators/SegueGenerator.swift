@@ -56,6 +56,7 @@ struct SegueGenerator: Generator {
       .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
 
     externalStruct = Struct(
+      comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
       type: Type(module: .Host, name: "segue"),
       implements: [],
       typealiasses: [],
@@ -124,8 +125,10 @@ struct SegueGenerator: Generator {
       )
     }
 
+    let typeName = sanitizedSwiftName(sourceType.description)
+
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
+      type: Type(module: .Host, name: typeName),
       implements: [],
       typealiasses: [],
       properties: properties.map(anyProperty),

@@ -30,6 +30,7 @@ struct ReuseIdentifierGenerator: Generator {
       .map(ReuseIdentifierGenerator.letFromReusable)
 
     externalStruct = Struct(
+      comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
       type: Type(module: .Host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],

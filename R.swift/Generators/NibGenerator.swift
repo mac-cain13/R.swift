@@ -54,16 +54,20 @@ struct NibGenerator: Generator {
           .map(NibGenerator.nibStructForNib)
       )
 
+    let nibProperties: [Property] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibVarForNib)
+    let nibFunctions: [Function] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibFuncForNib)
+
     externalStruct = Struct(
+      comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        properties: groupedNibs
-          .uniques
-          .map(NibGenerator.nibVarForNib),
-      functions: groupedNibs
-        .uniques
-        .map(NibGenerator.nibFuncForNib),
+        properties: nibProperties,
+        functions: nibFunctions,
         structs: []
       )
   }

@@ -24,26 +24,30 @@ struct StoryboardGenerator: Generator {
       .uniques
       .map(StoryboardGenerator.storyboardStructForStoryboard)
 
+    let storyboardProperties: [Property] = storyboardStructs.map {
+      Let(isStatic: true, name: $0.type.name, typeDefinition: .Inferred(Type.StoryboardResourceType), value: "_R.storyboard.\($0.type.name)()")
+    }
+    let storyboardFunctions: [Function] = storyboardStructs.map {
+      Function(
+        isStatic: true,
+        name: $0.type.name,
+        generics: nil,
+        parameters: [
+          Function.Parameter(name: "_", type: Type._Void)
+        ],
+        doesThrow: false,
+        returnType: Type._UIStoryboard,
+        body: "return UIStoryboard(resource: R.storyboard.\($0.type.name))"
+      )
+    }
+
     externalStruct = Struct(
+      comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
         type: Type(module: .Host, name: "storyboard"),
         implements: [],
         typealiasses: [],
-        properties: storyboardStructs.map {
-          Let(isStatic: true, name: $0.type.name, typeDefinition: .Inferred(Type.StoryboardResourceType), value: "_R.storyboard.\($0.type.name)()")
-        },
-        functions: storyboardStructs.map {
-          Function(
-            isStatic: true,
-            name: $0.type.name,
-            generics: nil,
-            parameters: [
-              Function.Parameter(name: "_", type: Type._Void)
-            ],
-            doesThrow: false,
-            returnType: Type._UIStoryboard,
-            body: "return UIStoryboard(resource: R.storyboard.\($0.type.name))"
-          )
-        },
+        properties: storyboardProperties,
+        functions: storyboardFunctions,
         structs: []
       )
 
