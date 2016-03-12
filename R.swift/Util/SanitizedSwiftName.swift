@@ -42,12 +42,12 @@ extension SequenceType {
     let empties = groupedBy[""]?.map { "'\(identifierSelector($0))'" }.sort()
     groupedBy[""] = nil
 
-    let uniques = groupedBy.values.filter { $0.count == 1 }.flatten()
+    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
       .map { ($0.0, $0.1.map(identifierSelector).sort()) }
 
-    return SwiftNameGroups(uniques: Array(uniques), duplicates: duplicates, empties: empties ?? [])
+    return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
   }
 }
 
