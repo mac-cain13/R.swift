@@ -79,7 +79,11 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .sort { $0.type.description < $1.type.description }
       .joinWithSeparator("\n\n")
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString].filter { $0 != "" }
+
+    // Private `init`, so that struct can't be initialized externally.
+    let privateInit = "private init() {}"
+
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
