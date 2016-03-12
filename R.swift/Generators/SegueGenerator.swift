@@ -102,6 +102,7 @@ struct SegueGenerator: Generator {
         optional: false
       )
       return Let(
+        comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         typeDefinition: .Specified(type),
@@ -111,6 +112,11 @@ struct SegueGenerator: Generator {
 
     let functions = seguesWithInfoForSourceType.map { segueWithInfo -> Function in
       Function(
+        comments: [
+          "Optionally returns a typed version of segue `\(segueWithInfo.segue.identifier)`.",
+          "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",
+          "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
+        ],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         generics: nil,

@@ -42,6 +42,7 @@ struct ReuseIdentifierGenerator: Generator {
 
   private static func letFromReusable(reusable: Reusable) -> Let {
     return Let(
+      comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,
       name: reusable.identifier,
       typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),

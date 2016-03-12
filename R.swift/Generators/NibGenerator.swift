@@ -74,6 +74,7 @@ struct NibGenerator: Generator {
 
   private static func nibFuncForNib(nib: Nib) -> Function {
     return Function(
+      comments: ["`UINib(name: \"\(nib.name)\", bundle: ...)`"],
       isStatic: true,
       name: nib.name,
       generics: nil,
@@ -89,7 +90,13 @@ struct NibGenerator: Generator {
   private static func nibVarForNib(nib: Nib) -> Let {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
     let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
-    return Let(isStatic: true, name: nib.name, typeDefinition: .Inferred(structType), value: "\(structType)()")
+    return Let(
+      comments: ["Nib `\(nib.name)`."],
+      isStatic: true,
+      name: nib.name,
+      typeDefinition: .Inferred(structType),
+      value: "\(structType)()"
+    )
   }
 
   private static func nibStructForNib(nib: Nib) -> Struct {

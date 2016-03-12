@@ -25,33 +25,45 @@ struct ResourceFileGenerator: Generator {
       .uniques
       .map {
         let pathExtensionOrNilString = $0.pathExtension.map { "\"\($0)\"" } ?? "nil"
-        return Let(isStatic: true, name: $0.fullname, typeDefinition: .Inferred(Type.FileResource), value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))")
+        return Let(
+          comments: ["Resource file `\($0.fullname)`."],
+          isStatic: true,
+          name: $0.fullname,
+          typeDefinition: .Inferred(Type.FileResource),
+          value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))"
+          )
       }
     let resourceFileFunctions: [Function] = groupedResourceFiles
       .uniques
-      .flatMap {
-        [
+      .flatMap { resourceFile -> [Function] in
+        let fullname = resourceFile.fullname
+        let filename = resourceFile.filename
+        let pathExtension = resourceFile.pathExtension.map { ext in "\"\(ext)\"" } ?? "nil"
+
+        return [
           Function(
+            comments: ["`bundle.URLForResource(\"\(filename)\", withExtension: \(pathExtension))`"],
             isStatic: true,
-            name: $0.fullname,
+            name: fullname,
             generics: nil,
             parameters: [
               Function.Parameter(name: "_", type: Type._Void)
             ],
             doesThrow: false,
             returnType: Type._NSURL.asOptional(),
-            body: "let fileResource = R.file.\(sanitizedSwiftName($0.fullname))\nreturn fileResource.bundle?.URLForResource(fileResource)"
+            body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle?.URLForResource(fileResource)"
           ),
           Function(
+            comments: ["`bundle.pathForResource(\"\(filename)\", ofType: \(pathExtension))`"],
             isStatic: true,
-            name: $0.fullname,
+            name: fullname,
             generics: nil,
             parameters: [
               Function.Parameter(name: "_", type: Type._Void)
             ],
             doesThrow: false,
             returnType: Type._String.asOptional(),
-            body: "let fileResource = R.file.\(sanitizedSwiftName($0.fullname))\nreturn fileResource.bundle?.pathForResource(fileResource)"
+            body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle?.pathForResource(fileResource)"
           )
         ]
       }
