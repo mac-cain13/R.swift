@@ -82,12 +82,31 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 ### Manually
 
 0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library#Installation) to your project
-1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
+1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory OR install the binary via homebrew. For more detail check [Homebrew](#homebrew)
 2. In XCode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script: `"$SRCROOT/rswift" "$SRCROOT"`
 4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+### Homebrew
+
+`R.swift`'s binary is also available via homebrew. [Homebrew](http://brew.sh) is a packagemanager for OSX. Install it via the following command: 
+
+```
+$ brew install rswift
+``` 
+
+Be also sure to update brew via `$ brew update`
+
+If your paths are correct, rswift should be available via the command line. 
+
+```
+$ rswift -h
+usage: rswift [-p|--xcodeproj] [-t|--target] [--bundleIdentifier]
+              [--buildProductsDir] [--developerDir] [--sourceRoot] [--sdkRoot]
+              [--productModuleName] [-h|--help]
+```
 
 ## Contribute
 
