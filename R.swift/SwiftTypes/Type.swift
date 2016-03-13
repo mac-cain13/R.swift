@@ -39,6 +39,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let ReuseIdentifierType = Type(module: "Rswift", name: "ReuseIdentifierType")
   static let StoryboardResourceType = Type(module: "Rswift", name: "StoryboardResourceType")
   static let StoryboardResourceWithInitialControllerType = Type(module: "Rswift", name: "StoryboardResourceWithInitialControllerType")
+  static let StoryboardViewControllerResource = Type(module: "Rswift", name: "StoryboardViewControllerResource")
   static let NibResourceType = Type(module: "Rswift", name: "NibResourceType")
   static let FileResource = Type(module: "Rswift", name: "FileResource")
   static let FontResource = Type(module: "Rswift", name: "FontResource")

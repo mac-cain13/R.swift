@@ -57,7 +57,7 @@ struct ImageGenerator: Generator {
           ],
           doesThrow: false,
           returnType: Type._UIImage.asOptional(),
-          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0.name)), compatibleWithTraitCollection: traitCollection)"
+          body: "return \(Type._UIImage.name)(resource: R.image.\(sanitizedSwiftName($0.name)), compatibleWithTraitCollection: traitCollection)"
         )
       }
 
@@ -76,7 +76,7 @@ struct ImageGenerator: Generator {
           isStatic: true,
           name: $0.name,
           typeDefinition: .Inferred(Type.ImageResource),
-          value: "ImageResource(bundle: _R.hostingBundle, name: \"\($0.name)\")"
+          value: "\(Type.ImageResource.name)(bundle: _R.hostingBundle, name: \"\($0.name)\")"
         )
     }
 

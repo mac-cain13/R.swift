@@ -89,6 +89,10 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
+### Homebrew (Unofficial)
+
+R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by @tomasharkema.
+
 ## Contribute
 
 Please post any issues, questions and compliments in the GitHub issue tracker and feel free to submit pull request with fixes and improvements. Keep in mind; a good pull request is small, forked from the `master`-branch and well explained. It also should benefit most of the users.
