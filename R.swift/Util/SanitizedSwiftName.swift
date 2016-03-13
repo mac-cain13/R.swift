@@ -59,8 +59,5 @@ private let SwiftKeywords = [
 
   // Keywords used in expressions and types
   "as", "catch", "dynamicType", "false", "is", "nil", "rethrows", "super", "self", "Self", "throw", "throws", "true", "try", "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__",
-
-  // Keywords used in patterns
-  "_",
 ]
 
