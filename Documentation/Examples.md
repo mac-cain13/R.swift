@@ -193,5 +193,5 @@ let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension:
 *With R.swift*
 ```swift
 let jsonURL = R.file.seedDataJson()
-let jsonPath = NSBundle.mainBundle().pathForResource(R.file.seedDataJson)
+let jsonPath = R.file.seedDataJson.path()
 ```
