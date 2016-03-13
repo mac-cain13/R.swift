@@ -33,6 +33,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UITraitCollection = Type(module: "UIKit", name: "UITraitCollection")
   static let _UIViewController = Type(module: "UIKit", name: "UIViewController")
   static let _UIFont = Type(module: "UIKit", name: "UIFont")
+  static let _UIColor = Type(module: "UIKit", name: "UIColor")
   static let _CGFloat = Type(module: .StdLib, name: "CGFloat")
 
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
@@ -42,6 +43,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let NibResourceType = Type(module: "Rswift", name: "NibResourceType")
   static let FileResource = Type(module: "Rswift", name: "FileResource")
   static let FontResource = Type(module: "Rswift", name: "FontResource")
+  static let ColorResource = Type(module: "Rswift", name: "ColorResource")
   static let ImageResource = Type(module: "Rswift", name: "ImageResource")
   static let Validatable = Type(module: "Rswift", name: "Validatable")
   static let TypedStoryboardSegueInfo = Type(module: "Rswift", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])

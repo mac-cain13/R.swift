@@ -92,6 +92,8 @@
 		D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E411C1816360066D7C0 /* Image.swift */; };
 		D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E431C1816790066D7C0 /* ResourceFile.swift */; };
 		D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E451C18169E0066D7C0 /* Nib.swift */; };
+		E22D43631C9582CA00692FFF /* ColorGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43621C9582CA00692FFF /* ColorGenerator.swift */; };
+		E22D43651C95845200692FFF /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,6 +143,8 @@
 		D5F97E411C1816360066D7C0 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		D5F97E431C1816790066D7C0 /* ResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFile.swift; sourceTree = "<group>"; };
 		D5F97E451C18169E0066D7C0 /* Nib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nib.swift; sourceTree = "<group>"; };
+		E22D43621C9582CA00692FFF /* ColorGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGenerator.swift; sourceTree = "<group>"; };
+		E22D43641C95845200692FFF /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +182,7 @@
 		D5B799611C1992A7009EA901 /* Generators */ = {
 			isa = PBXGroup;
 			children = (
+				E22D43621C9582CA00692FFF /* ColorGenerator.swift */,
 				D5B7996F1C199420009EA901 /* FontGenerator.swift */,
 				D5B799631C19937C009EA901 /* ImageGenerator.swift */,
 				D5B799691C1993E3009EA901 /* NibGenerator.swift */,
@@ -257,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */,
+				E22D43641C95845200692FFF /* ColorPalette.swift */,
 				D5F97E391C1812AE0066D7C0 /* Font.swift */,
 				D5F97E411C1816360066D7C0 /* Image.swift */,
 				D5F97E451C18169E0066D7C0 /* Nib.swift */,
@@ -450,6 +456,7 @@
 				D59F72391C1964950089767C /* Var.swift in Sources */,
 				D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */,
 				D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */,
+				E22D43651C95845200692FFF /* ColorPalette.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
 				D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */,
 				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
@@ -475,6 +482,7 @@
 				D5B799641C19937C009EA901 /* ImageGenerator.swift in Sources */,
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */,
+				E22D43631C9582CA00692FFF /* ColorGenerator.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
 				D56DC76D1C41758800623437 /* AccessModifier.swift in Sources */,
 				D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */,

@@ -16,6 +16,7 @@ enum ResourceParsingError: ErrorType {
 struct Resources {
   let assetFolders: [AssetFolder]
   let images: [Image]
+  let colors: [ColorPalette]
   let fonts: [Font]
   let nibs: [Nib]
   let storyboards: [Storyboard]
@@ -26,6 +27,7 @@ struct Resources {
   init(resourceURLs: [NSURL], fileManager: NSFileManager) {
     assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
     images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
+    colors = resourceURLs.flatMap { url in tryResourceParsing { try ColorPalette(url: url) } }
     fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
     nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
     storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
