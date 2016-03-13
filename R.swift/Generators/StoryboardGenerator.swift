@@ -62,8 +62,12 @@ struct StoryboardGenerator: Generator {
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
-    var properties: [Let] = []
+    var properties: [Property] = [
+      Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+    ]
 
+    // Initial view controller
     if let initialViewController = storyboard.initialViewController {
       implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
       typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
@@ -71,44 +75,51 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.StoryboardResourceType))
     }
 
-    func storyboardIdentifierPropertyNameForViewController(viewController: Storyboard.ViewController) -> String {
-        return "\(sanitizedSwiftName(viewController.storyboardIdentifier ?? viewController.type.name))StoryboardIdentifier"
+    // View controllers with identifiers
+    let groupedViewControllersWithIdentifier = storyboard.viewControllers
+      .flatMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
+        guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
+        return (vc, storyboardIdentifier)
+      }
+      .groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
+
+    for duplicate in groupedViewControllersWithIdentifier.duplicates {
+      let identifiers = duplicate.flatMap { $0.vc.storyboardIdentifier }.sort().joinWithSeparator(", ")
+      warn("Skipping \(duplicate.count) view controllers from storyboard \"\(storyboard.name)\" because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these view controller identifiers: \(identifiers)")
     }
 
-    let viewControllerStoryboardIDProperties = storyboard.viewControllers
-      .filter { $0.storyboardIdentifier != nil }
-      .filter { !$0.storyboardIdentifier!.isEmpty }
-      .groupUniquesAndDuplicates({ storyboardIdentifierPropertyNameForViewController($0) }).uniques
-      .map {
-        Let(
-          isStatic: false,
-          name: storyboardIdentifierPropertyNameForViewController($0),
-          typeDefinition: .Inferred(Type._String),
-          value:  "\"\($0.storyboardIdentifier!)\""
-        )
-    }
-    properties.appendContentsOf(viewControllerStoryboardIDProperties)
-
-    storyboard.viewControllers
-      .flatMap { (vc) -> Function? in
-        let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
-        return vc.storyboardIdentifier.map {
-          let synthesizedPropertyName = storyboardIdentifierPropertyNameForViewController(vc)
-          let identifierValue = viewControllerStoryboardIDProperties.contains { $0.name == synthesizedPropertyName } ? "self.\(synthesizedPropertyName)" : vc.storyboardIdentifier.map { "\"\($0)\"" } ?? "nil"
-
-          return Function(
+    let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
+      .map { (vc, identifier) -> (Storyboard.ViewController, Property) in
+        (
+          vc,
+          Let(
             isStatic: false,
-            name: $0,
-            generics: nil,
-            parameters: [],
-            doesThrow: false,
-            returnType: vc.type.asOptional(),
-            body: "return UIStoryboard(resource: self).instantiateViewControllerWithIdentifier(\(identifierValue))\(getterCast)"
+            name: sanitizedSwiftName(identifier),
+            typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
+            value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
-        }
+        )
+      }
+    viewControllersWithResourceProperty
+      .forEach { properties.append($0.1) }
+
+    viewControllersWithResourceProperty
+      .map { (vc, resource) in
+        Function(
+          isStatic: false,
+          name: resource.name,
+          generics: nil,
+          parameters: [
+            Function.Parameter(name: "_", type: Type._Void)
+          ],
+          doesThrow: false,
+          returnType: vc.type.asOptional(),
+          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+        )
       }
       .forEach { functions.append($0) }
 
+    // Validation
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
         "if UIImage(named: \"\($0)\") == nil { throw ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
@@ -135,16 +146,12 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
     }
 
-    properties.appendContentsOf([
-      Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
-    ])
-
+    // Return
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
-      properties: properties.map(anyProperty),
+      properties: properties,
       functions: functions,
       structs: []
     )
