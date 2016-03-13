@@ -62,6 +62,7 @@ struct StoryboardGenerator: Generator {
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
+    var properties: [Let] = []
 
     if let initialViewController = storyboard.initialViewController {
       implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
@@ -70,18 +71,39 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.StoryboardResourceType))
     }
 
+    func storyboardIdentifierPropertyNameForViewController(viewController: Storyboard.ViewController) -> String {
+        return "\(sanitizedSwiftName(viewController.storyboardIdentifier ?? viewController.type.name))StoryboardIdentifier"
+    }
+
+    let viewControllerStoryboardIDProperties = storyboard.viewControllers
+      .filter { $0.storyboardIdentifier != nil }
+      .filter { !$0.storyboardIdentifier!.isEmpty }
+      .groupUniquesAndDuplicates({ storyboardIdentifierPropertyNameForViewController($0) }).uniques
+      .map {
+        Let(
+          isStatic: false,
+          name: storyboardIdentifierPropertyNameForViewController($0),
+          typeDefinition: .Inferred(Type._String),
+          value:  "\"\($0.storyboardIdentifier!)\""
+        )
+    }
+    properties.appendContentsOf(viewControllerStoryboardIDProperties)
+
     storyboard.viewControllers
       .flatMap { (vc) -> Function? in
         let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
         return vc.storyboardIdentifier.map {
-          Function(
+          let synthesizedPropertyName = storyboardIdentifierPropertyNameForViewController(vc)
+          let identifierValue = viewControllerStoryboardIDProperties.contains { $0.name == synthesizedPropertyName } ? "self.\(synthesizedPropertyName)" : vc.storyboardIdentifier.map { "\"\($0)\"" } ?? "nil"
+
+          return Function(
             isStatic: false,
             name: $0,
             generics: nil,
             parameters: [],
             doesThrow: false,
             returnType: vc.type.asOptional(),
-            body: "return UIStoryboard(resource: self).instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
+            body: "return UIStoryboard(resource: self).instantiateViewControllerWithIdentifier(\(identifierValue))\(getterCast)"
           )
         }
       }
@@ -113,14 +135,16 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
     }
 
+    properties.appendContentsOf([
+      Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+    ])
+
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
-      properties: [
-        Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-        Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle"),
-      ],
+      properties: properties.map(anyProperty),
       functions: functions,
       structs: []
     )

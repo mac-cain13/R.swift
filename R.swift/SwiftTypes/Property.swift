@@ -12,6 +12,26 @@ protocol Property: UsedTypesProvider, CustomStringConvertible {
   var name: String { get }
 }
 
+struct AnyProperty: Property {
+  let property: Property
+
+  init(property: Property) {
+    self.property = property
+  }
+
+  var name: String {
+    return self.property.name
+  }
+
+  var usedTypes: [UsedType] {
+    return self.property.usedTypes
+  }
+
+  var description: String {
+    return self.property.description
+  }
+}
+
 extension Property {
   var callName: String {
     return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
