@@ -51,7 +51,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       implements: [],
       typealiasses: [],
       properties: [
-        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "NSBundle(identifier: \"\(bundleIdentifier)\")")
+        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "NSBundle(identifier: \"\(bundleIdentifier)\") ?? NSBundle.mainBundle()")
       ],
       functions: [],
       structs: generatorResults.internalStructs

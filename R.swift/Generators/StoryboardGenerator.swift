@@ -69,7 +69,12 @@ struct StoryboardGenerator: Generator {
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
+    var properties: [Property] = [
+      Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+    ]
 
+    // Initial view controller
     if let initialViewController = storyboard.initialViewController {
       implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
       typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
@@ -77,23 +82,50 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.StoryboardResourceType))
     }
 
-    storyboard.viewControllers
-      .flatMap { (vc) -> Function? in
-        let getterCast = (vc.type.asNonOptional() == Type._UIViewController) ? "" : " as? \(vc.type.asNonOptional())"
-        return vc.storyboardIdentifier.map {
-          Function(
+    // View controllers with identifiers
+    let groupedViewControllersWithIdentifier = storyboard.viewControllers
+      .flatMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
+        guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
+        return (vc, storyboardIdentifier)
+      }
+      .groupBySwiftNames { $0.identifier }
+
+    for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
+      warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
+      .map { (vc, identifier) -> (Storyboard.ViewController, Property) in
+        (
+          vc,
+          Let(
             isStatic: false,
-            name: $0,
-            generics: nil,
-            parameters: [],
-            doesThrow: false,
-            returnType: vc.type.asOptional(),
-            body: "return UIStoryboard(resource: self).instantiateViewControllerWithIdentifier(\"\($0)\")\(getterCast)"
+            name: sanitizedSwiftName(identifier),
+            typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
+            value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
-        }
+        )
+      }
+    viewControllersWithResourceProperty
+      .forEach { properties.append($0.1) }
+
+    viewControllersWithResourceProperty
+      .map { (vc, resource) in
+        Function(
+          isStatic: false,
+          name: resource.name,
+          generics: nil,
+          parameters: [
+            Function.Parameter(name: "_", type: Type._Void)
+          ],
+          doesThrow: false,
+          returnType: vc.type.asOptional(),
+          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+        )
       }
       .forEach { functions.append($0) }
 
+    // Validation
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
         "if UIImage(named: \"\($0)\") == nil { throw ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
@@ -120,14 +152,12 @@ struct StoryboardGenerator: Generator {
       implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
     }
 
+    // Return
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
-      properties: [
-        Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-        Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle"),
-      ],
+      properties: properties,
       functions: functions,
       structs: []
     )
