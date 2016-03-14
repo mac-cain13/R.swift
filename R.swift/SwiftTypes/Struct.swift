@@ -9,6 +9,7 @@
 import Foundation
 
 struct Struct: UsedTypesProvider, CustomStringConvertible {
+  var comments: [String] = []
   var accessModifier: AccessModifier = .Internal
   let type: Type
   var implements: [TypePrinter]
@@ -38,6 +39,16 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
     self.structs = structs
   }
 
+  init(comments: [String], type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+    self.comments = comments
+    self.type = type
+    self.implements = implements
+    self.typealiasses = typealiasses
+    self.properties = properties
+    self.functions = functions
+    self.structs = structs
+  }
+
   init(type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
     self.type = type
     self.implements = implements
@@ -48,6 +59,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
   }
 
   var description: String {
+    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
     let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joinWithSeparator(", ") : ""
 
@@ -67,8 +79,13 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .sort { $0.type.description < $1.type.description }
       .joinWithSeparator("\n\n")
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString].filter { $0 != "" }
+
+    // Private `init`, so that struct can't be initialized externally.
+    let privateInit = "private init() {}"
+
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
-    return "\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
+
+    return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }

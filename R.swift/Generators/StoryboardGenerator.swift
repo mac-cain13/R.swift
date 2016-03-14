@@ -24,26 +24,46 @@ struct StoryboardGenerator: Generator {
       .uniques
       .map(StoryboardGenerator.storyboardStructForStoryboard)
 
+    let storyboardProperties: [Property] = groupedStoryboards
+      .uniques
+      .map { storyboard in
+        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+
+        return Let(
+          comments: ["Storyboard `\(storyboard.name)`."],
+          isStatic: true,
+          name: struct_.type.name,
+          typeDefinition: .Inferred(Type.StoryboardResourceType),
+          value: "_R.storyboard.\(struct_.type.name)()"
+        )
+      }
+
+    let storyboardFunctions: [Function] = groupedStoryboards
+      .uniques
+      .map { storyboard in
+        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+
+        return Function(
+          comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
+          isStatic: true,
+          name: struct_.type.name,
+          generics: nil,
+          parameters: [
+            Function.Parameter(name: "_", type: Type._Void)
+          ],
+          doesThrow: false,
+          returnType: Type._UIStoryboard,
+          body: "return UIStoryboard(resource: R.storyboard.\(struct_.type.name))"
+        )
+      }
+
     externalStruct = Struct(
+      comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
         type: Type(module: .Host, name: "storyboard"),
         implements: [],
         typealiasses: [],
-        properties: storyboardStructs.map {
-          Let(isStatic: true, name: $0.type.name, typeDefinition: .Inferred(Type.StoryboardResourceType), value: "_R.storyboard.\($0.type.name)()")
-        },
-        functions: storyboardStructs.map {
-          Function(
-            isStatic: true,
-            name: $0.type.name,
-            generics: nil,
-            parameters: [
-              Function.Parameter(name: "_", type: Type._Void)
-            ],
-            doesThrow: false,
-            returnType: Type._UIStoryboard,
-            body: "return UIStoryboard(resource: R.storyboard.\($0.type.name))"
-          )
-        },
+        properties: storyboardProperties,
+        functions: storyboardFunctions,
         structs: []
       )
 

@@ -56,6 +56,7 @@ struct SegueGenerator: Generator {
       .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
 
     externalStruct = Struct(
+      comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
       type: Type(module: .Host, name: "segue"),
       implements: [],
       typealiasses: [],
@@ -101,6 +102,7 @@ struct SegueGenerator: Generator {
         optional: false
       )
       return Let(
+        comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         typeDefinition: .Specified(type),
@@ -110,6 +112,11 @@ struct SegueGenerator: Generator {
 
     let functions = seguesWithInfoForSourceType.map { segueWithInfo -> Function in
       Function(
+        comments: [
+          "Optionally returns a typed version of segue `\(segueWithInfo.segue.identifier)`.",
+          "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",
+          "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
+        ],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         generics: nil,
@@ -124,8 +131,11 @@ struct SegueGenerator: Generator {
       )
     }
 
+    let typeName = sanitizedSwiftName(sourceType.description)
+
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
+      comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],
+      type: Type(module: .Host, name: typeName),
       implements: [],
       typealiasses: [],
       properties: properties.map(anyProperty),

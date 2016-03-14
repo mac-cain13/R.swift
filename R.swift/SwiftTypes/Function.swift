@@ -9,6 +9,7 @@
 import Foundation
 
 struct Function: UsedTypesProvider {
+  let comments: [String]
   let isStatic: Bool
   let name: String
   let generics: String?
@@ -16,6 +17,28 @@ struct Function: UsedTypesProvider {
   let doesThrow: Bool
   let returnType: Type
   let body: String
+
+  init(isStatic: Bool, name: String, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+    self.comments = []
+    self.isStatic = isStatic
+    self.name = name
+    self.generics = generics
+    self.parameters = parameters
+    self.doesThrow = doesThrow
+    self.returnType = returnType
+    self.body = body
+  }
+
+  init(comments: [String], isStatic: Bool, name: String, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+    self.comments = comments
+    self.isStatic = isStatic
+    self.name = name
+    self.generics = generics
+    self.parameters = parameters
+    self.doesThrow = doesThrow
+    self.returnType = returnType
+    self.body = body
+  }
 
   var usedTypes: [UsedType] {
     return [
@@ -29,13 +52,15 @@ struct Function: UsedTypesProvider {
   }
 
   var description: String {
+    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indentWithString(IndentationString)
-    return "\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+
+    return "\(commentsString)\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

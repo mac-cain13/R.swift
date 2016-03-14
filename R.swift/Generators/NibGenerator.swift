@@ -54,22 +54,27 @@ struct NibGenerator: Generator {
           .map(NibGenerator.nibStructForNib)
       )
 
+    let nibProperties: [Property] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibVarForNib)
+    let nibFunctions: [Function] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibFuncForNib)
+
     externalStruct = Struct(
+      comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        properties: groupedNibs
-          .uniques
-          .map(NibGenerator.nibVarForNib),
-      functions: groupedNibs
-        .uniques
-        .map(NibGenerator.nibFuncForNib),
+        properties: nibProperties,
+        functions: nibFunctions,
         structs: []
       )
   }
 
   private static func nibFuncForNib(nib: Nib) -> Function {
     return Function(
+      comments: ["`UINib(name: \"\(nib.name)\", bundle: ...)`"],
       isStatic: true,
       name: nib.name,
       generics: nil,
@@ -85,7 +90,13 @@ struct NibGenerator: Generator {
   private static func nibVarForNib(nib: Nib) -> Let {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
     let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
-    return Let(isStatic: true, name: nib.name, typeDefinition: .Inferred(structType), value: "\(structType)()")
+    return Let(
+      comments: ["Nib `\(nib.name)`."],
+      isStatic: true,
+      name: nib.name,
+      typeDefinition: .Inferred(structType),
+      value: "\(structType)()"
+    )
   }
 
   private static func nibStructForNib(nib: Nib) -> Struct {

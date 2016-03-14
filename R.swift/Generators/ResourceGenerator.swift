@@ -84,6 +84,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   }
 
   let externalResourceStruct = Struct(
+      comments: ["This `R` struct is code generateted, and contains references to static resources."],
       type: Type(module: .Host, name: "R"),
       implements: [],
       typealiasses: [],
