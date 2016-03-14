@@ -23,7 +23,32 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
   let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
 
   let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
-  return SwiftKeywords.contains(capitalizedSwiftName) ? "`\(capitalizedSwiftName)`" : capitalizedSwiftName
+  if SwiftKeywords.contains(capitalizedSwiftName) {
+    return "`\(capitalizedSwiftName)`"
+  }
+
+  return capitalizedSwiftName // .isEmpty ? nil : capitalizedSwiftName
+}
+
+struct SwiftNameGroups<T> {
+  let uniques: [T]
+  let duplicates: [(String, [String])] // Identifiers that result in duplicate Swift names
+  let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
+}
+
+extension SequenceType {
+  func groupBySwiftNames(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
+    var groupedBy = groupBy { sanitizedSwiftName(identifierSelector($0)) }
+    let empties = groupedBy[""]?.map { "'\(identifierSelector($0))'" }.sort()
+    groupedBy[""] = nil
+
+    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
+    let duplicates = groupedBy
+      .filter { $0.1.count > 1 }
+      .map { ($0.0, $0.1.map(identifierSelector).sort()) }
+
+    return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
+  }
 }
 
 private let BlacklistedCharacters: NSCharacterSet = {

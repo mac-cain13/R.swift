@@ -13,11 +13,18 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+    let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
 
-    for duplicate in groupedStoryboards.duplicates {
-      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) storyboards because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these storyboards: \(names)")
+    for (name, duplicates) in groupedStoryboards.duplicates {
+      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let empties = groupedStoryboards.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 storyboard because no swift identifier can be generated for storyboard: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) storyboards because no swift identifier can be generated for all of these storyboards: \(empties.joinWithSeparator(", "))")
     }
 
     let storyboardStructs = groupedStoryboards
@@ -101,11 +108,10 @@ struct StoryboardGenerator: Generator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
+      .groupBySwiftNames { $0.identifier }
 
-    for duplicate in groupedViewControllersWithIdentifier.duplicates {
-      let identifiers = duplicate.flatMap { $0.vc.storyboardIdentifier }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) view controllers from storyboard \"\(storyboard.name)\" because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these view controller identifiers: \(identifiers)")
+    for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
+      warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")
     }
 
     let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques

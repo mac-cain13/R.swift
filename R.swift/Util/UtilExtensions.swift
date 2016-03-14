@@ -11,16 +11,6 @@ import Foundation
 
 // MARK: Array operations
 
-extension SequenceType {
-  func groupUniquesAndDuplicates<U: Hashable>(keySelector: Generator.Element -> U) -> (uniques: [Generator.Element], duplicates: [[Generator.Element]]) {
-    let groupedBy = Array(groupBy(keySelector).values)
-    let uniques = groupedBy.filter { $0.count == 1 }.reduce([], combine: +)
-    let duplicates = groupedBy.filter { $0.count > 1 }
-
-    return (uniques: uniques, duplicates: duplicates)
-  }
-}
-
 extension SequenceType where Generator.Element : CustomStringConvertible {
   func joinWithSeparator(separator: String) -> String {
     return map { $0.description }.joinWithSeparator(separator)
