@@ -94,6 +94,8 @@
 		D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E451C18169E0066D7C0 /* Nib.swift */; };
 		E22D43631C9582CA00692FFF /* ColorGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43621C9582CA00692FFF /* ColorGenerator.swift */; };
 		E22D43651C95845200692FFF /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
+		E24720CB1C96B6A600DF291D /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
+		E24720CC1C96B6AB00DF291D /* ColorGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43621C9582CA00692FFF /* ColorGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -441,7 +443,9 @@
 				D5B799711C199755009EA901 /* FontGenerator.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
 				D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */,
+				E24720CC1C96B6AB00DF291D /* ColorGenerator.swift in Sources */,
 				D5B799761C199755009EA901 /* SegueGenerator.swift in Sources */,
+				E24720CB1C96B6A600DF291D /* ColorPalette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
