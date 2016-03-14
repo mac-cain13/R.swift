@@ -31,7 +31,7 @@ struct ColorGenerator: Generator {
       type: Type(module: .Host, name: sanitizedSwiftName(palette.filename)),
       implements: [],
       typealiasses: [],
-      properties: [], // palette.colors.map(ColorGenerator.colorLet),
+      properties: palette.colors.map(ColorGenerator.colorLet),
       functions: palette.colors.map(ColorGenerator.colorFunction),
       structs: []
     )
@@ -51,7 +51,9 @@ struct ColorGenerator: Generator {
       isStatic: true,
       name: name,
       generics: nil,
-      parameters: [],
+      parameters: [
+        Function.Parameter(name: "_", type: Type._Void)
+      ],
       doesThrow: false,
       returnType: Type._UIColor,
       body: "return UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
