@@ -195,3 +195,22 @@ let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension:
 let jsonURL = R.file.seedDataJson()
 let jsonPath = R.file.seedDataJson.path()
 ```
+
+## Localized strings
+
+### Todo
+
+- [x] Support single Localizable.strings file used as a string constants file.
+- [x] Support multiple Localizable.strings files in their respective .lproj directories.
+- [ ] Support printf style string formatting.
+- [ ] Support .stringsdict files.
+
+*Vanilla*
+```swift
+let settingsTitle = NSLocalizedString("settings.title", comment: "")
+```
+
+*With R.swift*
+```swift
+let settingsTitle = R.string.settingsTitle
+```
