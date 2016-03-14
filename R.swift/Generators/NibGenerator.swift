@@ -36,11 +36,18 @@ struct NibGenerator: Generator {
   let internalStruct: Struct?
 
   init(nibs: [Nib]) {
-    let groupedNibs = nibs.groupUniquesAndDuplicates { sanitizedSwiftName($0.name) }
+    let groupedNibs = nibs.groupBySwiftNames { $0.name }
 
-    for duplicate in groupedNibs.duplicates {
-      let names = duplicate.map { $0.name }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) xibs because symbol '\(sanitizedSwiftName(duplicate.first!.name))' would be generated for all of these xibs: \(names)")
+    for (name, duplicates) in groupedNibs.duplicates {
+      warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let empties = groupedNibs.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 xib because no swift identifier can be generated for xib: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) xibs because no swift identifier can be generated for all of these xibs: \(empties.joinWithSeparator(", "))")
     }
 
     internalStruct = Struct(
@@ -54,22 +61,27 @@ struct NibGenerator: Generator {
           .map(NibGenerator.nibStructForNib)
       )
 
+    let nibProperties: [Property] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibVarForNib)
+    let nibFunctions: [Function] = groupedNibs
+      .uniques
+      .map(NibGenerator.nibFuncForNib)
+
     externalStruct = Struct(
+      comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
         type: Type(module: .Host, name: "nib"),
         implements: [],
         typealiasses: [],
-        properties: groupedNibs
-          .uniques
-          .map(NibGenerator.nibVarForNib),
-      functions: groupedNibs
-        .uniques
-        .map(NibGenerator.nibFuncForNib),
+        properties: nibProperties,
+        functions: nibFunctions,
         structs: []
       )
   }
 
   private static func nibFuncForNib(nib: Nib) -> Function {
     return Function(
+      comments: ["`UINib(name: \"\(nib.name)\", bundle: ...)`"],
       isStatic: true,
       name: nib.name,
       generics: nil,
@@ -85,7 +97,13 @@ struct NibGenerator: Generator {
   private static func nibVarForNib(nib: Nib) -> Let {
     let nibStructName = sanitizedSwiftName("_\(nib.name)")
     let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
-    return Let(isStatic: true, name: nib.name, typeDefinition: .Inferred(structType), value: "\(structType)()")
+    return Let(
+      comments: ["Nib `\(nib.name)`."],
+      isStatic: true,
+      name: nib.name,
+      typeDefinition: .Inferred(structType),
+      value: "\(structType)()"
+    )
   }
 
   private static func nibStructForNib(nib: Nib) -> Struct {

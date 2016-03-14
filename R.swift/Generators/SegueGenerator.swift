@@ -41,21 +41,34 @@ struct SegueGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedSeguesWithInfo = deduplicatedSeguesWithInfo
-      .groupUniquesAndDuplicates { "\(sanitizedSwiftName($0.segue.identifier))|\($0.sourceType)" }
+    var structs: [Struct] = []
 
-    for duplicate in groupedSeguesWithInfo.duplicates {
-      let anySegueWithInfo = duplicate.first!
-      let names = duplicate.map { $0.segue.identifier }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) segues for '\(anySegueWithInfo.sourceType)' because symbol '\(sanitizedSwiftName(anySegueWithInfo.segue.identifier))' would be generated for all of these segues, but with a different destination or segue type: \(names)")
+    for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.groupBy({ $0.sourceType }) {
+      let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftNames { $0.segue.identifier }
+
+      for (name, duplicates) in groupedSeguesWithInfo.duplicates {
+        warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joinWithSeparator(", "))")
+      }
+
+      let empties = groupedSeguesWithInfo.empties
+      if let empty = empties.first where empties.count == 1 {
+        warn("Skipping 1 segue for '\(sourceType)' because no swift identifier can be generated for segue: \(empty)")
+      }
+      else if empties.count > 1 {
+        warn("Skipping \(empties.count) segues for '\(sourceType)' because no swift identifier can be generated for all of these segues: \(empties.joinWithSeparator(", "))")
+      }
+
+      let sts = groupedSeguesWithInfo
+        .uniques
+        .groupBy { $0.sourceType }
+        .values
+        .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
+
+      structs = structs + sts
     }
 
-    let structs = groupedSeguesWithInfo.uniques
-      .groupBy { $0.sourceType }
-      .values
-      .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
-
     externalStruct = Struct(
+      comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
       type: Type(module: .Host, name: "segue"),
       implements: [],
       typealiasses: [],
@@ -101,6 +114,7 @@ struct SegueGenerator: Generator {
         optional: false
       )
       return Let(
+        comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         typeDefinition: .Specified(type),
@@ -110,6 +124,11 @@ struct SegueGenerator: Generator {
 
     let functions = seguesWithInfoForSourceType.map { segueWithInfo -> Function in
       Function(
+        comments: [
+          "Optionally returns a typed version of segue `\(segueWithInfo.segue.identifier)`.",
+          "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",
+          "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
+        ],
         isStatic: true,
         name: segueWithInfo.segue.identifier,
         generics: nil,
@@ -124,8 +143,11 @@ struct SegueGenerator: Generator {
       )
     }
 
+    let typeName = sanitizedSwiftName(sourceType.description)
+
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(sourceType.description)),
+      comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],
+      type: Type(module: .Host, name: typeName),
       implements: [],
       typealiasses: [],
       properties: properties.map(anyProperty),

@@ -18,11 +18,18 @@ struct ReuseIdentifierGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupUniquesAndDuplicates { sanitizedSwiftName($0.identifier) }
+    let groupedReusables = deduplicatedReusables.groupBySwiftNames { $0.identifier }
 
-    for duplicate in groupedReusables.duplicates {
-      let names = duplicate.map { $0.identifier }.sort().joinWithSeparator(", ")
-      warn("Skipping \(duplicate.count) reuseIdentifiers because symbol '\(sanitizedSwiftName(duplicate.first!.identifier))' would be generated for all of these reuseIdentifiers: \(names)")
+    for (name, duplicates) in groupedReusables.duplicates {
+      warn("Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let empties = groupedReusables.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) reuseIdentifiers because no swift identifier can be generated for all of these reuseIdentifiers: \(empties.joinWithSeparator(", "))")
     }
 
     let reuseIdentifierProperties = groupedReusables
@@ -30,6 +37,7 @@ struct ReuseIdentifierGenerator: Generator {
       .map(ReuseIdentifierGenerator.letFromReusable)
 
     externalStruct = Struct(
+      comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
       type: Type(module: .Host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
@@ -41,6 +49,7 @@ struct ReuseIdentifierGenerator: Generator {
 
   private static func letFromReusable(reusable: Reusable) -> Let {
     return Let(
+      comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,
       name: reusable.identifier,
       typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),

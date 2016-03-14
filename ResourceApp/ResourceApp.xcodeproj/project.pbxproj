@@ -56,6 +56,7 @@
 		D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F05D471BB520B1003AE55E /* FilesTests.swift */; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
+		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +127,7 @@
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
 		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
+		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +233,7 @@
 				D55C6CBB1B5D757300301B0D /* Supporting Files */,
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
+				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
 				D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */,
 				D51E60C11BB13626004BB376 /* Colors.jpg in Resources */,
+				E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
