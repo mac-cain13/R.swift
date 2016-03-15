@@ -40,7 +40,7 @@ struct ColorGenerator: Generator {
   private static func colorLet(name: String, color: NSColor) -> Let {
     return Let(
       comments: [
-        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span>"
+        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
       ],
       isStatic: true,
       name: name,
@@ -52,7 +52,7 @@ struct ColorGenerator: Generator {
   private static func colorFunction(name: String, color: NSColor) -> Function {
     return Function(
       comments: [
-        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding:  1px 3px;'>#\(color.hexString)</span>",
+        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding:  1px 3px;'>#\(color.hexString)</span> \(name)",
         "",
         "UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
       ],
