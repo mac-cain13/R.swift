@@ -27,12 +27,26 @@ struct ColorGenerator: Generator {
   private static func colorStructFromPalette(palette: ColorPalette) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
+    let groupedColors = palette.colors.groupBySwiftNames { $0.0 }
+
+    for (sanitizedName, duplicates) in groupedColors.duplicates {
+      warn("Skipping \(duplicates.count) colors in palette '\(palette.filename)' because symbol '\(sanitizedName)' would be generated for all of these colors: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let empties = groupedColors.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 color in palette '\(palette.filename)' because no swift identifier can be generated for image: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) images in palette '\(palette.filename)' because no swift identifier can be generated for all of these images: \(empties.joinWithSeparator(", "))")
+    }
+
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(palette.filename)),
       implements: [],
       typealiasses: [],
-      properties: palette.colors.map(ColorGenerator.colorLet),
-      functions: palette.colors.map(ColorGenerator.colorFunction),
+      properties: groupedColors.uniques.map(ColorGenerator.colorLet),
+      functions: groupedColors.uniques.map(ColorGenerator.colorFunction),
       structs: []
     )
   }
@@ -52,7 +66,7 @@ struct ColorGenerator: Generator {
   private static func colorFunction(name: String, color: NSColor) -> Function {
     return Function(
       comments: [
-        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding:  1px 3px;'>#\(color.hexString)</span> \(name)",
+        "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",
         "",
         "UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
       ],
