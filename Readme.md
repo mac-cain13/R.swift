@@ -43,12 +43,13 @@ After installing R.swift into your project you can use the `R`-struct to access 
 
 R.swift currently supports these types of resources:
 - [Images](Documentation/Examples.md#images)
+- [Custom fonts](Documentation/Examples.md#custom-fonts)
+- [Resource files](Documentation/Examples.md#resource-files)
+- [Colors](Documentation/Examples.md#colors)
 - [Storyboards](Documentation/Examples.md#storyboards)
 - [Segues](Documentation/Examples.md#segues)
 - [Nibs](Documentation/Examples.md#nibs)
 - [Reusable cells](Documentation/Examples.md#reusable-cells)
-- [Custom fonts](Documentation/Examples.md#custom-fonts)
-- [Resource files](Documentation/Examples.md#resource-files)
 
 Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-validation):
 - If all images used in storyboards are available

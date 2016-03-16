@@ -28,6 +28,46 @@ let settingsIcon = R.image.settingsIcon()
 let gradientBackground = R.image.gradientJpg()
 ```
 
+## Custom fonts
+
+*Vanilla*
+```swift
+let lightFontTitle = UIFont(name: "Acme-Light", size: 22)
+```
+
+*With R.swift*
+```swift
+let lightFontTitle = R.font.acmeLight(size: 22)
+```
+
+## Resource files
+
+*Vanilla*
+```swift
+let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
+let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension: "json")
+```
+
+*With R.swift*
+```swift
+let jsonURL = R.file.seedDataJson()
+let jsonPath = R.file.seedDataJson.path()
+```
+
+## Colors
+
+*Vanilla*
+```swift
+label.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
+label.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+```
+
+*With R.swift*
+```swift
+label.backgroundColor = R.color.appColors.backgroundColor()
+label.textColor = R.color.appColors.textColor()
+```
+
 ## Storyboards
 
 *Vanilla*
@@ -168,30 +208,4 @@ class RecentsController: UICollectionViewController {
     return cell
   }
 }
-```
-
-## Custom fonts
-
-*Vanilla*
-```swift
-let lightFontTitle = UIFont(name: "Acme-Light", size: 22)
-```
-
-*With R.swift*
-```swift
-let lightFontTitle = R.font.acmeLight(size: 22)
-```
-
-## Resource files
-
-*Vanilla*
-```swift
-let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
-let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension: "json")
-```
-
-*With R.swift*
-```swift
-let jsonURL = R.file.seedDataJson()
-let jsonPath = R.file.seedDataJson.path()
 ```
