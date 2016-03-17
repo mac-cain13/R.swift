@@ -58,6 +58,8 @@
 		D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F05D471BB520B1003AE55E /* FilesTests.swift */; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
+		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
+		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +134,8 @@
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
+		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
+		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +223,7 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				E2F268AF1C92BFE00093995D /* Colors */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
@@ -261,6 +266,7 @@
 		D55C6CD21B5D757300301B0D /* ResourceAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				E24720CD1C96B71B00DF291D /* ColorsTests.swift */,
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
 				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
@@ -303,6 +309,14 @@
 				D5F05D411BB52002003AE55E /* Some.json */,
 			);
 			path = Files;
+			sourceTree = "<group>";
+		};
+		E2F268AF1C92BFE00093995D /* Colors */ = {
+			isa = PBXGroup;
+			children = (
+				E2F268B01C92BFE00093995D /* My R.swift colors.clr */,
+			);
+			path = Colors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,6 +422,7 @@
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
 				D52725FE1C4BB6BC0005C8D4 /* References.storyboard in Resources */,
+				E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */,
 				D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
 				5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */,
@@ -523,6 +538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
+				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
 				D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */,

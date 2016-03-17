@@ -35,6 +35,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
 
   let generators: [Generator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
+      ColorGenerator(colorPalettes: resources.colors),
       FontGenerator(fonts: resources.fonts),
       SegueGenerator(storyboards: resources.storyboards),
       StoryboardGenerator(storyboards: resources.storyboards),
