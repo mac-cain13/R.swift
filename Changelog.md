@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.0
+
+New features:
+- Added support for CLR color lists (@tomlokhorst)
+- SwiftDoc comments are generated in the `R.generated.swift` file (@tomlokhorst)
+- R.swift is made available on Homebrew (maintained by @tomasharkema)
+- Synthesizing let accessors for storyboard identifiers (@JaviSoto)
+- New `NSData(resource: R.file.someFile)` constructor is now available (@tomlokhorst)
+
+Fixed issues:
+- **Breaking:** `R.file.someFile() as String` is removed to prevent ambiguity errors, use `R.file.someFile.path()` instead (@tomlokhorst)
+- Generated variable/function names will never be empty anymore (@tomlokhorst)
+- If the first view in a nib is a standard Apple Interface Builder class it will now typecast correctly instead of falling back to `UIView`
+- NSBundle now falls correctly back on the main bundle, this was documented as such but did not always happen
+- Swift keyword list updated to avoid generation of invalid variable/function names
+
 ## 1.3.0
 New features:
 - `R.file.*.path()` and `R.file.*.url()` are now available
