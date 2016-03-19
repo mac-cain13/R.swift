@@ -69,6 +69,8 @@ label.backgroundColor = R.color.appColors.backgroundColor()
 label.textColor = R.color.appColors.textColor()
 ```
 
+There are some points to keep in mind when using Color palettes, see [About Colors](Colors.md)
+
 ## Storyboards
 
 *Vanilla*
