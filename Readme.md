@@ -96,7 +96,7 @@ R.swift is also available through [Homebrew](http://brew.sh). This makes it poss
 
 ## Contribute
 
-We'll love contributions, read [Documentation/Contribute.md] for info on how to report issues, submit ideas and submit pull requests!
+We'll love contributions, read the [contribute docs](Documentation/Contribute.md) for info on how to report issues, submit ideas and submit pull requests!
 
 ## License
 
