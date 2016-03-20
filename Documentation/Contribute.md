@@ -13,14 +13,14 @@ Most important is to read the docs and scan the issue tracker before so you're s
 - [Check open pull requests](https://github.com/mac-cain13/R.swift/pulls)
 - [Search the issue tracker](https://github.com/mac-cain13/R.swift/issues)
 
-If you find your idea/bugreport feel free to comment with an emoji or text reaction to let us know that you'd like this to be implemented. Is your idea/bugreport not in there? Please submit it to the [issue tracker](https://github.com/mac-cain13/R.swift/issues)]!
+If you find your idea/bugreport feel free to comment with an emoji or text reaction to let us know that you'd like this to be implemented. Is your idea/bugreport not in there? Please submit it to the [issue tracker](https://github.com/mac-cain13/R.swift/issues)!
 
 ## Pull requests
 
 If you'd like to implement a feature:
 
 - Check [the steps above](#questions-issues-and-ideas) to make sure it isn't already being build
-- Feel free to discuss the feature in an issue, this will increase the chance of it being merged in
+- Feel free to discuss the change in an issue, this will increase the chance of it being merged in
 - Keep your PR small, so it's easy to review
 - Follow the coding guidelines below
 
