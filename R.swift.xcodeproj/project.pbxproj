@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D45C2191CA12913000B8DC9 /* StringsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsGenerator.swift */; };
+		5D45C21B1CA1294A000B8DC9 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C961C7C2BEE00B2F376 /* Strings.swift */; };
 		5D997C951C7C291900B2F376 /* StringsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsGenerator.swift */; };
 		5D997C971C7C2BEE00B2F376 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C961C7C2BEE00B2F376 /* Strings.swift */; };
 		D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
@@ -413,6 +415,7 @@
 				D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* ResourceGenerator.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
+				5D45C2191CA12913000B8DC9 /* StringsGenerator.swift in Sources */,
 				D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */,
 				D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */,
 				D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */,
@@ -425,6 +428,7 @@
 				D5F97E4B1C1819160066D7C0 /* AssetFolder.swift in Sources */,
 				D5F12D421BDACB87009A2C88 /* input.swift in Sources */,
 				D5F795C11BB9983900844EA2 /* MainTests.swift in Sources */,
+				5D45C21B1CA1294A000B8DC9 /* Strings.swift in Sources */,
 				D59F723D1C1964B20089767C /* Typealias.swift in Sources */,
 				D5F12D481BDACB8E009A2C88 /* XCProjectFile.swift in Sources */,
 				D5B7998A1C1B91A9009EA901 /* Module.swift in Sources */,
