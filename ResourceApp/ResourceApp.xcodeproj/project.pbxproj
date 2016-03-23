@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
+		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9D1BBC33680013F52A /* Colors@2x.jpg */; };
@@ -73,6 +75,10 @@
 
 /* Begin PBXFileReference section */
 		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		5D1AFAB01C858637003FE7AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D1AFAB21C858647003FE7AB /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D1AFAB31C85864F003FE7AB /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D9E41331C96918E002172D3 /* StringsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsTests.swift; sourceTree = "<group>"; };
 		9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
 		AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
@@ -160,6 +166,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5D1AFAAC1C85859D003FE7AB /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				5D1AFAAF1C858637003FE7AB /* Localizable.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		6BD8864A6B6559C4D6F93D81 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +228,7 @@
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D5F05D401BB51FEA003AE55E /* Files */,
+				5D1AFAAC1C85859D003FE7AB /* Strings */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
@@ -258,6 +273,7 @@
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
 				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
+				5D9E41331C96918E002172D3 /* StringsTests.swift */,
 				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
@@ -372,6 +388,8 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				ja,
 			);
 			mainGroup = D55C6CAF1B5D757300301B0D;
 			productRefGroup = D55C6CB91B5D757300301B0D /* Products */;
@@ -407,6 +425,7 @@
 				E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */,
 				D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */,
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
+				5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
@@ -521,6 +540,7 @@
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
 				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
+				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
 				D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
@@ -540,6 +560,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		5D1AFAAF1C858637003FE7AB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5D1AFAB01C858637003FE7AB /* en */,
+				5D1AFAB21C858647003FE7AB /* es */,
+				5D1AFAB31C85864F003FE7AB /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

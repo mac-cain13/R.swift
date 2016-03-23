@@ -1,0 +1,31 @@
+//
+//  Localizable.strings
+//  ResourceApp
+//
+//  Created by Nolan Warner on 2016/03/01.
+//  Copyright © 2016 Nolan Warner. All rights reserved.
+//
+
+"..project...abnormalKey..1." = "Abnormal Key 1 English";
+" project abnormalKey 2 " = "Abnormal Key 2 English";
+
+"project.missingKey.1" = "Missing Key 1 English";
+"project.missingKey.2" = "Missing Key 2 English";
+//"project.missingKey.3" = "Missing Key 3 English";
+"project.missingKey.4" = "Missing Key 4 English";
+//"project.missingKey.5" = "Missing Key 5 English";
+//"project.missingKey.6" = "Missing Key 6 English";
+"project.missingKey.7" = "Missing Key 7 English";
+"project.missingKey.8" = "Missing Key 8 English";
+"project.missingKey.9" = "Missing Key 9 English";
+
+"project.duplicateKey.1" = "Duplicate Key 1 English";
+"project.duplicateKey.1" = "Duplicate Key 1 English";
+"project.duplicateKey.2" = "Duplicate Key 2 English";
+"project.duplicateKey.2" = "Duplicate Key 2 English";
+"project.duplicateKey.2" = "Duplicate Key 2 English";
+
+"project_underscoreKey_1" = "Underscore Key 1 English";
+"project-hyphenKey-1" = "Hyphen Key 1 English";
+"project-mixedKey_1" = "Mixed Key 1 English";
+  "  project.oddSpacingKey.1  "    =    "  Odd Spacing Key 1 English   "   ;
