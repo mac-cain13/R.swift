@@ -55,7 +55,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if isObjectsTagOpened {
-        levelSinceObjectsTagOpened++;
+        levelSinceObjectsTagOpened += 1;
 
         if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
           where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
@@ -76,7 +76,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if isObjectsTagOpened {
-        levelSinceObjectsTagOpened--;
+        levelSinceObjectsTagOpened -= 1;
       }
     }
   }
