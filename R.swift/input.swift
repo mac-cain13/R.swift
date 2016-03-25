@@ -157,20 +157,24 @@ struct CallInformation {
   }
 }
 
-private func getFirstArgumentFromOptionData(options: [Option:[String]], helpString: String)(_ option: Option, defaultValue: String?) throws -> String {
-  guard let result = options[option]?.first ?? defaultValue else {
-    throw InputParsingError.MissingOption(error: "Missing option: \(option) ", helpString: helpString)
-  }
-
-  return result
+private func getFirstArgumentFromOptionData(options: [Option:[String]], helpString: String) -> (_: Option, defaultValue: String?) throws -> String {
+    return { (option, defaultValue) in
+        guard let result = options[option]?.first ?? defaultValue else {
+            throw InputParsingError.MissingOption(error: "Missing option: \(option) ", helpString: helpString)
+        }
+        
+        return result
+    }
 }
 
-func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL)(path: Path) -> NSURL {
-  switch path {
-  case let .Absolute(absolutePath):
-    return NSURL(fileURLWithPath: absolutePath)
-  case let .RelativeTo(sourceTreeFolder, relativePath):
-    let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-    return sourceTreeURL.URLByAppendingPathComponent(relativePath)
-  }
+func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL {
+    return { path in
+        switch path {
+        case let .Absolute(absolutePath):
+            return NSURL(fileURLWithPath: absolutePath)
+        case let .RelativeTo(sourceTreeFolder, relativePath):
+            let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
+            return sourceTreeURL.URLByAppendingPathComponent(relativePath)
+        }
+    }
 }
