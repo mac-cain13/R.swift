@@ -2,6 +2,6 @@
 xcuserdata
 *.xccheckout
 ResourceApp/rswift
-ResourceApp/R.generated.swift
+R.generated.swift
 ResourceApp/rswift.log
 Pods
