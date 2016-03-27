@@ -12,7 +12,7 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcassets"]
 
   // Note: "appiconset" is not loadable by default, so it's not included here
-  private static let AssetExtensions: Set<String> = ["launchimage", "imageset"]
+  private static let AssetExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
 
   let name: String
   let imageAssets: [String]
