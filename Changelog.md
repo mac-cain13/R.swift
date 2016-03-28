@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+New features:
+- Add support for "imagestack" assets, parallax images used on AppleTV (@chillpop) 
+
 ## 2.0.0
 
 Fixed issue:
