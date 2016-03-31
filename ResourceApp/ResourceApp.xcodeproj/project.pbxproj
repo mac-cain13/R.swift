@@ -64,6 +64,9 @@
 		DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF559B81CA4932F009B8C51 /* Rswift.framework */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
+		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
+		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
+		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
@@ -154,6 +157,9 @@
 		DEF559B81CA4932F009B8C51 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../R.swift.Library/build/Debug-appletvos/Rswift.framework"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
+		E29693571CAD64B500401D53 /* __FILE__ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = __FILE__; sourceTree = "<group>"; };
+		E29693591CAD64D100401D53 /* associatedtype */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = associatedtype; sourceTree = "<group>"; };
+		E296935B1CAD666200401D53 /* #column */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "#column"; sourceTree = "<group>"; };
 		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -344,6 +350,9 @@
 				D5F05D451BB52078003AE55E /* duplicateJson */,
 				D5F05D431BB52063003AE55E /* Duplicate.json */,
 				D5F05D411BB52002003AE55E /* Some.json */,
+				E29693571CAD64B500401D53 /* __FILE__ */,
+				E29693591CAD64D100401D53 /* associatedtype */,
+				E296935B1CAD666200401D53 /* #column */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -509,6 +518,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E296935C1CAD666200401D53 /* #column in Resources */,
 				D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */,
 				D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */,
 				D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */,
@@ -518,7 +528,9 @@
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
+				E296935A1CAD64D100401D53 /* associatedtype in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
 				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
