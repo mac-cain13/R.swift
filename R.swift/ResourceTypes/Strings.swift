@@ -178,6 +178,8 @@ struct StringValidator {
 
   private func showMissingKeysWarning() {
     missingKeys.forEach { missingKey in
+      if missingKey.keys.isEmpty { return }
+
       if let locale = missingKey.locale {
         let paddedKeys = missingKey.keys.sort().map { "'\($0)'" }
         let paddedKeysString = paddedKeys.joinWithSeparator(", ")
@@ -188,6 +190,8 @@ struct StringValidator {
 
   private func showDuplicateKeysWarning() {
     duplicateKeys.forEach { duplicateKey in
+      if duplicateKey.keys.isEmpty { return }
+
       let paddedKeys = Set(duplicateKey.keys).sort().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joinWithSeparator(", ")
       if let locale = duplicateKey.locale {
