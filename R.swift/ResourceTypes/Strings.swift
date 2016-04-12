@@ -183,7 +183,7 @@ struct StringValidator {
       if let locale = missingKey.locale {
         let paddedKeys = missingKey.keys.sort().map { "'\($0)'" }
         let paddedKeysString = paddedKeys.joinWithSeparator(", ")
-        warn("Locale '\(locale)' is missing translations for keys: [\(paddedKeysString)]")
+        warn("Locale '\(locale)' is missing translations for keys: \(paddedKeysString)")
       }
     }
   }
@@ -195,7 +195,7 @@ struct StringValidator {
       let paddedKeys = Set(duplicateKey.keys).sort().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joinWithSeparator(", ")
       if let locale = duplicateKey.locale {
-        warn("Locale '\(locale)' has multiple translations for keys: [\(paddedKeysString)]")
+        warn("Locale '\(locale)' has multiple translations for keys: \(paddedKeysString)")
       } else {
         warn("Multiple translations for keys: [\(paddedKeysString)]")
       }
