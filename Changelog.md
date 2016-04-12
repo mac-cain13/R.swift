@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.1.0
+
+New features:
+- Add support for "imagestack" assets, parallax images used on AppleTV (@chillpop) 
+
+## 2.0.0
+
+Fixed issue:
+- Use new version of R.swift.Library to avoid Swift 2.2 warnings
+- This version is not compatible with Swift 2.1 and therefore a breaking change, use 1.4.2 if you need Swift 2.1 compatibility.
+
+## 1.4.2
+
+Fixed issue:
+- Make this version compatible with Swift 2.1
+- This release is exactly the same version as 1.4.0
+
+## 1.4.1
+
+**Note: Do not use this version, use version 2.0.0 or 1.4.2 instead.**
+
+Fixed issue:
+- Use new version of R.swift.Library to avoid Swift 2.2 warnings
+
 ## 1.4.0
 
 New features:

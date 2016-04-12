@@ -12,7 +12,9 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcassets"]
 
   // Note: "appiconset" is not loadable by default, so it's not included here
-  private static let AssetExtensions: Set<String> = ["launchimage", "imageset"]
+  private static let AssetExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
+  // Ignore everything in folders with these extensions
+  private static let IgnoredExtensions: Set<String> = ["brandassets", "imagestacklayer"]
 
   let name: String
   let imageAssets: [String]
@@ -26,9 +28,14 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
     var assets = [NSURL]()
     let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
-      for file in enumerator {
-        if let fileURL = file as? NSURL, pathExtension = fileURL.pathExtension where AssetFolder.AssetExtensions.indexOf(pathExtension) != nil {
-          assets.append(fileURL)
+      for case let fileURL as NSURL in enumerator {
+        if let pathExtension = fileURL.pathExtension {
+          if AssetFolder.AssetExtensions.contains(pathExtension) {
+            assets.append(fileURL)
+          }
+          if AssetFolder.IgnoredExtensions.contains(pathExtension) {
+            enumerator.skipDescendants()
+          }
         }
       }
     }

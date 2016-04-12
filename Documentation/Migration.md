@@ -2,6 +2,10 @@
 
 Pointers for migration between major versions.
 
+## Upgrading to 2.0
+
+- Make sure you use Swift 2.2 / Xcode 7.3 since we've adjusted to the syntax changes.
+
 ## Upgrading to 1.0
 
 - iOS 7 support is dropped, use [R.swift 0.13](https://github.com/mac-cain13/R.swift/releases/tag/v0.13.0) if you still have to support it.

@@ -42,6 +42,8 @@
 		D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5B799861C1B8DD2009EA901 /* Specials.storyboard */; };
 		D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */; };
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
+		D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */ = {isa = PBXBuildFile; fileRef = D5CE930C1CA966D9009D0E62 /* rswift-tv.log */; };
+		D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */; };
 		D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */; };
@@ -49,7 +51,6 @@
 		D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B81B8E111A0035ECAA /* AveriaLibre.ttf */; };
 		D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B91B8E111A0035ECAA /* GdyBkltter1911.ttf */; };
 		D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E513BF1B8E11810035ECAA /* FontsTests.swift */; };
-		D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
 		D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */; };
 		D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */; };
 		D5F05D421BB52002003AE55E /* Some.json in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D411BB52002003AE55E /* Some.json */; };
@@ -57,8 +58,17 @@
 		D5F05D461BB52078003AE55E /* duplicateJson in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D451BB52078003AE55E /* duplicateJson */; };
 		D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F05D471BB520B1003AE55E /* FilesTests.swift */; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
+		DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559991CA4873D009B8C51 /* AppDelegate.swift */; };
+		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
+		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
+		DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */; };
+		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
+		DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF559B81CA4932F009B8C51 /* Rswift.framework */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
+		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
+		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
+		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
@@ -70,6 +80,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = D55C6CB71B5D757300301B0D;
 			remoteInfo = ResourceApp;
+		};
+		DEF559B01CA48892009B8C51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D55C6CB01B5D757300301B0D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEF559961CA4873D009B8C51;
+			remoteInfo = "ResourceApp-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -119,6 +136,7 @@
 		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellCollectionView.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		D5CE930C1CA966D9009D0E62 /* rswift-tv.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "rswift-tv.log"; sourceTree = SOURCE_ROOT; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-B.ttf"; sourceTree = "<group>"; };
 		D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-BI.ttf"; sourceTree = "<group>"; };
@@ -126,15 +144,28 @@
 		D5E513B81B8E111A0035ECAA /* AveriaLibre.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AveriaLibre.ttf; sourceTree = "<group>"; };
 		D5E513B91B8E111A0035ECAA /* GdyBkltter1911.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GdyBkltter1911.ttf; sourceTree = "<group>"; };
 		D5E513BF1B8E11810035ECAA /* FontsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontsTests.swift; sourceTree = "<group>"; };
-		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTests.swift; sourceTree = "<group>"; };
+		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagesTests.swift; path = ../ResourceAppTests/ImagesTests.swift; sourceTree = "<group>"; };
 		D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "The App Icon.png"; sourceTree = "<group>"; };
 		D5F05D411BB52002003AE55E /* Some.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Some.json; sourceTree = "<group>"; };
 		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
+		DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ResourceApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF559991CA4873D009B8C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DEF5599E1CA4873D009B8C51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DEF559A01CA4873D009B8C51 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DEF559A21CA4873D009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ResourceAppTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests_tvOS.swift; sourceTree = "<group>"; };
+		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
+		DEF559B81CA4932F009B8C51 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../R.swift.Library/build/Debug-appletvos/Rswift.framework"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
+		E29693571CAD64B500401D53 /* __FILE__ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = __FILE__; sourceTree = "<group>"; };
+		E29693591CAD64D100401D53 /* associatedtype */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = associatedtype; sourceTree = "<group>"; };
+		E296935B1CAD666200401D53 /* #column */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "#column"; sourceTree = "<group>"; };
 		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,12 +185,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DEF559941CA4873D009B8C51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEF559A81CA48892009B8C51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		065D32753EEB6C7AE2FA201F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DEF559B81CA4932F009B8C51 /* Rswift.framework */,
 				D5B799881C1B8F0C009EA901 /* AVKit.framework */,
 				AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */,
 			);
@@ -205,6 +252,8 @@
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
+				DEF559981CA4873D009B8C51 /* ResourceApp-tvOS */,
+				DEF559AC1CA48892009B8C51 /* ResourceAppTests-tvOS */,
 				D55C6CB91B5D757300301B0D /* Products */,
 				6BD8864A6B6559C4D6F93D81 /* Pods */,
 				065D32753EEB6C7AE2FA201F /* Frameworks */,
@@ -216,6 +265,8 @@
 			children = (
 				D55C6CB81B5D757300301B0D /* ResourceApp.app */,
 				D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */,
+				DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */,
+				DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -269,7 +320,6 @@
 				E24720CD1C96B71B00DF291D /* ColorsTests.swift */,
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
-				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
 				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
@@ -285,6 +335,15 @@
 			children = (
 				D50175BA1B5FEF6E00DB8314 /* rswift.log */,
 				D55C6CD41B5D757300301B0D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D5CE930B1CA966C6009D0E62 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D5CE930C1CA966D9009D0E62 /* rswift-tv.log */,
+				DEF559AF1CA48892009B8C51 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -307,8 +366,33 @@
 				D5F05D451BB52078003AE55E /* duplicateJson */,
 				D5F05D431BB52063003AE55E /* Duplicate.json */,
 				D5F05D411BB52002003AE55E /* Some.json */,
+				E29693571CAD64B500401D53 /* __FILE__ */,
+				E29693591CAD64D100401D53 /* associatedtype */,
+				E296935B1CAD666200401D53 /* #column */,
 			);
 			path = Files;
+			sourceTree = "<group>";
+		};
+		DEF559981CA4873D009B8C51 /* ResourceApp-tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				DEF559B61CA48DC2009B8C51 /* R.generated.swift */,
+				DEF559991CA4873D009B8C51 /* AppDelegate.swift */,
+				DEF5599D1CA4873D009B8C51 /* Main.storyboard */,
+				DEF559A01CA4873D009B8C51 /* Assets.xcassets */,
+				DEF559A21CA4873D009B8C51 /* Info.plist */,
+			);
+			path = "ResourceApp-tvOS";
+			sourceTree = "<group>";
+		};
+		DEF559AC1CA48892009B8C51 /* ResourceAppTests-tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */,
+				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
+				D5CE930B1CA966C6009D0E62 /* Supporting Files */,
+			);
+			path = "ResourceAppTests-tvOS";
 			sourceTree = "<group>";
 		};
 		E2F268AF1C92BFE00093995D /* Colors */ = {
@@ -361,6 +445,42 @@
 			productReference = D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		DEF559961CA4873D009B8C51 /* ResourceApp-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEF559A31CA4873D009B8C51 /* Build configuration list for PBXNativeTarget "ResourceApp-tvOS" */;
+			buildPhases = (
+				DEF559A61CA487D6009B8C51 /* R.swift */,
+				DEF559931CA4873D009B8C51 /* Sources */,
+				DEF559941CA4873D009B8C51 /* Frameworks */,
+				DEF559951CA4873D009B8C51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ResourceApp-tvOS";
+			productName = "ResourceApp-tvOS";
+			productReference = DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DEF559AA1CA48892009B8C51 /* ResourceAppTests-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEF559B21CA48892009B8C51 /* Build configuration list for PBXNativeTarget "ResourceAppTests-tvOS" */;
+			buildPhases = (
+				DEF559A71CA48892009B8C51 /* Sources */,
+				DEF559A81CA48892009B8C51 /* Frameworks */,
+				DEF559A91CA48892009B8C51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DEF559B11CA48892009B8C51 /* PBXTargetDependency */,
+			);
+			name = "ResourceAppTests-tvOS";
+			productName = "ResourceAppTests-tvOS";
+			productReference = DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -368,7 +488,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
@@ -378,6 +498,13 @@
 					D55C6CCE1B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
 						TestTargetID = D55C6CB71B5D757300301B0D;
+					};
+					DEF559961CA4873D009B8C51 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					DEF559AA1CA48892009B8C51 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = DEF559961CA4873D009B8C51;
 					};
 				};
 			};
@@ -398,6 +525,8 @@
 			targets = (
 				D55C6CB71B5D757300301B0D /* ResourceApp */,
 				D55C6CCE1B5D757300301B0D /* ResourceAppTests */,
+				DEF559961CA4873D009B8C51 /* ResourceApp-tvOS */,
+				DEF559AA1CA48892009B8C51 /* ResourceAppTests-tvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -407,6 +536,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E296935C1CAD666200401D53 /* #column in Resources */,
 				D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */,
 				D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */,
 				D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */,
@@ -416,7 +546,9 @@
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
+				E296935A1CAD64D100401D53 /* associatedtype in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
 				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
@@ -453,6 +585,23 @@
 			files = (
 				D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */,
 				D58AF2811B708CB300FB2A4E /* rswift.log in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEF559951CA4873D009B8C51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */,
+				DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEF559A91CA48892009B8C51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +667,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
 		};
+		DEF559A61CA487D6009B8C51 /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = R.swift;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT/ResourceApp-tvOS\" > \"$SRCROOT/rswift-tv.log\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -541,11 +704,28 @@
 				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
-				D5EB326F1B63AD6B005C7B47 /* ImagesTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
 				D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */,
 				D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEF559931CA4873D009B8C51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */,
+				DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEF559A71CA48892009B8C51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */,
+				D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +736,11 @@
 			isa = PBXTargetDependency;
 			target = D55C6CB71B5D757300301B0D /* ResourceApp */;
 			targetProxy = D55C6CD01B5D757300301B0D /* PBXContainerItemProxy */;
+		};
+		DEF559B11CA48892009B8C51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DEF559961CA4873D009B8C51 /* ResourceApp-tvOS */;
+			targetProxy = DEF559B01CA48892009B8C51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -592,6 +777,14 @@
 				D55C6CC91B5D757300301B0D /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		DEF5599D1CA4873D009B8C51 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DEF5599E1CA4873D009B8C51 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -640,6 +833,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -677,6 +871,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -711,10 +906,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -731,15 +923,72 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ResourceAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp.app/ResourceApp";
+			};
+			name = Release;
+		};
+		DEF559A41CA4873D009B8C51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = "ResourceApp-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceApp-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		DEF559A51CA4873D009B8C51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = "ResourceApp-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceApp-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		DEF559B31CA48892009B8C51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = "ResourceAppTests-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceAppTests-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
+			};
+			name = Debug;
+		};
+		DEF559B41CA48892009B8C51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = "ResourceAppTests-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceAppTests-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
 			};
 			name = Release;
 		};
@@ -769,6 +1018,24 @@
 			buildConfigurations = (
 				D55C6CDD1B5D757300301B0D /* Debug */,
 				D55C6CDE1B5D757300301B0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEF559A31CA4873D009B8C51 /* Build configuration list for PBXNativeTarget "ResourceApp-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF559A41CA4873D009B8C51 /* Debug */,
+				DEF559A51CA4873D009B8C51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEF559B21CA48892009B8C51 /* Build configuration list for PBXNativeTarget "ResourceAppTests-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF559B31CA48892009B8C51 /* Debug */,
+				DEF559B41CA48892009B8C51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
