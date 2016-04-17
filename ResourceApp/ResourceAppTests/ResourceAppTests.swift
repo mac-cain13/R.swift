@@ -13,12 +13,10 @@ import XCTest
 class ResourceAppTests: XCTestCase {
 
   let expectedWarnings = [
-    "warning: [R.swift] Locale 'en.lproj' is missing translations for keys: ['project.missingKey.3', 'project.missingKey.5', 'project.missingKey.6']",
-    "warning: [R.swift] Locale 'es.lproj' is missing translations for keys: ['project.missingKey.2', 'project.missingKey.6', 'project.missingKey.7']",
-    "warning: [R.swift] Locale 'ja.lproj' is missing translations for keys: ['project.missingKey.7', 'project.missingKey.8']",
-    "warning: [R.swift] Locale 'en.lproj' has multiple translations for keys: ['project.duplicateKey.1', 'project.duplicateKey.2']",
-    "warning: [R.swift] Locale 'es.lproj' has multiple translations for keys: ['project.duplicateKey.1', 'project.duplicateKey.2']",
-    "warning: [R.swift] Locale 'ja.lproj' has multiple translations for keys: ['project.duplicateKey.1', 'project.duplicateKey.2']",
+    "warning: [R.swift] Skipping 2 strings in locale 'en' because symbol 'projectDuplicateKey2' would be generated for all of these keys: project.DuplicateKey.2, project.duplicateKey.2",
+    "warning: [R.swift] Locale 'en' is missing translations for keys: 'project.missingKey.3', 'project.missingKey.5', 'project.missingKey.6'",
+    "warning: [R.swift] Locale 'es' is missing translations for keys: 'project.missingKey.2', 'project.missingKey.6', 'project.missingKey.7', 'quote', 'two'",
+    "warning: [R.swift] Locale 'ja' is missing translations for keys: 'one', 'project.missingKey.7', 'project.missingKey.8', 'quote', 'two'",
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
     "warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these xibs: Duplicate, duplicate",
     "warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these storyboards: Duplicate, duplicate",

@@ -21,7 +21,7 @@ struct Resources {
   let nibs: [Nib]
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
-  let strings: Strings
+  let strings: [LocalizableStrings]
     
   let reusables: [Reusable]
 
@@ -35,9 +35,7 @@ struct Resources {
     resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
-    strings = resourceURLs.flatMap { url in tryResourceParsing { try Strings(url: url) } }
-      .reduce(StringValidator(), combine: StringValidator.combine)
-      .validStrings()
+    strings = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
   }
 }
 
