@@ -18,8 +18,15 @@ struct UsedType {
 
 struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Void = Type(module: .StdLib, name: "Void")
+  static let _Any = Type(module: .StdLib, name: "Any")
   static let _AnyObject = Type(module: .StdLib, name: "AnyObject")
   static let _String = Type(module: .StdLib, name: "String")
+  static let _Int = Type(module: .StdLib, name: "Int")
+  static let _UInt = Type(module: .StdLib, name: "UInt")
+  static let _Double = Type(module: .StdLib, name: "Double")
+  static let _Character = Type(module: .StdLib, name: "Character")
+  static let _CStringPointer = Type(module: .StdLib, name: "UnsafePointer<unichar>")
+  static let _VoidPointer = Type(module: .StdLib, name: "UnsafePointer<Void>")
   static let _NSURL = Type(module: "Foundation", name: "NSURL")
   static let _UINib = Type(module: "UIKit", name: "UINib")
   static let _UIView = Type(module: "UIKit", name: "UIView")
