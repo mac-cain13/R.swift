@@ -1,0 +1,11 @@
+/* 
+  Settings.strings
+  ResourceApp
+
+  Created by Tom Lokhorst on 2016-04-17.
+  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+*/
+
+"Title" = "Instellingen";
+
+"Copy.Progress" = "Van de %2$d bestanden zijn er %1$d gekopieerd, %3$.2f%% compleet.";

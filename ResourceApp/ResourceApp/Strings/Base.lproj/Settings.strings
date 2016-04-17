@@ -1,0 +1,11 @@
+/* 
+  Settings.strings
+  ResourceApp
+
+  Created by Tom Lokhorst on 2016-04-17.
+  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+*/
+
+"Title" = "Settings";
+
+"Copy.Progress" = "%1$d of %2$i files copied, %3$f.2% completed.";

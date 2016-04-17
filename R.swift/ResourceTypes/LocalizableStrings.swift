@@ -11,17 +11,21 @@ import Foundation
 struct LocalizableStrings: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["strings"]
 
+  let filename: String
   let locale: String?
   let dictionary: [String : (value: String, params: [Type])]
 
   init(url: NSURL) throws {
     try LocalizableStrings.throwIfUnsupportedExtension(url.pathExtension)
 
-    // Set locale for file (second to last component)
+    guard let filename = url.filename else {
+      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+    }
+
+    // Get locale from url (second to last component)
+    var locale: String?
     if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
       locale = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
-    } else {
-      locale = nil
     }
 
     // Check to make sure url can be parsed as a dictionary
@@ -43,6 +47,8 @@ struct LocalizableStrings: WhiteListedExtensionsResourceType {
       }
     }
 
+    self.filename = filename
+    self.locale = locale
     self.dictionary = dictionary
   }
 }

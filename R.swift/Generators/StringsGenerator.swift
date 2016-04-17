@@ -11,25 +11,52 @@ import Foundation
 struct StringsGenerator: Generator {
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
-  
-  init(strings: [LocalizableStrings]) {
+
+  init(localizableStrings: [LocalizableStrings]) {
+
+    let localized = localizableStrings.groupBy { $0.filename }
+    let groupedLocalized = localized.groupBySwiftNames { $0.0 }
+
+    for (sanitizedName, duplicates) in groupedLocalized.duplicates {
+      warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
+    }
+
+    let empties = groupedLocalized.empties
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joinWithSeparator(", "))")
+    }
+
+    externalStruct = Struct(
+      type: Type(module: .Host, name: "string"),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: [],
+      structs: groupedLocalized.uniques.flatMap(StringsGenerator.stringStructFromLocalizableStrings)
+    )
+  }
+
+  private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
     var allKeys: [String: [Type]] = [:]
 
     for ls in strings {
-      let locale = ls.locale ?? "???"
+      let filenameLocale = ls.locale != nil ? "'\(filename)' (\(ls.locale!))" : "'\(filename)'"
       let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in locale '\(locale)' because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.joinWithSeparator(", "))")
+        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.joinWithSeparator(", "))")
       }
 
       let empties = groupedKeys.empties
       if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 string locale '\(locale)' because no swift identifier can be generated for key: \(empty)")
+        warn("Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
       }
       else if empties.count > 1 {
-        warn("Skipping \(empties.count) strings in locale '\(locale)' because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
+        warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
       }
 
       for key in groupedKeys.uniques {
@@ -45,7 +72,7 @@ struct StringsGenerator: Generator {
     }
 
     for ls in strings {
-      let locale = ls.locale ?? "???"
+      let filenameLocale = ls.locale != nil ? "'\(filename)' (\(ls.locale!))" : "'\(filename)'"
 
       let missing = Set(allKeys.keys).subtract(ls.dictionary.keys)
 
@@ -56,29 +83,38 @@ struct StringsGenerator: Generator {
       let paddedKeys = missing.sort().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joinWithSeparator(", ")
 
-      warn("Locale '\(locale)' is missing translations for keys: \(paddedKeysString)")
+      warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
-    externalStruct = Struct(
-      type: Type(module: .Host, name: "string"),
+    return Struct(
+      type: Type(module: .Host, name: sanitizedSwiftName(filename)),
       implements: [],
       typealiasses: [],
       properties: [],
-      functions: allKeys.map(StringsGenerator.stringFunction),
+      functions: allKeys.map { ($0.0, $0.1, filename)}.map(StringsGenerator.stringFunction),
       structs: []
     )
   }
 
-  private static func stringFunction(key: String, params: [Type]) -> Function {
+  private static func stringFunction(key: String, params: [Type], tableName: String) -> Function {
     if params.isEmpty {
-      return stringFunctionNoParams(key)
+      return stringFunctionNoParams(key, tableName: tableName)
     }
     else {
-      return stringFunctionParams(key, params: params)
+      return stringFunctionParams(key, params: params, tableName: tableName)
     }
   }
 
-  private static func stringFunctionNoParams(key: String) -> Function {
+  private static func stringFunctionNoParams(key: String, tableName: String) -> Function {
+    let body: String
+
+    if tableName == "Localizable" {
+      body = "return NSLocalizedString(\"\(key)\", comment: \"\")"
+    }
+    else {
+      body = "return NSLocalizedString(\"\(key)\", tableName: \"\(tableName)\", comment: \"\")"
+    }
+
     return Function(
       comments: [],
       isStatic: true,
@@ -89,11 +125,11 @@ struct StringsGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: "return NSLocalizedString(\"\(key)\", comment: \"\")"
+      body: body
     )
   }
 
-  private static func stringFunctionParams(key: String, params: [Type]) -> Function {
+  private static func stringFunctionParams(key: String, params: [Type], tableName: String) -> Function {
 
     let params = params.enumerate().map { ix, type -> Function.Parameter in
       let name = "value\(ix + 1)"
@@ -106,6 +142,15 @@ struct StringsGenerator: Generator {
       }
     }
 
+    let format: String
+
+    if tableName == "Localizable" {
+      format = "NSLocalizedString(\"\(key)\", comment: \"\")"
+    }
+    else {
+      format = "NSLocalizedString(\"\(key)\", tableName: \"\(tableName)\", comment: \"\")"
+    }
+
     let args = params.enumerate().map { ix, _ in "value\(ix + 1)" }.joinWithSeparator(", ")
 
     return Function(
@@ -116,7 +161,7 @@ struct StringsGenerator: Generator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: NSLocalizedString(\"\(key)\", comment: \"\"), locale: NSLocale.currentLocale(), \(args))"
+      body: "return String(format: \(format), locale: NSLocale.currentLocale(), \(args))"
     )
   }
 
