@@ -21,7 +21,7 @@ struct Resources {
   let nibs: [Nib]
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
-  let strings: Strings?
+  let strings: Strings
     
   let reusables: [Reusable]
 

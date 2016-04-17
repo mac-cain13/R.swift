@@ -12,16 +12,29 @@ struct StringsGenerator: Generator {
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
   
-  init(strings: Strings?) {
+  init(strings: Strings) {
     externalStruct = Struct(
       type: Type(module: .Host, name: "string"),
       implements: [],
       typealiasses: [],
-      properties: strings?.localizedKeys.keys.map {
-        Let(isStatic: true, name: $0, typeDefinition: .Inferred(Type.Strings), value: "NSLocalizedString(\"\($0)\", comment: \"\")")
-      } ?? [],
-      functions: [],
+      properties: [],
+      functions: strings.localizedKeys.keys.map(StringsGenerator.stringFunction),
       structs: []
+    )
+  }
+
+  private static func stringFunction(key: String) -> Function {
+    return Function(
+      comments: [],
+      isStatic: true,
+      name: key,
+      generics: nil,
+      parameters: [
+        Function.Parameter(name: "_", type: Type._Void)
+      ],
+      doesThrow: false,
+      returnType: Type._String,
+      body: "return NSLocalizedString(\"\(key)\", comment: \"\")"
     )
   }
 }
