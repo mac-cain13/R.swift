@@ -28,10 +28,9 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these filenames: Duplicate, Duplicate#",
     "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for filename: '@@'",
     "warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'",
-    "warning: [R.swift] Skipping 2 strings in 'Localizable' (en) because symbol 'projectDuplicateKey2' would be generated for all of these keys: project.DuplicateKey.2, project.duplicateKey.2",
-    "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'project.missingKey.3', 'project.missingKey.5', 'project.missingKey.6'",
-    "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'project.missingKey.2', 'project.missingKey.6', 'project.missingKey.7', 'quote', 'two'",
-    "warning: [R.swift] Strings file 'Localizable' (ja) is missing translations for keys: 'one', 'project.missingKey.7', 'project.missingKey.8', 'quote', 'two'",
+    "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'japanese only'",
+    "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'japanese only'",
+    "warning: [R.swift] Strings file 'Settings' (nl) is missing translations for keys: 'Not translated'",
   ]
 
   func testWarningsAreLogged() {

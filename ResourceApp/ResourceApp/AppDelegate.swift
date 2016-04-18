@@ -15,6 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+
+    let defaults = NSUserDefaults.standardUserDefaults()
+    defaults.setValue(["es"], forKey: "AppleLanguages")
+
+    print(R.string.settings.notTranslated())
+    print(R.string.settings.onlyDutch())
+
     // Override point for customization after application launch.
     return true
   }

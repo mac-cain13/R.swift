@@ -41,10 +41,14 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
-    var allKeys: [String: [Type]] = [:]
+    var allParams: [String: [Type]] = [:]
+    let baseKeys = strings
+      .filter { $0.locale.isBase }
+      .map { Set($0.dictionary.keys) }
+      .first
 
     for ls in strings {
-      let filenameLocale = ls.locale != nil ? "'\(filename)' (\(ls.locale!))" : "'\(filename)'"
+      let filenameLocale = ls.locale.withFilename(filename)
       let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
@@ -60,21 +64,22 @@ struct StringsGenerator: Generator {
       }
 
       for key in groupedKeys.uniques {
-        if let _ = allKeys[key] {
+        if let _ = allParams[key] {
           // TODO check if existing matches current params
         }
         else {
-          if let (_, params) = ls.dictionary[key] {
-            allKeys[key] = params
+          if let (_, params) = ls.dictionary[key]  {
+            allParams[key] = params
           }
         }
       }
     }
 
     for ls in strings {
-      let filenameLocale = ls.locale != nil ? "'\(filename)' (\(ls.locale!))" : "'\(filename)'"
+      let filenameLocale = ls.locale.withFilename(filename)
+      let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = Set(allKeys.keys).subtract(ls.dictionary.keys)
+      let missing = sourceKeys.subtract(ls.dictionary.keys)
 
       if missing.isEmpty {
         continue
@@ -91,7 +96,7 @@ struct StringsGenerator: Generator {
       implements: [],
       typealiasses: [],
       properties: [],
-      functions: allKeys.map { ($0.0, $0.1, filename)}.map(StringsGenerator.stringFunction),
+      functions: allParams.map { ($0.0, $0.1, filename)}.map(StringsGenerator.stringFunction),
       structs: []
     )
   }
@@ -165,4 +170,17 @@ struct StringsGenerator: Generator {
     )
   }
 
+}
+
+extension Locale {
+  func withFilename(filename: String) -> String {
+    switch self {
+    case .None:
+      return "'\(filename)'"
+    case .Base:
+      return "'\(filename)' (Base)"
+    case .Language(let language):
+      return "'\(filename)' (\(language))"
+    }
+  }
 }

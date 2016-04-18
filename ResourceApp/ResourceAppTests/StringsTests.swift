@@ -13,7 +13,7 @@ import XCTest
 class StringsTests: XCTestCase {
 
   func testNoNilStrings() {
-    XCTAssertNotNil(R.string.localizable.projectAbnormalKey1())
+    XCTAssertNotNil(R.string.localizable.one())
     XCTAssertNotNil(R.string.generic.loremipsum())
     XCTAssertNotNil(R.string.settings.copyProgress(2, 4, 50.0))
   }

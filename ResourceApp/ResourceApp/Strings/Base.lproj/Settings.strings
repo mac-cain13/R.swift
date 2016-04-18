@@ -8,4 +8,6 @@
 
 "Title" = "Settings";
 
-"Copy.Progress" = "%1$d of %2$i files copied, %3$f.2% completed.";
+"Not translated" = "Base language; Not translated";
+
+"Copy.Progress" = "%1$d of %2$i files copied, %3$f.2%% completed.";

@@ -8,11 +8,25 @@
 
 import Foundation
 
+enum Locale {
+  case None
+  case Base
+  case Language(String)
+
+  var isBase: Bool {
+    if case .Base = self {
+      return true
+    }
+
+    return false
+  }
+}
+
 struct LocalizableStrings: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["strings"]
 
   let filename: String
-  let locale: String?
+  let locale: Locale
   let dictionary: [String : (value: String, params: [Type])]
 
   init(url: NSURL) throws {
@@ -23,9 +37,16 @@ struct LocalizableStrings: WhiteListedExtensionsResourceType {
     }
 
     // Get locale from url (second to last component)
-    var locale: String?
+    var locale = Locale.None
     if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
-      locale = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
+      let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
+
+      if lang == "Base" {
+        locale = .Base
+      }
+      else {
+        locale = .Language(lang)
+      }
     }
 
     // Check to make sure url can be parsed as a dictionary

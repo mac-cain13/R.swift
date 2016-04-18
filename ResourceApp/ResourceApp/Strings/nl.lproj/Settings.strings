@@ -8,4 +8,6 @@
 
 "Title" = "Instellingen";
 
+"Only Dutch" = "Alleen Nederlands. Doesn't apepar in Base translation";
+
 "Copy.Progress" = "Van de %2$d bestanden zijn er %1$d gekopieerd, %3$.2f%% compleet.";
