@@ -68,7 +68,7 @@ struct StringsGenerator: Generator {
       let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.joinWithSeparator(", "))")
+        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
       }
 
       let empties = groupedKeys.empties
