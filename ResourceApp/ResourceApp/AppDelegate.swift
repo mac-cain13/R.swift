@@ -13,14 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
-
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
     let defaults = NSUserDefaults.standardUserDefaults()
-    defaults.setValue(["es"], forKey: "AppleLanguages")
+    defaults.setValue(["en"], forKey: "AppleLanguages")
 
-    print(R.string.settings.notTranslated())
-    print(R.string.settings.onlyDutch())
+    print(R.string.settings.formatSpecifiers1(11, 22, "str"))
+    print(R.string.settings.formatSpecifiers2(11, 22, "str"))
+    print(R.string.settings.formatSpecifiers3())
+    print(R.string.settings.formatSpecifiers4(11))
+    print(R.string.settings.formatSpecifiers5(11, "str"))
 
     // Override point for customization after application launch.
     return true

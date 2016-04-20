@@ -96,6 +96,8 @@
 		D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E411C1816360066D7C0 /* Image.swift */; };
 		D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E431C1816790066D7C0 /* ResourceFile.swift */; };
 		D5F97E4E1C1819160066D7C0 /* Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F97E451C18169E0066D7C0 /* Nib.swift */; };
+		E2156B8E1CC5254A00F341DC /* FormatSpecifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */; };
+		E2156B8F1CC5255000F341DC /* FormatSpecifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */; };
 		E22D43631C9582CA00692FFF /* ColorGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43621C9582CA00692FFF /* ColorGenerator.swift */; };
 		E22D43651C95845200692FFF /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
 		E24720CB1C96B6A600DF291D /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
@@ -151,6 +153,7 @@
 		D5F97E411C1816360066D7C0 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		D5F97E431C1816790066D7C0 /* ResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFile.swift; sourceTree = "<group>"; };
 		D5F97E451C18169E0066D7C0 /* Nib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nib.swift; sourceTree = "<group>"; };
+		E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormatSpecifier.swift; sourceTree = "<group>"; };
 		E22D43621C9582CA00692FFF /* ColorGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGenerator.swift; sourceTree = "<group>"; };
 		E22D43641C95845200692FFF /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -273,6 +276,7 @@
 				D5F97E3F1C1815E70066D7C0 /* AssetFolder.swift */,
 				E22D43641C95845200692FFF /* ColorPalette.swift */,
 				D5F97E391C1812AE0066D7C0 /* Font.swift */,
+				E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */,
 				D5F97E411C1816360066D7C0 /* Image.swift */,
 				5D997C961C7C2BEE00B2F376 /* LocalizableStrings.swift */,
 				D5F97E451C18169E0066D7C0 /* Nib.swift */,
@@ -444,6 +448,7 @@
 				D5B799721C199755009EA901 /* ImageGenerator.swift in Sources */,
 				D5B7997A1C19C1BD009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */,
 				D59F722A1C1963EA0089767C /* Struct.swift in Sources */,
+				E2156B8F1CC5255000F341DC /* FormatSpecifier.swift in Sources */,
 				D5A0A82E1C4793C20089ED2C /* TypePrinter.swift in Sources */,
 				D5A0A82D1C4793C20089ED2C /* SwiftCodeConverible.swift in Sources */,
 				D5B799731C199755009EA901 /* NibGenerator.swift in Sources */,
@@ -465,6 +470,7 @@
 			files = (
 				5D997C951C7C291900B2F376 /* StringsGenerator.swift in Sources */,
 				D5B799831C1B8C78009EA901 /* Module.swift in Sources */,
+				E2156B8E1CC5254A00F341DC /* FormatSpecifier.swift in Sources */,
 				D5C5A8EF1BB7196000163E71 /* Core.swift in Sources */,
 				D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */,
 				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,

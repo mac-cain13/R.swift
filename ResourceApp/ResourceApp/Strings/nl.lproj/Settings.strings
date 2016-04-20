@@ -10,4 +10,13 @@
 
 "Only Dutch" = "Alleen Nederlands. Doesn't apepar in Base translation";
 
+"Multiline" = "ABC
+DEF
+GHI";
 "Copy.Progress" = "Van de %2$d bestanden zijn er %1$d gekopieerd, %3$.2f%% compleet.";
+
+"FormatSpecifiers1" = "number 1: %d, number 2: %i";
+"FormatSpecifiers2" = "string 3: %3$@, number 1: %1$i";
+"FormatSpecifiers3" = "number 2: %2$d, string 3: %3$@, number 1: %1$i";
+"FormatSpecifiers4" = "number 1: %d, number 2: %i, string 3: %@";
+"FormatSpecifiers5" = "number 1: %d, number 2: %i, string 3: %@";

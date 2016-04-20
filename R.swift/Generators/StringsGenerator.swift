@@ -41,7 +41,7 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
-    var allParams: [String: [Type]] = [:]
+    var allParams: [String: [FormatSpecifier]] = [:]
     let baseKeys = strings
       .filter { $0.locale.isBase }
       .map { Set($0.dictionary.keys) }
@@ -91,17 +91,28 @@ struct StringsGenerator: Generator {
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
+    func includeParam(key: String) -> Bool {
+      if let baseKeys = baseKeys {
+        return baseKeys.contains(key)
+      }
+
+      return true
+    }
+
     return Struct(
       type: Type(module: .Host, name: sanitizedSwiftName(filename)),
       implements: [],
       typealiasses: [],
       properties: [],
-      functions: allParams.map { ($0.0, $0.1, filename)}.map(StringsGenerator.stringFunction),
+      functions: allParams
+        .filter { includeParam($0.0) }
+        .map { ($0.0, $0.1, filename)}
+        .map(StringsGenerator.stringFunction),
       structs: []
     )
   }
 
-  private static func stringFunction(key: String, params: [Type], tableName: String) -> Function {
+  private static func stringFunction(key: String, params: [FormatSpecifier], tableName: String) -> Function {
     if params.isEmpty {
       return stringFunctionNoParams(key, tableName: tableName)
     }
@@ -134,16 +145,16 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunctionParams(key: String, params: [Type], tableName: String) -> Function {
+  private static func stringFunctionParams(key: String, params: [FormatSpecifier], tableName: String) -> Function {
 
-    let params = params.enumerate().map { ix, type -> Function.Parameter in
+    let params = params.enumerate().map { ix, formatSpecifier -> Function.Parameter in
       let name = "value\(ix + 1)"
 
       if ix == 0 {
-        return Function.Parameter(name: name, type: type)
+        return Function.Parameter(name: name, type: formatSpecifier.type)
       }
       else {
-        return Function.Parameter(name: "_", localName: name, type: type)
+        return Function.Parameter(name: "_", localName: name, type: formatSpecifier.type)
       }
     }
 
