@@ -52,6 +52,7 @@ struct StringsGenerator: Generator {
     )
   }
 
+  // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
   private static func computeParams(filename: String, strings: [LocalizableStrings])
     -> [(key: String, params: [FormatSpecifier], tableName: String)]
   {
