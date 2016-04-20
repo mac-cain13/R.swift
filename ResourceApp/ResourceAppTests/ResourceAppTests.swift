@@ -31,6 +31,10 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'japanese only'",
     "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'japanese only'",
     "warning: [R.swift] Strings file 'Settings' (nl) is missing translations for keys: 'Not translated'",
+    "warning: [R.swift] Skipping string FormatSpecifiers2 in 'Settings' (nl), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (Base), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (nl), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string for key FormatSpecifiers5 (Settings), format specifiers don't match for all locales: Base, nl",
   ]
 
   func testWarningsAreLogged() {

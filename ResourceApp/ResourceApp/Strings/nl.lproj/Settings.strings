@@ -20,3 +20,4 @@ GHI";
 "FormatSpecifiers3" = "number 2: %2$d, string 3: %3$@, number 1: %1$i";
 "FormatSpecifiers4" = "number 1: %d, number 2: %i, string 3: %@";
 "FormatSpecifiers5" = "number 1: %d, number 2: %i, string 3: %@";
+"FormatSpecifiers6" = "number 1: %1$i, string 3: %3$@";

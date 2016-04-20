@@ -22,6 +22,21 @@ enum Locale {
   }
 }
 
+extension Locale: CustomStringConvertible {
+  var description: String {
+    switch self {
+    case .None:
+      return ""
+
+    case .Base:
+      return "Base"
+
+    case .Language(let language):
+      return language
+    }
+  }
+}
+
 struct LocalizableStrings: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["strings"]
 

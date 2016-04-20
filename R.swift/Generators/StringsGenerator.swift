@@ -41,12 +41,27 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
-    var allParams: [String: [FormatSpecifier]] = [:]
+    return Struct(
+      type: Type(module: .Host, name: sanitizedSwiftName(filename)),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: computeParams(filename, strings: strings)
+        .map(StringsGenerator.stringFunction),
+      structs: []
+    )
+  }
+
+  private static func computeParams(filename: String, strings: [LocalizableStrings])
+    -> [(key: String, params: [FormatSpecifier], tableName: String)]
+  {
+    var allParams: [String: [(Locale, [FormatSpecifier])]] = [:]
     let baseKeys = strings
       .filter { $0.locale.isBase }
       .map { Set($0.dictionary.keys) }
       .first
 
+    // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
       let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
@@ -63,18 +78,20 @@ struct StringsGenerator: Generator {
         warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
       }
 
+      // Save uniques
       for key in groupedKeys.uniques {
-        if let _ = allParams[key] {
-          // TODO check if existing matches current params
-        }
-        else {
-          if let (_, params) = ls.dictionary[key]  {
-            allParams[key] = params
+        if let (_, params) = ls.dictionary[key] {
+          if let _ = allParams[key] {
+            allParams[key]?.append((ls.locale, params))
+          }
+          else {
+            allParams[key] = [(ls.locale, params)]
           }
         }
       }
     }
 
+    // Warnings about missing translations
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
@@ -91,7 +108,8 @@ struct StringsGenerator: Generator {
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
-    func includeParam(key: String) -> Bool {
+    // Only include translation if it exists in Base
+    func includeTranslation(key: String) -> Bool {
       if let baseKeys = baseKeys {
         return baseKeys.contains(key)
       }
@@ -99,17 +117,55 @@ struct StringsGenerator: Generator {
       return true
     }
 
-    return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(filename)),
-      implements: [],
-      typealiasses: [],
-      properties: [],
-      functions: allParams
-        .filter { includeParam($0.0) }
-        .map { ($0.0, $0.1, filename)}
-        .map(StringsGenerator.stringFunction),
-      structs: []
-    )
+    var results: [(key: String, params: [FormatSpecifier], tableName: String)] = []
+    var badFormatSpecifiersKeys = Set<String>()
+
+    // Unify format specifiers
+    for (key, params) in allParams.filter({ includeTranslation($0.0) }).sortBy({ $0.0 }) {
+      var formatSpecifiers: [FormatSpecifier] = []
+      var areCorrectFormatSpecifiers = true
+
+      for (locale, fs) in params {
+        if fs.contains(FormatSpecifier.TopType) {
+          let name = locale.withFilename(filename)
+          warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
+
+          areCorrectFormatSpecifiers = false
+        }
+      }
+
+      if !areCorrectFormatSpecifiers { continue }
+
+      for (_, fs) in params {
+        let length = min(formatSpecifiers.count, fs.count)
+
+        if formatSpecifiers.prefix(length) == fs.prefix(length) {
+          if fs.count > formatSpecifiers.count {
+            formatSpecifiers = fs
+          }
+        }
+        else {
+          badFormatSpecifiersKeys.insert(key)
+
+          areCorrectFormatSpecifiers = false
+        }
+      }
+
+      if !areCorrectFormatSpecifiers { continue }
+
+      results.append((key: key, params: formatSpecifiers, tableName: filename))
+    }
+
+    for badKey in badFormatSpecifiersKeys.sort() {
+      let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
+
+      if let params = fewParams.first {
+        let locales = params.map { $0.0.description }.joinWithSeparator(", ")
+        warn("Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
+      }
+    }
+
+    return results
   }
 
   private static func stringFunction(key: String, params: [FormatSpecifier], tableName: String) -> Function {

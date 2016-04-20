@@ -19,10 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     defaults.setValue(["en"], forKey: "AppleLanguages")
 
     print(R.string.settings.formatSpecifiers1(11, 22, "str"))
-    print(R.string.settings.formatSpecifiers2(11, 22, "str"))
-    print(R.string.settings.formatSpecifiers3())
-    print(R.string.settings.formatSpecifiers4(11))
-    print(R.string.settings.formatSpecifiers5(11, "str"))
+    print(R.string.settings.formatSpecifiers3(11, 22, "str"))
+    print(R.string.settings.formatSpecifiers4(11, 22, "str"))
 
     // Override point for customization after application launch.
     return true
