@@ -30,6 +30,7 @@ struct StringsGenerator: Generator {
     }
 
     externalStruct = Struct(
+      comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
       type: Type(module: .Host, name: "string"),
       implements: [],
       typealiasses: [],
@@ -41,13 +42,16 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
+    let name = sanitizedSwiftName(filename)
+    let params = computeParams(filename, strings: strings)
+
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(filename)),
+      comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
+      type: Type(module: .Host, name: name),
       implements: [],
       typealiasses: [],
       properties: [],
-      functions: computeParams(filename, strings: strings)
-        .map(StringsGenerator.stringFunction),
+      functions: params.map(StringsGenerator.stringFunction),
       structs: []
     )
   }
