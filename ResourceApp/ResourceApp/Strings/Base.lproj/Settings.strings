@@ -10,9 +10,10 @@
 
 "Not translated" = "Base language; Not translated";
 
-"Multiline" = "ABC
-DEF
-GHI";
+"Multiline	\\key/
+\"weird\"?!" = "ABC
+\"\\DEF/\"
+GHI Base";
 "Copy.Progress" = "%1$d of %2$i files copied, %3$f.2%% completed.";
 
 "FormatSpecifiers1" = "number 1: %d, number 2: %i, string 3: %@";

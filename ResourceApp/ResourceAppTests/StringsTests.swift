@@ -22,8 +22,12 @@ class StringsTests: XCTestCase {
     XCTAssertNotNil(R.string.settings.formatSpecifiers1(11, 22, "str"))
     XCTAssertNotNil(R.string.settings.formatSpecifiers3(11, 22, "str"))
     XCTAssertNotNil(R.string.settings.formatSpecifiers4(11, 22, "str"))
-    XCTAssertNotNil(R.string.settings.multiline())
+    XCTAssertNotNil(R.string.settings.multilineKeyWeird())
     XCTAssertNotNil(R.string.settings.notTranslated())
     XCTAssertNotNil(R.string.settings.title())
+
+    XCTAssertEqual(
+      R.string.settings.multilineKeyWeird(),
+      NSLocalizedString("Multiline\t\\key/\n\"weird\"?!", tableName: "Settings", comment: ""))
   }
 }

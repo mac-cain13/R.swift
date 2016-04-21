@@ -57,8 +57,7 @@ struct StringsGenerator: Generator {
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
-  private static func computeParams(filename: String, strings: [LocalizableStrings])
-    -> [(key: String, params: [FormatSpecifier], tableName: String)]
+  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues]
   {
     var allParams: [String: [(Locale, [FormatSpecifier])]] = [:]
     let baseKeys = strings
@@ -122,7 +121,7 @@ struct StringsGenerator: Generator {
       return true
     }
 
-    var results: [(key: String, params: [FormatSpecifier], tableName: String)] = []
+    var results: [StringValues] = []
     var badFormatSpecifiersKeys = Set<String>()
 
     // Unify format specifiers
@@ -158,7 +157,7 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      results.append((key: key, params: formatSpecifiers, tableName: filename))
+      results.append(StringValues(key: key, params: formatSpecifiers, tableName: filename))
     }
 
     for badKey in badFormatSpecifiersKeys.sort() {
@@ -173,42 +172,34 @@ struct StringsGenerator: Generator {
     return results
   }
 
-  private static func stringFunction(key: String, params: [FormatSpecifier], tableName: String) -> Function {
-    if params.isEmpty {
-      return stringFunctionNoParams(key, tableName: tableName)
+  private static func stringFunction(values: StringValues) -> Function {
+    if values.params.isEmpty {
+      return stringFunctionNoParams(values)
     }
     else {
-      return stringFunctionParams(key, params: params, tableName: tableName)
+      return stringFunctionParams(values)
     }
   }
 
-  private static func stringFunctionNoParams(key: String, tableName: String) -> Function {
-    let body: String
-
-    if tableName == "Localizable" {
-      body = "return NSLocalizedString(\"\(key)\", comment: \"\")"
-    }
-    else {
-      body = "return NSLocalizedString(\"\(key)\", tableName: \"\(tableName)\", comment: \"\")"
-    }
+  private static func stringFunctionNoParams(values: StringValues) -> Function {
 
     return Function(
       comments: [],
       isStatic: true,
-      name: key,
+      name: values.key,
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void)
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: body
+      body: "return \(values.localizedString)"
     )
   }
 
-  private static func stringFunctionParams(key: String, params: [FormatSpecifier], tableName: String) -> Function {
+  private static func stringFunctionParams(values: StringValues) -> Function {
 
-    let params = params.enumerate().map { ix, formatSpecifier -> Function.Parameter in
+    let params = values.params.enumerate().map { ix, formatSpecifier -> Function.Parameter in
       let name = "value\(ix + 1)"
 
       if ix == 0 {
@@ -219,26 +210,17 @@ struct StringsGenerator: Generator {
       }
     }
 
-    let format: String
-
-    if tableName == "Localizable" {
-      format = "NSLocalizedString(\"\(key)\", comment: \"\")"
-    }
-    else {
-      format = "NSLocalizedString(\"\(key)\", tableName: \"\(tableName)\", comment: \"\")"
-    }
-
     let args = params.enumerate().map { ix, _ in "value\(ix + 1)" }.joinWithSeparator(", ")
 
     return Function(
       comments: [],
       isStatic: true,
-      name: key,
+      name: values.key,
       generics: nil,
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(format), locale: NSLocale.currentLocale(), \(args))"
+      body: "return String(format: \(values.localizedString), locale: NSLocale.currentLocale(), \(args))"
     )
   }
 
@@ -253,6 +235,27 @@ extension Locale {
       return "'\(filename)' (Base)"
     case .Language(let language):
       return "'\(filename)' (\(language))"
+    }
+  }
+}
+
+private struct StringValues {
+  let key: String
+  let params: [FormatSpecifier]
+  let tableName: String
+
+  var localizedString: String {
+    let escapedKey = key
+      .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+      .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+      .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
+      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+
+    if tableName == "Localizable" {
+      return "NSLocalizedString(\"\(escapedKey)\", comment: \"\")"
+    }
+    else {
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", comment: \"\")"
     }
   }
 }
