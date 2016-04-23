@@ -52,7 +52,7 @@ struct Function: UsedTypesProvider {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.flatMap { [$0] }.map { "/// \($0)\n" }.joinWithSeparator("")
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")

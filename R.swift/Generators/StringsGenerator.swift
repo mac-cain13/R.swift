@@ -59,7 +59,7 @@ struct StringsGenerator: Generator {
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
   private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues]
   {
-    var allParams: [String: [(Locale, [FormatSpecifier])]] = [:]
+    var allParams: [String: [(Locale, String, [FormatSpecifier])]] = [:]
     let baseKeys = strings
       .filter { $0.locale.isBase }
       .map { Set($0.dictionary.keys) }
@@ -84,12 +84,12 @@ struct StringsGenerator: Generator {
 
       // Save uniques
       for key in groupedKeys.uniques {
-        if let (_, params) = ls.dictionary[key] {
+        if let (value, params) = ls.dictionary[key] {
           if let _ = allParams[key] {
-            allParams[key]?.append((ls.locale, params))
+            allParams[key]?.append((ls.locale, value, params))
           }
           else {
-            allParams[key] = [(ls.locale, params)]
+            allParams[key] = [(ls.locale, value, params)]
           }
         }
       }
@@ -129,7 +129,7 @@ struct StringsGenerator: Generator {
       var formatSpecifiers: [FormatSpecifier] = []
       var areCorrectFormatSpecifiers = true
 
-      for (locale, fs) in params {
+      for (locale, _, fs) in params {
         if fs.contains(FormatSpecifier.TopType) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
@@ -140,7 +140,7 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      for (_, fs) in params {
+      for (_, _, fs) in params {
         let length = min(formatSpecifiers.count, fs.count)
 
         if formatSpecifiers.prefix(length) == fs.prefix(length) {
@@ -157,7 +157,9 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      results.append(StringValues(key: key, params: formatSpecifiers, tableName: filename))
+      let vals = params.map { ($0.0, $0.1) }
+      let values = StringValues(key: key, params: formatSpecifiers, tableName: filename, values: vals )
+      results.append(values)
     }
 
     for badKey in badFormatSpecifiersKeys.sort() {
@@ -184,7 +186,7 @@ struct StringsGenerator: Generator {
   private static func stringFunctionNoParams(values: StringValues) -> Function {
 
     return Function(
-      comments: [],
+      comments: values.comments,
       isStatic: true,
       name: values.key,
       generics: nil,
@@ -213,7 +215,7 @@ struct StringsGenerator: Generator {
     let args = params.enumerate().map { ix, _ in "value\(ix + 1)" }.joinWithSeparator(", ")
 
     return Function(
-      comments: [],
+      comments: values.comments,
       isStatic: true,
       name: values.key,
       generics: nil,
@@ -243,13 +245,10 @@ private struct StringValues {
   let key: String
   let params: [FormatSpecifier]
   let tableName: String
+  let values: [(Locale, String)]
 
   var localizedString: String {
-    let escapedKey = key
-      .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
-      .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
-      .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
-      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+    let escapedKey = key.escapedStringLiteral
 
     if tableName == "Localizable" {
       return "NSLocalizedString(\"\(escapedKey)\", comment: \"\")"
@@ -257,5 +256,41 @@ private struct StringValues {
     else {
       return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", comment: \"\")"
     }
+  }
+
+  var comments: [String] {
+    var results: [String] = []
+
+    let containsBase = values.any { $0.0.isBase }
+    let baseValue = values.filter { $0.0.isBase }.map { $0.1 }.first
+    let anyNone = values.any { $0.0.isNone }
+
+    if let baseValue = baseValue {
+      let str = "Base translation: \(baseValue)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+      results.append(str)
+    }
+    else if !containsBase {
+      if let (locale, value) = values.first {
+        if locale.isNone {
+          let str = "Value: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+          results.append(str)
+        }
+        else {
+          let str = "\(locale.description) translation: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+          results.append(str)
+        }
+      }
+    }
+
+    if !anyNone {
+      if !results.isEmpty {
+        results.append("")
+      }
+
+      let locales = values.map { $0.0.description }
+      results.append("Locales: \(locales.joinWithSeparator(", "))")
+    }
+
+    return results
   }
 }

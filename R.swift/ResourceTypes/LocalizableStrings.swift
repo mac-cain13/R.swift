@@ -20,6 +20,14 @@ enum Locale {
 
     return false
   }
+
+  var isNone: Bool {
+    if case .None = self {
+      return true
+    }
+
+    return false
+  }
 }
 
 extension Locale: CustomStringConvertible {
