@@ -18,12 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let defaults = NSUserDefaults.standardUserDefaults()
     defaults.setValue(["nl"], forKey: "AppleLanguages")
 
-    for totalRuns in 0..<3 {
-      for completedRuns in 0...totalRuns {
-        print(String(format: NSLocalizedString("scope.%lu out of %lu runs", tableName: nil, comment: ""), locale: NSLocale.currentLocale(), completedRuns, totalRuns))
-      }
-    }
-
     // Override point for customization after application launch.
     return true
   }

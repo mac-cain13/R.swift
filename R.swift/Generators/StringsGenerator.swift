@@ -57,8 +57,8 @@ struct StringsGenerator: Generator {
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
-  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues]
-  {
+  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
+
     var allParams: [String: [(Locale, String, [FormatSpecifier])]] = [:]
     let baseKeys: Set<String>?
     let bases = strings.filter { $0.locale.isBase }
