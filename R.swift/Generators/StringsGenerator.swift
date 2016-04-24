@@ -50,7 +50,7 @@ struct StringsGenerator: Generator {
       type: Type(module: .Host, name: name),
       implements: [],
       typealiasses: [],
-      properties: [],
+      properties: params.map(StringsGenerator.stringLet),
       functions: params.map(StringsGenerator.stringFunction),
       structs: []
     )
@@ -172,6 +172,23 @@ struct StringsGenerator: Generator {
     }
 
     return results
+  }
+
+  private static func stringLet(values: StringValues) -> Let {
+    let escapedKey = values.key.escapedStringLiteral
+    let locales = values.values
+      .map { $0.0 }
+      .filter { !$0.isNone }
+      .map { "\"\($0.description)\"" }
+      .joinWithSeparator(", ")
+
+    return Let(
+      comments: values.comments,
+      isStatic: true,
+      name: values.key,
+      typeDefinition: .Inferred(Type.StringResource),
+      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)])"
+    )
   }
 
   private static func stringFunction(values: StringValues) -> Function {
