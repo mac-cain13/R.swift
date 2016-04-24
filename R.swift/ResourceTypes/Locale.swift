@@ -60,3 +60,34 @@ extension Locale: CustomStringConvertible {
     }
   }
 }
+
+extension Locale: Hashable {
+  var hashValue: Int {
+    switch self {
+    case .None:
+      return 0
+
+    case .Base:
+      return 1
+
+    case .Language(let language):
+      return 2 &+  language.hashValue
+    }
+  }
+}
+
+func ==(lhs: Locale, rhs: Locale) -> Bool {
+  switch (lhs, rhs) {
+  case (.None, .None):
+    return true
+
+  case (.Base, .Base):
+    return true
+
+  case let (.Language(lLang), .Language(rLang)):
+    return lLang == rLang
+
+  default:
+    return false
+  }
+}

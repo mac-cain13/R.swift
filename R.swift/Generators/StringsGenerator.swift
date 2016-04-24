@@ -60,10 +60,14 @@ struct StringsGenerator: Generator {
   private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues]
   {
     var allParams: [String: [(Locale, String, [FormatSpecifier])]] = [:]
-    let baseKeys = strings
-      .filter { $0.locale.isBase }
-      .map { Set($0.dictionary.keys) }
-      .first
+    let baseKeys: Set<String>?
+    let bases = strings.filter { $0.locale.isBase }
+    if bases.isEmpty {
+      baseKeys = nil
+    }
+    else {
+      baseKeys = Set(bases.flatMap { $0.dictionary.keys })
+    }
 
     // Warnings about duplicates and empties
     for ls in strings {
@@ -96,11 +100,11 @@ struct StringsGenerator: Generator {
     }
 
     // Warnings about missing translations
-    for ls in strings {
-      let filenameLocale = ls.locale.withFilename(filename)
+    for (locale, lss) in strings.groupBy({ $0.locale }) {
+      let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtract(ls.dictionary.keys)
+      let missing = sourceKeys.subtract(lss.flatMap { $0.dictionary.keys })
 
       if missing.isEmpty {
         continue
