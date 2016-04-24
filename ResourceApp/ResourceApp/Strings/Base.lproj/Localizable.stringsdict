@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Localizable.stringsdict.plist
+   ResourceApp
+
+   Created by Tom Lokhorst on 2016-04-24.
+   Copyright (c) 2016 Mathijs Kadijk. All rights reserved.
+-->
+<!-- Example from: https://www.objc.io/issues/9-strings/string-localization/ -->
+<plist version="1.0">
+  <dict>
+    <key>scope.%lu out of %lu runs</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%1$#@lu_completed_runs@</string>
+      <key>lu_completed_runs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>lu</string>
+        <key>zero</key>
+        <string>No runs completed yet</string>
+        <key>one</key>
+        <string>One %2$#@lu_total_runs@</string>
+        <key>other</key>
+        <string>%lu %2$#@lu_total_runs@</string>
+      </dict>
+      <key>lu_total_runs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>lu</string>
+        <key>one</key>
+        <string>run completed</string>
+        <key>other</key>
+        <string>of %lu runs completed</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>
