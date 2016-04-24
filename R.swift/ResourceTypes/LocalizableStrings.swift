@@ -8,44 +8,7 @@
 
 import Foundation
 
-enum Locale {
-  case None
-  case Base
-  case Language(String)
-
-  var isBase: Bool {
-    if case .Base = self {
-      return true
-    }
-
-    return false
-  }
-
-  var isNone: Bool {
-    if case .None = self {
-      return true
-    }
-
-    return false
-  }
-}
-
-extension Locale: CustomStringConvertible {
-  var description: String {
-    switch self {
-    case .None:
-      return ""
-
-    case .Base:
-      return "Base"
-
-    case .Language(let language):
-      return language
-    }
-  }
-}
-
-struct LocalizableStrings: WhiteListedExtensionsResourceType {
+struct LocalizableStrings : WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["strings"]
 
   let filename: String
@@ -60,39 +23,36 @@ struct LocalizableStrings: WhiteListedExtensionsResourceType {
     }
 
     // Get locale from url (second to last component)
-    var locale = Locale.None
-    if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
-      let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
-
-      if lang == "Base" {
-        locale = .Base
-      }
-      else {
-        locale = .Language(lang)
-      }
-    }
+    let locale = Locale(url: url)
 
     // Check to make sure url can be parsed as a dictionary
     guard let nsDictionary = NSDictionary(contentsOfURL: url) else {
       throw ResourceParsingError.ParsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
-    // Parse strings from NSDictionary
-    var dictionary: [String : (value: String, params: [FormatSpecifier])] = [:]
-    for (key, obj) in nsDictionary {
-      if let
-        key = key as? String,
-        val = obj as? String
-      {
-        dictionary[key] = (val, FormatSpecifier.formatSpecifiersFromFormatString(val))
-      }
-      else {
-        throw ResourceParsingError.ParsingFailed("Non-string value in \(url.absoluteString): \(key) = \(obj)")
-      }
-    }
+    // Parse dicts from NSDictionary
+    let dictionary = try parseDictionary(nsDictionary, source: url.absoluteString)
 
     self.filename = filename
     self.locale = locale
     self.dictionary = dictionary
   }
+}
+
+private func parseDictionary(nsDictionary: NSDictionary, source: String) throws -> [String : (value: String, params: [FormatSpecifier])] {
+  var dictionary: [String : (value: String, params: [FormatSpecifier])] = [:]
+
+  for (key, obj) in nsDictionary {
+    if let
+      key = key as? String,
+      val = obj as? String
+    {
+      dictionary[key] = (val, FormatSpecifier.formatSpecifiersFromFormatString(val))
+    }
+    else {
+      throw ResourceParsingError.ParsingFailed("Non-string value in \(source): \(key) = \(obj)")
+    }
+  }
+
+  return dictionary
 }

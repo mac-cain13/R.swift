@@ -22,6 +22,7 @@ struct Resources {
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
   let localizableStrings: [LocalizableStrings]
+  let localizableStringsDicts: [LocalizableStringsDict]
     
   let reusables: [Reusable]
 
@@ -36,6 +37,7 @@ struct Resources {
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
     localizableStrings = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
+    localizableStringsDicts = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStringsDict(url: url) } }
   }
 }
 

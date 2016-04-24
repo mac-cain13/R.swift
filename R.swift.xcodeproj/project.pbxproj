@@ -102,6 +102,10 @@
 		E22D43651C95845200692FFF /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
 		E24720CB1C96B6A600DF291D /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43641C95845200692FFF /* ColorPalette.swift */; };
 		E24720CC1C96B6AB00DF291D /* ColorGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22D43621C9582CA00692FFF /* ColorGenerator.swift */; };
+		E2762AC51CCCEC100009BCAA /* LocalizableStringsDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2762AC41CCCEC100009BCAA /* LocalizableStringsDict.swift */; };
+		E2762AC71CCCEC2A0009BCAA /* Locale.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2762AC61CCCEC2A0009BCAA /* Locale.swift */; };
+		E2762AC81CCCEDE90009BCAA /* LocalizableStringsDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2762AC41CCCEC100009BCAA /* LocalizableStringsDict.swift */; };
+		E2762AC91CCCEE120009BCAA /* Locale.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2762AC61CCCEC2A0009BCAA /* Locale.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -156,6 +160,8 @@
 		E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormatSpecifier.swift; sourceTree = "<group>"; };
 		E22D43621C9582CA00692FFF /* ColorGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGenerator.swift; sourceTree = "<group>"; };
 		E22D43641C95845200692FFF /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		E2762AC41CCCEC100009BCAA /* LocalizableStringsDict.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizableStringsDict.swift; sourceTree = "<group>"; };
+		E2762AC61CCCEC2A0009BCAA /* Locale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locale.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,7 +284,9 @@
 				D5F97E391C1812AE0066D7C0 /* Font.swift */,
 				E2156B8D1CC5254A00F341DC /* FormatSpecifier.swift */,
 				D5F97E411C1816360066D7C0 /* Image.swift */,
+				E2762AC61CCCEC2A0009BCAA /* Locale.swift */,
 				5D997C961C7C2BEE00B2F376 /* LocalizableStrings.swift */,
+				E2762AC41CCCEC100009BCAA /* LocalizableStringsDict.swift */,
 				D5F97E451C18169E0066D7C0 /* Nib.swift */,
 				D5F97E431C1816790066D7C0 /* ResourceFile.swift */,
 				D5F97E371C178A4F0066D7C0 /* Resources.swift */,
@@ -418,6 +426,7 @@
 				D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* ResourceGenerator.swift in Sources */,
+				E2762AC91CCCEE120009BCAA /* Locale.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
 				5D45C2191CA12913000B8DC9 /* StringsGenerator.swift in Sources */,
 				D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */,
@@ -425,6 +434,7 @@
 				D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */,
 				D5B799751C199755009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
 				D586D1C71BE20D8600F18FEC /* PBXObject.swift in Sources */,
+				E2762AC81CCCEDE90009BCAA /* LocalizableStringsDict.swift in Sources */,
 				D59F72271C1963DA0089767C /* Type.swift in Sources */,
 				D5F97E4D1C1819160066D7C0 /* ResourceFile.swift in Sources */,
 				D5F97E481C1819160066D7C0 /* Xcodeproj.swift in Sources */,
@@ -475,6 +485,7 @@
 				D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */,
 				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,
 				D59F72391C1964950089767C /* Var.swift in Sources */,
+				E2762AC51CCCEC100009BCAA /* LocalizableStringsDict.swift in Sources */,
 				D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */,
 				D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */,
 				E22D43651C95845200692FFF /* ColorPalette.swift in Sources */,
@@ -482,6 +493,7 @@
 				D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */,
 				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
 				D5F97E401C1815E70066D7C0 /* AssetFolder.swift in Sources */,
+				E2762AC71CCCEC2A0009BCAA /* Locale.swift in Sources */,
 				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
 				D59F723C1C1964B20089767C /* Typealias.swift in Sources */,
 				D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */,
