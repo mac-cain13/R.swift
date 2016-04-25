@@ -73,21 +73,17 @@ There are some points to keep in mind when using Color palettes, see [About Colo
 
 ## Localized strings
 
-### Todo
-
-- [x] Support single Localizable.strings file used as a string constants file.
-- [x] Support multiple Localizable.strings files in their respective .lproj directories.
-- [ ] Support printf style string formatting.
-- [ ] Support .stringsdict files.
-
 *Vanilla*
 ```swift
-let settingsTitle = NSLocalizedString("settings.title", comment: "")
+let welcomeMessage = NSLocalizedString("welcome.message", comment: "")
+let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "")
 ```
 
 *With R.swift*
 ```swift
-let settingsTitle = R.string.settingsTitle
+// Localized strings are grouped per table (.strings file)
+let welcomeMessage = R.string.localizable.welcomeMessage()
+let settingsTitle = R.string.settings.title()
 ```
 
 ## Storyboards
