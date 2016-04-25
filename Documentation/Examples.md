@@ -77,6 +77,8 @@ There are some points to keep in mind when using Color palettes, see [About Colo
 ```swift
 let welcomeMessage = NSLocalizedString("welcome.message", comment: "")
 let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "")
+
+let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Alice")
 ```
 
 *With R.swift*
@@ -84,6 +86,8 @@ let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "
 // Localized strings are grouped per table (.strings file)
 let welcomeMessage = R.string.localizable.welcomeMessage()
 let settingsTitle = R.string.settings.title()
+
+let welcomeName = R.string.localizable.welcomeWithName("Alice")
 ```
 
 ## Storyboards
