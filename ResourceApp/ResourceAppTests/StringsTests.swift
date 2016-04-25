@@ -25,7 +25,7 @@ class StringsTests: XCTestCase {
     XCTAssertNotNil(R.string.settings.multilineKeyWeird())
     XCTAssertNotNil(R.string.settings.notTranslated())
     XCTAssertNotNil(R.string.settings.title())
-    XCTAssertNotNil(R.string.settings.scopeLuOutOfLuRuns(2, 4))
+    XCTAssertNotNil(R.string.settings.scopeLuOutOfLuRuns(lu_total_runs: 2, lu_completed_runs: 4))
 
     XCTAssertEqual(
       R.string.settings.multilineKeyWeird(),

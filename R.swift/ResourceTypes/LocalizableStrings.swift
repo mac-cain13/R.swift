@@ -13,9 +13,9 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
 
   let filename: String
   let locale: Locale
-  let dictionary: [String : (value: String, params: [FormatSpecifier])]
+  let dictionary: [String : (value: String, params: [(String?, FormatSpecifier)])]
 
-  init(filename: String, locale: Locale, dictionary: [String : (value: String, params: [FormatSpecifier])]) {
+  init(filename: String, locale: Locale, dictionary: [String : (value: String, params: [(String?, FormatSpecifier)])]) {
     self.filename = filename
     self.locale = locale
     self.dictionary = dictionary
@@ -37,7 +37,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     }
 
     // Parse dicts from NSDictionary
-    let dictionary: [String : (value: String, params: [FormatSpecifier])]
+    let dictionary: [String : (value: String, params: [(String?, FormatSpecifier)])]
     switch url.pathExtension {
     case "strings"?:
       dictionary = try parseStrings(nsDictionary, source: url.absoluteString)
@@ -53,15 +53,16 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
   }
 }
 
-private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (value: String, params: [FormatSpecifier])] {
-  var dictionary: [String : (value: String, params: [FormatSpecifier])] = [:]
+private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (value: String, params: [(String?, FormatSpecifier)])] {
+  var dictionary: [String : (value: String, params: [(String?, FormatSpecifier)])] = [:]
 
   for (key, obj) in nsDictionary {
     if let
       key = key as? String,
       val = obj as? String
     {
-      dictionary[key] = (val, FormatSpecifier.formatSpecifiersFromFormatString(val))
+      let params: [(String?, FormatSpecifier)] = FormatSpecifier.formatSpecifiersFromFormatString(val).map { (nil, $0) }
+      dictionary[key] = (val, params)
     }
     else {
       throw ResourceParsingError.ParsingFailed("Non-string value in \(source): \(key) = \(obj)")
@@ -71,40 +72,51 @@ private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> 
   return dictionary
 }
 
-private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (value: String, params: [FormatSpecifier])] {
-  var dictionary: [String : (value: String, params: [FormatSpecifier])] = [:]
+private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (value: String, params: [(String?, FormatSpecifier)])] {
+
+  var dictionary: [String : (value: String, params: [(String?, FormatSpecifier)])] = [:]
 
   for (key, obj) in nsDictionary {
     if let
       key = key as? String,
-      val = obj as? [String: AnyObject]
+      val = obj as? NSDictionary
     {
-      let localizedFormat = val["NSStringLocalizedFormatKey"] as! String
+      guard let localizedFormat = val["NSStringLocalizedFormatKey"] as? String else {
+        throw ResourceParsingError.ParsingFailed("Missing NSStringLocalizedFormatKey in \(source): \(key)")
+      }
 
-      var params: [(String, FormatSpecifier)] = []
-      for (paramName, dict) in val where paramName != "NSStringLocalizedFormatKey" {
-        if let paramDict = dict as? [String: String] {
-          guard let specType = paramDict["NSStringFormatSpecTypeKey"] where specType == "NSStringPluralRuleType" else {
-            throw ResourceParsingError.ParsingFailed("Missing NSStringFormatSpecTypeKey=NSStringPluralRuleType in \(source): \(key).\(paramName)")
+      var params: [(String?, FormatSpecifier)] = []
+      for (paramKey, dict) in val {
+        print(paramKey)
+
+        if let paramName = paramKey as? String {
+          if paramName == "NSStringLocalizedFormatKey" {
+            continue
           }
 
-          if let valueType = paramDict["NSStringFormatValueTypeKey"] {
-            if let char = valueType.characters.last,
-              formatSpecifier = FormatSpecifier(formatChar: char)
-            {
-              params.append((paramName, formatSpecifier))
+          if let paramDict = dict as? [String: String] {
+            guard let specType = paramDict["NSStringFormatSpecTypeKey"] where specType == "NSStringPluralRuleType" else {
+              throw ResourceParsingError.ParsingFailed("Missing NSStringFormatSpecTypeKey=NSStringPluralRuleType in \(source): \(key).\(paramName)")
             }
-            else {
-              throw ResourceParsingError.ParsingFailed("Can't parse format specifier `\(valueType)` in \(source): \(key).\(paramName)")
+
+            if let valueType = paramDict["NSStringFormatValueTypeKey"] {
+              if let char = valueType.characters.last,
+                formatSpecifier = FormatSpecifier(formatChar: char)
+              {
+                params.append((paramName, formatSpecifier))
+              }
+              else {
+                throw ResourceParsingError.ParsingFailed("Can't parse format specifier `\(valueType)` in \(source): \(key).\(paramName)")
+              }
             }
           }
-        }
-        else {
-          throw ResourceParsingError.ParsingFailed("Non-dict param in \(source): \(key).\(paramName)")
+          else {
+            throw ResourceParsingError.ParsingFailed("Non-dict param in \(source): \(key).\(paramName)")
+          }
         }
       }
 
-      dictionary[key] = (localizedFormat, params.map { $0.1 })
+      dictionary[key] = (localizedFormat, params)
     }
     else {
       throw ResourceParsingError.ParsingFailed("Non-dict value in \(source): \(key) = \(obj)")
