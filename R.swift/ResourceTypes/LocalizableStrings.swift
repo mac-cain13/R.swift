@@ -3,7 +3,7 @@
 //  R.swift
 //
 //  Created by Nolan Warner on 2016/02/23.
-//  Copyright © 2016 Nolan Warner. All rights reserved.
+//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
 //
 
 import Foundation
