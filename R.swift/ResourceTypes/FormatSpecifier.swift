@@ -29,28 +29,21 @@ enum FormatSpecifier {
   var type: Type {
     switch self {
     case .Object:
-      return Type._String
-
+      return ._String
     case .Double:
-      return Type._Double
-
+      return ._Double
     case .Int:
-      return Type._Int
-
+      return ._Int
     case .UInt:
-      return Type._UInt
-
+      return ._UInt
     case .Character:
-      return Type._Character
-
+      return ._Character
     case .CStringPointer:
-      return Type._CStringPointer
-
+      return ._CStringPointer
     case .VoidPointer:
-      return Type._VoidPointer
-
+      return ._VoidPointer
     case .TopType:
-      return Type._Any
+      return ._Any
     }
   }
 }
