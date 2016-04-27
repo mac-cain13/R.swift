@@ -166,7 +166,7 @@ struct StringsGenerator: Generator {
       let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
       if let params = fewParams.first {
-        let locales = params.map { $0.0.description }.joinWithSeparator(", ")
+        let locales = params.flatMap { $0.0.localeDescription }.joinWithSeparator(", ")
         warn("Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
       }
     }
@@ -178,8 +178,8 @@ struct StringsGenerator: Generator {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
-      .filter { !$0.isNone }
-      .map { "\"\($0.description)\"" }
+      .flatMap { $0.localeDescription }
+      .map { "\"\($0)\"" }
       .joinWithSeparator(", ")
 
     return Let(
@@ -288,12 +288,12 @@ private struct StringValues {
     }
     else if !containsBase {
       if let (locale, value) = values.first {
-        if locale.isNone {
-          let str = "Value: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+        if let localeDescription = locale.localeDescription {
+          let str = "\(localeDescription) translation: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
           results.append(str)
         }
         else {
-          let str = "\(locale.description) translation: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+          let str = "Value: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
           results.append(str)
         }
       }
@@ -304,7 +304,7 @@ private struct StringValues {
         results.append("")
       }
 
-      let locales = values.map { $0.0.description }
+      let locales = values.flatMap { $0.0.localeDescription }
       results.append("Locales: \(locales.joinWithSeparator(", "))")
     }
 

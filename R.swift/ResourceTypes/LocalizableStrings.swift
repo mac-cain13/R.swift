@@ -30,11 +30,11 @@ enum Locale {
   }
 }
 
-extension Locale: CustomStringConvertible {
-  var description: String {
+extension Locale {
+  var localeDescription: String? {
     switch self {
     case .None:
-      return ""
+      return nil
 
     case .Base:
       return "Base"
