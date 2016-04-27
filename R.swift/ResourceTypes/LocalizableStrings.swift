@@ -60,7 +60,7 @@ struct LocalizableStrings: WhiteListedExtensionsResourceType {
     }
 
     // Get locale from url (second to last component)
-    var locale = Locale.None
+    let locale: Locale
     if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
       let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
 
@@ -70,6 +70,9 @@ struct LocalizableStrings: WhiteListedExtensionsResourceType {
       else {
         locale = .Language(lang)
       }
+    }
+    else {
+      locale = Locale.None
     }
 
     // Check to make sure url can be parsed as a dictionary
