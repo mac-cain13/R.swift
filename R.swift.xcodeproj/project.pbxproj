@@ -236,7 +236,10 @@
 				D5C4227E1B711FDF004EA9B9 /* R.swiftTests */,
 				D5EA0DF51A3DF45600FFEBC4 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
 		};
 		D5EA0DF51A3DF45600FFEBC4 /* Products */ = {
 			isa = PBXGroup;
