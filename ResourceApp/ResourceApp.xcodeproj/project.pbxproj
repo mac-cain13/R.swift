@@ -67,6 +67,7 @@
 		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
 		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
+		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
@@ -160,6 +161,7 @@
 		E29693571CAD64B500401D53 /* __FILE__ */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = __FILE__; sourceTree = "<group>"; };
 		E29693591CAD64D100401D53 /* associatedtype */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = associatedtype; sourceTree = "<group>"; };
 		E296935B1CAD666200401D53 /* #column */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "#column"; sourceTree = "<group>"; };
+		E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelativeToProject.xib; sourceTree = "<group>"; };
 		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -268,6 +270,7 @@
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D5F05D401BB51FEA003AE55E /* Files */,
+				E2A10EF61CD13768006BFC63 /* Relative To Project */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
@@ -381,6 +384,15 @@
 			);
 			path = "ResourceAppTests-tvOS";
 			sourceTree = "<group>";
+		};
+		E2A10EF61CD13768006BFC63 /* Relative To Project */ = {
+			isa = PBXGroup;
+			children = (
+				E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */,
+			);
+			name = "Relative To Project";
+			path = "ResourceApp/Relative To Project";
+			sourceTree = SOURCE_ROOT;
 		};
 		E2F268AF1C92BFE00093995D /* Colors */ = {
 			isa = PBXGroup;
@@ -549,6 +561,7 @@
 				D5AD5C991B7A7CE700A8B96C /* Duplicate.storyboard in Resources */,
 				D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
+				E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
 				D5159EA21BBD0BB40013F52A /* Colors~ipad@2x.jpg in Resources */,
