@@ -57,6 +57,7 @@ struct StringsGenerator: Generator {
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
+  // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
   private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues]
   {
     var allParams: [String: [(Locale, String, [FormatSpecifier])]] = [:]
