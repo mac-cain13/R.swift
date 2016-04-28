@@ -71,6 +71,25 @@ label.textColor = R.color.appColors.textColor()
 
 There are some points to keep in mind when using Color palettes, see [About Colors](Colors.md)
 
+## Localized strings
+
+*Vanilla*
+```swift
+let welcomeMessage = NSLocalizedString("welcome.message", comment: "")
+let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "")
+
+let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Alice")
+```
+
+*With R.swift*
+```swift
+// Localized strings are grouped per table (.strings file)
+let welcomeMessage = R.string.localizable.welcomeMessage()
+let settingsTitle = R.string.settings.title()
+
+let welcomeName = R.string.localizable.welcomeWithName("Alice")
+```
+
 ## Storyboards
 
 *Vanilla*

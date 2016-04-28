@@ -23,7 +23,18 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 resource files because symbol 'duplicateJson' would be generated for all of these files: Duplicate.json, duplicateJson",
     "warning: [R.swift] Destination view controller with id Zbd-89-K73 for segue toUnknown in FirstViewController not found in storyboard References. Is this storyboard corrupt?",
     "warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: ' '",
-    "warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?"
+    "warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?",
+
+    "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these filenames: Duplicate, Duplicate#",
+    "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for filename: '@@'",
+    "warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'",
+    "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'japanese only'",
+    "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'japanese only'",
+    "warning: [R.swift] Strings file 'Settings' (nl) is missing translations for keys: 'Not translated'",
+    "warning: [R.swift] Skipping string FormatSpecifiers2 in 'Settings' (nl), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (Base), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (nl), not all format specifiers are consecutive",
+    "warning: [R.swift] Skipping string for key FormatSpecifiers5 (Settings), format specifiers don't match for all locales: Base, nl",
   ]
 
   func testWarningsAreLogged() {
@@ -41,10 +52,8 @@ class ResourceAppTests: XCTestCase {
       }
 
       XCTAssertEqual(logLines.count, expectedWarnings.count, "There are more/less warnings then expected")
-
     } catch {
       XCTFail("Failed to read rswift.log")
     }
   }
-
 }

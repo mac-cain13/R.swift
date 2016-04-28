@@ -18,8 +18,15 @@ struct UsedType {
 
 struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Void = Type(module: .StdLib, name: "Void")
+  static let _Any = Type(module: .StdLib, name: "Any")
   static let _AnyObject = Type(module: .StdLib, name: "AnyObject")
   static let _String = Type(module: .StdLib, name: "String")
+  static let _Int = Type(module: .StdLib, name: "Int")
+  static let _UInt = Type(module: .StdLib, name: "UInt")
+  static let _Double = Type(module: .StdLib, name: "Double")
+  static let _Character = Type(module: .StdLib, name: "Character")
+  static let _CStringPointer = Type(module: .StdLib, name: "UnsafePointer<unichar>")
+  static let _VoidPointer = Type(module: .StdLib, name: "UnsafePointer<Void>")
   static let _NSURL = Type(module: "Foundation", name: "NSURL")
   static let _UINib = Type(module: "UIKit", name: "UINib")
   static let _UIView = Type(module: "UIKit", name: "UIView")
@@ -35,6 +42,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UIFont = Type(module: "UIKit", name: "UIFont")
   static let _UIColor = Type(module: "UIKit", name: "UIColor")
   static let _CGFloat = Type(module: .StdLib, name: "CGFloat")
+  static let _CVarArgType = Type(module: .StdLib, name: "CVarArgType...")
 
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierType = Type(module: "Rswift", name: "ReuseIdentifierType")
@@ -46,6 +54,8 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let FontResource = Type(module: "Rswift", name: "FontResource")
   static let ColorResource = Type(module: "Rswift", name: "ColorResource")
   static let ImageResource = Type(module: "Rswift", name: "ImageResource")
+  static let StringResource = Type(module: "Rswift", name: "StringResource")
+  static let Strings = Type(module: "Rswift", name: "Strings")
   static let Validatable = Type(module: "Rswift", name: "Validatable")
   static let TypedStoryboardSegueInfo = Type(module: "Rswift", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
 

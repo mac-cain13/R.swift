@@ -42,6 +42,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       NibGenerator(nibs: resources.nibs),
       ReuseIdentifierGenerator(reusables: resources.reusables),
       ResourceFileGenerator(resourceFiles: resources.resourceFiles),
+      StringsGenerator(localizableStrings: resources.localizableStrings),
     ]
 
   var generatorResults = GeneratorResults()

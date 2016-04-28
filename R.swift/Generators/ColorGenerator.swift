@@ -15,6 +15,7 @@ struct ColorGenerator: Generator {
 
   init(colorPalettes palettes: [ColorPalette]) {
     externalStruct = Struct(
+      comments: ["This `R.color` struct is generated, and contains static references to \(palettes.count) color palettes."],
       type: Type(module: .Host, name: "color"),
       implements: [],
       typealiasses: [],
@@ -27,6 +28,7 @@ struct ColorGenerator: Generator {
   private static func colorStructFromPalette(palette: ColorPalette) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
+    let name = sanitizedSwiftName(palette.filename)
     let groupedColors = palette.colors.groupBySwiftNames { $0.0 }
 
     for (sanitizedName, duplicates) in groupedColors.duplicates {
@@ -42,7 +44,8 @@ struct ColorGenerator: Generator {
     }
 
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(palette.filename)),
+      comments: ["This `R.color.\(name)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
+      type: Type(module: .Host, name: name),
       implements: [],
       typealiasses: [],
       properties: groupedColors.uniques.map(ColorGenerator.colorLet),

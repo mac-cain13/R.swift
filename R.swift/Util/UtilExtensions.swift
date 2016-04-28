@@ -42,6 +42,14 @@ extension String {
     let components = componentsSeparatedByString("\n")
     return indentation + components.joinWithSeparator("\n\(indentation)")
   }
+
+  var escapedStringLiteral: String {
+    return self
+      .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+      .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+      .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
+      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+  }
 }
 
 // MARK: NSURL operations 

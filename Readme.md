@@ -46,6 +46,7 @@ R.swift currently supports these types of resources:
 - [Custom fonts](Documentation/Examples.md#custom-fonts)
 - [Resource files](Documentation/Examples.md#resource-files)
 - [Colors](Documentation/Examples.md#colors)
+- [Localized strings](Documentation/Examples.md#localized-strings)
 - [Storyboards](Documentation/Examples.md#storyboards)
 - [Segues](Documentation/Examples.md#segues)
 - [Nibs](Documentation/Examples.md#nibs)
