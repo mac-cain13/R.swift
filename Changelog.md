@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.0 (beta 1)
+
+New features:
+- Localized string support (by @renrawnalon and @tomlokhorst)
+
+Fixed issues:
+- Updated reserved keywords (by @tomlokhorst)
+
 ## 2.1.0
 
 New features:
