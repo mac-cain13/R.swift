@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.0 (beta 1)
+
+New features:
+- Localized string support (by @renrawnalon and @tomlokhorst)
+
+Fixed issues:
+- Updated reserved keywords (by @tomlokhorst)
+
 ## 2.1.0
 
 New features:
@@ -160,7 +168,7 @@ Fixes incorrect handling of Nib names with a space in them, see issue #56.
 
 ## 0.8.4
 
-When using the assistant editor XCode will not sugged the R.generated.swift file as a good place to add outlets and such.
+When using the assistant editor Xcode will not sugged the R.generated.swift file as a good place to add outlets and such.
 
 ## 0.8.3
 
@@ -198,7 +206,7 @@ Fixed a bug where some files where skipped during search and not included in the
 - Added support for nibs(/xibs) use R.nib.[name].firstView to get the first view in your nib fully typed!
 - All reuse identifiers in your project (nibs and storyboards) are available under R.reuseIdentifier.[name]
 - We now leave the generated file untouched if there are no updates
-- Errors in executing R.swift will now appear in between you XCode build errors/warnings
+- Errors in executing R.swift will now appear in between you Xcode build errors/warnings
 - UIViewController subclasses in your storyboard (like UINavigationController or UISplitviewController) are now correctly typed
 - Internal rewrite in the way we generate the R-struct
 

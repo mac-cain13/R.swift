@@ -5,9 +5,15 @@
 //  Created by Tom Lokhorst on 2016-04-18.
 //  Copyright © 2016 Mathijs Kadijk. All rights reserved.
 //
+//  Parts of the content of this file are loosly based on StringsFileParser.swift from SwiftGen/GenumKit.
+//  We don't feel this is a "substantial portion of the Software" so are not including their MIT license,
+//  eventhough we would like to give credit where credit is due by referring to SwiftGen thanking Olivier 
+//  Halligon for creating SwiftGen and GenumKit.
+//
+//  See: https://github.com/AliSoftware/SwiftGen/blob/master/GenumKit/Parsers/StringsFileParser.swift
+//
 
 import Foundation
-
 
 // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1
 enum FormatSpecifier {
@@ -23,28 +29,21 @@ enum FormatSpecifier {
   var type: Type {
     switch self {
     case .Object:
-      return Type._String
-
+      return ._String
     case .Double:
-      return Type._Double
-
+      return ._Double
     case .Int:
-      return Type._Int
-
+      return ._Int
     case .UInt:
-      return Type._UInt
-
+      return ._UInt
     case .Character:
-      return Type._Character
-
+      return ._Character
     case .CStringPointer:
-      return Type._CStringPointer
-
+      return ._CStringPointer
     case .VoidPointer:
-      return Type._VoidPointer
-
+      return ._VoidPointer
     case .TopType:
-      return Type._Any
+      return ._Any
     }
   }
 }
@@ -76,8 +75,6 @@ extension FormatSpecifier {
     return _formatSpecifiersFromFormatString(formatString)
   }
 }
-
-// Based on StringsFileParser.swift from SwiftGen
 
 private let formatTypesRegEx: NSRegularExpression = {
   let pattern_int = "(?:h|hh|l|ll|q|z|t|j)?([dioux])" // %d/%i/%o/%u/%x with their optional length modifiers like in "%lld"

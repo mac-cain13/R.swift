@@ -30,7 +30,7 @@ enum Locale {
   }
 }
 
-extension Locale: CustomStringConvertible {
+extension Locale {
   init(url: NSURL) {
     if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
       let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
@@ -47,10 +47,10 @@ extension Locale: CustomStringConvertible {
     }
   }
 
-  var description: String {
+  var localeDescription: String? {
     switch self {
     case .None:
-      return ""
+      return nil
 
     case .Base:
       return "Base"
