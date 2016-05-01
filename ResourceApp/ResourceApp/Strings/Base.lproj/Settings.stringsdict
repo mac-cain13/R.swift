@@ -39,5 +39,35 @@
         <string>of %lu runs completed</string>
       </dict>
     </dict>
+
+    <key>mismatch</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Base %#@first@</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>other</key>
+        <string>%d</string>
+      </dict>
+    </dict>
+
+    <key>incorrect in dutch</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Base %#@first@</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>other</key>
+        <string>%d</string>
+      </dict>
+    </dict>
   </dict>
 </plist>

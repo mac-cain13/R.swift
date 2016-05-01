@@ -60,7 +60,7 @@ struct StringsGenerator: Generator {
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
   private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
-    var allParams: [String: [(Locale, String, [(String?, FormatSpecifier)])]] = [:]
+    var allParams: [String: [(Locale, String, [StringParam])]] = [:]
     let baseKeys: Set<String>?
     let bases = strings.filter { $0.locale.isBase }
     if bases.isEmpty {
@@ -89,12 +89,12 @@ struct StringsGenerator: Generator {
 
       // Save uniques
       for key in groupedKeys.uniques {
-        if let (value, params) = ls.dictionary[key] {
+        if let (params, commentValue) = ls.dictionary[key] {
           if let _ = allParams[key] {
-            allParams[key]?.append((ls.locale, value, params))
+            allParams[key]?.append((ls.locale, commentValue, params))
           }
           else {
-            allParams[key] = [(ls.locale, value, params)]
+            allParams[key] = [(ls.locale, commentValue, params)]
           }
         }
       }
@@ -130,12 +130,12 @@ struct StringsGenerator: Generator {
     var badFormatSpecifiersKeys = Set<String>()
 
     // Unify format specifiers
-    for (key, params) in allParams.filter({ includeTranslation($0.0) }).sortBy({ $0.0 }) {
-      var formatSpecifiers: [(String?, FormatSpecifier)] = []
+    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sortBy({ $0.0 }) {
+      var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
-      for (locale, _, fs) in params {
-        if fs.any({ $0.1 == FormatSpecifier.TopType }) {
+      for (locale, _, ps) in keyParams {
+        if ps.any({ $0.spec == FormatSpecifier.TopType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -145,13 +145,9 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      for (_, _, fs) in params {
-        let length = min(formatSpecifiers.count, fs.count)
-
-        if formatSpecifiers.map({ "\($0.0) \($0.1)" }).prefix(length) == fs.map({ "\($0.0) \($0.1)" }).prefix(length) {
-          if fs.count > formatSpecifiers.count {
-            formatSpecifiers = fs
-          }
+      for (_, _, ps) in keyParams {
+        if let unified = params.unify(ps) {
+          params = unified
         }
         else {
           badFormatSpecifiersKeys.insert(key)
@@ -162,8 +158,8 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      let vals = params.map { ($0.0, $0.1) }
-      let values = StringValues(key: key, params: formatSpecifiers, tableName: filename, values: vals )
+      let vals = keyParams.map { ($0.0, $0.1) }
+      let values = StringValues(key: key, params: params, tableName: filename, values: vals )
       results.append(values)
     }
 
@@ -224,23 +220,22 @@ struct StringsGenerator: Generator {
   private static func stringFunctionParams(values: StringValues) -> Function {
 
     let params = values.params.enumerate().map { ix, param -> Function.Parameter in
-      let (paramName, formatSpecifier) = param
       let valueName = "value\(ix + 1)"
 
-      if let paramName = paramName {
-        return Function.Parameter(name: paramName, localName: valueName, type: formatSpecifier.type)
+      if let paramName = param.name {
+        return Function.Parameter(name: paramName, localName: valueName, type: param.spec.type)
       }
       else {
         if ix == 0 {
-          return Function.Parameter(name: valueName, type: formatSpecifier.type)
+          return Function.Parameter(name: valueName, type: param.spec.type)
         }
         else {
-          return Function.Parameter(name: "_", localName: valueName, type: formatSpecifier.type)
+          return Function.Parameter(name: "_", localName: valueName, type: param.spec.type)
         }
       }
     }
 
-    let args = params.enumerate().map { ix, _ in "value\(ix + 1)" }.joinWithSeparator(", ")
+    let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
 
     return Function(
       comments: values.comments,
@@ -271,7 +266,7 @@ extension Locale {
 
 private struct StringValues {
   let key: String
-  let params: [(String?, FormatSpecifier)]
+  let params: [StringParam]
   let tableName: String
   let values: [(Locale, String)]
 

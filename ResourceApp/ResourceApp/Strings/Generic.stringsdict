@@ -96,7 +96,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>d</string>
         <key>one</key>
-        <string>One Delta.first. Second: %#@second@</string>
+        <string>One Delta.first (%d). Second: %#@second@</string>
         <key>other</key>
         <string>Other Delta.first: %d. Second: %#@second@</string>
       </dict>
@@ -152,9 +152,65 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>d</string>
         <key>zero</key>
-        <string>Zero Epsilon.second.</string>
+        <string>Zero Zeta.second.</string>
         <key>other</key>
-        <string>Other Epsilon.second: %d.</string>
+        <string>Other Zeta.second: %d.</string>
+      </dict>
+    </dict>
+
+    <key>correct eta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Eta (| %@ - %#@second@ - %d|)</string>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Eta.second.</string>
+        <key>other</key>
+        <string>Other Eta.second: %d.</string>
+      </dict>
+    </dict>
+
+    <key>correct theta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Theta (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Theta.first</string>
+        <key>other</key>
+        <string>Other Theta.first: %d. %#@second@</string>
+      </dict>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Theta.second</string>
+        <key>other</key>
+        <string>Other Theta.second: %d. %#@third@</string>
+      </dict>
+      <key>third</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Theta.third</string>
+        <key>other</key>
+        <string>Other Theta.third: %d</string>
       </dict>
     </dict>
 
