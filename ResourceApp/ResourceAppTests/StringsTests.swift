@@ -26,9 +26,43 @@ class StringsTests: XCTestCase {
     XCTAssertNotNil(R.string.settings.notTranslated())
     XCTAssertNotNil(R.string.settings.title())
     XCTAssertNotNil(R.string.settings.scopeLuOutOfLuRuns(lu_completed_runs: 4, lu_total_runs: 2))
+  }
 
+  func testCorrectValues() {
     XCTAssertEqual(
       R.string.settings.multilineKeyWeird(),
       NSLocalizedString("Multiline\t\\key/\n\"weird\"?!", tableName: "Settings", comment: ""))
+
+    XCTAssertEqual(
+      R.string.generic.correctAlpha(first: 1),
+      "Pre Alpha (| One Alpha |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctBeta(first: 1, second: 2),
+      "Pre Beta (| One Beta.first x Other Beta.second: 2 |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctGamma(first: 1, second: 2),
+      "Pre Gamma (| Other Gamma.second: 2 x One Gamma.first |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctDelta(first: 1, second: 2),
+      "Pre Delta (| One Delta.first (1). Second: Other Delta.second: 2 |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctEpsilon(first: 1, second: 2),
+      "Pre Epsilon (| Other Epsilon.first: 1. Second: Other Epsilon.second: 2 |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctEta("ONE", second: 2, 3),
+      "Pre Eta (| ONE - Other Eta.second: 2. - 3|)")
+
+    XCTAssertEqual(
+      R.string.generic.correctTheta(first: 1, second: 2, third: 3),
+      "Pre Theta (| One Theta.first |)")
+
+    XCTAssertEqual(
+      R.string.generic.correctZeta("ONE", second: 2),
+      "Pre Zeta (| ONE Other Zeta.second: 2. |)")
   }
 }

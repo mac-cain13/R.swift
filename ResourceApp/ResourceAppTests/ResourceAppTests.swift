@@ -30,11 +30,19 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'",
     "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'japanese only'",
     "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'japanese only'",
-    "warning: [R.swift] Strings file 'Settings' (nl) is missing translations for keys: 'Not translated'",
+    "warning: [R.swift] Strings file 'Settings' (nl) is missing translations for keys: 'Not translated', 'incorrect in dutch'",
     "warning: [R.swift] Skipping string FormatSpecifiers2 in 'Settings' (nl), not all format specifiers are consecutive",
     "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (Base), not all format specifiers are consecutive",
     "warning: [R.swift] Skipping string FormatSpecifiers6 in 'Settings' (nl), not all format specifiers are consecutive",
     "warning: [R.swift] Skipping string for key FormatSpecifiers5 (Settings), format specifiers don't match for all locales: Base, nl",
+    "warning: [R.swift] Skipping string for key mismatch (Settings), format specifiers don't match for all locales: Base, nl",
+
+    "warning: [R.swift] Missing reference 'missing' in 'fault delta' 'Generic.stringsdict'",
+    "warning: [R.swift] Can't unify 'first' in 'fault beta' 'Generic.stringsdict'",
+    "warning: [R.swift] Can't unify 'first' in 'fault gamma' 'Generic.stringsdict'",
+    "warning: [R.swift] Missing reference 'missing' in 'fault alpha' 'Generic.stringsdict'",
+    "warning: [R.swift] Missing reference 'first_one' in 'fault epsilon' 'Generic.stringsdict'",
+    "warning: [R.swift] Missing reference 'first' in 'incorrect in dutch' 'Settings.stringsdict' (nl)",
   ]
 
   func testWarningsAreLogged() {

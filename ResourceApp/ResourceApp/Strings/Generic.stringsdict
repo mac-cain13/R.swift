@@ -116,28 +116,30 @@
     <key>correct epsilon</key>
     <dict>
       <key>NSStringLocalizedFormatKey</key>
-      <string>Pre Epsilon (| %2$#@second@ |)</string>
+      <string>Pre Epsilon (| %#@first@ |)</string>
+
       <key>first</key>
       <dict>
         <key>NSStringFormatSpecTypeKey</key>
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>d</string>
-        <key>one</key>
-        <string>One Epsilon.first</string>
+        <key>zero</key>
+        <string>Zero Epsilon.first (%d). Second: %#@second@</string>
         <key>other</key>
-        <string>Other Epsilon.first: %d</string>
+        <string>Other Epsilon.first: %d. Second: %#@second@</string>
       </dict>
+
       <key>second</key>
       <dict>
         <key>NSStringFormatSpecTypeKey</key>
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>d</string>
-        <key>zero</key>
-        <string>Zero Epsilon.second. First: %1$#@first@</string>
+        <key>one</key>
+        <string>One Epsilon.second</string>
         <key>other</key>
-        <string>Other Epsilon.second: %d. First: %1$#@first@</string>
+        <string>Other Epsilon.second: %d</string>
       </dict>
     </dict>
 
