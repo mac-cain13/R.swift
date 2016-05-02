@@ -78,7 +78,11 @@ There are some points to keep in mind when using Color palettes, see [About Colo
 let welcomeMessage = NSLocalizedString("welcome.message", comment: "")
 let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "")
 
+// Formatted strings
 let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Alice")
+
+// Stringsdict files
+let progress = String(format: NSLocalizedString("copy.progress", comment: ""), locale: NSLocale.currentLocale(), 4, 23)
 ```
 
 *With R.swift*
@@ -87,7 +91,11 @@ let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: 
 let welcomeMessage = R.string.localizable.welcomeMessage()
 let settingsTitle = R.string.settings.title()
 
+// Functions with parameters are generated for format strings
 let welcomeName = R.string.localizable.welcomeWithName("Alice")
+
+// Functions with named argument labels are generated for stringsdict keys
+let progress = R.string.localizable.copyProgress(completed: 4, total: 23)
 ```
 
 ## Storyboards

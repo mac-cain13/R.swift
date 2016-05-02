@@ -11,6 +11,14 @@ import Foundation
 
 // MARK: Array operations
 
+extension Array {
+  subscript (safe index: Int) -> Element? {
+    return indices ~= index ? self[index] : nil
+  }
+}
+
+// MARK: Sequence operations
+
 extension SequenceType where Generator.Element : CustomStringConvertible {
   func joinWithSeparator(separator: String) -> String {
     return map { $0.description }.joinWithSeparator(separator)
