@@ -289,17 +289,17 @@ private struct StringValues {
     let anyNone = values.any { $0.0.isNone }
 
     if let baseValue = baseValue {
-      let str = "Base translation: \(baseValue)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+      let str = "Base translation: \(baseValue)".commentString
       results.append(str)
     }
     else if !containsBase {
       if let (locale, value) = values.first {
         if let localeDescription = locale.localeDescription {
-          let str = "\(localeDescription) translation: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+          let str = "\(localeDescription) translation: \(value)".commentString
           results.append(str)
         }
         else {
-          let str = "Value: \(value)".stringByReplacingOccurrencesOfString("\n", withString: " ")
+          let str = "Value: \(value)".commentString
           results.append(str)
         }
       }

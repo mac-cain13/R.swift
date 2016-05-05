@@ -15,6 +15,7 @@
 \"\\DEF/\"
 GHI Base";
 "Copy.Progress" = "%1$d of %2$i files copied, %3$f.2%% completed.";
+"We need a couple things\r\nbefore you get started." = "We need a couple things\r\nbefore you get started.";
 
 "FormatSpecifiers1" = "number 1: %d, number 2: %i, string 3: %@";
 "FormatSpecifiers2" = "string 3: %3$@, number 2: %2$d, number 1: %1$i";

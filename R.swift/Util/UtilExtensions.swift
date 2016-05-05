@@ -56,7 +56,15 @@ extension String {
       .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
       .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
       .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
+      .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
       .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+  }
+
+  var commentString: String {
+    return self
+      .stringByReplacingOccurrencesOfString("\r\n", withString: " ")
+      .stringByReplacingOccurrencesOfString("\r", withString: " ")
+      .stringByReplacingOccurrencesOfString("\n", withString: " ")
   }
 }
 
