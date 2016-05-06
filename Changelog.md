@@ -4,7 +4,7 @@ Fixed issues:
 
 - Fix for using CR + LF in localized strings (by @tomlokhorst)
 
-## 2.2.0 (beta 1)
+## 2.2.0
 
 New features:
 - Localized string support (by @renrawnalon and @tomlokhorst)

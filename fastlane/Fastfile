@@ -55,7 +55,7 @@ lane :release do |options|
   changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
 
   af_insert_text_into_file(
-    file_path: 'Changelog.md',
+    file_path: "Changelog.md",
     text: "## #{newVersion}\n\n#{changelog}\n\n",
     insert_at_bottom: false
   )
@@ -64,20 +64,22 @@ lane :release do |options|
     raise "Aborted by user".red
   end
 
-  git_commit(
-    path: ".",
-    message: "Preparing for the #{newVersion} release"
-  )
+  unless `git status --porcelain`.empty?
+    git_commit(
+      path: ".",
+      message: "Preparing for the #{newVersion} release"
+    )
+  end
 
   push_to_git_remote
 
   af_create_github_release(
     owner: 'mac-cain13',
     repository: 'r.swift',
-    tag_name: 'v#{newVersion}',
+    tag_name: "v#{newVersion}",
     target_commitish: 'master',
-    name: '#{newVersion}',
-    body: '#{changelog}',
+    name: "#{newVersion}",
+    body: "#{changelog}",
     prerelease: isPrerelease
   )
 
