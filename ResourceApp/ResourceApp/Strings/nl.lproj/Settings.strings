@@ -15,6 +15,7 @@
 \"\\DEF/\"
 GHI Dutch";
 "Copy.Progress" = "Van de %2$d bestanden zijn er %1$d gekopieerd, %3$.2f%% compleet.";
+"We need a couple things\r\nbefore you get started." = "We hebben een aantal dingen nodig\r\nvoordat je begint.";
 
 "FormatSpecifiers1" = "number 1: %d, number 2: %i";
 "FormatSpecifiers2" = "string 3: %3$@, number 1: %1$i";
