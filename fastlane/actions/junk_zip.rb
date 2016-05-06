@@ -6,9 +6,9 @@ module Fastlane
         UI.message "Compressing files..."
 
         escapedPaths = params[:paths].map do |path|
-          File.expand_path("..", path).shellescape
+          File.expand_path(path, ".").shellescape
         end
-        Actions.sh "zip -rj #{params[:output_path].shellescape} #{escapedPaths.join(" ")}"
+        Actions.sh "zip -j #{params[:output_path].shellescape} #{escapedPaths.join(" ")}"
 
         UI.success "Successfully generated zip file at path '#{File.expand_path(params[:output_path])}'"
         return File.expand_path(params[:output_path])
@@ -19,7 +19,7 @@ module Fastlane
       #####################################################
 
       def self.description
-        "Compress files or folders to a zip without their path"
+        "Compress files to a zip without their path"
       end
 
       def self.details
@@ -29,10 +29,12 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(key: :paths,
                                        env_name: "FL_ZIP_PATHS",
-                                       description: "Paths to the directories or files to be zipped",
+                                       description: "Paths to the files to be zipped",
+                                       is_string: false,
                                        verify_block: proc do |paths|
+                                         raise "Paths should be an array".red unless paths.kind_of?(Array)
                                          paths.each do |path|
-                                          UI.user_error!("Couldn't find file/folder at path '#{File.expand_path(value)}'") unless File.exist?(path)
+                                          UI.user_error!("Couldn't find file at path '#{File.expand_path(path)}'") unless File.exist?(path)
                                          end
                                        end),
           FastlaneCore::ConfigItem.new(key: :output_path,
