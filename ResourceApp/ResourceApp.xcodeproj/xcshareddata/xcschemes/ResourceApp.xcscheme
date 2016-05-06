@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D5EA0DF31A3DF45600FFEBC4"
-               BuildableName = "rswift"
-               BlueprintName = "rswift"
-               ReferencedContainer = "container:../R.swift.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "D55C6CB71B5D757300301B0D"
                BuildableName = "ResourceApp.app"
                BlueprintName = "ResourceApp"
