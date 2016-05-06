@@ -14,7 +14,7 @@ struct ResourceFile {
       AssetFolder.supportedExtensions,
       Storyboard.supportedExtensions,
       Nib.supportedExtensions,
-      ["strings"] // Strings files are also precompiled resources, but we don't have support for them yet.
+      LocalizableStrings.supportedExtensions,
     ]
     .reduce([]) { $0.union($1) }
 

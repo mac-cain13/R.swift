@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Localizable.stringsdict.plist
+   ResourceApp
+
+   Created by Tom Lokhorst on 2016-04-24.
+   Copyright (c) 2016 Mathijs Kadijk. All rights reserved.
+-->
+<!-- Example from: https://www.objc.io/issues/9-strings/string-localization/ -->
+<plist version="1.0">
+  <dict>
+    <key>scope.%lu out of %lu runs</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%1$#@lu_completed_runs@</string>
+      <key>lu_completed_runs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>lu</string>
+        <key>zero</key>
+        <string>Geen rondes afgerond</string>
+        <key>one</key>
+        <string>Één %2$#@lu_total_runs@</string>
+        <key>other</key>
+        <string>%lu %2$#@lu_total_runs@</string>
+      </dict>
+      <key>lu_total_runs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>lu</string>
+        <key>one</key>
+        <string>ronde afgerond</string>
+        <key>other</key>
+        <string>van de %lu rondes afgerond</string>
+      </dict>
+    </dict>
+
+    <key>mismatch</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Nederlands %#@eerste@</string>
+      <key>eerste</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>other</key>
+        <string>%d</string>
+      </dict>
+    </dict>
+
+    <key>incorrect in dutch</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Nederalnds %#@first@</string>
+    </dict>
+  </dict>
+</plist>

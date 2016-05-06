@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
     let defaults = NSUserDefaults.standardUserDefaults()
-    defaults.setValue(["en"], forKey: "AppleLanguages")
+    defaults.setValue(["nl"], forKey: "AppleLanguages")
+
 
     // Override point for customization after application launch.
     return true
