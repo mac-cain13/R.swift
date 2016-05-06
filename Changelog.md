@@ -1,3 +1,9 @@
+## 2.2.1
+
+Fixed issues:
+
+- Fix for using CR + LF in localized strings (by @tomlokhorst)
+
 ## 2.2.0 (beta 1)
 
 New features:
