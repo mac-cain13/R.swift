@@ -1,35 +1,30 @@
 fastlane_version "1.86.0"
 
-lane :release do
-  ensure_git_branch(branch: "master")
-
-  if options[:allow_dirty_branch] != true
+lane :release do |options|
+  if options[:skip_git_checks] != true
+    ensure_git_branch(branch: "master")
     ensure_git_status_clean
   else
-    Helper.log.info "Skipping the 'git status clean' check!".yellow
+    Helper.log.info "Skipping the 'git status clean' and branch check!".yellow
   end
 
   git_pull
 
-  libraryVersion = read_podspec['dependencies']['R.swift.Library'].first
-  unless prompt(text: "R.swift.Library #{libraryVersion} is used. Adjust podspec now if this is incorrect, ready?".green, boolean: true, ci_input: "")
+  libraryVersionUsed = read_podspec['dependencies']['R.swift.Library'].first
+  libraryPodspecVersion = version_get_podspec(path: 'R.swift.Library/R.swift.Library.podspec')
+  unless prompt(text: "R.swift.Library #{libraryVersionUsed} is defined as dependency, current version seems to be #{libraryPodspecVersion}.\nAdjust podspec now if needed. Ready to continue?".green, boolean: true, ci_input: "")
     raise "Aborted by user".red
   end
 
   runalltests
 
-  archivePath = '/tmp/rswift/rswift.xcarchive'
+  archivePath = '/tmp/rswift.xcarchive'
 
   xcodebuild(
     workspace: 'R.swift.xcworkspace',
     scheme: 'rswift',
     archivePath: archivePath,
     archive: true
-  )
-
-  zipPath = junk_zip(
-    paths: ['#{archivePath}/Products/usr/local/bin/rswift', 'License'],
-    output_path: '/tmp/rswiftrelease.zip'
   )
 
   unless is_ci
@@ -78,6 +73,11 @@ lane :release do
     name: '#{newVersion}',
     body: '#{changelog}',
     prerelease: isPrerelease
+  )
+
+  zipPath = junk_zip(
+    paths: ['#{archivePath}/Products/usr/local/bin/rswift', 'License'],
+    output_path: '/tmp/rswift-#{newVersion}.zip'
   )
 
   af_upload_asset_for_github_release(
