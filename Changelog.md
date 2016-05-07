@@ -6,9 +6,7 @@ Fixed issues:
 
 ## 2.2.1
 
-Fixed issues:
-
-- Fix for using CR + LF in localized strings (by @tomlokhorst)
+This is an incorrectly released version and is therefore exactly the same as 2.2.0.
 
 ## 2.2.0
 

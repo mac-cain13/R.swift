@@ -14,6 +14,7 @@ Currently you type:
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
+let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Arthur Dent")
 ```
 
 With R.swift it becomes:
@@ -21,6 +22,7 @@ With R.swift it becomes:
 let icon = R.image.settingsIcon()
 let font = R.font.sanFrancisco(size: 42)
 let viewController = CustomViewController(nib: R.nib.customView)
+let string = R.string.localizable.welcomeWithName("Arthur Dent")
 ```
 
 Check out [more examples of R.swift based code](Documentation/Examples.md)!
@@ -64,7 +66,7 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 - [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
 - [How to fix missing imports in the generated file?](Documentation/QandA.md#how-to-fix-missing-imports-in-the-generated-file)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
-- [How to upgrade to 1.0?](Documentation/Migration.md)
+- [How to upgrade to a new major version?](Documentation/Migration.md)
 
 ## Installation
 
