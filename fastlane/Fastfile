@@ -16,9 +16,13 @@ lane :release do |options|
     raise "Aborted by user".red
   end
 
-  runalltests
+  if options[:skip_tests] != true
+    runalltests
+  else
+    Helper.log.info "Skipping tests!".yellow
+  end
 
-  archivePath = '/tmp/rswift.xcarchive'
+  archivePath = 'rswift.xcarchive'
 
   xcodebuild(
     workspace: 'R.swift.xcworkspace',
@@ -60,7 +64,15 @@ lane :release do |options|
     insert_at_bottom: false
   )
 
-  unless prompt(text: "#{newVersion} has been prepped for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to commit, tag, push and release #{newVersion} including all uncommitted changes?".green, boolean: true, ci_input:"y")
+  zipPath = "/tmp/rswift-#{newVersion}.zip"
+  sh "rm -f #{zipPath}"
+
+  junk_zip(
+    paths: ["#{archivePath}/Products/usr/local/bin/rswift", "./License"],
+    output_path: zipPath
+  )
+
+  unless prompt(text: "#{newVersion} has been build and prepped for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to commit, tag, push and release #{newVersion} including all uncommitted changes?".green, boolean: true, ci_input:"y")
     raise "Aborted by user".red
   end
 
@@ -81,11 +93,6 @@ lane :release do |options|
     name: "#{newVersion}",
     body: "#{changelog}",
     prerelease: isPrerelease
-  )
-
-  zipPath = junk_zip(
-    paths: ["#{archivePath}/Products/usr/local/bin/rswift", "./License"],
-    output_path: "/tmp/rswift-#{newVersion}.zip"
   )
 
   af_upload_asset_for_github_release(
