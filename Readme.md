@@ -72,6 +72,8 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 
 [CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
 
+_Note on Carthage: R.swift is a tool that used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
+
 ### CocoaPods (recommended)
 
 _There is also a [short video](https://vimeo.com/122888912) of this instruction._
