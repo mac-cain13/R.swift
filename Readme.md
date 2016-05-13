@@ -25,7 +25,7 @@ let viewController = CustomViewController(nib: R.nib.customView)
 let string = R.string.localizable.welcomeWithName("Arthur Dent")
 ```
 
-Check out [more examples of R.swift based code](Documentation/Examples.md)!
+Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.app uses R.swift](https://realm.io/news/slug-javi-soto-building-fabric-in-swift/#rswift-2956javascriptpresentzchangechapter053true)!
 
 ## Demo
 
