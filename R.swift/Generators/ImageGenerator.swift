@@ -12,7 +12,7 @@ struct ImageGenerator: Generator {
   let externalStruct: Struct?
   let internalStruct: Struct? = nil
 
-  init(assetFolders: [AssetFolder], images: [Image]) {
+  init(assetFolders: [AssetFolder], images: [Image], withTrait: Bool) {
     let assetFolderImageFunctions = assetFolders
       .flatMap { $0.imageAssets }
       .map {
@@ -20,17 +20,17 @@ struct ImageGenerator: Generator {
           isStatic: true,
           name: $0,
           generics: nil,
-          parameters: [
+          parameters: withTrait ? [
             Function.Parameter(
               name: "compatibleWithTraitCollection",
               localName: "traitCollection",
               type: Type._UITraitCollection.asOptional(),
               defaultValue: "nil"
-            )
-          ],
+              )
+          ] : [Function.Parameter(name: "_", type: Type._Void)],
           doesThrow: false,
           returnType: Type._UIImage.asOptional(),
-          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0)), compatibleWithTraitCollection: traitCollection)"
+          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0))" + (withTrait ? ", compatibleWithTraitCollection: traitCollection)" : ")")
         )
       }
 
@@ -45,17 +45,17 @@ struct ImageGenerator: Generator {
           isStatic: true,
           name: $0.name,
           generics: nil,
-          parameters: [
+          parameters: withTrait ? [
             Function.Parameter(
               name: "compatibleWithTraitCollection",
               localName: "traitCollection",
               type: Type._UITraitCollection.asOptional(),
               defaultValue: "nil"
             )
-          ],
+          ] : [Function.Parameter(name: "_", type: Type._Void)],
           doesThrow: false,
           returnType: Type._UIImage.asOptional(),
-          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0.name)), compatibleWithTraitCollection: traitCollection)"
+          body: "return UIImage(resource: R.image.\(sanitizedSwiftName($0.name))" + (withTrait ? ", compatibleWithTraitCollection: traitCollection)" : ")")
         )
       }
 

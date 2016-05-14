@@ -1,5 +1,5 @@
 PODS:
-  - R.swift.Library (1.0.0)
+  - R.swift.Library (1.1.0)
 
 DEPENDENCIES:
   - R.swift.Library (from `./R.swift.Library`)
@@ -9,6 +9,8 @@ EXTERNAL SOURCES:
     :path: ./R.swift.Library
 
 SPEC CHECKSUMS:
-  R.swift.Library: 59cf0941e6ba59e6e8cd6bba4670a042db19e04f
+  R.swift.Library: 57a598f845c89dd1c92827201711089dbb10c6e8
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 9865f360dc3d87ca57c113956b2f0636a08597e7
+
+COCOAPODS: 1.0.0

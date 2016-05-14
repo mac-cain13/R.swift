@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28BF81278032F9B79BAF85D3 /* Pods_ResourceAppWatchApp_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8085BCA0F59EEE2DD4AE9627 /* Pods_ResourceAppWatchApp_Extension.framework */; };
+		C30E26001CE74DBA009C38E5 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C30E25FE1CE74DBA009C38E5 /* Interface.storyboard */; };
+		C30E26021CE74DBA009C38E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30E26011CE74DBA009C38E5 /* Assets.xcassets */; };
+		C30E26091CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C30E26081CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C30E26101CE74DBA009C38E5 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E260F1CE74DBA009C38E5 /* InterfaceController.swift */; };
+		C30E26121CE74DBA009C38E5 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E26111CE74DBA009C38E5 /* ExtensionDelegate.swift */; };
+		C30E26141CE74DBA009C38E5 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E26131CE74DBA009C38E5 /* NotificationController.swift */; };
+		C30E26161CE74DBA009C38E5 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E26151CE74DBA009C38E5 /* GlanceController.swift */; };
+		C30E26181CE74DBA009C38E5 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E26171CE74DBA009C38E5 /* ComplicationController.swift */; };
+		C30E261A1CE74DBA009C38E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30E26191CE74DBA009C38E5 /* Assets.xcassets */; };
+		C30E261E1CE74DBA009C38E5 /* ResourceAppWatchApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = C30E25FC1CE74DBA009C38E5 /* ResourceAppWatchApp.app */; };
+		C30E262A1CE7628C009C38E5 /* R.watchOS.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E26291CE7628C009C38E5 /* R.watchOS.generated.swift */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9D1BBC33680013F52A /* Colors@2x.jpg */; };
@@ -58,6 +70,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C30E260A1CE74DBA009C38E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D55C6CB01B5D757300301B0D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C30E26071CE74DBA009C38E5;
+			remoteInfo = "ResourceAppWatchApp Extension";
+		};
+		C30E261C1CE74DBA009C38E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D55C6CB01B5D757300301B0D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C30E25FB1CE74DBA009C38E5;
+			remoteInfo = ResourceAppWatchApp;
+		};
 		D55C6CD01B5D757300301B0D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D55C6CB01B5D757300301B0D /* Project object */;
@@ -67,10 +93,54 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C30E26241CE74DBA009C38E5 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C30E26091CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C30E26261CE74DBA009C38E5 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				C30E261E1CE74DBA009C38E5 /* ResourceAppWatchApp.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1079E65F7B39D282FA2514DA /* Pods-ResourceAppWatchApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppWatchApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppWatchApp/Pods-ResourceAppWatchApp.release.xcconfig"; sourceTree = "<group>"; };
+		1E0632B8247257B7F7445B20 /* Pods-ResourceAppWatchApp Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppWatchApp Extension.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppWatchApp Extension/Pods-ResourceAppWatchApp Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		32FDE8C880141CFCB15F7740 /* Pods-ResourceAppWatchApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppWatchApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppWatchApp/Pods-ResourceAppWatchApp.debug.xcconfig"; sourceTree = "<group>"; };
+		6CE4180181FD65AE94C315E2 /* Pods_ResourceAppWatchApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceAppWatchApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8085BCA0F59EEE2DD4AE9627 /* Pods_ResourceAppWatchApp_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceAppWatchApp_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
 		AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C30E25FC1CE74DBA009C38E5 /* ResourceAppWatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceAppWatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C30E25FF1CE74DBA009C38E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		C30E26011CE74DBA009C38E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C30E26031CE74DBA009C38E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C30E26081CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ResourceAppWatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C30E260E1CE74DBA009C38E5 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		C30E260F1CE74DBA009C38E5 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		C30E26111CE74DBA009C38E5 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		C30E26131CE74DBA009C38E5 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		C30E26151CE74DBA009C38E5 /* GlanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
+		C30E26171CE74DBA009C38E5 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		C30E26191CE74DBA009C38E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C30E261B1CE74DBA009C38E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C30E26291CE7628C009C38E5 /* R.watchOS.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.watchOS.generated.swift; sourceTree = SOURCE_ROOT; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
 		D50175BD1B5FEFD000DB8314 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Secondary.storyboard; sourceTree = "<group>"; };
@@ -122,9 +192,25 @@
 		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
+		F787535916E1BBFE26FA78DD /* Pods-ResourceAppWatchApp Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppWatchApp Extension.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppWatchApp Extension/Pods-ResourceAppWatchApp Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7CBFFDE12BD23AE5BFF0B839 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C30E26051CE74DBA009C38E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BF81278032F9B79BAF85D3 /* Pods_ResourceAppWatchApp_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D55C6CB51B5D757300301B0D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -148,6 +234,8 @@
 			children = (
 				D5B799881C1B8F0C009EA901 /* AVKit.framework */,
 				AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */,
+				6CE4180181FD65AE94C315E2 /* Pods_ResourceAppWatchApp.framework */,
+				8085BCA0F59EEE2DD4AE9627 /* Pods_ResourceAppWatchApp_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -157,8 +245,46 @@
 			children = (
 				277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */,
 				9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */,
+				32FDE8C880141CFCB15F7740 /* Pods-ResourceAppWatchApp.debug.xcconfig */,
+				1079E65F7B39D282FA2514DA /* Pods-ResourceAppWatchApp.release.xcconfig */,
+				1E0632B8247257B7F7445B20 /* Pods-ResourceAppWatchApp Extension.debug.xcconfig */,
+				F787535916E1BBFE26FA78DD /* Pods-ResourceAppWatchApp Extension.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C30E25FD1CE74DBA009C38E5 /* ResourceAppWatchApp */ = {
+			isa = PBXGroup;
+			children = (
+				C30E25FE1CE74DBA009C38E5 /* Interface.storyboard */,
+				C30E26011CE74DBA009C38E5 /* Assets.xcassets */,
+				C30E26031CE74DBA009C38E5 /* Info.plist */,
+			);
+			path = ResourceAppWatchApp;
+			sourceTree = "<group>";
+		};
+		C30E260C1CE74DBA009C38E5 /* ResourceAppWatchApp Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C30E26291CE7628C009C38E5 /* R.watchOS.generated.swift */,
+				C30E260F1CE74DBA009C38E5 /* InterfaceController.swift */,
+				C30E26111CE74DBA009C38E5 /* ExtensionDelegate.swift */,
+				C30E26131CE74DBA009C38E5 /* NotificationController.swift */,
+				C30E26151CE74DBA009C38E5 /* GlanceController.swift */,
+				C30E26171CE74DBA009C38E5 /* ComplicationController.swift */,
+				C30E26191CE74DBA009C38E5 /* Assets.xcassets */,
+				C30E261B1CE74DBA009C38E5 /* Info.plist */,
+				C30E260D1CE74DBA009C38E5 /* Supporting Files */,
+			);
+			path = "ResourceAppWatchApp Extension";
+			sourceTree = "<group>";
+		};
+		C30E260D1CE74DBA009C38E5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C30E260E1CE74DBA009C38E5 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		D51E60BF1BB13612004BB376 /* Images */ = {
@@ -183,6 +309,8 @@
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
+				C30E25FD1CE74DBA009C38E5 /* ResourceAppWatchApp */,
+				C30E260C1CE74DBA009C38E5 /* ResourceAppWatchApp Extension */,
 				D55C6CB91B5D757300301B0D /* Products */,
 				6BD8864A6B6559C4D6F93D81 /* Pods */,
 				065D32753EEB6C7AE2FA201F /* Frameworks */,
@@ -194,6 +322,8 @@
 			children = (
 				D55C6CB81B5D757300301B0D /* ResourceApp.app */,
 				D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */,
+				C30E25FC1CE74DBA009C38E5 /* ResourceAppWatchApp.app */,
+				C30E26081CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -286,21 +416,61 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D55C6CB71B5D757300301B0D /* ResourceApp */ = {
+		C30E25FB1CE74DBA009C38E5 /* ResourceAppWatchApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D55C6CD91B5D757300301B0D /* Build configuration list for PBXNativeTarget "ResourceApp" */;
+			buildConfigurationList = C30E26251CE74DBA009C38E5 /* Build configuration list for PBXNativeTarget "ResourceAppWatchApp" */;
 			buildPhases = (
-				978E4B8123C372F370555011 /* Check Pods Manifest.lock */,
-				D55C6CED1B5E172900301B0D /* R.swift */,
-				D55C6CB41B5D757300301B0D /* Sources */,
-				D55C6CB51B5D757300301B0D /* Frameworks */,
-				D55C6CB61B5D757300301B0D /* Resources */,
-				89BF8D4EC08D38DB6564C369 /* Embed Pods Frameworks */,
-				ADB91CF666C6624CD5A00F13 /* Copy Pods Resources */,
+				C30E25FA1CE74DBA009C38E5 /* Resources */,
+				C30E26241CE74DBA009C38E5 /* Embed App Extensions */,
+				7CBFFDE12BD23AE5BFF0B839 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C30E260B1CE74DBA009C38E5 /* PBXTargetDependency */,
+			);
+			name = ResourceAppWatchApp;
+			productName = ResourceAppWatchApp;
+			productReference = C30E25FC1CE74DBA009C38E5 /* ResourceAppWatchApp.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		C30E26071CE74DBA009C38E5 /* ResourceAppWatchApp Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C30E26231CE74DBA009C38E5 /* Build configuration list for PBXNativeTarget "ResourceAppWatchApp Extension" */;
+			buildPhases = (
+				1D37199E9CAAD2F3F862EB7F /* 📦 Check Pods Manifest.lock */,
+				C30E26041CE74DBA009C38E5 /* Sources */,
+				C30E26051CE74DBA009C38E5 /* Frameworks */,
+				C30E26061CE74DBA009C38E5 /* Resources */,
+				2E3C7BC05765EF4005F7B26C /* 📦 Embed Pods Frameworks */,
+				82203C4C2C12422EE7178E4B /* 📦 Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ResourceAppWatchApp Extension";
+			productName = "ResourceAppWatchApp Extension";
+			productReference = C30E26081CE74DBA009C38E5 /* ResourceAppWatchApp Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		D55C6CB71B5D757300301B0D /* ResourceApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D55C6CD91B5D757300301B0D /* Build configuration list for PBXNativeTarget "ResourceApp" */;
+			buildPhases = (
+				978E4B8123C372F370555011 /* 📦 Check Pods Manifest.lock */,
+				D55C6CED1B5E172900301B0D /* R.swift */,
+				D55C6CB41B5D757300301B0D /* Sources */,
+				D55C6CB51B5D757300301B0D /* Frameworks */,
+				D55C6CB61B5D757300301B0D /* Resources */,
+				89BF8D4EC08D38DB6564C369 /* 📦 Embed Pods Frameworks */,
+				ADB91CF666C6624CD5A00F13 /* 📦 Copy Pods Resources */,
+				C30E26261CE74DBA009C38E5 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C30E261D1CE74DBA009C38E5 /* PBXTargetDependency */,
 			);
 			name = ResourceApp;
 			productName = ResourceApp;
@@ -332,10 +502,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
+					C30E25FB1CE74DBA009C38E5 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					C30E26071CE74DBA009C38E5 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					D55C6CB71B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
 					};
@@ -360,11 +536,30 @@
 			targets = (
 				D55C6CB71B5D757300301B0D /* ResourceApp */,
 				D55C6CCE1B5D757300301B0D /* ResourceAppTests */,
+				C30E25FB1CE74DBA009C38E5 /* ResourceAppWatchApp */,
+				C30E26071CE74DBA009C38E5 /* ResourceAppWatchApp Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C30E25FA1CE74DBA009C38E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C30E26021CE74DBA009C38E5 /* Assets.xcassets in Resources */,
+				C30E26001CE74DBA009C38E5 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C30E26061CE74DBA009C38E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C30E261A1CE74DBA009C38E5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D55C6CB61B5D757300301B0D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -417,29 +612,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		89BF8D4EC08D38DB6564C369 /* Embed Pods Frameworks */ = {
+		1D37199E9CAAD2F3F862EB7F /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		978E4B8123C372F370555011 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,14 +627,74 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		ADB91CF666C6624CD5A00F13 /* Copy Pods Resources */ = {
+		2E3C7BC05765EF4005F7B26C /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ResourceAppWatchApp Extension/Pods-ResourceAppWatchApp Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		82203C4C2C12422EE7178E4B /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ResourceAppWatchApp Extension/Pods-ResourceAppWatchApp Extension-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		89BF8D4EC08D38DB6564C369 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		978E4B8123C372F370555011 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		ADB91CF666C6624CD5A00F13 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -479,6 +719,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C30E26041CE74DBA009C38E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C30E26141CE74DBA009C38E5 /* NotificationController.swift in Sources */,
+				C30E26121CE74DBA009C38E5 /* ExtensionDelegate.swift in Sources */,
+				C30E26181CE74DBA009C38E5 /* ComplicationController.swift in Sources */,
+				C30E26101CE74DBA009C38E5 /* InterfaceController.swift in Sources */,
+				C30E262A1CE7628C009C38E5 /* R.watchOS.generated.swift in Sources */,
+				C30E26161CE74DBA009C38E5 /* GlanceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D55C6CB41B5D757300301B0D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -508,6 +761,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C30E260B1CE74DBA009C38E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C30E26071CE74DBA009C38E5 /* ResourceAppWatchApp Extension */;
+			targetProxy = C30E260A1CE74DBA009C38E5 /* PBXContainerItemProxy */;
+		};
+		C30E261D1CE74DBA009C38E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C30E25FB1CE74DBA009C38E5 /* ResourceAppWatchApp */;
+			targetProxy = C30E261C1CE74DBA009C38E5 /* PBXContainerItemProxy */;
+		};
 		D55C6CD11B5D757300301B0D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D55C6CB71B5D757300301B0D /* ResourceApp */;
@@ -516,6 +779,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		C30E25FE1CE74DBA009C38E5 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C30E25FF1CE74DBA009C38E5 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -543,6 +814,76 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C30E261F1CE74DBA009C38E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				IBSC_MODULE = ResourceAppWatchApp_Extension;
+				INFOPLIST_FILE = ResourceAppWatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.ResourceApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Debug;
+		};
+		C30E26201CE74DBA009C38E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				IBSC_MODULE = ResourceAppWatchApp_Extension;
+				INFOPLIST_FILE = ResourceAppWatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.ResourceApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Release;
+		};
+		C30E26211CE74DBA009C38E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E0632B8247257B7F7445B20 /* Pods-ResourceAppWatchApp Extension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = "ResourceAppWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.ResourceApp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Debug;
+		};
+		C30E26221CE74DBA009C38E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F787535916E1BBFE26FA78DD /* Pods-ResourceAppWatchApp Extension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = "ResourceAppWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.ResourceApp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.2;
+			};
+			name = Release;
+		};
 		D55C6CD71B5D757300301B0D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -692,6 +1033,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C30E26231CE74DBA009C38E5 /* Build configuration list for PBXNativeTarget "ResourceAppWatchApp Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C30E26211CE74DBA009C38E5 /* Debug */,
+				C30E26221CE74DBA009C38E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C30E26251CE74DBA009C38E5 /* Build configuration list for PBXNativeTarget "ResourceAppWatchApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C30E261F1CE74DBA009C38E5 /* Debug */,
+				C30E26201CE74DBA009C38E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D55C6CB31B5D757300301B0D /* Build configuration list for PBXProject "ResourceApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
