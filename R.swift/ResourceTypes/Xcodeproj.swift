@@ -11,6 +11,7 @@ import Foundation
 enum TargetType {
   case iOS
   case watchOS
+  case tvOS
 }
 
 extension TargetType {
@@ -22,17 +23,11 @@ extension TargetType {
     case "watchos":
       return .watchOS
 
+    case "appletvos":
+      return .tvOS
+
     default:
       return nil
-    }
-  }
-
-  var fileName: String {
-    switch self {
-    case .iOS:
-      return "R.generated.swift"
-    case .watchOS:
-      return "R.watchOS.generated.swift"
     }
   }
 }
@@ -64,15 +59,10 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
     let configs = target.buildConfigurationList.buildConfigurations
 
-    configs.forEach {
-      print($0.buildSettings)
-    }
-
     switch (configs.first?.buildSettings.SDKROOT, configs.first?.buildSettings.IPHONEOS_DEPLOYMENT_TARGET) {
     case let (sdkRoot?, _):
       guard let targetType = TargetType.fromSdkRoot(sdkRoot) else {
-        fail("\(sdkRoot) not jet supported!")
-        throw NSError(domain: "\(sdkRoot) not jet supported!", code: 0, userInfo: nil)
+        throw ResourceParsingError.OsNotSupported(sdkRoot)
       }
 
       return targetType
@@ -81,8 +71,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
       return .iOS
 
     default:
-      fail("No SDKROOT nor IPHONEOS_DEPLOYMENT_TARGET defined.")
-      throw NSError(domain: "No SDKROOT nor IPHONEOS_DEPLOYMENT_TARGET defined.", code: 0, userInfo: nil)
+      throw ResourceParsingError.OsNotDefined()
     }
   }
 

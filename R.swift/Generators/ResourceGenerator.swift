@@ -35,7 +35,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
 
   let generators: [Generator]
   switch targetType {
-  case .iOS:
+  case .iOS, .tvOS:
     generators = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images, withTrait: true),
       ColorGenerator(colorPalettes: resources.colors),

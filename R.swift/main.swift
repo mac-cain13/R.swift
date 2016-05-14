@@ -71,4 +71,10 @@ do {
 } catch let ResourceParsingError.ParsingFailed(description) {
   fail(description)
   exit(3)
+} catch let ResourceParsingError.OsNotSupported(osVersion) {
+  fail("\(osVersion) not jet supported!")
+  exit(4)
+} catch ResourceParsingError.OsNotDefined {
+  fail("No SDKROOT or IPHONEOS_DEPLOYMENT_TARGET defined.")
+  exit(5)
 }

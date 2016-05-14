@@ -16,6 +16,7 @@ class InterfaceController: WKInterfaceController {
         
         // Configure interface objects here.
         let image = R.image.watchIcon()
+        let string = R.string.things.thingy()
     }
 
     override func willActivate() {

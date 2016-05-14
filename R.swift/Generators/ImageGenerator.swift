@@ -17,7 +17,7 @@ struct ImageGenerator: Generator {
       .flatMap { $0.imageAssets }
       .map {
         Function(
-          comments: ["`UIImage(named: \"\($0)\", bundle: ..., traitCollection: ...)`"],
+          comments: ["`UIImage(named: \"\($0)\", bundle: ..." + (withTrait ? ", traitCollection: ...)`" : ")")],
           isStatic: true,
           name: $0,
           generics: nil,
