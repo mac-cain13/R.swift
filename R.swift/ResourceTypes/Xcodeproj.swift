@@ -72,7 +72,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     case let (sdkRoot?, _):
       guard let targetType = TargetType.fromSdkRoot(sdkRoot) else {
         fail("\(sdkRoot) not jet supported!")
-        throw NSError(domain: "", code: 0, userInfo: nil)
+        throw NSError(domain: "\(sdkRoot) not jet supported!", code: 0, userInfo: nil)
       }
 
       return targetType
@@ -82,7 +82,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
     default:
       fail("No SDKROOT nor IPHONEOS_DEPLOYMENT_TARGET defined.")
-      throw NSError(domain: "", code: 0, userInfo: nil)
+      throw NSError(domain: "No SDKROOT nor IPHONEOS_DEPLOYMENT_TARGET defined.", code: 0, userInfo: nil)
     }
   }
 

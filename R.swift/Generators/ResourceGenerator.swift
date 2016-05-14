@@ -45,10 +45,18 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       NibGenerator(nibs: resources.nibs),
       ReuseIdentifierGenerator(reusables: resources.reusables),
       ResourceFileGenerator(resourceFiles: resources.resourceFiles),
-      StringsGenerator(localizableStrings: resources.localizableStrings)
-      ]
+      StringsGenerator(localizableStrings: resources.localizableStrings)]
   case .watchOS:
-    generators = [ImageGenerator(assetFolders: resources.assetFolders, images: resources.images, withTrait: false)]
+    generators = [
+      ImageGenerator(assetFolders: resources.assetFolders, images: resources.images, withTrait: false),
+      ColorGenerator(colorPalettes: resources.colors),
+      SegueGenerator(storyboards: resources.storyboards),
+      //TODO: StoryboardGenerator is not yet ready for UIStoryboard's
+//      StoryboardGenerator(storyboards: resources.storyboards),
+      ResourceFileGenerator(resourceFiles: resources.resourceFiles),
+      StringsGenerator(localizableStrings: resources.localizableStrings)
+    ]
+    
   }
 
   var generatorResults = GeneratorResults()

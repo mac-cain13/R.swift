@@ -68,7 +68,7 @@ private let AllOptions = [
 ]
 
 struct CallInformation {
-  let outputPathURL: NSURL
+  let outputURL: NSURL
 
   let xcodeprojURL: NSURL
   let targetName: String
@@ -108,9 +108,9 @@ struct CallInformation {
       var resourceValue: AnyObject?
       try! outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
       if let isDirectory = (resourceValue as? NSNumber)?.boolValue where isDirectory {
-        self.outputPathURL = outputURL
+        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)
       } else {
-        self.outputPathURL = outputURL
+        self.outputURL = outputURL
       }
 
       let getFirstArgumentForOption = getFirstArgumentFromOptionData(options, helpString: optionParser.helpStringForCommandName(commandName))
