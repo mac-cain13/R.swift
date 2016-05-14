@@ -77,7 +77,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
       return targetType
 
-    case let (_, ios?):
+    case (_, _?):
       return .iOS
 
     default:
