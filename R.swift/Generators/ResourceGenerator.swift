@@ -31,10 +31,13 @@ private struct GeneratorResults {
   }
 }
 
-func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
+func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String, targetType: TargetType) -> (Struct, Struct) {
 
-  let generators: [Generator] = [
-      ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
+  let generators: [Generator]
+  switch targetType {
+  case .iOS:
+    generators = [
+      ImageGenerator(assetFolders: resources.assetFolders, images: resources.images, withTrait: true),
       ColorGenerator(colorPalettes: resources.colors),
       FontGenerator(fonts: resources.fonts),
       SegueGenerator(storyboards: resources.storyboards),
@@ -42,8 +45,11 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       NibGenerator(nibs: resources.nibs),
       ReuseIdentifierGenerator(reusables: resources.reusables),
       ResourceFileGenerator(resourceFiles: resources.resourceFiles),
-      StringsGenerator(localizableStrings: resources.localizableStrings),
-    ]
+      StringsGenerator(localizableStrings: resources.localizableStrings)
+      ]
+  case .watchOS:
+    generators = [ImageGenerator(assetFolders: resources.assetFolders, images: resources.images, withTrait: false)]
+  }
 
   var generatorResults = GeneratorResults()
   generators.forEach { generatorResults.addGenerator($0) }

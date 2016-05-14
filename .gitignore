@@ -3,6 +3,7 @@ xcuserdata
 *.xccheckout
 ResourceApp/rswift
 R.generated.swift
+R.watchOS.generated.swift
 ResourceApp/rswift.log
 ResourceApp/rswift-tv.log
 Pods
