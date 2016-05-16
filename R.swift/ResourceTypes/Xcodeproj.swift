@@ -8,6 +8,31 @@
 
 import Foundation
 
+enum TargetType {
+  case iOS
+  case watchOS
+  case tvOS
+}
+
+extension TargetType {
+
+  static func fromSdkRoot(sdkRoot: String) -> TargetType? {
+    switch sdkRoot {
+    case "ios":
+      return .iOS
+    case "watchos":
+      return .watchOS
+
+    case "appletvos":
+      return .tvOS
+
+    default:
+      return nil
+    }
+  }
+}
+
+
 struct Xcodeproj: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcodeproj"]
 
@@ -22,6 +47,32 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     }
 
     self.projectFile = projectFile
+  }
+
+  func targetTypeForTarget(targetName: String) throws -> TargetType {
+    // Look for target in project file
+    let allTargets = projectFile.project.targets
+    guard let target = allTargets.filter({ $0.name == targetName }).first else {
+      let availableTargets = allTargets.map { $0.name }.joinWithSeparator(", ")
+      throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
+    }
+
+    let configs = target.buildConfigurationList.buildConfigurations
+
+    switch (configs.first?.buildSettings.SDKROOT, configs.first?.buildSettings.IPHONEOS_DEPLOYMENT_TARGET) {
+    case let (sdkRoot?, _):
+      guard let targetType = TargetType.fromSdkRoot(sdkRoot) else {
+        throw ResourceParsingError.OsNotSupported(sdkRoot)
+      }
+
+      return targetType
+
+    case (_, _?):
+      return .iOS
+
+    default:
+      throw ResourceParsingError.OsNotDefined()
+    }
   }
 
   func resourcePathsForTarget(targetName: String) throws -> [Path] {

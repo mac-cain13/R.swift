@@ -27,7 +27,8 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
-  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
+  let targetType = try xcodeproj.targetTypeForTarget(callInformation.targetName)
+  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier, targetType: targetType)
 
   let usedModules = [internalStruct, externalStruct]
     .flatMap(getUsedTypes)
@@ -70,4 +71,10 @@ do {
 } catch let ResourceParsingError.ParsingFailed(description) {
   fail(description)
   exit(3)
+} catch let ResourceParsingError.OsNotSupported(osVersion) {
+  fail("\(osVersion) not jet supported!")
+  exit(4)
+} catch ResourceParsingError.OsNotDefined {
+  fail("No SDKROOT or IPHONEOS_DEPLOYMENT_TARGET defined.")
+  exit(5)
 }

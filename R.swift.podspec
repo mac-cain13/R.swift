@@ -24,6 +24,7 @@ Pod::Spec.new do |spec|
   spec.source = { :http => "https://github.com/mac-cain13/R.swift/releases/download/v#{spec.version}/rswift-#{spec.version}.zip" }
 
   spec.ios.deployment_target     = '8.0'
+  spec.watchos.deployment_target = '2.0'
   spec.tvos.deployment_target    = '9.0'
 
   spec.dependency "R.swift.Library", "~> 2.1.0"

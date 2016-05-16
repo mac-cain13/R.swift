@@ -11,6 +11,8 @@ import Foundation
 enum ResourceParsingError: ErrorType {
   case UnsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
   case ParsingFailed(String)
+  case OsNotSupported(String)
+  case OsNotDefined()
 }
 
 struct Resources {

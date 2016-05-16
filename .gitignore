@@ -3,8 +3,7 @@ xcuserdata
 *.xccheckout
 ResourceApp/rswift
 R.generated.swift
-ResourceApp/rswift.log
-ResourceApp/rswift-tv.log
+ResourceApp/*.log
 Pods
 fastlane/test_output
 fastlane/README.md
