@@ -4,6 +4,8 @@ About Colors
 R.swift can parse .clr color palette files and generate structs in `R.colors.*`.
 This is useful if you're using .clr color palettes as the source of colors in your project.
 
+_NOTE: Make sure the .clr file is part of the project, and a member of the target, for R.swift to pick it up._ 
+
 A potential work flow is this:
 > A designer maintains a color palette called `App Colors.clr`, a developer refers to colors like so: `R.colors.appColors.errorColor()`.
 >
@@ -19,6 +21,6 @@ The above points are not resolved by R.swift, so keep these in mind when using c
 
 ### Further reading
 
+- Discussion on using [other file formats](https://github.com/mac-cain13/R.swift/issues/204)
 - R.swift issue: [Add support for R.colors from .clr files](https://github.com/mac-cain13/R.swift/issues/169)
 - Natasha The Robot: [Xcode Tip: Color palette](http://natashatherobot.com/xcode-color-palette/)
-
