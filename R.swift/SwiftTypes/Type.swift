@@ -32,6 +32,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UIView = Type(module: "UIKit", name: "UIView")
   static let _UIImage = Type(module: "UIKit", name: "UIImage")
   static let _NSBundle = Type(module: "Foundation", name: "NSBundle")
+  static let _NSLocale = Type(module: "Foundation", name: "NSLocale")
   static let _UIStoryboard = Type(module: "UIKit", name: "UIStoryboard")
   static let _UITableViewCell = Type(module: "UIKit", name: "UITableViewCell")
   static let _UICollectionViewCell = Type(module: "UIKit", name: "UICollectionViewCell")
