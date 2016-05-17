@@ -34,6 +34,7 @@ lane :release do |options|
       raise "Invalid release type: #{bumpType}".red
     end
 
+    newVersion = version_get_podspec()
     changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
     af_insert_text_into_file(
       file_path: "Changelog.md",
@@ -48,7 +49,7 @@ lane :release do |options|
   filepath = '../R.swift/version.swift'
   newVersion = version_get_podspec()
 
-  content = File.read(filepath).sub(/let version = "(.*)"/, "let version = \"#{currentVersion}\"")
+  content = File.read(filepath).sub(/let version = "(.*)"/, "let version = \"#{newVersion}\"")
   File.open(filepath, 'wb') { |file| file.write(content) }
 
   if options[:skip_tests] != true
