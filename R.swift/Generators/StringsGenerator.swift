@@ -245,7 +245,7 @@ struct StringsGenerator: Generator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: NSLocale.currentLocale(), \(args))"
+      body: "return String(format: \(values.localizedString), locale: _R.applicationLocale, \(args))"
     )
   }
 
