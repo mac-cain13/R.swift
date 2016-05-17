@@ -56,18 +56,27 @@ do {
     }
   }
 
-} catch let InputParsingError.UserAskedForHelp(helpString: helpString) {
-  print(helpString)
-  exit(0)
-} catch let InputParsingError.IllegalOption(error: error, helpString: helpString) {
-  fail(error)
-  print(helpString)
-  exit(2)
-} catch let InputParsingError.MissingOption(error: error, helpString: helpString) {
-  fail(error)
-  print(helpString)
-  exit(2)
-} catch let ResourceParsingError.ParsingFailed(description) {
-  fail(description)
+} catch let error as InputParsingError {
+  if let errorDescription = error.errorDescription {
+    fail(errorDescription)
+  }
+
+  print(error.helpString)
+
+  switch error {
+  case .IllegalOption, .MissingOption:
+    exit(2)
+  case .UserAskedForHelp, .UserRequestsVersionInformation:
+    exit(0)
+  }
+} catch let error as ResourceParsingError {
+  switch error {
+  case let .ParsingFailed(description):
+    fail(description)
+  case let .UnsupportedExtension(givenExtension, supportedExtensions):
+    let joinedSupportedExtensions = supportedExtensions.joinWithSeparator(", ")
+    fail("File extension '\(givenExtension)' is not one of the supported extensions: \(joinedSupportedExtensions)")
+  }
+
   exit(3)
 }
