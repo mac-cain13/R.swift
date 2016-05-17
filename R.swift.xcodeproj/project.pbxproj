@@ -18,6 +18,8 @@
 		D56F923F1C2942B400177FF7 /* Struct+ChildValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */; };
 		D56F92401C29475F00177FF7 /* Struct+ChildValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */; };
 		D56F92411C29476700177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
+		D578CAD61CE064E900C50B7E /* version.swift in Sources */ = {isa = PBXBuildFile; fileRef = D578CAD51CE064E900C50B7E /* version.swift */; };
+		D578CAD71CE06AB000C50B7E /* version.swift in Sources */ = {isa = PBXBuildFile; fileRef = D578CAD51CE064E900C50B7E /* version.swift */; };
 		D579466B1B9347C20044D2FC /* XCProjectFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579466A1B9347C20044D2FC /* XCProjectFile.swift */; };
 		D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
 		D586724A1C21FF7D00A760EC /* TypeSequenceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */; };
@@ -116,6 +118,7 @@
 		D56DC76C1C41758800623437 /* AccessModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessModifier.swift; sourceTree = "<group>"; };
 		D56F923C1C29421600177FF7 /* TypeVar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeVar.swift; sourceTree = "<group>"; };
 		D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Struct+ChildValidation.swift"; sourceTree = "<group>"; };
+		D578CAD51CE064E900C50B7E /* version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = version.swift; sourceTree = "<group>"; };
 		D579466A1B9347C20044D2FC /* XCProjectFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCProjectFile.swift; sourceTree = "<group>"; };
 		D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeSequenceProvider.swift; sourceTree = "<group>"; };
 		D59F72251C1963DA0089767C /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
@@ -166,6 +169,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		D5C4227A1B711FDF004EA9B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1F5322A6D46CBD2B0ABA60D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -275,6 +285,7 @@
 				D5F97E361C1789E50066D7C0 /* ResourceTypes */,
 				D5F97E501C18D5EF0066D7C0 /* SwiftTypes */,
 				D5B7997B1C1B06F5009EA901 /* Util */,
+				D578CAD51CE064E900C50B7E /* version.swift */,
 			);
 			path = R.swift;
 			sourceTree = "<group>";
@@ -345,6 +356,7 @@
 			buildPhases = (
 				D5EA0DF01A3DF45600FFEBC4 /* Sources */,
 				D5DE480C1B5E1B14000F6A85 /* Install into test project */,
+				F1F5322A6D46CBD2B0ABA60D /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -459,6 +471,7 @@
 				D59F72311C19644F0089767C /* Function.swift in Sources */,
 				E241E4A11CD6545200F449E3 /* Unifiable.swift in Sources */,
 				D5B799721C199755009EA901 /* ImageGenerator.swift in Sources */,
+				D578CAD71CE06AB000C50B7E /* version.swift in Sources */,
 				D5B7997A1C19C1BD009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */,
 				D59F722A1C1963EA0089767C /* Struct.swift in Sources */,
 				E2156B8F1CC5255000F341DC /* StringParam.swift in Sources */,
@@ -493,6 +506,7 @@
 				D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */,
 				E22D43651C95845200692FFF /* ColorPalette.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
+				D578CAD61CE064E900C50B7E /* version.swift in Sources */,
 				D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */,
 				D5B7996E1C19940F009EA901 /* ResourceFileGenerator.swift in Sources */,
 				E2762ACF1CCD0B970009BCAA /* LocalizableStrings.swift in Sources */,
