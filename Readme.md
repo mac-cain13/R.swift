@@ -25,7 +25,7 @@ let viewController = CustomViewController(nib: R.nib.customView)
 let string = R.string.localizable.welcomeWithName("Arthur Dent")
 ```
 
-Check out [more examples of R.swift based code](Documentation/Examples.md)!
+Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.app uses R.swift](https://realm.io/news/slug-javi-soto-building-fabric-in-swift/#rswift-2956javascriptpresentzchangechapter053true)!
 
 ## Demo
 
@@ -52,7 +52,7 @@ R.swift currently supports these types of resources:
 - [Storyboards](Documentation/Examples.md#storyboards)
 - [Segues](Documentation/Examples.md#segues)
 - [Nibs](Documentation/Examples.md#nibs)
-- [Reusable cells](Documentation/Examples.md#reusable-cells)
+- [Reusable cells](Documentation/Examples.md#reusable-table-view-cells)
 
 Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-validation):
 - If all images used in storyboards are available
@@ -71,6 +71,8 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 ## Installation
 
 [CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
+
+_Note on Carthage: R.swift is a tool that used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
 
 ### CocoaPods (recommended)
 
