@@ -16,6 +16,41 @@ lane :release do |options|
     raise "Aborted by user".red
   end
 
+  currentVersion = version_get_podspec()
+  Helper.log.info "Current R.swift podspec version is #{currentVersion}"
+
+  isPrerelease = false
+  if options[:skip_version_bump] != true
+    bumpType = prompt(text: "What kind of release is this? (major/minor/patch/custom)".green, boolean: false, ci_input: "")
+    case bumpType
+    when "major", "minor", "patch"
+      version_bump_podspec(bump_type: bumpType)
+    when "custom"
+      newVersion = prompt(text: "What is the new custom version number?".green, boolean: false, ci_input: "")
+      version_bump_podspec(version_number: newVersion)
+
+      isPrerelease = prompt(text: "Is this a prerelease version?".green, boolean: true, ci_input: "")
+    else
+      raise "Invalid release type: #{bumpType}".red
+    end
+
+    changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
+    af_insert_text_into_file(
+      file_path: "Changelog.md",
+      text: "## #{newVersion}\n\n#{changelog}\n\n",
+      insert_at_bottom: false
+    )
+  else
+    isPrerelease = prompt(text: "Is this a prerelease version?".green, boolean: true, ci_input: "")
+  end
+
+  # Sync version.swift with version in podspec
+  filepath = '../R.swift/version.swift'
+  newVersion = version_get_podspec()
+
+  content = File.read(filepath).sub(/let version = "(.*)"/, "let version = \"#{currentVersion}\"")
+  File.open(filepath, 'wb') { |file| file.write(content) }
+
   if options[:skip_tests] != true
     runalltests
   else
@@ -31,39 +66,6 @@ lane :release do |options|
     archive: true
   )
 
-  unless is_ci
-    notification(
-      title: "R.swift release",
-      message: "💡 Needs your attention."
-    )
-  end
-
-  currentVersion = version_get_podspec()
-  Helper.log.info "Current R.swift podspec version is #{currentVersion}"
-
-  bumpType = prompt(text: "What kind of release is this? (major/minor/patch/custom)".green, boolean: false, ci_input: "")
-  isPrerelease = false
-  case bumpType
-  when "major", "minor", "patch"
-    version_bump_podspec(bump_type: bumpType)
-  when "custom"
-    newVersion = prompt(text: "What is the new custom version number?".green, boolean: false, ci_input: "")
-    version_bump_podspec(version_number: newVersion)
-
-    isPrerelease = prompt(text: "Is this a prerelease version?".green, boolean: true, ci_input: "")
-  else
-    raise "Invalid release type: #{bumpType}".red
-  end
-
-  newVersion = version_get_podspec()
-  changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
-
-  af_insert_text_into_file(
-    file_path: "Changelog.md",
-    text: "## #{newVersion}\n\n#{changelog}\n\n",
-    insert_at_bottom: false
-  )
-
   zipPath = "/tmp/rswift-#{newVersion}.zip"
   sh "rm -f #{zipPath}"
 
@@ -71,6 +73,13 @@ lane :release do |options|
     paths: ["#{archivePath}/Products/usr/local/bin/rswift", "./License"],
     output_path: zipPath
   )
+
+  unless is_ci
+    notification(
+      title: "R.swift release",
+      message: "💡 Needs your attention."
+    )
+  end
 
   unless prompt(text: "#{newVersion} has been build and prepped for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to commit, tag, push and release #{newVersion} including all uncommitted changes?".green, boolean: true, ci_input:"y")
     raise "Aborted by user".red

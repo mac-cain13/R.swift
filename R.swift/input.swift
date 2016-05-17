@@ -13,7 +13,38 @@ enum InputParsingError: ErrorType {
   case IllegalOption(error: String, helpString: String)
   case MissingOption(error: String, helpString: String)
   case UserAskedForHelp(helpString: String)
+  case UserRequestsVersionInformation(helpString: String)
+
+  var helpString: String {
+    switch self {
+    case let .IllegalOption(_, helpString):
+      return helpString
+    case let .MissingOption(_, helpString):
+      return helpString
+    case let .UserAskedForHelp(helpString):
+      return helpString
+    case let .UserRequestsVersionInformation(helpString):
+      return helpString
+    }
+  }
+
+  var errorDescription: String? {
+    switch self {
+    case let .IllegalOption(error, _):
+      return error
+    case let .MissingOption(error, _):
+      return error
+    case .UserAskedForHelp, .UserRequestsVersionInformation:
+      return nil
+    }
+  }
 }
+
+private let versionOption = Option(
+  trigger: .Long( "version"),
+  numberOfParameters: 0,
+  helpDescription: "Prints version information about this release."
+)
 
 private let xcodeprojOption = Option(
   trigger: .Mixed("p", "xcodeproj"),
@@ -57,6 +88,7 @@ private let sdkRootOption = Option(
 )
 
 private let AllOptions = [
+  versionOption,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -94,6 +126,10 @@ struct CallInformation {
 
       if options[optionParser.helpOption] != nil {
         throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
+      }
+
+      if options[versionOption] != nil {
+        throw InputParsingError.UserRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
       }
 
       guard let outputPath = extraArguments.first where extraArguments.count == 1 else {
