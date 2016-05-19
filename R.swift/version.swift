@@ -8,4 +8,4 @@
 
 import Foundation
 
-let version = "nightly build"
+let version = "2.3.0"

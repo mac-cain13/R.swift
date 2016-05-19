@@ -1,3 +1,12 @@
+## 2.3.0
+
+New features:
+- Add `--version` parameter that shows the version of R.swift you are running
+
+Fixed issues:
+- Use correct locale for localized strings
+- Fix typo in generated comments (by @waywalker)
+
 ## 2.2.2
 
 Fixed issues:
