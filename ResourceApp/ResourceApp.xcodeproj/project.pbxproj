@@ -448,13 +448,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D55C6CD91B5D757300301B0D /* Build configuration list for PBXNativeTarget "ResourceApp" */;
 			buildPhases = (
-				978E4B8123C372F370555011 /* 📦 Check Pods Manifest.lock */,
+				978E4B8123C372F370555011 /* [CP] Check Pods Manifest.lock */,
 				D55C6CED1B5E172900301B0D /* R.swift */,
 				D55C6CB41B5D757300301B0D /* Sources */,
 				D55C6CB51B5D757300301B0D /* Frameworks */,
 				D55C6CB61B5D757300301B0D /* Resources */,
-				89BF8D4EC08D38DB6564C369 /* 📦 Embed Pods Frameworks */,
-				ADB91CF666C6624CD5A00F13 /* 📦 Copy Pods Resources */,
+				89BF8D4EC08D38DB6564C369 /* [CP] Embed Pods Frameworks */,
+				ADB91CF666C6624CD5A00F13 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -527,21 +527,25 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
 					D55C6CB71B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0800;
 					};
 					D55C6CCE1B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0800;
 						TestTargetID = D55C6CB71B5D757300301B0D;
 					};
 					DEF559961CA4873D009B8C51 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 					DEF559AA1CA48892009B8C51 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = DEF559961CA4873D009B8C51;
 					};
 				};
@@ -655,14 +659,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		89BF8D4EC08D38DB6564C369 /* 📦 Embed Pods Frameworks */ = {
+		89BF8D4EC08D38DB6564C369 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,14 +674,14 @@
 			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		978E4B8123C372F370555011 /* 📦 Check Pods Manifest.lock */ = {
+		978E4B8123C372F370555011 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -685,14 +689,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		ADB91CF666C6624CD5A00F13 /* 📦 Copy Pods Resources */ = {
+		ADB91CF666C6624CD5A00F13 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -859,6 +863,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -906,6 +911,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -945,12 +951,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResourceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -958,12 +966,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResourceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -980,6 +991,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp.app/ResourceApp";
 			};
 			name = Debug;
@@ -993,6 +1005,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp.app/ResourceApp";
 			};
 			name = Release;
@@ -1008,6 +1022,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceApp-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Debug;
@@ -1022,6 +1037,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceApp-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = 3;
 			};
 			name = Release;
@@ -1037,6 +1054,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceAppTests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
 			};
 			name = Debug;
@@ -1051,6 +1069,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.ResourceAppTests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
 			};
 			name = Release;
