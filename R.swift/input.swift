@@ -142,9 +142,9 @@ struct CallInformation {
       let outputURL = NSURL(fileURLWithPath: outputPath)
 
       var resourceValue: AnyObject?
-      try! outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
+      try outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
       if let isDirectory = (resourceValue as? NSNumber)?.boolValue where isDirectory {
-        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)
+        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)!
       } else {
         self.outputURL = outputURL
       }
@@ -203,7 +203,7 @@ private func getFirstArgumentFromOptionData(options: [Option:[String]], helpStri
     }
 }
 
-func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL {
+func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL? {
     return { path in
         switch path {
         case let .Absolute(absolutePath):
