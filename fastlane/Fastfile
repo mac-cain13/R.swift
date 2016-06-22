@@ -113,7 +113,7 @@ lane :release do |options|
 
   unless is_ci
     notification(
-      title: "R.swift.Library release",
+      title: "R.swift release",
       message: "🎉 Version #{newVersion} is released."
     )
   end
@@ -147,7 +147,7 @@ end
 error do |lane, exception|
   unless is_ci
     notification(
-      title: "R.swift.Library #{lane}",
+      title: "R.swift #{lane}",
       message: "❌ Failed with an exception."
     )
   end
