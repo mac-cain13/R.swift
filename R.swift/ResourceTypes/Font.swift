@@ -16,7 +16,9 @@ struct Font: WhiteListedExtensionsResourceType {
   init(url: NSURL) throws {
     try Font.throwIfUnsupportedExtension(url.pathExtension)
 
-    let dataProvider = CGDataProviderCreateWithURL(url)
+    guard let dataProvider = CGDataProviderCreateWithURL(url) else {
+      throw ResourceParsingError.ParsingFailed("Unable to create data provider for font at \(url)")
+    }
     let font = CGFontCreateWithDataProvider(dataProvider)
 
     guard let postScriptName = CGFontCopyPostScriptName(font) else {

@@ -24,6 +24,7 @@ do {
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
+    .flatMap { $0 }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: NSFileManager.defaultManager())
 
