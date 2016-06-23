@@ -3,11 +3,10 @@ use_frameworks!
 workspace 'R.swift'
 project 'ResourceApp/ResourceApp'
 
-target 'ResourceApp' do
+target 'ResourceApp'
+target 'ResourceAppTests'
 
 pod 'R.swift.Library', :path => './R.swift.Library'
-
-end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
