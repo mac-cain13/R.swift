@@ -1,3 +1,9 @@
+## 2.4.0
+
+New features:
+
+- Swift 2.3 support
+
 ## 2.3.0
 
 New features:
