@@ -138,7 +138,6 @@ lane :runalltests do
   scan(
     workspace: "R.swift.xcworkspace",
     scheme: "ResourceApp-tvOS",
-    sdk: "iphonesimulator",
     destination: "name=Apple TV 1080p",
     clean: true
   )
