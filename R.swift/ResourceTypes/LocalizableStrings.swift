@@ -40,7 +40,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     let dictionary: [String : (params: [StringParam], commentValue: String)]
     switch url.pathExtension {
     case "strings"?:
-      dictionary = try parseStrings(nsDictionary, source: locale.withFilename("\(filename).strings"))
+      dictionary = try parseStrings(String(contentsOfURL: url), source: locale.withFilename("\(filename).strings"))
     case "stringsdict"?:
       dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
     default:
@@ -53,35 +53,70 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
   }
 }
 
-private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private func parseStrings(stringsFile: String, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
   var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
 
-  for (key, obj) in nsDictionary {
-    if let
-      key = key as? String,
-      val = obj as? String
-    {
+  for entry in StringsEntry.parse(stringsFile) {
       var params: [StringParam] = []
 
-      for part in FormatPart.formatParts(formatString: val) {
+      for part in FormatPart.formatParts(formatString: entry.val) {
         switch part {
         case .Reference:
-          throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(key) = \(val)")
+          throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(entry.key) = \(entry.val)")
 
         case .Spec(let formatSpecifier):
           params.append(StringParam(name: nil, spec: formatSpecifier))
         }
       }
 
-
-      dictionary[key] = (params, val)
-    }
-    else {
-      throw ResourceParsingError.ParsingFailed("Non-string value in \(source): \(key) = \(obj)")
-    }
+      dictionary[entry.key] = (params, entry.val)
   }
 
   return dictionary
+}
+
+private struct StringsEntry {
+  let comment: String?
+  let key: String
+  let val: String
+  
+  static let regex: NSRegularExpression = {
+    let capturedTrimmedComment = "(?s: /[*] \\s* (.*?) \\s* [*]/ )"
+    let whitespaceOrComment = "(?s: \\s | /[*] .*? [*]/)"
+    let slash = "\\\\"
+    let quotedString = "(?s: \" .*? (?<! \(slash))\" )"
+    let unquotedString = "[^\\s\(slash)\"=]+"
+    let string = "(?: \(quotedString) | \(unquotedString) )"
+    let pattern = "(?: \(capturedTrimmedComment) (\\s*) )? ( \(string) ) \(whitespaceOrComment)* = \(whitespaceOrComment)* ( \(string) ) \(whitespaceOrComment)* ;"
+    return try! NSRegularExpression(pattern: pattern, options: .AllowCommentsAndWhitespace)
+  }()
+  
+  init(source: String, match: NSTextCheckingResult) {
+    guard match.numberOfRanges == 5 else { fatalError("must be used with StringsEntry.regex") }
+    
+    func extract(range: NSRange, unescape: Bool) -> String? {
+      guard range.location != NSNotFound else { return nil }
+      let raw = (source as NSString).substringWithRange(range)
+      if !unescape { return raw }
+      return try! NSPropertyListSerialization.propertyListWithData(raw.dataUsingEncoding(NSUTF8StringEncoding)!, options: [], format: nil) as! String
+    }
+    
+    let preKeySpacing = extract(match.rangeAtIndex(2), unescape: false)
+    if preKeySpacing == nil || preKeySpacing?.componentsSeparatedByString("\n").count <= 2 {
+      comment = extract(match.rangeAtIndex(1), unescape: false)
+    }
+    else {
+      comment = nil
+    }
+    
+    key = extract(match.rangeAtIndex(3), unescape: true)!
+    val = extract(match.rangeAtIndex(4), unescape: true)!
+  }
+  
+  static func parse(stringsFileContents: String) -> [StringsEntry] {
+    return regex.matchesInString(stringsFileContents, options: [], range: NSRange(0..<stringsFileContents.utf16.count))
+      .map { StringsEntry(source: stringsFileContents, match: $0) }
+  }
 }
 
 private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
