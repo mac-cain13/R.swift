@@ -67,13 +67,13 @@ struct StringsGenerator: Generator {
       baseKeys = nil
     }
     else {
-      baseKeys = Set(bases.flatMap { $0.dictionary.keys })
+      baseKeys = Set(bases.flatMap { $0.keys })
     }
 
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
+      let groupedKeys = ls.keys.groupBySwiftNames { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
         warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
@@ -88,13 +88,17 @@ struct StringsGenerator: Generator {
       }
 
       // Save uniques
+      var byKey: [String: LocalizableStrings.Entry] = [:]
+      for entry in ls.entries {
+        byKey[entry.key] = entry
+      }
       for key in groupedKeys.uniques {
-        if let (params, commentValue) = ls.dictionary[key] {
+        if let entry = byKey[key] {
           if let _ = allParams[key] {
-            allParams[key]?.append((ls.locale, commentValue, params))
+            allParams[key]?.append((ls.locale, entry.val, entry.params))
           }
           else {
-            allParams[key] = [(ls.locale, commentValue, params)]
+            allParams[key] = [(ls.locale, entry.val, entry.params)]
           }
         }
       }
@@ -105,7 +109,7 @@ struct StringsGenerator: Generator {
       let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtract(lss.flatMap { $0.dictionary.keys })
+      let missing = sourceKeys.subtract(lss.flatMap { $0.keys })
 
       if missing.isEmpty {
         continue
