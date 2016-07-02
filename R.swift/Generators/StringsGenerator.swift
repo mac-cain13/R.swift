@@ -60,7 +60,7 @@ struct StringsGenerator: Generator {
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
   private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
-    var allParams: [String: [(Locale, String, [StringParam])]] = [:]
+    var allParams: [String: [(Locale, LocalizableStrings.Entry)]] = [:]
     let baseKeys: Set<String>?
     let bases = strings.filter { $0.locale.isBase }
     if bases.isEmpty {
@@ -95,10 +95,10 @@ struct StringsGenerator: Generator {
       for key in groupedKeys.uniques {
         if let entry = byKey[key] {
           if let _ = allParams[key] {
-            allParams[key]?.append((ls.locale, entry.val, entry.params))
+            allParams[key]?.append((ls.locale, entry))
           }
           else {
-            allParams[key] = [(ls.locale, entry.val, entry.params)]
+            allParams[key] = [(ls.locale, entry)]
           }
         }
       }
@@ -138,8 +138,8 @@ struct StringsGenerator: Generator {
       var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
-      for (locale, _, ps) in keyParams {
-        if ps.any({ $0.spec == FormatSpecifier.TopType }) {
+      for (locale, entry) in keyParams {
+        if entry.params.any({ $0.spec == FormatSpecifier.TopType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -149,8 +149,8 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      for (_, _, ps) in keyParams {
-        if let unified = params.unify(ps) {
+      for (_, entry) in keyParams {
+        if let unified = params.unify(entry.params) {
           params = unified
         }
         else {
@@ -162,8 +162,9 @@ struct StringsGenerator: Generator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      let vals = keyParams.map { ($0.0, $0.1) }
-      let values = StringValues(key: key, params: params, tableName: filename, values: vals )
+      let vals = keyParams.map { locale, entry in (locale, entry.val) }
+      let comments = keyParams.map { locale, entry in (locale, entry.comment) }
+      let values = StringValues(key: key, params: params, tableName: filename, values: vals, entryComments: comments)
       results.append(values)
     }
 
@@ -273,6 +274,7 @@ private struct StringValues {
   let params: [StringParam]
   let tableName: String
   let values: [(Locale, String)]
+  let entryComments: [(Locale, String?)]
 
   var localizedString: String {
     let escapedKey = key.escapedStringLiteral
@@ -316,6 +318,22 @@ private struct StringValues {
 
       let locales = values.flatMap { $0.0.localeDescription }
       results.append("Locales: \(locales.joinWithSeparator(", "))")
+    }
+    
+    let baseEntryComment = entryComments.filter { $0.0.isBase }.flatMap { $0.1 }.first
+    if let baseEntryComment = baseEntryComment {
+      if !results.isEmpty {
+        results.append("")
+      }
+      
+      let lines = baseEntryComment.componentsSeparatedByString("\n")
+      if lines.count == 1 {
+        results.append("Comment: \(lines[0])")
+      } else {
+        results.append("Comment:")
+        let indented = lines.map { "  \($0)" }
+        results.appendContentsOf(indented)
+      }
     }
 
     return results
