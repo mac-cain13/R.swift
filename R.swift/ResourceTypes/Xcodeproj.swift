@@ -13,7 +13,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
   private let projectFile: XCProjectFile
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)
 
     // Parse project file
@@ -28,7 +28,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     // Look for target in project file
     let allTargets = projectFile.project.targets
     guard let target = allTargets.filter({ $0.name == targetName }).first else {
-      let availableTargets = allTargets.map { $0.name }.joinWithSeparator(", ")
+      let availableTargets = allTargets.map { $0.name }.joined(separator: ", ")
       throw ResourceParsingError.ParsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
     }
 

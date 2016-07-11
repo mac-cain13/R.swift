@@ -18,14 +18,14 @@ struct SegueGenerator: Generator {
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in
-          guard let destinationType = SegueGenerator.resolveDestinationTypeForSegue(
-            segue,
+          guard let destinationType = SegueGenerator.resolveDestinationType(
+            for: segue,
             inViewController: viewController,
             inStoryboard: storyboard,
             allStoryboards: storyboards)
             else
           {
-            warn("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
+            warn(warning: "Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
             return nil
           }
 
@@ -47,15 +47,15 @@ struct SegueGenerator: Generator {
       let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftNames { $0.segue.identifier }
 
       for (name, duplicates) in groupedSeguesWithInfo.duplicates {
-        warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joinWithSeparator(", "))")
+        warn(warning: "Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joined(separator: ", "))")
       }
 
       let empties = groupedSeguesWithInfo.empties
       if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 segue for '\(sourceType)' because no swift identifier can be generated for segue: \(empty)")
+        warn(warning: "Skipping 1 segue for '\(sourceType)' because no swift identifier can be generated for segue: \(empty)")
       }
       else if empties.count > 1 {
-        warn("Skipping \(empties.count) segues for '\(sourceType)' because no swift identifier can be generated for all of these segues: \(empties.joinWithSeparator(", "))")
+        warn(warning: "Skipping \(empties.count) segues for '\(sourceType)' because no swift identifier can be generated for all of these segues: \(empties.joined(separator: ", "))")
       }
 
       let sts = groupedSeguesWithInfo
@@ -78,7 +78,7 @@ struct SegueGenerator: Generator {
     )
   }
 
-  private static func resolveDestinationTypeForSegue(segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
+  private static func resolveDestinationType(for segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
     if segue.kind == "unwind" {
       return Type._UIViewController
     }
@@ -92,7 +92,7 @@ struct SegueGenerator: Generator {
       .filter { $0.id == segue.destination }
       .first
       .flatMap { storyboard -> Type? in
-        switch storyboard.resolveWithStoryboards(storyboards) {
+        switch storyboard.resolve(with: storyboards) {
         case .CustomBundle:
           return Type._UIViewController // Not supported, fallback to UIViewController
         case let .Resolved(vc):

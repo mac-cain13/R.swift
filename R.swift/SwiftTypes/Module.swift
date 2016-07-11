@@ -34,8 +34,8 @@ enum Module: StringLiteralConvertible, CustomStringConvertible, Hashable {
 
   init(name: String?, fallback: Module = .Host) {
     switch name {
-    case .None: self = fallback
-    case let .Some(name): self = .Custom(name: name)
+    case .none: self = fallback
+    case let .some(name): self = .Custom(name: name)
     }
   }
 

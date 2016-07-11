@@ -22,7 +22,7 @@ struct ResourceFile {
   let filename: String
   let pathExtension: String?
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     if let pathExtension = url.pathExtension where ResourceFile.unsupportedExtensions.contains(pathExtension) {
       throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
     }

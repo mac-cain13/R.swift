@@ -52,13 +52,13 @@ struct Function: UsedTypesProvider {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = parameters.joinWithSeparator(", ")
+    let parameterString = parameters.joined(separator: ", ")
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    let bodyString = body.indentWithString(IndentationString)
+    let bodyString = body.indent(with: IndentationString)
 
     return "\(commentsString)\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }

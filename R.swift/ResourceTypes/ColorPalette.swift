@@ -15,7 +15,7 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
   let filename: String
   let colors: [String: NSColor]
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try ColorPalette.throwIfUnsupportedExtension(url.pathExtension)
 
     guard let filename = url.filename, path = url.path else {
@@ -27,7 +27,7 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
 
     var colors: [String: NSColor] = [:]
     for key in colorList.allKeys {
-      colors[key] = colorList.colorWithKey(key)?.colorUsingColorSpaceName(NSCalibratedRGBColorSpace)
+      colors[key] = colorList.color(withKey: key)?.usingColorSpaceName(NSCalibratedRGBColorSpace)
     }
 
     self.filename = filename

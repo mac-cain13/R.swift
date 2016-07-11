@@ -46,15 +46,15 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
     ]
 
   var generatorResults = GeneratorResults()
-  generators.forEach { generatorResults.addGenerator($0) }
+  generators.forEach { generatorResults.addGenerator(generator: $0) }
 
   let internalResourceStruct = Struct(
       type: Type(module: .Host, name: "_R"),
       implements: [],
       typealiasses: [],
       properties: [
-        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "NSBundle(identifier: \"\(bundleIdentifier)\") ?? NSBundle.mainBundle()"),
-        Let(isStatic: true, name: "applicationLocale", typeDefinition: .Inferred(Type._NSLocale), value: "hostingBundle.preferredLocalizations.first.flatMap(NSLocale.init) ?? NSLocale.currentLocale()")
+        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._Bundle), value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
+        Let(isStatic: true, name: "applicationLocale", typeDefinition: .Inferred(Type._Locale), value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
       ],
       functions: [],
       structs: generatorResults.internalStructs

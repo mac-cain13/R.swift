@@ -12,15 +12,15 @@ import Foundation
 Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
 Special rules: Can't begin with a number
 */
-func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
+func sanitizedSwiftName(_ name: String, lowercaseFirstCharacter: Bool = true) -> String {
+  var nameComponents = name.components(separatedBy: BlacklistedCharacters)
 
-  let firstComponent = nameComponents.removeAtIndex(0)
+  let firstComponent = nameComponents.remove(at: 0)
   let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
 
-  let regex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
+  let regex = try! RegularExpression(pattern: "^[0-9]+", options: .caseInsensitive)
   let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
-  let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
+  let sanitizedSwiftName = regex.stringByReplacingMatches(in: cleanedSwiftName, options: RegularExpression.MatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
 
   let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
   if SwiftKeywords.contains(capitalizedSwiftName) {
@@ -36,29 +36,29 @@ struct SwiftNameGroups<T> {
   let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
 }
 
-extension SequenceType {
-  func groupBySwiftNames(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
+extension Sequence {
+  func groupBySwiftNames(identifierSelector: (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
     var groupedBy = groupBy { sanitizedSwiftName(identifierSelector($0)) }
-    let empties = groupedBy[""]?.map { "'\(identifierSelector($0))'" }.sort()
+    let empties = groupedBy[""]?.map { "'\(identifierSelector($0))'" }.sorted()
     groupedBy[""] = nil
 
     let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
     let duplicates = groupedBy
-      .filter { $0.1.count > 1 }
-      .map { ($0.0, $0.1.map(identifierSelector).sort()) }
+      .filter { $0.value.count > 1 }
+      .map { ($0.key, $0.value.map(identifierSelector).sorted()) }
 
     return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
   }
 }
 
-private let BlacklistedCharacters: NSCharacterSet = {
-  let blacklist = NSMutableCharacterSet(charactersInString: "")
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.punctuationCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.symbolCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.illegalCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.controlCharacterSet())
-  blacklist.removeCharactersInString("_")
+private let BlacklistedCharacters: CharacterSet = {
+  var blacklist = CharacterSet(charactersIn: "")
+  blacklist.formUnion(.whitespacesAndNewlines)
+  blacklist.formUnion(.punctuation)
+  blacklist.formUnion(.symbols)
+  blacklist.formUnion(.illegalCharacters)
+  blacklist.formUnion(.controlCharacters)
+  blacklist.remove(charactersIn: "_")
 
   // Emoji ranges, roughly based on http://www.unicode.org/Public/emoji/1.0//emoji-data.txt
   [
@@ -67,8 +67,7 @@ private let BlacklistedCharacters: NSCharacterSet = {
     0x1F900...0x1F9FF,
     0x1F1E6...0x1F1FF,
   ].forEach {
-    let range = NSRange(location: $0.startIndex, length: $0.endIndex - $0.startIndex)
-    blacklist.removeCharactersInRange(range)
+    blacklist.remove(charactersIn: UnicodeScalar($0.lowerBound) ..< UnicodeScalar($0.upperBound))
   }
 
   return blacklist

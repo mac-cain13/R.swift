@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum InputParsingError: ErrorType {
+enum InputParsingError: ErrorProtocol {
   case IllegalOption(error: String, helpString: String)
   case MissingOption(error: String, helpString: String)
   case UserAskedForHelp(helpString: String)
@@ -100,32 +100,32 @@ private let AllOptions = [
 ]
 
 struct CallInformation {
-  let outputURL: NSURL
+  let outputURL: URL
 
-  let xcodeprojURL: NSURL
+  let xcodeprojURL: URL
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
 
-  private let buildProductsDirURL: NSURL
-  private let developerDirURL: NSURL
-  private let sourceRootURL: NSURL
-  private let sdkRootURL: NSURL
+  private let buildProductsDirURL: URL
+  private let developerDirURL: URL
+  private let sourceRootURL: URL
+  private let sdkRootURL: URL
 
-  init(processInfo: NSProcessInfo) throws {
+  init(processInfo: ProcessInfo) throws {
     try self.init(arguments: processInfo.arguments, environment: processInfo.environment)
   }
 
   init(arguments: [String], environment: [String: String]) throws {
     let optionParser = OptionParser(definitions: AllOptions)
-    let commandName = arguments.first.flatMap { NSURL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
+    let commandName = arguments.first.flatMap { URL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
     let argumentsWithoutCall = Array(arguments.dropFirst())
 
     do {
-      let (options, extraArguments) = try optionParser.parse(argumentsWithoutCall)
+      let (options, extraArguments) = try optionParser.parse(parameters: argumentsWithoutCall)
 
       if options[optionParser.helpOption] != nil {
-        throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
+        throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpString(for: commandName))
       }
 
       if options[versionOption] != nil {
@@ -135,24 +135,22 @@ struct CallInformation {
       guard let outputPath = extraArguments.first where extraArguments.count == 1 else {
         throw InputParsingError.IllegalOption(
           error: "Output folder for the 'R.generated.swift' file is mandatory as last argument.",
-          helpString: optionParser.helpStringForCommandName(commandName)
+          helpString: optionParser.helpString(for: commandName)
         )
       }
 
-      let outputURL = NSURL(fileURLWithPath: outputPath)
+      let outputURL = URL(fileURLWithPath: outputPath)
 
-      var resourceValue: AnyObject?
-      try outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
-      if let isDirectory = (resourceValue as? NSNumber)?.boolValue where isDirectory {
-        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)!
+      if try outputURL.resourceValues(forKeys: [URLResourceKey.isDirectoryKey]).isDirectory == true {
+        self.outputURL = try outputURL.appendingPathComponent(ResourceFilename, isDirectory: false)
       } else {
         self.outputURL = outputURL
       }
 
-      let getFirstArgumentForOption = getFirstArgumentFromOptionData(options, helpString: optionParser.helpStringForCommandName(commandName))
+      let getFirstArgumentForOption = getFirstArgumentFromOptionData(options: options, helpString: optionParser.helpString(for: commandName))
 
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, defaultValue: environment["PROJECT_FILE_PATH"])
-      xcodeprojURL = NSURL(fileURLWithPath: xcodeprojPath)
+      xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
 
       targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
 
@@ -161,25 +159,25 @@ struct CallInformation {
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, defaultValue: environment["PRODUCT_MODULE_NAME"])
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
-      buildProductsDirURL = NSURL(fileURLWithPath: buildProductsDirPath)
+      buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
 
       let developerDirPath = try getFirstArgumentForOption(developerDirOption, defaultValue: environment["DEVELOPER_DIR"])
-      developerDirURL = NSURL(fileURLWithPath: developerDirPath)
+      developerDirURL = URL(fileURLWithPath: developerDirPath)
 
       let sourceRootPath = try getFirstArgumentForOption(sourceRootOption, defaultValue: environment["SOURCE_ROOT"])
-      sourceRootURL = NSURL(fileURLWithPath: sourceRootPath)
+      sourceRootURL = URL(fileURLWithPath: sourceRootPath)
 
       let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
-      sdkRootURL = NSURL(fileURLWithPath: sdkRootPath)
+      sdkRootURL = URL(fileURLWithPath: sdkRootPath)
     } catch let OptionKitError.InvalidOption(invalidOption) {
       throw InputParsingError.IllegalOption(
         error: "The option '\(invalidOption)' is invalid.",
-        helpString: optionParser.helpStringForCommandName(commandName)
+        helpString: optionParser.helpString(for: commandName)
       )
     }
   }
 
-  func URLForSourceTreeFolder(sourceTreeFolder: SourceTreeFolder) -> NSURL {
+  func URLForSourceTreeFolder(sourceTreeFolder: SourceTreeFolder) -> URL {
     switch sourceTreeFolder {
     case .BuildProductsDir:
       return buildProductsDirURL
@@ -203,14 +201,14 @@ private func getFirstArgumentFromOptionData(options: [Option:[String]], helpStri
     }
 }
 
-func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL? {
+func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: (SourceTreeFolder) -> URL) -> (path: Path) -> URL? {
     return { path in
         switch path {
         case let .Absolute(absolutePath):
-            return NSURL(fileURLWithPath: absolutePath)
+            return URL(fileURLWithPath: absolutePath)
         case let .RelativeTo(sourceTreeFolder, relativePath):
             let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-            return sourceTreeURL.URLByAppendingPathComponent(relativePath)
+            return try? sourceTreeURL.appendingPathComponent(relativePath)
         }
     }
 }

@@ -18,15 +18,15 @@ struct StringsGenerator: Generator {
     let groupedLocalized = localized.groupBySwiftNames { $0.0 }
 
     for (sanitizedName, duplicates) in groupedLocalized.duplicates {
-      warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedLocalized.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
+      warn(warning: "Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joined(separator: ", "))")
     }
 
     externalStruct = Struct(
@@ -43,7 +43,7 @@ struct StringsGenerator: Generator {
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
     let name = sanitizedSwiftName(filename)
-    let params = computeParams(filename, strings: strings)
+    let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
       comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
@@ -72,19 +72,19 @@ struct StringsGenerator: Generator {
 
     // Warnings about duplicates and empties
     for ls in strings {
-      let filenameLocale = ls.locale.withFilename(filename)
+      let filenameLocale = ls.locale.with(filename: filename)
       let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
+        warn(warning: "Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joined(separator: ", "))")
       }
 
       let empties = groupedKeys.empties
       if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
+        warn(warning: "Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
       }
       else if empties.count > 1 {
-        warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
+        warn(warning: "Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joined(separator: ", "))")
       }
 
       // Save uniques
@@ -102,23 +102,23 @@ struct StringsGenerator: Generator {
 
     // Warnings about missing translations
     for (locale, lss) in strings.groupBy({ $0.locale }) {
-      let filenameLocale = locale.withFilename(filename)
+      let filenameLocale = locale.with(filename: filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtract(lss.flatMap { $0.dictionary.keys })
+      let missing = sourceKeys.subtracting(lss.flatMap { $0.dictionary.keys })
 
       if missing.isEmpty {
         continue
       }
 
-      let paddedKeys = missing.sort().map { "'\($0)'" }
-      let paddedKeysString = paddedKeys.joinWithSeparator(", ")
+      let paddedKeys = missing.sorted().map { "'\($0)'" }
+      let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-      warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
+      warn(warning: "Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
     // Only include translation if it exists in Base
-    func includeTranslation(key: String) -> Bool {
+    func includeTranslation(_ key: String) -> Bool {
       if let baseKeys = baseKeys {
         return baseKeys.contains(key)
       }
@@ -135,9 +135,9 @@ struct StringsGenerator: Generator {
       var areCorrectFormatSpecifiers = true
 
       for (locale, _, ps) in keyParams {
-        if ps.any({ $0.spec == FormatSpecifier.TopType }) {
-          let name = locale.withFilename(filename)
-          warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
+        if ps.any(pred: { $0.spec == FormatSpecifier.TopType }) {
+          let name = locale.with(filename: filename)
+          warn(warning: "Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
           areCorrectFormatSpecifiers = false
         }
@@ -146,7 +146,7 @@ struct StringsGenerator: Generator {
       if !areCorrectFormatSpecifiers { continue }
 
       for (_, _, ps) in keyParams {
-        if let unified = params.unify(ps) {
+        if let unified = params.unify(with: ps) {
           params = unified
         }
         else {
@@ -163,12 +163,12 @@ struct StringsGenerator: Generator {
       results.append(values)
     }
 
-    for badKey in badFormatSpecifiersKeys.sort() {
+    for badKey in badFormatSpecifiersKeys.sorted() {
       let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
       if let params = fewParams.first {
-        let locales = params.flatMap { $0.0.localeDescription }.joinWithSeparator(", ")
-        warn("Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
+        let locales = params.flatMap { $0.0.localeDescription }.joined(separator: ", ")
+        warn(warning: "Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
       }
     }
 
@@ -181,7 +181,7 @@ struct StringsGenerator: Generator {
       .map { $0.0 }
       .flatMap { $0.localeDescription }
       .map { "\"\($0)\"" }
-      .joinWithSeparator(", ")
+      .joined(separator: ", ")
 
     return Let(
       comments: values.comments,
@@ -194,10 +194,10 @@ struct StringsGenerator: Generator {
 
   private static func stringFunction(values: StringValues) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(values)
+      return stringFunctionNoParams(values: values)
     }
     else {
-      return stringFunctionParams(values)
+      return stringFunctionParams(values: values)
     }
   }
 
@@ -219,7 +219,7 @@ struct StringsGenerator: Generator {
 
   private static func stringFunctionParams(values: StringValues) -> Function {
 
-    let params = values.params.enumerate().map { ix, param -> Function.Parameter in
+    let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let valueName = "value\(ix + 1)"
 
       if let paramName = param.name {
@@ -235,7 +235,7 @@ struct StringsGenerator: Generator {
       }
     }
 
-    let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
+    let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
 
     return Function(
       comments: values.comments,
@@ -252,7 +252,7 @@ struct StringsGenerator: Generator {
 }
 
 extension Locale {
-  func withFilename(filename: String) -> String {
+  func with(filename: String) -> String {
     switch self {
     case .None:
       return "'\(filename)'"
@@ -311,7 +311,7 @@ private struct StringValues {
       }
 
       let locales = values.flatMap { $0.0.localeDescription }
-      results.append("Locales: \(locales.joinWithSeparator(", "))")
+      results.append("Locales: \(locales.joined(separator: ", "))")
     }
 
     return results
