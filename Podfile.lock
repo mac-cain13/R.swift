@@ -6,7 +6,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   R.swift.Library:
-    :path: ./R.swift.Library
+    :path: "./R.swift.Library"
 
 SPEC CHECKSUMS:
   R.swift.Library: 31a487b65381f37a7d203a6f1f935b43c9be35b0
