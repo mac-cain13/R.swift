@@ -8,7 +8,6 @@
 
 import UIKit
 import XCTest
-@testable import ResourceApp
 
 class FontsTests: XCTestCase {
 

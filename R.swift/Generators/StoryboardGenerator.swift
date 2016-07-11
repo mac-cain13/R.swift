@@ -120,7 +120,7 @@ struct StoryboardGenerator: Generator {
           vc,
           Let(
             isStatic: false,
-            name: sanitizedSwiftName(identifier),
+            name: "_" + sanitizedSwiftName(identifier),
             typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
             value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
@@ -131,16 +131,19 @@ struct StoryboardGenerator: Generator {
 
     viewControllersWithResourceProperty
       .map { (vc, resource) in
-        Function(
+
+        let typeCast = vc.type.name == "UIViewController" ? "" : " as? \(vc.type.name)"
+
+        return Function(
           isStatic: false,
-          name: resource.name,
+          name: sanitizedSwiftName(vc.storyboardIdentifier!), //resource.name,
           generics: nil,
           parameters: [
             Function.Parameter(name: "_", type: Type._Void)
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+          body: "return UIStoryboard(resource: self).instantiateViewController(withIdentifier: \(resource.name).identifier)\(typeCast)"
         )
       }
       .forEach { functions.append($0) }

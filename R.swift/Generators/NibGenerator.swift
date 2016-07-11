@@ -139,7 +139,7 @@ struct NibGenerator: Generator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: viewInfo.view.asOptional(),
-          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
+          body: "return instantiateWithOwner(ownerOrNil: ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
         )
       }
 
