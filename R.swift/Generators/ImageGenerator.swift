@@ -1,3 +1,4 @@
+
 //
 //  Image.swift
 //  R.swift
@@ -65,15 +66,15 @@ struct ImageGenerator: Generator {
     let groupedFunctions = allFunctions.groupBySwiftNames { $0.name }
 
     for (sanitizedName, duplicates) in groupedFunctions.duplicates {
-      warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedFunctions.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 image because no swift identifier can be generated for image: \(empty)")
+      warn(warning: "Skipping 1 image because no swift identifier can be generated for image: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) images because no swift identifier can be generated for all of these images: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) images because no swift identifier can be generated for all of these images: \(empties.joined(separator: ", "))")
     }
 
     let imageLets = groupedFunctions

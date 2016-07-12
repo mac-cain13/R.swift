@@ -32,15 +32,15 @@ struct ColorGenerator: Generator {
     let groupedColors = palette.colors.groupBySwiftNames { $0.0 }
 
     for (sanitizedName, duplicates) in groupedColors.duplicates {
-      warn("Skipping \(duplicates.count) colors in palette '\(palette.filename)' because symbol '\(sanitizedName)' would be generated for all of these colors: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) colors in palette '\(palette.filename)' because symbol '\(sanitizedName)' would be generated for all of these colors: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedColors.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 color in palette '\(palette.filename)' because no swift identifier can be generated for image: \(empty)")
+      warn(warning: "Skipping 1 color in palette '\(palette.filename)' because no swift identifier can be generated for image: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) images in palette '\(palette.filename)' because no swift identifier can be generated for all of these images: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) images in palette '\(palette.filename)' because no swift identifier can be generated for all of these images: \(empties.joined(separator: ", "))")
     }
 
     return Struct(

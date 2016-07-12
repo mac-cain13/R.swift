@@ -9,16 +9,16 @@
 import Foundation
 
 protocol Unifiable {
-  func unify(other: Self) -> Self?
+  func unify(with: Self) -> Self?
 }
 
 extension Array where Element : Unifiable {
-  func unify(other: [Element]) -> [Element]? {
+  func unify(with other: [Element]) -> [Element]? {
     var result = self
 
-    for (ix, right) in other.enumerate() {
+    for (ix, right) in other.enumerated() {
       if let left = result[safe: ix] {
-        if let unified = left.unify(right) {
+        if let unified = left.unify(with: right) {
           result[ix] = unified
         }
         else {

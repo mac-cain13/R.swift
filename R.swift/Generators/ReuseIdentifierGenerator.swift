@@ -21,15 +21,15 @@ struct ReuseIdentifierGenerator: Generator {
     let groupedReusables = deduplicatedReusables.groupBySwiftNames { $0.identifier }
 
     for (name, duplicates) in groupedReusables.duplicates {
-      warn("Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedReusables.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: \(empty)")
+      warn(warning: "Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) reuseIdentifiers because no swift identifier can be generated for all of these reuseIdentifiers: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) reuseIdentifiers because no swift identifier can be generated for all of these reuseIdentifiers: \(empties.joined(separator: ", "))")
     }
 
     let reuseIdentifierProperties = groupedReusables

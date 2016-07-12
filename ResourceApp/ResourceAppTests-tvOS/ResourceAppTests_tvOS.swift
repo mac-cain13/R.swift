@@ -16,7 +16,7 @@ class ResourceAppTests_tvOS: XCTestCase {
   ]
 
   func testWarningsAreLogged() {
-    guard let logURL = NSBundle(forClass: ResourceAppTests_tvOS.self).URLForResource("rswift-tv", withExtension: "log") else {
+    guard let logURL = Bundle(forClass: ResourceAppTests_tvOS.self).URLForResource("rswift-tv", withExtension: "log") else {
       XCTFail("File rswift.log not found")
       return
     }

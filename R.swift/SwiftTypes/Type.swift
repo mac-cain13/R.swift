@@ -27,12 +27,12 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Character = Type(module: .StdLib, name: "Character")
   static let _CStringPointer = Type(module: .StdLib, name: "UnsafePointer<unichar>")
   static let _VoidPointer = Type(module: .StdLib, name: "UnsafePointer<Void>")
-  static let _NSURL = Type(module: "Foundation", name: "NSURL")
+  static let _URL = Type(module: "Foundation", name: "URL")
   static let _UINib = Type(module: "UIKit", name: "UINib")
   static let _UIView = Type(module: "UIKit", name: "UIView")
   static let _UIImage = Type(module: "UIKit", name: "UIImage")
-  static let _NSBundle = Type(module: "Foundation", name: "NSBundle")
-  static let _NSLocale = Type(module: "Foundation", name: "NSLocale")
+  static let _Bundle = Type(module: "Foundation", name: "Bundle")
+  static let _Locale = Type(module: "Foundation", name: "Locale")
   static let _UIStoryboard = Type(module: "UIKit", name: "UIStoryboard")
   static let _UITableViewCell = Type(module: "UIKit", name: "UITableViewCell")
   static let _UICollectionViewCell = Type(module: "UIKit", name: "UICollectionViewCell")
@@ -99,11 +99,11 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: false)
   }
 
-  func withGenericArgs(genericArgs: [TypeVar]) -> Type {
+  func withGenericArgs(_ genericArgs: [TypeVar]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 
-  func withGenericArgs(genericArgs: [Type]) -> Type {
+  func withGenericArgs(_ genericArgs: [Type]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 }

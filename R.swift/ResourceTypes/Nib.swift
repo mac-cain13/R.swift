@@ -23,14 +23,14 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
     let parserDelegate = NibParserDelegate();
 
-    let parser = NSXMLParser(contentsOfURL: url)!
+    let parser = XMLParser(contentsOf: url)!
     parser.delegate = parserDelegate
     parser.parse()
 
@@ -39,7 +39,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   }
 }
 
-private class NibParserDelegate: NSObject, NSXMLParserDelegate {
+private class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
@@ -48,7 +48,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+  @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
@@ -57,19 +57,19 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
       if isObjectsTagOpened {
         levelSinceObjectsTagOpened += 1;
 
-        if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
+        if let rootView = viewWithAttributes(attributeDict: attributeDict, elementName: elementName)
           where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
         }
       }
 
-      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+      if let reusable = reusableFromAttributes(attributeDict: attributeDict, elementName: elementName) {
         reusables.append(reusable)
       }
     }
   }
 
-  @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+  @objc func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = false;

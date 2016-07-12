@@ -1,9 +1,9 @@
 [submodule "Xcode.swift"]
 	path = Xcode.swift
-	url = https://github.com/mac-cain13/Xcode.swift.git
+	url = https://github.com/siemensikkema/Xcode.swift.git
 [submodule "OptionKit"]
 	path = OptionKit
-	url = https://github.com/mac-cain13/OptionKit.git
+	url = https://github.com/siemensikkema/OptionKit.git
 [submodule "R.swift.Library"]
 	path = R.swift.Library
-	url = https://mac-cain13@github.com/mac-cain13/R.swift.Library.git
+	url = https://github.com/siemensikkema/R.swift.Library.git

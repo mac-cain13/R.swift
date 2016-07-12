@@ -52,7 +52,7 @@ struct Let: Property {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
 
     let typeString: String

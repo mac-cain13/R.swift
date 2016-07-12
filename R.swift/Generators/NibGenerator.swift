@@ -39,15 +39,15 @@ struct NibGenerator: Generator {
     let groupedNibs = nibs.groupBySwiftNames { $0.name }
 
     for (name, duplicates) in groupedNibs.duplicates {
-      warn("Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) xibs because symbol '\(name)' would be generated for all of these xibs: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedNibs.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 xib because no swift identifier can be generated for xib: \(empty)")
+      warn(warning: "Skipping 1 xib because no swift identifier can be generated for xib: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) xibs because no swift identifier can be generated for all of these xibs: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) xibs because no swift identifier can be generated for all of these xibs: \(empties.joined(separator: ", "))")
     }
 
     internalStruct = Struct(
@@ -116,7 +116,7 @@ struct NibGenerator: Generator {
     let bundleLet = Let(
       isStatic: false,
       name: "bundle",
-      typeDefinition: .Inferred(Type._NSBundle),
+      typeDefinition: .Inferred(Type._Bundle),
       value: "_R.hostingBundle"
     )
 
@@ -139,7 +139,7 @@ struct NibGenerator: Generator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: viewInfo.view.asOptional(),
-          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
+          body: "return instantiateWithOwner(ownerOrNil: ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
         )
       }
 

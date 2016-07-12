@@ -59,32 +59,32 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
-    let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joinWithSeparator(", ") : ""
+    let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joined(separator: ", ") : ""
 
     let typealiasString = typealiasses
-      .sort { $0.alias < $1.alias }
-      .joinWithSeparator("\n")
+      .sorted { $0.alias < $1.alias }
+      .joined(separator: "\n")
 
     let varsString = properties
-      .sort {  $0.callName < $1.callName }
+      .sorted {  $0.callName < $1.callName }
       .map { $0.description }
-      .joinWithSeparator("\n")
+      .joined(separator: "\n")
     let functionsString = functions
-      .sort { $0.callName < $1.callName }
+      .sorted { $0.callName < $1.callName }
       .map { $0.description }
-      .joinWithSeparator("\n\n")
+      .joined(separator: "\n\n")
     let structsString = structs
-      .sort { $0.type.description < $1.type.description }
-      .joinWithSeparator("\n\n")
+      .sorted { $0.type.description < $1.type.description }
+      .joined(separator: "\n\n")
 
 
     // Private `init`, so that struct can't be initialized externally.
     let privateInit = "private init() {}"
 
     let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
-    let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
+    let bodyString = bodyComponents.joined(separator: "\n\n").indent(with: IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }

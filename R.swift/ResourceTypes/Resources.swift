@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ResourceParsingError: ErrorType {
+enum ResourceParsingError: ErrorProtocol {
   case UnsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
   case ParsingFailed(String)
 }
@@ -25,7 +25,7 @@ struct Resources {
     
   let reusables: [Reusable]
 
-  init(resourceURLs: [NSURL], fileManager: NSFileManager) {
+  init(resourceURLs: [URL], fileManager: FileManager) {
     assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
     images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
     colors = resourceURLs.flatMap { url in tryResourceParsing { try ColorPalette(url: url) } }
@@ -43,7 +43,7 @@ private func tryResourceParsing<T>(parse: () throws -> T) -> T? {
   do {
     return try parse()
   } catch let ResourceParsingError.ParsingFailed(humanReadableError) {
-    warn(humanReadableError)
+    warn(warning: humanReadableError)
     return nil
   } catch ResourceParsingError.UnsupportedExtension {
     return nil

@@ -21,7 +21,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     self.dictionary = dictionary
   }
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try LocalizableStrings.throwIfUnsupportedExtension(url.pathExtension)
 
     guard let filename = url.filename else {
@@ -32,7 +32,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     let locale = Locale(url: url)
 
     // Check to make sure url can be parsed as a dictionary
-    guard let nsDictionary = NSDictionary(contentsOfURL: url) else {
+    guard let nsDictionary = NSDictionary(contentsOf: url) else {
       throw ResourceParsingError.ParsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
@@ -40,9 +40,9 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     let dictionary: [String : (params: [StringParam], commentValue: String)]
     switch url.pathExtension {
     case "strings"?:
-      dictionary = try parseStrings(nsDictionary, source: locale.withFilename("\(filename).strings"))
+      dictionary = try parseStrings(nsDictionary, source: locale.with(filename: "\(filename).strings"))
     case "stringsdict"?:
-      dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
+      dictionary = try parseStringsdict(nsDictionary, source: locale.with(filename: "\(filename).stringsdict"))
     default:
       throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
     }
@@ -53,7 +53,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
   }
 }
 
-private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
   var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
 
   for (key, obj) in nsDictionary {
@@ -84,7 +84,7 @@ private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> 
   return dictionary
 }
 
-private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
 
   var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
 
@@ -98,11 +98,11 @@ private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws
       }
 
       do {
-        let params = try parseStringsdictParams(localizedFormat, dict: dict)
+        let params = try parseStringsdictParams(format: localizedFormat, dict: dict)
         dictionary[key] = (params, localizedFormat)
       }
       catch ResourceParsingError.ParsingFailed(let message) {
-        warn("\(message) in '\(key)' \(source)")
+        warn(warning: "\(message) in '\(key)' \(source)")
       }
     }
     else {
@@ -121,7 +121,7 @@ private func parseStringsdictParams(format: String, dict: [String: AnyObject]) t
   for part in parts {
     switch part {
     case .Reference(let reference):
-      params += try lookup(reference, dict: dict)
+      params += try lookup(reference, in: dict)
 
     case .Spec(let formatSpecifier):
       params.append(StringParam(name: nil, spec: formatSpecifier))
@@ -131,7 +131,7 @@ private func parseStringsdictParams(format: String, dict: [String: AnyObject]) t
   return params
 }
 
-func lookup(key: String, dict: [String: AnyObject], processedReferences: [String] = []) throws -> [StringParam] {
+func lookup(_ key: String, in dict: [String: AnyObject], with processedReferences: [String] = []) throws -> [StringParam] {
   var processedReferences = processedReferences
 
   if processedReferences.contains(key) {
@@ -165,14 +165,14 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
     for part in parts {
       switch part {
       case .Reference(let reference):
-        alternative += try lookup(reference, dict: dict, processedReferences: processedReferences)
+        alternative += try lookup(reference, in: dict, with: processedReferences)
 
       case .Spec(let formatSpecifier):
         alternative.append(StringParam(name: key, spec: formatSpecifier))
       }
     }
 
-    if let unified = results.unify(alternative) {
+    if let unified = results.unify(with: alternative) {
       results = unified
     }
     else {

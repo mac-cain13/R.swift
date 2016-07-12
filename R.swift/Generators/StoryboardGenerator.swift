@@ -16,25 +16,25 @@ struct StoryboardGenerator: Generator {
     let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
 
     for (name, duplicates) in groupedStoryboards.duplicates {
-      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joined(separator: ", "))")
     }
 
     let empties = groupedStoryboards.empties
     if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 storyboard because no swift identifier can be generated for storyboard: \(empty)")
+      warn(warning: "Skipping 1 storyboard because no swift identifier can be generated for storyboard: \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) storyboards because no swift identifier can be generated for all of these storyboards: \(empties.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(empties.count) storyboards because no swift identifier can be generated for all of these storyboards: \(empties.joined(separator: ", "))")
     }
 
     let storyboardStructs = groupedStoryboards
       .uniques
-      .map(StoryboardGenerator.storyboardStructForStoryboard)
+      .map(StoryboardGenerator.storyboardStruct)
 
     let storyboardProperties: [Property] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
 
         return Let(
           comments: ["Storyboard `\(storyboard.name)`."],
@@ -48,7 +48,7 @@ struct StoryboardGenerator: Generator {
     let storyboardFunctions: [Function] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
 
         return Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
@@ -84,14 +84,14 @@ struct StoryboardGenerator: Generator {
     )
   }
 
-  private static func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
+  private static func storyboardStruct(for storyboard: Storyboard) -> Struct {
 
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
     var properties: [Property] = [
       Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
 
     // Initial view controller
@@ -111,7 +111,7 @@ struct StoryboardGenerator: Generator {
       .groupBySwiftNames { $0.identifier }
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
-      warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")
+      warn(warning: "Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joined(separator: ", "))")
     }
 
     let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
@@ -120,7 +120,7 @@ struct StoryboardGenerator: Generator {
           vc,
           Let(
             isStatic: false,
-            name: sanitizedSwiftName(identifier),
+            name: "_" + sanitizedSwiftName(identifier),
             typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
             value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
@@ -131,16 +131,19 @@ struct StoryboardGenerator: Generator {
 
     viewControllersWithResourceProperty
       .map { (vc, resource) in
-        Function(
+
+        let typeCast = vc.type.name == "UIViewController" ? "" : " as? \(vc.type.name)"
+
+        return Function(
           isStatic: false,
-          name: resource.name,
+          name: sanitizedSwiftName(vc.storyboardIdentifier!), //resource.name,
           generics: nil,
           parameters: [
             Function.Parameter(name: "_", type: Type._Void)
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+          body: "return UIStoryboard(resource: self).instantiateViewController(withIdentifier: \(resource.name).identifier)\(typeCast)"
         )
       }
       .forEach { functions.append($0) }
@@ -166,7 +169,7 @@ struct StoryboardGenerator: Generator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateLines.joinWithSeparator("\n")
+        body: validateLines.joined(separator: "\n")
       )
       functions.append(validateFunction)
       implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))

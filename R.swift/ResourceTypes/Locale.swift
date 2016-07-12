@@ -31,9 +31,9 @@ enum Locale {
 }
 
 extension Locale {
-  init(url: NSURL) {
+  init(url: URL) {
     if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
-      let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
+      let lang = localeComponent.replacingOccurrences(of: ".lproj", with: "")
 
       if lang == "Base" {
         self = .Base

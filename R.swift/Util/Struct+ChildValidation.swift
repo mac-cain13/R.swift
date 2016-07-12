@@ -39,7 +39,7 @@ extension Struct {
         returnType: Type._Void,
         body: validatableStructs
           .map { "try \($0.type).validate()" }
-          .joinWithSeparator("\n")
+          .joined(separator: "\n")
       )
     )
     

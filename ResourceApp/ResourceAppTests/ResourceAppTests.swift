@@ -46,7 +46,7 @@ class ResourceAppTests: XCTestCase {
   ]
 
   func testWarningsAreLogged() {
-    guard let logURL = NSBundle(forClass: ResourceAppTests.self).URLForResource("rswift", withExtension: "log") else {
+    guard let logURL = Bundle(forClass: ResourceAppTests.self).URLForResource("rswift", withExtension: "log") else {
       XCTFail("File rswift.log not found")
       return
     }

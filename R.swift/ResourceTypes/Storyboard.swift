@@ -37,14 +37,14 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
       .first
   }
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Storyboard.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
     let parserDelegate = StoryboardParserDelegate()
 
-    let parser = NSXMLParser(contentsOfURL: url)!
+    let parser = XMLParser(contentsOf: url)!
     parser.delegate = parserDelegate
     parser.parse()
 
@@ -61,7 +61,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let type: Type
     private(set) var segues: [Segue]
 
-    private mutating func addSegue(segue: Segue) {
+    private mutating func add(segue: Segue) {
       segues.append(segue)
     }
   }
@@ -77,7 +77,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let referencedIdentifier: String?
     let bundleIdentifier: String?
 
-    func resolveWithStoryboards(storyboards: [Storyboard]) -> ResolvedResult {
+    func resolve(with storyboards: [Storyboard]) -> ResolvedResult {
       if nil != bundleIdentifier {
         // Can't resolve storyboard in other bundles
         return .CustomBundle
@@ -111,7 +111,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   }
 }
 
-private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
+private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var viewControllers: [Storyboard.ViewController] = []
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
@@ -121,7 +121,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   // State
   var currentViewController: (String, Storyboard.ViewController)?
 
-  @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+  @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "document":
       if let initialViewController = attributeDict["initialViewController"] {
@@ -135,7 +135,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
       if let customType = customType where attributeDict["kind"] != "custom" {
-        warn("Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
+        warn(warning: "Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
       }
 
       if let segueIdentifier = attributeDict["identifier"],
@@ -145,7 +145,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         let type = customType ?? Type._UIStoryboardSegue
 
         let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
-        currentViewController?.1.addSegue(segue)
+        currentViewController?.1.add(segue: segue)
       }
 
     case "image":
@@ -165,17 +165,17 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     default:
-      if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
+      if let viewController = viewControllerFromAttributes(attributeDict: attributeDict, elementName: elementName) {
         currentViewController = (elementName, viewController)
       }
 
-      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+      if let reusable = reusableFromAttributes(attributeDict: attributeDict, elementName: elementName) {
         reusables.append(reusable)
       }
     }
   }
 
-  @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+  @objc func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     if let currentViewController = currentViewController where elementName == currentViewController.0 {
       viewControllers.append(currentViewController.1)
       self.currentViewController = nil
