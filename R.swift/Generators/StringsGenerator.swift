@@ -230,7 +230,7 @@ struct StringsGenerator: Generator {
           return Function.Parameter(name: valueName, type: param.spec.type)
         }
         else {
-          return Function.Parameter(name: "_", localName: valueName, type: param.spec.type)
+          return Function.Parameter(name: valueName, type: param.spec.type)
         }
       }
     }
