@@ -51,7 +51,7 @@ struct ReuseIdentifierGenerator: Generator {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,
-      name: reusable.identifier,
+      name: SwiftIdentifier(name: reusable.identifier),
       typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
       value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )

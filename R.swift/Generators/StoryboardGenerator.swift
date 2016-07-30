@@ -120,7 +120,7 @@ struct StoryboardGenerator: Generator {
           vc,
           Let(
             isStatic: false,
-            name: sanitizedSwiftName(identifier),
+            name: SwiftIdentifier(name: identifier),
             typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
             value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
@@ -153,7 +153,7 @@ struct StoryboardGenerator: Generator {
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
         vc.storyboardIdentifier.map {
-          "if _R.storyboard.\(sanitizedSwiftName(storyboard.name))().\(sanitizedSwiftName($0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
+          "if _R.storyboard.\(SwiftIdentifier(name: storyboard.name))().\(SwiftIdentifier(name: $0))() == nil { throw ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
       }
     let validateLines = validateImagesLines + validateViewControllersLines
@@ -174,7 +174,7 @@ struct StoryboardGenerator: Generator {
 
     // Return
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
+      type: Type(module: .Host, name: SwiftIdentifier(name: storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
       properties: properties,

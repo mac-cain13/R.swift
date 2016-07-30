@@ -83,24 +83,24 @@ struct NibGenerator: Generator {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", bundle: ...)`"],
       isStatic: true,
-      name: nib.name,
+      name: SwiftIdentifier(name: nib.name),
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void)
       ],
       doesThrow: false,
       returnType: Type._UINib,
-      body: "return UINib(resource: R.nib.\(sanitizedSwiftName(nib.name)))"
+      body: "return UINib(resource: R.nib.\(SwiftIdentifier(name: nib.name)))"
     )
   }
 
   private static func nibVarForNib(nib: Nib) -> Let {
-    let nibStructName = sanitizedSwiftName("_\(nib.name)")
-    let structType = Type(module: .Host, name: "_R.nib.\(nibStructName)")
+    let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
+    let structType = Type(module: .Host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
     return Let(
       comments: ["Nib `\(nib.name)`."],
       isStatic: true,
-      name: nib.name,
+      name: SwiftIdentifier(name: nib.name),
       typeDefinition: .Inferred(structType),
       value: "\(structType)()"
     )
@@ -110,7 +110,7 @@ struct NibGenerator: Generator {
 
     let instantiateParameters = [
       Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
-      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: "[NSObject : AnyObject]", optional: true), defaultValue: "nil")
+      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: SwiftIdentifier(rawValue: "[NSObject : AnyObject]"), optional: true), defaultValue: "nil")
     ]
 
     let bundleLet = Let(
@@ -134,7 +134,7 @@ struct NibGenerator: Generator {
         let viewTypeString = viewInfo.view.description
         return Function(
           isStatic: false,
-          name: "\(viewInfo.ordinal.word)View",
+          name: SwiftIdentifier(name: "\(viewInfo.ordinal.word)View"),
           generics: nil,
           parameters: instantiateParameters,
           doesThrow: false,
@@ -161,9 +161,9 @@ struct NibGenerator: Generator {
       reuseProtocols = []
     }
 
-    let sanitizedName = sanitizedSwiftName(nib.name, lowercaseFirstCharacter: false)
+    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
     return Struct(
-        type: Type(module: .Host, name: "_\(sanitizedName)"),
+        type: Type(module: .Host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
         implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
         typealiasses: reuseTypealiasses,
         properties: [bundleLet, nameVar] + reuseIdentifierProperties,

@@ -34,7 +34,7 @@ struct ResourceFileGenerator: Generator {
         return Let(
           comments: ["Resource file `\($0.fullname)`."],
           isStatic: true,
-          name: $0.fullname,
+          name: SwiftIdentifier(name: $0.fullname),
           typeDefinition: .Inferred(Type.FileResource),
           value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))"
           )
@@ -50,14 +50,14 @@ struct ResourceFileGenerator: Generator {
           Function(
             comments: ["`bundle.URLForResource(\"\(filename)\", withExtension: \(pathExtension))`"],
             isStatic: true,
-            name: fullname,
+            name: SwiftIdentifier(name: fullname),
             generics: nil,
             parameters: [
               Function.Parameter(name: "_", type: Type._Void)
             ],
             doesThrow: false,
             returnType: Type._NSURL.asOptional(),
-            body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle.URLForResource(fileResource)"
+            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.URLForResource(fileResource)"
           )
         ]
       }

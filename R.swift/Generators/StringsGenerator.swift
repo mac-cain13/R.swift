@@ -42,7 +42,7 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
-    let name = sanitizedSwiftName(filename)
+    let name = SwiftIdentifier(name: filename)
     let params = computeParams(filename, strings: strings)
 
     return Struct(
@@ -186,7 +186,7 @@ struct StringsGenerator: Generator {
     return Let(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       typeDefinition: .Inferred(Type.StringResource),
       value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)])"
     )
@@ -206,7 +206,7 @@ struct StringsGenerator: Generator {
     return Function(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void)
@@ -240,7 +240,7 @@ struct StringsGenerator: Generator {
     return Function(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: params,
       doesThrow: false,

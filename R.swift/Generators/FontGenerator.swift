@@ -18,7 +18,7 @@ struct FontGenerator: Generator {
       Let(
         comments: ["Font `\($0.name)`."],
         isStatic: true,
-        name: $0.name,
+        name: SwiftIdentifier(name: $0.name),
         typeDefinition: .Inferred(Type.FontResource),
         value: "FontResource(fontName: \"\($0.name)\")"
       )
@@ -39,14 +39,14 @@ struct FontGenerator: Generator {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
       isStatic: true,
-      name: font.name,
+      name: SwiftIdentifier(name: font.name),
       generics: nil,
       parameters: [
         Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
       ],
       doesThrow: false,
       returnType: Type._UIFont.asOptional(),
-      body: "return UIFont(resource: \(sanitizedSwiftName(font.name)), size: size)"
+      body: "return UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
     )
   }
 }

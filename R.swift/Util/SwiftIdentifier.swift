@@ -14,7 +14,7 @@ private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: 
  Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
  Special rules: Can't begin with a number
  */
-struct SwiftIdentifier : CustomStringConvertible, Hashable {
+struct SwiftIdentifier : CustomStringConvertible {
   let description: String
 
   init(name: String, lowercaseFirstCharacter: Bool = true) {
@@ -36,6 +36,12 @@ struct SwiftIdentifier : CustomStringConvertible, Hashable {
     }
   }
 
+  init(rawValue: String) {
+    description = rawValue
+  }
+}
+
+extension SwiftIdentifier : Hashable {
   var hashValue: Int {
     return description.hashValue
   }
@@ -45,22 +51,27 @@ func ==(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {
   return lhs.description == rhs.description
 }
 
-func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
-  var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
+extension SwiftIdentifier : StringLiteralConvertible {
+  typealias StringLiteralType = String
+  typealias UnicodeScalarLiteralType = String
+  typealias ExtendedGraphemeClusterLiteralType = String
 
-  let firstComponent = nameComponents.removeAtIndex(0)
-  let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
+  init(stringLiteral value: StringLiteralType) {
+    description = value
 
-  let regex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
-  let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
-  let sanitizedSwiftName = regex.stringByReplacingMatchesInString(cleanedSwiftName, options: NSMatchingOptions(rawValue: 0), range: fullRange, withTemplate: "")
-
-  let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
-  if SwiftKeywords.contains(capitalizedSwiftName) {
-    return "`\(capitalizedSwiftName)`"
+    if self != SwiftIdentifier(name: value, lowercaseFirstCharacter: false) {
+      assertionFailure("'\(value)' not a correct SwiftIdentifier")
+    }
   }
 
-  return capitalizedSwiftName // .isEmpty ? nil : capitalizedSwiftName
+  init(unicodeScalarLiteral value: StringLiteralType) {
+    description = value
+  }
+
+  init(extendedGraphemeClusterLiteral value: StringLiteralType) {
+    description = value
+  }
+
 }
 
 struct SwiftNameGroups<T> {

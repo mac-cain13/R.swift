@@ -28,7 +28,7 @@ struct ColorGenerator: Generator {
   private static func colorStructFromPalette(palette: ColorPalette) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
-    let name = sanitizedSwiftName(palette.filename)
+    let name = SwiftIdentifier(name: palette.filename)
     let groupedColors = palette.colors.groupBySwiftIdentifiers { $0.0 }
 
     for (sanitizedName, duplicates) in groupedColors.duplicates {
@@ -60,7 +60,7 @@ struct ColorGenerator: Generator {
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
       ],
       isStatic: true,
-      name: name,
+      name: SwiftIdentifier(name: name),
       typeDefinition: .Inferred(Type.ColorResource),
       value: "ColorResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
     )
@@ -74,7 +74,7 @@ struct ColorGenerator: Generator {
         "UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
       ],
       isStatic: true,
-      name: name,
+      name: SwiftIdentifier(name: name),
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void)
