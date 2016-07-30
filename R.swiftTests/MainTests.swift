@@ -41,7 +41,7 @@ class MainTests: XCTestCase {
     // Use XCTAssert and related functions to verify your tests produce the correct results.
 
     swiftNameData.forEach {
-      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseFirstCharacter: true)
+      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseFirstCharacter: true).description
       XCTAssertEqual(sanitizedResult, $0.1)
     }
   }
