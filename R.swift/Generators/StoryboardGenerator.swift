@@ -14,8 +14,7 @@ struct StoryboardGenerator: Generator {
 
   init(storyboards: [Storyboard]) {
     let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
-
-    groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "storyboard")
+    groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardStructs = groupedStoryboards
       .uniques

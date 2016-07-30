@@ -14,7 +14,6 @@ struct ResourceFileGenerator: Generator {
 
   init(resourceFiles: [ResourceFile]) {
     let groupedResourceFiles = resourceFiles.groupBySwiftIdentifiers { $0.fullname }
-
     groupedResourceFiles.printWarningsForDuplicatesAndEmpties(source: "resource file", result: "file")
 
     let resourceFileProperties: [Property] = groupedResourceFiles

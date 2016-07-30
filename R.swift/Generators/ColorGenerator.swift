@@ -14,6 +14,9 @@ struct ColorGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(colorPalettes palettes: [ColorPalette]) {
+    let groupedPalettes = palettes.groupBySwiftIdentifiers { $0.filename }
+    groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
+
     externalStruct = Struct(
       comments: ["This `R.color` struct is generated, and contains static references to \(palettes.count) color palettes."],
       type: Type(module: .Host, name: "color"),
@@ -21,7 +24,7 @@ struct ColorGenerator: Generator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: palettes.flatMap(ColorGenerator.colorStructFromPalette)
+      structs: groupedPalettes.uniques.flatMap(ColorGenerator.colorStructFromPalette)
     )
   }
 
