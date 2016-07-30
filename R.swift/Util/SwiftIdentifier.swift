@@ -78,6 +78,26 @@ struct SwiftNameGroups<T> {
   let uniques: [T]
   let duplicates: [(SwiftIdentifier, [String])] // Identifiers that result in duplicate Swift names
   let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
+
+  func printWarningsForDuplicatesAndEmpties(source source: String, container: String? = nil, result: String) {
+
+    let sourceSingular = [source, container].flatMap { $0 }.joinWithSeparator(" ")
+    let sourcePlural = ["\(source)s", container].flatMap { $0 }.joinWithSeparator(" ")
+
+    let resultSingular = result
+    let resultPlural = "\(result)s"
+
+    for (sanitizedName, dups) in duplicates {
+      warn("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName)' would be generated for all of these \(resultPlural): \(dups.joinWithSeparator(", "))")
+    }
+
+    if let empty = empties.first where empties.count == 1 {
+      warn("Skipping 1 \(sourceSingular) because no swift identifier can be generated for \(resultSingular): \(empty)")
+    }
+    else if empties.count > 1 {
+      warn("Skipping \(empties.count) \(sourcePlural) because no swift identifier can be generated for all of these \(resultPlural): \(empties.joinWithSeparator(", "))")
+    }
+  }
 }
 
 extension SequenceType {

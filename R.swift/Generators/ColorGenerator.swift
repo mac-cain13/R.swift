@@ -31,17 +31,7 @@ struct ColorGenerator: Generator {
     let name = SwiftIdentifier(name: palette.filename)
     let groupedColors = palette.colors.groupBySwiftIdentifiers { $0.0 }
 
-    for (sanitizedName, duplicates) in groupedColors.duplicates {
-      warn("Skipping \(duplicates.count) colors in palette '\(palette.filename)' because symbol '\(sanitizedName)' would be generated for all of these colors: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedColors.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 color in palette '\(palette.filename)' because no swift identifier can be generated for image: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) images in palette '\(palette.filename)' because no swift identifier can be generated for all of these images: \(empties.joinWithSeparator(", "))")
-    }
+    groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", container: "in palette '\(palette.filename)'", result: "color")
 
     return Struct(
       comments: ["This `R.color.\(name)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],

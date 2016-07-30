@@ -17,17 +17,7 @@ struct StringsGenerator: Generator {
     let localized = localizableStrings.groupBy { $0.filename }
     let groupedLocalized = localized.groupBySwiftIdentifiers { $0.0 }
 
-    for (sanitizedName, duplicates) in groupedLocalized.duplicates {
-      warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedLocalized.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joinWithSeparator(", "))")
-    }
+    groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
     externalStruct = Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
@@ -75,17 +65,7 @@ struct StringsGenerator: Generator {
       let filenameLocale = ls.locale.withFilename(filename)
       let groupedKeys = ls.dictionary.keys.groupBySwiftIdentifiers { $0 }
 
-      for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
-      }
-
-      let empties = groupedKeys.empties
-      if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
-      }
-      else if empties.count > 1 {
-        warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
-      }
+      groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
       // Save uniques
       for key in groupedKeys.uniques {

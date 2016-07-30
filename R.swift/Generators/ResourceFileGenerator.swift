@@ -15,17 +15,7 @@ struct ResourceFileGenerator: Generator {
   init(resourceFiles: [ResourceFile]) {
     let groupedResourceFiles = resourceFiles.groupBySwiftIdentifiers { $0.fullname }
 
-    for (name, duplicates) in groupedResourceFiles.duplicates {
-      warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedResourceFiles.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 resource file because no swift identifier can be generated for file: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) resource files because no swift identifier can be generated for all of these files: \(empties.joinWithSeparator(", "))")
-    }
+    groupedResourceFiles.printWarningsForDuplicatesAndEmpties(source: "resource file", result: "file")
 
     let resourceFileProperties: [Property] = groupedResourceFiles
       .uniques

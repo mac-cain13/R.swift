@@ -15,17 +15,7 @@ struct StoryboardGenerator: Generator {
   init(storyboards: [Storyboard]) {
     let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
 
-    for (name, duplicates) in groupedStoryboards.duplicates {
-      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedStoryboards.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 storyboard because no swift identifier can be generated for storyboard: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) storyboards because no swift identifier can be generated for all of these storyboards: \(empties.joinWithSeparator(", "))")
-    }
+    groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "storyboard")
 
     let storyboardStructs = groupedStoryboards
       .uniques
