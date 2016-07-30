@@ -13,7 +13,7 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
+    let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
 
     for (name, duplicates) in groupedStoryboards.duplicates {
       warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
@@ -108,7 +108,7 @@ struct StoryboardGenerator: Generator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupBySwiftNames { $0.identifier }
+      .groupBySwiftIdentifiers { $0.identifier }
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
       warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")

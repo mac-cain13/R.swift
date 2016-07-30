@@ -18,7 +18,7 @@ struct ReuseIdentifierGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupBySwiftNames { $0.identifier }
+    let groupedReusables = deduplicatedReusables.groupBySwiftIdentifiers { $0.identifier }
 
     for (name, duplicates) in groupedReusables.duplicates {
       warn("Skipping \(duplicates.count) reuseIdentifiers because symbol '\(name)' would be generated for all of these reuseIdentifiers: \(duplicates.joinWithSeparator(", "))")

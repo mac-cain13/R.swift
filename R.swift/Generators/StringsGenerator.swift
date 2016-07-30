@@ -15,7 +15,7 @@ struct StringsGenerator: Generator {
   init(localizableStrings: [LocalizableStrings]) {
 
     let localized = localizableStrings.groupBy { $0.filename }
-    let groupedLocalized = localized.groupBySwiftNames { $0.0 }
+    let groupedLocalized = localized.groupBySwiftIdentifiers { $0.0 }
 
     for (sanitizedName, duplicates) in groupedLocalized.duplicates {
       warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
@@ -73,7 +73,7 @@ struct StringsGenerator: Generator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
+      let groupedKeys = ls.dictionary.keys.groupBySwiftIdentifiers { $0 }
 
       for (sanitizedName, duplicates) in groupedKeys.duplicates {
         warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")

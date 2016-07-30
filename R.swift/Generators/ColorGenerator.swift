@@ -29,7 +29,7 @@ struct ColorGenerator: Generator {
     if palette.colors.isEmpty { return nil }
 
     let name = sanitizedSwiftName(palette.filename)
-    let groupedColors = palette.colors.groupBySwiftNames { $0.0 }
+    let groupedColors = palette.colors.groupBySwiftIdentifiers { $0.0 }
 
     for (sanitizedName, duplicates) in groupedColors.duplicates {
       warn("Skipping \(duplicates.count) colors in palette '\(palette.filename)' because symbol '\(sanitizedName)' would be generated for all of these colors: \(duplicates.joinWithSeparator(", "))")

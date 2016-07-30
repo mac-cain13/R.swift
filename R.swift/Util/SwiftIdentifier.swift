@@ -1,5 +1,5 @@
 //
-//  SanitizedSwiftName.swift
+//  SwiftIdentifier.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 11-12-15.
@@ -8,10 +8,43 @@
 
 import Foundation
 
+private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
+
 /*
-Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
-Special rules: Can't begin with a number
-*/
+ Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
+ Special rules: Can't begin with a number
+ */
+struct SwiftIdentifier : CustomStringConvertible, Hashable {
+  let description: String
+
+  init(name: String, lowercaseFirstCharacter: Bool = true) {
+    var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
+
+    let firstComponent = nameComponents.removeAtIndex(0)
+    let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
+
+    let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
+    let sanitizedSwiftName = numberRegex.stringByReplacingMatchesInString(cleanedSwiftName, options: [], range: fullRange, withTemplate: "")
+
+    let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
+
+    if SwiftKeywords.contains(capitalizedSwiftName) {
+      description = "`\(capitalizedSwiftName)`"
+    }
+    else {
+      description = capitalizedSwiftName
+    }
+  }
+
+  var hashValue: Int {
+    return description.hashValue
+  }
+}
+
+func ==(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {
+  return lhs.description == rhs.description
+}
+
 func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> String {
   var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
 
@@ -32,15 +65,16 @@ func sanitizedSwiftName(name: String, lowercaseFirstCharacter: Bool = true) -> S
 
 struct SwiftNameGroups<T> {
   let uniques: [T]
-  let duplicates: [(String, [String])] // Identifiers that result in duplicate Swift names
+  let duplicates: [(SwiftIdentifier, [String])] // Identifiers that result in duplicate Swift names
   let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
 }
 
 extension SequenceType {
-  func groupBySwiftNames(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
-    var groupedBy = groupBy { sanitizedSwiftName(identifierSelector($0)) }
-    let empties = groupedBy[""]?.map { "'\(identifierSelector($0))'" }.sort()
-    groupedBy[""] = nil
+  func groupBySwiftIdentifiers(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
+    var groupedBy = groupBy { SwiftIdentifier(name: identifierSelector($0)) }
+    let empty = SwiftIdentifier(name: "")
+    let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sort()
+    groupedBy[empty] = nil
 
     let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
     let duplicates = groupedBy

@@ -62,7 +62,7 @@ struct ImageGenerator: Generator {
       }
 
     let allFunctions = assetFolderImageFunctions + imageFunctions
-    let groupedFunctions = allFunctions.groupBySwiftNames { $0.name }
+    let groupedFunctions = allFunctions.groupBySwiftIdentifiers { $0.name }
 
     for (sanitizedName, duplicates) in groupedFunctions.duplicates {
       warn("Skipping \(duplicates.count) images because symbol '\(sanitizedName)' would be generated for all of these images: \(duplicates.joinWithSeparator(", "))")

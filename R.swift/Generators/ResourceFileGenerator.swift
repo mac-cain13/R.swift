@@ -13,7 +13,7 @@ struct ResourceFileGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(resourceFiles: [ResourceFile]) {
-    let groupedResourceFiles = resourceFiles.groupBySwiftNames { $0.fullname }
+    let groupedResourceFiles = resourceFiles.groupBySwiftIdentifiers { $0.fullname }
 
     for (name, duplicates) in groupedResourceFiles.duplicates {
       warn("Skipping \(duplicates.count) resource files because symbol '\(name)' would be generated for all of these files: \(duplicates.joinWithSeparator(", "))")
