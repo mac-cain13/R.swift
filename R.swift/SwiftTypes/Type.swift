@@ -27,7 +27,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Character = Type(module: .StdLib, name: "Character")
   static let _CStringPointer = Type(module: .StdLib, name: "UnsafePointer<unichar>")
   static let _VoidPointer = Type(module: .StdLib, name: "UnsafePointer<Void>")
-  static let _NSURL = Type(module: "Foundation", name: "NSURL")
+  static let _NSURL = Type(module: "Foundation", name: "URL")
   static let _UINib = Type(module: "UIKit", name: "UINib")
   static let _UIView = Type(module: "UIKit", name: "UIView")
   static let _UIImage = Type(module: "UIKit", name: "UIImage")
