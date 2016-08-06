@@ -208,9 +208,7 @@ struct StringsGenerator: Generator {
       isStatic: true,
       name: values.key,
       generics: nil,
-      parameters: [
-        Function.Parameter(name: "_", type: Type._Void)
-      ],
+      parameters: [],
       doesThrow: false,
       returnType: Type._String,
       body: "return \(values.localizedString)"
@@ -226,12 +224,7 @@ struct StringsGenerator: Generator {
         return Function.Parameter(name: paramName, localName: valueName, type: param.spec.type)
       }
       else {
-        if ix == 0 {
-          return Function.Parameter(name: valueName, type: param.spec.type)
-        }
-        else {
-          return Function.Parameter(name: valueName, type: param.spec.type)
-        }
+        return Function.Parameter(name: valueName, type: param.spec.type)
       }
     }
 
