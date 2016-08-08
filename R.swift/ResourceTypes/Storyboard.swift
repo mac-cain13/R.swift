@@ -119,7 +119,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   var reusables: [Reusable] = []
 
   // State
-  var currentViewController: (String, Storyboard.ViewController)?
+  var currentViewController: Storyboard.ViewController?
 
   @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
@@ -145,7 +145,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         let type = customType ?? Type._UIStoryboardSegue
 
         let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
-        currentViewController?.1.addSegue(segue)
+        currentViewController?.addSegue(segue)
       }
 
     case "image":
@@ -166,7 +166,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
 
     default:
       if let viewController = viewControllerFromAttributes(attributeDict, elementName: elementName) {
-        currentViewController = (elementName, viewController)
+        currentViewController = viewController
       }
 
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
@@ -176,9 +176,20 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-    if let currentViewController = currentViewController where elementName == currentViewController.0 {
-      viewControllers.append(currentViewController.1)
-      self.currentViewController = nil
+
+    // We keep the current view controller open to collect segues until the closing scene:
+    // <scene>
+    //   <viewController>
+    //     ...
+    //     <segue />
+    //   </viewController>
+    //   <segue />
+    // </scene>
+    if elementName == "scene" {
+      if let currentViewController = currentViewController {
+        viewControllers.append(currentViewController)
+        self.currentViewController = nil
+      }
     }
   }
 
