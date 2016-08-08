@@ -66,6 +66,7 @@
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
 		DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF559B81CA4932F009B8C51 /* Rswift.framework */; };
 		E20983241D585E78005ACBAA /* SegueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20983231D585E78005ACBAA /* SegueTests.swift */; };
+		E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20983251D585F8C005ACBAA /* Xib with ViewController.xib */; };
 		E2156B631CC4042900F341DC /* Settings.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B651CC4042900F341DC /* Settings.strings */; };
 		E2156B681CC41EB400F341DC /* Generic.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B671CC41EB400F341DC /* Generic.strings */; };
 		E2156B6A1CC4292600F341DC /* Duplicate.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B691CC4292600F341DC /* Duplicate.strings */; };
@@ -175,6 +176,7 @@
 		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		DEF559B81CA4932F009B8C51 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../R.swift.Library/build/Debug-appletvos/Rswift.framework"; sourceTree = "<group>"; };
 		E20983231D585E78005ACBAA /* SegueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTests.swift; sourceTree = "<group>"; };
+		E20983251D585F8C005ACBAA /* Xib with ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Xib with ViewController.xib"; sourceTree = "<group>"; };
 		E2156B641CC4042900F341DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B661CC4043C00F341DC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B671CC41EB400F341DC /* Generic.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Generic.strings; sourceTree = "<group>"; };
@@ -341,6 +343,7 @@
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
+				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */,
+				E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				E2156B631CC4042900F341DC /* Settings.strings in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
