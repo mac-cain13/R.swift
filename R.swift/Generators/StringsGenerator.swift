@@ -193,7 +193,7 @@ struct StringsGenerator: Generator {
       isStatic: true,
       name: values.key,
       typeDefinition: .Inferred(Type.StringResource),
-      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)])"
+      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)], comment: nil)"
     )
   }
 
