@@ -13,12 +13,12 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
 
   let filename: String
   let locale: Locale
-  let dictionary: [String : (params: [StringParam], commentValue: String)]
+  let entries: [Entry]
 
-  init(filename: String, locale: Locale, dictionary: [String : (params: [StringParam], commentValue: String)]) {
+  init(filename: String, locale: Locale, entries: [Entry]) {
     self.filename = filename
     self.locale = locale
-    self.dictionary = dictionary
+    self.entries = entries
   }
 
   init(url: NSURL) throws {
@@ -37,56 +37,218 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     }
 
     // Parse dicts from NSDictionary
-    let dictionary: [String : (params: [StringParam], commentValue: String)]
+    let entries: [Entry]
     switch url.pathExtension {
     case "strings"?:
-      dictionary = try parseStrings(nsDictionary, source: locale.withFilename("\(filename).strings"))
+      entries = try parseStrings(String(contentsOfURL: url), source: locale.withFilename("\(filename).strings"))
     case "stringsdict"?:
-      dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
+      entries = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
     default:
       throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
     }
 
     self.filename = filename
     self.locale = locale
-    self.dictionary = dictionary
+    self.entries = entries
+  }
+  
+  var keys: [String] {
+    return entries.map { $0.key }
+  }
+  
+  struct Entry {
+    let key: String
+    let val: String
+    let params: [StringParam]
+    let comment: String?
   }
 }
 
-private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
-  var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
-
-  for (key, obj) in nsDictionary {
-    if let
-      key = key as? String,
-      val = obj as? String
-    {
-      var params: [StringParam] = []
-
-      for part in FormatPart.formatParts(formatString: val) {
-        switch part {
-        case .Reference:
-          throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(key) = \(val)")
-
-        case .Spec(let formatSpecifier):
-          params.append(StringParam(name: nil, spec: formatSpecifier))
-        }
+private func parseStrings(stringsFile: String, source: String) throws -> [LocalizableStrings.Entry] {
+  var entries: [LocalizableStrings.Entry] = []
+  
+  for parsed in StringsFileEntry.parse(stringsFile) {
+    var params: [StringParam] = []
+    
+    for part in FormatPart.formatParts(formatString: parsed.val) {
+      switch part {
+      case .Reference:
+        throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(parsed.key) = \(parsed.val)")
+        
+      case .Spec(let formatSpecifier):
+        params.append(StringParam(name: nil, spec: formatSpecifier))
       }
+    }
+    
+    entries.append(LocalizableStrings.Entry(key: parsed.key, val: parsed.val, params: params, comment: parsed.comment))
+  }
+  
+  return entries
+}
 
+// MARK: -
 
-      dictionary[key] = (params, val)
+private let unquotedStringCharacters: NSCharacterSet = {
+  let set = NSMutableCharacterSet.whitespaceAndNewlineCharacterSet()
+  set.invert()
+  set.removeCharactersInString("\\\"=;")
+  return set
+}()
+
+private extension NSScanner {
+  func scan(s: String) -> Bool {
+    return scanString(s, intoString: nil)
+  }
+  
+  func scanUpTo(s: String) -> String? {
+    var result: NSString?
+    guard scanUpToString(s, intoString: &result) else { return nil }
+    return result as String?
+  }
+  
+  func scanCharacters(set: NSCharacterSet) -> String? {
+    var result: NSString?
+    guard scanCharactersFromSet(set, intoString: &result) else { return nil }
+    return result as String?
+  }
+  
+  func scanComment() -> StringsFileEntry.Comment? {
+    if scan("/*") {
+      let result = scanUpTo("*/")
+      scan("*/")
+      return .block(result ?? "")
+    }
+    else if scan("//") {
+      let result = scanUpTo("\n")
+      scan("\n")
+      return .line(result ?? "")
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Non-string value in \(source): \(key) = \(obj)")
+      return nil
     }
   }
-
-  return dictionary
+  
+  func skipCommentsAndWhitespace() {
+    while !atEnd {
+      if scanComment() == nil &&
+        scanCharacters(.whitespaceAndNewlineCharacterSet()) == nil
+      {
+        return
+      }
+    }
+  }
+  
+  func scanKeyOrValue() -> String? {
+    if scan("\"") {
+      var key = ""
+      while let part = scanUpTo("\"") {
+        key.appendContentsOf(part)
+        scan("\"")
+        if part.characters.last == "\\" {
+          key.append(Character("\""))
+        } else {
+          break
+        }
+      }
+      do {
+        let data = "\"\(key)\"".dataUsingEncoding(NSUTF8StringEncoding)!
+        return try NSPropertyListSerialization.propertyListWithData(data, options: [], format: nil) as? String
+      } catch {
+        return nil
+      }
+    }
+    else if let part = scanCharacters(unquotedStringCharacters) {
+      return part
+    }
+    else {
+      return nil
+    }
+  }
 }
 
-private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private struct StringsFileEntry {
+  let comment: String?
+  let key: String
+  let val: String
+  
+  enum Comment {
+    case block(String)
+    case line(String)
+    
+    var content: String {
+      switch self {
+      case .block(let content): return content
+      case .line(let content): return content
+      }
+    }
+  }
+  
+  static func mergeComments(comments: [Comment]) -> String? {
+    guard !comments.isEmpty else { return nil }
+    // TODO: something nicer
+    return comments.map { $0.content }.joinWithSeparator(" ")
+  }
+  
+  static func parse(stringsFile: String) -> [StringsFileEntry] {
+    var entries: [StringsFileEntry] = []
+    
+    let scanner = NSScanner(string: stringsFile)
+    scanner.charactersToBeSkipped = nil
+    scanner.caseSensitive = true
+    
+    while !scanner.atEnd {
+      scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+      
+      var comments: [Comment] = []
+      while let comment = scanner.scanComment() {
+        comments.append(comment)
+        
+        if case .block = comment {
+          break
+        }
+      }
+      
+      // Only comments directly above a string are desired.
+      if let whitespace = scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+      {
+        var newlines = whitespace.characters.filter({ $0 == "\n" }).count
+        if case .line? = comments.last {
+          newlines += 1
+        }
+        if newlines > 1 {
+          continue
+        }
+      }
+      
+      guard let key = scanner.scanKeyOrValue() else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard scanner.scan("=") else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard let val = scanner.scanKeyOrValue() else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard scanner.scan(";") else { continue }
+      
+      scanner.scanCharacters(.whitespaceCharacterSet())
+      if let comment = scanner.scanComment() {
+        comments.append(comment)
+      }
+      
+      entries.append(StringsFileEntry(comment: mergeComments(comments), key: key, val: val))
+    }
+    
+    return entries
+  }
+}
 
-  var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
+private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [LocalizableStrings.Entry] {
+
+  var entries: [LocalizableStrings.Entry] = []
 
   for (key, obj) in nsDictionary {
     if let
@@ -99,7 +261,7 @@ private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws
 
       do {
         let params = try parseStringsdictParams(localizedFormat, dict: dict)
-        dictionary[key] = (params, localizedFormat)
+        entries.append(LocalizableStrings.Entry(key: key, val: localizedFormat, params: params, comment: nil))
       }
       catch ResourceParsingError.ParsingFailed(let message) {
         warn("\(message) in '\(key)' \(source)")
@@ -110,7 +272,7 @@ private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws
     }
   }
 
-  return dictionary
+  return entries
 }
 
 private func parseStringsdictParams(format: String, dict: [String: AnyObject]) throws -> [StringParam] {
