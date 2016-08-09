@@ -64,5 +64,45 @@ class StringsTests: XCTestCase {
     XCTAssertEqual(
       R.string.generic.correctZeta("ONE", second: 2),
       "Pre Zeta (| ONE Other Zeta.second: 2. |)")
+    
+    XCTAssertNil(R.string.comments.starKey1.comment)
+    
+    XCTAssertEqual(
+      R.string.comments.starKey2.comment,
+      "comment belongs to key2")
+    
+    XCTAssertEqual(
+      R.string.comments.starKey3.comment,
+      "comment belongs to key3")
+    
+    XCTAssertNil(R.string.comments.starKey4.comment)
+    
+    XCTAssertEqual(
+      R.string.comments.starKey5.comment,
+      "first part of comment for key 5 second part of comment, should be merged")
+    
+    XCTAssertEqual(
+      R.string.comments.starKey6.comment,
+      "big, multiline comment belonging to key6")
+    
+    XCTAssertNil(R.string.comments.slashKey1.comment)
+    
+    XCTAssertEqual(
+      R.string.comments.slashKey2.comment,
+      "comment belongs to key2")
+    
+    XCTAssertEqual(
+      R.string.comments.slashKey3.comment,
+      "comment belongs to key3")
+    
+    XCTAssertNil(R.string.comments.slashKey4.comment)
+    
+    XCTAssertEqual(
+      R.string.comments.slashKey5.comment,
+      "first part of comment for key 5 second part of comment, should be merged")
+    
+    XCTAssertEqual(
+      R.string.comments.slashKey6.comment,
+      "big, multiline comment belonging to key6")
   }
 }

@@ -187,13 +187,18 @@ struct StringsGenerator: Generator {
       .flatMap { $0.localeDescription }
       .map { "\"\($0)\"" }
       .joinWithSeparator(", ")
+    let firstComment = values.entryComments
+      .first?
+      .1?
+      .escapedStringLiteral
+    let escapedComment = firstComment.map { "\"\($0)\"" } ?? "nil"
 
     return Let(
       comments: values.comments,
       isStatic: true,
       name: values.key,
       typeDefinition: .Inferred(Type.StringResource),
-      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)], comment: nil)"
+      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)], comment: \(escapedComment))"
     )
   }
 
