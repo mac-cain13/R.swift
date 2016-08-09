@@ -86,47 +86,163 @@ private func parseStrings(stringsFile: String, source: String) throws -> [Locali
   return entries
 }
 
+// MARK: -
+
+private let unquotedStringCharacters: NSCharacterSet = {
+  let set = NSMutableCharacterSet.whitespaceAndNewlineCharacterSet()
+  set.invert()
+  set.removeCharactersInString("\\\"=;")
+  return set
+}()
+
+private extension NSScanner {
+  func scan(s: String) -> Bool {
+    return scanString(s, intoString: nil)
+  }
+  
+  func scanUpTo(s: String) -> String? {
+    var result: NSString?
+    guard scanUpToString(s, intoString: &result) else { return nil }
+    return result as String?
+  }
+  
+  func scanCharacters(set: NSCharacterSet) -> String? {
+    var result: NSString?
+    guard scanCharactersFromSet(set, intoString: &result) else { return nil }
+    return result as String?
+  }
+  
+  func scanComment() -> StringsFileEntry.Comment? {
+    if scan("/*") {
+      let result = scanUpTo("*/")
+      scan("*/")
+      return .block(result ?? "")
+    }
+    else if scan("//") {
+      let result = scanUpTo("\n")
+      scan("\n")
+      return .line(result ?? "")
+    }
+    else {
+      return nil
+    }
+  }
+  
+  func skipCommentsAndWhitespace() {
+    while !atEnd {
+      if scanComment() == nil &&
+        scanCharacters(.whitespaceAndNewlineCharacterSet()) == nil
+      {
+        return
+      }
+    }
+  }
+  
+  func scanKeyOrValue() -> String? {
+    if scan("\"") {
+      var key = ""
+      while let part = scanUpTo("\"") {
+        key.appendContentsOf(part)
+        scan("\"")
+        if part.characters.last == "\\" {
+          key.append(Character("\""))
+        } else {
+          break
+        }
+      }
+      do {
+        let data = "\"\(key)\"".dataUsingEncoding(NSUTF8StringEncoding)!
+        return try NSPropertyListSerialization.propertyListWithData(data, options: [], format: nil) as? String
+      } catch {
+        return nil
+      }
+    }
+    else if let part = scanCharacters(unquotedStringCharacters) {
+      return part
+    }
+    else {
+      return nil
+    }
+  }
+}
+
 private struct StringsFileEntry {
   let comment: String?
   let key: String
   let val: String
   
-  static let regex: NSRegularExpression = {
-    let capturedTrimmedComment = "(?s: /[*] \\s* (.*?) \\s* [*]/ )"
-    let whitespaceOrComment = "(?s: \\s | /[*] .*? [*]/)"
-    let slash = "\\\\"
-    let quotedString = "(?s: \" .*? (?<! \(slash))\" )"
-    let unquotedString = "[^\\s\(slash)\"=]+"
-    let string = "(?: \(quotedString) | \(unquotedString) )"
-    let pattern = "(?: \(capturedTrimmedComment) (\\s*) )? ( \(string) ) \(whitespaceOrComment)* = \(whitespaceOrComment)* ( \(string) ) \(whitespaceOrComment)* ;"
-    return try! NSRegularExpression(pattern: pattern, options: .AllowCommentsAndWhitespace)
-  }()
-  
-  init(source: String, match: NSTextCheckingResult) {
-    guard match.numberOfRanges == 5 else { fatalError("must be used with StringsEntry.regex") }
+  enum Comment {
+    case block(String)
+    case line(String)
     
-    func extract(range: NSRange, unescape: Bool) -> String? {
-      guard range.location != NSNotFound else { return nil }
-      let raw = (source as NSString).substringWithRange(range)
-      if !unescape { return raw }
-      return try! NSPropertyListSerialization.propertyListWithData(raw.dataUsingEncoding(NSUTF8StringEncoding)!, options: [], format: nil) as! String
+    var content: String {
+      switch self {
+      case .block(let content): return content
+      case .line(let content): return content
+      }
     }
-    
-    let preKeySpacing = extract(match.rangeAtIndex(2), unescape: false)
-    if preKeySpacing == nil || preKeySpacing?.componentsSeparatedByString("\n").count <= 2 {
-      comment = extract(match.rangeAtIndex(1), unescape: false)
-    }
-    else {
-      comment = nil
-    }
-    
-    key = extract(match.rangeAtIndex(3), unescape: true)!
-    val = extract(match.rangeAtIndex(4), unescape: true)!
   }
   
-  static func parse(stringsFileContents: String) -> [StringsFileEntry] {
-    return regex.matchesInString(stringsFileContents, options: [], range: NSRange(0..<stringsFileContents.utf16.count))
-      .map { StringsFileEntry(source: stringsFileContents, match: $0) }
+  static func mergeComments(comments: [Comment]) -> String? {
+    guard !comments.isEmpty else { return nil }
+    // TODO: something nicer
+    return comments.map { $0.content }.joinWithSeparator(" ")
+  }
+  
+  static func parse(stringsFile: String) -> [StringsFileEntry] {
+    var entries: [StringsFileEntry] = []
+    
+    let scanner = NSScanner(string: stringsFile)
+    scanner.charactersToBeSkipped = nil
+    scanner.caseSensitive = true
+    
+    while !scanner.atEnd {
+      scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+      
+      var comments: [Comment] = []
+      while let comment = scanner.scanComment() {
+        comments.append(comment)
+        
+        if case .block = comment {
+          break
+        }
+      }
+      
+      // Only comments directly above a string are desired.
+      if let whitespace = scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+      {
+        var newlines = whitespace.characters.filter({ $0 == "\n" }).count
+        if case .line? = comments.last {
+          newlines += 1
+        }
+        if newlines > 1 {
+          continue
+        }
+      }
+      
+      guard let key = scanner.scanKeyOrValue() else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard scanner.scan("=") else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard let val = scanner.scanKeyOrValue() else { continue }
+      
+      scanner.skipCommentsAndWhitespace()
+      
+      guard scanner.scan(";") else { continue }
+      
+      scanner.scanCharacters(.whitespaceCharacterSet())
+      if let comment = scanner.scanComment() {
+        comments.append(comment)
+      }
+      
+      entries.append(StringsFileEntry(comment: mergeComments(comments), key: key, val: val))
+    }
+    
+    return entries
   }
 }
 
