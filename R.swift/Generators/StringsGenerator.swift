@@ -220,14 +220,10 @@ struct StringsGenerator: Generator {
   private static func stringFunctionParams(values: StringValues) -> Function {
 
     let params = values.params.enumerate().map { ix, param -> Function.Parameter in
+      let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
 
-      if let paramName = param.name {
-        return Function.Parameter(name: paramName, localName: valueName, type: param.spec.type)
-      }
-      else {
-        return Function.Parameter(name: "_", localName: valueName, type: param.spec.type)
-      }
+      return Function.Parameter(name: argumentLabel, localName: valueName, type: param.spec.type)
     }
 
     let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
