@@ -116,7 +116,7 @@ struct NibGenerator: Generator {
     let bundleLet = Let(
       isStatic: false,
       name: "bundle",
-      typeDefinition: .Inferred(Type._NSBundle),
+      typeDefinition: .Inferred(Type._Bundle),
       value: "_R.hostingBundle"
     )
 

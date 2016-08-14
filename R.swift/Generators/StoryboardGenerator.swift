@@ -91,7 +91,7 @@ struct StoryboardGenerator: Generator {
     var functions: [Function] = []
     var properties: [Property] = [
       Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
 
     // Initial view controller

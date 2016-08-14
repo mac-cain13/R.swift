@@ -56,7 +56,7 @@ struct ResourceFileGenerator: Generator {
               Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
             ],
             doesThrow: false,
-            returnType: Type._NSURL.asOptional(),
+            returnType: Type._URL.asOptional(),
             body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle.url(forResource: fileResource)"
           )
         ]

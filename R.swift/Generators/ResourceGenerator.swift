@@ -53,8 +53,16 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       implements: [],
       typealiasses: [],
       properties: [
-        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
-        Let(isStatic: true, name: "applicationLocale", typeDefinition: .Inferred(Type._NSLocale), value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
+        Let(
+          isStatic: true,
+          name: "hostingBundle",
+          typeDefinition: .Inferred(Type._Bundle),
+          value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
+        Let(
+          isStatic: true,
+          name: "applicationLocale",
+          typeDefinition: .Inferred(Type._Locale),
+          value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
       ],
       functions: [],
       structs: generatorResults.internalStructs
