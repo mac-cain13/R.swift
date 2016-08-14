@@ -56,7 +56,7 @@ struct StoryboardGenerator: Generator {
           name: struct_.type.name,
           generics: nil,
           parameters: [
-            Function.Parameter(name: "_", type: Type._Void)
+            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
@@ -136,11 +136,11 @@ struct StoryboardGenerator: Generator {
           name: resource.name,
           generics: nil,
           parameters: [
-            Function.Parameter(name: "_", type: Type._Void)
+            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+          body: "return UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
         )
       }
       .forEach { functions.append($0) }

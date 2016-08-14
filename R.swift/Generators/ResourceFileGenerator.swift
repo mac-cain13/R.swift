@@ -48,16 +48,16 @@ struct ResourceFileGenerator: Generator {
 
         return [
           Function(
-            comments: ["`bundle.URLForResource(\"\(filename)\", withExtension: \(pathExtension))`"],
+            comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \(pathExtension))`"],
             isStatic: true,
             name: fullname,
             generics: nil,
             parameters: [
-              Function.Parameter(name: "_", type: Type._Void)
+              Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
             ],
             doesThrow: false,
             returnType: Type._NSURL.asOptional(),
-            body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle.URLForResource(fileResource)"
+            body: "let fileResource = R.file.\(sanitizedSwiftName(fullname))\nreturn fileResource.bundle.url(forResource: fileResource)"
           )
         ]
       }
