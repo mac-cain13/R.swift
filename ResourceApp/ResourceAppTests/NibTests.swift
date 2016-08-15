@@ -21,7 +21,7 @@ class NibTests: XCTestCase {
   }
 
   func testNibIsOfCorrectType() {
-    XCTAssertTrue(R.nib.supplementaryElement.dynamicType.ReusableType.classForCoder() == UICollectionReusableView.classForCoder())
+    XCTAssertTrue(type(of: R.nib.supplementaryElement).ReusableType.classForCoder() == UICollectionReusableView.classForCoder())
   }
 
 }
