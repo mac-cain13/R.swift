@@ -27,11 +27,11 @@ enum TypeDefinition: UsedTypesProvider {
 struct Let: Property {
   let comments: [String]
   let isStatic: Bool
-  let name: String
+  let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
 
-  init(isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
+  init(isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = []
     self.isStatic = isStatic
     self.name = name
@@ -39,7 +39,7 @@ struct Let: Property {
     self.value = value
   }
 
-  init(comments: [String], isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = comments
     self.isStatic = isStatic
     self.name = name
@@ -61,6 +61,6 @@ struct Let: Property {
     case .Inferred: typeString = ""
     }
 
-    return "\(commentsString)\(staticString)let \(callName)\(typeString) = \(value)"
+    return "\(commentsString)\(staticString)let \(name)\(typeString) = \(value)"
   }
 }

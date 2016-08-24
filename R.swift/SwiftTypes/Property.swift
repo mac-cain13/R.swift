@@ -9,13 +9,7 @@
 import Foundation
 
 protocol Property: UsedTypesProvider, CustomStringConvertible {
-  var name: String { get }
-}
-
-extension Property {
-  var callName: String {
-    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-  }
+  var name: SwiftIdentifier { get }
 }
 
 /// Type-erasure function

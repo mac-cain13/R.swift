@@ -62,9 +62,9 @@
 		D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */; };
 		D5B799791C19C082009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799781C19C082009EA901 /* WhiteListedExtensionsResourceType.swift */; };
 		D5B7997A1C19C1BD009EA901 /* WhiteListedExtensionsResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799781C19C082009EA901 /* WhiteListedExtensionsResourceType.swift */; };
-		D5B7997D1C1B07C3009EA901 /* SanitizedSwiftName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997C1C1B07C3009EA901 /* SanitizedSwiftName.swift */; };
+		D5B7997D1C1B07C3009EA901 /* SwiftIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */; };
 		D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */; };
-		D5B799801C1B0943009EA901 /* SanitizedSwiftName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997C1C1B07C3009EA901 /* SanitizedSwiftName.swift */; };
+		D5B799801C1B0943009EA901 /* SwiftIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */; };
 		D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */; };
 		D5B799831C1B8C78009EA901 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799821C1B8C78009EA901 /* Module.swift */; };
 		D5B7998A1C1B91A9009EA901 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799821C1B8C78009EA901 /* Module.swift */; };
@@ -139,7 +139,7 @@
 		D5B7996D1C19940F009EA901 /* ResourceFileGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceFileGenerator.swift; sourceTree = "<group>"; };
 		D5B7996F1C199420009EA901 /* FontGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontGenerator.swift; sourceTree = "<group>"; };
 		D5B799781C19C082009EA901 /* WhiteListedExtensionsResourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteListedExtensionsResourceType.swift; sourceTree = "<group>"; };
-		D5B7997C1C1B07C3009EA901 /* SanitizedSwiftName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SanitizedSwiftName.swift; sourceTree = "<group>"; };
+		D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftIdentifier.swift; sourceTree = "<group>"; };
 		D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorOutput.swift; sourceTree = "<group>"; };
 		D5B799821C1B8C78009EA901 /* Module.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		D5C4227D1B711FDF004EA9B9 /* rswiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rswiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,7 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */,
-				D5B7997C1C1B07C3009EA901 /* SanitizedSwiftName.swift */,
+				D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */,
 				D56F923E1C2942B400177FF7 /* Struct+ChildValidation.swift */,
 				D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */,
 				D5EA0DFE1A3DF4E300FFEBC4 /* UtilExtensions.swift */,
@@ -482,7 +482,7 @@
 				D5B799731C199755009EA901 /* NibGenerator.swift in Sources */,
 				D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */,
 				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
-				D5B799801C1B0943009EA901 /* SanitizedSwiftName.swift in Sources */,
+				D5B799801C1B0943009EA901 /* SwiftIdentifier.swift in Sources */,
 				D5B799711C199755009EA901 /* FontGenerator.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
 				D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */,
@@ -539,7 +539,7 @@
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
 				D56DC76D1C41758800623437 /* AccessModifier.swift in Sources */,
 				D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */,
-				D5B7997D1C1B07C3009EA901 /* SanitizedSwiftName.swift in Sources */,
+				D5B7997D1C1B07C3009EA901 /* SwiftIdentifier.swift in Sources */,
 				D5A0A82A1C47920A0089ED2C /* SwiftCodeConverible.swift in Sources */,
 				D5B799681C1993B7009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5B799701C199420009EA901 /* FontGenerator.swift in Sources */,

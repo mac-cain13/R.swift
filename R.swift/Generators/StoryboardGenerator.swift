@@ -13,19 +13,8 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupBySwiftNames { $0.name }
-
-    for (name, duplicates) in groupedStoryboards.duplicates {
-      warn("Skipping \(duplicates.count) storyboards because symbol '\(name)' would be generated for all of these storyboards: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedStoryboards.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 storyboard because no swift identifier can be generated for storyboard: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) storyboards because no swift identifier can be generated for all of these storyboards: \(empties.joinWithSeparator(", "))")
-    }
+    let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
+    groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardStructs = groupedStoryboards
       .uniques
@@ -108,7 +97,7 @@ struct StoryboardGenerator: Generator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupBySwiftNames { $0.identifier }
+      .groupBySwiftIdentifiers { $0.identifier }
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
       warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")
@@ -120,7 +109,7 @@ struct StoryboardGenerator: Generator {
           vc,
           Let(
             isStatic: false,
-            name: sanitizedSwiftName(identifier),
+            name: SwiftIdentifier(name: identifier),
             typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
             value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
@@ -153,7 +142,7 @@ struct StoryboardGenerator: Generator {
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
         vc.storyboardIdentifier.map {
-          "if _R.storyboard.\(sanitizedSwiftName(storyboard.name))().\(sanitizedSwiftName($0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(sanitizedSwiftName($0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
+          "if _R.storyboard.\(SwiftIdentifier(name: storyboard.name))().\(SwiftIdentifier(name: $0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
       }
     let validateLines = validateImagesLines + validateViewControllersLines
@@ -174,7 +163,7 @@ struct StoryboardGenerator: Generator {
 
     // Return
     return Struct(
-      type: Type(module: .Host, name: sanitizedSwiftName(storyboard.name)),
+      type: Type(module: .Host, name: SwiftIdentifier(name: storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
       properties: properties,
