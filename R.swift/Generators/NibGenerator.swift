@@ -70,12 +70,12 @@ struct NibGenerator: Generator {
 
   private static func nibFuncForNib(nib: Nib) -> Function {
     return Function(
-      comments: ["`UINib(name: \"\(nib.name)\", bundle: ...)`"],
+      comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       isStatic: true,
       name: SwiftIdentifier(name: nib.name),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "_", type: Type._Void)
+        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
       ],
       doesThrow: false,
       returnType: Type._UINib,
@@ -105,7 +105,7 @@ struct NibGenerator: Generator {
     let bundleLet = Let(
       isStatic: false,
       name: "bundle",
-      typeDefinition: .Inferred(Type._NSBundle),
+      typeDefinition: .Inferred(Type._Bundle),
       value: "_R.hostingBundle"
     )
 
@@ -128,7 +128,7 @@ struct NibGenerator: Generator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: viewInfo.view.asOptional(),
-          body: "return instantiateWithOwner(ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
+          body: "return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
         )
       }
 

@@ -70,7 +70,7 @@ struct ColorGenerator: Generator {
       name: SwiftIdentifier(name: name),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "_", type: Type._Void)
+        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
       ],
       doesThrow: false,
       returnType: Type._UIColor,

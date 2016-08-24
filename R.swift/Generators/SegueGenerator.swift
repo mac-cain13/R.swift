@@ -123,7 +123,7 @@ struct SegueGenerator: Generator {
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         generics: nil,
         parameters: [
-          Function.Parameter.init(name: "segue", localName: "segue", type: Type._UIStoryboardSegue)
+          Function.Parameter.init(name: "segue", type: Type._UIStoryboardSegue)
         ],
         doesThrow: false,
         returnType: Type.TypedStoryboardSegueInfo

@@ -50,7 +50,7 @@ class MainTests: XCTestCase {
     // This is an example of a performance test case.
     self.measureBlock {
       (0...1000).forEach { _ in
-        SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
+        let _ = SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
       }
     }
   }

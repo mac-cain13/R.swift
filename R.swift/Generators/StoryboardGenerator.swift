@@ -45,7 +45,7 @@ struct StoryboardGenerator: Generator {
           name: struct_.type.name,
           generics: nil,
           parameters: [
-            Function.Parameter(name: "_", type: Type._Void)
+            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
@@ -80,7 +80,7 @@ struct StoryboardGenerator: Generator {
     var functions: [Function] = []
     var properties: [Property] = [
       Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._NSBundle), value: "_R.hostingBundle")
+      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
 
     // Initial view controller
@@ -125,11 +125,11 @@ struct StoryboardGenerator: Generator {
           name: resource.name,
           generics: nil,
           parameters: [
-            Function.Parameter(name: "_", type: Type._Void)
+            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIStoryboard(resource: self).instantiateViewController(\(resource.name))"
+          body: "return UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
         )
       }
       .forEach { functions.append($0) }

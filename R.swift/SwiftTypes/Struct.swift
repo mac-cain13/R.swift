@@ -82,10 +82,10 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .joinWithSeparator("\n\n")
 
 
-    // Private `init`, so that struct can't be initialized externally.
-    let privateInit = "private init() {}"
+    // File private `init`, so that struct can't be initialized externally.
+    let filePrivateInit = "fileprivate init() {}"
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, filePrivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"

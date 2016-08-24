@@ -16,6 +16,7 @@ struct ImageGenerator: Generator {
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 
+
     let imagesNames = images
       .groupBy { $0.name }
       .values
@@ -57,7 +58,7 @@ struct ImageGenerator: Generator {
       generics: nil,
       parameters: [
         Function.Parameter(
-          name: "compatibleWithTraitCollection",
+          name: "compatibleWith",
           localName: "traitCollection",
           type: Type._UITraitCollection.asOptional(),
           defaultValue: "nil"
@@ -65,7 +66,7 @@ struct ImageGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return \(Type._UIImage.name)(resource: R.image.\(SwiftIdentifier(name: name)), compatibleWithTraitCollection: traitCollection)"
+      body: "return \(Type._UIImage.name)(resource: R.image.\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
     )
   }
 }

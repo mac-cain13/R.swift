@@ -44,7 +44,7 @@ struct FontGenerator: Generator {
       name: SwiftIdentifier(name: font.name),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
+        Function.Parameter(name: "size", type: Type._CGFloat)
       ],
       doesThrow: false,
       returnType: Type._UIFont.asOptional(),

@@ -189,7 +189,7 @@ struct StringsGenerator: Generator {
       name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "_", type: Type._Void)
+        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
       ],
       doesThrow: false,
       returnType: Type._String,
@@ -200,19 +200,10 @@ struct StringsGenerator: Generator {
   private static func stringFunctionParams(values: StringValues) -> Function {
 
     let params = values.params.enumerate().map { ix, param -> Function.Parameter in
+      let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
 
-      if let paramName = param.name {
-        return Function.Parameter(name: paramName, localName: valueName, type: param.spec.type)
-      }
-      else {
-        if ix == 0 {
-          return Function.Parameter(name: valueName, type: param.spec.type)
-        }
-        else {
-          return Function.Parameter(name: "_", localName: valueName, type: param.spec.type)
-        }
-      }
+      return Function.Parameter(name: argumentLabel, localName: valueName, type: param.spec.type)
     }
 
     let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
@@ -257,7 +248,7 @@ private struct StringValues {
       return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, tableName: \"\(tableName)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: _R.hostingBundle, comment: \"\")"
     }
   }
 
