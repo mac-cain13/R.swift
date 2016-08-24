@@ -1,3 +1,14 @@
+## 2.5.0
+
+New features:
+
+- Bundle is used in string resources
+
+Bugfix:
+
+- Detect all segues correctly
+- Fix namespace problems with validation errors
+
 ## 2.4.0
 
 New features:
