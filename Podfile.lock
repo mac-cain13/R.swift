@@ -1,15 +1,15 @@
 PODS:
-  - R.swift.Library (2.3.0)
+  - R.swift.Library (3.0.0.beta.1)
 
 DEPENDENCIES:
   - R.swift.Library (from `./R.swift.Library`)
 
 EXTERNAL SOURCES:
   R.swift.Library:
-    :path: "./R.swift.Library"
+    :path: ./R.swift.Library
 
 SPEC CHECKSUMS:
-  R.swift.Library: 75df6abfd22492c852136c4d7b6a9ca21664772a
+  R.swift.Library: a95a41bdd4420dd27c2c2c709b0f35d0b2b05224
 
 PODFILE CHECKSUM: 7cd35a355bad243c7a21d1bbcec5bf669a3e93b7
 
