@@ -51,6 +51,14 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     self.locale = locale
     self.dictionary = dictionary
   }
+
+  func isLocalizedNibOrStoryboard(names: Set<String>) -> Bool {
+    if locale == .None {
+      return false
+    }
+
+    return names.contains(filename)
+  }
 }
 
 private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
