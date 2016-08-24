@@ -35,7 +35,13 @@ struct Resources {
     resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
-    localizableStrings = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
+
+
+    let nibAndStoryboardNames = Set(nibs.map { $0.name } + storyboards.map { $0.name })
+
+    localizableStrings = resourceURLs
+      .flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
+      .filter { !$0.isLocalizedNibOrStoryboard(nibAndStoryboardNames) }
   }
 }
 
