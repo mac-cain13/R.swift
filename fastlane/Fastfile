@@ -132,7 +132,7 @@ lane :runalltests do
     workspace: "R.swift.xcworkspace",
     scheme: "ResourceApp",
     sdk: "iphonesimulator",
-    destination: "name=iPhone 6",
+    destination: "name=iPhone SE",
     clean: true
   )
   scan(
