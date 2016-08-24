@@ -188,7 +188,7 @@ struct StringsGenerator: Generator {
       isStatic: true,
       name: values.key,
       typeDefinition: .Inferred(Type.StringResource),
-      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)])"
+      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: _R.hostingBundle, locales: [\(locales)])"
     )
   }
 
@@ -274,10 +274,10 @@ private struct StringValues {
     let escapedKey = key.escapedStringLiteral
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, tableName: \"\(tableName)\", comment: \"\")"
     }
   }
 
