@@ -65,6 +65,8 @@
 		DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */; };
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
 		DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF559B81CA4932F009B8C51 /* Rswift.framework */; };
+		E20983241D585E78005ACBAA /* SegueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20983231D585E78005ACBAA /* SegueTests.swift */; };
+		E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20983251D585F8C005ACBAA /* Xib with ViewController.xib */; };
 		E2156B631CC4042900F341DC /* Settings.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B651CC4042900F341DC /* Settings.strings */; };
 		E2156B681CC41EB400F341DC /* Generic.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B671CC41EB400F341DC /* Generic.strings */; };
 		E2156B6A1CC4292600F341DC /* Duplicate.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B691CC4292600F341DC /* Duplicate.strings */; };
@@ -173,6 +175,8 @@
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		DEF559B81CA4932F009B8C51 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../R.swift.Library/build/Debug-appletvos/Rswift.framework"; sourceTree = "<group>"; };
+		E20983231D585E78005ACBAA /* SegueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTests.swift; sourceTree = "<group>"; };
+		E20983251D585F8C005ACBAA /* Xib with ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Xib with ViewController.xib"; sourceTree = "<group>"; };
 		E2156B641CC4042900F341DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B661CC4043C00F341DC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B671CC41EB400F341DC /* Generic.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Generic.strings; sourceTree = "<group>"; };
@@ -339,6 +343,7 @@
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
+				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";
@@ -359,6 +364,7 @@
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
 				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
+				E20983231D585E78005ACBAA /* SegueTests.swift */,
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
 				5D9E41331C96918E002172D3 /* StringsTests.swift */,
 				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
@@ -625,6 +631,7 @@
 				D5BA2E5F1C90086C0025C9E3 /* CellCollectionView.xib in Resources */,
 				D5AD5CA11B7A926200A8B96C /* DuplicateCellView.xib in Resources */,
 				E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */,
+				E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */,
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				E2156B631CC4042900F341DC /* Settings.strings in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
@@ -807,6 +814,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E20983241D585E78005ACBAA /* SegueTests.swift in Sources */,
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
 				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
@@ -929,10 +937,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -979,10 +985,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1042,7 +1046,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5806108C4C9AA942D017FD38 /* Pods-ResourceAppTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1062,7 +1065,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A12A24E7B08066489311F5F /* Pods-ResourceAppTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ResourceAppTests/Info.plist;

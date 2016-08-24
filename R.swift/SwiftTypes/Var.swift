@@ -10,7 +10,7 @@ import Foundation
 
 struct Var: Property {
   let isStatic: Bool
-  let name: String
+  let name: SwiftIdentifier
   let type: Type
   let getter: String
 
@@ -20,6 +20,6 @@ struct Var: Property {
 
   var description: String {
     let staticString = isStatic ? "static " : ""
-    return "\(staticString)var \(callName): \(type) { \(getter) }"
+    return "\(staticString)var \(name): \(type) { \(getter) }"
   }
 }

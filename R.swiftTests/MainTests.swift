@@ -41,7 +41,7 @@ class MainTests: XCTestCase {
     // Use XCTAssert and related functions to verify your tests produce the correct results.
 
     swiftNameData.forEach {
-      let sanitizedResult = sanitizedSwiftName($0.0, lowercaseFirstCharacter: true)
+      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseFirstCharacter: true).description
       XCTAssertEqual(sanitizedResult, $0.1)
     }
   }
@@ -50,7 +50,7 @@ class MainTests: XCTestCase {
     // This is an example of a performance test case.
     self.measureBlock {
       (0...1000).forEach { _ in
-        sanitizedSwiftName("(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
+        let _ = SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
       }
     }
   }

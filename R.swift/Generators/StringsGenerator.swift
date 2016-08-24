@@ -15,19 +15,9 @@ struct StringsGenerator: Generator {
   init(localizableStrings: [LocalizableStrings]) {
 
     let localized = localizableStrings.groupBy { $0.filename }
-    let groupedLocalized = localized.groupBySwiftNames { $0.0 }
+    let groupedLocalized = localized.groupBySwiftIdentifiers { $0.0 }
 
-    for (sanitizedName, duplicates) in groupedLocalized.duplicates {
-      warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
-    }
-
-    let empties = groupedLocalized.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joinWithSeparator(", "))")
-    }
+    groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
     externalStruct = Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
@@ -42,7 +32,7 @@ struct StringsGenerator: Generator {
 
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
-    let name = sanitizedSwiftName(filename)
+    let name = SwiftIdentifier(name: filename)
     let params = computeParams(filename, strings: strings)
 
     return Struct(
@@ -73,19 +63,9 @@ struct StringsGenerator: Generator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupBySwiftNames { $0 }
+      let groupedKeys = ls.dictionary.keys.groupBySwiftIdentifiers { $0 }
 
-      for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
-      }
-
-      let empties = groupedKeys.empties
-      if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
-      }
-      else if empties.count > 1 {
-        warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
-      }
+      groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
       // Save uniques
       for key in groupedKeys.uniques {
@@ -186,9 +166,9 @@ struct StringsGenerator: Generator {
     return Let(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       typeDefinition: .Inferred(Type.StringResource),
-      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)])"
+      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: _R.hostingBundle, locales: [\(locales)])"
     )
   }
 
@@ -206,7 +186,7 @@ struct StringsGenerator: Generator {
     return Function(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
@@ -231,7 +211,7 @@ struct StringsGenerator: Generator {
     return Function(
       comments: values.comments,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: params,
       doesThrow: false,
@@ -265,10 +245,10 @@ private struct StringValues {
     let escapedKey = key.escapedStringLiteral
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, tableName: \"\(tableName)\", comment: \"\")"
     }
   }
 

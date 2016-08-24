@@ -61,7 +61,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let TypedStoryboardSegueInfo = Type(module: "Rswift", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
 
   let module: Module
-  let name: String
+  let name: SwiftIdentifier
   let genericArgs: [TypeVar]
   let optional: Bool
 
@@ -77,14 +77,14 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
     return description.hashValue
   }
 
-  init(module: Module, name: String, genericArgs: [TypeVar] = [], optional: Bool = false) {
+  init(module: Module, name: SwiftIdentifier, genericArgs: [TypeVar] = [], optional: Bool = false) {
     self.module = module
     self.name = name
     self.genericArgs = genericArgs
     self.optional = optional
   }
 
-  init(module: Module, name: String, genericArgs: [Type], optional: Bool = false) {
+  init(module: Module, name: SwiftIdentifier, genericArgs: [Type], optional: Bool = false) {
     self.module = module
     self.name = name
     self.genericArgs = genericArgs.map(TypeVar.init)
