@@ -1,3 +1,9 @@
+## 3.0.0.beta.1
+
+New features:
+
+- Swift 3 support
+
 ## 2.5.0
 
 New features:
