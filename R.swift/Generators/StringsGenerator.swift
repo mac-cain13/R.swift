@@ -248,7 +248,7 @@ private struct StringValues {
       return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, tableName: \"\(tableName)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: _R.hostingBundle, comment: \"\")"
     }
   }
 
