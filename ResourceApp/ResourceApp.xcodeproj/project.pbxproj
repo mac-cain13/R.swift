@@ -179,7 +179,6 @@
 		E209EC491D6D681B00308357 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LocalizedStoryboard.strings; sourceTree = "<group>"; };
 		E209EC4D1D6D68B800308357 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LocalizedNib.xib; sourceTree = "<group>"; };
 		E209EC521D6D707E00308357 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LocalizedNib.strings; sourceTree = "<group>"; };
-		E209EC531D6D71F300308357 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/LocalizedNib.xib; sourceTree = "<group>"; };
 		E2156B641CC4042900F341DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B661CC4043C00F341DC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Settings.strings; sourceTree = "<group>"; };
 		E2156B671CC41EB400F341DC /* Generic.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Generic.strings; sourceTree = "<group>"; };
@@ -927,7 +926,6 @@
 			children = (
 				E209EC4D1D6D68B800308357 /* Base */,
 				E209EC521D6D707E00308357 /* es */,
-				E209EC531D6D71F300308357 /* nl */,
 			);
 			name = LocalizedNib.xib;
 			sourceTree = "<group>";
