@@ -176,7 +176,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   }
 
   @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-    if let currentViewController = currentViewController where elementName == currentViewController.0 {
+    if let currentViewController = currentViewController where elementName == "scene" {
       viewControllers.append(currentViewController.1)
       self.currentViewController = nil
     }
