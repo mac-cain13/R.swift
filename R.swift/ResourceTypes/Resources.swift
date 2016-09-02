@@ -21,7 +21,8 @@ struct Resources {
   let nibs: [Nib]
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
-
+  let localizableStrings: [LocalizableStrings]
+    
   let reusables: [Reusable]
 
   init(resourceURLs: [NSURL], fileManager: NSFileManager) {
@@ -34,6 +35,7 @@ struct Resources {
     resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
+    localizableStrings = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
   }
 }
 

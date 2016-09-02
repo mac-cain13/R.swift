@@ -68,22 +68,24 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .joinWithSeparator("\n")
 
     let varsString = properties
-      .sort {  $0.callName < $1.callName }
+//      .sort { $0.name.description < $1.name.description }
       .map { $0.description }
+      .sort()
       .joinWithSeparator("\n")
     let functionsString = functions
-      .sort { $0.callName < $1.callName }
+//      .sort { $0.name.description < $1.name.description }
       .map { $0.description }
+      .sort()
       .joinWithSeparator("\n\n")
     let structsString = structs
       .sort { $0.type.description < $1.type.description }
       .joinWithSeparator("\n\n")
 
 
-    // Private `init`, so that struct can't be initialized externally.
-    let privateInit = "private init() {}"
+    // File private `init`, so that struct can't be initialized externally.
+    let filePrivateInit = "fileprivate init() {}"
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, filePrivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"

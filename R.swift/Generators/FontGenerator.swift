@@ -13,12 +13,14 @@ struct FontGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(fonts: [Font]) {
+    let groupedFonts = fonts.groupBySwiftIdentifiers { $0.name }
+    groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
-    let fontProperties: [Property] = fonts.map {
+    let fontProperties: [Property] = groupedFonts.uniques.map {
       Let(
         comments: ["Font `\($0.name)`."],
         isStatic: true,
-        name: $0.name,
+        name: SwiftIdentifier(name: $0.name),
         typeDefinition: .Inferred(Type.FontResource),
         value: "FontResource(fontName: \"\($0.name)\")"
       )
@@ -30,7 +32,7 @@ struct FontGenerator: Generator {
       implements: [],
       typealiasses: [],
       properties: fontProperties,
-      functions: fonts.map(FontGenerator.fontFunctionFromFont),
+      functions: groupedFonts.uniques.map(FontGenerator.fontFunctionFromFont),
       structs: []
     )
   }
@@ -39,14 +41,14 @@ struct FontGenerator: Generator {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
       isStatic: true,
-      name: font.name,
+      name: SwiftIdentifier(name: font.name),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "size", localName: "size", type: Type._CGFloat)
+        Function.Parameter(name: "size", type: Type._CGFloat)
       ],
       doesThrow: false,
       returnType: Type._UIFont.asOptional(),
-      body: "return UIFont(resource: \(sanitizedSwiftName(font.name)), size: size)"
+      body: "return UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
     )
   }
 }

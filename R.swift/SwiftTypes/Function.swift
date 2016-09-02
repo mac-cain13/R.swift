@@ -11,14 +11,14 @@ import Foundation
 struct Function: UsedTypesProvider {
   let comments: [String]
   let isStatic: Bool
-  let name: String
+  let name: SwiftIdentifier
   let generics: String?
   let parameters: [Parameter]
   let doesThrow: Bool
   let returnType: Type
   let body: String
 
-  init(isStatic: Bool, name: String, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+  init(isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
     self.comments = []
     self.isStatic = isStatic
     self.name = name
@@ -29,7 +29,7 @@ struct Function: UsedTypesProvider {
     self.body = body
   }
 
-  init(comments: [String], isStatic: Bool, name: String, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+  init(comments: [String], isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
     self.comments = comments
     self.isStatic = isStatic
     self.name = name
@@ -47,10 +47,6 @@ struct Function: UsedTypesProvider {
     ].flatten()
   }
 
-  var callName: String {
-    return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
-  }
-
   var description: String {
     let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
     let staticString = isStatic ? "static " : ""
@@ -60,7 +56,7 @@ struct Function: UsedTypesProvider {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indentWithString(IndentationString)
 
-    return "\(commentsString)\(staticString)func \(callName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+    return "\(commentsString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {
@@ -73,12 +69,12 @@ struct Function: UsedTypesProvider {
       return type.usedTypes
     }
 
-    var swiftName: String {
-      return sanitizedSwiftName(name, lowercaseFirstCharacter: true)
+    var swiftIdentifier: SwiftIdentifier {
+      return SwiftIdentifier(name: name, lowercaseFirstCharacter: true)
     }
 
     var description: String {
-      let definition = localName.map({ "\(self.swiftName) \($0): \(type)" }) ?? "\(swiftName): \(type)"
+      let definition = localName.map({ "\(swiftIdentifier) \($0): \(type)" }) ?? "\(swiftIdentifier): \(type)"
       return defaultValue.map({ "\(definition) = \($0)" }) ?? definition
     }
 

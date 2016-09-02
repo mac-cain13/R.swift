@@ -44,19 +44,9 @@ struct SegueGenerator: Generator {
     var structs: [Struct] = []
 
     for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.groupBy({ $0.sourceType }) {
-      let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftNames { $0.segue.identifier }
+      let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftIdentifiers { $0.segue.identifier }
 
-      for (name, duplicates) in groupedSeguesWithInfo.duplicates {
-        warn("Skipping \(duplicates.count) segues for '\(sourceType)' because symbol '\(name)' would be generated for all of these segues, but with a different destination or segue type: \(duplicates.joinWithSeparator(", "))")
-      }
-
-      let empties = groupedSeguesWithInfo.empties
-      if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 segue for '\(sourceType)' because no swift identifier can be generated for segue: \(empty)")
-      }
-      else if empties.count > 1 {
-        warn("Skipping \(empties.count) segues for '\(sourceType)' because no swift identifier can be generated for all of these segues: \(empties.joinWithSeparator(", "))")
-      }
+      groupedSeguesWithInfo.printWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType)'", result: "segue")
 
       let sts = groupedSeguesWithInfo
         .uniques
@@ -116,7 +106,7 @@ struct SegueGenerator: Generator {
       return Let(
         comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
         isStatic: true,
-        name: segueWithInfo.segue.identifier,
+        name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         typeDefinition: .Specified(type),
         value: "StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
       )
@@ -130,20 +120,20 @@ struct SegueGenerator: Generator {
           "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
         ],
         isStatic: true,
-        name: segueWithInfo.segue.identifier,
+        name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         generics: nil,
         parameters: [
-          Function.Parameter.init(name: "segue", localName: "segue", type: Type._UIStoryboardSegue)
+          Function.Parameter.init(name: "segue", type: Type._UIStoryboardSegue)
         ],
         doesThrow: false,
         returnType: Type.TypedStoryboardSegueInfo
           .asOptional()
           .withGenericArgs([segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType]),
-        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(sanitizedSwiftName(sourceType.description)).\(sanitizedSwiftName(segueWithInfo.segue.identifier)), segue: segue)"
+        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(SwiftIdentifier(name: sourceType.description)).\(SwiftIdentifier(name: segueWithInfo.segue.identifier)), segue: segue)"
       )
     }
 
-    let typeName = sanitizedSwiftName(sourceType.description)
+    let typeName = SwiftIdentifier(name: sourceType.description)
 
     return Struct(
       comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],

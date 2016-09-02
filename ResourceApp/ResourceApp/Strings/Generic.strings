@@ -1,0 +1,10 @@
+/* 
+  Generic.strings
+  ResourceApp
+
+  Created by Tom Lokhorst on 2016-04-17.
+  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+*/
+
+"loremipsum" = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+"#" = "hashtag";

@@ -13,7 +13,38 @@ enum InputParsingError: ErrorType {
   case IllegalOption(error: String, helpString: String)
   case MissingOption(error: String, helpString: String)
   case UserAskedForHelp(helpString: String)
+  case UserRequestsVersionInformation(helpString: String)
+
+  var helpString: String {
+    switch self {
+    case let .IllegalOption(_, helpString):
+      return helpString
+    case let .MissingOption(_, helpString):
+      return helpString
+    case let .UserAskedForHelp(helpString):
+      return helpString
+    case let .UserRequestsVersionInformation(helpString):
+      return helpString
+    }
+  }
+
+  var errorDescription: String? {
+    switch self {
+    case let .IllegalOption(error, _):
+      return error
+    case let .MissingOption(error, _):
+      return error
+    case .UserAskedForHelp, .UserRequestsVersionInformation:
+      return nil
+    }
+  }
 }
+
+private let versionOption = Option(
+  trigger: .Long( "version"),
+  numberOfParameters: 0,
+  helpDescription: "Prints version information about this release."
+)
 
 private let xcodeprojOption = Option(
   trigger: .Mixed("p", "xcodeproj"),
@@ -57,6 +88,7 @@ private let sdkRootOption = Option(
 )
 
 private let AllOptions = [
+  versionOption,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -96,6 +128,10 @@ struct CallInformation {
         throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
       }
 
+      if options[versionOption] != nil {
+        throw InputParsingError.UserRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
+      }
+
       guard let outputPath = extraArguments.first where extraArguments.count == 1 else {
         throw InputParsingError.IllegalOption(
           error: "Output folder for the 'R.generated.swift' file is mandatory as last argument.",
@@ -106,9 +142,9 @@ struct CallInformation {
       let outputURL = NSURL(fileURLWithPath: outputPath)
 
       var resourceValue: AnyObject?
-      try! outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
+      try outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
       if let isDirectory = (resourceValue as? NSNumber)?.boolValue where isDirectory {
-        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)
+        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)!
       } else {
         self.outputURL = outputURL
       }
@@ -167,7 +203,7 @@ private func getFirstArgumentFromOptionData(options: [Option:[String]], helpStri
     }
 }
 
-func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL {
+func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL? {
     return { path in
         switch path {
         case let .Absolute(absolutePath):

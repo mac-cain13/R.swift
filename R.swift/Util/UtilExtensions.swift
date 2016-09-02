@@ -11,6 +11,14 @@ import Foundation
 
 // MARK: Array operations
 
+extension Array {
+  subscript (safe index: Int) -> Element? {
+    return indices ~= index ? self[index] : nil
+  }
+}
+
+// MARK: Sequence operations
+
 extension SequenceType where Generator.Element : CustomStringConvertible {
   func joinWithSeparator(separator: String) -> String {
     return map { $0.description }.joinWithSeparator(separator)
@@ -41,6 +49,22 @@ extension String {
   func indentWithString(indentation: String) -> String {
     let components = componentsSeparatedByString("\n")
     return indentation + components.joinWithSeparator("\n\(indentation)")
+  }
+
+  var escapedStringLiteral: String {
+    return self
+      .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+      .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+      .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
+      .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
+      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+  }
+
+  var commentString: String {
+    return self
+      .stringByReplacingOccurrencesOfString("\r\n", withString: " ")
+      .stringByReplacingOccurrencesOfString("\r", withString: " ")
+      .stringByReplacingOccurrencesOfString("\n", withString: " ")
   }
 }
 

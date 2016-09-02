@@ -14,7 +14,7 @@ class SecondViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
 
-    MyViewController(nib: R.nib.myView)
+    let _ = MyViewController(nib: R.nib.myView)
   }
 
   override func didReceiveMemoryWarning() {
@@ -22,7 +22,7 @@ class SecondViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
 
-  @IBAction func unwindSomethingSomthing(segue: UIStoryboardSegue) {
+  @IBAction func unwindSomethingSomthing(_ segue: UIStoryboardSegue) {
 
   }
 }

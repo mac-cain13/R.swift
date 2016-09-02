@@ -42,6 +42,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       NibGenerator(nibs: resources.nibs),
       ReuseIdentifierGenerator(reusables: resources.reusables),
       ResourceFileGenerator(resourceFiles: resources.resourceFiles),
+      StringsGenerator(localizableStrings: resources.localizableStrings),
     ]
 
   var generatorResults = GeneratorResults()
@@ -52,7 +53,16 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
       implements: [],
       typealiasses: [],
       properties: [
-        Let(isStatic: true, name: "hostingBundle", typeDefinition: .Inferred(Type._NSBundle), value: "NSBundle(identifier: \"\(bundleIdentifier)\") ?? NSBundle.mainBundle()")
+        Let(
+          isStatic: true,
+          name: "hostingBundle",
+          typeDefinition: .Inferred(Type._Bundle),
+          value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
+        Let(
+          isStatic: true,
+          name: "applicationLocale",
+          typeDefinition: .Inferred(Type._Locale),
+          value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
       ],
       functions: [],
       structs: generatorResults.internalStructs
@@ -85,7 +95,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   }
 
   let externalResourceStruct = Struct(
-      comments: ["This `R` struct is code generateted, and contains references to static resources."],
+      comments: ["This `R` struct is code generated, and contains references to static resources."],
       type: Type(module: .Host, name: "R"),
       implements: [],
       typealiasses: [],

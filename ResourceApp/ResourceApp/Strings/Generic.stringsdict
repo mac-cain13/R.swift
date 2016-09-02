@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Generic.stringsdict.plist
+   ResourceApp
+
+   Created by Tom Lokhorst on 2016-04-25.
+   Copyright (c) 2016 Mathijs Kadijk. All rights reserved.
+-->
+<plist version="1.0">
+  <dict>
+
+    <key>correct alpha</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Alpha (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Alpha</string>
+        <key>one</key>
+        <string>One Alpha</string>
+        <key>other</key>
+        <string>Other Alpha: %d</string>
+      </dict>
+    </dict>
+
+    <key>correct beta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Beta (| %#@first@ x %#@second@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Beta.first</string>
+        <key>other</key>
+        <string>Other Beta.first: %d</string>
+      </dict>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Beta.second</string>
+        <key>other</key>
+        <string>Other Beta.second: %d</string>
+      </dict>
+    </dict>
+
+    <key>correct gamma</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Gamma (| %2$#@second@ x %1$#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Gamma.first</string>
+        <key>other</key>
+        <string>Other Gamma.first: %d</string>
+      </dict>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Gamma.second</string>
+        <key>other</key>
+        <string>Other Gamma.second: %d</string>
+      </dict>
+    </dict>
+
+    <key>correct delta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Delta (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Delta.first (%d). Second: %#@second@</string>
+        <key>other</key>
+        <string>Other Delta.first: %d. Second: %#@second@</string>
+      </dict>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Delta.second</string>
+        <key>other</key>
+        <string>Other Delta.second: %d</string>
+      </dict>
+    </dict>
+
+    <key>correct epsilon</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Epsilon (| %#@first@ |)</string>
+
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Epsilon.first (%d). Second: %#@second@</string>
+        <key>other</key>
+        <string>Other Epsilon.first: %d. Second: %#@second@</string>
+      </dict>
+
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Epsilon.second</string>
+        <key>other</key>
+        <string>Other Epsilon.second: %d</string>
+      </dict>
+    </dict>
+
+    <key>correct zeta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Zeta (| %@ %2$#@second@ |)</string>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Zeta.second.</string>
+        <key>other</key>
+        <string>Other Zeta.second: %d.</string>
+      </dict>
+    </dict>
+
+    <key>correct eta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Eta (| %@ - %#@second@ - %d|)</string>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Eta.second.</string>
+        <key>other</key>
+        <string>Other Eta.second: %d.</string>
+      </dict>
+    </dict>
+
+    <key>correct theta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Theta (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Theta.first</string>
+        <key>other</key>
+        <string>Other Theta.first: %d. %#@second@</string>
+      </dict>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Theta.second</string>
+        <key>other</key>
+        <string>Other Theta.second: %d. %#@third@</string>
+      </dict>
+      <key>third</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Theta.third</string>
+        <key>other</key>
+        <string>Other Theta.third: %d</string>
+      </dict>
+    </dict>
+
+    <key>fault alpha</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Alpha (| %#@missing@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Alpha</string>
+        <key>one</key>
+        <string>One Alpha</string>
+        <key>other</key>
+        <string>Other Alpha: %d</string>
+      </dict>
+    </dict>
+
+    <key>fault beta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Beta (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Beta.first %u</string>
+        <key>other</key>
+        <string>Other Beta.first: %d</string>
+      </dict>
+    </dict>
+
+    <key>fault gamma</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Gamma (| %1$#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Gamma.first</string>
+        <key>other</key>
+        <string>Other Gamma.first: %lu</string>
+      </dict>
+    </dict>
+
+    <key>fault delta</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Delta (| %#@first@ |)</string>
+      <key>first</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>one</key>
+        <string>One Delta.first. Second: %#@missing@</string>
+        <key>other</key>
+        <string>Other Delta.first: %d. Second: %#@missing@</string>
+      </dict>
+    </dict>
+
+    <key>fault epsilon</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>Pre Epsilon (| %#@second@ |)</string>
+      <key>second</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>d</string>
+        <key>zero</key>
+        <string>Zero Epsilon.second. First: %1$#@first_two@</string>
+        <key>other</key>
+        <string>Other Epsilon.second: %d. First: %1$#@first_one@</string>
+      </dict>
+    </dict>
+
+    <key>Welcome</key>
+    <dict>
+      <key>NSStringVariableWidthRuleType</key>
+      <dict>
+        <key>100</key>
+        <string>Hi</string>
+        <key>200</key>
+        <string>Welcome</string>
+        <key>300</key>
+        <string>Welcome to the store!</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>

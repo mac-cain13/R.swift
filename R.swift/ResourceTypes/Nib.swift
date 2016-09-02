@@ -100,7 +100,9 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
+    let customType = customClass
+      .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
+      .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     return customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
   }
@@ -113,7 +115,9 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
-    let customType = customClass.map { Type(module: Module(name: customModule), name: $0, optional: false) }
+    let customType = customClass
+      .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
+      .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
 
