@@ -1,8 +1,12 @@
-## 3.0.0.beta.1
+## 3.0.0
 
 New features:
 
 - Swift 3 support
+
+**Breaking changes:**
+- Swift 2 is not supported anymore, use the 2.* versions for Swift 2
+- Some methods are renamed, those are annotated with an availability annotation so the compiler will help you rename
 
 ## 2.5.0
 
