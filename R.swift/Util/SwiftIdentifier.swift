@@ -150,10 +150,10 @@ private let SwiftKeywords = [
   // Keywords used in expressions and types
   "as", "Any", "catch", "false", "is", "nil", "rethrows", "super", "self", "Self", "throw", "throws", "true", "try",
 
-  // Keywords used in patterns
-  "_",
-
   // Keywords that begin with a number sign (#)
   "#available", "#colorLiteral", "#column", "#else", "#elseif", "#endif", "#file", "#fileLiteral", "#function", "#if", "#imageLiteral", "#line", "#selector", "#sourceLocation",
+
+  // Keywords from Swift 2 that are still reserved
+  "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__",
 ]
 
