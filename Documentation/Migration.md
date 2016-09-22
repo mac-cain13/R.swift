@@ -2,6 +2,12 @@
 
 Pointers for migration between major versions.
 
+## Upgrading to 3.0
+
+- Make sure you use Swift 3 / Xcode 8 since we've adjusted to the syntax changes.
+- If you want to use Swift 2.3 / Xcode 8 use the latest R.swift 2 release.
+- Some methods are renamed to match the new Swift 3 naming conventions, there are annotation available so the compiler can help you migrate.
+
 ## Upgrading to 2.0
 
 - Make sure you use Swift 2.2 / Xcode 7.3 since we've adjusted to the syntax changes.
