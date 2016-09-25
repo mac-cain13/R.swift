@@ -80,6 +80,7 @@
 		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
+		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E49A92E1DBC6CCB05867DDB6 /* Pods_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */; };
 /* End PBXBuildFile section */
@@ -192,6 +193,9 @@
 		E29693591CAD64D100401D53 /* associatedtype */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = associatedtype; sourceTree = "<group>"; };
 		E296935B1CAD666200401D53 /* #column */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "#column"; sourceTree = "<group>"; };
 		E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelativeToProject.xib; sourceTree = "<group>"; };
+		E2CD68631D7CACC100BEBE59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text; name = Base; path = Base.lproj/hello.txt; sourceTree = "<group>"; };
+		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
+		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
 		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -314,6 +318,7 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				E2CD68611D7CAC9200BEBE59 /* Localized */,
 				E2F268AF1C92BFE00093995D /* Colors */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				D51E60BF1BB13612004BB376 /* Images */,
@@ -446,6 +451,14 @@
 			name = "Relative To Project";
 			path = "ResourceApp/Relative To Project";
 			sourceTree = SOURCE_ROOT;
+		};
+		E2CD68611D7CAC9200BEBE59 /* Localized */ = {
+			isa = PBXGroup;
+			children = (
+				E2CD68641D7CACC100BEBE59 /* hello.txt */,
+			);
+			path = Localized;
+			sourceTree = "<group>";
 		};
 		E2F268AF1C92BFE00093995D /* Colors */ = {
 			isa = PBXGroup;
@@ -605,6 +618,7 @@
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
+				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
@@ -918,6 +932,16 @@
 				E2762AC31CCCDFE10009BCAA /* nl */,
 			);
 			name = Settings.stringsdict;
+			sourceTree = "<group>";
+		};
+		E2CD68641D7CACC100BEBE59 /* hello.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E2CD68631D7CACC100BEBE59 /* Base */,
+				E2CD68651D7CACCA00BEBE59 /* es */,
+				E2CD68661D7CACCB00BEBE59 /* nl */,
+			);
+			name = hello.txt;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
