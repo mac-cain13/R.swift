@@ -8,7 +8,7 @@
 
 import Foundation
 
-private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: .CaseInsensitive)
+private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: .caseInsensitive)
 
 /*
  Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
@@ -18,13 +18,13 @@ struct SwiftIdentifier : CustomStringConvertible {
   let description: String
 
   init(name: String, lowercaseFirstCharacter: Bool = true) {
-    var nameComponents = name.componentsSeparatedByCharactersInSet(BlacklistedCharacters)
+    var nameComponents = name.components(separatedBy: BlacklistedCharacters)
 
-    let firstComponent = nameComponents.removeAtIndex(0)
+    let firstComponent = nameComponents.remove(at: 0)
     let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
 
     let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
-    let sanitizedSwiftName = numberRegex.stringByReplacingMatchesInString(cleanedSwiftName, options: [], range: fullRange, withTemplate: "")
+    let sanitizedSwiftName = numberRegex.stringByReplacingMatches(in: cleanedSwiftName, options: [], range: fullRange, withTemplate: "")
 
     let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
 
@@ -51,7 +51,7 @@ func ==(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {
   return lhs.description == rhs.description
 }
 
-extension SwiftIdentifier : StringLiteralConvertible {
+extension SwiftIdentifier : ExpressibleByStringLiteral {
   typealias StringLiteralType = String
   typealias UnicodeScalarLiteralType = String
   typealias ExtendedGraphemeClusterLiteralType = String
@@ -79,51 +79,51 @@ struct SwiftNameGroups<T> {
   let duplicates: [(SwiftIdentifier, [String])] // Identifiers that result in duplicate Swift names
   let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
 
-  func printWarningsForDuplicatesAndEmpties(source source: String, container: String? = nil, result: String) {
+  func printWarningsForDuplicatesAndEmpties(source: String, container: String? = nil, result: String) {
 
-    let sourceSingular = [source, container].flatMap { $0 }.joinWithSeparator(" ")
-    let sourcePlural = ["\(source)s", container].flatMap { $0 }.joinWithSeparator(" ")
+    let sourceSingular = [source, container].flatMap { $0 }.joined(separator: " ")
+    let sourcePlural = ["\(source)s", container].flatMap { $0 }.joined(separator: " ")
 
     let resultSingular = result
     let resultPlural = "\(result)s"
 
     for (sanitizedName, dups) in duplicates {
-      warn("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName)' would be generated for all of these \(resultPlural): \(dups.joinWithSeparator(", "))")
+      warn("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName)' would be generated for all of these \(resultPlural): \(dups.joined(separator: ", "))")
     }
 
-    if let empty = empties.first where empties.count == 1 {
+    if let empty = empties.first , empties.count == 1 {
       warn("Skipping 1 \(sourceSingular) because no swift identifier can be generated for \(resultSingular): \(empty)")
     }
     else if empties.count > 1 {
-      warn("Skipping \(empties.count) \(sourcePlural) because no swift identifier can be generated for all of these \(resultPlural): \(empties.joinWithSeparator(", "))")
+      warn("Skipping \(empties.count) \(sourcePlural) because no swift identifier can be generated for all of these \(resultPlural): \(empties.joined(separator: ", "))")
     }
   }
 }
 
-extension SequenceType {
-  func groupBySwiftIdentifiers(identifierSelector: Generator.Element -> String) -> SwiftNameGroups<Generator.Element> {
+extension Sequence {
+  func grouped(by identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
     var groupedBy = groupBy { SwiftIdentifier(name: identifierSelector($0)) }
     let empty = SwiftIdentifier(name: "")
-    let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sort()
+    let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sorted()
     groupedBy[empty] = nil
 
     let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
-      .map { ($0.0, $0.1.map(identifierSelector).sort()) }
+      .map { ($0.0, $0.1.map(identifierSelector).sorted()) }
 
     return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
   }
 }
 
-private let BlacklistedCharacters: NSCharacterSet = {
-  let blacklist = NSMutableCharacterSet(charactersInString: "")
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.punctuationCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.symbolCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.illegalCharacterSet())
-  blacklist.formUnionWithCharacterSet(NSCharacterSet.controlCharacterSet())
-  blacklist.removeCharactersInString("_")
+private let BlacklistedCharacters: CharacterSet = {
+  let blacklist = NSMutableCharacterSet(charactersIn: "")
+  blacklist.formUnion(with: CharacterSet.whitespacesAndNewlines)
+  blacklist.formUnion(with: CharacterSet.punctuationCharacters)
+  blacklist.formUnion(with: CharacterSet.symbols)
+  blacklist.formUnion(with: CharacterSet.illegalCharacters)
+  blacklist.formUnion(with: CharacterSet.controlCharacters)
+  blacklist.removeCharacters(in: "_")
 
   // Emoji ranges, roughly based on http://www.unicode.org/Public/emoji/1.0//emoji-data.txt
   [
@@ -133,10 +133,10 @@ private let BlacklistedCharacters: NSCharacterSet = {
     0x1F1E6...0x1F1FF,
   ].forEach {
     let range = NSRange(location: $0.startIndex, length: $0.endIndex - $0.startIndex)
-    blacklist.removeCharactersInRange(range)
+    blacklist.removeCharacters(in: range)
   }
 
-  return blacklist
+  return blacklist as CharacterSet
 }()
 
 // Based on https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/LexicalStructure.html#//apple_ref/doc/uid/TP40014097-CH30-ID413

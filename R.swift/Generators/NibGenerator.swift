@@ -40,26 +40,26 @@ struct NibGenerator: Generator {
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     internalStruct = Struct(
-        type: Type(module: .Host, name: "nib"),
+        type: Type(module: .host, name: "nib"),
         implements: [],
         typealiasses: [],
         properties: [],
         functions: [],
         structs: groupedNibs
           .uniques
-          .map(NibGenerator.nibStructForNib)
+          .map(NibGenerator.nibStruct)
       )
 
     let nibProperties: [Property] = groupedNibs
       .uniques
-      .map(NibGenerator.nibVarForNib)
+      .map(NibGenerator.nibVar)
     let nibFunctions: [Function] = groupedNibs
       .uniques
-      .map(NibGenerator.nibFuncForNib)
+      .map(NibGenerator.nibFunc)
 
     externalStruct = Struct(
       comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
-        type: Type(module: .Host, name: "nib"),
+        type: Type(module: .host, name: "nib"),
         implements: [],
         typealiasses: [],
         properties: nibProperties,
@@ -68,7 +68,7 @@ struct NibGenerator: Generator {
       )
   }
 
-  private static func nibFuncForNib(nib: Nib) -> Function {
+  private static func nibFunc(for nib: Nib) -> Function {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       isStatic: true,
@@ -83,36 +83,36 @@ struct NibGenerator: Generator {
     )
   }
 
-  private static func nibVarForNib(nib: Nib) -> Let {
+  private static func nibVar(for nib: Nib) -> Let {
     let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
-    let structType = Type(module: .Host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
+    let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
     return Let(
       comments: ["Nib `\(nib.name)`."],
       isStatic: true,
       name: SwiftIdentifier(name: nib.name),
-      typeDefinition: .Inferred(structType),
+      typeDefinition: .inferred(structType),
       value: "\(structType)()"
     )
   }
 
-  private static func nibStructForNib(nib: Nib) -> Struct {
+  private static func nibStruct(for nib: Nib) -> Struct {
 
     let instantiateParameters = [
       Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
-      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .StdLib, name: SwiftIdentifier(rawValue: "[NSObject : AnyObject]"), optional: true), defaultValue: "nil")
+      Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .stdLib, name: SwiftIdentifier(rawValue: "[NSObject : AnyObject]"), optional: true), defaultValue: "nil")
     ]
 
     let bundleLet = Let(
       isStatic: false,
       name: "bundle",
-      typeDefinition: .Inferred(Type._Bundle),
+      typeDefinition: .inferred(Type._Bundle),
       value: "_R.hostingBundle"
     )
 
     let nameVar = Let(
       isStatic: false,
       name: "name",
-      typeDefinition: .Inferred(Type._String),
+      typeDefinition: .inferred(Type._String),
       value: "\"\(nib.name)\""
     )
 
@@ -135,11 +135,11 @@ struct NibGenerator: Generator {
     let reuseIdentifierProperties: [Property]
     let reuseProtocols: [Type]
     let reuseTypealiasses: [Typealias]
-    if let reusable = nib.reusables.first where nib.rootViews.count == 1 && nib.reusables.count == 1 {
+    if let reusable = nib.reusables.first , nib.rootViews.count == 1 && nib.reusables.count == 1 {
       reuseIdentifierProperties = [Let(
         isStatic: false,
         name: "identifier",
-        typeDefinition: .Inferred(Type._String),
+        typeDefinition: .inferred(Type._String),
         value: "\"\(reusable.identifier)\""
         )]
       reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
@@ -152,7 +152,7 @@ struct NibGenerator: Generator {
 
     let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
     return Struct(
-        type: Type(module: .Host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
+        type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
         implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
         typealiasses: reuseTypealiasses,
         properties: [bundleLet, nameVar] + reuseIdentifierProperties,

@@ -9,80 +9,80 @@
 
 import Foundation
 
-enum InputParsingError: ErrorType {
-  case IllegalOption(error: String, helpString: String)
-  case MissingOption(error: String, helpString: String)
-  case UserAskedForHelp(helpString: String)
-  case UserRequestsVersionInformation(helpString: String)
+enum InputParsingError: Error {
+  case illegalOption(error: String, helpString: String)
+  case missingOption(error: String, helpString: String)
+  case userAskedForHelp(helpString: String)
+  case userRequestsVersionInformation(helpString: String)
 
   var helpString: String {
     switch self {
-    case let .IllegalOption(_, helpString):
+    case let .illegalOption(_, helpString):
       return helpString
-    case let .MissingOption(_, helpString):
+    case let .missingOption(_, helpString):
       return helpString
-    case let .UserAskedForHelp(helpString):
+    case let .userAskedForHelp(helpString):
       return helpString
-    case let .UserRequestsVersionInformation(helpString):
+    case let .userRequestsVersionInformation(helpString):
       return helpString
     }
   }
 
   var errorDescription: String? {
     switch self {
-    case let .IllegalOption(error, _):
+    case let .illegalOption(error, _):
       return error
-    case let .MissingOption(error, _):
+    case let .missingOption(error, _):
       return error
-    case .UserAskedForHelp, .UserRequestsVersionInformation:
+    case .userAskedForHelp, .userRequestsVersionInformation:
       return nil
     }
   }
 }
 
 private let versionOption = Option(
-  trigger: .Long( "version"),
+  trigger: .long( "version"),
   numberOfParameters: 0,
   helpDescription: "Prints version information about this release."
 )
 
 private let xcodeprojOption = Option(
-  trigger: .Mixed("p", "xcodeproj"),
+  trigger: .mixed("p", "xcodeproj"),
   numberOfParameters: 1,
   helpDescription: "Path to the xcodeproj file, if non given R.swift will use the environment variable PROJECT_FILE_PATH."
 )
 private let targetOption = Option(
-  trigger: .Mixed("t", "target"),
+  trigger: .mixed("t", "target"),
   numberOfParameters: 1,
   helpDescription: "Target the R-file should be generated for, if none given R.swift will use the environment variable TARGET_NAME."
 )
 private let bundleIdentifierOption = Option(
-  trigger: .Long("bundleIdentifier"),
+  trigger: .long("bundleIdentifier"),
   numberOfParameters: 1,
   helpDescription: "Bundle identifier the R-file is be generated for, if none given R.swift will use the environment variable PRODUCT_BUNDLE_IDENTIFIER."
 )
 private let productModuleNameOption = Option(
-  trigger: .Long("productModuleName"),
+  trigger: .long("productModuleName"),
   numberOfParameters: 1,
   helpDescription: "Product module name the R-file is generated for, is none given R.swift will use the environment variable PRODUCT_MODULE_NAME"
 )
 private let buildProductsDirOption = Option(
-  trigger: .Long("buildProductsDir"), 
+  trigger: .long("buildProductsDir"), 
   numberOfParameters: 1, 
   helpDescription: "Build products folder that Xcode uses during build, if none given R.swift will use the environment variable BUILT_PRODUCTS_DIR."
 )
 private let developerDirOption = Option(
-  trigger: .Long("developerDir"), 
+  trigger: .long("developerDir"), 
   numberOfParameters: 1, 
   helpDescription: "Developer folder that Xcode uses during build, if none given R.swift will use the environment variable DEVELOPER_DIR."
 )
 private let sourceRootOption = Option(
-  trigger: .Long("sourceRoot"), 
+  trigger: .long("sourceRoot"), 
   numberOfParameters: 1, 
   helpDescription: "Source root folder that Xcode uses during build, if none given R.swift will use the environment variable SOURCE_ROOT."
 )
 private let sdkRootOption = Option(
-  trigger: .Long("sdkRoot"), 
+  trigger: .long("sdkRoot"), 
   numberOfParameters: 1, 
   helpDescription: "SDK root folder that Xcode uses during build, if none given R.swift will use the environment variable SDKROOT."
 )
@@ -100,51 +100,51 @@ private let AllOptions = [
 ]
 
 struct CallInformation {
-  let outputURL: NSURL
+  let outputURL: URL
 
-  let xcodeprojURL: NSURL
+  let xcodeprojURL: URL
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
 
-  private let buildProductsDirURL: NSURL
-  private let developerDirURL: NSURL
-  private let sourceRootURL: NSURL
-  private let sdkRootURL: NSURL
+  private let buildProductsDirURL: URL
+  private let developerDirURL: URL
+  private let sourceRootURL: URL
+  private let sdkRootURL: URL
 
-  init(processInfo: NSProcessInfo) throws {
+  init(processInfo: ProcessInfo) throws {
     try self.init(arguments: processInfo.arguments, environment: processInfo.environment)
   }
 
   init(arguments: [String], environment: [String: String]) throws {
     let optionParser = OptionParser(definitions: AllOptions)
-    let commandName = arguments.first.flatMap { NSURL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
+    let commandName = arguments.first.flatMap { URL(fileURLWithPath: $0).lastPathComponent } ?? "rswift"
     let argumentsWithoutCall = Array(arguments.dropFirst())
 
     do {
       let (options, extraArguments) = try optionParser.parse(argumentsWithoutCall)
 
       if options[optionParser.helpOption] != nil {
-        throw InputParsingError.UserAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
+        throw InputParsingError.userAskedForHelp(helpString: optionParser.helpStringForCommandName(commandName))
       }
 
       if options[versionOption] != nil {
-        throw InputParsingError.UserRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
+        throw InputParsingError.userRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
       }
 
-      guard let outputPath = extraArguments.first where extraArguments.count == 1 else {
-        throw InputParsingError.IllegalOption(
+      guard let outputPath = extraArguments.first , extraArguments.count == 1 else {
+        throw InputParsingError.illegalOption(
           error: "Output folder for the 'R.generated.swift' file is mandatory as last argument.",
           helpString: optionParser.helpStringForCommandName(commandName)
         )
       }
 
-      let outputURL = NSURL(fileURLWithPath: outputPath)
+      let outputURL = URL(fileURLWithPath: outputPath)
 
       var resourceValue: AnyObject?
-      try outputURL.getResourceValue(&resourceValue, forKey: NSURLIsDirectoryKey)
-      if let isDirectory = (resourceValue as? NSNumber)?.boolValue where isDirectory {
-        self.outputURL = outputURL.URLByAppendingPathComponent(ResourceFilename, isDirectory: false)!
+      try (outputURL as NSURL).getResourceValue(&resourceValue, forKey: URLResourceKey.isDirectoryKey)
+      if let isDirectory = (resourceValue as? NSNumber)?.boolValue , isDirectory {
+        self.outputURL = outputURL.appendingPathComponent(ResourceFilename, isDirectory: false)!
       } else {
         self.outputURL = outputURL
       }
@@ -152,7 +152,7 @@ struct CallInformation {
       let getFirstArgumentForOption = getFirstArgumentFromOptionData(options, helpString: optionParser.helpStringForCommandName(commandName))
 
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, defaultValue: environment["PROJECT_FILE_PATH"])
-      xcodeprojURL = NSURL(fileURLWithPath: xcodeprojPath)
+      xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
 
       targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
 
@@ -161,25 +161,25 @@ struct CallInformation {
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, defaultValue: environment["PRODUCT_MODULE_NAME"])
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
-      buildProductsDirURL = NSURL(fileURLWithPath: buildProductsDirPath)
+      buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
 
       let developerDirPath = try getFirstArgumentForOption(developerDirOption, defaultValue: environment["DEVELOPER_DIR"])
-      developerDirURL = NSURL(fileURLWithPath: developerDirPath)
+      developerDirURL = URL(fileURLWithPath: developerDirPath)
 
       let sourceRootPath = try getFirstArgumentForOption(sourceRootOption, defaultValue: environment["SOURCE_ROOT"])
-      sourceRootURL = NSURL(fileURLWithPath: sourceRootPath)
+      sourceRootURL = URL(fileURLWithPath: sourceRootPath)
 
       let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
-      sdkRootURL = NSURL(fileURLWithPath: sdkRootPath)
+      sdkRootURL = URL(fileURLWithPath: sdkRootPath)
     } catch let OptionKitError.InvalidOption(invalidOption) {
-      throw InputParsingError.IllegalOption(
+      throw InputParsingError.illegalOption(
         error: "The option '\(invalidOption)' is invalid.",
         helpString: optionParser.helpStringForCommandName(commandName)
       )
     }
   }
 
-  func URLForSourceTreeFolder(sourceTreeFolder: SourceTreeFolder) -> NSURL {
+  func URLForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
     switch sourceTreeFolder {
     case .BuildProductsDir:
       return buildProductsDirURL
@@ -193,24 +193,24 @@ struct CallInformation {
   }
 }
 
-private func getFirstArgumentFromOptionData(options: [Option:[String]], helpString: String) -> (_: Option, defaultValue: String?) throws -> String {
+private func getFirstArgument(from options: [Option:[String]], helpString: String) -> (Option, String?) throws -> String {
     return { (option, defaultValue) in
         guard let result = options[option]?.first ?? defaultValue else {
-            throw InputParsingError.MissingOption(error: "Missing option: \(option) ", helpString: helpString)
+            throw InputParsingError.missingOption(error: "Missing option: \(option) ", helpString: helpString)
         }
         
         return result
     }
 }
 
-func pathResolverWithSourceTreeFolderToURLConverter(URLForSourceTreeFolder: SourceTreeFolder -> NSURL) -> (path: Path) -> NSURL? {
+func pathResolver(with URLForSourceTreeFolder: @escaping (SourceTreeFolder) -> URL) -> (Path) -> URL? {
     return { path in
         switch path {
-        case let .Absolute(absolutePath):
-            return NSURL(fileURLWithPath: absolutePath)
-        case let .RelativeTo(sourceTreeFolder, relativePath):
+        case let .absolute(absolutePath):
+            return URL(fileURLWithPath: absolutePath)
+        case let .relativeTo(sourceTreeFolder, relativePath):
             let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-            return sourceTreeURL.URLByAppendingPathComponent(relativePath)
+            return sourceTreeURL.appendingPathComponent(relativePath)
         }
     }
 }

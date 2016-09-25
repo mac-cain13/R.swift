@@ -27,7 +27,7 @@ struct ReuseIdentifierGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
-      type: Type(module: .Host, name: "reuseIdentifier"),
+      type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
       properties: reuseIdentifierProperties.map(anyProperty),
@@ -36,12 +36,12 @@ struct ReuseIdentifierGenerator: Generator {
     )
   }
 
-  private static func letFromReusable(reusable: Reusable) -> Let {
+  fileprivate static func letFromReusable(_ reusable: Reusable) -> Let {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,
       name: SwiftIdentifier(name: reusable.identifier),
-      typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
+      typeDefinition: .specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
       value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )
   }

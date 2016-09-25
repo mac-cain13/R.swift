@@ -19,16 +19,16 @@ struct ColorGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.color` struct is generated, and contains static references to \(palettes.count) color palettes."],
-      type: Type(module: .Host, name: "color"),
+      type: Type(module: .host, name: "color"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedPalettes.uniques.flatMap(ColorGenerator.colorStructFromPalette)
+      structs: groupedPalettes.uniques.flatMap(ColorGenerator.colorStruct)
     )
   }
 
-  private static func colorStructFromPalette(palette: ColorPalette) -> Struct? {
+  private static func colorStruct(from palette: ColorPalette) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
     let name = SwiftIdentifier(name: palette.filename)
@@ -38,7 +38,7 @@ struct ColorGenerator: Generator {
 
     return Struct(
       comments: ["This `R.color.\(name)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
-      type: Type(module: .Host, name: name),
+      type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
       properties: groupedColors.uniques.map(ColorGenerator.colorLet),
@@ -47,19 +47,19 @@ struct ColorGenerator: Generator {
     )
   }
 
-  private static func colorLet(name: String, color: NSColor) -> Let {
+  private static func colorLet(_ name: String, color: NSColor) -> Let {
     return Let(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
       ],
       isStatic: true,
       name: SwiftIdentifier(name: name),
-      typeDefinition: .Inferred(Type.ColorResource),
+      typeDefinition: .inferred(Type.ColorResource),
       value: "ColorResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
     )
   }
 
-  private static func colorFunction(name: String, color: NSColor) -> Function {
+  private static func colorFunction(_ name: String, color: NSColor) -> Function {
     return Function(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",

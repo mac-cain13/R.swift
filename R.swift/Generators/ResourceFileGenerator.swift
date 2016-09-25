@@ -24,7 +24,7 @@ struct ResourceFileGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.file` struct is generated, and contains static references to \(firstLocales.count) files."],
-      type: Type(module: .Host, name: "file"),
+      type: Type(module: .host, name: "file"),
       implements: [],
       typealiasses: [],
       properties: firstLocales.flatMap(ResourceFileGenerator.propertiesFromResourceFiles),
@@ -33,7 +33,7 @@ struct ResourceFileGenerator: Generator {
     )
   }
 
-  private static func propertiesFromResourceFiles(fullname: String, resourceFiles: [ResourceFile]) -> [Property] {
+  private static func propertiesFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Property] {
 
     return resourceFiles
       .map {
@@ -42,13 +42,13 @@ struct ResourceFileGenerator: Generator {
           comments: ["Resource file `\($0.fullname)`."],
           isStatic: true,
           name: SwiftIdentifier(name: $0.fullname),
-          typeDefinition: .Inferred(Type.FileResource),
+          typeDefinition: .inferred(Type.FileResource),
           value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))"
         )
     }
   }
 
-  private static func functionsFromResourceFiles(fullname: String, resourceFiles: [ResourceFile]) -> [Function] {
+  private static func functionsFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Function] {
 
     return resourceFiles
       .flatMap { resourceFile -> [Function] in

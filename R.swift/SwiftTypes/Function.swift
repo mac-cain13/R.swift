@@ -44,11 +44,11 @@ struct Function: UsedTypesProvider {
     return [
       returnType.usedTypes,
       parameters.flatMap(getUsedTypes),
-    ].flatten()
+    ].joined()
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")

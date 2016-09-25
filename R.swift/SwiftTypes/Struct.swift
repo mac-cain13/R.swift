@@ -26,7 +26,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
         properties.flatMap(getUsedTypes),
         functions.flatMap(getUsedTypes),
         structs.flatMap(getUsedTypes),
-      ].flatten()
+      ].joined()
   }
 
   init(accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
@@ -59,26 +59,26 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
-    let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joinWithSeparator(", ") : ""
+    let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joined(separator: ", ") : ""
 
     let typealiasString = typealiasses
-      .sort { $0.alias < $1.alias }
+      .joined { $0.alias < $1.alias }
       .joinWithSeparator("\n")
 
     let varsString = properties
 //      .sort { $0.name.description < $1.name.description }
       .map { $0.description }
-      .sort()
-      .joinWithSeparator("\n")
+      .sorted()
+      .joined(separator: "\n")
     let functionsString = functions
 //      .sort { $0.name.description < $1.name.description }
       .map { $0.description }
-      .sort()
-      .joinWithSeparator("\n\n")
+      .sorted()
+      .joined(separator: "\n\n")
     let structsString = structs
-      .sort { $0.type.description < $1.type.description }
+      .joined { $0.type.description < $1.type.description }
       .joinWithSeparator("\n\n")
 
 
@@ -86,7 +86,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
     let filePrivateInit = "fileprivate init() {}"
 
     let bodyComponents = [typealiasString, varsString, functionsString, structsString, filePrivateInit].filter { $0 != "" }
-    let bodyString = bodyComponents.joinWithSeparator("\n\n").indentWithString(IndentationString)
+    let bodyString = bodyComponents.joined(separator: "\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }

@@ -34,23 +34,23 @@ struct ImageGenerator: Generator {
           comments: ["Image `\(name)`."],
           isStatic: true,
           name: SwiftIdentifier(name: name),
-          typeDefinition: .Inferred(Type.ImageResource),
+          typeDefinition: .inferred(Type.ImageResource),
           value: "\(Type.ImageResource.name)(bundle: _R.hostingBundle, name: \"\(name)\")"
         )
       }
 
     externalStruct = Struct(
       comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
-      type: Type(module: .Host, name: "image"),
+      type: Type(module: .host, name: "image"),
       implements: [],
       typealiasses: [],
       properties: imageLets.map(anyProperty),
-      functions: groupedFunctions.uniques.map(ImageGenerator.functionForImageName),
+      functions: groupedFunctions.uniques.map(ImageGenerator.imageFunction),
       structs: []
     )
   }
 
-  static func functionForImageName(name: String) -> Function {
+  static func imageFunction(for name: String) -> Function {
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       isStatic: true,

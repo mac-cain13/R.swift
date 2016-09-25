@@ -48,7 +48,7 @@ class MainTests: XCTestCase {
   
   func testPerformanceSwiftNameSanitization() {
     // This is an example of a performance test case.
-    self.measureBlock {
+    self.measure {
       (0...1000).forEach { _ in
         let _ = SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
       }

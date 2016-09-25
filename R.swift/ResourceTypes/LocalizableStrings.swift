@@ -21,19 +21,19 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     self.dictionary = dictionary
   }
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try LocalizableStrings.throwIfUnsupportedExtension(url.pathExtension)
 
     guard let filename = url.filename else {
-      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
 
     // Get locale from url (second to last component)
     let locale = Locale(url: url)
 
     // Check to make sure url can be parsed as a dictionary
-    guard let nsDictionary = NSDictionary(contentsOfURL: url) else {
-      throw ResourceParsingError.ParsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
+    guard let nsDictionary = NSDictionary(contentsOf: url) else {
+      throw ResourceParsingError.parsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
     // Parse dicts from NSDictionary
@@ -44,7 +44,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     case "stringsdict"?:
       dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
     default:
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
+      throw ResourceParsingError.unsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
     }
 
     self.filename = filename
@@ -53,22 +53,22 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
   }
 }
 
-private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
   var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
 
   for (key, obj) in nsDictionary {
     if let
       key = key as? String,
-      val = obj as? String
+      let val = obj as? String
     {
       var params: [StringParam] = []
 
       for part in FormatPart.formatParts(formatString: val) {
         switch part {
-        case .Reference:
-          throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(key) = \(val)")
+        case .reference:
+          throw ResourceParsingError.parsingFailed("Non-specifier reference in \(source): \(key) = \(val)")
 
-        case .Spec(let formatSpecifier):
+        case .spec(let formatSpecifier):
           params.append(StringParam(name: nil, spec: formatSpecifier))
         }
       }
@@ -77,21 +77,21 @@ private func parseStrings(nsDictionary: NSDictionary, source: String) throws -> 
       dictionary[key] = (params, val)
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Non-string value in \(source): \(key) = \(obj)")
+      throw ResourceParsingError.parsingFailed("Non-string value in \(source): \(key) = \(obj)")
     }
   }
 
   return dictionary
 }
 
-private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
+private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) throws -> [String : (params: [StringParam], commentValue: String)] {
 
   var dictionary: [String : (params: [StringParam], commentValue: String)] = [:]
 
   for (key, obj) in nsDictionary {
     if let
       key = key as? String,
-      dict = obj as? [String: AnyObject]
+      let dict = obj as? [String: AnyObject]
     {
       guard let localizedFormat = dict["NSStringLocalizedFormatKey"] as? String else {
         continue
@@ -101,29 +101,29 @@ private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws
         let params = try parseStringsdictParams(localizedFormat, dict: dict)
         dictionary[key] = (params, localizedFormat)
       }
-      catch ResourceParsingError.ParsingFailed(let message) {
+      catch ResourceParsingError.parsingFailed(let message) {
         warn("\(message) in '\(key)' \(source)")
       }
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Non-dict value in \(source): \(key) = \(obj)")
+      throw ResourceParsingError.parsingFailed("Non-dict value in \(source): \(key) = \(obj)")
     }
   }
 
   return dictionary
 }
 
-private func parseStringsdictParams(format: String, dict: [String: AnyObject]) throws -> [StringParam] {
+private func parseStringsdictParams(_ format: String, dict: [String: AnyObject]) throws -> [StringParam] {
 
   var params: [StringParam] = []
 
   let parts = FormatPart.formatParts(formatString: format)
   for part in parts {
     switch part {
-    case .Reference(let reference):
+    case .reference(let reference):
       params += try lookup(reference, dict: dict)
 
-    case .Spec(let formatSpecifier):
+    case .spec(let formatSpecifier):
       params.append(StringParam(name: nil, spec: formatSpecifier))
     }
   }
@@ -135,24 +135,24 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
   var processedReferences = processedReferences
 
   if processedReferences.contains(key) {
-    throw ResourceParsingError.ParsingFailed("Cyclic reference '\(key)'")
+    throw ResourceParsingError.parsingFailed("Cyclic reference '\(key)'")
   }
 
   processedReferences.append(key)
 
-  guard let obj = dict[key], nested = obj as? [String: AnyObject] else {
-    throw ResourceParsingError.ParsingFailed("Missing reference '\(key)'")
+  guard let obj = dict[key], let nested = obj as? [String: AnyObject] else {
+    throw ResourceParsingError.parsingFailed("Missing reference '\(key)'")
   }
 
   guard let formatSpecType = nested["NSStringFormatSpecTypeKey"] as? String,
-    formatValueType = nested["NSStringFormatValueTypeKey"] as? String
-    where formatSpecType == "NSStringPluralRuleType"
+    let formatValueType = nested["NSStringFormatValueTypeKey"] as? String
+    , formatSpecType == "NSStringPluralRuleType"
   else {
-    throw ResourceParsingError.ParsingFailed("Incorrect reference '\(key)'")
+    throw ResourceParsingError.parsingFailed("Incorrect reference '\(key)'")
   }
   guard let formatSpecifier = FormatSpecifier(formatString: formatValueType)
   else {
-    throw ResourceParsingError.ParsingFailed("Incorrect reference format specifier \"\(formatValueType)\" for '\(key)'")
+    throw ResourceParsingError.parsingFailed("Incorrect reference format specifier \"\(formatValueType)\" for '\(key)'")
   }
 
   var results = [StringParam(name: nil, spec: formatSpecifier)]
@@ -164,10 +164,10 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
     let parts = FormatPart.formatParts(formatString: stringValue)
     for part in parts {
       switch part {
-      case .Reference(let reference):
+      case .reference(let reference):
         alternative += try lookup(reference, dict: dict, processedReferences: processedReferences)
 
-      case .Spec(let formatSpecifier):
+      case .spec(let formatSpecifier):
         alternative.append(StringParam(name: key, spec: formatSpecifier))
       }
     }
@@ -176,7 +176,7 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
       results = unified
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Can't unify '\(key)'")
+      throw ResourceParsingError.parsingFailed("Can't unify '\(key)'")
     }
   }
 

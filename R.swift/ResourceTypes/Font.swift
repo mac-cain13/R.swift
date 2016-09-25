@@ -13,16 +13,16 @@ struct Font: WhiteListedExtensionsResourceType {
 
   let name: String
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Font.throwIfUnsupportedExtension(url.pathExtension)
 
-    guard let dataProvider = CGDataProviderCreateWithURL(url) else {
-      throw ResourceParsingError.ParsingFailed("Unable to create data provider for font at \(url)")
+    guard let dataProvider = CGDataProvider(url: url as CFURL) else {
+      throw ResourceParsingError.parsingFailed("Unable to create data provider for font at \(url)")
     }
-    let font = CGFontCreateWithDataProvider(dataProvider)
+    let font = CGFont(dataProvider)
 
-    guard let postScriptName = CGFontCopyPostScriptName(font) else {
-      throw ResourceParsingError.ParsingFailed("No postscriptName associated to font at \(url)")
+    guard let postScriptName = font.postScriptName else {
+      throw ResourceParsingError.parsingFailed("No postscriptName associated to font at \(url)")
     }
 
     name = postScriptName as String

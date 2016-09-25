@@ -37,20 +37,20 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
       .first
   }
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Storyboard.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
-    guard let parser = NSXMLParser(contentsOfURL: url) else {
-      throw ResourceParsingError.ParsingFailed("Couldn't load file at: '\(url)'")
+    guard let parser = XMLParser(contentsOf: url) else {
+      throw ResourceParsingError.parsingFailed("Couldn't load file at: '\(url)'")
     }
 
     let parserDelegate = StoryboardParserDelegate()
     parser.delegate = parserDelegate
 
     guard parser.parse() else {
-      throw ResourceParsingError.ParsingFailed("Invalid XML in file at: '\(url)'")
+      throw ResourceParsingError.parsingFailed("Invalid XML in file at: '\(url)'")
     }
 
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
@@ -66,15 +66,15 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let type: Type
     private(set) var segues: [Segue]
 
-    private mutating func addSegue(segue: Segue) {
+    private mutating func add(_ segue: Segue) {
       segues.append(segue)
     }
   }
 
   struct ViewControllerPlaceholder {
     enum ResolvedResult {
-      case CustomBundle
-      case Resolved(ViewController?)
+      case customBundle
+      case resolved(ViewController?)
     }
 
     let id: String
@@ -82,25 +82,25 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let referencedIdentifier: String?
     let bundleIdentifier: String?
 
-    func resolveWithStoryboards(storyboards: [Storyboard]) -> ResolvedResult {
+    func resolveWithStoryboards(_ storyboards: [Storyboard]) -> ResolvedResult {
       if nil != bundleIdentifier {
         // Can't resolve storyboard in other bundles
-        return .CustomBundle
+        return .customBundle
       }
 
       guard let storyboardName = storyboardName else {
         // Storyboard reference without a storyboard defined?!
-        return .Resolved(nil)
+        return .resolved(nil)
       }
 
       let storyboard = storyboards
         .filter { $0.name == storyboardName }
 
       guard let referencedIdentifier = referencedIdentifier else {
-        return .Resolved(storyboard.first?.initialViewController)
+        return .resolved(storyboard.first?.initialViewController)
       }
 
-      return .Resolved(storyboard
+      return .resolved(storyboard
         .flatMap {
           $0.viewControllers.filter { $0.storyboardIdentifier == referencedIdentifier }
         }
@@ -116,7 +116,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   }
 }
 
-private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
+private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var viewControllers: [Storyboard.ViewController] = []
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
@@ -126,7 +126,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
   // State
   var currentViewController: Storyboard.ViewController?
 
-  @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+  @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "document":
       if let initialViewController = attributeDict["initialViewController"] {
@@ -141,13 +141,13 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
         .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
         .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
-      if let customType = customType where attributeDict["kind"] != "custom" {
+      if let customType = customType , attributeDict["kind"] != "custom" {
         warn("Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
       }
 
       if let segueIdentifier = attributeDict["identifier"],
-        destination = attributeDict["destination"],
-        kind = attributeDict["kind"]
+        let destination = attributeDict["destination"],
+        let kind = attributeDict["kind"]
       {
         let type = customType ?? Type._UIStoryboardSegue
 
@@ -161,7 +161,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
       }
 
     case "viewControllerPlaceholder":
-      if let id = attributeDict["id"] where attributeDict["sceneMemberID"] == "viewController" {
+      if let id = attributeDict["id"] , attributeDict["sceneMemberID"] == "viewController" {
         let placeholder = Storyboard.ViewControllerPlaceholder(
           id: id,
           storyboardName: attributeDict["storyboardName"],
@@ -182,7 +182,7 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+  @objc func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
     // We keep the current view controller open to collect segues until the closing scene:
     // <scene>
@@ -200,8 +200,8 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func viewControllerFromAttributes(attributeDict: [String : String], elementName: String) -> Storyboard.ViewController? {
-    guard let id = attributeDict["id"] where attributeDict["sceneMemberID"] == "viewController" else {
+  func viewControllerFromAttributes(_ attributeDict: [String : String], elementName: String) -> Storyboard.ViewController? {
+    guard let id = attributeDict["id"] , attributeDict["sceneMemberID"] == "viewController" else {
       return nil
     }
 
@@ -219,8 +219,8 @@ private class StoryboardParserDelegate: NSObject, NSXMLParserDelegate {
     return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
   }
 
-  func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
-    guard let reuseIdentifier = attributeDict["reuseIdentifier"] where reuseIdentifier != "" else {
+  func reusableFromAttributes(_ attributeDict: [String : String], elementName: String) -> Reusable? {
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] , reuseIdentifier != "" else {
       return nil
     }
 

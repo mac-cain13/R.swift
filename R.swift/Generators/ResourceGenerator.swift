@@ -20,7 +20,7 @@ private struct GeneratorResults {
 
   init() {}
 
-  mutating func addGenerator(generator: Generator) {
+  mutating func add(_ generator: Generator) {
     if let externalStruct = generator.externalStruct {
       externalStructs.append(externalStruct)
     }
@@ -31,7 +31,7 @@ private struct GeneratorResults {
   }
 }
 
-func generateResourceStructsWithResources(resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
+func generateResourceStructs(with resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
 
   let generators: [Generator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
@@ -49,19 +49,19 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   generators.forEach { generatorResults.addGenerator($0) }
 
   let internalResourceStruct = Struct(
-      type: Type(module: .Host, name: "_R"),
+      type: Type(module: .host, name: "_R"),
       implements: [],
       typealiasses: [],
       properties: [
         Let(
           isStatic: true,
           name: "hostingBundle",
-          typeDefinition: .Inferred(Type._Bundle),
+          typeDefinition: .inferred(Type._Bundle),
           value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
         Let(
           isStatic: true,
           name: "applicationLocale",
-          typeDefinition: .Inferred(Type._Locale),
+          typeDefinition: .inferred(Type._Locale),
           value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
       ],
       functions: [],
@@ -74,8 +74,8 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
   if internalResourceStruct.implements.map({ $0.type }).contains(Type.Validatable) {
     externalStructs.append(Struct(
         accessModifier: .Private,
-        type: Type(module: .Host, name: "intern"),
-        implements: [TypePrinter(type: Type.Validatable, style: .FullyQualified)],
+        type: Type(module: .host, name: "intern"),
+        implements: [TypePrinter(type: Type.Validatable, style: .fullyQualified)],
         typealiasses: [],
         properties: [],
         functions: [
@@ -96,7 +96,7 @@ func generateResourceStructsWithResources(resources: Resources, bundleIdentifier
 
   let externalResourceStruct = Struct(
       comments: ["This `R` struct is code generated, and contains references to static resources."],
-      type: Type(module: .Host, name: "R"),
+      type: Type(module: .host, name: "R"),
       implements: [],
       typealiasses: [],
       properties: [],
