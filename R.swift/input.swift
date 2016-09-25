@@ -46,20 +46,25 @@ private let versionOption = Option(
   helpDescription: "Prints version information about this release."
 )
 
+private let accessLevelOption = Option(
+  trigger: .Long("accessLevel"),
+  numberOfParameters: 1,
+  helpDescription: "The access level [public|internal] to use for the generated R-file, will default to `internal`."
+)
 private let xcodeprojOption = Option(
   trigger: .Mixed("p", "xcodeproj"),
   numberOfParameters: 1,
-  helpDescription: "Path to the xcodeproj file, if non given R.swift will use the environment variable PROJECT_FILE_PATH."
+  helpDescription: "Path to the xcodeproj file, will default to the environment variable PROJECT_FILE_PATH."
 )
 private let targetOption = Option(
   trigger: .Mixed("t", "target"),
   numberOfParameters: 1,
-  helpDescription: "Target the R-file should be generated for, if none given R.swift will use the environment variable TARGET_NAME."
+  helpDescription: "Target the R-file should be generated for, will default to the environment variable TARGET_NAME."
 )
 private let bundleIdentifierOption = Option(
   trigger: .Long("bundleIdentifier"),
   numberOfParameters: 1,
-  helpDescription: "Bundle identifier the R-file is be generated for, if none given R.swift will use the environment variable PRODUCT_BUNDLE_IDENTIFIER."
+  helpDescription: "Bundle identifier the R-file is be generated for, will default to the environment variable PRODUCT_BUNDLE_IDENTIFIER."
 )
 private let productModuleNameOption = Option(
   trigger: .Long("productModuleName"),
@@ -69,26 +74,27 @@ private let productModuleNameOption = Option(
 private let buildProductsDirOption = Option(
   trigger: .Long("buildProductsDir"), 
   numberOfParameters: 1, 
-  helpDescription: "Build products folder that Xcode uses during build, if none given R.swift will use the environment variable BUILT_PRODUCTS_DIR."
+  helpDescription: "Build products folder that Xcode uses during build, will default to the environment variable BUILT_PRODUCTS_DIR."
 )
 private let developerDirOption = Option(
   trigger: .Long("developerDir"), 
   numberOfParameters: 1, 
-  helpDescription: "Developer folder that Xcode uses during build, if none given R.swift will use the environment variable DEVELOPER_DIR."
+  helpDescription: "Developer folder that Xcode uses during build, will default to the environment variable DEVELOPER_DIR."
 )
 private let sourceRootOption = Option(
   trigger: .Long("sourceRoot"), 
   numberOfParameters: 1, 
-  helpDescription: "Source root folder that Xcode uses during build, if none given R.swift will use the environment variable SOURCE_ROOT."
+  helpDescription: "Source root folder that Xcode uses during build, will default to the environment variable SOURCE_ROOT."
 )
 private let sdkRootOption = Option(
   trigger: .Long("sdkRoot"), 
   numberOfParameters: 1, 
-  helpDescription: "SDK root folder that Xcode uses during build, if none given R.swift will use the environment variable SDKROOT."
+  helpDescription: "SDK root folder that Xcode uses during build, will default to the environment variable SDKROOT."
 )
 
 private let AllOptions = [
   versionOption,
+  accessLevelOption,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -101,6 +107,8 @@ private let AllOptions = [
 
 struct CallInformation {
   let outputURL: NSURL
+
+  let accessLevel: AccessModifier
 
   let xcodeprojURL: NSURL
   let targetName: String
@@ -150,6 +158,15 @@ struct CallInformation {
       }
 
       let getFirstArgumentForOption = getFirstArgumentFromOptionData(options, helpString: optionParser.helpStringForCommandName(commandName))
+
+      let accessLevelString = try getFirstArgumentForOption(accessLevelOption, defaultValue: AccessModifier.Internal.rawValue)
+      guard let parsedAccessLevel = AccessModifier(rawValue: accessLevelString) else {
+        throw InputParsingError.IllegalOption(
+          error: "Access level \(accessLevelString) is invalid.",
+          helpString: optionParser.helpStringForCommandName(commandName)
+        )
+      }
+      accessLevel = parsedAccessLevel
 
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, defaultValue: environment["PROJECT_FILE_PATH"])
       xcodeprojURL = NSURL(fileURLWithPath: xcodeprojPath)
