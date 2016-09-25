@@ -42,11 +42,16 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
 
     name = url.filename!
 
-    let parserDelegate = StoryboardParserDelegate()
+    guard let parser = NSXMLParser(contentsOfURL: url) else {
+      throw ResourceParsingError.ParsingFailed("Couldn't load file at: '\(url)'")
+    }
 
-    let parser = NSXMLParser(contentsOfURL: url)!
+    let parserDelegate = StoryboardParserDelegate()
     parser.delegate = parserDelegate
-    parser.parse()
+
+    guard parser.parse() else {
+      throw ResourceParsingError.ParsingFailed("Invalid XML in file at: '\(url)'")
+    }
 
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers

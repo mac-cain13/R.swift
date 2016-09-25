@@ -28,27 +28,17 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
 
     name = url.filename!
 
-    let fullPath = url.path!
-        
-    let parserDelegate = NibParserDelegate();
-    parserDelegate.filename = name
-        
-    //load data before, so we can detect if there is a problem loading it
-    let data = NSData(contentsOfURL: url.filePathURL!)
-    guard let workingData = data else {
-		//if we could not load the data, warn and return
-        warn("Failed to read file : \(fullPath)")
-        rootViews = [Type]()
-        reusables = [Reusable]()
-        return
+    guard let parser = NSXMLParser(contentsOfURL: url) else {
+      throw ResourceParsingError.ParsingFailed("Couldn't load file at: '\(url)'")
     }
-    //try parse the document
-    let parser =  NSXMLParser(data: workingData)
+
+    let parserDelegate = NibParserDelegate()
     parser.delegate = parserDelegate
-    if !parser.parse() {
-        //if we fail at parsing, then warn, this is for example bad xml, or if no data was presented at all
-        warn("Could not parse file : \(fullPath)")
+
+    guard parser.parse() else {
+        throw ResourceParsingError.ParsingFailed("Invalid XML in file at: '\(url)'")
     }
+
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
   }
