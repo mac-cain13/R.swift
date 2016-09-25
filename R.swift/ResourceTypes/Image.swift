@@ -17,7 +17,9 @@ struct Image: WhiteListedExtensionsResourceType {
   init(url: URL) throws {
     try Image.throwIfUnsupportedExtension(url.pathExtension)
 
-    guard let filename = url.lastPathComponent, let pathExtension = url.pathExtension else {
+    let filename = url.lastPathComponent
+    let pathExtension = url.pathExtension
+    guard filename.characters.count > 0 && pathExtension.characters.count > 0 else {
       throw ResourceParsingError.parsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 

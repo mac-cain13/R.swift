@@ -42,7 +42,7 @@ struct Resources {
 private func tryResourceParsing<T>(_ parse: () throws -> T) -> T? {
   do {
     return try parse()
-  } catch let ResourceParsingError.ParsingFailed(humanReadableError) {
+  } catch let ResourceParsingError.parsingFailed(humanReadableError) {
     warn(humanReadableError)
     return nil
   } catch ResourceParsingError.unsupportedExtension {

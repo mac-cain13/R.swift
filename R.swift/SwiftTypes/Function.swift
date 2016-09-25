@@ -44,7 +44,7 @@ struct Function: UsedTypesProvider {
     return [
       returnType.usedTypes,
       parameters.flatMap(getUsedTypes),
-    ].joined()
+    ].flatten()
   }
 
   var description: String {

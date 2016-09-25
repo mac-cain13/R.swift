@@ -101,7 +101,7 @@ struct SwiftNameGroups<T> {
 }
 
 extension Sequence {
-  func grouped(by identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
+  func groupedBySwiftIdentifier(_ identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
     var groupedBy = groupBy { SwiftIdentifier(name: identifierSelector($0)) }
     let empty = SwiftIdentifier(name: "")
     let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sorted()
@@ -132,7 +132,7 @@ private let BlacklistedCharacters: CharacterSet = {
     0x1F900...0x1F9FF,
     0x1F1E6...0x1F1FF,
   ].forEach {
-    let range = NSRange(location: $0.startIndex, length: $0.endIndex - $0.startIndex)
+    let range = NSRange(location: $0.lowerBound, length: $0.upperBound - $0.lowerBound)
     blacklist.removeCharacters(in: range)
   }
 

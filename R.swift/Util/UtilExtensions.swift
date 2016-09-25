@@ -25,19 +25,25 @@ extension Sequence where Iterator.Element : CustomStringConvertible {
   }
 }
 
+extension Sequence where Iterator.Element : Sequence {
+  func flatten() -> [Iterator.Element.Iterator.Element] {
+    return flatMap { $0 }
+  }
+}
+
 // MARK: String operations
 
 extension String {
   var lowercaseFirstCharacter: String {
     if self.characters.count <= 1 { return self.lowercased() }
     let index = characters.index(startIndex, offsetBy: 1)
-    return substringToIndex(index).lowercased() + substring(from: index)
+    return substring(to: index).lowercased() + substring(from: index)
   }
 
   var uppercaseFirstCharacter: String {
     if self.characters.count <= 1 { return self.uppercased() }
     let index = characters.index(startIndex, offsetBy: 1)
-    return substringToIndex(index).uppercased() + substring(from: index)
+    return substring(to: index).uppercased() + substring(from: index)
   }
 
   func indentWithString(_ indentation: String) -> String {

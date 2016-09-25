@@ -13,7 +13,7 @@ struct FontGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(fonts: [Font]) {
-    let groupedFonts = fonts.groupBySwiftIdentifiers { $0.name }
+    let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
     let fontProperties: [Property] = groupedFonts.uniques.map {

@@ -39,9 +39,9 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     // Parse dicts from NSDictionary
     let dictionary: [String : (params: [StringParam], commentValue: String)]
     switch url.pathExtension {
-    case "strings"?:
+    case "strings":
       dictionary = try parseStrings(nsDictionary, source: locale.withFilename("\(filename).strings"))
-    case "stringsdict"?:
+    case "stringsdict":
       dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
     default:
       throw ResourceParsingError.unsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
@@ -121,7 +121,7 @@ private func parseStringsdictParams(_ format: String, dict: [String: AnyObject])
   for part in parts {
     switch part {
     case .reference(let reference):
-      params += try lookup(reference, dict: dict)
+      params += try lookup(key: reference, in: dict)
 
     case .spec(let formatSpecifier):
       params.append(StringParam(name: nil, spec: formatSpecifier))
@@ -131,7 +131,7 @@ private func parseStringsdictParams(_ format: String, dict: [String: AnyObject])
   return params
 }
 
-func lookup(key: String, dict: [String: AnyObject], processedReferences: [String] = []) throws -> [StringParam] {
+func lookup(key: String, in dict: [String: AnyObject], processedReferences: [String] = []) throws -> [StringParam] {
   var processedReferences = processedReferences
 
   if processedReferences.contains(key) {
@@ -165,7 +165,7 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
     for part in parts {
       switch part {
       case .reference(let reference):
-        alternative += try lookup(reference, dict: dict, processedReferences: processedReferences)
+        alternative += try lookup(key: reference, in: dict, processedReferences: processedReferences)
 
       case .spec(let formatSpecifier):
         alternative.append(StringParam(name: key, spec: formatSpecifier))

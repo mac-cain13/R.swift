@@ -18,7 +18,7 @@ struct ReuseIdentifierGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupBySwiftIdentifiers { $0.identifier }
+    let groupedReusables = deduplicatedReusables.groupedBySwiftIdentifier { $0.identifier }
     groupedReusables.printWarningsForDuplicatesAndEmpties(source: "reuseIdentifier", result: "reuseIdentifier")
 
     let reuseIdentifierProperties = groupedReusables
@@ -30,7 +30,7 @@ struct ReuseIdentifierGenerator: Generator {
       type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      properties: reuseIdentifierProperties.map(anyProperty),
+      properties: reuseIdentifierProperties.map(any),
       functions: [],
       structs: []
     )

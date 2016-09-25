@@ -18,10 +18,10 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
   init(url: URL) throws {
     try ColorPalette.throwIfUnsupportedExtension(url.pathExtension)
 
-    guard let filename = url.filename, let path = url.path else {
+    guard let filename = url.filename else {
       throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
-    guard let colorList = NSColorList(name: "", fromFile: path) else {
+    guard let colorList = NSColorList(name: "", fromFile: url.path) else {
       throw ResourceParsingError.parsingFailed("Couldn't parse as color palette: \(url)")
     }
 

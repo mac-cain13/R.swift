@@ -26,7 +26,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
         properties.flatMap(getUsedTypes),
         functions.flatMap(getUsedTypes),
         structs.flatMap(getUsedTypes),
-      ].joined()
+      ].flatten()
   }
 
   init(accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
@@ -64,22 +64,24 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
     let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joined(separator: ", ") : ""
 
     let typealiasString = typealiasses
-      .joined { $0.alias < $1.alias }
+      .sorted { $0.alias < $1.alias }
       .joinWithSeparator("\n")
 
     let varsString = properties
-//      .sort { $0.name.description < $1.name.description }
+//      .sorted { $0.name.description < $1.name.description }
       .map { $0.description }
       .sorted()
       .joined(separator: "\n")
     let functionsString = functions
-//      .sort { $0.name.description < $1.name.description }
+//      .sorted { $0.name.description < $1.name.description }
       .map { $0.description }
       .sorted()
       .joined(separator: "\n\n")
     let structsString = structs
-      .joined { $0.type.description < $1.type.description }
-      .joinWithSeparator("\n\n")
+//      .sorted { $0.type.description < $1.type.description }
+      .map { $0.description }
+      .sorted()
+      .joined(separator: "\n\n")
 
 
     // File private `init`, so that struct can't be initialized externally.

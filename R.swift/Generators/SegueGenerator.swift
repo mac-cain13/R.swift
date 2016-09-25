@@ -44,7 +44,7 @@ struct SegueGenerator: Generator {
     var structs: [Struct] = []
 
     for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.groupBy({ $0.sourceType }) {
-      let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftIdentifiers { $0.segue.identifier }
+      let groupedSeguesWithInfo = seguesBySourceType.groupedBySwiftIdentifier { $0.segue.identifier }
 
       groupedSeguesWithInfo.printWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType)'", result: "segue")
 
@@ -140,7 +140,7 @@ struct SegueGenerator: Generator {
       type: Type(module: .host, name: typeName),
       implements: [],
       typealiasses: [],
-      properties: properties.map(anyProperty),
+      properties: properties.map(any),
       functions: functions,
       structs: []
     )

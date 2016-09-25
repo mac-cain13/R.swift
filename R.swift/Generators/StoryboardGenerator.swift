@@ -13,12 +13,12 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
+    let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardStructs = groupedStoryboards
       .uniques
-      .map(StoryboardGenerator.storyboardStructForStoryboard)
+      .map(StoryboardGenerator.storyboardStruct)
 
     let storyboardProperties: [Property] = groupedStoryboards
       .uniques
@@ -37,7 +37,7 @@ struct StoryboardGenerator: Generator {
     let storyboardFunctions: [Function] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
 
         return Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
@@ -97,7 +97,7 @@ struct StoryboardGenerator: Generator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupBySwiftIdentifiers { $0.identifier }
+      .groupedBySwiftIdentifier { $0.identifier }
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
       warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joined(separator: ", "))")

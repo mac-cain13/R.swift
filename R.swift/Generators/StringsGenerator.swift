@@ -15,13 +15,13 @@ struct StringsGenerator: Generator {
   init(localizableStrings: [LocalizableStrings]) {
 
     let localized = localizableStrings.groupBy { $0.filename }
-    let groupedLocalized = localized.groupBySwiftIdentifiers { $0.0 }
+    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
     externalStruct = Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
-      type: Type(module: .Host, name: "string"),
+      type: Type(module: .host, name: "string"),
       implements: [],
       typealiasses: [],
       properties: [],
@@ -33,11 +33,11 @@ struct StringsGenerator: Generator {
   private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
 
     let name = SwiftIdentifier(name: filename)
-    let params = computeParams(filename, strings: strings)
+    let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
       comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
-      type: Type(module: .Host, name: name),
+      type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
       properties: params.map(StringsGenerator.stringLet),
@@ -63,7 +63,7 @@ struct StringsGenerator: Generator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupBySwiftIdentifiers { $0 }
+      let groupedKeys = ls.dictionary.keys.groupedBySwiftIdentifier { $0 }
 
       groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
@@ -85,20 +85,20 @@ struct StringsGenerator: Generator {
       let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtract(lss.flatMap { $0.dictionary.keys })
+      let missing = sourceKeys.subtracting(lss.flatMap { $0.dictionary.keys })
 
       if missing.isEmpty {
         continue
       }
 
-      let paddedKeys = missing.sort().map { "'\($0)'" }
+      let paddedKeys = missing.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joinWithSeparator(", ")
 
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
     // Only include translation if it exists in Base
-    func includeTranslation(key: String) -> Bool {
+    func includeTranslation(_ key: String) -> Bool {
       if let baseKeys = baseKeys {
         return baseKeys.contains(key)
       }
@@ -115,7 +115,7 @@ struct StringsGenerator: Generator {
       var areCorrectFormatSpecifiers = true
 
       for (locale, _, ps) in keyParams {
-        if ps.any({ $0.spec == FormatSpecifier.TopType }) {
+        if ps.any({ $0.spec == FormatSpecifier.topType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -143,7 +143,7 @@ struct StringsGenerator: Generator {
       results.append(values)
     }
 
-    for badKey in badFormatSpecifiersKeys.sort() {
+    for badKey in badFormatSpecifiersKeys.sorted() {
       let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
       if let params = fewParams.first {
@@ -167,21 +167,21 @@ struct StringsGenerator: Generator {
       comments: values.comments,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
-      typeDefinition: .Inferred(Type.StringResource),
+      typeDefinition: .inferred(Type.StringResource),
       value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: _R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
   }
 
   private static func stringFunction(values: StringValues) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(values)
+      return stringFunctionNoParams(for: values)
     }
     else {
-      return stringFunctionParams(values)
+      return stringFunctionParams(for: values)
     }
   }
 
-  private static func stringFunctionNoParams(values: StringValues) -> Function {
+  private static func stringFunctionNoParams(for values: StringValues) -> Function {
 
     return Function(
       comments: values.comments,
@@ -197,9 +197,9 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunctionParams(values: StringValues) -> Function {
+  private static func stringFunctionParams(for values: StringValues) -> Function {
 
-    let params = values.params.enumerate().map { ix, param -> Function.Parameter in
+    let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
 
@@ -223,13 +223,13 @@ struct StringsGenerator: Generator {
 }
 
 extension Locale {
-  func withFilename(filename: String) -> String {
+  func withFilename(_ filename: String) -> String {
     switch self {
-    case .None:
+    case .none:
       return "'\(filename)'"
-    case .Base:
+    case .base:
       return "'\(filename)' (Base)"
-    case .Language(let language):
+    case .language(let language):
       return "'\(filename)' (\(language))"
     }
   }

@@ -46,7 +46,7 @@ func generateResourceStructs(with resources: Resources, bundleIdentifier: String
     ]
 
   var generatorResults = GeneratorResults()
-  generators.forEach { generatorResults.addGenerator($0) }
+  generators.forEach { generatorResults.add($0) }
 
   let internalResourceStruct = Struct(
       type: Type(module: .host, name: "_R"),

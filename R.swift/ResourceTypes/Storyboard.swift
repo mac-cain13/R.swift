@@ -66,7 +66,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     let type: Type
     private(set) var segues: [Segue]
 
-    private mutating func add(_ segue: Segue) {
+    fileprivate mutating func add(_ segue: Segue) {
       segues.append(segue)
     }
   }
@@ -152,7 +152,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         let type = customType ?? Type._UIStoryboardSegue
 
         let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
-        currentViewController?.addSegue(segue)
+        currentViewController?.add(segue)
       }
 
     case "image":

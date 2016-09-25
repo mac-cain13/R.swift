@@ -144,34 +144,34 @@ struct CallInformation {
       var resourceValue: AnyObject?
       try (outputURL as NSURL).getResourceValue(&resourceValue, forKey: URLResourceKey.isDirectoryKey)
       if let isDirectory = (resourceValue as? NSNumber)?.boolValue , isDirectory {
-        self.outputURL = outputURL.appendingPathComponent(ResourceFilename, isDirectory: false)!
+        self.outputURL = outputURL.appendingPathComponent(ResourceFilename, isDirectory: false)
       } else {
         self.outputURL = outputURL
       }
 
-      let getFirstArgumentForOption = getFirstArgumentFromOptionData(options, helpString: optionParser.helpStringForCommandName(commandName))
+      let getFirstArgumentForOption = getFirstArgument(from: options, helpString: optionParser.helpStringForCommandName(commandName))
 
-      let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, defaultValue: environment["PROJECT_FILE_PATH"])
+      let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, environment["PROJECT_FILE_PATH"])
       xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
 
-      targetName = try getFirstArgumentForOption(targetOption, defaultValue: environment["TARGET_NAME"])
+      targetName = try getFirstArgumentForOption(targetOption, environment["TARGET_NAME"])
 
-      bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, defaultValue: environment["PRODUCT_BUNDLE_IDENTIFIER"])
+      bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, environment["PRODUCT_BUNDLE_IDENTIFIER"])
 
-      productModuleName = try getFirstArgumentForOption(productModuleNameOption, defaultValue: environment["PRODUCT_MODULE_NAME"])
+      productModuleName = try getFirstArgumentForOption(productModuleNameOption, environment["PRODUCT_MODULE_NAME"])
 
-      let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, defaultValue: environment["BUILT_PRODUCTS_DIR"])
+      let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
 
-      let developerDirPath = try getFirstArgumentForOption(developerDirOption, defaultValue: environment["DEVELOPER_DIR"])
+      let developerDirPath = try getFirstArgumentForOption(developerDirOption, environment["DEVELOPER_DIR"])
       developerDirURL = URL(fileURLWithPath: developerDirPath)
 
-      let sourceRootPath = try getFirstArgumentForOption(sourceRootOption, defaultValue: environment["SOURCE_ROOT"])
+      let sourceRootPath = try getFirstArgumentForOption(sourceRootOption, environment["SOURCE_ROOT"])
       sourceRootURL = URL(fileURLWithPath: sourceRootPath)
 
-      let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, defaultValue: environment["SDKROOT"])
+      let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, environment["SDKROOT"])
       sdkRootURL = URL(fileURLWithPath: sdkRootPath)
-    } catch let OptionKitError.InvalidOption(invalidOption) {
+    } catch let OptionKitError.invalidOption(invalidOption) {
       throw InputParsingError.illegalOption(
         error: "The option '\(invalidOption)' is invalid.",
         helpString: optionParser.helpStringForCommandName(commandName)
@@ -181,13 +181,13 @@ struct CallInformation {
 
   func URLForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
     switch sourceTreeFolder {
-    case .BuildProductsDir:
+    case .buildProductsDir:
       return buildProductsDirURL
-    case .DeveloperDir:
+    case .developerDir:
       return developerDirURL
-    case .SDKRoot:
+    case .sdkRoot:
       return sdkRootURL
-    case .SourceRoot:
+    case .sourceRoot:
       return sourceRootURL
     }
   }

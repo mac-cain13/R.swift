@@ -23,7 +23,7 @@ struct ImageGenerator: Generator {
       .flatMap { $0.first?.name }
 
     let allFunctions = assetFolderImageNames + imagesNames
-    let groupedFunctions = allFunctions.groupBySwiftIdentifiers { $0 }
+    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 
@@ -44,7 +44,7 @@ struct ImageGenerator: Generator {
       type: Type(module: .host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: imageLets.map(anyProperty),
+      properties: imageLets.map(any),
       functions: groupedFunctions.uniques.map(ImageGenerator.imageFunction),
       structs: []
     )

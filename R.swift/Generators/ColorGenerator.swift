@@ -14,7 +14,7 @@ struct ColorGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(colorPalettes palettes: [ColorPalette]) {
-    let groupedPalettes = palettes.groupBySwiftIdentifiers { $0.filename }
+    let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
     externalStruct = Struct(
@@ -32,7 +32,7 @@ struct ColorGenerator: Generator {
     if palette.colors.isEmpty { return nil }
 
     let name = SwiftIdentifier(name: palette.filename)
-    let groupedColors = palette.colors.groupBySwiftIdentifiers { $0.0 }
+    let groupedColors = palette.colors.groupedBySwiftIdentifier { $0.0 }
 
     groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", container: "in palette '\(palette.filename)'", result: "color")
 

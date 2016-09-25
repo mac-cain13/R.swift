@@ -36,7 +36,7 @@ struct NibGenerator: Generator {
   let internalStruct: Struct?
 
   init(nibs: [Nib]) {
-    let groupedNibs = nibs.groupBySwiftIdentifiers { $0.name }
+    let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     internalStruct = Struct(

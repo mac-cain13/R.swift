@@ -15,7 +15,7 @@ struct ResourceFileGenerator: Generator {
   init(resourceFiles: [ResourceFile]) {
 
     let localized = resourceFiles.groupBy { $0.fullname }
-    let groupedLocalized = localized.groupBySwiftIdentifiers { $0.0 }
+    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "resource file", result: "file")
 
@@ -37,13 +37,12 @@ struct ResourceFileGenerator: Generator {
 
     return resourceFiles
       .map {
-        let pathExtensionOrNilString = $0.pathExtension.map { "\"\($0)\"" } ?? "nil"
         return Let(
           comments: ["Resource file `\($0.fullname)`."],
           isStatic: true,
           name: SwiftIdentifier(name: $0.fullname),
           typeDefinition: .inferred(Type.FileResource),
-          value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \(pathExtensionOrNilString))"
+          value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
         )
     }
   }
@@ -54,11 +53,11 @@ struct ResourceFileGenerator: Generator {
       .flatMap { resourceFile -> [Function] in
         let fullname = resourceFile.fullname
         let filename = resourceFile.filename
-        let pathExtension = resourceFile.pathExtension.map { ext in "\"\(ext)\"" } ?? "nil"
+        let pathExtension = resourceFile.pathExtension
 
         return [
           Function(
-            comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \(pathExtension))`"],
+            comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
             isStatic: true,
             name: SwiftIdentifier(name: fullname),
             generics: nil,

@@ -20,19 +20,20 @@ struct ResourceFile {
 
   let fullname: String
   let filename: String
-  let pathExtension: String?
+  let pathExtension: String
 
   init(url: URL) throws {
-    if let pathExtension = url.pathExtension , ResourceFile.unsupportedExtensions.contains(pathExtension) {
+    pathExtension = url.pathExtension
+    if ResourceFile.unsupportedExtensions.contains(pathExtension) {
       throw ResourceParsingError.unsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
     }
 
-    guard let fullname = url.lastPathComponent, let filename = url.filename else {
+    let fullname = url.lastPathComponent
+    guard let filename = url.filename else {
       throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
 
     self.fullname = fullname
     self.filename = filename
-    pathExtension = url.pathExtension
   }
 }

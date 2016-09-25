@@ -29,13 +29,12 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
     let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
       for case let fileURL as URL in enumerator {
-        if let pathExtension = fileURL.pathExtension {
-          if AssetFolder.AssetExtensions.contains(pathExtension) {
-            assets.append(fileURL)
-          }
-          if AssetFolder.IgnoredExtensions.contains(pathExtension) {
-            enumerator.skipDescendants()
-          }
+        let pathExtension = fileURL.pathExtension
+        if AssetFolder.AssetExtensions.contains(pathExtension) {
+          assets.append(fileURL)
+        }
+        if AssetFolder.IgnoredExtensions.contains(pathExtension) {
+          enumerator.skipDescendants()
         }
       }
     }

@@ -19,16 +19,16 @@ private let Header = [
   ].joined(separator: "\n")
 
 do {
-  let callInformation = try CallInformation(processInfo: ProcessInfo.processInfo())
+  let callInformation = try CallInformation(processInfo: ProcessInfo())
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
-    .map(pathResolverWithSourceTreeFolderToURLConverter(callInformation.URLForSourceTreeFolder))
+    .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
     .flatMap { $0 }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-  let (internalStruct, externalStruct) = generateResourceStructsWithResources(resources, bundleIdentifier: callInformation.bundleIdentifier)
+  let (internalStruct, externalStruct) = generateResourceStructs(with: resources, bundleIdentifier: callInformation.bundleIdentifier)
 
   let usedModules = [internalStruct, externalStruct]
     .flatMap(getUsedTypes)
@@ -48,7 +48,7 @@ do {
     ].joined(separator: "\n\n")
 
   // Write file if we have changes
-  let currentFileContents = try? String(contentsOfURL: callInformation.outputURL, encoding: String.Encoding.utf8)
+  let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: String.Encoding.utf8)
   if currentFileContents != fileContents  {
     do {
       try fileContents.write(to: callInformation.outputURL, atomically: true, encoding: String.Encoding.utf8)
