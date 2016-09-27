@@ -14,7 +14,7 @@ Currently you type:
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
-let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Arthur Dent")
+let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Arthur Dent")
 ```
 
 With R.swift it becomes:
