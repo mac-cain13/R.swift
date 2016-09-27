@@ -18,7 +18,7 @@ struct ReuseIdentifierGenerator: Generator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupBySwiftIdentifiers { $0.identifier }
+    let groupedReusables = deduplicatedReusables.groupedBySwiftIdentifier { $0.identifier }
     groupedReusables.printWarningsForDuplicatesAndEmpties(source: "reuseIdentifier", result: "reuseIdentifier")
 
     let reuseIdentifierProperties = groupedReusables
@@ -27,21 +27,21 @@ struct ReuseIdentifierGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
-      type: Type(module: .Host, name: "reuseIdentifier"),
+      type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      properties: reuseIdentifierProperties.map(anyProperty),
+      properties: reuseIdentifierProperties.map(any),
       functions: [],
       structs: []
     )
   }
 
-  private static func letFromReusable(reusable: Reusable) -> Let {
+  fileprivate static func letFromReusable(_ reusable: Reusable) -> Let {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,
       name: SwiftIdentifier(name: reusable.identifier),
-      typeDefinition: .Specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
+      typeDefinition: .specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
       value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
     )
   }

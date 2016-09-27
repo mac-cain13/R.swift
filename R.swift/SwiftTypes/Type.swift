@@ -11,22 +11,22 @@ import Foundation
 struct UsedType {
   let type: Type
 
-  private init(type: Type) {
+  fileprivate init(type: Type) {
     self.type = type
   }
 }
 
 struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
-  static let _Void = Type(module: .StdLib, name: "Void")
-  static let _Any = Type(module: .StdLib, name: "Any")
-  static let _AnyObject = Type(module: .StdLib, name: "AnyObject")
-  static let _String = Type(module: .StdLib, name: "String")
-  static let _Int = Type(module: .StdLib, name: "Int")
-  static let _UInt = Type(module: .StdLib, name: "UInt")
-  static let _Double = Type(module: .StdLib, name: "Double")
-  static let _Character = Type(module: .StdLib, name: "Character")
-  static let _CStringPointer = Type(module: .StdLib, name: "UnsafePointer<unichar>")
-  static let _VoidPointer = Type(module: .StdLib, name: "UnsafePointer<Void>")
+  static let _Void = Type(module: .stdLib, name: "Void")
+  static let _Any = Type(module: .stdLib, name: "Any")
+  static let _AnyObject = Type(module: .stdLib, name: "AnyObject")
+  static let _String = Type(module: .stdLib, name: "String")
+  static let _Int = Type(module: .stdLib, name: "Int")
+  static let _UInt = Type(module: .stdLib, name: "UInt")
+  static let _Double = Type(module: .stdLib, name: "Double")
+  static let _Character = Type(module: .stdLib, name: "Character")
+  static let _CStringPointer = Type(module: .stdLib, name: "UnsafePointer<unichar>")
+  static let _VoidPointer = Type(module: .stdLib, name: "UnsafePointer<Void>")
   static let _URL = Type(module: "Foundation", name: "URL")
   static let _Bundle = Type(module: "Foundation", name: "Bundle")
   static let _Locale = Type(module: "Foundation", name: "Locale")
@@ -42,8 +42,8 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UIViewController = Type(module: "UIKit", name: "UIViewController")
   static let _UIFont = Type(module: "UIKit", name: "UIFont")
   static let _UIColor = Type(module: "UIKit", name: "UIColor")
-  static let _CGFloat = Type(module: .StdLib, name: "CGFloat")
-  static let _CVarArgType = Type(module: .StdLib, name: "CVarArgType...")
+  static let _CGFloat = Type(module: .stdLib, name: "CGFloat")
+  static let _CVarArgType = Type(module: .stdLib, name: "CVarArgType...")
 
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierType = Type(module: "Rswift", name: "ReuseIdentifierType")
@@ -99,11 +99,11 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: false)
   }
 
-  func withGenericArgs(genericArgs: [TypeVar]) -> Type {
+  func withGenericArgs(_ genericArgs: [TypeVar]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 
-  func withGenericArgs(genericArgs: [Type]) -> Type {
+  func withGenericArgs(_ genericArgs: [Type]) -> Type {
     return Type(module: module, name: name, genericArgs: genericArgs, optional: optional)
   }
 }

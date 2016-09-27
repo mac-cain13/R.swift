@@ -13,6 +13,6 @@ protocol Property: UsedTypesProvider, CustomStringConvertible {
 }
 
 /// Type-erasure function
-func anyProperty(property: Property) -> Property {
+func any(_ property: Property) -> Property {
   return property
 }

@@ -44,7 +44,7 @@ struct SegueGenerator: Generator {
     var structs: [Struct] = []
 
     for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.groupBy({ $0.sourceType }) {
-      let groupedSeguesWithInfo = seguesBySourceType.groupBySwiftIdentifiers { $0.segue.identifier }
+      let groupedSeguesWithInfo = seguesBySourceType.groupedBySwiftIdentifier { $0.segue.identifier }
 
       groupedSeguesWithInfo.printWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType)'", result: "segue")
 
@@ -59,7 +59,7 @@ struct SegueGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
-      type: Type(module: .Host, name: "segue"),
+      type: Type(module: .host, name: "segue"),
       implements: [],
       typealiasses: [],
       properties: [],
@@ -68,7 +68,7 @@ struct SegueGenerator: Generator {
     )
   }
 
-  private static func resolveDestinationTypeForSegue(segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
+  private static func resolveDestinationTypeForSegue(_ segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
     if segue.kind == "unwind" {
       return Type._UIViewController
     }
@@ -83,9 +83,9 @@ struct SegueGenerator: Generator {
       .first
       .flatMap { storyboard -> Type? in
         switch storyboard.resolveWithStoryboards(storyboards) {
-        case .CustomBundle:
+        case .customBundle:
           return Type._UIViewController // Not supported, fallback to UIViewController
-        case let .Resolved(vc):
+        case let .resolved(vc):
           return vc?.type
         }
       }
@@ -93,7 +93,7 @@ struct SegueGenerator: Generator {
     return destinationViewControllerType ?? destinationViewControllerPlaceholderType
   }
 
-  private static func seguesWithInfoForSourceTypeToStruct(seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
+  fileprivate static func seguesWithInfoForSourceTypeToStruct(_ seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
     guard let sourceType = seguesWithInfoForSourceType.first?.sourceType else { return nil }
 
     let properties = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
@@ -107,7 +107,7 @@ struct SegueGenerator: Generator {
         comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
-        typeDefinition: .Specified(type),
+        typeDefinition: .specified(type),
         value: "StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
       )
     }
@@ -137,10 +137,10 @@ struct SegueGenerator: Generator {
 
     return Struct(
       comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],
-      type: Type(module: .Host, name: typeName),
+      type: Type(module: .host, name: typeName),
       implements: [],
       typealiasses: [],
-      properties: properties.map(anyProperty),
+      properties: properties.map(any),
       functions: functions,
       structs: []
     )

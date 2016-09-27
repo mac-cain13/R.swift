@@ -13,23 +13,23 @@ struct StoryboardGenerator: Generator {
   let internalStruct: Struct?
 
   init(storyboards: [Storyboard]) {
-    let groupedStoryboards = storyboards.groupBySwiftIdentifiers { $0.name }
+    let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardStructs = groupedStoryboards
       .uniques
-      .map(StoryboardGenerator.storyboardStructForStoryboard)
+      .map(StoryboardGenerator.storyboardStruct)
 
     let storyboardProperties: [Property] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
 
         return Let(
           comments: ["Storyboard `\(storyboard.name)`."],
           isStatic: true,
           name: struct_.type.name,
-          typeDefinition: .Inferred(Type.StoryboardResourceType),
+          typeDefinition: .inferred(Type.StoryboardResourceType),
           value: "_R.storyboard.\(struct_.type.name)()"
         )
       }
@@ -37,7 +37,7 @@ struct StoryboardGenerator: Generator {
     let storyboardFunctions: [Function] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStructForStoryboard(storyboard)
+        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
 
         return Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
@@ -55,7 +55,7 @@ struct StoryboardGenerator: Generator {
 
     externalStruct = Struct(
       comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
-        type: Type(module: .Host, name: "storyboard"),
+        type: Type(module: .host, name: "storyboard"),
         implements: [],
         typealiasses: [],
         properties: storyboardProperties,
@@ -64,7 +64,7 @@ struct StoryboardGenerator: Generator {
       )
 
     internalStruct = Struct(
-      type: Type(module: .Host, name: "storyboard"),
+      type: Type(module: .host, name: "storyboard"),
       implements: [],
       typealiasses: [],
       properties: [],
@@ -73,14 +73,14 @@ struct StoryboardGenerator: Generator {
     )
   }
 
-  private static func storyboardStructForStoryboard(storyboard: Storyboard) -> Struct {
+  private static func storyboardStruct(for storyboard: Storyboard) -> Struct {
 
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
     var properties: [Property] = [
-      Let(isStatic: false, name: "name", typeDefinition: .Inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .Inferred(Type._Bundle), value: "_R.hostingBundle")
+      Let(isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
+      Let(isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
 
     // Initial view controller
@@ -97,10 +97,10 @@ struct StoryboardGenerator: Generator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupBySwiftIdentifiers { $0.identifier }
+      .groupedBySwiftIdentifier { $0.identifier }
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
-      warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joinWithSeparator(", "))")
+      warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joined(separator: ", "))")
     }
 
     let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
@@ -110,7 +110,7 @@ struct StoryboardGenerator: Generator {
           Let(
             isStatic: false,
             name: SwiftIdentifier(name: identifier),
-            typeDefinition: .Inferred(Type.StoryboardViewControllerResource),
+            typeDefinition: .inferred(Type.StoryboardViewControllerResource),
             value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
           )
         )
@@ -155,15 +155,15 @@ struct StoryboardGenerator: Generator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateLines.joinWithSeparator("\n")
+        body: validateLines.joined(separator: "\n")
       )
       functions.append(validateFunction)
-      implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
+      implements.append(TypePrinter(type: Type.Validatable, style: .fullyQualified))
     }
 
     // Return
     return Struct(
-      type: Type(module: .Host, name: SwiftIdentifier(name: storyboard.name)),
+      type: Type(module: .host, name: SwiftIdentifier(name: storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,
       properties: properties,

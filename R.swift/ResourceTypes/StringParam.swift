@@ -19,8 +19,8 @@ struct StringParam : Equatable, Unifiable {
   let name: String?
   let spec: FormatSpecifier
 
-  func unify(other: StringParam) -> StringParam? {
-    if let name = name, otherName = other.name where name != otherName {
+  func unify(_ other: StringParam) -> StringParam? {
+    if let name = name, let otherName = other.name , name != otherName {
       return nil
     }
 
@@ -37,35 +37,35 @@ func ==(lhs: StringParam, rhs: StringParam) -> Bool {
 }
 
 enum FormatPart: Unifiable {
-  case Spec(FormatSpecifier)
-  case Reference(String)
+  case spec(FormatSpecifier)
+  case reference(String)
 
   var formatSpecifier: FormatSpecifier? {
     switch self {
-    case .Spec(let formatSpecifier):
+    case .spec(let formatSpecifier):
       return formatSpecifier
 
-    case .Reference:
+    case .reference:
       return nil
     }
   }
 
-  static func formatParts(formatString formatString: String) -> [FormatPart] {
+  static func formatParts(formatString: String) -> [FormatPart] {
     return createFormatParts(formatString)
   }
 
-  func unify(other: FormatPart) -> FormatPart? {
+  func unify(_ other: FormatPart) -> FormatPart? {
     switch (self, other) {
-    case let (.Spec(l), .Spec(r)):
+    case let (.spec(l), .spec(r)):
       if let spec = l.unify(r) {
-        return .Spec(spec)
+        return .spec(spec)
       }
       else {
         return nil
       }
 
-    case let (.Reference(l), .Reference(r)) where l == r:
-      return .Reference(l)
+    case let (.reference(l), .reference(r)) where l == r:
+      return .reference(l)
 
     default:
       return nil
@@ -75,32 +75,32 @@ enum FormatPart: Unifiable {
 
 // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1
 enum FormatSpecifier {
-  case Object
-  case Double
-  case Int
-  case UInt
-  case Character
-  case CStringPointer
-  case VoidPointer
-  case TopType
+  case object
+  case double
+  case int
+  case uInt
+  case character
+  case cStringPointer
+  case voidPointer
+  case topType
 
   var type: Type {
     switch self {
-    case .Object:
+    case .object:
       return ._String
-    case .Double:
+    case .double:
       return ._Double
-    case .Int:
+    case .int:
       return ._Int
-    case .UInt:
+    case .uInt:
       return ._UInt
-    case .Character:
+    case .character:
       return ._Character
-    case .CStringPointer:
+    case .cStringPointer:
       return ._CStringPointer
-    case .VoidPointer:
+    case .voidPointer:
       return ._VoidPointer
-    case .TopType:
+    case .topType:
       return ._Any
     }
   }
@@ -119,33 +119,33 @@ extension FormatSpecifier : Unifiable {
   }
 
   init?(formatChar char: Swift.Character) {
-    let lcChar = Swift.String(char).lowercaseString.characters.first!
+    let lcChar = Swift.String(char).lowercased().characters.first!
     switch lcChar {
     case "@":
-      self = .Object
+      self = .object
     case "a", "e", "f", "g":
-      self = .Double
+      self = .double
     case "d", "i":
-      self = .Int
+      self = .int
     case "o", "u", "x":
-      self = .UInt
+      self = .uInt
     case "c":
-      self = .Character
+      self = .character
     case "s":
-      self = .CStringPointer
+      self = .cStringPointer
     case "p":
-      self = .VoidPointer
+      self = .voidPointer
     default:
       return nil
     }
   }
 
-  func unify(other: FormatSpecifier) -> FormatSpecifier? {
-    if self == .TopType {
+  func unify(_ other: FormatSpecifier) -> FormatSpecifier? {
+    if self == .topType {
       return other
     }
 
-    if other == .TopType {
+    if other == .topType {
       return self
     }
 
@@ -159,7 +159,7 @@ extension FormatSpecifier : Unifiable {
 
 private let referenceRegEx: NSRegularExpression = {
   do {
-    return try NSRegularExpression(pattern: "#@([^@]+)@", options: [.CaseInsensitive])
+    return try NSRegularExpression(pattern: "#@([^@]+)@", options: [.caseInsensitive])
   } catch {
     fatalError("Error building the regular expression used to match reference")
   }
@@ -172,37 +172,37 @@ private let formatTypesRegEx: NSRegularExpression = {
   let precision = "[-+]?\\d?(?:\\.\\d)?" // precision like in "%1.2f"
   let reference = "#@([^@]+)@" // reference to NSStringFormatSpecType in .stringsdict
   do {
-    return try NSRegularExpression(pattern: "(?<!%)%\(position)\(precision)(@|\(pattern_int)|\(pattern_float)|[csp]|\(reference))", options: [.CaseInsensitive])
+    return try NSRegularExpression(pattern: "(?<!%)%\(position)\(precision)(@|\(pattern_int)|\(pattern_float)|[csp]|\(reference))", options: [.caseInsensitive])
   } catch {
     fatalError("Error building the regular expression used to match string formats")
   }
 }()
 
 // "I give %d apples to %@ %#@named@" --> [.Spec(.Int), .Spec(.String), .Reference("named")]
-private func createFormatParts(formatString: String) -> [FormatPart] {
+private func createFormatParts(_ formatString: String) -> [FormatPart] {
   let nsString = formatString as NSString
   let range = NSRange(location: 0, length: nsString.length)
 
   // Extract the list of chars (conversion specifiers) and their optional positional specifier
-  let chars = formatTypesRegEx.matchesInString(formatString, options: [], range: range).map { match -> (String, Int?) in
+  let chars = formatTypesRegEx.matches(in: formatString, options: [], range: range).map { match -> (String, Int?) in
     let range: NSRange
-    if match.rangeAtIndex(3).location != NSNotFound {
+    if match.rangeAt(3).location != NSNotFound {
       // [dioux] are in range #3 because in #2 there may be length modifiers (like in "lld")
-      range = match.rangeAtIndex(3)
+      range = match.rangeAt(3)
     } else {
       // otherwise, no length modifier, the conversion specifier is in #2
-      range = match.rangeAtIndex(2)
+      range = match.rangeAt(2)
     }
-    let char = nsString.substringWithRange(range)
+    let char = nsString.substring(with: range)
 
-    let posRange = match.rangeAtIndex(1)
+    let posRange = match.rangeAt(1)
     if posRange.location == NSNotFound {
       // No positional specifier
       return (char, nil)
     } else {
       // Remove the "$" at the end of the positional specifier, and convert to Int
       let posRange1 = NSRange(location: posRange.location, length: posRange.length-1)
-      let pos = nsString.substringWithRange(posRange1)
+      let pos = nsString.substring(with: posRange1)
       return (char, Int(pos))
     }
   }
@@ -223,11 +223,11 @@ private func createFormatParts(formatString: String) -> [FormatPart] {
     let param: FormatPart?
 
     if let reference = referenceRegEx.firstSubstring(input: str) {
-      param = FormatPart.Reference(reference)
+      param = FormatPart.reference(reference)
     }
-    else if let char = str.characters.first, fs = FormatSpecifier(formatChar: char)
+    else if let char = str.characters.first, let fs = FormatSpecifier(formatChar: char)
     {
-      param = FormatPart.Spec(fs)
+      param = FormatPart.spec(fs)
     }
     else {
       param = nil
@@ -236,7 +236,7 @@ private func createFormatParts(formatString: String) -> [FormatPart] {
     if let param = param {
       if insertionPos > 0 {
         while params.count <= insertionPos - 1 {
-          params.append(FormatPart.Spec(FormatSpecifier.TopType))
+          params.append(FormatPart.spec(FormatSpecifier.topType))
         }
 
         params[insertionPos - 1] = param
@@ -248,11 +248,11 @@ private func createFormatParts(formatString: String) -> [FormatPart] {
 }
 
 extension NSRegularExpression {
-  private func firstSubstring(input input: String) -> String? {
+  fileprivate func firstSubstring(input: String) -> String? {
     let nsInput = input as NSString
     let inputRange = NSMakeRange(0, nsInput.length)
 
-    guard let match = self.firstMatchInString(input, options: [], range: inputRange) else {
+    guard let match = self.firstMatch(in: input, options: [], range: inputRange) else {
       return nil
     }
 
@@ -260,7 +260,7 @@ extension NSRegularExpression {
       return nil
     }
 
-    let range = match.rangeAtIndex(1)
-    return nsInput.substringWithRange(range)
+    let range = match.rangeAt(1)
+    return nsInput.substring(with: range)
   }
 }
