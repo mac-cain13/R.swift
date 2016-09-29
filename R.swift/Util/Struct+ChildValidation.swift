@@ -28,7 +28,7 @@ extension Struct {
 
     var outputStruct = self
     outputStruct.structs = childStructs
-    outputStruct.implements.append(TypePrinter(type: Type.Validatable, style: .fullyQualified))
+    outputStruct.implements.append(TypePrinter(type: Type.Validatable))
     outputStruct.functions.append(
       Function(
         isStatic: true,

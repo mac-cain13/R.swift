@@ -9,13 +9,7 @@
 import Foundation
 
 struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
-  enum Style {
-    case fullyQualified
-    case withoutModule
-  }
-
   let type: Type
-  let style: Style
 
   var usedTypes: [UsedType] {
     return type.usedTypes
@@ -32,22 +26,15 @@ struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
       withoutModule = "\(type.name)\(optionalString)"
     }
 
-    switch (style, type.module) {
-    case (.fullyQualified, let .custom(moduleName)):
+    if case let .custom(name: moduleName) = type.module {
       return "\(moduleName).\(withoutModule)"
-    case (.fullyQualified, _), (.withoutModule, _):
+    } else {
       return withoutModule
     }
   }
 
   init(type: Type) {
     self.type = type
-    self.style = .withoutModule
-  }
-
-  init(type: Type, style: Style) {
-    self.type = type
-    self.style = style
   }
 }
 

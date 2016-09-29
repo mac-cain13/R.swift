@@ -158,7 +158,7 @@ struct StoryboardGenerator: Generator {
         body: validateLines.joined(separator: "\n")
       )
       functions.append(validateFunction)
-      implements.append(TypePrinter(type: Type.Validatable, style: .fullyQualified))
+      implements.append(TypePrinter(type: Type.Validatable))
     }
 
     // Return

@@ -75,7 +75,7 @@ func generateResourceStructs(with resources: Resources, bundleIdentifier: String
     externalStructs.append(Struct(
         accessModifier: .Private,
         type: Type(module: .host, name: "intern"),
-        implements: [TypePrinter(type: Type.Validatable, style: .fullyQualified)],
+        implements: [TypePrinter(type: Type.Validatable)],
         typealiasses: [],
         properties: [],
         functions: [
