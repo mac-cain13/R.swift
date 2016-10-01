@@ -234,10 +234,10 @@ func pathResolver(with URLForSourceTreeFolder: @escaping (SourceTreeFolder) -> U
     return { path in
         switch path {
         case let .absolute(absolutePath):
-            return URL(fileURLWithPath: absolutePath)
+            return URL(fileURLWithPath: absolutePath).standardizedFileURL
         case let .relativeTo(sourceTreeFolder, relativePath):
             let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-            return sourceTreeURL.appendingPathComponent(relativePath)
+            return sourceTreeURL.appendingPathComponent(relativePath).standardizedFileURL
         }
     }
 }
