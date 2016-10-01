@@ -108,7 +108,7 @@ struct SegueGenerator: Generator {
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         typeDefinition: .specified(type),
-        value: "StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
+        value: "Rswift.StoryboardSegueIdentifier(identifier: \"\(segueWithInfo.segue.identifier)\")"
       )
     }
 
@@ -129,7 +129,7 @@ struct SegueGenerator: Generator {
         returnType: Type.TypedStoryboardSegueInfo
           .asOptional()
           .withGenericArgs([segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType]),
-        body: "return TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(SwiftIdentifier(name: sourceType.description)).\(SwiftIdentifier(name: segueWithInfo.segue.identifier)), segue: segue)"
+        body: "return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(SwiftIdentifier(name: sourceType.description)).\(SwiftIdentifier(name: segueWithInfo.segue.identifier)), segue: segue)"
       )
     }
 

@@ -49,7 +49,7 @@ struct StoryboardGenerator: Generator {
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
-          body: "return UIStoryboard(resource: R.storyboard.\(struct_.type.name))"
+          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(struct_.type.name))"
         )
       }
 
@@ -129,7 +129,7 @@ struct StoryboardGenerator: Generator {
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
+          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
         )
       }
       .forEach { functions.append($0) }
@@ -137,7 +137,7 @@ struct StoryboardGenerator: Generator {
     // Validation
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
-        "if UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+        "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateViewControllersLines = storyboard.viewControllers
       .flatMap { vc in
@@ -158,7 +158,7 @@ struct StoryboardGenerator: Generator {
         body: validateLines.joined(separator: "\n")
       )
       functions.append(validateFunction)
-      implements.append(TypePrinter(type: Type.Validatable, style: .fullyQualified))
+      implements.append(TypePrinter(type: Type.Validatable))
     }
 
     // Return

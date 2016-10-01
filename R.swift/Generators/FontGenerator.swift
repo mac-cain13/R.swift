@@ -22,7 +22,7 @@ struct FontGenerator: Generator {
         isStatic: true,
         name: SwiftIdentifier(name: $0.name),
         typeDefinition: .inferred(Type.FontResource),
-        value: "FontResource(fontName: \"\($0.name)\")"
+        value: "Rswift.FontResource(fontName: \"\($0.name)\")"
       )
     }
 
@@ -48,7 +48,7 @@ struct FontGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UIFont.asOptional(),
-      body: "return UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
+      body: "return UIKit.UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
     )
   }
 }

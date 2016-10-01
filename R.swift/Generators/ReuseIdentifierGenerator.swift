@@ -42,7 +42,7 @@ struct ReuseIdentifierGenerator: Generator {
       isStatic: true,
       name: SwiftIdentifier(name: reusable.identifier),
       typeDefinition: .specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),
-      value: "\(Type.ReuseIdentifier.name)(identifier: \"\(reusable.identifier)\")"
+      value: "Rswift.ReuseIdentifier(identifier: \"\(reusable.identifier)\")"
     )
   }
 }

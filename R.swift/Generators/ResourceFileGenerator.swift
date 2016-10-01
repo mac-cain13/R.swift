@@ -42,7 +42,7 @@ struct ResourceFileGenerator: Generator {
           isStatic: true,
           name: SwiftIdentifier(name: $0.fullname),
           typeDefinition: .inferred(Type.FileResource),
-          value: "FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
+          value: "Rswift.FileResource(bundle: _R.hostingBundle, name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
         )
     }
   }

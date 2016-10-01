@@ -79,7 +79,7 @@ struct NibGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UINib,
-      body: "return UINib(resource: R.nib.\(SwiftIdentifier(name: nib.name)))"
+      body: "return UIKit.UINib(resource: R.nib.\(SwiftIdentifier(name: nib.name)))"
     )
   }
 
