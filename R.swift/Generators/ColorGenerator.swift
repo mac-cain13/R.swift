@@ -55,7 +55,7 @@ struct ColorGenerator: Generator {
       isStatic: true,
       name: SwiftIdentifier(name: name),
       typeDefinition: .inferred(Type.ColorResource),
-      value: "ColorResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
+      value: "Rswift.ColorResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
     )
   }
 
@@ -74,7 +74,7 @@ struct ColorGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UIColor,
-      body: "return UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
+      body: "return UIKit.UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
     )
   }
 }
