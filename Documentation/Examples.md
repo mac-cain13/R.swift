@@ -4,13 +4,20 @@ On this page you'll find examples of the kind of resources R.swift supports and 
 
 ## Runtime validation
 
-Call `R.assertValid()` to call all validation methods that R.swift generates, this will check:
+Call `R.validate()` to call all validation methods that R.swift generates, this will check:
 - If all images used in storyboards are available
 - If all view controllers with storyboard identifiers can be loaded
 
-The `assertValid()` method does nothing when in release mode, only in debug mode it will perform checks and assert if a check fails. If you want more control you can also use `try R.validate()` which will throw a detailed error about the problems that occur and will always perform checks, even in release builds.
+The `R.validate()` method will throw a detailed error about the problems that occur. Note that this method will always perform checks, even in release builds. It’s recommended that validation is done in a testcase.
 
-_Note:_ The validation methods are there to perform checks that can't be done at compile time, it's recommended to put `R.assertValid()` in your `AppDelegate`.
+*Example testcase*
+```swift
+do {
+  try R.validate()
+} catch {
+	XCTFail(error)
+}
+```
 
 ## Images
 
