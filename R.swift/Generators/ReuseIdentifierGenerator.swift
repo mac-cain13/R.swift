@@ -8,11 +8,14 @@
 
 import Foundation
 
-struct ReuseIdentifierGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct ReuseIdentifierGenerator: StructGenerator {
+  private let reusables: [Reusable]
 
   init(reusables: [Reusable]) {
+    self.reusables = reusables
+  }
+
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let deduplicatedReusables = reusables
       .groupBy { $0.hashValue }
       .values
@@ -23,10 +26,11 @@ struct ReuseIdentifierGenerator: Generator {
 
     let reuseIdentifierProperties = groupedReusables
       .uniques
-      .map(ReuseIdentifierGenerator.letFromReusable)
+      .map(letFromReusable)
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
@@ -36,7 +40,7 @@ struct ReuseIdentifierGenerator: Generator {
     )
   }
 
-  fileprivate static func letFromReusable(_ reusable: Reusable) -> Let {
+  private func letFromReusable(_ reusable: Reusable) -> Let {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
       isStatic: true,

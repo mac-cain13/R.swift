@@ -8,47 +8,51 @@
 
 import Foundation
 
-struct StringsGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct StringsGenerator: StructGenerator {
+  private let localizableStrings: [LocalizableStrings]
 
   init(localizableStrings: [LocalizableStrings]) {
+    self.localizableStrings = localizableStrings
+  }
 
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let localized = localizableStrings.groupBy { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "string"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedLocalized.uniques.flatMap(StringsGenerator.stringStructFromLocalizableStrings)
+      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) }
     )
   }
 
-  private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessModifier) -> Struct? {
 
     let name = SwiftIdentifier(name: filename)
     let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
       comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: params.map(StringsGenerator.stringLet),
-      functions: params.map(StringsGenerator.stringFunction),
+      properties: params.map(stringLet),
+      functions: params.map(stringFunction),
       structs: []
     )
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
-  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
+  private func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
     var allParams: [String: [(Locale, String, [StringParam])]] = [:]
     let baseKeys: Set<String>?
@@ -155,7 +159,7 @@ struct StringsGenerator: Generator {
     return results
   }
 
-  private static func stringLet(values: StringValues) -> Let {
+  private func stringLet(values: StringValues) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -172,7 +176,7 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunction(values: StringValues) -> Function {
+  private func stringFunction(values: StringValues) -> Function {
     if values.params.isEmpty {
       return stringFunctionNoParams(for: values)
     }
@@ -181,7 +185,7 @@ struct StringsGenerator: Generator {
     }
   }
 
-  private static func stringFunctionNoParams(for values: StringValues) -> Function {
+  private func stringFunctionNoParams(for values: StringValues) -> Function {
 
     return Function(
       comments: values.comments,
@@ -197,7 +201,7 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunctionParams(for values: StringValues) -> Function {
+  private func stringFunctionParams(for values: StringValues) -> Function {
 
     let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let argumentLabel = param.name ?? "_"

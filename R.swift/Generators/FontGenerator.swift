@@ -8,11 +8,14 @@
 
 import Foundation
 
-struct FontGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct FontGenerator: StructGenerator {
+  private let fonts: [Font]
 
   init(fonts: [Font]) {
+    self.fonts = fonts
+  }
+
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
@@ -26,18 +29,19 @@ struct FontGenerator: Generator {
       )
     }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "font"),
       implements: [],
       typealiasses: [],
       properties: fontProperties,
-      functions: groupedFonts.uniques.map(FontGenerator.fontFunction),
+      functions: groupedFonts.uniques.map(fontFunction),
       structs: []
     )
   }
 
-  private static func fontFunction(from font: Font) -> Function {
+  private func fontFunction(from font: Font) -> Function {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
       isStatic: true,

@@ -8,11 +8,16 @@
 
 import Foundation
 
-struct ImageGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct ImageGenerator: StructGenerator {
+  private let assetFolders: [AssetFolder]
+  private let images: [Image]
 
   init(assetFolders: [AssetFolder], images: [Image]) {
+    self.assetFolders = assetFolders
+    self.images = images
+  }
+
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 
@@ -39,18 +44,19 @@ struct ImageGenerator: Generator {
         )
       }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "image"),
       implements: [],
       typealiasses: [],
       properties: imageLets.map(any),
-      functions: groupedFunctions.uniques.map(ImageGenerator.imageFunction),
+      functions: groupedFunctions.uniques.map(imageFunction),
       structs: []
     )
   }
 
-  static func imageFunction(for name: String) -> Function {
+  private func imageFunction(for name: String) -> Function {
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       isStatic: true,

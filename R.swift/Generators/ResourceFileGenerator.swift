@@ -8,12 +8,14 @@
 
 import Foundation
 
-struct ResourceFileGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct ResourceFileGenerator: StructGenerator {
+  private let resourceFiles: [ResourceFile]
 
   init(resourceFiles: [ResourceFile]) {
+    self.resourceFiles = resourceFiles
+  }
 
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let localized = resourceFiles.groupBy { $0.fullname }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
@@ -22,18 +24,19 @@ struct ResourceFileGenerator: Generator {
     // For resource files, the contents of the different locales don't matter, so we just use the first one
     let firstLocales = groupedLocalized.uniques.map { ($0.0, Array($0.1.prefix(1))) }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.file` struct is generated, and contains static references to \(firstLocales.count) files."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "file"),
       implements: [],
       typealiasses: [],
-      properties: firstLocales.flatMap(ResourceFileGenerator.propertiesFromResourceFiles),
-      functions: firstLocales.flatMap(ResourceFileGenerator.functionsFromResourceFiles),
+      properties: firstLocales.flatMap(propertiesFromResourceFiles),
+      functions: firstLocales.flatMap(functionsFromResourceFiles),
       structs: []
     )
   }
 
-  private static func propertiesFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Property] {
+  private func propertiesFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Let] {
 
     return resourceFiles
       .map {
@@ -47,7 +50,7 @@ struct ResourceFileGenerator: Generator {
     }
   }
 
-  private static func functionsFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Function] {
+  private func functionsFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Function] {
 
     return resourceFiles
       .flatMap { resourceFile -> [Function] in

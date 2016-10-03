@@ -9,8 +9,8 @@
 import Foundation
 
 struct Struct: UsedTypesProvider, CustomStringConvertible {
-  var comments: [String] = []
-  var accessModifier: AccessModifier = .Internal
+  var comments: [String]
+  var accessModifier: AccessModifier
   let type: Type
   var implements: [TypePrinter]
   let typealiasses: [Typealias]
@@ -29,27 +29,9 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       ].flatten()
   }
 
-  init(accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
-    self.accessModifier = accessModifier
-    self.type = type
-    self.implements = implements
-    self.typealiasses = typealiasses
-    self.properties = properties
-    self.functions = functions
-    self.structs = structs
-  }
-
-  init(comments: [String], type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+  init(comments: [String], accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
     self.comments = comments
-    self.type = type
-    self.implements = implements
-    self.typealiasses = typealiasses
-    self.properties = properties
-    self.functions = functions
-    self.structs = structs
-  }
-
-  init(type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+    self.accessModifier = accessModifier
     self.type = type
     self.implements = implements
     self.typealiasses = typealiasses
@@ -68,26 +50,25 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .joinWithSeparator("\n")
 
     let varsString = properties
-//      .sorted { $0.name.description < $1.name.description }
       .map { $0.description }
       .sorted()
       .joined(separator: "\n")
+
     let functionsString = functions
-//      .sorted { $0.name.description < $1.name.description }
       .map { $0.description }
       .sorted()
       .joined(separator: "\n\n")
+    
     let structsString = structs
-//      .sorted { $0.type.description < $1.type.description }
       .map { $0.description }
       .sorted()
       .joined(separator: "\n\n")
 
 
-    // File private `init`, so that struct can't be initialized externally.
-    let filePrivateInit = "fileprivate init() {}"
+    // Private `init`, so that struct can't be initialized
+    let privateInit = "private init() {}"
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString, filePrivateInit].filter { $0 != "" }
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joined(separator: "\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"

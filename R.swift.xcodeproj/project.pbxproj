@@ -32,8 +32,6 @@
 		D59F722A1C1963EA0089767C /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72281C1963EA0089767C /* Struct.swift */; };
 		D59F72301C19644F0089767C /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F722F1C19644F0089767C /* Function.swift */; };
 		D59F72311C19644F0089767C /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F722F1C19644F0089767C /* Function.swift */; };
-		D59F72391C1964950089767C /* Var.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72381C1964950089767C /* Var.swift */; };
-		D59F723A1C1964950089767C /* Var.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72381C1964950089767C /* Var.swift */; };
 		D59F723C1C1964B20089767C /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723B1C1964B20089767C /* Typealias.swift */; };
 		D59F723D1C1964B20089767C /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723B1C1964B20089767C /* Typealias.swift */; };
 		D59F723F1C19651F0089767C /* ReusableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F723E1C19651F0089767C /* ReusableContainer.swift */; };
@@ -43,8 +41,6 @@
 		D5A0A82D1C4793C20089ED2C /* SwiftCodeConverible.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A0A8291C47920A0089ED2C /* SwiftCodeConverible.swift */; };
 		D5A0A82E1C4793C20089ED2C /* TypePrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A0A82B1C4792210089ED2C /* TypePrinter.swift */; };
 		D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129AE1C3BA5F900A1C5FC /* Let.swift */; };
-		D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129B01C3BA65C00A1C5FC /* Property.swift */; };
-		D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129B01C3BA65C00A1C5FC /* Property.swift */; };
 		D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B129AE1C3BA5F900A1C5FC /* Let.swift */; };
 		D5B799641C19937C009EA901 /* ImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799631C19937C009EA901 /* ImageGenerator.swift */; };
 		D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B799651C19939D009EA901 /* SegueGenerator.swift */; };
@@ -124,13 +120,11 @@
 		D59F72251C1963DA0089767C /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		D59F72281C1963EA0089767C /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		D59F722F1C19644F0089767C /* Function.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
-		D59F72381C1964950089767C /* Var.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Var.swift; sourceTree = "<group>"; };
 		D59F723B1C1964B20089767C /* Typealias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D59F723E1C19651F0089767C /* ReusableContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableContainer.swift; sourceTree = "<group>"; };
 		D5A0A8291C47920A0089ED2C /* SwiftCodeConverible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCodeConverible.swift; sourceTree = "<group>"; };
 		D5A0A82B1C4792210089ED2C /* TypePrinter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypePrinter.swift; sourceTree = "<group>"; };
 		D5B129AE1C3BA5F900A1C5FC /* Let.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Let.swift; sourceTree = "<group>"; };
-		D5B129B01C3BA65C00A1C5FC /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		D5B799631C19937C009EA901 /* ImageGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGenerator.swift; sourceTree = "<group>"; };
 		D5B799651C19939D009EA901 /* SegueGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueGenerator.swift; sourceTree = "<group>"; };
 		D5B799671C1993B7009EA901 /* StoryboardGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardGenerator.swift; sourceTree = "<group>"; };
@@ -320,12 +314,10 @@
 				D59F722F1C19644F0089767C /* Function.swift */,
 				D5B129AE1C3BA5F900A1C5FC /* Let.swift */,
 				D5B799821C1B8C78009EA901 /* Module.swift */,
-				D5B129B01C3BA65C00A1C5FC /* Property.swift */,
 				D59F72281C1963EA0089767C /* Struct.swift */,
 				D59F72251C1963DA0089767C /* Type.swift */,
 				D59F723B1C1964B20089767C /* Typealias.swift */,
 				D56F923C1C29421600177FF7 /* TypeVar.swift */,
-				D59F72381C1964950089767C /* Var.swift */,
 			);
 			path = SwiftTypes;
 			sourceTree = "<group>";
@@ -446,7 +438,6 @@
 				E2762AC91CCCEE120009BCAA /* Locale.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
 				5D45C2191CA12913000B8DC9 /* StringsGenerator.swift in Sources */,
-				D5B129B21C3BA75A00A1C5FC /* Property.swift in Sources */,
 				E2762AD01CCD0CF90009BCAA /* LocalizableStrings.swift in Sources */,
 				D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */,
 				D5B799741C199755009EA901 /* ResourceFileGenerator.swift in Sources */,
@@ -463,7 +454,6 @@
 				D5F12D481BDACB8E009A2C88 /* XCProjectFile.swift in Sources */,
 				D5B7998A1C1B91A9009EA901 /* Module.swift in Sources */,
 				D5F97E471C1819160066D7C0 /* Resources.swift in Sources */,
-				D59F723A1C1964950089767C /* Var.swift in Sources */,
 				D56DC76E1C41770500623437 /* AccessModifier.swift in Sources */,
 				D56F92401C29475F00177FF7 /* Struct+ChildValidation.swift in Sources */,
 				D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */,
@@ -502,10 +492,8 @@
 				D5C5A8EF1BB7196000163E71 /* Core.swift in Sources */,
 				D58672491C21FC9700A760EC /* TypeSequenceProvider.swift in Sources */,
 				D5F97E461C18169E0066D7C0 /* Nib.swift in Sources */,
-				D59F72391C1964950089767C /* Var.swift in Sources */,
 				D5B7997F1C1B07EB009EA901 /* ErrorOutput.swift in Sources */,
 				E2A918751CD4B61200394F6F /* Unifiable.swift in Sources */,
-				D5B129B11C3BA65C00A1C5FC /* Property.swift in Sources */,
 				E22D43651C95845200692FFF /* ColorPalette.swift in Sources */,
 				D5F97E421C1816360066D7C0 /* Image.swift in Sources */,
 				D578CAD61CE064E900C50B7E /* version.swift in Sources */,

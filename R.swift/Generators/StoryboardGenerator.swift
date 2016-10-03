@@ -8,22 +8,25 @@
 
 import Foundation
 
-struct StoryboardGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct?
+struct StoryboardGenerator: StructGenerator {
+  private let storyboards: [Storyboard]
 
   init(storyboards: [Storyboard]) {
+    self.storyboards = storyboards
+  }
+
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardStructs = groupedStoryboards
       .uniques
-      .map(StoryboardGenerator.storyboardStruct)
+      .map { storyboardStruct(for: $0, at: externalAccessLevel) }
 
     let storyboardProperties: [Property] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
+        let struct_ = storyboardStruct(for: storyboard, at: externalAccessLevel)
 
         return Let(
           comments: ["Storyboard `\(storyboard.name)`."],
@@ -37,7 +40,7 @@ struct StoryboardGenerator: Generator {
     let storyboardFunctions: [Function] = groupedStoryboards
       .uniques
       .map { storyboard in
-        let struct_ = StoryboardGenerator.storyboardStruct(for: storyboard)
+        let struct_ = storyboardStruct(for: storyboard, at: externalAccessLevel)
 
         return Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
@@ -53,8 +56,9 @@ struct StoryboardGenerator: Generator {
         )
       }
 
-    externalStruct = Struct(
-      comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
+    return Struct(
+        comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
+        accessModifier: externalAccessLevel,
         type: Type(module: .host, name: "storyboard"),
         implements: [],
         typealiasses: [],
@@ -63,7 +67,10 @@ struct StoryboardGenerator: Generator {
         structs: []
       )
 
-    internalStruct = Struct(
+    // TODO: Move this into the the returned struct as fileprivate
+    _ = Struct(
+      comments: [],
+      accessModifier: .FilePrivate,
       type: Type(module: .host, name: "storyboard"),
       implements: [],
       typealiasses: [],
@@ -73,8 +80,7 @@ struct StoryboardGenerator: Generator {
     )
   }
 
-  private static func storyboardStruct(for storyboard: Storyboard) -> Struct {
-
+  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessModifier) -> Struct {
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
@@ -163,6 +169,8 @@ struct StoryboardGenerator: Generator {
 
     // Return
     return Struct(
+      comments: [],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: SwiftIdentifier(name: storyboard.name)),
       implements: implements,
       typealiasses: typealiasses,

@@ -28,7 +28,7 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-  let (internalStruct, externalStruct) = generateResourceStructs(with: resources, bundleIdentifier: callInformation.bundleIdentifier)
+  let (internalStruct, externalStruct) = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
 
   let usedModules = [internalStruct, externalStruct]
     .flatMap(getUsedTypes)

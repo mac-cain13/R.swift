@@ -31,15 +31,21 @@ private let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
-struct NibGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct?
+struct NibGenerator: StructGenerator {
+  private let nibs: [Nib]
 
   init(nibs: [Nib]) {
+    self.nibs = nibs
+  }
+
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
     let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
-    internalStruct = Struct(
+    // TODO: Move this as fileprivate into the returned struct
+    _ = Struct(
+      comments: [],
+      accessModifier: externalAccessLevel,
         type: Type(module: .host, name: "nib"),
         implements: [],
         typealiasses: [],
@@ -47,28 +53,29 @@ struct NibGenerator: Generator {
         functions: [],
         structs: groupedNibs
           .uniques
-          .map(NibGenerator.nibStruct)
+          .map { nibStruct(for: $0, at: externalAccessLevel) }
       )
 
     let nibProperties: [Property] = groupedNibs
       .uniques
-      .map(NibGenerator.nibVar)
+      .map(nibVar)
     let nibFunctions: [Function] = groupedNibs
       .uniques
-      .map(NibGenerator.nibFunc)
+      .map(nibFunc)
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
-        type: Type(module: .host, name: "nib"),
-        implements: [],
-        typealiasses: [],
-        properties: nibProperties,
-        functions: nibFunctions,
-        structs: []
-      )
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: "nib"),
+      implements: [],
+      typealiasses: [],
+      properties: nibProperties,
+      functions: nibFunctions,
+      structs: []
+    )
   }
 
-  private static func nibFunc(for nib: Nib) -> Function {
+  private func nibFunc(for nib: Nib) -> Function {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       isStatic: true,
@@ -83,7 +90,7 @@ struct NibGenerator: Generator {
     )
   }
 
-  private static func nibVar(for nib: Nib) -> Let {
+  private func nibVar(for nib: Nib) -> Let {
     let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
     let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
     return Let(
@@ -95,8 +102,7 @@ struct NibGenerator: Generator {
     )
   }
 
-  private static func nibStruct(for nib: Nib) -> Struct {
-
+  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessModifier) -> Struct {
     let instantiateParameters = [
       Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
       Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .stdLib, name: SwiftIdentifier(rawValue: "[NSObject : AnyObject]"), optional: true), defaultValue: "nil")
@@ -152,12 +158,14 @@ struct NibGenerator: Generator {
 
     let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
     return Struct(
-        type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
-        implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
-        typealiasses: reuseTypealiasses,
-        properties: [bundleLet, nameVar] + reuseIdentifierProperties,
-        functions: viewFuncs,
-        structs: []
-      )
+      comments: [],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
+      implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
+      typealiasses: reuseTypealiasses,
+      properties: [bundleLet, nameVar] + reuseIdentifierProperties,
+      functions: viewFuncs,
+      structs: []
+    )
   }
 }

@@ -47,7 +47,7 @@ private let versionOption = Option(
 )
 
 private let accessLevelOption = Option(
-  trigger: .Long("accessLevel"),
+  trigger: .long("accessLevel"),
   numberOfParameters: 1,
   helpDescription: "The access level [public|internal] to use for the generated R-file, will default to `internal`."
 )
@@ -108,15 +108,9 @@ private let AllOptions = [
 struct CallInformation {
   let outputURL: URL
 
-<<<<<<< HEAD
   let accessLevel: AccessModifier
 
-  let xcodeprojURL: NSURL
-||||||| merged common ancestors
-  let xcodeprojURL: NSURL
-=======
   let xcodeprojURL: URL
->>>>>>> master
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
@@ -165,9 +159,9 @@ struct CallInformation {
 
       let getFirstArgumentForOption = getFirstArgument(from: options, helpString: optionParser.helpStringForCommandName(commandName))
 
-      let accessLevelString = try getFirstArgumentForOption(accessLevelOption, defaultValue: AccessModifier.Internal.rawValue)
+      let accessLevelString = try getFirstArgumentForOption(accessLevelOption, AccessModifier.Internal.rawValue)
       guard let parsedAccessLevel = AccessModifier(rawValue: accessLevelString) else {
-        throw InputParsingError.IllegalOption(
+        throw InputParsingError.illegalOption(
           error: "Access level \(accessLevelString) is invalid.",
           helpString: optionParser.helpStringForCommandName(commandName)
         )

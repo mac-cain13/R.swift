@@ -9,31 +9,17 @@
 
 import Foundation
 
-protocol Generator {
-  var externalStruct: Struct? { get }
-  var internalStruct: Struct? { get }
+protocol StructGenerator {
+  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct?
 }
 
-private struct GeneratorResults {
-  var externalStructs: [Struct] = []
-  var internalStructs: [Struct] = []
-
-  init() {}
-
-  mutating func add(_ generator: Generator) {
-    if let externalStruct = generator.externalStruct {
-      externalStructs.append(externalStruct)
-    }
-
-    if let internalStruct = generator.internalStruct {
-      internalStructs.append(internalStruct)
-    }
-  }
+func anyGenerator(generator: StructGenerator) -> StructGenerator {
+  return generator
 }
 
-func generateResourceStructs(with resources: Resources, bundleIdentifier: String) -> (Struct, Struct) {
+func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessModifier, forBundleIdentifier bundleIdentifier: String) -> (Struct, Struct) {
 
-  let generators: [Generator] = [
+  let generators: [StructGenerator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
       ColorGenerator(colorPalettes: resources.colors),
       FontGenerator(fonts: resources.fonts),
@@ -45,10 +31,12 @@ func generateResourceStructs(with resources: Resources, bundleIdentifier: String
       StringsGenerator(localizableStrings: resources.localizableStrings),
     ]
 
-  var generatorResults = GeneratorResults()
-  generators.forEach { generatorResults.add($0) }
+  var structs = generators
+    .flatMap { $0.generateStruct(at: externalAccessLevel) }
 
   let internalResourceStruct = Struct(
+      comments: [],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "_R"),
       implements: [],
       typealiasses: [],
@@ -65,14 +53,13 @@ func generateResourceStructs(with resources: Resources, bundleIdentifier: String
           value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
       ],
       functions: [],
-      structs: generatorResults.internalStructs
+      structs: []// TODO: generatorResults.internalStructs
     )
     .addChildStructValidationMethods()
 
-  var externalStructs = generatorResults.externalStructs
-
   if internalResourceStruct.implements.map({ $0.type }).contains(Type.Validatable) {
-    externalStructs.append(Struct(
+    structs.append(Struct(
+        comments: [],
         accessModifier: .Private,
         type: Type(module: .host, name: "intern"),
         implements: [TypePrinter(type: Type.Validatable)],
@@ -96,12 +83,13 @@ func generateResourceStructs(with resources: Resources, bundleIdentifier: String
 
   let externalResourceStruct = Struct(
       comments: ["This `R` struct is code generated, and contains references to static resources."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "R"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: externalStructs
+      structs: structs
     )
     .addChildStructValidationMethods()
 

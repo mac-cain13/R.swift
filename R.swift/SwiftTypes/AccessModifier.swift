@@ -9,7 +9,8 @@
 import Foundation
 
 enum AccessModifier: String {
-  case Internal = "internal"
-  case Private = "private"
   case Public = "public"
+  case Internal = "internal"
+  case FilePrivate = "fileprivate"
+  case Private = "private"
 }
