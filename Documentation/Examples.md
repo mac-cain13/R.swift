@@ -4,13 +4,20 @@ On this page you'll find examples of the kind of resources R.swift supports and 
 
 ## Runtime validation
 
-Call `R.assertValid()` to call all validation methods that R.swift generates, this will check:
+Call `R.validate()` to call all validation methods that R.swift generates, this will check:
 - If all images used in storyboards are available
 - If all view controllers with storyboard identifiers can be loaded
 
-The `assertValid()` method does nothing when in release mode, only in debug mode it will perform checks and assert if a check fails. If you want more control you can also use `try R.validate()` which will throw a detailed error about the problems that occur and will always perform checks, even in release builds.
+The `R.validate()` method will throw a detailed error about the problems that occur. Note that this method will always perform checks, even in release builds. It’s recommended that validation is done in a testcase.
 
-_Note:_ The validation methods are there to perform checks that can't be done at compile time, it's recommended to put `R.assertValid()` in your `AppDelegate`.
+*Example testcase*
+```swift
+do {
+  try R.validate()
+} catch {
+	XCTFail(error)
+}
+```
 
 ## Images
 
@@ -44,8 +51,8 @@ let lightFontTitle = R.font.acmeLight(size: 22)
 
 *Vanilla*
 ```swift
-let jsonURL = NSBundle.mainBundle().URLForResource("seed-data", withExtension: "json")
-let jsonPath = NSBundle.mainBundle().pathForResource("seed-data", withExtension: "json")
+let jsonURL = Bundle.main.url(forResource: "seed-data", withExtension: "json")
+let jsonPath = Bundle.main.path(forResource: "seed-data", ofType: "json")
 ```
 
 *With R.swift*
@@ -79,10 +86,10 @@ let welcomeMessage = NSLocalizedString("welcome.message", comment: "")
 let settingsTitle = NSLocalizedString("title", tableName: "Settings", comment: "")
 
 // Formatted strings
-let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Alice")
+let welcomeName = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Alice")
 
 // Stringsdict files
-let progress = String(format: NSLocalizedString("copy.progress", comment: ""), locale: NSLocale.currentLocale(), 4, 23)
+let progress = String(format: NSLocalizedString("copy.progress", comment: ""), locale: NSLocale.current, 4, 23)
 ```
 
 *With R.swift*
@@ -104,7 +111,7 @@ let progress = R.string.localizable.copyProgress(completed: 4, total: 23)
 ```swift
 let storyboard = UIStoryboard(name: "Main", bundle: nil)
 let initialTabBarController = storyboard.instantiateInitialViewController() as? UITabBarController
-let settingsController = self.instantiateViewControllerWithIdentifier("settingsController") as? SettingsController
+let settingsController = storyboard.instantiateViewController(withIdentifier: "settingsController") as? SettingsControllerSettingsController
 ```
 
 *With R.swift*
@@ -119,26 +126,25 @@ let settingsController = R.storyboard.main.settingsController()
 *Vanilla*
 ```swift
 // Trigger segue with:
-performSegueWithIdentifier("openSettings", sender: self)
+performSegue(withIdentifier: "openSettings", sender: self)
 
 // And then prepare it:
-override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-  if let settingsController = segue.destinationViewController as? SettingsController,
-    segue = segue as? CustomSettingsSegue
-    where segue.identifier == "openSettings" {
+override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if let settingsController = segue.destination as? SettingsController,
+       let segue = segue as? CustomSettingsSegue, segue.identifier == "openSettings" {
       segue.animationType = .LockAnimation
       settingsController.lockSettings = true
+    }
   }
-}
 ```
 
 *With R.swift*
 ```swift
 // Trigger segue with:
-performSegueWithIdentifier(R.segue.overviewController.openSettings, sender: self)
+performSegue(withIdentifier: R.segue.overviewController.openSettings, sender: self)
 
 // And then prepare it:
-override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
   if let typedInfo = R.segue.overviewController.openSettings(segue: segue) {
     typedInfo.segue.animationType = .LockAnimation
     typedInfo.destinationViewController.lockSettings = true
@@ -154,7 +160,7 @@ override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 ```swift
 let nameOfNib = "CustomView"
 let customViewNib = UINib(nibName: "CustomView", bundle: nil)
-let rootViews = customViewNib.instantiateWithOwner(nil, options: nil)
+let rootViews = customViewNib.instantiate(withOwner: nil, options: nil)
 let customView = rootViews[0] as? CustomView
 
 let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: nil)
@@ -178,10 +184,10 @@ class FaqAnswerController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let textCellNib = UINib(nibName: "TextCell", bundle: nil)
-    tableView.registerNib(textCellNib, forCellReuseIdentifier: "TextCellIdentifier")
+    tableView.register(textCellNib, forCellReuseIdentifier: "TextCellIdentifier")
   }
 
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let textCell = tableView.dequeueReusableCellWithIdentifier("TextCellIdentifier", forIndexPath: indexPath) as! TextCell
     textCell.mainLabel.text = "Hello World"
     return textCell
@@ -194,10 +200,10 @@ class FaqAnswerController: UITableViewController {
 class FaqAnswerController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    tableView.registerNib(R.nib.textCell)
+    tableView.register(R.nib.textCell)
   }
 
-  override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.identifier, forIndexPath: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
@@ -213,10 +219,10 @@ class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let talkCellNib = UINib(nibName: "TalkCell", bundle: nil)
-    collectionView?.registerNib(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
+    collectionView?.register(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
   }
 
-  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCellIdentifier", forIndexPath: indexPath) as! TalkCell
     cell.configureCell("Item \(indexPath.item)")
     return cell
@@ -229,10 +235,10 @@ class RecentsController: UICollectionViewController {
 class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    collectionView?.registerNib(R.nib.talkCell)
+    collectionView?.register(R.nib.talkCell)
   }
 
-  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCell, forIndexPath: indexPath)!
     cell.configureCell("Item \(indexPath.item)")
     return cell

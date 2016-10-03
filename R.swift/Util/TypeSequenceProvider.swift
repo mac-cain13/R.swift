@@ -12,6 +12,6 @@ protocol UsedTypesProvider {
   var usedTypes: [UsedType] { get }
 }
 
-func getUsedTypes(provider: UsedTypesProvider) -> [UsedType] {
+func getUsedTypes(from provider: UsedTypesProvider) -> [UsedType] {
   return provider.usedTypes
 }

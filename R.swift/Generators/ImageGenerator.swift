@@ -23,7 +23,7 @@ struct ImageGenerator: Generator {
       .flatMap { $0.first?.name }
 
     let allFunctions = assetFolderImageNames + imagesNames
-    let groupedFunctions = allFunctions.groupBySwiftIdentifiers { $0 }
+    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 
@@ -34,23 +34,23 @@ struct ImageGenerator: Generator {
           comments: ["Image `\(name)`."],
           isStatic: true,
           name: SwiftIdentifier(name: name),
-          typeDefinition: .Inferred(Type.ImageResource),
-          value: "\(Type.ImageResource.name)(bundle: _R.hostingBundle, name: \"\(name)\")"
+          typeDefinition: .inferred(Type.ImageResource),
+          value: "Rswift.ImageResource(bundle: _R.hostingBundle, name: \"\(name)\")"
         )
       }
 
     externalStruct = Struct(
       comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
-      type: Type(module: .Host, name: "image"),
+      type: Type(module: .host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: imageLets.map(anyProperty),
-      functions: groupedFunctions.uniques.map(ImageGenerator.functionForImageName),
+      properties: imageLets.map(any),
+      functions: groupedFunctions.uniques.map(ImageGenerator.imageFunction),
       structs: []
     )
   }
 
-  static func functionForImageName(name: String) -> Function {
+  static func imageFunction(for name: String) -> Function {
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       isStatic: true,
@@ -66,7 +66,7 @@ struct ImageGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return \(Type._UIImage.name)(resource: R.image.\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
+      body: "return UIKit.UIImage(resource: R.image.\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
     )
   }
 }

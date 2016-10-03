@@ -13,7 +13,7 @@ struct FontGenerator: Generator {
   let internalStruct: Struct? = nil
 
   init(fonts: [Font]) {
-    let groupedFonts = fonts.groupBySwiftIdentifiers { $0.name }
+    let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
     let fontProperties: [Property] = groupedFonts.uniques.map {
@@ -21,23 +21,23 @@ struct FontGenerator: Generator {
         comments: ["Font `\($0.name)`."],
         isStatic: true,
         name: SwiftIdentifier(name: $0.name),
-        typeDefinition: .Inferred(Type.FontResource),
-        value: "FontResource(fontName: \"\($0.name)\")"
+        typeDefinition: .inferred(Type.FontResource),
+        value: "Rswift.FontResource(fontName: \"\($0.name)\")"
       )
     }
 
     externalStruct = Struct(
       comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
-      type: Type(module: .Host, name: "font"),
+      type: Type(module: .host, name: "font"),
       implements: [],
       typealiasses: [],
       properties: fontProperties,
-      functions: groupedFonts.uniques.map(FontGenerator.fontFunctionFromFont),
+      functions: groupedFonts.uniques.map(FontGenerator.fontFunction),
       structs: []
     )
   }
 
-  private static func fontFunctionFromFont(font: Font) -> Function {
+  private static func fontFunction(from font: Font) -> Function {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
       isStatic: true,
@@ -48,7 +48,7 @@ struct FontGenerator: Generator {
       ],
       doesThrow: false,
       returnType: Type._UIFont.asOptional(),
-      body: "return UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
+      body: "return UIKit.UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
     )
   }
 }

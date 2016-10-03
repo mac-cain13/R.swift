@@ -14,11 +14,11 @@ protocol WhiteListedExtensionsResourceType {
 
 extension WhiteListedExtensionsResourceType {
   // Convenience function to check if the path extension is supported, but feels a bit dirty since it throws and takes an optional
-  static func throwIfUnsupportedExtension(pathExtension: String?) throws {
+  static func throwIfUnsupportedExtension(_ pathExtension: String?) throws {
     let pathExtension = pathExtension ?? ""
     
-    if !supportedExtensions.contains(pathExtension.lowercaseString) {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: supportedExtensions)
+    if !supportedExtensions.contains(pathExtension.lowercased()) {
+      throw ResourceParsingError.unsupportedExtension(givenExtension: pathExtension, supportedExtensions: supportedExtensions)
     }
   }
 }

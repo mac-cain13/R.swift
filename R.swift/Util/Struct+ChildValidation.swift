@@ -28,7 +28,7 @@ extension Struct {
 
     var outputStruct = self
     outputStruct.structs = childStructs
-    outputStruct.implements.append(TypePrinter(type: Type.Validatable, style: .FullyQualified))
+    outputStruct.implements.append(TypePrinter(type: Type.Validatable))
     outputStruct.functions.append(
       Function(
         isStatic: true,
@@ -39,7 +39,7 @@ extension Struct {
         returnType: Type._Void,
         body: validatableStructs
           .map { "try \($0.type).validate()" }
-          .joinWithSeparator("\n")
+          .joined(separator: "\n")
       )
     )
     

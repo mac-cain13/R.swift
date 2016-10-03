@@ -9,13 +9,13 @@
 import Foundation
 
 enum TypeDefinition: UsedTypesProvider {
-  case Specified(Type)
-  case Inferred(Type?)
+  case specified(Type)
+  case inferred(Type?)
 
   var type: Type? {
     switch self {
-    case let .Specified(type): return type
-    case let .Inferred(type): return type
+    case let .specified(type): return type
+    case let .inferred(type): return type
     }
   }
 
@@ -52,13 +52,13 @@ struct Let: Property {
   }
 
   var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
 
     let typeString: String
     switch typeDefinition {
-    case let .Specified(type): typeString = ": \(type)"
-    case .Inferred: typeString = ""
+    case let .specified(type): typeString = ": \(type)"
+    case .inferred: typeString = ""
     }
 
     return "\(commentsString)\(staticString)let \(name)\(typeString) = \(value)"

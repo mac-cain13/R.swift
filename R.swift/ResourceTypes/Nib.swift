@@ -23,23 +23,28 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
     name = url.filename!
 
-    let parserDelegate = NibParserDelegate();
+    guard let parser = XMLParser(contentsOf: url) else {
+      throw ResourceParsingError.parsingFailed("Couldn't load file at: '\(url)'")
+    }
 
-    let parser = NSXMLParser(contentsOfURL: url)!
+    let parserDelegate = NibParserDelegate()
     parser.delegate = parserDelegate
-    parser.parse()
+
+    guard parser.parse() else {
+        throw ResourceParsingError.parsingFailed("Invalid XML in file at: '\(url)'")
+    }
 
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
   }
 }
 
-private class NibParserDelegate: NSObject, NSXMLParserDelegate {
+private class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
@@ -48,7 +53,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
-  @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+  @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = true;
@@ -58,7 +63,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
         levelSinceObjectsTagOpened += 1;
 
         if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
-          where levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
+          , levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
         }
       }
@@ -69,7 +74,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+  @objc func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     switch elementName {
     case "objects":
       isObjectsTagOpened = false;
@@ -81,7 +86,7 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     }
   }
 
-  func viewWithAttributes(attributeDict: [String : String], elementName: String) -> Type? {
+  func viewWithAttributes(_ attributeDict: [String : String], elementName: String) -> Type? {
     let customModuleProvider = attributeDict["customModuleProvider"]
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
@@ -92,8 +97,8 @@ private class NibParserDelegate: NSObject, NSXMLParserDelegate {
     return customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView
   }
 
-  func reusableFromAttributes(attributeDict: [String : String], elementName: String) -> Reusable? {
-    guard let reuseIdentifier = attributeDict["reuseIdentifier"] where reuseIdentifier != "" else {
+  func reusableFromAttributes(_ attributeDict: [String : String], elementName: String) -> Reusable? {
+    guard let reuseIdentifier = attributeDict["reuseIdentifier"] , reuseIdentifier != "" else {
       return nil
     }
 
