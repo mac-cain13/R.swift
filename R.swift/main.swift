@@ -28,10 +28,9 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-  let (internalStruct, externalStruct) = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
+  let resourceStruct = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
 
-  let usedModules = [internalStruct, externalStruct]
-    .flatMap(getUsedTypes)
+  let usedModules = resourceStruct.usedTypes
     .map { $0.type.module }
 
   let imports = Set(usedModules)
@@ -43,8 +42,7 @@ do {
   let fileContents = [
       Header,
       imports,
-      externalStruct.description,
-      internalStruct.description,
+      resourceStruct.swiftCode
     ].joined(separator: "\n\n")
 
   // Write file if we have changes

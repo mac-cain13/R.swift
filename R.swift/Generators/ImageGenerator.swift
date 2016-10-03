@@ -37,6 +37,7 @@ struct ImageGenerator: StructGenerator {
       .map { name in
         Let(
           comments: ["Image `\(name)`."],
+          accessModifier: externalAccessLevel,
           isStatic: true,
           name: SwiftIdentifier(name: name),
           typeDefinition: .inferred(Type.ImageResource),

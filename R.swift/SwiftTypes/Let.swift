@@ -26,21 +26,15 @@ enum TypeDefinition: UsedTypesProvider {
 
 struct Let: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
+  let accessModifier: AccessModifier
   let isStatic: Bool
   let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
 
-  init(isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
-    self.comments = []
-    self.isStatic = isStatic
-    self.name = name
-    self.typeDefinition = typeDefinition
-    self.value = value
-  }
-
-  init(comments: [String], isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], accessModifier: AccessModifier, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = comments
+    self.accessModifier = accessModifier
     self.isStatic = isStatic
     self.name = name
     self.typeDefinition = typeDefinition
@@ -53,6 +47,7 @@ struct Let: UsedTypesProvider, SwiftCodeConverible {
 
   var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let staticString = isStatic ? "static " : ""
 
     let typeString: String
@@ -61,6 +56,6 @@ struct Let: UsedTypesProvider, SwiftCodeConverible {
     case .inferred: typeString = ""
     }
 
-    return "\(commentsString)\(staticString)let \(name)\(typeString) = \(value)"
+    return "\(commentsString)\(accessModifierString)\(staticString)let \(name)\(typeString) = \(value)"
   }
 }

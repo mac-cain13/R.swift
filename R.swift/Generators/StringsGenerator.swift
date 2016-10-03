@@ -44,7 +44,7 @@ struct StringsGenerator: StructGenerator {
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: params.map(stringLet),
+      properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
       functions: params.map(stringFunction),
       structs: []
     )
@@ -159,7 +159,7 @@ struct StringsGenerator: StructGenerator {
     return results
   }
 
-  private func stringLet(values: StringValues) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessModifier) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -169,6 +169,7 @@ struct StringsGenerator: StructGenerator {
 
     return Let(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       typeDefinition: .inferred(Type.StringResource),

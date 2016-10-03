@@ -58,10 +58,10 @@ struct NibGenerator: StructGenerator {
 
     let nibProperties: [Let] = groupedNibs
       .uniques
-      .map(nibVar)
+      .map { nibVar(for: $0, at: externalAccessLevel) }
     let nibFunctions: [Function] = groupedNibs
       .uniques
-      .map(nibFunc)
+      .map { nibFunc(for: $0, at: externalAccessLevel) }
 
     return Struct(
       comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
@@ -75,7 +75,7 @@ struct NibGenerator: StructGenerator {
     )
   }
 
-  private func nibFunc(for nib: Nib) -> Function {
+  private func nibFunc(for nib: Nib, at externalAccessLevel: AccessModifier) -> Function {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       isStatic: true,
@@ -90,11 +90,12 @@ struct NibGenerator: StructGenerator {
     )
   }
 
-  private func nibVar(for nib: Nib) -> Let {
+  private func nibVar(for nib: Nib, at externalAccessLevel: AccessModifier) -> Let {
     let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
     let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
     return Let(
       comments: ["Nib `\(nib.name)`."],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: nib.name),
       typeDefinition: .inferred(structType),
@@ -109,6 +110,8 @@ struct NibGenerator: StructGenerator {
     ]
 
     let bundleLet = Let(
+      comments: [],
+      accessModifier: .FilePrivate,
       isStatic: false,
       name: "bundle",
       typeDefinition: .inferred(Type._Bundle),
@@ -116,6 +119,8 @@ struct NibGenerator: StructGenerator {
     )
 
     let nameVar = Let(
+      comments: [],
+      accessModifier: externalAccessLevel,
       isStatic: false,
       name: "name",
       typeDefinition: .inferred(Type._String),
@@ -143,6 +148,8 @@ struct NibGenerator: StructGenerator {
     let reuseTypealiasses: [Typealias]
     if let reusable = nib.reusables.first , nib.rootViews.count == 1 && nib.reusables.count == 1 {
       reuseIdentifierProperties = [Let(
+        comments: [],
+        accessModifier: externalAccessLevel,
         isStatic: false,
         name: "identifier",
         typeDefinition: .inferred(Type._String),

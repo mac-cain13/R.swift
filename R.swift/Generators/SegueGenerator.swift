@@ -109,6 +109,7 @@ struct SegueGenerator: StructGenerator {
       )
       return Let(
         comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         typeDefinition: .specified(type),

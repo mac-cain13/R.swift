@@ -22,6 +22,7 @@ struct FontGenerator: StructGenerator {
     let fontProperties: [Let] = groupedFonts.uniques.map {
       Let(
         comments: ["Font `\($0.name)`."],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: $0.name),
         typeDefinition: .inferred(Type.FontResource),

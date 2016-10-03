@@ -17,7 +17,7 @@ func anyGenerator(generator: StructGenerator) -> StructGenerator {
   return generator
 }
 
-func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessModifier, forBundleIdentifier bundleIdentifier: String) -> (Struct, Struct) {
+func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessModifier, forBundleIdentifier bundleIdentifier: String) -> Struct {
 
   let generators: [StructGenerator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
@@ -42,11 +42,15 @@ func generateResourceStructs(with resources: Resources, at externalAccessLevel: 
       typealiasses: [],
       properties: [
         Let(
+          comments: [],
+          accessModifier: .FilePrivate,
           isStatic: true,
           name: "hostingBundle",
           typeDefinition: .inferred(Type._Bundle),
           value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
         Let(
+          comments: [],
+          accessModifier: .FilePrivate,
           isStatic: true,
           name: "applicationLocale",
           typeDefinition: .inferred(Type._Locale),
@@ -93,5 +97,5 @@ func generateResourceStructs(with resources: Resources, at externalAccessLevel: 
     )
     .addChildStructValidationMethods()
 
-  return (internalResourceStruct, externalResourceStruct)
+  return externalResourceStruct
 }

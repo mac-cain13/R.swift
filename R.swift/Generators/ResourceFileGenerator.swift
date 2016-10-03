@@ -30,18 +30,19 @@ struct ResourceFileGenerator: StructGenerator {
       type: Type(module: .host, name: "file"),
       implements: [],
       typealiasses: [],
-      properties: firstLocales.flatMap(propertiesFromResourceFiles),
+      properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       functions: firstLocales.flatMap(functionsFromResourceFiles),
       structs: []
     )
   }
 
-  private func propertiesFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Let] {
+  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessModifier) -> [Let] {
 
     return resourceFiles
       .map {
         return Let(
           comments: ["Resource file `\($0.fullname)`."],
+          accessModifier: externalAccessLevel,
           isStatic: true,
           name: SwiftIdentifier(name: $0.fullname),
           typeDefinition: .inferred(Type.FileResource),

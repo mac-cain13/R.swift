@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Struct: UsedTypesProvider, CustomStringConvertible {
+struct Struct: UsedTypesProvider, SwiftCodeConverible {
   var comments: [String]
   var accessModifier: AccessModifier
   let type: Type
@@ -40,7 +40,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
     self.structs = structs
   }
 
-  var description: String {
+  var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joined(separator: ", ") : ""
@@ -55,12 +55,12 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .joined(separator: "\n")
 
     let functionsString = functions
-      .map { $0.description }
+      .map { $0.swiftCode }
       .sorted()
       .joined(separator: "\n\n")
     
     let structsString = structs
-      .map { $0.description }
+      .map { $0.swiftCode }
       .sorted()
       .joined(separator: "\n\n")
 

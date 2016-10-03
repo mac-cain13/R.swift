@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Function: UsedTypesProvider {
+struct Function: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
   let isStatic: Bool
   let name: SwiftIdentifier
@@ -47,7 +47,7 @@ struct Function: UsedTypesProvider {
     ].flatten()
   }
 
-  var description: String {
+  var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""

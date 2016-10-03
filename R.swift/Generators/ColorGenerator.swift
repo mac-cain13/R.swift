@@ -46,17 +46,18 @@ struct ColorGenerator: StructGenerator {
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: groupedColors.uniques.map(colorLet),
+      properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },
       functions: groupedColors.uniques.map(colorFunction),
       structs: []
     )
   }
 
-  private func colorLet(_ name: String, color: NSColor) -> Let {
+  private func colorLet(_ name: String, color: NSColor, at externalAccessLevel: AccessModifier) -> Let {
     return Let(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
       ],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
       typeDefinition: .inferred(Type.ColorResource),

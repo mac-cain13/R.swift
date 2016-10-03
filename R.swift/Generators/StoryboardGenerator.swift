@@ -30,6 +30,7 @@ struct StoryboardGenerator: StructGenerator {
 
         return Let(
           comments: ["Storyboard `\(storyboard.name)`."],
+          accessModifier: externalAccessLevel,
           isStatic: true,
           name: struct_.type.name,
           typeDefinition: .inferred(Type.StoryboardResourceType),
@@ -85,8 +86,8 @@ struct StoryboardGenerator: StructGenerator {
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
     var properties: [Let] = [
-      Let(isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: "_R.hostingBundle")
+      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
+      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
 
     // Initial view controller
@@ -114,6 +115,8 @@ struct StoryboardGenerator: StructGenerator {
         (
           vc,
           Let(
+            comments: [],
+            accessModifier: externalAccessLevel,
             isStatic: false,
             name: SwiftIdentifier(name: identifier),
             typeDefinition: .inferred(Type.StoryboardViewControllerResource),
