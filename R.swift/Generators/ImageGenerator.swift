@@ -50,7 +50,7 @@ struct ImageGenerator: StructGenerator {
       type: Type(module: .host, name: "image"),
       implements: [],
       typealiasses: [],
-      properties: imageLets.map(any),
+      properties: imageLets,
       functions: groupedFunctions.uniques.map(imageFunction),
       structs: []
     )

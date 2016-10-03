@@ -23,7 +23,7 @@ struct StoryboardGenerator: StructGenerator {
       .uniques
       .map { storyboardStruct(for: $0, at: externalAccessLevel) }
 
-    let storyboardProperties: [Property] = groupedStoryboards
+    let storyboardProperties: [Let] = groupedStoryboards
       .uniques
       .map { storyboard in
         let struct_ = storyboardStruct(for: storyboard, at: externalAccessLevel)
@@ -84,7 +84,7 @@ struct StoryboardGenerator: StructGenerator {
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
-    var properties: [Property] = [
+    var properties: [Let] = [
       Let(isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
       Let(isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: "_R.hostingBundle")
     ]
@@ -110,7 +110,7 @@ struct StoryboardGenerator: StructGenerator {
     }
 
     let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
-      .map { (vc, identifier) -> (Storyboard.ViewController, Property) in
+      .map { (vc, identifier) -> (Storyboard.ViewController, Let) in
         (
           vc,
           Let(

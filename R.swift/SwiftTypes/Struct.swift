@@ -14,7 +14,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
   let type: Type
   var implements: [TypePrinter]
   let typealiasses: [Typealias]
-  let properties: [Property]
+  let properties: [Let]
   var functions: [Function]
   var structs: [Struct]
 
@@ -29,7 +29,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       ].flatten()
   }
 
-  init(comments: [String], accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Property], functions: [Function], structs: [Struct]) {
+  init(comments: [String], accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Let], functions: [Function], structs: [Struct]) {
     self.comments = comments
     self.accessModifier = accessModifier
     self.type = type
@@ -50,7 +50,7 @@ struct Struct: UsedTypesProvider, CustomStringConvertible {
       .joinWithSeparator("\n")
 
     let varsString = properties
-      .map { $0.description }
+      .map { $0.swiftCode }
       .sorted()
       .joined(separator: "\n")
 

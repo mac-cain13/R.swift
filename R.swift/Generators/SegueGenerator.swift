@@ -145,7 +145,7 @@ struct SegueGenerator: StructGenerator {
       type: Type(module: .host, name: typeName),
       implements: [],
       typealiasses: [],
-      properties: properties.map(any),
+      properties: properties,
       functions: functions,
       structs: []
     )

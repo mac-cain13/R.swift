@@ -19,7 +19,7 @@ struct FontGenerator: StructGenerator {
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
-    let fontProperties: [Property] = groupedFonts.uniques.map {
+    let fontProperties: [Let] = groupedFonts.uniques.map {
       Let(
         comments: ["Font `\($0.name)`."],
         isStatic: true,

@@ -24,7 +24,7 @@ enum TypeDefinition: UsedTypesProvider {
   }
 }
 
-struct Let: Property {
+struct Let: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
   let isStatic: Bool
   let name: SwiftIdentifier
@@ -51,7 +51,7 @@ struct Let: Property {
     return typeDefinition.usedTypes
   }
 
-  var description: String {
+  var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let staticString = isStatic ? "static " : ""
 

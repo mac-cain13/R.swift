@@ -56,7 +56,7 @@ struct NibGenerator: StructGenerator {
           .map { nibStruct(for: $0, at: externalAccessLevel) }
       )
 
-    let nibProperties: [Property] = groupedNibs
+    let nibProperties: [Let] = groupedNibs
       .uniques
       .map(nibVar)
     let nibFunctions: [Function] = groupedNibs
@@ -138,7 +138,7 @@ struct NibGenerator: StructGenerator {
         )
       }
 
-    let reuseIdentifierProperties: [Property]
+    let reuseIdentifierProperties: [Let]
     let reuseProtocols: [Type]
     let reuseTypealiasses: [Typealias]
     if let reusable = nib.reusables.first , nib.rootViews.count == 1 && nib.reusables.count == 1 {

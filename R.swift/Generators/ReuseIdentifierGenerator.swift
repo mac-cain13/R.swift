@@ -34,7 +34,7 @@ struct ReuseIdentifierGenerator: StructGenerator {
       type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      properties: reuseIdentifierProperties.map(any),
+      properties: reuseIdentifierProperties,
       functions: [],
       structs: []
     )
