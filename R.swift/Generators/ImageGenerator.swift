@@ -52,14 +52,15 @@ struct ImageGenerator: StructGenerator {
       implements: [],
       typealiasses: [],
       properties: imageLets,
-      functions: groupedFunctions.uniques.map(imageFunction),
+      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
       structs: []
     )
   }
 
-  private func imageFunction(for name: String) -> Function {
+  private func imageFunction(for name: String, at externalAccessLevel: AccessModifier) -> Function {
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
       generics: nil,

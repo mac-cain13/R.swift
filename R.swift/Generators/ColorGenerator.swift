@@ -47,7 +47,7 @@ struct ColorGenerator: StructGenerator {
       implements: [],
       typealiasses: [],
       properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },
-      functions: groupedColors.uniques.map(colorFunction),
+      functions: groupedColors.uniques.map { colorFunction($0, color: $1, at: externalAccessLevel) },
       structs: []
     )
   }
@@ -65,13 +65,14 @@ struct ColorGenerator: StructGenerator {
     )
   }
 
-  private func colorFunction(_ name: String, color: NSColor) -> Function {
+  private func colorFunction(_ name: String, color: NSColor, at externalAccessLevel: AccessModifier) -> Function {
     return Function(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",
         "",
         "UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
       ],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
       generics: nil,

@@ -124,6 +124,7 @@ struct SegueGenerator: StructGenerator {
           "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",
           "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
         ],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         generics: nil,

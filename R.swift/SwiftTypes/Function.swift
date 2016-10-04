@@ -10,6 +10,7 @@ import Foundation
 
 struct Function: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
+  let accessModifier: AccessModifier
   let isStatic: Bool
   let name: SwiftIdentifier
   let generics: String?
@@ -18,19 +19,9 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   let returnType: Type
   let body: String
 
-  init(isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
-    self.comments = []
-    self.isStatic = isStatic
-    self.name = name
-    self.generics = generics
-    self.parameters = parameters
-    self.doesThrow = doesThrow
-    self.returnType = returnType
-    self.body = body
-  }
-
-  init(comments: [String], isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+  init(comments: [String], accessModifier: AccessModifier, isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
     self.comments = comments
+    self.accessModifier = accessModifier
     self.isStatic = isStatic
     self.name = name
     self.generics = generics
@@ -49,6 +40,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
 
   var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
     let parameterString = parameters.joinWithSeparator(", ")
@@ -56,7 +48,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indentWithString(IndentationString)
 
-    return "\(commentsString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+    return "\(commentsString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

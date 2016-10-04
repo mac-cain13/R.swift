@@ -31,7 +31,7 @@ struct ResourceFileGenerator: StructGenerator {
       implements: [],
       typealiasses: [],
       properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
-      functions: firstLocales.flatMap(functionsFromResourceFiles),
+      functions: firstLocales.flatMap { functionsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       structs: []
     )
   }
@@ -51,7 +51,7 @@ struct ResourceFileGenerator: StructGenerator {
     }
   }
 
-  private func functionsFromResourceFiles(_ fullname: String, resourceFiles: [ResourceFile]) -> [Function] {
+  private func functionsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessModifier) -> [Function] {
 
     return resourceFiles
       .flatMap { resourceFile -> [Function] in
@@ -62,6 +62,7 @@ struct ResourceFileGenerator: StructGenerator {
         return [
           Function(
             comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
+            accessModifier: externalAccessLevel,
             isStatic: true,
             name: SwiftIdentifier(name: fullname),
             generics: nil,

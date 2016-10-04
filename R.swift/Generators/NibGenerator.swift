@@ -78,6 +78,7 @@ struct NibGenerator: StructGenerator {
   private func nibFunc(for nib: Nib, at externalAccessLevel: AccessModifier) -> Function {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: nib.name),
       generics: nil,
@@ -133,6 +134,8 @@ struct NibGenerator: StructGenerator {
         let viewIndex = viewInfo.ordinal.number - 1
         let viewTypeString = viewInfo.view.description
         return Function(
+          comments: [],
+          accessModifier: externalAccessLevel,
           isStatic: false,
           name: SwiftIdentifier(name: "\(viewInfo.ordinal.word)View"),
           generics: nil,

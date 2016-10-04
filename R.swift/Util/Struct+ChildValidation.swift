@@ -11,13 +11,13 @@ import Foundation
 extension Struct {
   /// Implements the Validatable protocol on this and child struct if one or more childs already implement the 
   /// Validatable protocol. The newly created validate methods will call their child validate methods.
-  func addChildStructValidationMethods() -> Struct {
+  func addChildStructValidationMethods(at externalAccessLevel: AccessModifier) -> Struct {
     if implements.map({ $0.type }).contains(Type.Validatable) {
       return self
     }
 
     let childStructs = structs
-      .map { $0.addChildStructValidationMethods() }
+      .map { $0.addChildStructValidationMethods(at: externalAccessLevel) }
 
     let validatableStructs = childStructs
       .filter { $0.implements.map({ $0.type }).contains(Type.Validatable) }
@@ -31,6 +31,8 @@ extension Struct {
     outputStruct.implements.append(TypePrinter(type: Type.Validatable))
     outputStruct.functions.append(
       Function(
+        comments: [],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: "validate",
         generics: nil,

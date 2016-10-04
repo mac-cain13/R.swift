@@ -45,6 +45,7 @@ struct StoryboardGenerator: StructGenerator {
 
         return Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
+          accessModifier: externalAccessLevel,
           isStatic: true,
           name: struct_.type.name,
           generics: nil,
@@ -130,6 +131,8 @@ struct StoryboardGenerator: StructGenerator {
     viewControllersWithResourceProperty
       .map { (vc, resource) in
         Function(
+          comments: [],
+          accessModifier: externalAccessLevel,
           isStatic: false,
           name: resource.name,
           generics: nil,
@@ -158,6 +161,8 @@ struct StoryboardGenerator: StructGenerator {
 
     if validateLines.count > 0 {
       let validateFunction = Function(
+        comments: [],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: "validate",
         generics: nil,

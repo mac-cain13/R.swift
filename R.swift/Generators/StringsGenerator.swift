@@ -45,7 +45,7 @@ struct StringsGenerator: StructGenerator {
       implements: [],
       typealiasses: [],
       properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
-      functions: params.map(stringFunction),
+      functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
       structs: []
     )
   }
@@ -177,19 +177,20 @@ struct StringsGenerator: StructGenerator {
     )
   }
 
-  private func stringFunction(values: StringValues) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(for: values)
+      return stringFunctionNoParams(for: values, at: externalAccessLevel)
     }
     else {
-      return stringFunctionParams(for: values)
+      return stringFunctionParams(for: values, at: externalAccessLevel)
     }
   }
 
-  private func stringFunctionNoParams(for values: StringValues) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       generics: nil,
@@ -202,7 +203,7 @@ struct StringsGenerator: StructGenerator {
     )
   }
 
-  private func stringFunctionParams(for values: StringValues) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
 
     let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let argumentLabel = param.name ?? "_"
@@ -215,6 +216,7 @@ struct StringsGenerator: StructGenerator {
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       generics: nil,

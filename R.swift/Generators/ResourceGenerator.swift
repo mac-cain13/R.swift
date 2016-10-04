@@ -59,7 +59,7 @@ func generateResourceStructs(with resources: Resources, at externalAccessLevel: 
       functions: [],
       structs: []// TODO: generatorResults.internalStructs
     )
-    .addChildStructValidationMethods()
+    .addChildStructValidationMethods(at: externalAccessLevel)
 
   if internalResourceStruct.implements.map({ $0.type }).contains(Type.Validatable) {
     structs.append(Struct(
@@ -71,6 +71,8 @@ func generateResourceStructs(with resources: Resources, at externalAccessLevel: 
         properties: [],
         functions: [
           Function(
+            comments: [],
+            accessModifier: .FilePrivate,
             isStatic: true,
             name: "validate",
             generics: nil,
@@ -95,7 +97,7 @@ func generateResourceStructs(with resources: Resources, at externalAccessLevel: 
       functions: [],
       structs: structs
     )
-    .addChildStructValidationMethods()
+    .addChildStructValidationMethods(at: externalAccessLevel)
 
   return externalResourceStruct
 }

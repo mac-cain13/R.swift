@@ -37,14 +37,15 @@ struct FontGenerator: StructGenerator {
       implements: [],
       typealiasses: [],
       properties: fontProperties,
-      functions: groupedFonts.uniques.map(fontFunction),
+      functions: groupedFonts.uniques.map { fontFunction(from: $0, at: externalAccessLevel) },
       structs: []
     )
   }
 
-  private func fontFunction(from font: Font) -> Function {
+  private func fontFunction(from font: Font, at externalAccessLevel: AccessModifier) -> Function {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: font.name),
       generics: nil,
