@@ -15,7 +15,7 @@ struct StoryboardGenerator: StructGenerator {
     self.storyboards = storyboards
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
     let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 

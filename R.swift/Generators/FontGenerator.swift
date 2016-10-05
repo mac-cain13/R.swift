@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct FontGenerator: StructGenerator {
+struct FontGenerator: ExternalOnlyStructGenerator {
   private let fonts: [Font]
 
   init(fonts: [Font]) {
     self.fonts = fonts
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 

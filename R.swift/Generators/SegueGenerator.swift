@@ -10,14 +10,14 @@ import Foundation
 
 typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
 
-struct SegueGenerator: StructGenerator {
+struct SegueGenerator: ExternalOnlyStructGenerator {
   private let storyboards: [Storyboard]
 
   init(storyboards: [Storyboard]) {
     self.storyboards = storyboards
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in

@@ -15,6 +15,19 @@ protocol StructGenerator {
   func generatedStructs(at externalAccessLevel: AccessModifier) -> Result
 }
 
+protocol ExternalOnlyStructGenerator: StructGenerator {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct
+}
+
+extension ExternalOnlyStructGenerator {
+  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
+    return (
+      generatedStruct(at: externalAccessLevel),
+      nil
+    )
+  }
+}
+
 func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessModifier, forBundleIdentifier bundleIdentifier: String) -> StructGenerator.Result {
 
   let generators: [StructGenerator] = [

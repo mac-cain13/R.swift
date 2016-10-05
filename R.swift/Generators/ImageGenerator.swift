@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ImageGenerator: StructGenerator {
+struct ImageGenerator: ExternalOnlyStructGenerator {
   private let assetFolders: [AssetFolder]
   private let images: [Image]
 
@@ -17,7 +17,7 @@ struct ImageGenerator: StructGenerator {
     self.images = images
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 

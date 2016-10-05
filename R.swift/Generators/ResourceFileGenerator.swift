@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct ResourceFileGenerator: StructGenerator {
+struct ResourceFileGenerator: ExternalOnlyStructGenerator {
   private let resourceFiles: [ResourceFile]
 
   init(resourceFiles: [ResourceFile]) {
     self.resourceFiles = resourceFiles
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let localized = resourceFiles.groupBy { $0.fullname }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 

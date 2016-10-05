@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct ReuseIdentifierGenerator: StructGenerator {
+struct ReuseIdentifierGenerator: ExternalOnlyStructGenerator {
   private let reusables: [Reusable]
 
   init(reusables: [Reusable]) {
     self.reusables = reusables
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let deduplicatedReusables = reusables
       .groupBy { $0.hashValue }
       .values

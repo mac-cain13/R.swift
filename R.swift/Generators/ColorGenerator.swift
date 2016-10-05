@@ -9,14 +9,14 @@
 import Foundation
 import AppKit.NSColor
 
-struct ColorGenerator: StructGenerator {
+struct ColorGenerator: ExternalOnlyStructGenerator {
   private let palettes: [ColorPalette]
 
   init(colorPalettes palettes: [ColorPalette]) {
     self.palettes = palettes
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 

@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct StringsGenerator: StructGenerator {
+struct StringsGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
 
   init(localizableStrings: [LocalizableStrings]) {
     self.localizableStrings = localizableStrings
   }
 
-  func generateStruct(at externalAccessLevel: AccessModifier) -> Struct? {
+  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
     let localized = localizableStrings.groupBy { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
