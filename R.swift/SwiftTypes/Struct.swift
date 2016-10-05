@@ -65,10 +65,10 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
       .joined(separator: "\n\n")
 
 
-    // Private `init`, so that struct can't be initialized
-    let privateInit = "private init() {}"
+    // File private `init`, so that struct can't be initialized from the outside world
+    let fileprivateInit = "fileprivate init() {}"
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString, privateInit].filter { $0 != "" }
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, fileprivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joined(separator: "\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"

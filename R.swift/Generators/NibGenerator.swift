@@ -120,7 +120,7 @@ struct NibGenerator: StructGenerator {
       isStatic: false,
       name: "bundle",
       typeDefinition: .inferred(Type._Bundle),
-      value: "_R.hostingBundle"
+      value: "R.hostingBundle"
     )
 
     let nameVar = Let(

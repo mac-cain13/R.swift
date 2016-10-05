@@ -29,7 +29,7 @@ class ValidatedStructGenerator: StructGenerator {
 
     let validationStruct = Struct(
       comments: [],
-      accessModifier: .Private,
+      accessModifier: .FilePrivate,
       type: Type(module: .host, name: "intern"),
       implements: [TypePrinter(type: Type.Validatable)],
       typealiasses: [],
@@ -37,7 +37,7 @@ class ValidatedStructGenerator: StructGenerator {
       functions: [
         Function(
           comments: [],
-          accessModifier: .Private,
+          accessModifier: .FilePrivate,
           isStatic: true,
           name: "validate",
           generics: nil,
