@@ -28,9 +28,11 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-  let resourceStruct = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
+  let (externalStruct, internalStruct) = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
+  let generatedStructs = [externalStruct, internalStruct].flatMap { $0 }
 
-  let usedModules = resourceStruct.usedTypes
+  let usedModules = generatedStructs
+    .flatMap(getUsedTypes)
     .map { $0.type.module }
 
   let imports = Set(usedModules)
@@ -39,11 +41,11 @@ do {
     .map { "import \($0)" }
     .joined(separator: "\n")
 
-  let fileContents = [
-      Header,
-      imports,
-      resourceStruct.swiftCode
-    ].joined(separator: "\n\n")
+  let fileContentItems = [
+    Header,
+    imports
+  ] + generatedStructs.map { $0.swiftCode }
+  let fileContents = fileContentItems.joined(separator: "\n\n")
 
   // Write file if we have changes
   let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: String.Encoding.utf8)

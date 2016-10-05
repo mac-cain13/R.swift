@@ -9,12 +9,12 @@
 import Foundation
 
 struct Struct: UsedTypesProvider, SwiftCodeConverible {
-  var comments: [String]
-  var accessModifier: AccessModifier
+  let comments: [String]
+  let accessModifier: AccessModifier
   let type: Type
   var implements: [TypePrinter]
   let typealiasses: [Typealias]
-  let properties: [Let]
+  var properties: [Let]
   var functions: [Function]
   var structs: [Struct]
 

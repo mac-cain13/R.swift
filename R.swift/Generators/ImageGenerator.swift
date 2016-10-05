@@ -21,7 +21,6 @@ struct ImageGenerator: StructGenerator {
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 
-
     let imagesNames = images
       .groupBy { $0.name }
       .values
