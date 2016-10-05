@@ -58,7 +58,7 @@ struct StoryboardGenerator: StructGenerator {
         )
       }
 
-    return Struct(
+    let externalStruct = Struct(
         comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
         accessModifier: externalAccessLevel,
         type: Type(module: .host, name: "storyboard"),
@@ -69,16 +69,20 @@ struct StoryboardGenerator: StructGenerator {
         structs: []
       )
 
-    // TODO: Move this into the the returned struct as fileprivate
-    _ = Struct(
+    let internalStruct = Struct(
       comments: [],
-      accessModifier: .FilePrivate,
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "storyboard"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
       structs: storyboardStructs
+    )
+
+    return (
+      externalStruct,
+      internalStruct
     )
   }
 

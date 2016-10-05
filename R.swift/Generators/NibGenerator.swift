@@ -42,6 +42,19 @@ struct NibGenerator: StructGenerator {
     let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
+    let internalStruct = Struct(
+      comments: [],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: "nib"),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: [],
+      structs: groupedNibs
+        .uniques
+        .map { nibStruct(for: $0, at: externalAccessLevel) }
+    )
+
     let nibProperties: [Let] = groupedNibs
       .uniques
       .map { nibVar(for: $0, at: externalAccessLevel) }
@@ -49,7 +62,7 @@ struct NibGenerator: StructGenerator {
       .uniques
       .map { nibFunc(for: $0, at: externalAccessLevel) }
 
-    return Struct(
+    let externalStruct = Struct(
       comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "nib"),
@@ -57,9 +70,12 @@ struct NibGenerator: StructGenerator {
       typealiasses: [],
       properties: nibProperties,
       functions: nibFunctions,
-      structs: groupedNibs
-        .uniques
-        .map { nibStruct(for: $0, at: .FilePrivate) }
+      structs: []
+    )
+
+    return (
+      externalStruct,
+      internalStruct
     )
   }
 
@@ -100,7 +116,7 @@ struct NibGenerator: StructGenerator {
 
     let bundleLet = Let(
       comments: [],
-      accessModifier: .FilePrivate,
+      accessModifier: externalAccessLevel,
       isStatic: false,
       name: "bundle",
       typeDefinition: .inferred(Type._Bundle),
