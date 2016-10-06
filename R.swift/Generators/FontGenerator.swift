@@ -15,7 +15,7 @@ struct FontGenerator: ExternalOnlyStructGenerator {
     self.fonts = fonts
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
@@ -42,7 +42,7 @@ struct FontGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func fontFunction(from font: Font, at externalAccessLevel: AccessModifier) -> Function {
+  private func fontFunction(from font: Font, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
       accessModifier: externalAccessLevel,

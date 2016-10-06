@@ -108,7 +108,7 @@ private let AllOptions = [
 struct CallInformation {
   let outputURL: URL
 
-  let accessLevel: AccessModifier
+  let accessLevel: AccessLevel
 
   let xcodeprojURL: URL
   let targetName: String
@@ -159,8 +159,8 @@ struct CallInformation {
 
       let getFirstArgumentForOption = getFirstArgument(from: options, helpString: optionParser.helpStringForCommandName(commandName))
 
-      let accessLevelString = try getFirstArgumentForOption(accessLevelOption, AccessModifier.Internal.rawValue)
-      guard let parsedAccessLevel = AccessModifier(rawValue: accessLevelString) else {
+      let accessLevelString = try getFirstArgumentForOption(accessLevelOption, AccessLevel.Internal.rawValue)
+      guard let parsedAccessLevel = AccessLevel(rawValue: accessLevelString) else {
         throw InputParsingError.illegalOption(
           error: "Access level \(accessLevelString) is invalid.",
           helpString: optionParser.helpStringForCommandName(commandName)

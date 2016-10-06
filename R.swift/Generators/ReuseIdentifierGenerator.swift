@@ -15,7 +15,7 @@ struct ReuseIdentifierGenerator: ExternalOnlyStructGenerator {
     self.reusables = reusables
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let deduplicatedReusables = reusables
       .groupBy { $0.hashValue }
       .values
@@ -40,7 +40,7 @@ struct ReuseIdentifierGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func letFromReusable(_ reusable: Reusable, at externalAccessLevel: AccessModifier) -> Let {
+  private func letFromReusable(_ reusable: Reusable, at externalAccessLevel: AccessLevel) -> Let {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
       accessModifier: externalAccessLevel,

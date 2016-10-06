@@ -15,7 +15,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     self.localizableStrings = localizableStrings
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let localized = localizableStrings.groupBy { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
@@ -33,7 +33,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessModifier) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel) -> Struct? {
 
     let name = SwiftIdentifier(name: filename)
     let params = computeParams(filename: filename, strings: strings)
@@ -159,7 +159,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     return results
   }
 
-  private func stringLet(values: StringValues, at externalAccessLevel: AccessModifier) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -177,7 +177,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringFunction(values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
     if values.params.isEmpty {
       return stringFunctionNoParams(for: values, at: externalAccessLevel)
     }
@@ -186,7 +186,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     }
   }
 
-  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     return Function(
       comments: values.comments,
@@ -203,7 +203,7 @@ struct StringsGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessModifier) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let argumentLabel = param.name ?? "_"

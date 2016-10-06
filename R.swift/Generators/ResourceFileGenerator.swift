@@ -15,7 +15,7 @@ struct ResourceFileGenerator: ExternalOnlyStructGenerator {
     self.resourceFiles = resourceFiles
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let localized = resourceFiles.groupBy { $0.fullname }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
@@ -36,7 +36,7 @@ struct ResourceFileGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessModifier) -> [Let] {
+  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Let] {
 
     return resourceFiles
       .map {
@@ -51,7 +51,7 @@ struct ResourceFileGenerator: ExternalOnlyStructGenerator {
     }
   }
 
-  private func functionsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessModifier) -> [Function] {
+  private func functionsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Function] {
 
     return resourceFiles
       .flatMap { resourceFile -> [Function] in

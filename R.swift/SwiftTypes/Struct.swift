@@ -10,7 +10,7 @@ import Foundation
 
 struct Struct: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
-  let accessModifier: AccessModifier
+  let accessModifier: AccessLevel
   let type: Type
   var implements: [TypePrinter]
   let typealiasses: [Typealias]
@@ -29,7 +29,7 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
       ].flatten()
   }
 
-  init(comments: [String], accessModifier: AccessModifier, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Let], functions: [Function], structs: [Struct]) {
+  init(comments: [String], accessModifier: AccessLevel, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Let], functions: [Function], structs: [Struct]) {
     self.comments = comments
     self.accessModifier = accessModifier
     self.type = type

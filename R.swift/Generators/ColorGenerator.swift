@@ -16,7 +16,7 @@ struct ColorGenerator: ExternalOnlyStructGenerator {
     self.palettes = palettes
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
@@ -32,7 +32,7 @@ struct ColorGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func colorStruct(from palette: ColorPalette, at externalAccessLevel: AccessModifier) -> Struct? {
+  private func colorStruct(from palette: ColorPalette, at externalAccessLevel: AccessLevel) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
     let name = SwiftIdentifier(name: palette.filename)
@@ -52,7 +52,7 @@ struct ColorGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func colorLet(_ name: String, color: NSColor, at externalAccessLevel: AccessModifier) -> Let {
+  private func colorLet(_ name: String, color: NSColor, at externalAccessLevel: AccessLevel) -> Let {
     return Let(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
@@ -65,7 +65,7 @@ struct ColorGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func colorFunction(_ name: String, color: NSColor, at externalAccessLevel: AccessModifier) -> Function {
+  private func colorFunction(_ name: String, color: NSColor, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",

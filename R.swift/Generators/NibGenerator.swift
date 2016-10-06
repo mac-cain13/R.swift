@@ -38,7 +38,7 @@ struct NibGenerator: StructGenerator {
     self.nibs = nibs
   }
 
-  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
     let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
@@ -79,7 +79,7 @@ struct NibGenerator: StructGenerator {
     )
   }
 
-  private func nibFunc(for nib: Nib, at externalAccessLevel: AccessModifier) -> Function {
+  private func nibFunc(for nib: Nib, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       accessModifier: externalAccessLevel,
@@ -95,7 +95,7 @@ struct NibGenerator: StructGenerator {
     )
   }
 
-  private func nibVar(for nib: Nib, at externalAccessLevel: AccessModifier) -> Let {
+  private func nibVar(for nib: Nib, at externalAccessLevel: AccessLevel) -> Let {
     let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
     let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
     return Let(
@@ -108,7 +108,7 @@ struct NibGenerator: StructGenerator {
     )
   }
 
-  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessModifier) -> Struct {
+  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessLevel) -> Struct {
     let instantiateParameters = [
       Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
       Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .stdLib, name: SwiftIdentifier(rawValue: "[NSObject : AnyObject]"), optional: true), defaultValue: "nil")

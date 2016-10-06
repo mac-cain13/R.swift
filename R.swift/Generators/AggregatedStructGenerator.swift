@@ -15,7 +15,7 @@ class AggregatedStructGenerator: StructGenerator {
     self.subgenerators = subgenerators
   }
 
-  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
     let collectedResult = subgenerators
       .map { $0.generatedStructs(at: externalAccessLevel) }
       .reduce(StructGeneratorResultCollector()) { collector, result in collector.appending(result) }

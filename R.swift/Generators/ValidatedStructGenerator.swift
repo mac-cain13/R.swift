@@ -15,7 +15,7 @@ class ValidatedStructGenerator: StructGenerator {
     self.validationSubject = validationSubject
   }
 
-  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
 
     let internalStruct = validationSubject.internalStruct?
       .addingChildStructValidationMethods(at: externalAccessLevel)
@@ -63,7 +63,7 @@ class ValidatedStructGenerator: StructGenerator {
 private extension Struct {
   /// Implements the Validatable protocol on this and child struct if one or more childs already implement the
   /// Validatable protocol. The newly created validate methods will call their child validate methods.
-  func addingChildStructValidationMethods(at externalAccessLevel: AccessModifier) -> Struct {
+  func addingChildStructValidationMethods(at externalAccessLevel: AccessLevel) -> Struct {
     if implements.map({ $0.type }).contains(Type.Validatable) {
       return self
     }

@@ -12,15 +12,15 @@ import Foundation
 protocol StructGenerator {
   typealias Result = (externalStruct: Struct, internalStruct: Struct?)
 
-  func generatedStructs(at externalAccessLevel: AccessModifier) -> Result
+  func generatedStructs(at externalAccessLevel: AccessLevel) -> Result
 }
 
 protocol ExternalOnlyStructGenerator: StructGenerator {
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct
 }
 
 extension ExternalOnlyStructGenerator {
-  func generatedStructs(at externalAccessLevel: AccessModifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
     return (
       generatedStruct(at: externalAccessLevel),
       nil
@@ -28,7 +28,7 @@ extension ExternalOnlyStructGenerator {
   }
 }
 
-func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessModifier, forBundleIdentifier bundleIdentifier: String) -> StructGenerator.Result {
+func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessLevel, forBundleIdentifier bundleIdentifier: String) -> StructGenerator.Result {
 
   let generators: [StructGenerator] = [
       ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),

@@ -10,7 +10,7 @@ import Foundation
 
 struct Function: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
-  let accessModifier: AccessModifier
+  let accessModifier: AccessLevel
   let isStatic: Bool
   let name: SwiftIdentifier
   let generics: String?
@@ -19,7 +19,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   let returnType: Type
   let body: String
 
-  init(comments: [String], accessModifier: AccessModifier, isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
+  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
     self.comments = comments
     self.accessModifier = accessModifier
     self.isStatic = isStatic

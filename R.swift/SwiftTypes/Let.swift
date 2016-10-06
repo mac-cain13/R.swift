@@ -26,13 +26,13 @@ enum TypeDefinition: UsedTypesProvider {
 
 struct Let: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
-  let accessModifier: AccessModifier
+  let accessModifier: AccessLevel
   let isStatic: Bool
   let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
 
-  init(comments: [String], accessModifier: AccessModifier, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = comments
     self.accessModifier = accessModifier
     self.isStatic = isStatic

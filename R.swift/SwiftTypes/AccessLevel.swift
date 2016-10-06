@@ -1,5 +1,5 @@
 //
-//  AccessModifier.swift
+//  AccessLevel.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-01-16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum AccessModifier: String {
+enum AccessLevel: String {
   case Public = "public"
   case Internal = "internal"
   case FilePrivate = "fileprivate"

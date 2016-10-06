@@ -17,7 +17,7 @@ struct ImageGenerator: ExternalOnlyStructGenerator {
     self.images = images
   }
 
-  func generatedStruct(at externalAccessLevel: AccessModifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 
@@ -56,7 +56,7 @@ struct ImageGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func imageFunction(for name: String, at externalAccessLevel: AccessModifier) -> Function {
+  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,

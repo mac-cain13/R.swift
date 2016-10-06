@@ -12,8 +12,8 @@
 		D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
 		D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE21BE2016E0034F4D7 /* PBXObject.swift */; };
 		D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
-		D56DC76D1C41758800623437 /* AccessModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76C1C41758800623437 /* AccessModifier.swift */; };
-		D56DC76E1C41770500623437 /* AccessModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76C1C41758800623437 /* AccessModifier.swift */; };
+		D56DC76D1C41758800623437 /* AccessLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76C1C41758800623437 /* AccessLevel.swift */; };
+		D56DC76E1C41770500623437 /* AccessLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76C1C41758800623437 /* AccessLevel.swift */; };
 		D56F923D1C29421600177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
 		D56F92411C29476700177FF7 /* TypeVar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56F923C1C29421600177FF7 /* TypeVar.swift */; };
 		D578CAD61CE064E900C50B7E /* version.swift in Sources */ = {isa = PBXBuildFile; fileRef = D578CAD51CE064E900C50B7E /* version.swift */; };
@@ -113,7 +113,7 @@
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D5646DE21BE2016E0034F4D7 /* PBXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBXObject.swift; sourceTree = "<group>"; };
 		D5646DE31BE2016E0034F4D7 /* Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
-		D56DC76C1C41758800623437 /* AccessModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessModifier.swift; sourceTree = "<group>"; };
+		D56DC76C1C41758800623437 /* AccessLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessLevel.swift; sourceTree = "<group>"; };
 		D56F923C1C29421600177FF7 /* TypeVar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeVar.swift; sourceTree = "<group>"; };
 		D578CAD51CE064E900C50B7E /* version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = version.swift; sourceTree = "<group>"; };
 		D579466A1B9347C20044D2FC /* XCProjectFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCProjectFile.swift; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				D5A0A8281C4791E40089ED2C /* CodeGenerators */,
-				D56DC76C1C41758800623437 /* AccessModifier.swift */,
+				D56DC76C1C41758800623437 /* AccessLevel.swift */,
 				D59F722F1C19644F0089767C /* Function.swift */,
 				D5B129AE1C3BA5F900A1C5FC /* Let.swift */,
 				D5B799821C1B8C78009EA901 /* Module.swift */,
@@ -459,7 +459,7 @@
 				D5F12D481BDACB8E009A2C88 /* XCProjectFile.swift in Sources */,
 				D5B7998A1C1B91A9009EA901 /* Module.swift in Sources */,
 				D5F97E471C1819160066D7C0 /* Resources.swift in Sources */,
-				D56DC76E1C41770500623437 /* AccessModifier.swift in Sources */,
+				D56DC76E1C41770500623437 /* AccessLevel.swift in Sources */,
 				D5F97E4C1C1819160066D7C0 /* Image.swift in Sources */,
 				D5F12D491BDACB90009A2C88 /* Core.swift in Sources */,
 				D586724A1C21FF7D00A760EC /* TypeSequenceProvider.swift in Sources */,
@@ -531,7 +531,7 @@
 				D5B7996A1C1993E3009EA901 /* NibGenerator.swift in Sources */,
 				E22D43631C9582CA00692FFF /* ColorGenerator.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
-				D56DC76D1C41758800623437 /* AccessModifier.swift in Sources */,
+				D56DC76D1C41758800623437 /* AccessLevel.swift in Sources */,
 				D5B129AF1C3BA5F900A1C5FC /* Let.swift in Sources */,
 				D5B7997D1C1B07C3009EA901 /* SwiftIdentifier.swift in Sources */,
 				D5A0A82A1C47920A0089ED2C /* SwiftCodeConverible.swift in Sources */,
