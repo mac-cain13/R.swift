@@ -1,5 +1,5 @@
 //
-//  Segue.swift
+//  SegueStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -10,7 +10,7 @@ import Foundation
 
 typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
 
-struct SegueGenerator: ExternalOnlyStructGenerator {
+struct SegueStructGenerator: ExternalOnlyStructGenerator {
   private let storyboards: [Storyboard]
 
   init(storyboards: [Storyboard]) {

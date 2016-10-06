@@ -1,5 +1,5 @@
 //
-//  StringsGenerator.swift
+//  StringsStructGenerator.swift
 //  R.swift
 //
 //  Created by Nolan Warner on 2016/02/23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StringsGenerator: ExternalOnlyStructGenerator {
+struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
 
   init(localizableStrings: [LocalizableStrings]) {

@@ -1,5 +1,5 @@
 //
-//  Storyboard.swift
+//  StoryboardStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StoryboardGenerator: StructGenerator {
+struct StoryboardStructGenerator: StructGenerator {
   private let storyboards: [Storyboard]
 
   init(storyboards: [Storyboard]) {

@@ -31,15 +31,15 @@ extension ExternalOnlyStructGenerator {
 func generateResourceStructs(with resources: Resources, at externalAccessLevel: AccessLevel, forBundleIdentifier bundleIdentifier: String) -> StructGenerator.Result {
 
   let generators: [StructGenerator] = [
-      ImageGenerator(assetFolders: resources.assetFolders, images: resources.images),
-      ColorGenerator(colorPalettes: resources.colors),
-      FontGenerator(fonts: resources.fonts),
-      SegueGenerator(storyboards: resources.storyboards),
-      StoryboardGenerator(storyboards: resources.storyboards),
-      NibGenerator(nibs: resources.nibs),
-      ReuseIdentifierGenerator(reusables: resources.reusables),
-      ResourceFileGenerator(resourceFiles: resources.resourceFiles),
-      StringsGenerator(localizableStrings: resources.localizableStrings),
+      ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
+      ColorStructGenerator(colorPalettes: resources.colors),
+      FontStructGenerator(fonts: resources.fonts),
+      SegueStructGenerator(storyboards: resources.storyboards),
+      StoryboardStructGenerator(storyboards: resources.storyboards),
+      NibStructGenerator(nibs: resources.nibs),
+      ReuseIdentifierStructGenerator(reusables: resources.reusables),
+      ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
+      StringsStructGenerator(localizableStrings: resources.localizableStrings),
     ]
 
   let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)

@@ -1,5 +1,5 @@
 //
-//  ReuseIdentifier.swift
+//  ReuseIdentifierStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ReuseIdentifierGenerator: ExternalOnlyStructGenerator {
+struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
   private let reusables: [Reusable]
 
   init(reusables: [Reusable]) {

@@ -1,5 +1,5 @@
 //
-//  ColorGenerator.swift
+//  ColorStructGenerator.swift
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-03-13.
@@ -9,7 +9,7 @@
 import Foundation
 import AppKit.NSColor
 
-struct ColorGenerator: ExternalOnlyStructGenerator {
+struct ColorStructGenerator: ExternalOnlyStructGenerator {
   private let palettes: [ColorPalette]
 
   init(colorPalettes palettes: [ColorPalette]) {

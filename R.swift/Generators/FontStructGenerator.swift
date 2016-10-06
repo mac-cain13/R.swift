@@ -1,5 +1,5 @@
 //
-//  Font.swift
+//  FontStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FontGenerator: ExternalOnlyStructGenerator {
+struct FontStructGenerator: ExternalOnlyStructGenerator {
   private let fonts: [Font]
 
   init(fonts: [Font]) {

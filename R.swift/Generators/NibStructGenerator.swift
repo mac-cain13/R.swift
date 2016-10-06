@@ -1,5 +1,5 @@
 //
-//  Nib.swift
+//  NibStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -31,7 +31,7 @@ private let Ordinals = [
   (number: 20, word: "twentieth"),
 ]
 
-struct NibGenerator: StructGenerator {
+struct NibStructGenerator: StructGenerator {
   private let nibs: [Nib]
 
   init(nibs: [Nib]) {

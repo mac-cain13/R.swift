@@ -1,5 +1,5 @@
 //
-//  ResourceFile.swift
+//  ResourceFileStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ResourceFileGenerator: ExternalOnlyStructGenerator {
+struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
   private let resourceFiles: [ResourceFile]
 
   init(resourceFiles: [ResourceFile]) {
