@@ -1,54 +1,59 @@
 //
-//  StringsGenerator.swift
+//  StringsStructGenerator.swift
 //  R.swift
 //
 //  Created by Nolan Warner on 2016/02/23.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-struct StringsGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct StringsStructGenerator: ExternalOnlyStructGenerator {
+  private let localizableStrings: [LocalizableStrings]
 
   init(localizableStrings: [LocalizableStrings]) {
+    self.localizableStrings = localizableStrings
+  }
 
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let localized = localizableStrings.groupBy { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "string"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedLocalized.uniques.flatMap(StringsGenerator.stringStructFromLocalizableStrings)
+      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) }
     )
   }
 
-  private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel) -> Struct? {
 
     let name = SwiftIdentifier(name: filename)
     let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
       comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: params.map(StringsGenerator.stringLet),
-      functions: params.map(StringsGenerator.stringFunction),
+      properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
+      functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
       structs: []
     )
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
-  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
+  private func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
     var allParams: [String: [(Locale, String, [StringParam])]] = [:]
     let baseKeys: Set<String>?
@@ -155,7 +160,7 @@ struct StringsGenerator: Generator {
     return results
   }
 
-  private static func stringLet(values: StringValues) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -165,26 +170,28 @@ struct StringsGenerator: Generator {
 
     return Let(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       typeDefinition: .inferred(Type.StringResource),
-      value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: _R.hostingBundle, locales: [\(locales)], comment: nil)"
+      value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
   }
 
-  private static func stringFunction(values: StringValues) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(for: values)
+      return stringFunctionNoParams(for: values, at: externalAccessLevel)
     }
     else {
-      return stringFunctionParams(for: values)
+      return stringFunctionParams(for: values, at: externalAccessLevel)
     }
   }
 
-  private static func stringFunctionNoParams(for values: StringValues) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       generics: nil,
@@ -197,7 +204,7 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunctionParams(for values: StringValues) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     let params = values.params.enumerated().map { ix, param -> Function.Parameter in
       let argumentLabel = param.name ?? "_"
@@ -210,13 +217,14 @@ struct StringsGenerator: Generator {
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: _R.applicationLocale, \(args))"
+      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))"
     )
   }
 
@@ -245,10 +253,10 @@ private struct StringValues {
     let escapedKey = key.escapedStringLiteral
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: _R.hostingBundle, comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: _R.hostingBundle, comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: R.hostingBundle, comment: \"\")"
     }
   }
 

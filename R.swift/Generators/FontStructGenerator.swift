@@ -1,24 +1,29 @@
 //
-//  Font.swift
+//  FontStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-struct FontGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct FontStructGenerator: ExternalOnlyStructGenerator {
+  private let fonts: [Font]
 
   init(fonts: [Font]) {
+    self.fonts = fonts
+  }
+
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
-    let fontProperties: [Property] = groupedFonts.uniques.map {
+    let fontProperties = groupedFonts.uniques.map {
       Let(
         comments: ["Font `\($0.name)`."],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: $0.name),
         typeDefinition: .inferred(Type.FontResource),
@@ -26,20 +31,22 @@ struct FontGenerator: Generator {
       )
     }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "font"),
       implements: [],
       typealiasses: [],
       properties: fontProperties,
-      functions: groupedFonts.uniques.map(FontGenerator.fontFunction),
+      functions: groupedFonts.uniques.map { fontFunction(from: $0, at: externalAccessLevel) },
       structs: []
     )
   }
 
-  private static func fontFunction(from font: Font) -> Function {
+  private func fontFunction(from font: Font, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: font.name),
       generics: nil,

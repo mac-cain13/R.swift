@@ -1,34 +1,39 @@
 //
-//  ColorGenerator.swift
+//  ColorStructGenerator.swift
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-03-13.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 import AppKit.NSColor
 
-struct ColorGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct ColorStructGenerator: ExternalOnlyStructGenerator {
+  private let palettes: [ColorPalette]
 
   init(colorPalettes palettes: [ColorPalette]) {
+    self.palettes = palettes
+  }
+
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.color` struct is generated, and contains static references to \(palettes.count) color palettes."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "color"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedPalettes.uniques.flatMap(ColorGenerator.colorStruct)
+      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel) }
     )
   }
 
-  private static func colorStruct(from palette: ColorPalette) -> Struct? {
+  private func colorStruct(from palette: ColorPalette, at externalAccessLevel: AccessLevel) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
     let name = SwiftIdentifier(name: palette.filename)
@@ -38,20 +43,22 @@ struct ColorGenerator: Generator {
 
     return Struct(
       comments: ["This `R.color.\(name)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: groupedColors.uniques.map(ColorGenerator.colorLet),
-      functions: groupedColors.uniques.map(ColorGenerator.colorFunction),
+      properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },
+      functions: groupedColors.uniques.map { colorFunction($0, color: $1, at: externalAccessLevel) },
       structs: []
     )
   }
 
-  private static func colorLet(_ name: String, color: NSColor) -> Let {
+  private func colorLet(_ name: String, color: NSColor, at externalAccessLevel: AccessLevel) -> Let {
     return Let(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)"
       ],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
       typeDefinition: .inferred(Type.ColorResource),
@@ -59,13 +66,14 @@ struct ColorGenerator: Generator {
     )
   }
 
-  private static func colorFunction(_ name: String, color: NSColor) -> Function {
+  private func colorFunction(_ name: String, color: NSColor, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",
         "",
         "UIColor(red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
       ],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
       generics: nil,

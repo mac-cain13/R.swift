@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 11-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -29,6 +30,15 @@ enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
     case .host: return ""
     case .stdLib: return ""
     case let .custom(name: name): return name
+    }
+  }
+
+  var isCustom: Bool {
+    switch self {
+    case .custom:
+      return true
+    default:
+      return false
     }
   }
 

@@ -1,18 +1,22 @@
 //
-//  ReuseIdentifier.swift
+//  ReuseIdentifierStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-struct ReuseIdentifierGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
+  private let reusables: [Reusable]
 
   init(reusables: [Reusable]) {
+    self.reusables = reusables
+  }
+
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let deduplicatedReusables = reusables
       .groupBy { $0.hashValue }
       .values
@@ -23,22 +27,24 @@ struct ReuseIdentifierGenerator: Generator {
 
     let reuseIdentifierProperties = groupedReusables
       .uniques
-      .map(ReuseIdentifierGenerator.letFromReusable)
+      .map { letFromReusable($0, at: externalAccessLevel) }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.reuseIdentifier` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "reuseIdentifier"),
       implements: [],
       typealiasses: [],
-      properties: reuseIdentifierProperties.map(any),
+      properties: reuseIdentifierProperties,
       functions: [],
       structs: []
     )
   }
 
-  fileprivate static func letFromReusable(_ reusable: Reusable) -> Let {
+  private func letFromReusable(_ reusable: Reusable, at externalAccessLevel: AccessLevel) -> Let {
     return Let(
       comments: ["Reuse identifier `\(reusable.identifier)`."],
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: reusable.identifier),
       typeDefinition: .specified(Type.ReuseIdentifier.withGenericArgs([reusable.type])),

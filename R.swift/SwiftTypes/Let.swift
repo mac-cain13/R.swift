@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 05-01-16.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -24,23 +25,17 @@ enum TypeDefinition: UsedTypesProvider {
   }
 }
 
-struct Let: Property {
+struct Let: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
+  let accessModifier: AccessLevel
   let isStatic: Bool
   let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
 
-  init(isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
-    self.comments = []
-    self.isStatic = isStatic
-    self.name = name
-    self.typeDefinition = typeDefinition
-    self.value = value
-  }
-
-  init(comments: [String], isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = comments
+    self.accessModifier = accessModifier
     self.isStatic = isStatic
     self.name = name
     self.typeDefinition = typeDefinition
@@ -51,8 +46,9 @@ struct Let: Property {
     return typeDefinition.usedTypes
   }
 
-  var description: String {
+  var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let staticString = isStatic ? "static " : ""
 
     let typeString: String
@@ -61,6 +57,6 @@ struct Let: Property {
     case .inferred: typeString = ""
     }
 
-    return "\(commentsString)\(staticString)let \(name)\(typeString) = \(value)"
+    return "\(commentsString)\(accessModifierString)\(staticString)let \(name)\(typeString) = \(value)"
   }
 }

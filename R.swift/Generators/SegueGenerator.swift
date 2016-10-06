@@ -1,24 +1,28 @@
 //
-//  Segue.swift
+//  SegueStructGenerator.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 10-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
 typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
 
-struct SegueGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct SegueStructGenerator: ExternalOnlyStructGenerator {
+  private let storyboards: [Storyboard]
 
   init(storyboards: [Storyboard]) {
+    self.storyboards = storyboards
+  }
+
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in
-          guard let destinationType = SegueGenerator.resolveDestinationTypeForSegue(
+          guard let destinationType = resolveDestinationTypeForSegue(
             segue,
             inViewController: viewController,
             inStoryboard: storyboard,
@@ -52,13 +56,14 @@ struct SegueGenerator: Generator {
         .uniques
         .groupBy { $0.sourceType }
         .values
-        .flatMap(SegueGenerator.seguesWithInfoForSourceTypeToStruct)
+        .flatMap { self.seguesWithInfoForSourceTypeToStruct($0, at: externalAccessLevel) }
 
       structs = structs + sts
     }
 
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: "segue"),
       implements: [],
       typealiasses: [],
@@ -68,7 +73,7 @@ struct SegueGenerator: Generator {
     )
   }
 
-  private static func resolveDestinationTypeForSegue(_ segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
+  private func resolveDestinationTypeForSegue(_ segue: Storyboard.Segue, inViewController: Storyboard.ViewController, inStoryboard storyboard: Storyboard, allStoryboards storyboards: [Storyboard]) -> Type? {
     if segue.kind == "unwind" {
       return Type._UIViewController
     }
@@ -93,7 +98,7 @@ struct SegueGenerator: Generator {
     return destinationViewControllerType ?? destinationViewControllerPlaceholderType
   }
 
-  fileprivate static func seguesWithInfoForSourceTypeToStruct(_ seguesWithInfoForSourceType: [SegueWithInfo]) -> Struct? {
+  private func seguesWithInfoForSourceTypeToStruct(_ seguesWithInfoForSourceType: [SegueWithInfo], at externalAccessLevel: AccessLevel) -> Struct? {
     guard let sourceType = seguesWithInfoForSourceType.first?.sourceType else { return nil }
 
     let properties = seguesWithInfoForSourceType.map { segueWithInfo -> Let in
@@ -105,6 +110,7 @@ struct SegueGenerator: Generator {
       )
       return Let(
         comments: ["Segue identifier `\(segueWithInfo.segue.identifier)`."],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         typeDefinition: .specified(type),
@@ -119,6 +125,7 @@ struct SegueGenerator: Generator {
           "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",
           "For use inside `prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)`."
         ],
+        accessModifier: externalAccessLevel,
         isStatic: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         generics: nil,
@@ -137,10 +144,11 @@ struct SegueGenerator: Generator {
 
     return Struct(
       comments: ["This struct is generated for `\(sourceType.name)`, and contains static references to \(properties.count) segues."],
+      accessModifier: externalAccessLevel,
       type: Type(module: .host, name: typeName),
       implements: [],
       typealiasses: [],
-      properties: properties.map(any),
+      properties: properties,
       functions: functions,
       structs: []
     )
