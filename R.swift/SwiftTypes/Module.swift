@@ -33,6 +33,15 @@ enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
     }
   }
 
+  var isCustom: Bool {
+    switch self {
+    case .custom:
+      return true
+    default:
+      return false
+    }
+  }
+
   init(name: String?, fallback: Module = .host) {
     switch name {
     case .none: self = fallback
