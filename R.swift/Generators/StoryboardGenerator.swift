@@ -20,53 +20,45 @@ struct StoryboardStructGenerator: StructGenerator {
     let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
-    let storyboardStructs = groupedStoryboards
+    let storyboardTypes = groupedStoryboards
       .uniques
-      .map { storyboardStruct(for: $0, at: externalAccessLevel) }
+      .map { storyboard -> (Struct, Let, Function) in
+        let _struct = storyboardStruct(for: storyboard, at: externalAccessLevel)
 
-    let storyboardProperties: [Let] = groupedStoryboards
-      .uniques
-      .map { storyboard in
-        let struct_ = storyboardStruct(for: storyboard, at: externalAccessLevel)
-
-        return Let(
+        let _property = Let(
           comments: ["Storyboard `\(storyboard.name)`."],
           accessModifier: externalAccessLevel,
           isStatic: true,
-          name: struct_.type.name,
+          name: _struct.type.name,
           typeDefinition: .inferred(Type.StoryboardResourceType),
-          value: "_R.storyboard.\(struct_.type.name)()"
+          value: "_R.storyboard.\(_struct.type.name)()"
         )
-      }
 
-    let storyboardFunctions: [Function] = groupedStoryboards
-      .uniques
-      .map { storyboard in
-        let struct_ = storyboardStruct(for: storyboard, at: externalAccessLevel)
-
-        return Function(
+        let _function = Function(
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
           accessModifier: externalAccessLevel,
           isStatic: true,
-          name: struct_.type.name,
+          name: _struct.type.name,
           generics: nil,
           parameters: [
             Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
-          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(struct_.type.name))"
+          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(_struct.type.name))"
         )
+
+        return (_struct, _property, _function)
       }
 
     let externalStruct = Struct(
-        comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardProperties.count) storyboards."],
+        comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
         accessModifier: externalAccessLevel,
         type: Type(module: .host, name: "storyboard"),
         implements: [],
         typealiasses: [],
-        properties: storyboardProperties,
-        functions: storyboardFunctions,
+        properties: storyboardTypes.map { $0.1 },
+        functions: storyboardTypes.map { $0.2 },
         structs: []
       )
 
@@ -78,7 +70,7 @@ struct StoryboardStructGenerator: StructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: storyboardStructs
+      structs: storyboardTypes.map { $0.0 }
     )
 
     return (
@@ -156,8 +148,8 @@ struct StoryboardStructGenerator: StructGenerator {
       .map {
         "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
-    let validateViewControllersLines = storyboard.viewControllers
-      .flatMap { vc in
+    let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
+      .flatMap { vc, _ in
         vc.storyboardIdentifier.map {
           "if _R.storyboard.\(SwiftIdentifier(name: storyboard.name))().\(SwiftIdentifier(name: $0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
