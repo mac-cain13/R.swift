@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5D45C2191CA12913000B8DC9 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
 		5D997C951C7C291900B2F376 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
+		D5214C1F1DA6AA9300212FF1 /* Struct+InternalProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */; };
+		D5214C201DA6AAC300212FF1 /* Struct+InternalProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */; };
 		D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
 		D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE21BE2016E0034F4D7 /* PBXObject.swift */; };
 		D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
@@ -114,6 +116,7 @@
 
 /* Begin PBXFileReference section */
 		5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsStructGenerator.swift; sourceTree = "<group>"; };
+		D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Struct+InternalProperties.swift"; sourceTree = "<group>"; };
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		D5646DE21BE2016E0034F4D7 /* PBXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBXObject.swift; sourceTree = "<group>"; };
 		D5646DE31BE2016E0034F4D7 /* Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
@@ -233,6 +236,7 @@
 		D5B7997B1C1B06F5009EA901 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */,
 				D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */,
 				D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */,
 				D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */,
@@ -454,6 +458,7 @@
 				E2762AD01CCD0CF90009BCAA /* LocalizableStrings.swift in Sources */,
 				D59F72401C19651F0089767C /* ReusableContainer.swift in Sources */,
 				D5E890AD1DA6308C0059D5ED /* HeaderPrinter.swift in Sources */,
+				D5214C201DA6AAC300212FF1 /* Struct+InternalProperties.swift in Sources */,
 				D5B799741C199755009EA901 /* ResourceFileStructGenerator.swift in Sources */,
 				D5B799751C199755009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
 				D586D1C71BE20D8600F18FEC /* PBXObject.swift in Sources */,
@@ -529,6 +534,7 @@
 				D5EA0DFF1A3DF4E300FFEBC4 /* UtilExtensions.swift in Sources */,
 				D59F723F1C19651F0089767C /* ReusableContainer.swift in Sources */,
 				D5B7996C1C1993F8009EA901 /* ReuseIdentifierGenerator.swift in Sources */,
+				D5214C1F1DA6AA9300212FF1 /* Struct+InternalProperties.swift in Sources */,
 				D5646DE61BE2016E0034F4D7 /* Serialization.swift in Sources */,
 				D59F72291C1963EA0089767C /* Struct.swift in Sources */,
 				D59F72261C1963DA0089767C /* Type.swift in Sources */,

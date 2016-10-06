@@ -23,7 +23,25 @@ do {
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-  let (externalStruct, internalStruct) = generateResourceStructs(with: resources, at: callInformation.accessLevel, forBundleIdentifier: callInformation.bundleIdentifier)
+  let generators: [StructGenerator] = [
+    ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
+    ColorStructGenerator(colorPalettes: resources.colors),
+    FontStructGenerator(fonts: resources.fonts),
+    SegueStructGenerator(storyboards: resources.storyboards),
+    StoryboardStructGenerator(storyboards: resources.storyboards),
+    NibStructGenerator(nibs: resources.nibs),
+    ReuseIdentifierStructGenerator(reusables: resources.reusables),
+    ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
+    StringsStructGenerator(localizableStrings: resources.localizableStrings),
+  ]
+
+  let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
+    .generatedStructs(at: callInformation.accessLevel)
+
+  let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
+    .generatedStructs(at: callInformation.accessLevel)
+
+  let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
 
   let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),
