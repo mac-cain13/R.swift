@@ -27,6 +27,12 @@ The reason this happens is because of the availability of the var `R.image.setti
 
 If you get errors like `Use of undeclared type 'SomeType'` in the `R.generated.swift` file most of the time this can be fixed by [explicitly stating the module in your xib or storyboard](Images/ExplicitCustomModule.png). This will make R.swift recognize that an import is necessary.
 
+## Can I use R.swift in a library?
+
+Yes, just add R.swift as a buildstep in your library project and it will work just like normal. If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift.
+
+For example Cocoapods users would change their build step to: `"$SRCROOT/rswift" --accessLevel public "$SRCROOT"`
+
 ## How does R.swift work?
 
 During installation you add R.swift as a Build phase to your target, basically this means that:
