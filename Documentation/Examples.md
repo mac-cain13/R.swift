@@ -5,7 +5,7 @@ On this page you'll find examples of the kind of resources R.swift supports and 
 ## Runtime validation
 
 Call `R.validate()` to call all validation methods that R.swift generates, this will check:
-- If all images used in storyboards are available
+- If all images used in storyboards and nibs are available
 - If all view controllers with storyboard identifiers can be loaded
 
 The `R.validate()` method will throw a detailed error about the problems that occur. Note that this method will always perform checks, even in release builds. It’s recommended that validation is done in a testcase.
