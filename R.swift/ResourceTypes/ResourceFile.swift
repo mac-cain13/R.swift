@@ -31,7 +31,7 @@ struct ResourceFile {
 
     let fullname = url.lastPathComponent
     guard let filename = url.filename else {
-      throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
     }
 
     self.fullname = fullname

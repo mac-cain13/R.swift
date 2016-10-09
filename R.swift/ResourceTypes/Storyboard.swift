@@ -41,7 +41,10 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   init(url: URL) throws {
     try Storyboard.throwIfUnsupportedExtension(url.pathExtension)
 
-    name = url.filename!
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
+    }
+    name = filename
 
     guard let parser = XMLParser(contentsOf: url) else {
       throw ResourceParsingError.parsingFailed("Couldn't load file at: '\(url)'")
