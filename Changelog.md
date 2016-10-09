@@ -1,3 +1,21 @@
+## 3.1.0
+
+New features:
+
+- Support for `--accessLevel public` flag that makes all `R` things public (handy for libraries)
+- Handle multiple locales for resource files (`R.file.*`) by @tomlokhorst
+- Add some more checks while parsing nibs by @Tvede-dk
+- Use fully qualified names in the generated file to prevent naming conflicts
+- Validation for custom fonts and images in nibs
+
+Deprecated:
+- Deprecated `assertValid` method, use `validate` from a test instead
+
+Bugfix:
+
+- Duplicate printed errors on storyboards
+- Validation generated not compilable code when duplicate storyboard identifiers where present
+
 ## 3.0.0
 
 New features:
