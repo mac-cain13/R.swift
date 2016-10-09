@@ -9,7 +9,8 @@
 
 import Foundation
 
-private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: .caseInsensitive)
+private let numberPrefixRegex = try! NSRegularExpression(pattern: "^[0-9]+")
+private let upperCasedPrefixRegex = try! NSRegularExpression(pattern: "^([A-Z]+)(?=[^a-z]{1})")
 
 /*
  Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
@@ -18,27 +19,39 @@ private let numberRegex = try! NSRegularExpression(pattern: "^[0-9]+", options: 
 struct SwiftIdentifier : CustomStringConvertible {
   let description: String
 
-  init(name: String, lowercaseFirstCharacter: Bool = true) {
+  init(name: String, lowercaseStartingCharacters: Bool = true) {
+    // Remove all blacklisted characters from the name and uppercase the character after a blacklisted character
     var nameComponents = name.components(separatedBy: BlacklistedCharacters)
-
     let firstComponent = nameComponents.remove(at: 0)
     let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
 
-    let fullRange = NSRange(location: 0, length: cleanedSwiftName.characters.count)
-    let sanitizedSwiftName = numberRegex.stringByReplacingMatches(in: cleanedSwiftName, options: [], range: fullRange, withTemplate: "")
+    // Remove numbers at the start of the name
+    let sanitizedSwiftName = numberPrefixRegex.stringByReplacingMatches(in: cleanedSwiftName, options: [], range: cleanedSwiftName.fullRange, withTemplate: "")
 
-    let capitalizedSwiftName = lowercaseFirstCharacter ? sanitizedSwiftName.lowercaseFirstCharacter : sanitizedSwiftName
+    // Lowercase the start of the name
+    let capitalizedSwiftName = lowercaseStartingCharacters ? SwiftIdentifier.lowercasePrefix(sanitizedSwiftName) : sanitizedSwiftName
 
+    // Escape the name if it is a keyword
     if SwiftKeywords.contains(capitalizedSwiftName) {
       description = "`\(capitalizedSwiftName)`"
-    }
-    else {
+    } else {
       description = capitalizedSwiftName
     }
   }
 
   init(rawValue: String) {
     description = rawValue
+  }
+
+  private static func lowercasePrefix(_ name: String) -> String {
+    let prefixRange = upperCasedPrefixRegex.rangeOfFirstMatch(in: name, options: [], range: name.fullRange)
+
+    if prefixRange.location == NSNotFound {
+      return name.lowercaseFirstCharacter
+    } else {
+      let lowercasedPrefix = (name as NSString).substring(with: prefixRange).lowercased()
+      return (name as NSString).replacingCharacters(in: prefixRange, with: lowercasedPrefix)
+    }
   }
 }
 
@@ -60,7 +73,7 @@ extension SwiftIdentifier : ExpressibleByStringLiteral {
   init(stringLiteral value: StringLiteralType) {
     description = value
 
-    if self != SwiftIdentifier(name: value, lowercaseFirstCharacter: false) {
+    if self != SwiftIdentifier(name: value, lowercaseStartingCharacters: false) {
       assertionFailure("'\(value)' not a correct SwiftIdentifier")
     }
   }

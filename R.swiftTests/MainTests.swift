@@ -33,11 +33,18 @@ class MainTests: XCTestCase {
     "123 😄": "😄",
     "🇳🇱": "🇳🇱",
     "🌂MakeItRain!": "🌂MakeItRain",
+    "PRFXMyClass": "prfxMyClass",
+    "NSSomeThing": "nsSomeThing",
+    "MyClass": "myClass",
+    "PRFX_MyClass": "prfx_MyClass",
+    "PRFX-myClass": "prfxMyClass",
+    "123NSSomeThing": "nsSomeThing",
+    "PR123FXMyClass": "pr123FXMyClass"
   ]
   
   func testSwiftNameSanitization() {
     swiftNameData.forEach {
-      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseFirstCharacter: true).description
+      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseStartingCharacters: true).description
       XCTAssertEqual(sanitizedResult, $0.1)
     }
   }
@@ -46,7 +53,7 @@ class MainTests: XCTestCase {
     // This is an example of a performance test case.
     self.measure {
       (0...1000).forEach { _ in
-        let _ = SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseFirstCharacter: true)
+        let _ = SwiftIdentifier(name: "(looks) easy, but it's not reallY that easy!", lowercaseStartingCharacters: true)
       }
     }
   }

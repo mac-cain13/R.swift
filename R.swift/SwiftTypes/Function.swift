@@ -63,7 +63,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     }
 
     var swiftIdentifier: SwiftIdentifier {
-      return SwiftIdentifier(name: name, lowercaseFirstCharacter: true)
+      return SwiftIdentifier(name: name, lowercaseStartingCharacters: true)
     }
 
     var description: String {

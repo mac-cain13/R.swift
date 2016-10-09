@@ -171,7 +171,7 @@ struct NibStructGenerator: StructGenerator {
       reuseProtocols = []
     }
 
-    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
+    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
     return Struct(
       comments: [],
       accessModifier: externalAccessLevel,

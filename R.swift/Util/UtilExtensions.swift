@@ -51,6 +51,10 @@ extension String {
     return indentation + components.joined(separator: "\n\(indentation)")
   }
 
+  var fullRange: NSRange {
+    return NSRange(location: 0, length: characters.count)
+  }
+
   var escapedStringLiteral: String {
     return self
       .replacingOccurrences(of: "\\", with: "\\\\")
