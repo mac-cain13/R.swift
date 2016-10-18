@@ -57,6 +57,13 @@ private let accessLevelOption = Option(
   numberOfParameters: 1,
   helpDescription: "The access level [public|internal] to use for the generated R-file, will default to `internal`."
 )
+
+private let rswiftignore = Option(
+  trigger: .long("rswiftignore"),
+  numberOfParameters: 1,
+  helpDescription: "Path to pattern file that describes files that should be ignored."
+)
+
 private let xcodeprojOption = Option(
   trigger: .mixed("p", "xcodeproj"),
   numberOfParameters: 1,
@@ -78,23 +85,23 @@ private let productModuleNameOption = Option(
   helpDescription: "Product module name the R-file is generated for, is none given R.swift will use the environment variable PRODUCT_MODULE_NAME"
 )
 private let buildProductsDirOption = Option(
-  trigger: .long("buildProductsDir"), 
-  numberOfParameters: 1, 
+  trigger: .long("buildProductsDir"),
+  numberOfParameters: 1,
   helpDescription: "Build products folder that Xcode uses during build, will default to the environment variable BUILT_PRODUCTS_DIR."
 )
 private let developerDirOption = Option(
-  trigger: .long("developerDir"), 
-  numberOfParameters: 1, 
+  trigger: .long("developerDir"),
+  numberOfParameters: 1,
   helpDescription: "Developer folder that Xcode uses during build, will default to the environment variable DEVELOPER_DIR."
 )
 private let sourceRootOption = Option(
-  trigger: .long("sourceRoot"), 
-  numberOfParameters: 1, 
+  trigger: .long("sourceRoot"),
+  numberOfParameters: 1,
   helpDescription: "Source root folder that Xcode uses during build, will default to the environment variable SOURCE_ROOT."
 )
 private let sdkRootOption = Option(
-  trigger: .long("sdkRoot"), 
-  numberOfParameters: 1, 
+  trigger: .long("sdkRoot"),
+  numberOfParameters: 1,
   helpDescription: "SDK root folder that Xcode uses during build, will default to the environment variable SDKROOT."
 )
 
@@ -102,6 +109,7 @@ private let AllOptions = [
   versionOption,
   edgeOption,
   accessLevelOption,
+  rswiftignore,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -114,6 +122,7 @@ private let AllOptions = [
 
 struct CallInformation {
   let outputURL: URL
+  let rswiftignoreURL: URL?
 
   let edge: Bool
   let accessLevel: AccessLevel
@@ -187,6 +196,9 @@ struct CallInformation {
 
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, environment["PRODUCT_MODULE_NAME"])
 
+      let rswiftignorePath = try getFirstArgumentForOption(rswiftignore, nil)
+      rswiftignoreURL = URL(fileURLWithPath: rswiftignorePath)
+
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
 
@@ -225,7 +237,7 @@ private func getFirstArgument(from options: [Option:[String]], helpString: Strin
         guard let result = options[option]?.first ?? defaultValue else {
             throw InputParsingError.missingOption(error: "Missing option: \(option) ", helpString: helpString)
         }
-        
+
         return result
     }
 }
