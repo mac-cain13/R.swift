@@ -196,8 +196,11 @@ struct CallInformation {
 
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, environment["PRODUCT_MODULE_NAME"])
 
-      let rswiftignorePath = try getFirstArgumentForOption(rswiftignore, nil)
-      rswiftignoreURL = URL(fileURLWithPath: rswiftignorePath)
+      if let rswiftignorePath = options[rswiftignore]?.first {
+        rswiftignoreURL = URL(fileURLWithPath: rswiftignorePath)
+      } else {
+        rswiftignoreURL = nil
+      }
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
