@@ -10,6 +10,10 @@ import Foundation
 
 class IgnoreFile {
   private let patterns: [String]
+  
+  init() {
+    patterns = []
+  }
 
   init(ignoreFileURL: URL) throws {
     let ignoreFileParentPath = ignoreFileURL.baseURL?.absoluteString ?? ""
