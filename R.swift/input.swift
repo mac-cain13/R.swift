@@ -195,10 +195,11 @@ struct CallInformation {
       bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, environment["PRODUCT_BUNDLE_IDENTIFIER"])
 
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, environment["PRODUCT_MODULE_NAME"])
-
-      if let rswiftignorePath = options[rswiftignore]?.first {
+      
+      do {
+        let rswiftignorePath = try getFirstArgumentForOption(rswiftignore, nil)
         rswiftignoreURL = URL(fileURLWithPath: rswiftignorePath)
-      } else {
+      } catch {
         rswiftignoreURL = nil
       }
 
