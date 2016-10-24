@@ -171,15 +171,40 @@ struct NibStructGenerator: StructGenerator {
       reuseProtocols = []
     }
 
+    // Validation
+    let validateImagesLines = Set(nib.usedImageIdentifiers)
+      .map {
+        "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+    }
+
+    var validateFunctions: [Function] = []
+    var validateImplements: [Type] = []
+    if validateImagesLines.count > 0 {
+      let validateFunction = Function(
+        comments: [],
+        accessModifier: externalAccessLevel,
+        isStatic: true,
+        name: "validate",
+        generics: nil,
+        parameters: [],
+        doesThrow: true,
+        returnType: Type._Void,
+        body: validateImagesLines.joined(separator: "\n")
+      )
+      validateFunctions.append(validateFunction)
+      validateImplements.append(Type.Validatable)
+    }
+
     let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
+
     return Struct(
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
-      implements: ([Type.NibResourceType] + reuseProtocols).map(TypePrinter.init),
+      implements: ([Type.NibResourceType] + reuseProtocols + validateImplements).map(TypePrinter.init),
       typealiasses: reuseTypealiasses,
       properties: [bundleLet, nameVar] + reuseIdentifierProperties,
-      functions: viewFuncs,
+      functions: viewFuncs + validateFunctions,
       structs: []
     )
   }

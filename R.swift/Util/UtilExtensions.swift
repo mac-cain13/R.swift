@@ -76,6 +76,7 @@ extension String {
 
 extension URL {
   var filename: String? {
-    return deletingPathExtension().lastPathComponent
+    let filename = deletingPathExtension().lastPathComponent
+    return filename.characters.count == 0 ? nil : filename
   }
 }

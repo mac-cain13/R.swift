@@ -23,7 +23,10 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
   init(url: URL, fileManager: FileManager) throws {
     try AssetFolder.throwIfUnsupportedExtension(url.pathExtension)
 
-    name = url.filename!
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
+    }
+    name = filename
 
     // Browse asset directory recursively and list only the assets folders
     var assets = [URL]()

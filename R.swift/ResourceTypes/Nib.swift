@@ -23,11 +23,15 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let name: String
   let rootViews: [Type]
   let reusables: [Reusable]
+  let usedImageIdentifiers: [String]
 
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
-    name = url.filename!
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
+    }
+    name = filename
 
     guard let parser = XMLParser(contentsOf: url) else {
       throw ResourceParsingError.parsingFailed("Couldn't load file at: '\(url)'")
@@ -42,6 +46,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
 
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
+    usedImageIdentifiers = parserDelegate.usedImageIdentifiers
   }
 }
 
@@ -49,6 +54,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
+  var usedImageIdentifiers: [String] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -57,7 +63,12 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     switch elementName {
     case "objects":
-      isObjectsTagOpened = true;
+      isObjectsTagOpened = true
+
+    case "image":
+      if let imageIdentifier = attributeDict["name"] {
+        usedImageIdentifiers.append(imageIdentifier)
+      }
 
     default:
       if isObjectsTagOpened {

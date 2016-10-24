@@ -55,8 +55,9 @@ R.swift currently supports these types of resources:
 - [Reusable cells](Documentation/Examples.md#reusable-table-view-cells)
 
 Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-validation):
-- If all images used in storyboards are available
+- If all images used in storyboards and nibs are available
 - If all view controllers with storyboard identifiers can be loaded
+- If all custom fonts can be loaded
 
 ## Q&A
 
