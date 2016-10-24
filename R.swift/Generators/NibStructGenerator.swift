@@ -195,7 +195,8 @@ struct NibStructGenerator: StructGenerator {
       validateImplements.append(Type.Validatable)
     }
 
-    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
+    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
+
     return Struct(
       comments: [],
       accessModifier: externalAccessLevel,

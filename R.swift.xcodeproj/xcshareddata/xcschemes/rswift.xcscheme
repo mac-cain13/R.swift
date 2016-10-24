@@ -91,6 +91,10 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "--edge"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--accessLevel public"
             isEnabled = "YES">
          </CommandLineArgument>
