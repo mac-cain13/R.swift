@@ -10,11 +10,13 @@
 import Foundation
 
 let IndentationString = "  "
-
 let ResourceFilename = "R.generated.swift"
+
+var isEdgeEnabled = false
 
 do {
   let callInformation = try CallInformation(processInfo: ProcessInfo())
+  isEdgeEnabled = callInformation.edge
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)

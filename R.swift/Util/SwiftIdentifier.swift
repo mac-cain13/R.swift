@@ -44,6 +44,10 @@ struct SwiftIdentifier : CustomStringConvertible {
   }
 
   private static func lowercasePrefix(_ name: String) -> String {
+    guard isEdgeEnabled else {
+      return name.lowercaseFirstCharacter
+    }
+
     let prefixRange = upperCasedPrefixRegex.rangeOfFirstMatch(in: name, options: [], range: name.fullRange)
 
     if prefixRange.location == NSNotFound {

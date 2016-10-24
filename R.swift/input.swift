@@ -41,9 +41,15 @@ enum InputParsingError: Error {
 }
 
 private let versionOption = Option(
-  trigger: .long( "version"),
+  trigger: .long("version"),
   numberOfParameters: 0,
   helpDescription: "Prints version information about this release."
+)
+
+private let edgeOption = Option(
+  trigger: .long("edge"),
+  numberOfParameters: 0,
+  helpDescription: "Enable stable features that will be in the next major release."
 )
 
 private let accessLevelOption = Option(
@@ -94,6 +100,7 @@ private let sdkRootOption = Option(
 
 private let AllOptions = [
   versionOption,
+  edgeOption,
   accessLevelOption,
   xcodeprojOption,
   targetOption,
@@ -108,6 +115,7 @@ private let AllOptions = [
 struct CallInformation {
   let outputURL: URL
 
+  let edge: Bool
   let accessLevel: AccessLevel
 
   let xcodeprojURL: URL
@@ -139,6 +147,8 @@ struct CallInformation {
       if options[versionOption] != nil {
         throw InputParsingError.userRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
       }
+
+      edge = (options[edgeOption] != nil)
 
       guard let outputPath = extraArguments.first , extraArguments.count == 1 else {
         throw InputParsingError.illegalOption(
