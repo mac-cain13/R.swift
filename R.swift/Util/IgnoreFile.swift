@@ -9,19 +9,20 @@
 import Foundation
 
 class IgnoreFile {
-  private let patterns: [String]
-  private let ignoreFileURL: URL?
-  
+  private let patterns: [NSURL]
+
   init() {
     patterns = []
-    ignoreFileURL = nil
   }
 
   init(ignoreFileURL: URL) throws {
-    self.ignoreFileURL = ignoreFileURL
+    let parentDirString = ignoreFileURL.deletingLastPathComponent().path + "/"
     patterns = try String(contentsOf: ignoreFileURL)
       .components(separatedBy: CharacterSet.newlines)
       .filter(IgnoreFile.isPattern)
+      .flatMap { IgnoreFile.listFilePaths(pattern: parentDirString + $0) }
+      .map { NSURL.init(string: $0) }
+      .flatMap { $0 }
   }
 
   static private func isPattern(potentialPattern: String) -> Bool {
@@ -34,28 +35,12 @@ class IgnoreFile {
     return true
   }
 
-  func match(url: NSURL) -> Bool {
-    return patterns
-      .flatMap { listFilePaths(pattern: $0) }
-      .map { NSURL.init(string: $0, relativeTo: ignoreFileURL?.baseURL)?.absoluteURL }
-      .flatMap { $0 }
-      .any { url == $0 as NSURL }
+  static private func listFilePaths(pattern: String) -> [String] {
+    if (pattern.isEmpty) { return [] }
+    return Glob.init(pattern: pattern).paths
   }
   
-  private func listFilePaths(pattern: String) -> [String] {
-    if (pattern.isEmpty) { return [] }
-    
-    var globObj = glob_t()
-    var paths = [String]()
-    glob(pattern, 0, nil, &globObj)
-    for i in 0 ..< Int(globObj.gl_matchc) {
-      let mutablePointer = globObj.gl_pathv[Int(i)]
-      if let charPointer = UnsafePointer<CChar>(mutablePointer) {
-        let filePath = String.init(cString: charPointer)
-        paths.append(filePath)
-      }
-    }
-    globfree(&globObj)
-    return paths
+  func match(url: NSURL) -> Bool {
+    return patterns.any { url.path == $0.path }
   }
 }
