@@ -10,17 +10,18 @@ import Foundation
 
 class IgnoreFile {
   private let patterns: [String]
+  private let ignoreFileURL: URL?
   
   init() {
     patterns = []
+    ignoreFileURL = nil
   }
 
   init(ignoreFileURL: URL) throws {
-    let ignoreFileParentPath = ignoreFileURL.baseURL?.absoluteString ?? ""
+    self.ignoreFileURL = ignoreFileURL
     patterns = try String(contentsOf: ignoreFileURL)
       .components(separatedBy: CharacterSet.newlines)
       .filter(IgnoreFile.isPattern)
-      .map { ignoreFileParentPath + $0 }
   }
 
   static private func isPattern(potentialPattern: String) -> Bool {
@@ -35,7 +36,26 @@ class IgnoreFile {
 
   func match(url: NSURL) -> Bool {
     return patterns
-      .map { NSURL.init(string: $0) }
-      .any { url == $0 }
+      .flatMap { listFilePaths(pattern: $0) }
+      .map { NSURL.init(string: $0, relativeTo: ignoreFileURL?.baseURL)?.absoluteURL }
+      .flatMap { $0 }
+      .any { url == $0 as NSURL }
+  }
+  
+  private func listFilePaths(pattern: String) -> [String] {
+    if (pattern.isEmpty) { return [] }
+    
+    var globObj = glob_t()
+    var paths = [String]()
+    glob(pattern, 0, nil, &globObj)
+    for i in 0 ..< Int(globObj.gl_matchc) {
+      let mutablePointer = globObj.gl_pathv[Int(i)]
+      if let charPointer = UnsafePointer<CChar>(mutablePointer) {
+        let filePath = String.init(cString: charPointer)
+        paths.append(filePath)
+      }
+    }
+    globfree(&globObj)
+    return paths
   }
 }
