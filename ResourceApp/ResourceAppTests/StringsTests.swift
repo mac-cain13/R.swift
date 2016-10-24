@@ -79,11 +79,15 @@ class StringsTests: XCTestCase {
     
     XCTAssertEqual(
       R.string.comments.starKey5.comment,
-      "first part of comment for key 5 second part of comment, should be merged")
+      "first part of comment for key5\nsecond part of comment, should be merged")
     
     XCTAssertEqual(
       R.string.comments.starKey6.comment,
-      "big, multiline comment belonging to key6")
+      "big, multiline comment\nbelonging to key6")
+
+    XCTAssertNil(R.string.comments.starKey7.comment)
+
+    XCTAssertNil(R.string.comments.starKey8.comment)
     
     XCTAssertNil(R.string.comments.slashKey1.comment)
     
@@ -99,10 +103,14 @@ class StringsTests: XCTestCase {
     
     XCTAssertEqual(
       R.string.comments.slashKey5.comment,
-      "first part of comment for key 5 second part of comment, should be merged")
+      "first part of comment for key5\nsecond part of comment, should be merged")
     
     XCTAssertEqual(
       R.string.comments.slashKey6.comment,
-      "big, multiline comment belonging to key6")
+      "big, multiline comment\nbelonging to key6")
+
+    XCTAssertNil(R.string.comments.slashKey7.comment)
+
+    XCTAssertNil(R.string.comments.slashKey8.comment)
   }
 }

@@ -250,8 +250,8 @@
 		5D1AFAAC1C85859D003FE7AB /* Strings */ = {
 			isa = PBXGroup;
 			children = (
-				E243EAF41DBE600A00F6ECDE /* Comments.strings */,
 				E2156B6D1CC42B6700F341DC /* @@.strings */,
+				E243EAF41DBE600A00F6ECDE /* Comments.strings */,
 				E2156B691CC4292600F341DC /* Duplicate.strings */,
 				E2156B6B1CC4293000F341DC /* Duplicate#.strings */,
 				E2156B671CC41EB400F341DC /* Generic.strings */,

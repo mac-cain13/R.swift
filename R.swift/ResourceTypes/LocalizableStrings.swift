@@ -118,12 +118,24 @@ private extension Scanner {
     if scan("/*") {
       let result = scanUpTo("*/")
       _ = scan("*/")
-      return .block(result ?? "")
+
+      if let result = result?.trimmingCharacters(in: .whitespaces), !result.isEmpty {
+        return .block(result)
+      }
+      else {
+        return nil
+      }
     }
     else if scan("//") {
       let result = scanUpTo("\n")
       _ = scan("\n")
-      return .line(result ?? "")
+
+      if let result = result?.trimmingCharacters(in: .whitespaces), !result.isEmpty {
+        return .line(result)
+      }
+      else {
+        return nil
+      }
     }
     else {
       return nil
@@ -188,7 +200,7 @@ private struct StringsFileEntry {
   static func mergeComments(_ comments: [Comment]) -> String? {
     guard !comments.isEmpty else { return nil }
     // TODO: something nicer
-    return comments.map { $0.content }.joinWithSeparator(" ")
+    return comments.map { $0.content }.joinWithSeparator("\n")
   }
   
   static func parse(stringsFile: String) -> [StringsFileEntry] {

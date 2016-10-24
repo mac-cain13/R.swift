@@ -19,10 +19,18 @@
 /* first part of comment for key5 */
 "star-key5" = "Five"; /* second part of comment, should be merged */
 
-/* big, multiline, comment
+/* big, multiline comment
  * belonging to key6
  */
 "star-key6" = "Six";
+
+/*     */
+"star-key7" = "Seven";
+
+/*
+ **
+ */
+"star-key8" = "Eight";
 
 
 // comment doesn't belong to any key
@@ -38,6 +46,14 @@
 // first part of comment for key5
 "slash-key5" = "Five"; // second part of comment, should be merged
 
-// big, multiline, comment
+// big, multiline comment
 // belonging to key6
 "slash-key6" = "Six";
+
+//
+"slash-key7" = "Seven";
+
+//
+////
+//
+"slash-key8" = "Eight";
