@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3406F9501DB64E8C00351D0E /* IgnoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */; };
 		3406F9511DB65FAB00351D0E /* IgnoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */; };
+		3406F9581DBEA87500351D0E /* Glob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F9571DBEA87500351D0E /* Glob.swift */; };
+		3406F9591DBEA87500351D0E /* Glob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F9571DBEA87500351D0E /* Glob.swift */; };
 		5D45C2191CA12913000B8DC9 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
 		5D997C951C7C291900B2F376 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
 		D5214C1F1DA6AA9300212FF1 /* Struct+InternalProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */; };
@@ -118,6 +120,7 @@
 
 /* Begin PBXFileReference section */
 		3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoreFile.swift; sourceTree = "<group>"; };
+		3406F9571DBEA87500351D0E /* Glob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glob.swift; sourceTree = "<group>"; };
 		5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsStructGenerator.swift; sourceTree = "<group>"; };
 		D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Struct+InternalProperties.swift"; sourceTree = "<group>"; };
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -246,6 +249,7 @@
 				D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */,
 				D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */,
 				D5EA0DFE1A3DF4E300FFEBC4 /* UtilExtensions.swift */,
+				3406F9571DBEA87500351D0E /* Glob.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -498,6 +502,7 @@
 				D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */,
 				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
 				D5B799801C1B0943009EA901 /* SwiftIdentifier.swift in Sources */,
+				3406F9591DBEA87500351D0E /* Glob.swift in Sources */,
 				D5E890A71DA5A2550059D5ED /* AggregatedStructGenerator.swift in Sources */,
 				D5B799711C199755009EA901 /* FontStructGenerator.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
@@ -532,6 +537,7 @@
 				D5E890A51DA5A2290059D5ED /* AggregatedStructGenerator.swift in Sources */,
 				E2762AC71CCCEC2A0009BCAA /* Locale.swift in Sources */,
 				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
+				3406F9581DBEA87500351D0E /* Glob.swift in Sources */,
 				D59F723C1C1964B20089767C /* Typealias.swift in Sources */,
 				D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */,
 				D5DA249D1B9CB1BF00AAA43E /* StructGenerator.swift in Sources */,
