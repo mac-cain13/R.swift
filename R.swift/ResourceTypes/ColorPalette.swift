@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-03-13.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -15,19 +16,19 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
   let filename: String
   let colors: [String: NSColor]
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try ColorPalette.throwIfUnsupportedExtension(url.pathExtension)
 
-    guard let filename = url.filename, path = url.path else {
-      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
-    guard let colorList = NSColorList(name: "", fromFile: path) else {
-      throw ResourceParsingError.ParsingFailed("Couldn't parse as color palette: \(url)")
+    guard let colorList = NSColorList(name: "", fromFile: url.path) else {
+      throw ResourceParsingError.parsingFailed("Couldn't parse as color palette: \(url)")
     }
 
     var colors: [String: NSColor] = [:]
     for key in colorList.allKeys {
-      colors[key] = colorList.colorWithKey(key)?.colorUsingColorSpaceName(NSCalibratedRGBColorSpace)
+      colors[key] = colorList.color(withKey: key)?.usingColorSpaceName(NSCalibratedRGBColorSpace)
     }
 
     self.filename = filename

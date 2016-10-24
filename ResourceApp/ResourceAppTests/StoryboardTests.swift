@@ -18,8 +18,8 @@ class StoryboardTests: XCTestCase {
   }
 
   func testStoryboardInitialViewControllers() {
-    XCTAssertNotNil(R.storyboard.main.initialViewController(), "Initial view controller is missing")
-    XCTAssertNotNil(R.storyboard.secondary.initialViewController(), "Initial view controller is missing")
+    XCTAssertNotNil(R.storyboard.main.instantiateInitialViewController(), "Initial view controller is missing")
+    XCTAssertNotNil(R.storyboard.secondary.instantiateInitialViewController(), "Initial view controller is missing")
   }
 
   func testStoryboardSpecificViewControllers() {

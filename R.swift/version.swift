@@ -3,9 +3,10 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-05-16.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-let version = "2.4.0"
+let version = "3.1.0"

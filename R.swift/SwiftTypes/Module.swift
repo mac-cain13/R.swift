@@ -3,52 +3,62 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 11-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-enum Module: StringLiteralConvertible, CustomStringConvertible, Hashable {
-  case Host
-  case StdLib
-  case Custom(name: String)
+enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
+  case host
+  case stdLib
+  case custom(name: String)
 
   typealias UnicodeScalarLiteralType = StringLiteralType
   typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
   var hashValue: Int {
     switch self {
-    case .Host: return "--HOSTINGBUNDLE".hashValue
-    case .StdLib: return "--STDLIB".hashValue
-    case let .Custom(name: name): return name.hashValue
+    case .host: return "--HOSTINGBUNDLE".hashValue
+    case .stdLib: return "--STDLIB".hashValue
+    case let .custom(name: name): return name.hashValue
     }
   }
 
   var description: String {
     switch self {
-    case .Host: return ""
-    case .StdLib: return ""
-    case let .Custom(name: name): return name
+    case .host: return ""
+    case .stdLib: return ""
+    case let .custom(name: name): return name
     }
   }
 
-  init(name: String?, fallback: Module = .Host) {
+  var isCustom: Bool {
+    switch self {
+    case .custom:
+      return true
+    default:
+      return false
+    }
+  }
+
+  init(name: String?, fallback: Module = .host) {
     switch name {
-    case .None: self = fallback
-    case let .Some(name): self = .Custom(name: name)
+    case .none: self = fallback
+    case let .some(name): self = .custom(name: name)
     }
   }
 
   init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-    self = .Custom(name: value)
+    self = .custom(name: value)
   }
 
   init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-    self = .Custom(name: value)
+    self = .custom(name: value)
   }
 
   init(stringLiteral value: StringLiteralType) {
-    self = .Custom(name: value)
+    self = .custom(name: value)
   }
 }
 

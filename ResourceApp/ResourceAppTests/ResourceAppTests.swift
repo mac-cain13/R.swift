@@ -14,19 +14,20 @@ class ResourceAppTests: XCTestCase {
 
   let expectedWarnings = [
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
-    "warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these xibs: Duplicate, duplicate",
-    "warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these storyboards: Duplicate, duplicate",
+    "warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate",
+    "warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate",
     "warning: [R.swift] Skipping 2 reuseIdentifiers because symbol 'duplicateCellView' would be generated for all of these reuseIdentifiers: DuplicateCellView, duplicateCellView",
-    "warning: [R.swift] Skipping 2 segues for 'SecondViewController' because symbol 'toFirst' would be generated for all of these segues, but with a different destination or segue type: ToFirst, toFirst",
+    "warning: [R.swift] Skipping 2 segues for 'SecondViewController' because symbol 'toFirst' would be generated for all of these segues: ToFirst, toFirst",
     "warning: [R.swift] Skipping 2 images because symbol 'theAppIcon' would be generated for all of these images: The App Icon, TheAppIcon",
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
     "warning: [R.swift] Skipping 2 resource files because symbol 'duplicateJson' would be generated for all of these files: Duplicate.json, duplicateJson",
     "warning: [R.swift] Destination view controller with id Zbd-89-K73 for segue toUnknown in FirstViewController not found in storyboard References. Is this storyboard corrupt?",
+    "warning: [R.swift] Skipping 2 view controllers because symbol 'validationClash' would be generated for all of these view controller identifiers: Validation clash, ValidationClash",
     "warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: ' '",
     "warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?",
 
-    "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these filenames: Duplicate, Duplicate#",
-    "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for filename: '@@'",
+    "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these files: Duplicate, Duplicate#",
+    "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for file: '@@'",
     "warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'",
     "warning: [R.swift] Strings file 'Localizable' (en) is missing translations for keys: 'japanese only'",
     "warning: [R.swift] Strings file 'Localizable' (es) is missing translations for keys: 'japanese only'",
@@ -46,14 +47,14 @@ class ResourceAppTests: XCTestCase {
   ]
 
   func testWarningsAreLogged() {
-    guard let logURL = NSBundle(forClass: ResourceAppTests.self).URLForResource("rswift", withExtension: "log") else {
+    guard let logURL = Bundle(for: ResourceAppTests.self).url(forResource: "rswift", withExtension: "log") else {
       XCTFail("File rswift.log not found")
       return
     }
 
     do {
-      let logContent = try String(contentsOfURL: logURL)
-      let logLines = logContent.componentsSeparatedByString("\n")
+      let logContent = try String(contentsOf: logURL)
+      let logLines = logContent.components(separatedBy: "\n")
 
       for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")

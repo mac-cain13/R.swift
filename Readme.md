@@ -14,7 +14,7 @@ Currently you type:
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
-let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.currentLocale(), "Arthur Dent")
+let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Arthur Dent")
 ```
 
 With R.swift it becomes:
@@ -54,9 +54,10 @@ R.swift currently supports these types of resources:
 - [Nibs](Documentation/Examples.md#nibs)
 - [Reusable cells](Documentation/Examples.md#reusable-table-view-cells)
 
-Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-validation):
-- If all images used in storyboards are available
+Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-validation):
+- If all images used in storyboards and nibs are available
 - If all view controllers with storyboard identifiers can be loaded
+- If all custom fonts can be loaded
 
 ## Q&A
 
@@ -65,6 +66,7 @@ Runtime validation with [`R.assertValid()`](Documentation/Examples.md#runtime-va
 - [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
 - [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
 - [How to fix missing imports in the generated file?](Documentation/QandA.md#how-to-fix-missing-imports-in-the-generated-file)
+- [Can I use R.swift in a library?](Documentation/QandA.md#can-i-use-rswift-in-a-library)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [How to upgrade to a new major version?](Documentation/Migration.md)
 

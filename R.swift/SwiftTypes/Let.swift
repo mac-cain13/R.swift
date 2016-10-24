@@ -3,19 +3,20 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 05-01-16.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
 enum TypeDefinition: UsedTypesProvider {
-  case Specified(Type)
-  case Inferred(Type?)
+  case specified(Type)
+  case inferred(Type?)
 
   var type: Type? {
     switch self {
-    case let .Specified(type): return type
-    case let .Inferred(type): return type
+    case let .specified(type): return type
+    case let .inferred(type): return type
     }
   }
 
@@ -24,23 +25,17 @@ enum TypeDefinition: UsedTypesProvider {
   }
 }
 
-struct Let: Property {
+struct Let: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
+  let accessModifier: AccessLevel
   let isStatic: Bool
-  let name: String
+  let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
 
-  init(isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
-    self.comments = []
-    self.isStatic = isStatic
-    self.name = name
-    self.typeDefinition = typeDefinition
-    self.value = value
-  }
-
-  init(comments: [String], isStatic: Bool, name: String, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
     self.comments = comments
+    self.accessModifier = accessModifier
     self.isStatic = isStatic
     self.name = name
     self.typeDefinition = typeDefinition
@@ -51,16 +46,17 @@ struct Let: Property {
     return typeDefinition.usedTypes
   }
 
-  var description: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joinWithSeparator("")
+  var swiftCode: String {
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let staticString = isStatic ? "static " : ""
 
     let typeString: String
     switch typeDefinition {
-    case let .Specified(type): typeString = ": \(type)"
-    case .Inferred: typeString = ""
+    case let .specified(type): typeString = ": \(type)"
+    case .inferred: typeString = ""
     }
 
-    return "\(commentsString)\(staticString)let \(callName)\(typeString) = \(value)"
+    return "\(commentsString)\(accessModifierString)\(staticString)let \(name)\(typeString) = \(value)"
   }
 }

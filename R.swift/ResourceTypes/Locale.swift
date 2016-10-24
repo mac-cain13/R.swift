@@ -3,18 +3,19 @@
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-04-24.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
 enum Locale {
-  case None
-  case Base
-  case Language(String)
+  case none
+  case base
+  case language(String)
 
   var isBase: Bool {
-    if case .Base = self {
+    if case .base = self {
       return true
     }
 
@@ -22,7 +23,7 @@ enum Locale {
   }
 
   var isNone: Bool {
-    if case .None = self {
+    if case .none = self {
       return true
     }
 
@@ -31,31 +32,31 @@ enum Locale {
 }
 
 extension Locale {
-  init(url: NSURL) {
-    if let localeComponent = url.pathComponents?.dropLast().last where localeComponent.hasSuffix(".lproj") {
-      let lang = localeComponent.stringByReplacingOccurrencesOfString(".lproj", withString: "")
+  init(url: URL) {
+    if let localeComponent = url.pathComponents.dropLast().last , localeComponent.hasSuffix(".lproj") {
+      let lang = localeComponent.replacingOccurrences(of: ".lproj", with: "")
 
       if lang == "Base" {
-        self = .Base
+        self = .base
       }
       else {
-        self = .Language(lang)
+        self = .language(lang)
       }
     }
     else {
-      self = .None
+      self = .none
     }
   }
 
   var localeDescription: String? {
     switch self {
-    case .None:
+    case .none:
       return nil
 
-    case .Base:
+    case .base:
       return "Base"
 
-    case .Language(let language):
+    case .language(let language):
       return language
     }
   }
@@ -64,27 +65,27 @@ extension Locale {
 extension Locale: Hashable {
   var hashValue: Int {
     switch self {
-    case .None:
+    case .none:
       return 0
 
-    case .Base:
+    case .base:
       return 1
 
-    case .Language(let language):
-      return 2 &+  language.hashValue
+    case .language(let language):
+      return 2 &+ language.hashValue
     }
   }
 }
 
 func ==(lhs: Locale, rhs: Locale) -> Bool {
   switch (lhs, rhs) {
-  case (.None, .None):
+  case (.none, .none):
     return true
 
-  case (.Base, .Base):
+  case (.base, .base):
     return true
 
-  case let (.Language(lLang), .Language(rLang)):
+  case let (.language(lLang), .language(rLang)):
     return lLang == rLang
 
   default:

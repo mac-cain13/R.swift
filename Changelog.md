@@ -1,3 +1,42 @@
+## 3.1.0
+
+New features:
+
+- Support for `--accessLevel public` flag that makes all `R` things public (handy for libraries)
+- Handle multiple locales for resource files (`R.file.*`) by @tomlokhorst
+- Add some more checks while parsing nibs by @Tvede-dk
+- Use fully qualified names in the generated file to prevent naming conflicts
+- Validation for custom fonts and images in nibs
+
+Deprecated:
+- Deprecated `assertValid` method, use `validate` from a test instead
+
+Bugfix:
+
+- Duplicate printed errors on storyboards
+- Validation generated not compilable code when duplicate storyboard identifiers where present
+
+## 3.0.0
+
+New features:
+
+- Swift 3 support
+
+**Breaking changes:**
+- Swift 2 is not supported anymore, use the 2.* versions for Swift 2
+- Some methods are renamed, those are annotated with an availability annotation so the compiler will help you rename
+
+## 2.5.0
+
+New features:
+
+- Bundle is used in string resources
+
+Bugfix:
+
+- Detect all segues correctly
+- Fix namespace problems with validation errors
+
 ## 2.4.0
 
 New features:

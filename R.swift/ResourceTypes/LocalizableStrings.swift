@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-04-24.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -21,30 +22,30 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
     self.entries = entries
   }
 
-  init(url: NSURL) throws {
+  init(url: URL) throws {
     try LocalizableStrings.throwIfUnsupportedExtension(url.pathExtension)
 
     guard let filename = url.filename else {
-      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
 
     // Get locale from url (second to last component)
     let locale = Locale(url: url)
 
     // Check to make sure url can be parsed as a dictionary
-    guard let nsDictionary = NSDictionary(contentsOfURL: url) else {
-      throw ResourceParsingError.ParsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
+    guard let nsDictionary = NSDictionary(contentsOf: url) else {
+      throw ResourceParsingError.parsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
     // Parse dicts from NSDictionary
     let entries: [Entry]
     switch url.pathExtension {
-    case "strings"?:
-      entries = try parseStrings(String(contentsOfURL: url), source: locale.withFilename("\(filename).strings"))
-    case "stringsdict"?:
+    case "strings":
+      entries = try parseStrings(String(contentsOf: url), source: locale.withFilename("\(filename).strings"))
+    case "stringsdict":
       entries = try parseStringsdict(nsDictionary, source: locale.withFilename("\(filename).stringsdict"))
     default:
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
+      throw ResourceParsingError.unsupportedExtension(givenExtension: url.pathExtension, supportedExtensions: LocalizableStrings.supportedExtensions)
     }
 
     self.filename = filename
@@ -64,18 +65,18 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
   }
 }
 
-private func parseStrings(stringsFile: String, source: String) throws -> [LocalizableStrings.Entry] {
+private func parseStrings(_ stringsFile: String, source: String) throws -> [LocalizableStrings.Entry] {
   var entries: [LocalizableStrings.Entry] = []
   
-  for parsed in StringsFileEntry.parse(stringsFile) {
+  for parsed in StringsFileEntry.parse(stringsFile: stringsFile) {
     var params: [StringParam] = []
     
     for part in FormatPart.formatParts(formatString: parsed.val) {
       switch part {
-      case .Reference:
-        throw ResourceParsingError.ParsingFailed("Non-specifier reference in \(source): \(parsed.key) = \(parsed.val)")
+      case .reference:
+        throw ResourceParsingError.parsingFailed("Non-specifier reference in \(source): \(parsed.key) = \(parsed.val)")
         
-      case .Spec(let formatSpecifier):
+      case .spec(let formatSpecifier):
         params.append(StringParam(name: nil, spec: formatSpecifier))
       }
     }
@@ -86,41 +87,42 @@ private func parseStrings(stringsFile: String, source: String) throws -> [Locali
   return entries
 }
 
+
 // MARK: -
 
-private let unquotedStringCharacters: NSCharacterSet = {
-  let set = NSMutableCharacterSet.whitespaceAndNewlineCharacterSet()
+private let unquotedStringCharacters: CharacterSet = {
+  var set = CharacterSet.whitespacesAndNewlines
   set.invert()
-  set.removeCharactersInString("\\\"=;")
+  set.remove(charactersIn: "\\\"=;")
   return set
 }()
 
-private extension NSScanner {
-  func scan(s: String) -> Bool {
-    return scanString(s, intoString: nil)
+private extension Scanner {
+  func scan(_ s: String) -> Bool {
+    return scanString(s, into: nil)
   }
   
-  func scanUpTo(s: String) -> String? {
+  func scanUpTo(_ s: String) -> String? {
     var result: NSString?
-    guard scanUpToString(s, intoString: &result) else { return nil }
+    guard scanUpTo(s, into: &result) else { return nil }
     return result as String?
   }
   
-  func scanCharacters(set: NSCharacterSet) -> String? {
+  func scanCharacters(_ set: CharacterSet) -> String? {
     var result: NSString?
-    guard scanCharactersFromSet(set, intoString: &result) else { return nil }
+    guard scanCharacters(from: set as CharacterSet, into: &result) else { return nil }
     return result as String?
   }
   
   func scanComment() -> StringsFileEntry.Comment? {
     if scan("/*") {
       let result = scanUpTo("*/")
-      scan("*/")
+      _ = scan("*/")
       return .block(result ?? "")
     }
     else if scan("//") {
       let result = scanUpTo("\n")
-      scan("\n")
+      _ = scan("\n")
       return .line(result ?? "")
     }
     else {
@@ -129,9 +131,9 @@ private extension NSScanner {
   }
   
   func skipCommentsAndWhitespace() {
-    while !atEnd {
+    while !isAtEnd {
       if scanComment() == nil &&
-        scanCharacters(.whitespaceAndNewlineCharacterSet()) == nil
+        scanCharacters(.whitespacesAndNewlines) == nil
       {
         return
       }
@@ -142,8 +144,8 @@ private extension NSScanner {
     if scan("\"") {
       var key = ""
       while let part = scanUpTo("\"") {
-        key.appendContentsOf(part)
-        scan("\"")
+        key.append(part)
+        _ = scan("\"")
         if part.characters.last == "\\" {
           key.append(Character("\""))
         } else {
@@ -151,8 +153,8 @@ private extension NSScanner {
         }
       }
       do {
-        let data = "\"\(key)\"".dataUsingEncoding(NSUTF8StringEncoding)!
-        return try NSPropertyListSerialization.propertyListWithData(data, options: [], format: nil) as? String
+        let data = "\"\(key)\"".data(using: String.Encoding.utf8)!
+        return try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? String
       } catch {
         return nil
       }
@@ -183,7 +185,7 @@ private struct StringsFileEntry {
     }
   }
   
-  static func mergeComments(comments: [Comment]) -> String? {
+  static func mergeComments(_ comments: [Comment]) -> String? {
     guard !comments.isEmpty else { return nil }
     // TODO: something nicer
     return comments.map { $0.content }.joinWithSeparator(" ")
@@ -192,12 +194,12 @@ private struct StringsFileEntry {
   static func parse(stringsFile: String) -> [StringsFileEntry] {
     var entries: [StringsFileEntry] = []
     
-    let scanner = NSScanner(string: stringsFile)
+    let scanner = Scanner(string: stringsFile)
     scanner.charactersToBeSkipped = nil
     scanner.caseSensitive = true
     
-    while !scanner.atEnd {
-      scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+    while !scanner.isAtEnd {
+      _ = scanner.scanCharacters(.whitespacesAndNewlines)
       
       var comments: [Comment] = []
       while let comment = scanner.scanComment() {
@@ -209,7 +211,7 @@ private struct StringsFileEntry {
       }
       
       // Only comments directly above a string are desired.
-      if let whitespace = scanner.scanCharacters(.whitespaceAndNewlineCharacterSet())
+      if let whitespace = scanner.scanCharacters(.whitespacesAndNewlines)
       {
         var newlines = whitespace.characters.filter({ $0 == "\n" }).count
         if case .line? = comments.last {
@@ -234,7 +236,7 @@ private struct StringsFileEntry {
       
       guard scanner.scan(";") else { continue }
       
-      scanner.scanCharacters(.whitespaceCharacterSet())
+      _ = scanner.scanCharacters(.whitespaces)
       if let comment = scanner.scanComment() {
         comments.append(comment)
       }
@@ -246,14 +248,14 @@ private struct StringsFileEntry {
   }
 }
 
-private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws -> [LocalizableStrings.Entry] {
+private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) throws -> [LocalizableStrings.Entry] {
 
   var entries: [LocalizableStrings.Entry] = []
 
   for (key, obj) in nsDictionary {
     if let
       key = key as? String,
-      dict = obj as? [String: AnyObject]
+      let dict = obj as? [String: AnyObject]
     {
       guard let localizedFormat = dict["NSStringLocalizedFormatKey"] as? String else {
         continue
@@ -263,29 +265,29 @@ private func parseStringsdict(nsDictionary: NSDictionary, source: String) throws
         let params = try parseStringsdictParams(localizedFormat, dict: dict)
         entries.append(LocalizableStrings.Entry(key: key, val: localizedFormat, params: params, comment: nil))
       }
-      catch ResourceParsingError.ParsingFailed(let message) {
+      catch ResourceParsingError.parsingFailed(let message) {
         warn("\(message) in '\(key)' \(source)")
       }
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Non-dict value in \(source): \(key) = \(obj)")
+      throw ResourceParsingError.parsingFailed("Non-dict value in \(source): \(key) = \(obj)")
     }
   }
 
   return entries
 }
 
-private func parseStringsdictParams(format: String, dict: [String: AnyObject]) throws -> [StringParam] {
+private func parseStringsdictParams(_ format: String, dict: [String: AnyObject]) throws -> [StringParam] {
 
   var params: [StringParam] = []
 
   let parts = FormatPart.formatParts(formatString: format)
   for part in parts {
     switch part {
-    case .Reference(let reference):
-      params += try lookup(reference, dict: dict)
+    case .reference(let reference):
+      params += try lookup(key: reference, in: dict)
 
-    case .Spec(let formatSpecifier):
+    case .spec(let formatSpecifier):
       params.append(StringParam(name: nil, spec: formatSpecifier))
     }
   }
@@ -293,43 +295,43 @@ private func parseStringsdictParams(format: String, dict: [String: AnyObject]) t
   return params
 }
 
-func lookup(key: String, dict: [String: AnyObject], processedReferences: [String] = []) throws -> [StringParam] {
+func lookup(key: String, in dict: [String: AnyObject], processedReferences: [String] = []) throws -> [StringParam] {
   var processedReferences = processedReferences
 
   if processedReferences.contains(key) {
-    throw ResourceParsingError.ParsingFailed("Cyclic reference '\(key)'")
+    throw ResourceParsingError.parsingFailed("Cyclic reference '\(key)'")
   }
 
   processedReferences.append(key)
 
-  guard let obj = dict[key], nested = obj as? [String: AnyObject] else {
-    throw ResourceParsingError.ParsingFailed("Missing reference '\(key)'")
+  guard let obj = dict[key], let nested = obj as? [String: AnyObject] else {
+    throw ResourceParsingError.parsingFailed("Missing reference '\(key)'")
   }
 
   guard let formatSpecType = nested["NSStringFormatSpecTypeKey"] as? String,
-    formatValueType = nested["NSStringFormatValueTypeKey"] as? String
-    where formatSpecType == "NSStringPluralRuleType"
+    let formatValueType = nested["NSStringFormatValueTypeKey"] as? String
+    , formatSpecType == "NSStringPluralRuleType"
   else {
-    throw ResourceParsingError.ParsingFailed("Incorrect reference '\(key)'")
+    throw ResourceParsingError.parsingFailed("Incorrect reference '\(key)'")
   }
   guard let formatSpecifier = FormatSpecifier(formatString: formatValueType)
   else {
-    throw ResourceParsingError.ParsingFailed("Incorrect reference format specifier \"\(formatValueType)\" for '\(key)'")
+    throw ResourceParsingError.parsingFailed("Incorrect reference format specifier \"\(formatValueType)\" for '\(key)'")
   }
 
   var results = [StringParam(name: nil, spec: formatSpecifier)]
 
-  let stringValues = nested.values.flatMap { $0 as? String }
+  let stringValues = nested.values.flatMap { $0 as? String }.sorted()
 
   for stringValue in stringValues {
     var alternative: [StringParam] = []
     let parts = FormatPart.formatParts(formatString: stringValue)
     for part in parts {
       switch part {
-      case .Reference(let reference):
-        alternative += try lookup(reference, dict: dict, processedReferences: processedReferences)
+      case .reference(let reference):
+        alternative += try lookup(key: reference, in: dict, processedReferences: processedReferences)
 
-      case .Spec(let formatSpecifier):
+      case .spec(let formatSpecifier):
         alternative.append(StringParam(name: key, spec: formatSpecifier))
       }
     }
@@ -338,7 +340,7 @@ func lookup(key: String, dict: [String: AnyObject], processedReferences: [String
       results = unified
     }
     else {
-      throw ResourceParsingError.ParsingFailed("Can't unify '\(key)'")
+      throw ResourceParsingError.parsingFailed("Can't unify '\(key)'")
     }
   }
 

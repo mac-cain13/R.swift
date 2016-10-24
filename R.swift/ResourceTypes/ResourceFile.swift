@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -20,19 +21,20 @@ struct ResourceFile {
 
   let fullname: String
   let filename: String
-  let pathExtension: String?
+  let pathExtension: String
 
-  init(url: NSURL) throws {
-    if let pathExtension = url.pathExtension where ResourceFile.unsupportedExtensions.contains(pathExtension) {
-      throw ResourceParsingError.UnsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
+  init(url: URL) throws {
+    pathExtension = url.pathExtension
+    if ResourceFile.unsupportedExtensions.contains(pathExtension) {
+      throw ResourceParsingError.unsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
     }
 
-    guard let fullname = url.lastPathComponent, filename = url.filename else {
-      throw ResourceParsingError.ParsingFailed("Couldn't extract filename without extension from URL: \(url)")
+    let fullname = url.lastPathComponent
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
     }
 
     self.fullname = fullname
     self.filename = filename
-    pathExtension = url.pathExtension
   }
 }

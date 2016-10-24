@@ -1,64 +1,59 @@
 //
-//  StringsGenerator.swift
+//  StringsStructGenerator.swift
 //  R.swift
 //
 //  Created by Nolan Warner on 2016/02/23.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-struct StringsGenerator: Generator {
-  let externalStruct: Struct?
-  let internalStruct: Struct? = nil
+struct StringsStructGenerator: ExternalOnlyStructGenerator {
+  private let localizableStrings: [LocalizableStrings]
 
   init(localizableStrings: [LocalizableStrings]) {
+    self.localizableStrings = localizableStrings
+  }
 
+  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let localized = localizableStrings.groupBy { $0.filename }
-    let groupedLocalized = localized.groupBySwiftNames { $0.0 }
+    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
-    for (sanitizedName, duplicates) in groupedLocalized.duplicates {
-      warn("Skipping \(duplicates.count) strings files because symbol '\(sanitizedName)' would be generated for all of these filenames: \(duplicates.joinWithSeparator(", "))")
-    }
+    groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
-    let empties = groupedLocalized.empties
-    if let empty = empties.first where empties.count == 1 {
-      warn("Skipping 1 strings file because no swift identifier can be generated for filename: \(empty)")
-    }
-    else if empties.count > 1 {
-      warn("Skipping \(empties.count) strings files because no swift identifier can be generated for all of these filenames: \(empties.joinWithSeparator(", "))")
-    }
-
-    externalStruct = Struct(
+    return Struct(
       comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
-      type: Type(module: .Host, name: "string"),
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: "string"),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedLocalized.uniques.flatMap(StringsGenerator.stringStructFromLocalizableStrings)
+      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) }
     )
   }
 
-  private static func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings]) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel) -> Struct? {
 
-    let name = sanitizedSwiftName(filename)
-    let params = computeParams(filename, strings: strings)
+    let name = SwiftIdentifier(name: filename)
+    let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
       comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
-      type: Type(module: .Host, name: name),
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: params.map(StringsGenerator.stringLet),
-      functions: params.map(StringsGenerator.stringFunction),
+      properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
+      functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
       structs: []
     )
   }
 
   // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
-  private static func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
+  private func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
     var allParams: [String: [(Locale, LocalizableStrings.Entry)]] = [:]
     let baseKeys: Set<String>?
@@ -73,19 +68,9 @@ struct StringsGenerator: Generator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.keys.groupBySwiftNames { $0 }
+      let groupedKeys = ls.keys.groupedBySwiftIdentifier { $0 }
 
-      for (sanitizedName, duplicates) in groupedKeys.duplicates {
-        warn("Skipping \(duplicates.count) strings in \(filenameLocale) because symbol '\(sanitizedName)' would be generated for all of these keys: \(duplicates.map { "'\($0)'" }.joinWithSeparator(", "))")
-      }
-
-      let empties = groupedKeys.empties
-      if let empty = empties.first where empties.count == 1 {
-        warn("Skipping 1 string in \(filenameLocale) because no swift identifier can be generated for key: \(empty)")
-      }
-      else if empties.count > 1 {
-        warn("Skipping \(empties.count) strings in \(filenameLocale) because no swift identifier can be generated for all of these keys: \(empties.joinWithSeparator(", "))")
-      }
+      groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
       // Save uniques
       var byKey: [String: LocalizableStrings.Entry] = [:]
@@ -109,20 +94,20 @@ struct StringsGenerator: Generator {
       let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtract(lss.flatMap { $0.keys })
+      let missing = sourceKeys.subtracting(lss.flatMap { $0.keys })
 
       if missing.isEmpty {
         continue
       }
 
-      let paddedKeys = missing.sort().map { "'\($0)'" }
+      let paddedKeys = missing.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joinWithSeparator(", ")
 
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
     // Only include translation if it exists in Base
-    func includeTranslation(key: String) -> Bool {
+    func includeTranslation(_ key: String) -> Bool {
       if let baseKeys = baseKeys {
         return baseKeys.contains(key)
       }
@@ -139,7 +124,7 @@ struct StringsGenerator: Generator {
       var areCorrectFormatSpecifiers = true
 
       for (locale, entry) in keyParams {
-        if entry.params.any({ $0.spec == FormatSpecifier.TopType }) {
+        if entry.params.any({ $0.spec == FormatSpecifier.topType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -168,7 +153,7 @@ struct StringsGenerator: Generator {
       results.append(values)
     }
 
-    for badKey in badFormatSpecifiersKeys.sort() {
+    for badKey in badFormatSpecifiersKeys.sorted() {
       let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
       if let params = fewParams.first {
@@ -180,7 +165,7 @@ struct StringsGenerator: Generator {
     return results
   }
 
-  private static func stringLet(values: StringValues) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -195,31 +180,33 @@ struct StringsGenerator: Generator {
 
     return Let(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
-      name: values.key,
-      typeDefinition: .Inferred(Type.StringResource),
-      value: "StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", locales: [\(locales)], comment: \(escapedComment))"
+      name: SwiftIdentifier(name: values.key),
+      typeDefinition: .inferred(Type.StringResource),
+      value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: \(escapedComment))"
     )
   }
 
-  private static func stringFunction(values: StringValues) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(values)
+      return stringFunctionNoParams(for: values, at: externalAccessLevel)
     }
     else {
-      return stringFunctionParams(values)
+      return stringFunctionParams(for: values, at: externalAccessLevel)
     }
   }
 
-  private static func stringFunctionNoParams(values: StringValues) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "_", type: Type._Void)
+        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
       ],
       doesThrow: false,
       returnType: Type._String,
@@ -227,48 +214,40 @@ struct StringsGenerator: Generator {
     )
   }
 
-  private static func stringFunctionParams(values: StringValues) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
-    let params = values.params.enumerate().map { ix, param -> Function.Parameter in
+    let params = values.params.enumerated().map { ix, param -> Function.Parameter in
+      let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
 
-      if let paramName = param.name {
-        return Function.Parameter(name: paramName, localName: valueName, type: param.spec.type)
-      }
-      else {
-        if ix == 0 {
-          return Function.Parameter(name: valueName, type: param.spec.type)
-        }
-        else {
-          return Function.Parameter(name: "_", localName: valueName, type: param.spec.type)
-        }
-      }
+      return Function.Parameter(name: argumentLabel, localName: valueName, type: param.spec.type)
     }
 
     let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
 
     return Function(
       comments: values.comments,
+      accessModifier: externalAccessLevel,
       isStatic: true,
-      name: values.key,
+      name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: _R.applicationLocale, \(args))"
+      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))"
     )
   }
 
 }
 
 extension Locale {
-  func withFilename(filename: String) -> String {
+  func withFilename(_ filename: String) -> String {
     switch self {
-    case .None:
+    case .none:
       return "'\(filename)'"
-    case .Base:
+    case .base:
       return "'\(filename)' (Base)"
-    case .Language(let language):
+    case .language(let language):
       return "'\(filename)' (\(language))"
     }
   }
@@ -285,10 +264,10 @@ private struct StringValues {
     let escapedKey = key.escapedStringLiteral
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: R.hostingBundle, comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: R.hostingBundle, comment: \"\")"
     }
   }
 
@@ -330,14 +309,14 @@ private struct StringValues {
       if !results.isEmpty {
         results.append("")
       }
-      
-      let lines = baseEntryComment.componentsSeparatedByString("\n")
+
+      let lines = baseEntryComment.components(separatedBy: "\n")
       if lines.count == 1 {
         results.append("Comment: \(lines[0])")
       } else {
         results.append("Comment:")
         let indented = lines.map { "  \($0)" }
-        results.appendContentsOf(indented)
+        results.append(contentsOf: indented)
       }
     }
 

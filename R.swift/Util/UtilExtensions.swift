@@ -19,14 +19,14 @@ extension Array {
 
 // MARK: Sequence operations
 
-extension SequenceType where Generator.Element : CustomStringConvertible {
-  func joinWithSeparator(separator: String) -> String {
-    return map { $0.description }.joinWithSeparator(separator)
+extension Sequence where Iterator.Element : CustomStringConvertible {
+  func joinWithSeparator(_ separator: String) -> String {
+    return map { $0.description }.joined(separator: separator)
   }
 }
 
-extension SequenceType where Generator.Element : SequenceType {
-  func flatten() -> [Generator.Element.Generator.Element] {
+extension Sequence where Iterator.Element : Sequence {
+  func flatten() -> [Iterator.Element.Iterator.Element] {
     return flatMap { $0 }
   }
 }
@@ -35,43 +35,44 @@ extension SequenceType where Generator.Element : SequenceType {
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if self.characters.count <= 1 { return self.lowercaseString }
-    let index = startIndex.advancedBy(1)
-    return substringToIndex(index).lowercaseString + substringFromIndex(index)
+    if self.characters.count <= 1 { return self.lowercased() }
+    let index = characters.index(startIndex, offsetBy: 1)
+    return substring(to: index).lowercased() + substring(from: index)
   }
 
   var uppercaseFirstCharacter: String {
-    if self.characters.count <= 1 { return self.uppercaseString }
-    let index = startIndex.advancedBy(1)
-    return substringToIndex(index).uppercaseString + substringFromIndex(index)
+    if self.characters.count <= 1 { return self.uppercased() }
+    let index = characters.index(startIndex, offsetBy: 1)
+    return substring(to: index).uppercased() + substring(from: index)
   }
 
-  func indentWithString(indentation: String) -> String {
-    let components = componentsSeparatedByString("\n")
-    return indentation + components.joinWithSeparator("\n\(indentation)")
+  func indentWithString(_ indentation: String) -> String {
+    let components = self.components(separatedBy: "\n")
+    return indentation + components.joined(separator: "\n\(indentation)")
   }
 
   var escapedStringLiteral: String {
     return self
-      .stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
-      .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
-      .stringByReplacingOccurrencesOfString("\t", withString: "\\t")
-      .stringByReplacingOccurrencesOfString("\r", withString: "\\r")
-      .stringByReplacingOccurrencesOfString("\n", withString: "\\n")
+      .replacingOccurrences(of: "\\", with: "\\\\")
+      .replacingOccurrences(of: "\"", with: "\\\"")
+      .replacingOccurrences(of: "\t", with: "\\t")
+      .replacingOccurrences(of: "\r", with: "\\r")
+      .replacingOccurrences(of: "\n", with: "\\n")
   }
 
   var commentString: String {
     return self
-      .stringByReplacingOccurrencesOfString("\r\n", withString: " ")
-      .stringByReplacingOccurrencesOfString("\r", withString: " ")
-      .stringByReplacingOccurrencesOfString("\n", withString: " ")
+      .replacingOccurrences(of: "\r\n", with: " ")
+      .replacingOccurrences(of: "\r", with: " ")
+      .replacingOccurrences(of: "\n", with: " ")
   }
 }
 
 // MARK: NSURL operations 
 
-extension NSURL {
+extension URL {
   var filename: String? {
-    return URLByDeletingPathExtension?.lastPathComponent
+    let filename = deletingPathExtension().lastPathComponent
+    return filename.characters.count == 0 ? nil : filename
   }
 }

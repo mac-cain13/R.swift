@@ -16,14 +16,14 @@ class ResourceAppTests_tvOS: XCTestCase {
   ]
 
   func testWarningsAreLogged() {
-    guard let logURL = NSBundle(forClass: ResourceAppTests_tvOS.self).URLForResource("rswift-tv", withExtension: "log") else {
+    guard let logURL = Bundle(for: ResourceAppTests_tvOS.self).url(forResource: "rswift-tv", withExtension: "log") else {
       XCTFail("File rswift.log not found")
       return
     }
 
     do {
-      let logContent = try String(contentsOfURL: logURL)
-      let logLines = logContent.componentsSeparatedByString("\n")
+      let logContent = try String(contentsOf: logURL)
+      let logLines = logContent.components(separatedBy: "\n")
 
       for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")

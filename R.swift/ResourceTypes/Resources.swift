@@ -3,14 +3,15 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 08-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-enum ResourceParsingError: ErrorType {
-  case UnsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
-  case ParsingFailed(String)
+enum ResourceParsingError: Error {
+  case unsupportedExtension(givenExtension: String?, supportedExtensions: Set<String>)
+  case parsingFailed(String)
 }
 
 struct Resources {
@@ -25,7 +26,7 @@ struct Resources {
     
   let reusables: [Reusable]
 
-  init(resourceURLs: [NSURL], fileManager: NSFileManager) {
+  init(resourceURLs: [URL], fileManager: FileManager) {
     assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
     images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
     colors = resourceURLs.flatMap { url in tryResourceParsing { try ColorPalette(url: url) } }
@@ -39,13 +40,13 @@ struct Resources {
   }
 }
 
-private func tryResourceParsing<T>(parse: () throws -> T) -> T? {
+private func tryResourceParsing<T>(_ parse: () throws -> T) -> T? {
   do {
     return try parse()
-  } catch let ResourceParsingError.ParsingFailed(humanReadableError) {
+  } catch let ResourceParsingError.parsingFailed(humanReadableError) {
     warn(humanReadableError)
     return nil
-  } catch ResourceParsingError.UnsupportedExtension {
+  } catch ResourceParsingError.unsupportedExtension {
     return nil
   } catch {
     return nil

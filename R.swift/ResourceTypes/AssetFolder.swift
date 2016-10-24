@@ -3,7 +3,8 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
-//  Copyright © 2015 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
@@ -19,23 +20,25 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
   let name: String
   let imageAssets: [String]
 
-  init(url: NSURL, fileManager: NSFileManager) throws {
+  init(url: URL, fileManager: FileManager) throws {
     try AssetFolder.throwIfUnsupportedExtension(url.pathExtension)
 
-    name = url.filename!
+    guard let filename = url.filename else {
+      throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
+    }
+    name = filename
 
     // Browse asset directory recursively and list only the assets folders
-    var assets = [NSURL]()
-    let enumerator = fileManager.enumeratorAtURL(url, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles, errorHandler: nil)
+    var assets = [URL]()
+    let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
-      for case let fileURL as NSURL in enumerator {
-        if let pathExtension = fileURL.pathExtension {
-          if AssetFolder.AssetExtensions.contains(pathExtension) {
-            assets.append(fileURL)
-          }
-          if AssetFolder.IgnoredExtensions.contains(pathExtension) {
-            enumerator.skipDescendants()
-          }
+      for case let fileURL as URL in enumerator {
+        let pathExtension = fileURL.pathExtension
+        if AssetFolder.AssetExtensions.contains(pathExtension) {
+          assets.append(fileURL)
+        }
+        if AssetFolder.IgnoredExtensions.contains(pathExtension) {
+          enumerator.skipDescendants()
         }
       }
     }

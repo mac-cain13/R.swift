@@ -3,19 +3,14 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 14-01-16.
-//  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
 struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
-  enum Style {
-    case FullyQualified
-    case WithoutModule
-  }
-
   let type: Type
-  let style: Style
 
   var usedTypes: [UsedType] {
     return type.usedTypes
@@ -32,22 +27,15 @@ struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
       withoutModule = "\(type.name)\(optionalString)"
     }
 
-    switch (style, type.module) {
-    case (.FullyQualified, let .Custom(moduleName)):
+    if case let .custom(name: moduleName) = type.module {
       return "\(moduleName).\(withoutModule)"
-    case (.FullyQualified, _), (.WithoutModule, _):
+    } else {
       return withoutModule
     }
   }
 
   init(type: Type) {
     self.type = type
-    self.style = .WithoutModule
-  }
-
-  init(type: Type, style: Style) {
-    self.type = type
-    self.style = style
   }
 }
 
