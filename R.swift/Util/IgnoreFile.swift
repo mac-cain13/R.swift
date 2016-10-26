@@ -21,6 +21,8 @@ class IgnoreFile {
       .components(separatedBy: CharacterSet.newlines)
       .filter(IgnoreFile.isPattern)
       .flatMap { IgnoreFile.listFilePaths(pattern: parentDirString + $0) }
+      .map { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) }
+      .flatMap { $0 }
       .map { NSURL.init(string: $0) }
       .flatMap { $0 }
   }
