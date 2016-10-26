@@ -177,7 +177,6 @@
 		E2762AC61CCCEC2A0009BCAA /* Locale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locale.swift; sourceTree = "<group>"; };
 		E2762ACE1CCD0B970009BCAA /* LocalizableStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		E2A918741CD4B61200394F6F /* Unifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Unifiable.swift; sourceTree = "<group>"; };
-		FAF521711DBD9716009B221A /* rswift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "rswift-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,7 +274,6 @@
 		D5EA0DEB1A3DF45600FFEBC4 = {
 			isa = PBXGroup;
 			children = (
-				FAF521711DBD9716009B221A /* rswift-Bridging-Header.h */,
 				D5EA0DF61A3DF45600FFEBC4 /* R.swift */,
 				D57946691B9347A70044D2FC /* Xcode.swift */,
 				D5C5A8ED1BB7193B00163E71 /* OptionKit */,
