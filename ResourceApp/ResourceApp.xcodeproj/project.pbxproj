@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3406F9611DC14EF300351D0E /* rswift.ignore in Resources */ = {isa = PBXBuildFile; fileRef = 3406F9601DC14EF300351D0E /* rswift.ignore */; };
+		3406F9621DC14EF300351D0E /* rswift.ignore in Resources */ = {isa = PBXBuildFile; fileRef = 3406F9601DC14EF300351D0E /* rswift.ignore */; };
 		4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
@@ -105,6 +107,7 @@
 /* Begin PBXFileReference section */
 		275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		3406F9601DC14EF300351D0E /* rswift.ignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.ignore; sourceTree = "<group>"; };
 		5806108C4C9AA942D017FD38 /* Pods-ResourceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D1AFAB01C858637003FE7AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB21C858647003FE7AB /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -290,6 +293,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				3406F9601DC14EF300351D0E /* rswift.ignore */,
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
@@ -654,6 +658,7 @@
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 				D52725FC1C4A7C6A0005C8D4 /* Sky.tiff in Resources */,
+				3406F9611DC14EF300351D0E /* rswift.ignore in Resources */,
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
 				D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */,
 				E2156B6E1CC42B6700F341DC /* @@.strings in Resources */,
@@ -666,6 +671,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3406F9621DC14EF300351D0E /* rswift.ignore in Resources */,
 				D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */,
 				D58AF2811B708CB300FB2A4E /* rswift.log in Resources */,
 			);
@@ -778,7 +784,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" --rswiftignore \"rswift.ignore\" > \"$SRCROOT/rswift.log\"";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
