@@ -10,7 +10,7 @@ import XCTest
 
 class GlobTests : XCTestCase {
   
-  let tmpFiles = ["foo", "bar", "baz", "dir1/file1.ext", "dir1/dir2/dir3/file2.ext"]
+  let tmpFiles = ["foo", "bar", "baz", "dir1/file1.ext", "dir1/dir2/dir3/file2.ext", "dir1/file1.extfoo"]
   var tmpDir = ""
   
   override func setUp() {
@@ -109,7 +109,7 @@ class GlobTests : XCTestCase {
     // Should be the equivalent of "ls -d -1 /(tmpdir)/**/*"
     let pattern = "\(tmpDir)/**/*"
     let glob = Glob(pattern: pattern, behavior: GlobBehaviorBashV3)
-    XCTAssertEqual(glob.paths, ["\(tmpDir)/dir1/dir2/", "\(tmpDir)/dir1/file1.ext"])
+    XCTAssertEqual(glob.paths, ["\(tmpDir)/dir1/dir2/", "\(tmpDir)/dir1/file1.ext", "\(tmpDir)/dir1/file1.extfoo"])
   }
   
   func testDoubleGlobstarBashV3() {
@@ -133,6 +133,7 @@ class GlobTests : XCTestCase {
       "\(tmpDir)/dir1/dir2/dir3/",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
       "\(tmpDir)/dir1/file1.ext",
+      "\(tmpDir)/dir1/file1.extfoo",
       "\(tmpDir)/foo"
       ])
   }
@@ -161,6 +162,7 @@ class GlobTests : XCTestCase {
       "\(tmpDir)/dir1/dir2/dir3/",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
       "\(tmpDir)/dir1/file1.ext",
+      "\(tmpDir)/dir1/file1.extfoo",
       "\(tmpDir)/foo",
       ])
   }
@@ -171,6 +173,17 @@ class GlobTests : XCTestCase {
     XCTAssertEqual(glob.paths, [
       "\(tmpDir)/dir1/dir2/dir3/",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
+      ])
+  }
+  
+  func testDoubleGlobstarBashV4WithFileExtension() {
+    // Should be the equivalent of "ls -d -1 /(tmpdir)/**/*.ext"
+    // Should not find "\(tmpDir)/dir1/file1.extfoo" which the file extension prefix is .ext
+    let pattern = "\(tmpDir)/**/*.ext"
+    let glob = Glob(pattern: pattern, behavior: GlobBehaviorBashV4)
+    XCTAssertEqual(glob.paths, [
+      "\(tmpDir)/dir1/dir2/dir3/file2.ext",
+      "\(tmpDir)/dir1/file1.ext"
       ])
   }
   
@@ -190,6 +203,7 @@ class GlobTests : XCTestCase {
       "\(tmpDir)/baz",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
       "\(tmpDir)/dir1/file1.ext",
+      "\(tmpDir)/dir1/file1.extfoo",
       "\(tmpDir)/foo",
       ])
   }
@@ -208,6 +222,7 @@ class GlobTests : XCTestCase {
       "\(tmpDir)/baz",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
       "\(tmpDir)/dir1/file1.ext",
+      "\(tmpDir)/dir1/file1.extfoo",
       "\(tmpDir)/foo",
       ])
   }
@@ -226,6 +241,7 @@ class GlobTests : XCTestCase {
       "\(tmpDir)/baz",
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
       "\(tmpDir)/dir1/file1.ext",
+      "\(tmpDir)/dir1/file1.extfoo",
       "\(tmpDir)/foo",
       ])
   }
