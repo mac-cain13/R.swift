@@ -31,7 +31,7 @@ class IgnoreFile {
     if potentialPattern.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return false }
 
     // Check for commented line
-    if potentialPattern.characters.first == "#" { return false }
+    if potentialPattern.trimmingCharacters(in: .whitespacesAndNewlines).characters.first == "#" { return false }
 
     return true
   }

@@ -1,0 +1,7 @@
+# Filtering single file
+ResourceApp/Images/Sky.tiff
+
+ # Corrupt line
+
+# Ignore all files containing '.ignoreme.'
+**/*.ignoreme.*

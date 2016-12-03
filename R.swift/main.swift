@@ -21,15 +21,17 @@ do {
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
 
   let ignoreFile : IgnoreFile
-  if let rswiftignoreURL = callInformation.rswiftignoreURL {
-    ignoreFile = try IgnoreFile(ignoreFileURL: rswiftignoreURL)
-  } else {
+  do {
+    ignoreFile = try IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)
+  } catch {
     ignoreFile = IgnoreFile()
   }
 
-  let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+  let resourceURLsRaw = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
     .flatMap { $0 }
+
+    let resourceURLs = resourceURLsRaw
     .filter { !ignoreFile.matches(url: $0) }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)

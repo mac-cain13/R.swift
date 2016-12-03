@@ -58,7 +58,7 @@ private let accessLevelOption = Option(
   helpDescription: "The access level [public|internal] to use for the generated R-file, will default to `internal`."
 )
 
-private let rswiftignore = Option(
+private let rswiftIgnoreOption = Option(
   trigger: .long("rswiftignore"),
   numberOfParameters: 1,
   helpDescription: "Path to pattern file that describes files that should be ignored."
@@ -109,7 +109,7 @@ private let AllOptions = [
   versionOption,
   edgeOption,
   accessLevelOption,
-  rswiftignore,
+  rswiftIgnoreOption,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -122,8 +122,8 @@ private let AllOptions = [
 
 struct CallInformation {
   let outputURL: URL
-  let rswiftignoreURL: URL?
-
+  let rswiftIgnoreURL: URL
+  
   let edge: Bool
   let accessLevel: AccessLevel
 
@@ -195,13 +195,6 @@ struct CallInformation {
       bundleIdentifier = try getFirstArgumentForOption(bundleIdentifierOption, environment["PRODUCT_BUNDLE_IDENTIFIER"])
 
       productModuleName = try getFirstArgumentForOption(productModuleNameOption, environment["PRODUCT_MODULE_NAME"])
-      
-      do {
-        let rswiftignorePath = try getFirstArgumentForOption(rswiftignore, nil)
-        rswiftignoreURL = URL(fileURLWithPath: rswiftignorePath)
-      } catch {
-        rswiftignoreURL = nil
-      }
 
       let buildProductsDirPath = try getFirstArgumentForOption(buildProductsDirOption, environment["BUILT_PRODUCTS_DIR"])
       buildProductsDirURL = URL(fileURLWithPath: buildProductsDirPath)
@@ -214,6 +207,9 @@ struct CallInformation {
 
       let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, environment["SDKROOT"])
       sdkRootURL = URL(fileURLWithPath: sdkRootPath)
+
+      let relativeIgnorePath = try getFirstArgumentForOption(rswiftIgnoreOption, ".rswiftignore")
+      rswiftIgnoreURL = sourceRootURL.appendingPathComponent(relativeIgnorePath, isDirectory: false)
     } catch let OptionKitError.invalidOption(invalidOption) {
       throw InputParsingError.illegalOption(
         error: "The option '\(invalidOption)' is invalid.",

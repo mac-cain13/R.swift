@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3406F9611DC14EF300351D0E /* rswift.ignore in Resources */ = {isa = PBXBuildFile; fileRef = 3406F9601DC14EF300351D0E /* rswift.ignore */; };
-		3406F9621DC14EF300351D0E /* rswift.ignore in Resources */ = {isa = PBXBuildFile; fileRef = 3406F9601DC14EF300351D0E /* rswift.ignore */; };
 		4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
@@ -33,6 +31,8 @@
 		D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76F1C42A5E700623437 /* StoryboardTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
+		D59A04641DF3223800B9F65F /* icon.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = D59A04631DF3223800B9F65F /* icon.ignoreme.png */; };
+		D59A04661DF3225500B9F65F /* hand.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = D59A04651DF3225500B9F65F /* hand.ignoreme.png */; };
 		D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C901B78FC0500A8B96C /* duplicate.xib */; };
 		D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */; };
 		D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */; };
@@ -107,7 +107,6 @@
 /* Begin PBXFileReference section */
 		275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
-		3406F9601DC14EF300351D0E /* rswift.ignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.ignore; sourceTree = "<group>"; };
 		5806108C4C9AA942D017FD38 /* Pods-ResourceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D1AFAB01C858637003FE7AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB21C858647003FE7AB /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -141,6 +140,8 @@
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
 		D56DC76F1C42A5E700623437 /* StoryboardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
+		D59A04631DF3223800B9F65F /* icon.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.ignoreme.png; sourceTree = "<group>"; };
+		D59A04651DF3225500B9F65F /* hand.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hand.ignoreme.png; sourceTree = "<group>"; };
 		D5AD5C901B78FC0500A8B96C /* duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = duplicate.xib; path = Duplicate/duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Duplicate.xib; sourceTree = "<group>"; };
 		D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = duplicate.storyboard; path = Duplicate/duplicate.storyboard; sourceTree = "<group>"; };
@@ -277,6 +278,7 @@
 		D51E60BF1BB13612004BB376 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				D59A04631DF3223800B9F65F /* icon.ignoreme.png */,
 				D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */,
 				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
 				D51E60C01BB13626004BB376 /* Colors.jpg */,
@@ -293,7 +295,6 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
-				3406F9601DC14EF300351D0E /* rswift.ignore */,
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
@@ -322,6 +323,7 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
+				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				E2CD68611D7CAC9200BEBE59 /* Localized */,
 				E2F268AF1C92BFE00093995D /* Colors */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
@@ -653,12 +655,13 @@
 				D5F05D421BB52002003AE55E /* Some.json in Resources */,
 				E2156B631CC4042900F341DC /* Settings.strings in Resources */,
 				D5F05D441BB52063003AE55E /* Duplicate.json in Resources */,
+				D59A04641DF3223800B9F65F /* icon.ignoreme.png in Resources */,
 				D5159EA21BBD0BB40013F52A /* Colors~ipad@2x.jpg in Resources */,
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
+				D59A04661DF3225500B9F65F /* hand.ignoreme.png in Resources */,
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
 				D52725FC1C4A7C6A0005C8D4 /* Sky.tiff in Resources */,
-				3406F9611DC14EF300351D0E /* rswift.ignore in Resources */,
 				D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */,
 				D51E60C61BB1E600004BB376 /* User@white@2x.png in Resources */,
 				E2156B6E1CC42B6700F341DC /* @@.strings in Resources */,
@@ -671,7 +674,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3406F9621DC14EF300351D0E /* rswift.ignore in Resources */,
 				D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */,
 				D58AF2811B708CB300FB2A4E /* rswift.log in Resources */,
 			);
@@ -784,7 +786,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" --rswiftignore \"rswift.ignore\" > \"$SRCROOT/rswift.log\"";
+			shellScript = "\"$SRCROOT/rswift\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
