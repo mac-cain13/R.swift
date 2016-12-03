@@ -568,11 +568,11 @@
 				TargetAttributes = {
 					D55C6CB71B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0810;
 					};
 					D55C6CCE1B5D757300301B0D = {
 						CreatedOnToolsVersion = 6.4;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0810;
 						TestTargetID = D55C6CB71B5D757300301B0D;
 					};
 					DEF559961CA4873D009B8C51 = {
@@ -1058,6 +1058,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1073,6 +1074,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1091,6 +1093,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp.app/ResourceApp";
 			};
 			name = Debug;
@@ -1107,6 +1110,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.mathijskadijk.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp.app/ResourceApp";
 			};
 			name = Release;
