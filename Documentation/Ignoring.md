@@ -11,7 +11,7 @@ _Note:_ All patterns are file paths relative to the path of the `.rswiftignore` 
 ### Example
 
 ```
-# Ignore a spefic font gile
+# Ignore a specific font file
 fonts/myspecialfont.ttf
 
 # Ignore all tiff and tif files in the images folder
