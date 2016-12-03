@@ -10,6 +10,7 @@
 import Foundation
 
 struct Typealias: UsedTypesProvider, CustomStringConvertible {
+  let accessModifier: AccessLevel
   let alias: String
   let type: Type?
 
@@ -18,8 +19,9 @@ struct Typealias: UsedTypesProvider, CustomStringConvertible {
   }
 
   var description: String {
+    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
     let typeString = type.map { " = \($0)" } ?? ""
 
-    return "typealias \(alias)\(typeString)"
+    return "\(accessModifierString)typealias \(alias)\(typeString)"
   }
 }

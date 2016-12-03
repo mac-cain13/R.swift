@@ -91,7 +91,7 @@ struct StoryboardStructGenerator: StructGenerator {
     // Initial view controller
     if let initialViewController = storyboard.initialViewController {
       implements.append(TypePrinter(type: Type.StoryboardResourceWithInitialControllerType))
-      typealiasses.append(Typealias(alias: "InitialController", type: initialViewController.type))
+      typealiasses.append(Typealias(accessModifier: externalAccessLevel, alias: "InitialController", type: initialViewController.type))
     } else {
       implements.append(TypePrinter(type: Type.StoryboardResourceType))
     }

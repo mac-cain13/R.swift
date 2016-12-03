@@ -163,7 +163,7 @@ struct NibStructGenerator: StructGenerator {
         typeDefinition: .inferred(Type._String),
         value: "\"\(reusable.identifier)\""
         )]
-      reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
+      reuseTypealiasses = [Typealias(accessModifier: externalAccessLevel, alias: "ReusableType", type: reusable.type)]
       reuseProtocols = [Type.ReuseIdentifierType]
     } else {
       reuseIdentifierProperties = []
