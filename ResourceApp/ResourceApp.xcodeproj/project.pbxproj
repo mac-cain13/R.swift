@@ -323,7 +323,6 @@
 		D55C6CBA1B5D757300301B0D /* ResourceApp */ = {
 			isa = PBXGroup;
 			children = (
-				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				E2CD68611D7CAC9200BEBE59 /* Localized */,
 				E2F268AF1C92BFE00093995D /* Colors */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
@@ -355,6 +354,7 @@
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
+				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 			);
 			path = ResourceApp;
 			sourceTree = "<group>";

@@ -19,19 +19,11 @@ do {
   isEdgeEnabled = callInformation.edge
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+  let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-  let ignoreFile : IgnoreFile
-  do {
-    ignoreFile = try IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)
-  } catch {
-    ignoreFile = IgnoreFile()
-  }
-
-  let resourceURLsRaw = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+  let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
     .flatMap { $0 }
-
-    let resourceURLs = resourceURLsRaw
     .filter { !ignoreFile.matches(url: $0) }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
