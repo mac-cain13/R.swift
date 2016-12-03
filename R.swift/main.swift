@@ -30,7 +30,7 @@ do {
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
     .flatMap { $0 }
-    .filter { !ignoreFile.match(url: $0 as NSURL) }
+    .filter { !ignoreFile.matches(url: $0) }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 

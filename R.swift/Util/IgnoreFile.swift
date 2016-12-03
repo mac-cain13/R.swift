@@ -9,27 +9,26 @@
 import Foundation
 
 class IgnoreFile {
-  private let patterns: [NSURL]
+  private let ignoredURLs: [URL]
 
   init() {
-    patterns = []
+    ignoredURLs = []
   }
 
   init(ignoreFileURL: URL) throws {
-    let parentDirString = ignoreFileURL.deletingLastPathComponent().path + "/"
-    patterns = try String(contentsOf: ignoreFileURL)
-      .components(separatedBy: CharacterSet.newlines)
+    let workingDirectory = ignoreFileURL.deletingLastPathComponent()
+
+    ignoredURLs = try String(contentsOf: ignoreFileURL)
+      .components(separatedBy: .newlines)
       .filter(IgnoreFile.isPattern)
-      .flatMap { IgnoreFile.listFilePaths(pattern: parentDirString + $0) }
-      .map { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) }
-      .flatMap { $0 }
-      .map { NSURL.init(string: $0) }
-      .flatMap { $0 }
+      .map { workingDirectory.path + "/" + $0 } // This is a glob pattern, so we don't use URL here
+      .flatMap(IgnoreFile.listFilePaths)
+      .map { URL(fileURLWithPath: $0).standardizedFileURL }
   }
 
   static private func isPattern(potentialPattern: String) -> Bool {
     // Check for empty line
-    if potentialPattern.characters.count == 0 { return false }
+    if potentialPattern.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return false }
 
     // Check for commented line
     if potentialPattern.characters.first == "#" { return false }
@@ -38,11 +37,14 @@ class IgnoreFile {
   }
 
   static private func listFilePaths(pattern: String) -> [String] {
-    if (pattern.isEmpty) { return [] }
-    return Glob.init(pattern: pattern).paths
+    guard !pattern.isEmpty else {
+      return []
+    }
+
+    return Glob(pattern: pattern).paths
   }
   
-  func match(url: NSURL) -> Bool {
-    return patterns.any { url.path == $0.path }
+  func matches(url: URL) -> Bool {
+    return ignoredURLs.contains(url)
   }
 }
