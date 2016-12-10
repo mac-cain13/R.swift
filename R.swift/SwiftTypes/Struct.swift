@@ -18,6 +18,7 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
   var properties: [Let]
   var functions: [Function]
   var structs: [Struct]
+  var classes: [Class]
 
   var usedTypes: [UsedType] {
     return [
@@ -28,17 +29,6 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
         functions.flatMap(getUsedTypes),
         structs.flatMap(getUsedTypes),
       ].flatten()
-  }
-
-  init(comments: [String], accessModifier: AccessLevel, type: Type, implements: [TypePrinter], typealiasses: [Typealias], properties: [Let], functions: [Function], structs: [Struct]) {
-    self.comments = comments
-    self.accessModifier = accessModifier
-    self.type = type
-    self.implements = implements
-    self.typealiasses = typealiasses
-    self.properties = properties
-    self.functions = functions
-    self.structs = structs
   }
 
   var swiftCode: String {
@@ -65,11 +55,15 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
       .sorted()
       .joined(separator: "\n\n")
 
+    let classesString = classes
+      .map { $0.swiftCode }
+      .sorted()
+      .joined(separator: "\n\n")
 
     // File private `init`, so that struct can't be initialized from the outside world
     let fileprivateInit = "fileprivate init() {}"
 
-    let bodyComponents = [typealiasString, varsString, functionsString, structsString, fileprivateInit].filter { $0 != "" }
+    let bodyComponents = [typealiasString, varsString, functionsString, structsString, classesString, fileprivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joined(separator: "\n\n").indentWithString(IndentationString)
 
     return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"

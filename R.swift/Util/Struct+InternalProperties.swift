@@ -18,7 +18,7 @@ extension Struct {
         isStatic: true,
         name: "hostingBundle",
         typeDefinition: .inferred(Type._Bundle),
-        value: "Bundle(identifier: \"\(bundleIdentifier)\") ?? Bundle.main"),
+        value: "Bundle(for: R.Class.self)"),
       Let(
         comments: [],
         accessModifier: .FilePrivate,
@@ -28,8 +28,13 @@ extension Struct {
         value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
     ]
 
+    let internalClasses = [
+      Class(accessModifier: .FilePrivate, type: Type(module: .host, name: "Class"))
+    ]
+
     var externalStruct = self
     externalStruct.properties.append(contentsOf: internalProperties)
+    externalStruct.classes.append(contentsOf: internalClasses)
 
     return externalStruct
   }

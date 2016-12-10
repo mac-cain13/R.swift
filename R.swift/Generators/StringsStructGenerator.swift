@@ -30,7 +30,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) }
+      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) },
+      classes: []
     )
   }
 
@@ -47,7 +48,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
       functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 

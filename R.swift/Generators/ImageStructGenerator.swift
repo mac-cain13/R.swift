@@ -53,7 +53,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: imageLets,
       functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 

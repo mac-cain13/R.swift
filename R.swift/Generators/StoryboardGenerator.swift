@@ -59,7 +59,8 @@ struct StoryboardStructGenerator: StructGenerator {
         typealiasses: [],
         properties: storyboardTypes.map { $0.1 },
         functions: storyboardTypes.map { $0.2 },
-        structs: []
+        structs: [],
+        classes: []
       )
 
     let internalStruct = Struct(
@@ -70,7 +71,8 @@ struct StoryboardStructGenerator: StructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: storyboardTypes.map { $0.0 }
+      structs: storyboardTypes.map { $0.0 },
+      classes: []
     )
 
     return (
@@ -181,7 +183,8 @@ struct StoryboardStructGenerator: StructGenerator {
       typealiasses: typealiasses,
       properties: properties,
       functions: functions,
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 }

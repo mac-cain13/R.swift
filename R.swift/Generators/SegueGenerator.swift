@@ -69,7 +69,8 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: structs
+      structs: structs,
+      classes: []
     )
   }
 
@@ -150,7 +151,8 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: properties,
       functions: functions,
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 }

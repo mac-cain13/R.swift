@@ -37,7 +37,8 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: reuseIdentifierProperties,
       functions: [],
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 

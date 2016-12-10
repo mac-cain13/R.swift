@@ -33,7 +33,8 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       functions: firstLocales.flatMap { functionsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 
