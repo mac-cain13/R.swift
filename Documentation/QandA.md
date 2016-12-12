@@ -27,6 +27,12 @@ The reason this happens is because of the availability of the var `R.image.setti
 
 If you get errors like `Use of undeclared type 'SomeType'` in the `R.generated.swift` file most of the time this can be fixed by [explicitly stating the module in your xib or storyboard](Images/ExplicitCustomModule.png). This will make R.swift recognize that an import is necessary.
 
+## How to use classes with the same name as their module?
+
+If you get errors like `'SomeType' is not a member type of 'SomeType'` you're using a module that contains a class/struct/enum with the same name as the module itself. This is a known [Swift issue](https://bugs.swift.org/browse/SR-898).
+
+Work around this problem by [*emptying* the module field in the xib or storyboard](Images/ExplicitCustomModule.png). Then [add `--import SomeType` as a flag](Images/CustomImport.png) to the R.swift build phase to make sure R.swift imports the module in the generated file.
+
 ## Can I use R.swift in a library?
 
 Yes, just add R.swift as a buildstep in your library project and it will work just like normal. If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift.
