@@ -1,3 +1,14 @@
+## 3.2.0
+
+New features:
+- Added option to explicitly import modules (fixes #277)
+- Support for an ignore file to skip resources (thanks @shiraji / fixes #276)
+- Add edge flag to enable new stable feature that are breaking changes
+- New nicer casing of identifiers (is behind the edge flag)
+
+Bugfix:
+- Load hosting bundle by class instead of identifier (fixes #293)
+
 ## 3.1.0
 
 New features:

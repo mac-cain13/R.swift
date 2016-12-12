@@ -9,4 +9,4 @@
 
 import Foundation
 
-let version = "3.1.0"
+let version = "3.2.0"
