@@ -52,6 +52,12 @@ private let edgeOption = Option(
   helpDescription: "Enable stable features that will be in the next major release."
 )
 
+private let importOption = Option(
+  trigger: .long("import"),
+  numberOfParameters: 1,
+  helpDescription: "Add extra modules as import in the generated file, comma seperated."
+)
+
 private let accessLevelOption = Option(
   trigger: .long("accessLevel"),
   numberOfParameters: 1,
@@ -108,6 +114,7 @@ private let sdkRootOption = Option(
 private let AllOptions = [
   versionOption,
   edgeOption,
+  importOption,
   accessLevelOption,
   rswiftIgnoreOption,
   xcodeprojOption,
@@ -126,6 +133,7 @@ struct CallInformation {
   
   let edge: Bool
   let accessLevel: AccessLevel
+  let imports: Set<Module>
 
   let xcodeprojURL: URL
   let targetName: String
@@ -186,6 +194,14 @@ struct CallInformation {
         )
       }
       accessLevel = parsedAccessLevel
+
+      imports = Set(
+        try getFirstArgumentForOption(importOption, "")
+          .components(separatedBy: ",")
+          .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+          .filter { !$0.isEmpty }
+          .map(Module.custom)
+      )
 
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, environment["PROJECT_FILE_PATH"])
       xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)

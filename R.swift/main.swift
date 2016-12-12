@@ -50,7 +50,11 @@ do {
 
   let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),
-      ImportPrinter(structs: [externalStruct, internalStruct], excludedModules: [Module.custom(name: callInformation.productModuleName)]),
+      ImportPrinter(
+        modules: callInformation.imports,
+        extractFrom: [externalStruct, internalStruct],
+        exclude: [Module.custom(name: callInformation.productModuleName)]
+      ),
       externalStruct,
       internalStruct
     ]
