@@ -120,7 +120,7 @@ struct SwiftNameGroups<T> {
 
 extension Sequence {
   func groupedBySwiftIdentifier(_ identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
-    var groupedBy = groupBy { SwiftIdentifier(name: identifierSelector($0)) }
+    var groupedBy = grouped { SwiftIdentifier(name: identifierSelector($0)) }
     let empty = SwiftIdentifier(name: "")
     let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sorted()
     groupedBy[empty] = nil

@@ -23,7 +23,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       .flatMap { $0.imageAssets }
 
     let imagesNames = images
-      .groupBy { $0.name }
+      .grouped { $0.name }
       .values
       .flatMap { $0.first?.name }
 

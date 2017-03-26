@@ -1,6 +1,6 @@
-[submodule "Xcode.swift"]
-	path = Xcode.swift
-	url = https://github.com/mac-cain13/Xcode.swift.git
+[submodule "XcodeEdit"]
+	path = XcodeEdit
+	url = https://github.com/tomlokhorst/XcodeEdit.git
 [submodule "OptionKit"]
 	path = OptionKit
 	url = https://github.com/mac-cain13/OptionKit.git

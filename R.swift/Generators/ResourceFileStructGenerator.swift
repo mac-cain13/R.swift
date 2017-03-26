@@ -17,7 +17,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
-    let localized = resourceFiles.groupBy { $0.fullname }
+    let localized = resourceFiles.grouped { $0.fullname }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "resource file", result: "file")

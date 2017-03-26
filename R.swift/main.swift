@@ -22,7 +22,7 @@ do {
   let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
-    .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
+    .map { path in path.url(with: callInformation.URLForSourceTreeFolder) }
     .flatMap { $0 }
     .filter { !ignoreFile.matches(url: $0) }
 

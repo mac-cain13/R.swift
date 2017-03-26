@@ -39,7 +39,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     }
 
     let deduplicatedSeguesWithInfo = seguesWithInfo
-      .groupBy { segue, sourceType, destinationType in
+      .grouped { segue, sourceType, destinationType in
         "\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
       }
       .values
@@ -47,14 +47,14 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
 
     var structs: [Struct] = []
 
-    for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.groupBy({ $0.sourceType }) {
+    for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.grouped(by: { $0.sourceType }) {
       let groupedSeguesWithInfo = seguesBySourceType.groupedBySwiftIdentifier { $0.segue.identifier }
 
       groupedSeguesWithInfo.printWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType)'", result: "segue")
 
       let sts = groupedSeguesWithInfo
         .uniques
-        .groupBy { $0.sourceType }
+        .grouped { $0.sourceType }
         .values
         .flatMap { self.seguesWithInfoForSourceTypeToStruct($0, at: externalAccessLevel) }
 

@@ -18,7 +18,7 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
 
   func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
     let deduplicatedReusables = reusables
-      .groupBy { $0.hashValue }
+      .grouped { $0.hashValue }
       .values
       .flatMap { $0.first }
 

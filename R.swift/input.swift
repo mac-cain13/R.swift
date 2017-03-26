@@ -257,15 +257,3 @@ private func getFirstArgument(from options: [Option:[String]], helpString: Strin
         return result
     }
 }
-
-func pathResolver(with URLForSourceTreeFolder: @escaping (SourceTreeFolder) -> URL) -> (Path) -> URL? {
-    return { path in
-        switch path {
-        case let .absolute(absolutePath):
-            return URL(fileURLWithPath: absolutePath).standardizedFileURL
-        case let .relativeTo(sourceTreeFolder, relativePath):
-            let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-            return sourceTreeURL.appendingPathComponent(relativePath).standardizedFileURL
-        }
-    }
-}

@@ -17,7 +17,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
-    let localized = localizableStrings.groupBy { $0.filename }
+    let localized = localizableStrings.grouped { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
@@ -88,7 +88,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     }
 
     // Warnings about missing translations
-    for (locale, lss) in strings.groupBy({ $0.locale }) {
+    for (locale, lss) in strings.grouped(by: { $0.locale }) {
       let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
@@ -117,7 +117,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     var badFormatSpecifiersKeys = Set<String>()
 
     // Unify format specifiers
-    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sortBy({ $0.0 }) {
+    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sorted(by: { $0.0 }) {
       var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
