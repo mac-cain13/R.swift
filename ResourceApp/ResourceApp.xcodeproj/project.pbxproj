@@ -75,6 +75,7 @@
 		E2156B6C1CC4293000F341DC /* Duplicate#.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6B1CC4293000F341DC /* Duplicate#.strings */; };
 		E2156B6E1CC42B6700F341DC /* @@.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6D1CC42B6700F341DC /* @@.strings */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
+		E22A62091E8AE788009B7F9F /* Display P3.clr in Resources */ = {isa = PBXBuildFile; fileRef = E22A62081E8AE788009B7F9F /* Display P3.clr */; };
 		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
@@ -189,6 +190,7 @@
 		E2156B6B1CC4293000F341DC /* Duplicate#.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Duplicate#.strings"; sourceTree = "<group>"; };
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
+		E22A62081E8AE788009B7F9F /* Display P3.clr */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Display P3.clr"; sourceTree = "<group>"; };
 		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 		E2F268AF1C92BFE00093995D /* Colors */ = {
 			isa = PBXGroup;
 			children = (
+				E22A62081E8AE788009B7F9F /* Display P3.clr */,
 				E2F268B01C92BFE00093995D /* My R.swift colors.clr */,
 			);
 			path = Colors;
@@ -624,6 +627,7 @@
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
+				E22A62091E8AE788009B7F9F /* Display P3.clr in Resources */,
 				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
