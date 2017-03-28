@@ -202,16 +202,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D57946691B9347A70044D2FC /* Xcode.swift */ = {
+		D57946691B9347A70044D2FC /* XcodeEdit */ = {
 			isa = PBXGroup;
 			children = (
-				D579466A1B9347C20044D2FC /* XCProjectFile.swift */,
 				D5646DE11BE2016E0034F4D7 /* Extensions.swift */,
 				D5646DE21BE2016E0034F4D7 /* PBXObject.swift */,
 				D5646DE31BE2016E0034F4D7 /* Serialization.swift */,
+				D579466A1B9347C20044D2FC /* XCProjectFile.swift */,
 			);
-			name = Xcode.swift;
-			path = Xcode.swift/Xcode/Xcode;
+			name = XcodeEdit;
+			path = XcodeEdit/Sources;
 			sourceTree = "<group>";
 		};
 		D5A0A8281C4791E40089ED2C /* CodeGenerators */ = {
@@ -281,7 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				D5EA0DF61A3DF45600FFEBC4 /* R.swift */,
-				D57946691B9347A70044D2FC /* Xcode.swift */,
+				D57946691B9347A70044D2FC /* XcodeEdit */,
 				D5C5A8ED1BB7193B00163E71 /* OptionKit */,
 				D5C4227E1B711FDF004EA9B9 /* R.swiftTests */,
 				D5EA0DF51A3DF45600FFEBC4 /* Products */,
