@@ -28,7 +28,13 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
 
     var colors: [String: NSColor] = [:]
     for key in colorList.allKeys {
-      colors[key] = colorList.color(withKey: key)?.usingColorSpaceName(NSCalibratedRGBColorSpace)
+      guard let color = colorList.color(withKey: key) else { continue }
+      guard color.colorSpaceName == NSCalibratedRGBColorSpace else {
+        warn("Skipping color '\(key)' in '\(url.lastPathComponent)' because it is colorspace '\(color.colorSpace.description)', R.swift currently only supports colorspace RGB")
+        continue
+      }
+
+      colors[key] = color
     }
 
     self.filename = filename
