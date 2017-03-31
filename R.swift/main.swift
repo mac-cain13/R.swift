@@ -62,6 +62,7 @@ do {
   let fileContents = codeConvertibles
     .flatMap { $0?.swiftCode }
     .joined(separator: "\n\n")
+    + "\n" // Newline at end of file
 
   // Write file if we have changes
   let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: String.Encoding.utf8)
