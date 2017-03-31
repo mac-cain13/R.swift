@@ -11,3 +11,4 @@ fastlane/README.md
 fastlane/report.xml
 fastlane/settoken.sh
 rswift.xcarchive
+.build
