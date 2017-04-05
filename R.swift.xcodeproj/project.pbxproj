@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3406F9501DB64E8C00351D0E /* IgnoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */; };
+		3406F9511DB65FAB00351D0E /* IgnoreFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */; };
+		3406F9581DBEA87500351D0E /* Glob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F9571DBEA87500351D0E /* Glob.swift */; };
+		3406F9591DBEA87500351D0E /* Glob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F9571DBEA87500351D0E /* Glob.swift */; };
+		3406F95F1DC1484800351D0E /* GlobTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3406F95E1DC1484800351D0E /* GlobTests.swift */; };
 		5D45C2191CA12913000B8DC9 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
 		5D997C951C7C291900B2F376 /* StringsStructGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */; };
 		D5214C1F1DA6AA9300212FF1 /* Struct+InternalProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */; };
@@ -26,6 +31,8 @@
 		D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE11BE2016E0034F4D7 /* Extensions.swift */; };
 		D586D1C71BE20D8600F18FEC /* PBXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE21BE2016E0034F4D7 /* PBXObject.swift */; };
 		D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5646DE31BE2016E0034F4D7 /* Serialization.swift */; };
+		D58AFCE61DFC2A6400344CB7 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58AFCE51DFC2A6400344CB7 /* Class.swift */; };
+		D58AFCE71DFC2C6500344CB7 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58AFCE51DFC2A6400344CB7 /* Class.swift */; };
 		D59F72261C1963DA0089767C /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72251C1963DA0089767C /* Type.swift */; };
 		D59F72271C1963DA0089767C /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72251C1963DA0089767C /* Type.swift */; };
 		D59F72291C1963EA0089767C /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59F72281C1963EA0089767C /* Struct.swift */; };
@@ -115,6 +122,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoreFile.swift; sourceTree = "<group>"; };
+		3406F9571DBEA87500351D0E /* Glob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glob.swift; sourceTree = "<group>"; };
+		3406F95E1DC1484800351D0E /* GlobTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobTests.swift; sourceTree = "<group>"; };
 		5D997C941C7C291900B2F376 /* StringsStructGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsStructGenerator.swift; sourceTree = "<group>"; };
 		D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Struct+InternalProperties.swift"; sourceTree = "<group>"; };
 		D5646DE11BE2016E0034F4D7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -125,6 +135,7 @@
 		D578CAD51CE064E900C50B7E /* version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = version.swift; sourceTree = "<group>"; };
 		D579466A1B9347C20044D2FC /* XCProjectFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCProjectFile.swift; sourceTree = "<group>"; };
 		D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeSequenceProvider.swift; sourceTree = "<group>"; };
+		D58AFCE51DFC2A6400344CB7 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 		D59F72251C1963DA0089767C /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		D59F72281C1963EA0089767C /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		D59F722F1C19644F0089767C /* Function.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
@@ -237,10 +248,12 @@
 			isa = PBXGroup;
 			children = (
 				D5214C1E1DA6AA9300212FF1 /* Struct+InternalProperties.swift */,
+				3406F94F1DB64E8C00351D0E /* IgnoreFile.swift */,
 				D5B7997E1C1B07EB009EA901 /* ErrorOutput.swift */,
 				D5B7997C1C1B07C3009EA901 /* SwiftIdentifier.swift */,
 				D58672481C21FC9700A760EC /* TypeSequenceProvider.swift */,
 				D5EA0DFE1A3DF4E300FFEBC4 /* UtilExtensions.swift */,
+				3406F9571DBEA87500351D0E /* Glob.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -250,6 +263,7 @@
 			children = (
 				D5C422811B711FDF004EA9B9 /* Info.plist */,
 				D5F795C01BB9983900844EA2 /* MainTests.swift */,
+				3406F95E1DC1484800351D0E /* GlobTests.swift */,
 			);
 			path = R.swiftTests;
 			sourceTree = "<group>";
@@ -334,6 +348,7 @@
 				D59F72251C1963DA0089767C /* Type.swift */,
 				D59F723B1C1964B20089767C /* Typealias.swift */,
 				D56F923C1C29421600177FF7 /* TypeVar.swift */,
+				D58AFCE51DFC2A6400344CB7 /* Class.swift */,
 			);
 			path = SwiftTypes;
 			sourceTree = "<group>";
@@ -447,10 +462,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5F12D461BDACB87009A2C88 /* UtilExtensions.swift in Sources */,
+				3406F95F1DC1484800351D0E /* GlobTests.swift in Sources */,
 				D56F92411C29476700177FF7 /* TypeVar.swift in Sources */,
 				D5B799771C199755009EA901 /* StoryboardGenerator.swift in Sources */,
 				D5B799811C1B0943009EA901 /* ErrorOutput.swift in Sources */,
 				D5F12D431BDACB87009A2C88 /* StructGenerator.swift in Sources */,
+				D58AFCE71DFC2C6500344CB7 /* Class.swift in Sources */,
 				E2762AC91CCCEE120009BCAA /* Locale.swift in Sources */,
 				D5F97E4A1C1819160066D7C0 /* Storyboard.swift in Sources */,
 				5D45C2191CA12913000B8DC9 /* StringsStructGenerator.swift in Sources */,
@@ -492,9 +509,11 @@
 				D5B129B31C3BA75A00A1C5FC /* Let.swift in Sources */,
 				D5F97E491C1819160066D7C0 /* Font.swift in Sources */,
 				D5B799801C1B0943009EA901 /* SwiftIdentifier.swift in Sources */,
+				3406F9591DBEA87500351D0E /* Glob.swift in Sources */,
 				D5E890A71DA5A2550059D5ED /* AggregatedStructGenerator.swift in Sources */,
 				D5B799711C199755009EA901 /* FontStructGenerator.swift in Sources */,
 				D586D1C61BE20D8600F18FEC /* Extensions.swift in Sources */,
+				3406F9511DB65FAB00351D0E /* IgnoreFile.swift in Sources */,
 				D586D1C81BE20D8600F18FEC /* Serialization.swift in Sources */,
 				E24720CC1C96B6AB00DF291D /* ColorStructGenerator.swift in Sources */,
 				D5B799761C199755009EA901 /* SegueGenerator.swift in Sources */,
@@ -525,9 +544,11 @@
 				D5E890A51DA5A2290059D5ED /* AggregatedStructGenerator.swift in Sources */,
 				E2762AC71CCCEC2A0009BCAA /* Locale.swift in Sources */,
 				D5F97E3C1C1813A70066D7C0 /* Storyboard.swift in Sources */,
+				3406F9581DBEA87500351D0E /* Glob.swift in Sources */,
 				D59F723C1C1964B20089767C /* Typealias.swift in Sources */,
 				D5B799661C19939D009EA901 /* SegueGenerator.swift in Sources */,
 				D5DA249D1B9CB1BF00AAA43E /* StructGenerator.swift in Sources */,
+				D58AFCE61DFC2A6400344CB7 /* Class.swift in Sources */,
 				D5F97E3A1C1812AE0066D7C0 /* Font.swift in Sources */,
 				D5E890AB1DA630540059D5ED /* HeaderPrinter.swift in Sources */,
 				D5EA0DF81A3DF45600FFEBC4 /* main.swift in Sources */,
@@ -547,6 +568,7 @@
 				D5646DE41BE2016E0034F4D7 /* Extensions.swift in Sources */,
 				D5B7996A1C1993E3009EA901 /* NibStructGenerator.swift in Sources */,
 				E22D43631C9582CA00692FFF /* ColorStructGenerator.swift in Sources */,
+				3406F9501DB64E8C00351D0E /* IgnoreFile.swift in Sources */,
 				D5646DE51BE2016E0034F4D7 /* PBXObject.swift in Sources */,
 				D56DC76D1C41758800623437 /* AccessLevel.swift in Sources */,
 				D5E890A91DA6265D0059D5ED /* ImportPrinter.swift in Sources */,
@@ -576,7 +598,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.rswiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
 		};
@@ -592,7 +614,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.rswiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
 		};
@@ -638,7 +660,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
 		};
@@ -676,7 +698,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
 		};
@@ -684,7 +706,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
 		};
@@ -693,7 +715,7 @@
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
 		};

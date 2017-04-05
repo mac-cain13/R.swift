@@ -13,13 +13,14 @@ import Foundation
 struct ImportPrinter: SwiftCodeConverible {
   let swiftCode: String
 
-  init(structs: [Struct?], excludedModules: Set<Module>) {
-    let usedModules = structs
+  init(modules: Set<Module>, extractFrom structs: [Struct?], exclude excludedModules: Set<Module>) {
+    let extractedModules = structs
       .flatMap { $0 }
       .flatMap(getUsedTypes)
       .map { $0.type.module }
 
-    swiftCode = Set(usedModules)
+    swiftCode = modules
+      .union(extractedModules)
       .subtracting(excludedModules)
       .filter { $0.isCustom }
       .sortBy { $0.description }

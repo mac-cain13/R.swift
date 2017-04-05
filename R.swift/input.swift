@@ -41,9 +41,21 @@ enum InputParsingError: Error {
 }
 
 private let versionOption = Option(
-  trigger: .long( "version"),
+  trigger: .long("version"),
   numberOfParameters: 0,
   helpDescription: "Prints version information about this release."
+)
+
+private let edgeOption = Option(
+  trigger: .long("edge"),
+  numberOfParameters: 0,
+  helpDescription: "Enable stable features that will be in the next major release."
+)
+
+private let importOption = Option(
+  trigger: .long("import"),
+  numberOfParameters: 1,
+  helpDescription: "Add extra modules as import in the generated file, comma seperated."
 )
 
 private let accessLevelOption = Option(
@@ -51,6 +63,13 @@ private let accessLevelOption = Option(
   numberOfParameters: 1,
   helpDescription: "The access level [public|internal] to use for the generated R-file, will default to `internal`."
 )
+
+private let rswiftIgnoreOption = Option(
+  trigger: .long("rswiftignore"),
+  numberOfParameters: 1,
+  helpDescription: "Path to pattern file that describes files that should be ignored."
+)
+
 private let xcodeprojOption = Option(
   trigger: .mixed("p", "xcodeproj"),
   numberOfParameters: 1,
@@ -72,29 +91,32 @@ private let productModuleNameOption = Option(
   helpDescription: "Product module name the R-file is generated for, is none given R.swift will use the environment variable PRODUCT_MODULE_NAME"
 )
 private let buildProductsDirOption = Option(
-  trigger: .long("buildProductsDir"), 
-  numberOfParameters: 1, 
+  trigger: .long("buildProductsDir"),
+  numberOfParameters: 1,
   helpDescription: "Build products folder that Xcode uses during build, will default to the environment variable BUILT_PRODUCTS_DIR."
 )
 private let developerDirOption = Option(
-  trigger: .long("developerDir"), 
-  numberOfParameters: 1, 
+  trigger: .long("developerDir"),
+  numberOfParameters: 1,
   helpDescription: "Developer folder that Xcode uses during build, will default to the environment variable DEVELOPER_DIR."
 )
 private let sourceRootOption = Option(
-  trigger: .long("sourceRoot"), 
-  numberOfParameters: 1, 
+  trigger: .long("sourceRoot"),
+  numberOfParameters: 1,
   helpDescription: "Source root folder that Xcode uses during build, will default to the environment variable SOURCE_ROOT."
 )
 private let sdkRootOption = Option(
-  trigger: .long("sdkRoot"), 
-  numberOfParameters: 1, 
+  trigger: .long("sdkRoot"),
+  numberOfParameters: 1,
   helpDescription: "SDK root folder that Xcode uses during build, will default to the environment variable SDKROOT."
 )
 
 private let AllOptions = [
   versionOption,
+  edgeOption,
+  importOption,
   accessLevelOption,
+  rswiftIgnoreOption,
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
@@ -107,8 +129,11 @@ private let AllOptions = [
 
 struct CallInformation {
   let outputURL: URL
-
+  let rswiftIgnoreURL: URL
+  
+  let edge: Bool
   let accessLevel: AccessLevel
+  let imports: Set<Module>
 
   let xcodeprojURL: URL
   let targetName: String
@@ -140,6 +165,8 @@ struct CallInformation {
         throw InputParsingError.userRequestsVersionInformation(helpString: "\(commandName) (R.swift) \(version)")
       }
 
+      edge = (options[edgeOption] != nil)
+
       guard let outputPath = extraArguments.first , extraArguments.count == 1 else {
         throw InputParsingError.illegalOption(
           error: "Output folder for the 'R.generated.swift' file is mandatory as last argument.",
@@ -168,6 +195,14 @@ struct CallInformation {
       }
       accessLevel = parsedAccessLevel
 
+      imports = Set(
+        try getFirstArgumentForOption(importOption, "")
+          .components(separatedBy: ",")
+          .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+          .filter { !$0.isEmpty }
+          .map(Module.custom)
+      )
+
       let xcodeprojPath = try getFirstArgumentForOption(xcodeprojOption, environment["PROJECT_FILE_PATH"])
       xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
 
@@ -188,6 +223,9 @@ struct CallInformation {
 
       let sdkRootPath = try getFirstArgumentForOption(sdkRootOption, environment["SDKROOT"])
       sdkRootURL = URL(fileURLWithPath: sdkRootPath)
+
+      let relativeIgnorePath = try getFirstArgumentForOption(rswiftIgnoreOption, ".rswiftignore")
+      rswiftIgnoreURL = sourceRootURL.appendingPathComponent(relativeIgnorePath, isDirectory: false)
     } catch let OptionKitError.invalidOption(invalidOption) {
       throw InputParsingError.illegalOption(
         error: "The option '\(invalidOption)' is invalid.",
@@ -215,7 +253,7 @@ private func getFirstArgument(from options: [Option:[String]], helpString: Strin
         guard let result = options[option]?.first ?? defaultValue else {
             throw InputParsingError.missingOption(error: "Missing option: \(option) ", helpString: helpString)
         }
-        
+
         return result
     }
 }
@@ -224,10 +262,10 @@ func pathResolver(with URLForSourceTreeFolder: @escaping (SourceTreeFolder) -> U
     return { path in
         switch path {
         case let .absolute(absolutePath):
-            return URL(fileURLWithPath: absolutePath)
+            return URL(fileURLWithPath: absolutePath).standardizedFileURL
         case let .relativeTo(sourceTreeFolder, relativePath):
             let sourceTreeURL = URLForSourceTreeFolder(sourceTreeFolder)
-            return sourceTreeURL.appendingPathComponent(relativePath)
+            return sourceTreeURL.appendingPathComponent(relativePath).standardizedFileURL
         }
     }
 }

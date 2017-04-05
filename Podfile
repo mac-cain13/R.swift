@@ -7,6 +7,7 @@ target 'ResourceApp'
 target 'ResourceAppTests'
 
 pod 'R.swift.Library', :path => './R.swift.Library'
+pod 'SWRevealViewController'
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|

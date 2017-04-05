@@ -29,7 +29,8 @@ class AggregatedStructGenerator: StructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: collectedResult.externalStructs
+      structs: collectedResult.externalStructs,
+      classes: []
     )
 
     let internalStruct = Struct(
@@ -40,7 +41,8 @@ class AggregatedStructGenerator: StructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: collectedResult.internalStructs
+      structs: collectedResult.internalStructs,
+      classes: []
     )
 
     return (externalStruct, internalStruct)

@@ -66,6 +66,8 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 - [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
 - [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
 - [How to fix missing imports in the generated file?](Documentation/QandA.md#how-to-fix-missing-imports-in-the-generated-file)
+- [How to use classes with the same name as their module?](Documentation/QandA.md#how-to-use-classes-with-the-same-name-as-their-module)
+- [Can I ignore resources?](Documentation/Ignoring.md)
 - [Can I use R.swift in a library?](Documentation/QandA.md#can-i-use-rswift-in-a-library)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [How to upgrade to a new major version?](Documentation/Migration.md)

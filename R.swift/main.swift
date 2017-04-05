@@ -10,16 +10,21 @@
 import Foundation
 
 let IndentationString = "  "
-
 let ResourceFilename = "R.generated.swift"
+
+var isEdgeEnabled = false
 
 do {
   let callInformation = try CallInformation(processInfo: ProcessInfo())
+  isEdgeEnabled = callInformation.edge
 
   let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+  let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
+
   let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
     .map(pathResolver(with: callInformation.URLForSourceTreeFolder))
     .flatMap { $0 }
+    .filter { !ignoreFile.matches(url: $0) }
 
   let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
@@ -45,7 +50,11 @@ do {
 
   let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),
-      ImportPrinter(structs: [externalStruct, internalStruct], excludedModules: [Module.custom(name: callInformation.productModuleName)]),
+      ImportPrinter(
+        modules: callInformation.imports,
+        extractFrom: [externalStruct, internalStruct],
+        exclude: [Module.custom(name: callInformation.productModuleName)]
+      ),
       externalStruct,
       internalStruct
     ]
@@ -53,6 +62,7 @@ do {
   let fileContents = codeConvertibles
     .flatMap { $0?.swiftCode }
     .joined(separator: "\n\n")
+    + "\n" // Newline at end of file
 
   // Write file if we have changes
   let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: String.Encoding.utf8)

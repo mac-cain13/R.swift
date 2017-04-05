@@ -53,7 +53,8 @@ struct NibStructGenerator: StructGenerator {
       functions: [],
       structs: groupedNibs
         .uniques
-        .map { nibStruct(for: $0, at: externalAccessLevel) }
+        .map { nibStruct(for: $0, at: externalAccessLevel) },
+      classes: []
     )
 
     let nibProperties: [Let] = groupedNibs
@@ -71,7 +72,8 @@ struct NibStructGenerator: StructGenerator {
       typealiasses: [],
       properties: nibProperties,
       functions: nibFunctions,
-      structs: []
+      structs: [],
+      classes: []
     )
 
     return (
@@ -163,7 +165,7 @@ struct NibStructGenerator: StructGenerator {
         typeDefinition: .inferred(Type._String),
         value: "\"\(reusable.identifier)\""
         )]
-      reuseTypealiasses = [Typealias(alias: "ReusableType", type: reusable.type)]
+      reuseTypealiasses = [Typealias(accessModifier: externalAccessLevel, alias: "ReusableType", type: reusable.type)]
       reuseProtocols = [Type.ReuseIdentifierType]
     } else {
       reuseIdentifierProperties = []
@@ -174,7 +176,7 @@ struct NibStructGenerator: StructGenerator {
     // Validation
     let validateImagesLines = Set(nib.usedImageIdentifiers)
       .map {
-        "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+        "if UIKit.UIImage(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
     }
 
     var validateFunctions: [Function] = []
@@ -195,7 +197,8 @@ struct NibStructGenerator: StructGenerator {
       validateImplements.append(Type.Validatable)
     }
 
-    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseFirstCharacter: false)
+    let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
+
     return Struct(
       comments: [],
       accessModifier: externalAccessLevel,
@@ -204,7 +207,8 @@ struct NibStructGenerator: StructGenerator {
       typealiasses: reuseTypealiasses,
       properties: [bundleLet, nameVar] + reuseIdentifierProperties,
       functions: viewFuncs + validateFunctions,
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 }

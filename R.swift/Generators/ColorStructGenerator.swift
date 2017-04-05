@@ -29,7 +29,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel) }
+      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel) },
+      classes: []
     )
   }
 
@@ -49,7 +50,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },
       functions: groupedColors.uniques.map { colorFunction($0, color: $1, at: externalAccessLevel) },
-      structs: []
+      structs: [],
+      classes: []
     )
   }
 

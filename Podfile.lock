@@ -1,16 +1,19 @@
 PODS:
-  - R.swift.Library (3.0.1)
+  - R.swift.Library (3.0.2)
+  - SWRevealViewController (2.3.0)
 
 DEPENDENCIES:
   - R.swift.Library (from `./R.swift.Library`)
+  - SWRevealViewController
 
 EXTERNAL SOURCES:
   R.swift.Library:
     :path: ./R.swift.Library
 
 SPEC CHECKSUMS:
-  R.swift.Library: 0869d8d546517aa79db078fd8262724391a38db8
+  R.swift.Library: fbdec16c9802ad104fc1ba53415dc190e6ec5c73
+  SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
 
-PODFILE CHECKSUM: 7cd35a355bad243c7a21d1bbcec5bf669a3e93b7
+PODFILE CHECKSUM: 01a9adda3d0351316eaba0604673348a62d0ea9d
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.2.0

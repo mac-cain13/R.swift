@@ -142,7 +142,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
       let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
       let customClass = attributeDict["customClass"]
       let customType = customClass
-        .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
+        .map { SwiftIdentifier(name: $0, lowercaseStartingCharacters: false) }
         .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
       if let customType = customType , attributeDict["kind"] != "custom" {
@@ -215,7 +215,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
     let customType = customClass
-      .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
+      .map { SwiftIdentifier(name: $0, lowercaseStartingCharacters: false) }
       .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIViewController
@@ -232,7 +232,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     let customModule = (customModuleProvider == "target") ? nil : attributeDict["customModule"]
     let customClass = attributeDict["customClass"]
     let customType = customClass
-      .map { SwiftIdentifier(name: $0, lowercaseFirstCharacter: false) }
+      .map { SwiftIdentifier(name: $0, lowercaseStartingCharacters: false) }
       .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
     let type = customType ?? ElementNameToTypeMapping[elementName] ?? Type._UIView

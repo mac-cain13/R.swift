@@ -48,7 +48,8 @@ class ValidatedStructGenerator: StructGenerator {
           body: validationFunctionBody
         )
       ],
-      structs: []
+      structs: [],
+      classes: []
     )
 
     var externalStruct = validationSubject.externalStruct
