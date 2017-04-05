@@ -57,31 +57,35 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   // Maybe when we pick up this issue: https://github.com/mac-cain13/R.swift/issues/136
   private func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
-    var allParams: [String: [(Locale, String, [StringParam])]] = [:]
+    var allParams: [String: [(Locale, LocalizableStrings.Entry)]] = [:]
     let baseKeys: Set<String>?
     let bases = strings.filter { $0.locale.isBase }
     if bases.isEmpty {
       baseKeys = nil
     }
     else {
-      baseKeys = Set(bases.flatMap { $0.dictionary.keys })
+      baseKeys = Set(bases.flatMap { $0.keys })
     }
 
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupedBySwiftIdentifier { $0 }
+      let groupedKeys = ls.keys.groupedBySwiftIdentifier { $0 }
 
       groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
       // Save uniques
+      var byKey: [String: LocalizableStrings.Entry] = [:]
+      for entry in ls.entries {
+        byKey[entry.key] = entry
+      }
       for key in groupedKeys.uniques {
-        if let (params, commentValue) = ls.dictionary[key] {
+        if let entry = byKey[key] {
           if let _ = allParams[key] {
-            allParams[key]?.append((ls.locale, commentValue, params))
+            allParams[key]?.append((ls.locale, entry))
           }
           else {
-            allParams[key] = [(ls.locale, commentValue, params)]
+            allParams[key] = [(ls.locale, entry)]
           }
         }
       }
@@ -92,7 +96,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let filenameLocale = locale.withFilename(filename)
       let sourceKeys = baseKeys ?? Set(allParams.keys)
 
-      let missing = sourceKeys.subtracting(lss.flatMap { $0.dictionary.keys })
+      let missing = sourceKeys.subtracting(lss.flatMap { $0.keys })
 
       if missing.isEmpty {
         continue
@@ -121,8 +125,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
-      for (locale, _, ps) in keyParams {
-        if ps.any({ $0.spec == FormatSpecifier.topType }) {
+      for (locale, entry) in keyParams {
+        if entry.params.any({ $0.spec == FormatSpecifier.topType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -132,8 +136,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      for (_, _, ps) in keyParams {
-        if let unified = params.unify(ps) {
+      for (_, entry) in keyParams {
+        if let unified = params.unify(entry.params) {
           params = unified
         }
         else {
@@ -145,8 +149,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
       if !areCorrectFormatSpecifiers { continue }
 
-      let vals = keyParams.map { ($0.0, $0.1) }
-      let values = StringValues(key: key, params: params, tableName: filename, values: vals )
+      let vals = keyParams.map { locale, entry in (locale, entry.val) }
+      let comments = keyParams.map { locale, entry in (locale, entry.comment) }
+      let values = StringValues(key: key, params: params, tableName: filename, values: vals, entryComments: comments)
       results.append(values)
     }
 
@@ -169,6 +174,11 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       .flatMap { $0.localeDescription }
       .map { "\"\($0)\"" }
       .joinWithSeparator(", ")
+    let firstComment = values.entryComments
+      .first?
+      .1?
+      .escapedStringLiteral
+    let escapedComment = firstComment.map { "\"\($0)\"" } ?? "nil"
 
     return Let(
       comments: values.comments,
@@ -176,7 +186,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       typeDefinition: .inferred(Type.StringResource),
-      value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
+      value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: \(escapedComment))"
     )
   }
 
@@ -250,6 +260,7 @@ private struct StringValues {
   let params: [StringParam]
   let tableName: String
   let values: [(Locale, String)]
+  let entryComments: [(Locale, String?)]
 
   var localizedString: String {
     let escapedKey = key.escapedStringLiteral
@@ -293,6 +304,22 @@ private struct StringValues {
 
       let locales = values.flatMap { $0.0.localeDescription }
       results.append("Locales: \(locales.joinWithSeparator(", "))")
+    }
+    
+    let baseEntryComment = entryComments.filter { $0.0.isBase }.flatMap { $0.1 }.first
+    if let baseEntryComment = baseEntryComment {
+      if !results.isEmpty {
+        results.append("")
+      }
+
+      let lines = baseEntryComment.components(separatedBy: "\n")
+      if lines.count == 1 {
+        results.append("Comment: \(lines[0])")
+      } else {
+        results.append("Comment:")
+        let indented = lines.map { "  \($0)" }
+        results.append(contentsOf: indented)
+      }
     }
 
     return results

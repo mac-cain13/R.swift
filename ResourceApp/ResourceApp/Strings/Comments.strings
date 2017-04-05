@@ -1,0 +1,59 @@
+/* 
+  Comments.strings
+  ResourceApp
+
+  Created by Nolan Waite on 2016-08-07.
+  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+*/
+
+/* comment doesn't belong to any key */
+
+"star-key1" = "One";
+
+/* comment belongs to key2 */
+"star-key2" = "Two";
+
+"star-key3" = "Three"; /* comment belongs to key3 */
+"star-key4" = "Four";
+
+/* first part of comment for key5 */
+"star-key5" = "Five"; /* second part of comment, should be merged */
+
+/* big, multiline comment
+ * belonging to key6
+ */
+"star-key6" = "Six";
+
+/*     */
+"star-key7" = "Seven";
+
+/*
+ **
+ */
+"star-key8" = "Eight";
+
+
+// comment doesn't belong to any key
+
+"slash-key1" = "One";
+
+// comment belongs to key2
+"slash-key2" = "Two";
+
+"slash-key3" = "Three"; // comment belongs to key3
+"slash-key4" = "Four";
+
+// first part of comment for key5
+"slash-key5" = "Five"; // second part of comment, should be merged
+
+// big, multiline comment
+// belonging to key6
+"slash-key6" = "Six";
+
+//
+"slash-key7" = "Seven";
+
+//
+////
+//
+"slash-key8" = "Eight";
