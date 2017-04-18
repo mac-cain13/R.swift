@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
+		5D36D61C1EA5EEB30069572F /* sRGB.clr in Resources */ = {isa = PBXBuildFile; fileRef = 5D36D61B1EA5EEB30069572F /* sRGB.clr */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
@@ -112,6 +113,7 @@
 		5D1AFAB01C858637003FE7AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB21C858647003FE7AB /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB31C85864F003FE7AB /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D36D61B1EA5EEB30069572F /* sRGB.clr */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sRGB.clr; sourceTree = "<group>"; };
 		5D9E41331C96918E002172D3 /* StringsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsTests.swift; sourceTree = "<group>"; };
 		8A12A24E7B08066489311F5F /* Pods-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 			children = (
 				E22A62081E8AE788009B7F9F /* Display P3.clr */,
 				E2F268B01C92BFE00093995D /* My R.swift colors.clr */,
+				5D36D61B1EA5EEB30069572F /* sRGB.clr */,
 			);
 			path = Colors;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */,
 				5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
+				5D36D61C1EA5EEB30069572F /* sRGB.clr in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */,

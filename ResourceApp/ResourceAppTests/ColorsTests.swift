@@ -18,6 +18,8 @@ class ColorsTests: XCTestCase {
     XCTAssertNotNil(R.color.myRSwiftColors.seeThroughGray)
     XCTAssertNotNil(R.color.displayP3.red())
     XCTAssertNotNil(R.color.displayP3.green())
+    XCTAssertNotNil(R.color.sRGB.blue())
+    XCTAssertNotNil(R.color.sRGB.teal())
   }
   
   func testDisplayP3Colors() {
@@ -36,6 +38,25 @@ class ColorsTests: XCTestCase {
     XCTAssertTrue(round(red * 255) == 0)
     XCTAssertTrue(round(green * 255) == 255)
     XCTAssertTrue(round(blue * 255) == 0)
+    XCTAssertTrue(round(alpha * 255) == 255)
+  }
+  
+  func testSRGBColors() {
+    var red: CGFloat = 0
+    var green: CGFloat = 0
+    var blue: CGFloat = 0
+    var alpha: CGFloat = 0
+    
+    R.color.sRGB.blue().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+    XCTAssertTrue(round(red * 255) == 0)
+    XCTAssertTrue(round(green * 255) == 0)
+    XCTAssertTrue(round(blue * 255) == 255)
+    XCTAssertTrue(round(alpha * 255) == 255)
+    
+    R.color.sRGB.teal().getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+    XCTAssertTrue(round(red * 255) == 67)
+    XCTAssertTrue(round(green * 255) == 212)
+    XCTAssertTrue(round(blue * 255) == 165)
     XCTAssertTrue(round(alpha * 255) == 255)
   }
 
