@@ -13,9 +13,6 @@ import XCTest
 class ResourceAppTests: XCTestCase {
 
   let expectedWarnings = [
-    "warning: [R.swift] Skipping color 'Red' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB",
-    "warning: [R.swift] Skipping color 'Green' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB",
-
     "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second",
     "warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate",
     "warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate",
