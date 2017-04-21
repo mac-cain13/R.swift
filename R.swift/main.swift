@@ -92,7 +92,7 @@ do {
     fail(description)
   case let .unsupportedExtension(givenExtension, supportedExtensions):
     let joinedSupportedExtensions = supportedExtensions.joined(separator: ", ")
-    fail("File extension '\(givenExtension)' is not one of the supported extensions: \(joinedSupportedExtensions)")
+    fail("File extension '\(String(describing: givenExtension))' is not one of the supported extensions: \(joinedSupportedExtensions)")
   }
 
   exit(3)

@@ -6,13 +6,8 @@ project 'ResourceApp/ResourceApp'
 target 'ResourceApp'
 target 'ResourceAppTests'
 
-pod 'R.swift.Library', :path => './R.swift.Library'
+pod 'R.swift.Library', :git => 'git@github.com:mac-cain13/R.swift.Library.git' # for CI builds
+# pod 'R.swift.Library', :path => '../R.swift.Library' # for development
+
 pod 'SWRevealViewController'
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-    end
-  end
-end
