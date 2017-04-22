@@ -48,7 +48,7 @@ struct EnvironmentKeys {
   static let target = "TARGET_NAME"
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
-  static let buildProductsDir = "BUILT_PRODUCTS_DIR" // IS THIS A TYPO?!?
+  static let buildProductsDir = "BUILT_PRODUCTS_DIR" // "BUILT" is the correct spelling here
   static let developerDir = "DEVELOPER_DIR"
   static let sourceRoot = "SOURCE_ROOT"
   static let sdkRoot = "SDKROOT"
