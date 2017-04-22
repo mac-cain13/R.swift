@@ -14,14 +14,14 @@ extension Struct {
     let internalProperties = [
       Let(
         comments: [],
-        accessModifier: .FilePrivate,
+        accessModifier: .filePrivate,
         isStatic: true,
         name: "hostingBundle",
         typeDefinition: .inferred(Type._Bundle),
         value: "Bundle(for: R.Class.self)"),
       Let(
         comments: [],
-        accessModifier: .FilePrivate,
+        accessModifier: .filePrivate,
         isStatic: true,
         name: "applicationLocale",
         typeDefinition: .inferred(Type._Locale),
@@ -29,7 +29,7 @@ extension Struct {
     ]
 
     let internalClasses = [
-      Class(accessModifier: .FilePrivate, type: Type(module: .host, name: "Class"))
+      Class(accessModifier: .filePrivate, type: Type(module: .host, name: "Class"))
     ]
 
     var externalStruct = self

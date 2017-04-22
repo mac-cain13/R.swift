@@ -19,11 +19,28 @@ extension Array {
 
 // MARK: Sequence operations
 
-extension Sequence where Iterator.Element : CustomStringConvertible {
-  func joinWithSeparator(_ separator: String) -> String {
-    return map { $0.description }.joined(separator: separator)
+extension Sequence {
+  func grouped<Key: Hashable>(by keySelector: (Iterator.Element) -> Key) -> [Key : [Iterator.Element]] {
+    var groupedBy = Dictionary<Key, [Iterator.Element]>()
+
+    for element in self {
+      let key = keySelector(element)
+      if let group = groupedBy[key] {
+        groupedBy[key] = group + [element]
+      } else {
+        groupedBy[key] = [element]
+      }
+    }
+
+    return groupedBy
   }
 }
+
+// extension Sequence where Iterator.Element : CustomStringConvertible {
+//   func joined(separator: String) -> String {
+//     return map { $0.description }.joined(separator: separator)
+//   }
+// }
 
 extension Sequence where Iterator.Element : Sequence {
   func flatten() -> [Iterator.Element.Iterator.Element] {
@@ -46,7 +63,7 @@ extension String {
     return substring(to: index).uppercased() + substring(from: index)
   }
 
-  func indentWithString(_ indentation: String) -> String {
+  func indent(with indentation: String) -> String {
     let components = self.components(separatedBy: "\n")
     return indentation + components.joined(separator: "\n\(indentation)")
   }

@@ -1,0 +1,89 @@
+//
+//  CallInformation.swift
+//  R.swift
+//
+//  Created by Tom Lokhorst on 2017-04-22.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
+//
+
+import Foundation
+import XcodeEdit
+
+public struct RswiftCore {
+  static var isEdgeEnabled = false
+
+  static public func run(_ callInformation: CallInformation) throws {
+
+    do {
+      RswiftCore.isEdgeEnabled = callInformation.edgeEnabled
+
+      let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+      let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
+
+      let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+        .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
+        .flatMap { $0 }
+        .filter { !ignoreFile.matches(url: $0) }
+
+      let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+
+      let generators: [StructGenerator] = [
+        ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
+        ColorStructGenerator(colorPalettes: resources.colors),
+        FontStructGenerator(fonts: resources.fonts),
+        SegueStructGenerator(storyboards: resources.storyboards),
+        StoryboardStructGenerator(storyboards: resources.storyboards),
+        NibStructGenerator(nibs: resources.nibs),
+        ReuseIdentifierStructGenerator(reusables: resources.reusables),
+        ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
+        StringsStructGenerator(localizableStrings: resources.localizableStrings),
+      ]
+
+      let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
+        .generatedStructs(at: callInformation.accessLevel)
+
+      let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
+        .generatedStructs(at: callInformation.accessLevel)
+
+      let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
+
+      let codeConvertibles: [SwiftCodeConverible?] = [
+          HeaderPrinter(),
+          ImportPrinter(
+            modules: callInformation.imports,
+            extractFrom: [externalStruct, internalStruct],
+            exclude: [Module.custom(name: callInformation.productModuleName)]
+          ),
+          externalStruct,
+          internalStruct
+        ]
+
+      let fileContents = codeConvertibles
+        .flatMap { $0?.swiftCode }
+        .joined(separator: "\n\n")
+
+      // Write file if we have changes
+      let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)
+      if currentFileContents != fileContents  {
+        do {
+          try fileContents.write(to: callInformation.outputURL, atomically: true, encoding: .utf8)
+        } catch {
+          fail(error.localizedDescription)
+        }
+      }
+
+    } catch let error as ResourceParsingError {
+      switch error {
+      case let .parsingFailed(description):
+        fail(description)
+
+      case let .unsupportedExtension(givenExtension, supportedExtensions):
+        let joinedSupportedExtensions = supportedExtensions.joined(separator: ", ")
+        fail("File extension '\(String(describing: givenExtension))' is not one of the supported extensions: \(joinedSupportedExtensions)")
+      }
+
+      exit(3)
+    }
+  }
+}

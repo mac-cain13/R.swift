@@ -42,7 +42,7 @@ class MainTests: XCTestCase {
   ]
   
   func testSwiftNameSanitization() {
-    isEdgeEnabled = true
+    RswiftCore.isEdgeEnabled = true
     
     swiftNameData.forEach {
       let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseStartingCharacters: true).description

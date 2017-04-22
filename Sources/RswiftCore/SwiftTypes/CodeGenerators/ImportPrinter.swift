@@ -23,7 +23,7 @@ struct ImportPrinter: SwiftCodeConverible {
       .union(extractedModules)
       .subtracting(excludedModules)
       .filter { $0.isCustom }
-      .sorted { $0.description }
+      .sorted { $0.description < $1.description }
       .map { "import \($0)" }
       .joined(separator: "\n")
   }

@@ -9,15 +9,15 @@
 
 import Foundation
 
-enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
+public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
   case host
   case stdLib
   case custom(name: String)
 
-  typealias UnicodeScalarLiteralType = StringLiteralType
-  typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
+  public typealias UnicodeScalarLiteralType = StringLiteralType
+  public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
-  var hashValue: Int {
+  public var hashValue: Int {
     switch self {
     case .host: return "--HOSTINGBUNDLE".hashValue
     case .stdLib: return "--STDLIB".hashValue
@@ -25,7 +25,7 @@ enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
     }
   }
 
-  var description: String {
+  public var description: String {
     switch self {
     case .host: return ""
     case .stdLib: return ""
@@ -42,26 +42,26 @@ enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
     }
   }
 
-  init(name: String?, fallback: Module = .host) {
+  public init(name: String?, fallback: Module = .host) {
     switch name {
     case .none: self = fallback
     case let .some(name): self = .custom(name: name)
     }
   }
 
-  init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
+  public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
     self = .custom(name: value)
   }
 
-  init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
+  public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
     self = .custom(name: value)
   }
 
-  init(stringLiteral value: StringLiteralType) {
+  public init(stringLiteral value: StringLiteralType) {
     self = .custom(name: value)
   }
-}
 
-func ==(lhs: Module, rhs: Module) -> Bool {
-  return lhs.hashValue == rhs.hashValue
+  static public func ==(lhs: Module, rhs: Module) -> Bool {
+    return lhs.hashValue == rhs.hashValue
+  }
 }

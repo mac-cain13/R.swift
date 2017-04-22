@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import XcodeEdit
 
 struct Xcodeproj: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcodeproj"]

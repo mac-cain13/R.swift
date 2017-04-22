@@ -13,7 +13,7 @@ struct Class: SwiftCodeConverible {
   let type: Type
 
   var swiftCode: String {
-    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
+    let accessModifierString = accessModifier.swiftCode
 
     return "\(accessModifierString)class \(type) {}"
   }

@@ -19,7 +19,7 @@ struct Typealias: UsedTypesProvider, CustomStringConvertible {
   }
 
   var description: String {
-    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
+    let accessModifierString = accessModifier.swiftCode
     let typeString = type.map { " = \($0)" } ?? ""
 
     return "\(accessModifierString)typealias \(alias)\(typeString)"

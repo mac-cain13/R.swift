@@ -99,7 +99,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       }
 
       let paddedKeys = missing.sorted().map { "'\($0)'" }
-      let paddedKeysString = paddedKeys.joinWithSeparator(", ")
+      let paddedKeysString = paddedKeys.joined(separator: ", ")
 
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
@@ -117,12 +117,12 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     var badFormatSpecifiersKeys = Set<String>()
 
     // Unify format specifiers
-    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sorted(by: { $0.0 }) {
+    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sorted(by: { $0.0 < $1.0 }) {
       var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
       for (locale, _, ps) in keyParams {
-        if ps.any({ $0.spec == FormatSpecifier.topType }) {
+        if ps.contains(where: { $0.spec == FormatSpecifier.topType }) {
           let name = locale.withFilename(filename)
           warn("Skipping string \(key) in \(name), not all format specifiers are consecutive")
 
@@ -154,7 +154,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
       if let params = fewParams.first {
-        let locales = params.flatMap { $0.0.localeDescription }.joinWithSeparator(", ")
+        let locales = params.flatMap { $0.0.localeDescription }.joined(separator: ", ")
         warn("Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
       }
     }
@@ -168,7 +168,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       .map { $0.0 }
       .flatMap { $0.localeDescription }
       .map { "\"\($0)\"" }
-      .joinWithSeparator(", ")
+      .joined(separator: ", ")
 
     return Let(
       comments: values.comments,
@@ -215,7 +215,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       return Function.Parameter(name: argumentLabel, localName: valueName, type: param.spec.type)
     }
 
-    let args = params.map { $0.localName ?? $0.name }.joinWithSeparator(", ")
+    let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
 
     return Function(
       comments: values.comments,
@@ -265,9 +265,9 @@ private struct StringValues {
   var comments: [String] {
     var results: [String] = []
 
-    let containsBase = values.any { $0.0.isBase }
+    let containsBase = values.contains { $0.0.isBase }
     let baseValue = values.filter { $0.0.isBase }.map { $0.1 }.first
-    let anyNone = values.any { $0.0.isNone }
+    let anyNone = values.contains { $0.0.isNone }
 
     if let baseValue = baseValue {
       let str = "Base translation: \(baseValue)".commentString
@@ -292,7 +292,7 @@ private struct StringValues {
       }
 
       let locales = values.flatMap { $0.0.localeDescription }
-      results.append("Locales: \(locales.joinWithSeparator(", "))")
+      results.append("Locales: \(locales.joined(separator: ", "))")
     }
 
     return results

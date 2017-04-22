@@ -44,7 +44,7 @@ struct SwiftIdentifier : CustomStringConvertible {
   }
 
   private static func lowercasePrefix(_ name: String) -> String {
-    guard isEdgeEnabled else {
+    guard RswiftCore.isEdgeEnabled else {
       return name.lowercaseFirstCharacter
     }
 

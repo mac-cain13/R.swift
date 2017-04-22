@@ -21,7 +21,7 @@ struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
 
     let withoutModule: String
     if type.genericArgs.count > 0 {
-      let args = type.genericArgs.joinWithSeparator(", ")
+      let args = type.genericArgs.map { $0.description }.joined(separator: ", ")
       withoutModule = "\(type.name)<\(args)>\(optionalString)"
     } else {
       withoutModule = "\(type.name)\(optionalString)"

@@ -41,13 +41,13 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
 
   var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
-    let accessModifierString = (accessModifier == .Internal) ? "" : accessModifier.rawValue + " "
+    let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = parameters.joinWithSeparator(", ")
+    let parameterString = parameters.map { $0.description }.joined(separator: ", ")
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    let bodyString = body.indentWithString(IndentationString)
+    let bodyString = body.indent(with: "  ")
 
     return "\(commentsString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
