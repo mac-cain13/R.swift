@@ -129,6 +129,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E244DAC21EAD38E300D8ECA5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5EA0DEC1A3DF45600FFEBC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2FD12A81EAA41C000772CF1;
+			remoteInfo = Commander;
+		};
+		E244DAC41EAD38E300D8ECA5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5EA0DEC1A3DF45600FFEBC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2FD12C71EAA9F9B00772CF1;
+			remoteInfo = XcodeEdit;
+		};
 		E2FD12C01EAA981B00772CF1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D5EA0DEC1A3DF45600FFEBC4 /* Project object */;
@@ -158,6 +172,7 @@
 		D5C422811B711FDF004EA9B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5EA0DF41A3DF45600FFEBC4 /* rswift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rswift; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5F795C01BB9983900844EA2 /* MainTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTests.swift; sourceTree = "<group>"; };
+		E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = RswiftConfig.xcconfig; sourceTree = "<group>"; };
 		E259C9051E8E4B1B00560B05 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = ".build/checkouts/XcodeEdit--4754805210155529311/Sources/Extensions.swift"; sourceTree = "<group>"; };
 		E259C9061E8E4B1B00560B05 /* PBXObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PBXObject.swift; path = ".build/checkouts/XcodeEdit--4754805210155529311/Sources/PBXObject.swift"; sourceTree = "<group>"; };
 		E259C9071E8E4B1B00560B05 /* Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Serialization.swift; path = ".build/checkouts/XcodeEdit--4754805210155529311/Sources/Serialization.swift"; sourceTree = "<group>"; };
@@ -283,6 +298,7 @@
 		D5EA0DEB1A3DF45600FFEBC4 = {
 			isa = PBXGroup;
 			children = (
+				E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */,
 				E2FD12DD1EAB97D600772CF1 /* Sources */,
 				E259C9031E8E4AF300560B05 /* Dependencies */,
 				D5C4227E1B711FDF004EA9B9 /* R.swiftTests */,
@@ -505,7 +521,6 @@
 			buildConfigurationList = D5EA0DFB1A3DF45600FFEBC4 /* Build configuration list for PBXNativeTarget "rswift" */;
 			buildPhases = (
 				D5EA0DF01A3DF45600FFEBC4 /* Sources */,
-				D5DE480C1B5E1B14000F6A85 /* Install into test project */,
 				F1F5322A6D46CBD2B0ABA60D /* Frameworks */,
 			);
 			buildRules = (
@@ -568,6 +583,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				E244DAC31EAD38E300D8ECA5 /* PBXTargetDependency */,
+				E244DAC51EAD38E300D8ECA5 /* PBXTargetDependency */,
 			);
 			name = RswiftCore;
 			productName = RswiftCore;
@@ -658,23 +675,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		D5DE480C1B5E1B14000F6A85 /* Install into test project */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Install into test project";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME\" ./ResourceApp";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D5C422791B711FDF004EA9B9 /* Sources */ = {
@@ -830,6 +830,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E244DAC31EAD38E300D8ECA5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2FD12A81EAA41C000772CF1 /* Commander */;
+			targetProxy = E244DAC21EAD38E300D8ECA5 /* PBXContainerItemProxy */;
+		};
+		E244DAC51EAD38E300D8ECA5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2FD12C71EAA9F9B00772CF1 /* XcodeEdit */;
+			targetProxy = E244DAC41EAD38E300D8ECA5 /* PBXContainerItemProxy */;
+		};
 		E2FD12C11EAA981B00772CF1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E2FD12A81EAA41C000772CF1 /* Commander */;
@@ -850,6 +860,7 @@
 /* Begin XCBuildConfiguration section */
 		D5C422821B711FDF004EA9B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -866,6 +877,7 @@
 		};
 		D5C422831B711FDF004EA9B9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -966,13 +978,14 @@
 		};
 		D5EA0DFC1A3DF45600FFEBC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(BUILT_PRODUCTS_DIR)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
 				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
@@ -982,13 +995,14 @@
 		};
 		D5EA0DFD1A3DF45600FFEBC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx $(BUILT_PRODUCTS_DIR)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
 				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
@@ -999,6 +1013,7 @@
 		};
 		E2FD12AF1EAA41C000772CF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1032,6 +1047,7 @@
 		};
 		E2FD12B01EAA41C000772CF1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1065,6 +1081,7 @@
 		};
 		E2FD12CE1EAA9F9B00772CF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1093,6 +1110,7 @@
 		};
 		E2FD12CF1EAA9F9B00772CF1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1121,6 +1139,7 @@
 		};
 		E2FD13CE1EAB9E5400772CF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1149,6 +1168,7 @@
 		};
 		E2FD13CF1EAB9E5400772CF1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E244DAC11EAD37D500D8ECA5 /* RswiftConfig.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1230,6 +1250,7 @@
 				E2FD13CF1EAB9E5400772CF1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
