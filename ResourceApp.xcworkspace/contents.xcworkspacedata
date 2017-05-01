@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:R.swift.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:ResourceApp/ResourceApp.xcodeproj">
    </FileRef>
    <FileRef

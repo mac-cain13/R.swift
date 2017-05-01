@@ -1,6 +1,6 @@
 use_frameworks!
 
-workspace 'R.swift'
+workspace 'ResourceApp'
 project 'ResourceApp/ResourceApp'
 
 target 'ResourceApp'

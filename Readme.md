@@ -106,6 +106,8 @@ R.swift is build using [Swift Package Manager (SPM)](https://github.com/apple/sw
 To create a development build of R.swift, check out the code and run `swift build` from the root directory.  
 To create a release build, run `swift build -c release -Xswiftc -static-stdlib` to statically link the Swift standard library.
 
+For developing R.swift in Xcode, run `swift package generate-xcodeproj --xcconfig-overrides RswiftConfig.xcconfig`.
+
 ## Contribute
 
 We'll love contributions, read the [contribute docs](Documentation/Contribute.md) for info on how to report issues, submit ideas and submit pull requests!
