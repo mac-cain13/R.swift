@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		06EDDB95158EEF51E198F18D /* Pods_Shared_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD76EBA4B07AFBC2E0A7746E /* Pods_Shared_ResourceApp.framework */; };
+		1FE8F903EFFB05A77F667F37 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40006FCEC0070D1F7D182DEC /* Pods_Shared_ResourceApp_tvOS.framework */; };
 		4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */; };
 		4EE4E64AA87673005A93908B /* Pods_Shared_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF5424DEB59DF8CD26A856D /* Pods_Shared_ResourceAppTests.framework */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
@@ -68,7 +69,6 @@
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
 		DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */; };
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
-		DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF559B81CA4932F009B8C51 /* Rswift.framework */; };
 		E20983241D585E78005ACBAA /* SegueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20983231D585E78005ACBAA /* SegueTests.swift */; };
 		E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20983251D585F8C005ACBAA /* Xib with ViewController.xib */; };
 		E2156B631CC4042900F341DC /* Settings.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B651CC4042900F341DC /* Settings.strings */; };
@@ -87,7 +87,6 @@
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 		E2F268B11C92BFE00093995D /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
-		ED18F361A7EEB750278EC1D6 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40006FCEC0070D1F7D182DEC /* Pods_Shared_ResourceApp_tvOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -238,8 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF559B91CA4932F009B8C51 /* Rswift.framework in Frameworks */,
-				ED18F361A7EEB750278EC1D6 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */,
+				1FE8F903EFFB05A77F667F37 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
