@@ -7,6 +7,7 @@
 //  Adapted from https://gist.github.com/efirestone/ce01ae109e08772647eb061b3bb387c3
 
 import XCTest
+@testable import RswiftCore
 
 class GlobTests : XCTestCase {
   

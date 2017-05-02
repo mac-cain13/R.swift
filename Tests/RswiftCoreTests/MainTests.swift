@@ -8,6 +8,7 @@
 //
 
 import XCTest
+@testable import RswiftCore
 
 class MainTests: XCTestCase {
   override func setUp() {
