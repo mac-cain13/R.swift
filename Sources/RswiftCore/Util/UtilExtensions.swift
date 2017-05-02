@@ -36,12 +36,6 @@ extension Sequence {
   }
 }
 
-// extension Sequence where Iterator.Element : CustomStringConvertible {
-//   func joined(separator: String) -> String {
-//     return map { $0.description }.joined(separator: separator)
-//   }
-// }
-
 extension Sequence where Iterator.Element : Sequence {
   func flatten() -> [Iterator.Element.Iterator.Element] {
     return flatMap { $0 }
