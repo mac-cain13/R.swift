@@ -48,7 +48,7 @@ lane :release do |options|
   File.open(filepath, 'wb') { |file| file.write(content) }
 
   if options[:skip_tests] != true
-    #runalltests
+    runalltests
   else
     Helper.log.info "Skipping tests!".yellow
   end
