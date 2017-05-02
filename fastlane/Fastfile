@@ -97,20 +97,17 @@ desc "Runs all the tests"
 lane :runalltests do
   cocoapods(repo_update: false)
 
+  sh "cd .. && swift test && mkdir -p build/debug && cp .build/debug/rswift build/debug"
+
   scan(
-    workspace: "R.swift.xcworkspace",
-    scheme: "rswift",
-    clean: true
-  )
-  scan(
-    workspace: "R.swift.xcworkspace",
+    workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp",
     sdk: "iphonesimulator",
     destination: "name=iPhone SE",
     clean: true
   )
   scan(
-    workspace: "R.swift.xcworkspace",
+    workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp-tvOS",
     destination: "name=Apple TV 1080p",
     clean: true
