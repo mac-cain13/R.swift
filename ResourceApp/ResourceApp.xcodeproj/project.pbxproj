@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06EDDB95158EEF51E198F18D /* Pods_Shared_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD76EBA4B07AFBC2E0A7746E /* Pods_Shared_ResourceApp.framework */; };
-		1FE8F903EFFB05A77F667F37 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40006FCEC0070D1F7D182DEC /* Pods_Shared_ResourceApp_tvOS.framework */; };
-		4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */; };
-		4EE4E64AA87673005A93908B /* Pods_Shared_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF5424DEB59DF8CD26A856D /* Pods_Shared_ResourceAppTests.framework */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
@@ -108,22 +104,14 @@
 
 /* Begin PBXFileReference section */
 		22ACD120062243785169391F /* Pods-Shared-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
-		275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.debug.xcconfig"; sourceTree = "<group>"; };
 		3677277BC1C4F3F77310381B /* Pods-Shared-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
-		40006FCEC0070D1F7D182DEC /* Pods_Shared_ResourceApp_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5806108C4C9AA942D017FD38 /* Pods-ResourceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5D1AFAB01C858637003FE7AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB21C858647003FE7AB /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D1AFAB31C85864F003FE7AB /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D9E41331C96918E002172D3 /* StringsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsTests.swift; sourceTree = "<group>"; };
 		70B4C9EF7848D510D018EB8E /* Pods-Shared-ResourceApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		8A12A24E7B08066489311F5F /* Pods-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ResourceApp/Pods-ResourceApp.release.xcconfig"; sourceTree = "<group>"; };
 		9C2D4D874D7A6B1F02578293 /* Pods-Shared-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
-		CD76EBA4B07AFBC2E0A7746E /* Pods_Shared_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D41BDD927A1804A5D763C750 /* Pods-Shared-ResourceApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp-tvOS.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		D436146321CC7322E5ECEE24 /* Pods-Shared-ResourceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
@@ -180,7 +168,6 @@
 		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
-		DBF5424DEB59DF8CD26A856D /* Pods_Shared_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ResourceApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559991CA4873D009B8C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEF5599E1CA4873D009B8C51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -190,7 +177,6 @@
 		DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests_tvOS.swift; sourceTree = "<group>"; };
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		DEF559B81CA4932F009B8C51 /* Rswift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Rswift.framework; path = "../R.swift.Library/build/Debug-appletvos/Rswift.framework"; sourceTree = "<group>"; };
 		E20983231D585E78005ACBAA /* SegueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTests.swift; sourceTree = "<group>"; };
 		E20983251D585F8C005ACBAA /* Xib with ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Xib with ViewController.xib"; sourceTree = "<group>"; };
 		E2156B641CC4042900F341DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Settings.strings; sourceTree = "<group>"; };
@@ -220,7 +206,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06EDDB95158EEF51E198F18D /* Pods_Shared_ResourceApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,8 +213,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4278A8983F091212CF85BC50 /* Pods_ResourceAppTests.framework in Frameworks */,
-				4EE4E64AA87673005A93908B /* Pods_Shared_ResourceAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,7 +220,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FE8F903EFFB05A77F667F37 /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,13 +236,7 @@
 		065D32753EEB6C7AE2FA201F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DEF559B81CA4932F009B8C51 /* Rswift.framework */,
 				D5B799881C1B8F0C009EA901 /* AVKit.framework */,
-				AEC5C6D68E1E8337CC9568C1 /* Pods_ResourceApp.framework */,
-				275034DCC8B63BBF751DFF93 /* Pods_ResourceAppTests.framework */,
-				CD76EBA4B07AFBC2E0A7746E /* Pods_Shared_ResourceApp.framework */,
-				40006FCEC0070D1F7D182DEC /* Pods_Shared_ResourceApp_tvOS.framework */,
-				DBF5424DEB59DF8CD26A856D /* Pods_Shared_ResourceAppTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -283,10 +259,6 @@
 		6BD8864A6B6559C4D6F93D81 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				277C3D45ECA1EEF6F7DAF957 /* Pods-ResourceApp.debug.xcconfig */,
-				9BB33190FE04C23E506646C2 /* Pods-ResourceApp.release.xcconfig */,
-				5806108C4C9AA942D017FD38 /* Pods-ResourceAppTests.debug.xcconfig */,
-				8A12A24E7B08066489311F5F /* Pods-ResourceAppTests.release.xcconfig */,
 				22ACD120062243785169391F /* Pods-Shared-ResourceApp.debug.xcconfig */,
 				3677277BC1C4F3F77310381B /* Pods-Shared-ResourceApp.release.xcconfig */,
 				70B4C9EF7848D510D018EB8E /* Pods-Shared-ResourceApp-tvOS.debug.xcconfig */,
