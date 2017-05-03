@@ -1,18 +1,20 @@
 use_frameworks!
 
-workspace 'R.swift'
+workspace 'ResourceApp'
 project 'ResourceApp/ResourceApp'
 
-target 'ResourceApp'
-target 'ResourceAppTests'
+abstract_target 'Shared' do
 
-pod 'R.swift.Library', :path => './R.swift.Library'
-pod 'SWRevealViewController'
+  pod 'R.swift.Library', :git => 'git@github.com:mac-cain13/R.swift.Library.git' # for CI builds
+  # pod 'R.swift.Library', :path => '../R.swift.Library' # for development
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-    end
+  target 'ResourceApp' do
+    pod 'SWRevealViewController'
   end
+  target 'ResourceAppTests' do
+    pod 'SWRevealViewController'
+  end
+  target 'ResourceApp-tvOS'
+
 end
+

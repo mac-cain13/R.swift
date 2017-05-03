@@ -99,9 +99,14 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
-### Homebrew (Unofficial)
+### Building from source
 
-R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
+R.swift is build using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
+
+To create a development build of R.swift, check out the code and run `swift build` from the root directory.  
+To create a release build, run `swift build -c release -Xswiftc -static-stdlib` to statically link the Swift standard library.
+
+For developing R.swift in Xcode, run `swift package generate-xcodeproj --xcconfig-overrides RswiftConfig.xcconfig`.
 
 ## Contribute
 

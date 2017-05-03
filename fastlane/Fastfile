@@ -11,8 +11,7 @@ lane :release do |options|
   git_pull
 
   libraryVersionUsed = read_podspec['dependencies']['R.swift.Library'].first
-  libraryPodspecVersion = version_get_podspec(path: 'R.swift.Library/R.swift.Library.podspec')
-  unless prompt(text: "R.swift.Library #{libraryVersionUsed} is defined as dependency, current version seems to be #{libraryPodspecVersion}.\nAdjust podspec now if needed. Ready to continue?".green, boolean: true, ci_input: "")
+  unless prompt(text: "R.swift.Library #{libraryVersionUsed} is defined as dependency.\nAdjust podspec now if needed. Ready to continue?".green, boolean: true, ci_input: "")
     raise "Aborted by user".red
   end
 
@@ -20,36 +19,32 @@ lane :release do |options|
   Helper.log.info "Current R.swift podspec version is #{currentVersion}"
 
   isPrerelease = false
-  if options[:skip_version_bump] != true
-    bumpType = prompt(text: "What kind of release is this? (major/minor/patch/custom)".green, boolean: false, ci_input: "")
-    case bumpType
-    when "major", "minor", "patch"
-      version_bump_podspec(bump_type: bumpType)
-    when "custom"
-      newVersion = prompt(text: "What is the new custom version number?".green, boolean: false, ci_input: "")
-      version_bump_podspec(version_number: newVersion)
+  bumpType = prompt(text: "What kind of release is this? (major/minor/patch/custom)".green, boolean: false, ci_input: "")
+  case bumpType
+  when "major", "minor", "patch"
+    version_bump_podspec(bump_type: bumpType)
+  when "custom"
+    newVersion = prompt(text: "What is the new custom version number?".green, boolean: false, ci_input: "")
+    version_bump_podspec(version_number: newVersion)
 
-      isPrerelease = prompt(text: "Is this a prerelease version?".green, boolean: true, ci_input: "")
-    else
-      raise "Invalid release type: #{bumpType}".red
-    end
-
-    newVersion = version_get_podspec()
-    changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
-    af_insert_text_into_file(
-      file_path: "Changelog.md",
-      text: "## #{newVersion}\n\n#{changelog}\n\n",
-      insert_at_bottom: false
-    )
-  else
     isPrerelease = prompt(text: "Is this a prerelease version?".green, boolean: true, ci_input: "")
+  else
+    raise "Invalid release type: #{bumpType}".red
   end
 
+  newVersion = version_get_podspec()
+  changelog = prompt(text: "Please provide release notes:".green, boolean: false, ci_input: "", multi_line_end_keyword: "FIN")
+  af_insert_text_into_file(
+    file_path: "Changelog.md",
+    text: "## #{newVersion}\n\n#{changelog}\n\n",
+    insert_at_bottom: false
+  )
+
   # Sync version.swift with version in podspec
-  filepath = '../R.swift/version.swift'
+  filepath = '../Sources/rswift/Rswift.swift'
   newVersion = version_get_podspec()
 
-  content = File.read(filepath).sub(/let version = "(.*)"/, "let version = \"#{newVersion}\"")
+  content = File.read(filepath).sub(/static let version = "(.*)"/, "static let version = \"#{newVersion}\"")
   File.open(filepath, 'wb') { |file| file.write(content) }
 
   if options[:skip_tests] != true
@@ -58,29 +53,15 @@ lane :release do |options|
     Helper.log.info "Skipping tests!".yellow
   end
 
-  archivePath = 'rswift.xcarchive'
-
-  xcodebuild(
-    workspace: 'R.swift.xcworkspace',
-    scheme: 'rswift',
-    archivePath: archivePath,
-    archive: true
-  )
+  sh "cd .. && swift build -c release -Xswiftc -static-stdlib"
 
   zipPath = "/tmp/rswift-#{newVersion}.zip"
   sh "rm -f #{zipPath}"
 
   junk_zip(
-    paths: ["#{archivePath}/Products/usr/local/bin/rswift", "./License"],
+    paths: ["./.build/release/rswift", "./License"],
     output_path: zipPath
   )
-
-  unless is_ci
-    notification(
-      title: "R.swift release",
-      message: "💡 Needs your attention."
-    )
-  end
 
   unless prompt(text: "#{newVersion} has been build and prepped for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to commit, tag, push and release #{newVersion} including all uncommitted changes?".green, boolean: true, ci_input:"y")
     raise "Aborted by user".red
@@ -110,33 +91,23 @@ lane :release do |options|
   )
 
   pod_push
-
-  unless is_ci
-    notification(
-      title: "R.swift release",
-      message: "🎉 Version #{newVersion} is released."
-    )
-  end
 end
 
 desc "Runs all the tests"
 lane :runalltests do
   cocoapods(repo_update: false)
 
+  sh "cd .. && swift test && mkdir -p build/debug && cp .build/debug/rswift build/debug"
+
   scan(
-    workspace: "R.swift.xcworkspace",
-    scheme: "rswift",
-    clean: true
-  )
-  scan(
-    workspace: "R.swift.xcworkspace",
+    workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp",
     sdk: "iphonesimulator",
     destination: "name=iPhone SE",
     clean: true
   )
   scan(
-    workspace: "R.swift.xcworkspace",
+    workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp-tvOS",
     destination: "name=Apple TV 1080p",
     clean: true
