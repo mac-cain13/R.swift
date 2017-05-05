@@ -25,7 +25,7 @@ let viewController = CustomViewController(nib: R.nib.customView)
 let string = R.string.localizable.welcomeWithName("Arthur Dent")
 ```
 
-Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.app uses R.swift](https://realm.io/news/slug-javi-soto-building-fabric-in-swift/#rswift-2956javascriptpresentzchangechapter053true)!
+Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.app uses R.swift](https://news.realm.io/news/slug-javi-soto-building-fabric-in-swift/#rswift-2956)!
 
 ## Demo
 
@@ -45,7 +45,7 @@ After installing R.swift into your project you can use the `R`-struct to access 
 
 R.swift currently supports these types of resources:
 - [Images](Documentation/Examples.md#images)
-- [Custom fonts](Documentation/Examples.md#custom-fonts)
+- [Fonts](Documentation/Examples.md#custom-fonts)
 - [Resource files](Documentation/Examples.md#resource-files)
 - [Colors](Documentation/Examples.md#colors)
 - [Localized strings](Documentation/Examples.md#localized-strings)
