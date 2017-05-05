@@ -48,6 +48,8 @@ let lightFontTitle = UIFont(name: "Acme-Light", size: 22)
 let lightFontTitle = R.font.acmeLight(size: 22)
 ```
 
+**Tip:** Also want this for system fonts? Take a look at the [UIFontComplete](https://github.com/Nirma/UIFontComplete) library, has a similar solution for the fonts Apple ships with iOS.
+
 ## Resource files
 
 *Vanilla*
