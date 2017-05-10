@@ -9,18 +9,24 @@
 
 import Foundation
 
-struct AssetFolder: WhiteListedExtensionsResourceType {
+struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderType {
   static let supportedExtensions: Set<String> = ["xcassets"]
 
   // Note: "appiconset" is not loadable by default, so it's not included here
   private static let AssetExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
   // Ignore everything in folders with these extensions
   private static let IgnoredExtensions: Set<String> = ["brandassets", "imagestacklayer"]
+  // Files checked for asset folder and subfolder properties
+  fileprivate static let AssetPropertiesFilenames: Array<(fileName: String, fileExtension: String)> = [("Contents","json")]
 
+  let url: URL
   let name: String
-  let imageAssets: [String]
+  var path: String { return "" }
+  var imageAssets: [String]
+  var subfolders: [NamespacedAssetSubfolder]
 
   init(url: URL, fileManager: FileManager) throws {
+    self.url = url
     try AssetFolder.throwIfUnsupportedExtension(url.pathExtension)
 
     guard let filename = url.filename else {
@@ -30,10 +36,14 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
 
     // Browse asset directory recursively and list only the assets folders
     var assets = [URL]()
+    var namespaces = [URL]()
     let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
       for case let fileURL as URL in enumerator {
         let pathExtension = fileURL.pathExtension
+        if fileURL.providesNamespace {
+          namespaces.append(fileURL.namespaceURL)
+        }
         if AssetFolder.AssetExtensions.contains(pathExtension) {
           assets.append(fileURL)
         }
@@ -43,6 +53,153 @@ struct AssetFolder: WhiteListedExtensionsResourceType {
       }
     }
 
-    imageAssets = assets.map { $0.filename! }
+    subfolders = []
+    imageAssets = []
+    namespaces.sort { $0.absoluteString < $1.absoluteString }
+    namespaces.map(NamespacedAssetSubfolder.init).forEach {
+        dive(subfolder: $0)
+    }
+
+    assets.forEach {
+        dive(asset: $0)
+    }
   }
+}
+
+protocol NamespacedAssetSubfolderType {
+    var url: URL { get }
+    var name: String { get }
+    var path: String { get }
+    var imageAssets: [String] { get set }
+    var subfolders: [NamespacedAssetSubfolder] { get set }
+
+    mutating func dive(subfolder: NamespacedAssetSubfolder)
+    mutating func dive(asset: URL)
+}
+
+extension NamespacedAssetSubfolderType {
+    mutating func dive(subfolder: NamespacedAssetSubfolder) {
+        if var parent = subfolders.first(where: { subfolder.isSubfolderOf($0) }) {
+            parent.dive(subfolder: subfolder)
+        } else {
+            subfolder.path = path.characters.count > 0 ? "\(path).\(subfolder.name)" : "\(subfolder.name)"
+            subfolders.append(subfolder)
+        }
+    }
+
+    mutating func dive(asset: URL) {
+        if var parent = subfolders.first(where: { asset.matches($0.url) }) {
+            parent.dive(asset: asset)
+        } else {
+            imageAssets.append(asset.filename!)
+        }
+    }
+
+    func isSubfolderOf(_ subfolder: NamespacedAssetSubfolder) -> Bool {
+        return url.absoluteString != subfolder.url.absoluteString && url.matches(subfolder.url)
+    }
+}
+
+class NamespacedAssetSubfolder: NamespacedAssetSubfolderType {
+    let url: URL
+    let name: String
+    var path: String = ""
+    var imageAssets: [String] = []
+    var subfolders: [NamespacedAssetSubfolder] = []
+
+    init(url: URL) {
+        self.url = url
+        self.name = url.namespace
+    }
+}
+
+extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
+    func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+        let allFunctions = imageAssets
+        let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
+
+        groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
+
+        let imagePath = path.replacingOccurrences(of: ".", with: "/") + (!path.isEmpty ? "/" : "")
+
+        let imageLets = groupedFunctions
+            .uniques
+            .map { name in
+                Let(
+                    comments: ["Image `\(name)`."],
+                    accessModifier: externalAccessLevel,
+                    isStatic: true,
+                    name: SwiftIdentifier(name: name),
+                    typeDefinition: .inferred(Type.ImageResource),
+                    value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(imagePath)\(name)\")"
+                )
+        }
+
+        return Struct(
+            comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
+            accessModifier: externalAccessLevel,
+            type: Type(module: .host, name: SwiftIdentifier(rawValue: name)),
+            implements: [],
+            typealiasses: [],
+            properties: imageLets,
+            functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
+            structs: subfolders.map { $0.generatedStruct(at: externalAccessLevel) },
+            classes: []
+        )
+    }
+
+    private func imageFunction(for name: String, at externalAccessLevel: AccessLevel) -> Function {
+        return Function(
+            comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
+            accessModifier: externalAccessLevel,
+            isStatic: true,
+            name: SwiftIdentifier(name: name),
+            generics: nil,
+            parameters: [
+                Function.Parameter(
+                    name: "compatibleWith",
+                    localName: "traitCollection",
+                    type: Type._UITraitCollection.asOptional(),
+                    defaultValue: "nil"
+                )
+            ],
+            doesThrow: false,
+            returnType: Type._UIImage.asOptional(),
+            body: "return UIKit.UIImage(resource: R.image.\(path).\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
+        )
+    }
+}
+
+fileprivate extension URL {
+    var providesNamespace: Bool {
+        guard isFileURL else { return false }
+
+        let isPropertiesFile = AssetFolder.AssetPropertiesFilenames.contains(where: { (fileName: String, fileExtension: String) -> Bool in
+            guard let pathFilename = self.filename else {
+                return false
+            }
+            let pathExtension = self.pathExtension
+            return pathFilename == fileName && pathExtension == fileExtension
+        })
+
+        guard isPropertiesFile else { return false }
+        guard let data = try? Data(contentsOf: self) else { return false }
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else { return false }
+        guard let dict = json as? [String: Any] else { return false }
+        guard let properties = dict["properties"] as? [String: Any] else { return false }
+        guard let providesNamespace = properties["provides-namespace"] as? Bool else { return false }
+
+        return providesNamespace
+    }
+    var namespace: String {
+        return lastPathComponent
+    }
+    var namespaceURL: URL {
+        return deletingLastPathComponent()
+    }
+
+    // Returns whether self is descendant of namespace 
+    func matches(_ namespace: URL) -> Bool {
+        return self.absoluteString.hasPrefix(namespace.absoluteString)
+    }
 }

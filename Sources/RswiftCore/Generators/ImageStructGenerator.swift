@@ -30,6 +30,14 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     let allFunctions = assetFolderImageNames + imagesNames
     let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
+    let assetSubfolders = assetFolders
+      .flatMap { $0.subfolders }
+      .mergeDuplicates(recursive: true)
+      .removeConflicting(with: allFunctions)
+
+    let structs = assetSubfolders
+      .map { $0.generatedStruct(at: externalAccessLevel) }
+
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 
     let imageLets = groupedFunctions
@@ -53,7 +61,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: imageLets,
       functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
-      structs: [],
+      structs: structs,
       classes: []
     )
   }
@@ -79,3 +87,33 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 }
+
+fileprivate extension Array where Element: NamespacedAssetSubfolder {
+    func mergeDuplicates(recursive: Bool) -> [Element] {
+        var dict = [String: Element]()
+
+        self.forEach { subfolder in
+            if let duplicate = dict[subfolder.name], recursive {
+                duplicate.subfolders = (duplicate.subfolders + subfolder.subfolders).mergeDuplicates(recursive: true)
+            } else if let duplicate = dict[subfolder.name] {
+                duplicate.subfolders = duplicate.subfolders + subfolder.subfolders
+            } else {
+                dict[subfolder.name] = subfolder
+            }
+        }
+
+        return dict.values.map { $0 }
+    }
+
+    func removeConflicting(with allFunctions: [String]) -> [Element] {
+        let uniques = self.filter { !allFunctions.contains($0.name)  }
+        let duplicates = self.filter { allFunctions.contains($0.name)  }
+
+        for subfolder in duplicates {
+            warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
+        }
+
+        return uniques
+    }
+}
+
