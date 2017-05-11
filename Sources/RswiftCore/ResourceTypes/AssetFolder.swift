@@ -22,6 +22,7 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
   let url: URL
   let name: String
   var path: String { return "" }
+  var resourcePath: String { return "" }
   var imageAssets: [String]
   var subfolders: [NamespacedAssetSubfolder]
 
@@ -70,6 +71,7 @@ protocol NamespacedAssetSubfolderType {
     var url: URL { get }
     var name: String { get }
     var path: String { get }
+    var resourcePath: String { get }
     var imageAssets: [String] { get set }
     var subfolders: [NamespacedAssetSubfolder] { get set }
 
@@ -82,7 +84,10 @@ extension NamespacedAssetSubfolderType {
         if var parent = subfolders.first(where: { subfolder.isSubfolderOf($0) }) {
             parent.dive(subfolder: subfolder)
         } else {
-            subfolder.path = path.characters.count > 0 ? "\(path).\(subfolder.name)" : "\(subfolder.name)"
+            let name = SwiftIdentifier(name: subfolder.name, lowercaseStartingCharacters: false)
+            let resourceName = SwiftIdentifier(rawValue: subfolder.name)
+            subfolder.path = path.characters.count > 0 ? "\(path).\(name)" : "\(name)"
+            subfolder.resourcePath = resourcePath.characters.count > 0 ? "\(resourcePath)/\(resourceName)" : "\(resourceName)"
             subfolders.append(subfolder)
         }
     }
@@ -104,6 +109,7 @@ class NamespacedAssetSubfolder: NamespacedAssetSubfolderType {
     let url: URL
     let name: String
     var path: String = ""
+    var resourcePath: String = ""
     var imageAssets: [String] = []
     var subfolders: [NamespacedAssetSubfolder] = []
 
@@ -120,7 +126,7 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
 
         groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 
-        let imagePath = path.replacingOccurrences(of: ".", with: "/") + (!path.isEmpty ? "/" : "")
+        let imagePath = resourcePath + (!path.isEmpty ? "/" : "")
 
         let assetSubfolders = subfolders
             .mergeDuplicates()
@@ -145,7 +151,7 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
         return Struct(
             comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
             accessModifier: externalAccessLevel,
-            type: Type(module: .host, name: SwiftIdentifier(rawValue: name)),
+            type: Type(module: .host, name: SwiftIdentifier(name: name, lowercaseStartingCharacters: false)),
             implements: [],
             typealiasses: [],
             properties: imageLets,
