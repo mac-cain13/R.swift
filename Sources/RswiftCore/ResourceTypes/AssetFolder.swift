@@ -122,6 +122,13 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
 
         let imagePath = path.replacingOccurrences(of: ".", with: "/") + (!path.isEmpty ? "/" : "")
 
+        let assetSubfolders = subfolders
+            .mergeDuplicates()
+            .removeConflicting(with: allFunctions.map({ "\(SwiftIdentifier(name: $0))" }))
+
+        let structs = assetSubfolders
+            .map { $0.generatedStruct(at: externalAccessLevel) }
+
         let imageLets = groupedFunctions
             .uniques
             .map { name in
@@ -143,7 +150,7 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
             typealiasses: [],
             properties: imageLets,
             functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
-            structs: subfolders.map { $0.generatedStruct(at: externalAccessLevel) },
+            structs: structs,
             classes: []
         )
     }

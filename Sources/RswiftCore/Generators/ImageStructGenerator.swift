@@ -32,8 +32,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 
     let assetSubfolders = assetFolders
       .flatMap { $0.subfolders }
-      .mergeDuplicates(recursive: true)
-      .removeConflicting(with: allFunctions)
+      .mergeDuplicates()
+      .removeConflicting(with: allFunctions.map({ "\(SwiftIdentifier(name: $0))" }))
 
     let structs = assetSubfolders
       .map { $0.generatedStruct(at: externalAccessLevel) }
@@ -88,15 +88,14 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
   }
 }
 
-fileprivate extension Array where Element: NamespacedAssetSubfolder {
-    func mergeDuplicates(recursive: Bool) -> [Element] {
+extension Array where Element: NamespacedAssetSubfolder {
+    func mergeDuplicates() -> [Element] {
         var dict = [String: Element]()
 
         self.forEach { subfolder in
-            if let duplicate = dict[subfolder.name], recursive {
-                duplicate.subfolders = (duplicate.subfolders + subfolder.subfolders).mergeDuplicates(recursive: true)
-            } else if let duplicate = dict[subfolder.name] {
-                duplicate.subfolders = duplicate.subfolders + subfolder.subfolders
+            if let duplicate = dict[subfolder.name] {
+                duplicate.subfolders += subfolder.subfolders
+                duplicate.imageAssets += subfolder.imageAssets
             } else {
                 dict[subfolder.name] = subfolder
             }

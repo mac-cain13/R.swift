@@ -12,6 +12,8 @@
 		8A0FBCE6E8FF0950B8821B0B /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */; };
 		B9AD30832913E120484BAD10 /* Pods_Shared_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
+		CCBC9CB91EC4809D002F3D0E /* Images2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */; };
+		CCBC9CBA1EC480A2002F3D0E /* Images2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */; };
 		D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50175BC1B5FEFD000DB8314 /* Secondary.storyboard */; };
 		D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9D1BBC33680013F52A /* Colors@2x.jpg */; };
 		D5159EA01BBC37BC0013F52A /* Colors@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5159E9F1BBC37BC0013F52A /* Colors@3x.jpg */; };
@@ -116,6 +118,7 @@
 		9C2D4D874D7A6B1F02578293 /* Pods-Shared-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		BA2177EF715BB7F766BD6216 /* Pods_Shared_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
+		CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images2.xcassets; sourceTree = "<group>"; };
 		D41BDD927A1804A5D763C750 /* Pods-Shared-ResourceApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp-tvOS.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		D436146321CC7322E5ECEE24 /* Pods-Shared-ResourceAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D50175BA1B5FEF6E00DB8314 /* rswift.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rswift.log; sourceTree = SOURCE_ROOT; };
@@ -332,6 +335,7 @@
 				E2CD68611D7CAC9200BEBE59 /* Localized */,
 				E2F268AF1C92BFE00093995D /* Colors */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
+				CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */,
 				D51E60BF1BB13612004BB376 /* Images */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D5F05D401BB51FEA003AE55E /* Files */,
@@ -669,6 +673,7 @@
 				D59A04641DF3223800B9F65F /* icon.ignoreme.png in Resources */,
 				D5159EA21BBD0BB40013F52A /* Colors~ipad@2x.jpg in Resources */,
 				D5AD5C971B7A7CDA00A8B96C /* duplicate.storyboard in Resources */,
+				CCBC9CB91EC4809D002F3D0E /* Images2.xcassets in Resources */,
 				D59A04661DF3225500B9F65F /* hand.ignoreme.png in Resources */,
 				D5AD5C9D1B7A901F00A8B96C /* ADuplicateCellView.xib in Resources */,
 				D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */,
@@ -687,6 +692,7 @@
 			files = (
 				D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */,
 				D58AF2811B708CB300FB2A4E /* rswift.log in Resources */,
+				CCBC9CBA1EC480A2002F3D0E /* Images2.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -797,7 +803,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		ADB91CF666C6624CD5A00F13 /* [CP] Copy Pods Resources */ = {
@@ -827,7 +833,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D55C6CED1B5E172900301B0D /* R.swift */ = {
@@ -870,7 +876,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
