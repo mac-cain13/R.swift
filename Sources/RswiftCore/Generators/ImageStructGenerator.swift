@@ -51,7 +51,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
           typeDefinition: .inferred(Type.ImageResource),
           value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
         )
-      }
+    }
 
     return Struct(
       comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
@@ -89,30 +89,30 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 }
 
 extension Array where Element: NamespacedAssetSubfolder {
-    func mergeDuplicates() -> [Element] {
-        var dict = [String: Element]()
+  func mergeDuplicates() -> [Element] {
+    var dict = [String: Element]()
 
-        self.forEach { subfolder in
-            if let duplicate = dict[subfolder.name] {
-                duplicate.subfolders += subfolder.subfolders
-                duplicate.imageAssets += subfolder.imageAssets
-            } else {
-                dict[subfolder.name] = subfolder
-            }
-        }
-
-        return dict.values.map { $0 }
+    self.forEach { subfolder in
+      if let duplicate = dict[subfolder.name] {
+        duplicate.subfolders += subfolder.subfolders
+        duplicate.imageAssets += subfolder.imageAssets
+      } else {
+        dict[subfolder.name] = subfolder
+      }
     }
 
-    func removeConflicting(with allFunctions: [String]) -> [Element] {
-        let uniques = self.filter { !allFunctions.contains($0.name)  }
-        let duplicates = self.filter { allFunctions.contains($0.name)  }
+    return dict.values.map { $0 }
+  }
 
-        for subfolder in duplicates {
-            warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
-        }
+  func removeConflicting(with allFunctions: [String]) -> [Element] {
+    let uniques = self.filter { !allFunctions.contains($0.name)  }
+    let duplicates = self.filter { allFunctions.contains($0.name)  }
 
-        return uniques
+    for subfolder in duplicates {
+      warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
     }
+
+    return uniques
+  }
 }
 
