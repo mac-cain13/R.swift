@@ -16,7 +16,10 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     self.fonts = fonts
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName: SwiftIdentifier = "font"
+    let qualifiedName = prefix + structName
+
     let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
@@ -44,7 +47,8 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
         body: "return UIKit.UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
       )
 
-      let validateLine = "if R.font.\(SwiftIdentifier(name: font.name))(size: 42) == nil { throw Rswift.ValidationError(description:\"[R.swift] Font '\(font.name)' could not be loaded, is '\(font.filename)' added to the UIAppFonts array in this targets Info.plist?\") }"
+      let fontName = qualifiedName + SwiftIdentifier(name: font.name)
+      let validateLine = "if \(fontName)(size: 42) == nil { throw Rswift.ValidationError(description:\"[R.swift] Font '\(font.name)' could not be loaded, is '\(font.filename)' added to the UIAppFonts array in this targets Info.plist?\") }"
 
       return (properties, function, validateLine)
     }
@@ -73,7 +77,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     return Struct(
       comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "font"),
+      type: Type(module: .host, name: structName),
       implements: implements,
       typealiasses: [],
       properties: properties,

@@ -18,7 +18,9 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     self.images = images
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName: SwiftIdentifier = "image"
+    let qualifiedName = prefix + structName
     let assetFolderImageNames = assetFolders
       .flatMap { $0.imageAssets }
 
@@ -36,7 +38,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       .removeConflicting(with: allFunctions.map({ "\(SwiftIdentifier(name: $0))" }))
 
     let structs = assetSubfolders
-      .map { $0.generatedStruct(at: externalAccessLevel) }
+      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 

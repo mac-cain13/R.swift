@@ -21,8 +21,8 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
 
   let url: URL
   let name: String
-  var path: String { return "" }
-  var resourcePath: String { return "" }
+  let path = ""
+  let resourcePath = ""
   var imageAssets: [String]
   var subfolders: [NamespacedAssetSubfolder]
 
@@ -84,10 +84,10 @@ extension NamespacedAssetSubfolderType {
     if var parent = subfolders.first(where: { subfolder.isSubfolderOf($0) }) {
       parent.dive(subfolder: subfolder)
     } else {
-      let name = SwiftIdentifier(name: subfolder.name, lowercaseStartingCharacters: false)
+      let name = SwiftIdentifier(name: subfolder.name)
       let resourceName = SwiftIdentifier(rawValue: subfolder.name)
-      subfolder.path = path.characters.count > 0 ? "\(path).\(name)" : "\(name)"
-      subfolder.resourcePath = resourcePath.characters.count > 0 ? "\(resourcePath)/\(resourceName)" : "\(resourceName)"
+      subfolder.path = path != "" ? "\(path).\(name)" : "\(name)"
+      subfolder.resourcePath = resourcePath != "" ? "\(resourcePath)/\(resourceName)" : "\(resourceName)"
       subfolders.append(subfolder)
     }
   }
@@ -120,7 +120,7 @@ class NamespacedAssetSubfolder: NamespacedAssetSubfolderType {
 }
 
 extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
@@ -132,8 +132,11 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
       .mergeDuplicates()
       .removeConflicting(with: allFunctions.map({ "\(SwiftIdentifier(name: $0))" }))
 
+
+    let structName = SwiftIdentifier(name: self.name)
+    let qualifiedName = prefix + structName
     let structs = assetSubfolders
-      .map { $0.generatedStruct(at: externalAccessLevel) }
+      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
 
     let imageLets = groupedFunctions
       .uniques
@@ -149,9 +152,9 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
     }
 
     return Struct(
-      comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(imageLets.count) images."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: SwiftIdentifier(name: name, lowercaseStartingCharacters: false)),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: imageLets,

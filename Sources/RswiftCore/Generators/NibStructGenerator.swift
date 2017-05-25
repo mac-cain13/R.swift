@@ -39,14 +39,16 @@ struct NibStructGenerator: StructGenerator {
     self.nibs = nibs
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
+    let structName: SwiftIdentifier = "nib"
+    let qualifiedName = prefix + structName
     let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     let internalStruct = Struct(
       comments: [],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "nib"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: [],
@@ -59,15 +61,15 @@ struct NibStructGenerator: StructGenerator {
 
     let nibProperties: [Let] = groupedNibs
       .uniques
-      .map { nibVar(for: $0, at: externalAccessLevel) }
+      .map { nibVar(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
     let nibFunctions: [Function] = groupedNibs
       .uniques
-      .map { nibFunc(for: $0, at: externalAccessLevel) }
+      .map { nibFunc(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
 
     let externalStruct = Struct(
-      comments: ["This `R.nib` struct is generated, and contains static references to \(nibProperties.count) nibs."],
+      comments: ["This `\(qualifiedName) struct is generated, and contains static references to \(nibProperties.count) nibs."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "nib"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: nibProperties,
@@ -82,7 +84,10 @@ struct NibStructGenerator: StructGenerator {
     )
   }
 
-  private func nibFunc(for nib: Nib, at externalAccessLevel: AccessLevel) -> Function {
+  private func nibFunc(for nib: Nib, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
+    let nibName = SwiftIdentifier(name: nib.name)
+    let qualifiedName = prefix + nibName
+
     return Function(
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       accessModifier: externalAccessLevel,
@@ -94,13 +99,14 @@ struct NibStructGenerator: StructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UINib,
-      body: "return UIKit.UINib(resource: R.nib.\(SwiftIdentifier(name: nib.name)))"
+      body: "return UIKit.UINib(resource: \(qualifiedName))"
     )
   }
 
-  private func nibVar(for nib: Nib, at externalAccessLevel: AccessLevel) -> Let {
-    let nibStructName = SwiftIdentifier(name: "_\(nib.name)")
-    let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_R.nib.\(nibStructName)"))
+  private func nibVar(for nib: Nib, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Let {
+    let structName = SwiftIdentifier(name: "_\(nib.name)")
+    let qualifiedName = prefix + structName
+    let structType = Type(module: .host, name: SwiftIdentifier(rawValue: "_\(qualifiedName)"))
     return Let(
       comments: ["Nib `\(nib.name)`."],
       accessModifier: externalAccessLevel,
