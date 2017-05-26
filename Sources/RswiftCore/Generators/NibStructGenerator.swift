@@ -67,7 +67,7 @@ struct NibStructGenerator: StructGenerator {
       .map { nibFunc(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
 
     let externalStruct = Struct(
-      comments: ["This `\(qualifiedName) struct is generated, and contains static references to \(nibProperties.count) nibs."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(nibProperties.count) nibs."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
       implements: [],
