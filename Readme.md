@@ -37,14 +37,6 @@ Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.a
 
 ![Compiletime checked images](Documentation/Images/DemoRenameImage.gif)
 
-**Support for assets grouped in folders:**
-
-Selecting "Provides Namespace" results in grouping assets.
-
-![Assets folders structure](Documentation/Images/DemoUseNamespacedSubfolders.png)
-
-![Use image assets grouped ](Documentation/Images/DemoUseImageAssetsNamespaces.png)
-
 This is only the beginning, check out [more examples](Documentation/Examples.md)!
 
 ## Features

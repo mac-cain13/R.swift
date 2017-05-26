@@ -36,6 +36,17 @@ let settingsIcon = R.image.settingsIcon()
 let gradientBackground = R.image.gradientJpg()
 ```
 
+### Support for assets grouped in folders
+
+Selecting "Provides Namespace" results in grouping assets:
+
+![Assets folders structure](Images/NamespacedSubfolders.png)
+
+Use like so:
+```swift
+let image = R.image.menu.icons.first()
+```
+
 ## Custom fonts
 
 *Vanilla*
