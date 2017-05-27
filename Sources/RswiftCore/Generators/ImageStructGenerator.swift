@@ -32,15 +32,17 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     let allFunctions = assetFolderImageNames + imagesNames
     let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
-    let assetSubfolders = assetFolders
-      .flatMap { $0.subfolders }
-      .mergeDuplicates()
-      .removeConflicting(with: allFunctions.map({ "\(SwiftIdentifier(name: $0))" }))
-
-    let structs = assetSubfolders
-      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
-
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
+
+
+    let assetSubfolders = AssetSubfolders(
+      all: assetFolders.flatMap { $0.subfolders },
+      assetIdentifiers: allFunctions.map { SwiftIdentifier(name: $0) })
+
+    assetSubfolders.printWarningsForDuplicates()
+
+    let structs = assetSubfolders.folders
+      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
 
     let imageLets = groupedFunctions
       .uniques
@@ -90,31 +92,98 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
   }
 }
 
-extension Array where Element: NamespacedAssetSubfolder {
-  func mergeDuplicates() -> [Element] {
-    var dict = [String: Element]()
+extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let allFunctions = imageAssets
+    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
-    self.forEach { subfolder in
-      if let duplicate = dict[subfolder.name] {
-        duplicate.subfolders += subfolder.subfolders
-        duplicate.imageAssets += subfolder.imageAssets
-      } else {
-        dict[subfolder.name] = subfolder
-      }
+    groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
+
+
+    let assetSubfolders = AssetSubfolders(
+      all: subfolders,
+      assetIdentifiers: allFunctions.map { SwiftIdentifier(name: $0) })
+
+    assetSubfolders.printWarningsForDuplicates()
+
+    let imagePath = resourcePath + (!path.isEmpty ? "/" : "")
+    let structName = SwiftIdentifier(name: self.name)
+    let qualifiedName = prefix + structName
+    let structs = assetSubfolders.folders
+      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
+
+    let imageLets = groupedFunctions
+      .uniques
+      .map { name in
+        Let(
+          comments: ["Image `\(name)`."],
+          accessModifier: externalAccessLevel,
+          isStatic: true,
+          name: SwiftIdentifier(name: name),
+          typeDefinition: .inferred(Type.ImageResource),
+          value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(imagePath)\(name)\")"
+        )
     }
 
-    return dict.values.map { $0 }
+    return Struct(
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(imageLets.count) images."],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: structName),
+      implements: [],
+      typealiasses: [],
+      properties: imageLets,
+      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
+      structs: structs,
+      classes: []
+    )
   }
 
-  func removeConflicting(with allFunctions: [String]) -> [Element] {
-    let uniques = self.filter { !allFunctions.contains($0.name)  }
-    let duplicates = self.filter { allFunctions.contains($0.name)  }
-
-    for subfolder in duplicates {
-      warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
-    }
-
-    return uniques
+  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel) -> Function {
+    return Function(
+      comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
+      accessModifier: externalAccessLevel,
+      isStatic: true,
+      name: SwiftIdentifier(name: name),
+      generics: nil,
+      parameters: [
+        Function.Parameter(
+          name: "compatibleWith",
+          localName: "traitCollection",
+          type: Type._UITraitCollection.asOptional(),
+          defaultValue: "nil"
+        )
+      ],
+      doesThrow: false,
+      returnType: Type._UIImage.asOptional(),
+      body: "return UIKit.UIImage(resource: R.image.\(path).\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
+    )
   }
 }
 
+struct AssetSubfolders {
+  let folders: [NamespacedAssetSubfolder]
+  let duplicates: [NamespacedAssetSubfolder]
+
+  init(all subfolders: [NamespacedAssetSubfolder], assetIdentifiers: [SwiftIdentifier]) {
+    var dict: [SwiftIdentifier: NamespacedAssetSubfolder] = [:]
+
+    for subfolder in subfolders {
+      let name = SwiftIdentifier(name: subfolder.name)
+      if let duplicate = dict[name] {
+        duplicate.subfolders += subfolder.subfolders
+        duplicate.imageAssets += subfolder.imageAssets
+      } else {
+        dict[name] = subfolder
+      }
+    }
+
+    self.folders = dict.values.filter { !assetIdentifiers.contains(SwiftIdentifier(name: $0.name)) }
+    self.duplicates = dict.values.filter { assetIdentifiers.contains(SwiftIdentifier(name: $0.name)) }
+  }
+
+  func printWarningsForDuplicates() {
+    for subfolder in duplicates {
+      warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
+    }
+  }
+}
