@@ -254,19 +254,27 @@ private struct StringValues {
   var localizedString: String {
     let escapedKey = key.escapedStringLiteral
 
+    var valueArgument: String = ""
+    if let baseValue = baseValue {
+      valueArgument = ", value: \"\(baseValue.escapedStringLiteral)\""
+    }
+
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: R.hostingBundle, comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: R.hostingBundle\(valueArgument), comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: R.hostingBundle, comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: R.hostingBundle\(valueArgument), comment: \"\")"
     }
+  }
+
+  private var baseValue: String? {
+    return values.filter { $0.0.isBase }.map { $0.1 }.first
   }
 
   var comments: [String] {
     var results: [String] = []
 
     let containsBase = values.contains { $0.0.isBase }
-    let baseValue = values.filter { $0.0.isBase }.map { $0.1 }.first
     let anyNone = values.contains { $0.0.isNone }
 
     if let baseValue = baseValue {
