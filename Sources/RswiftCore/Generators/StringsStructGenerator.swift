@@ -16,34 +16,42 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     self.localizableStrings = localizableStrings
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName: SwiftIdentifier = "string"
+    let qualifiedName = prefix + structName
     let localized = localizableStrings.grouped { $0.filename }
     let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
+    let structs = groupedLocalized.uniques.flatMap { (key: String, value: [LocalizableStrings]) in
+      return stringStructFromLocalizableStrings(filename: key, strings: value, at: externalAccessLevel, prefix: qualifiedName)
+    }
+
     return Struct(
-      comments: ["This `R.string` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "string"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedLocalized.uniques.flatMap { stringStructFromLocalizableStrings(filename: $0.0, strings: $0.1, at: externalAccessLevel) },
+      structs: structs,
       classes: []
     )
   }
 
-  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct? {
 
-    let name = SwiftIdentifier(name: filename)
+    let structName = SwiftIdentifier(name: filename)
+    let qualifiedName = prefix + structName
+
     let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
-      comments: ["This `R.string.\(name)` struct is generated, and contains static references to \(params.count) localization keys."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(params.count) localization keys."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: name),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: params.map { stringLet(values: $0, at: externalAccessLevel) },

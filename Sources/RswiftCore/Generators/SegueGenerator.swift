@@ -18,7 +18,10 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     self.storyboards = storyboards
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName: SwiftIdentifier = "segue"
+    let qualifiedName = prefix + structName
+
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
         viewController.segues.flatMap { segue -> SegueWithInfo? in
@@ -62,9 +65,9 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
-      comments: ["This `R.segue` struct is generated, and contains static references to \(structs.count) view controllers."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(structs.count) view controllers."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "segue"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: [],

@@ -41,10 +41,10 @@ public struct RswiftCore {
       ]
 
       let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
-        .generatedStructs(at: callInformation.accessLevel)
+        .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
       let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
-        .generatedStructs(at: callInformation.accessLevel)
+        .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
       let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
 
