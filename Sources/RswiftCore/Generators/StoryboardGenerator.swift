@@ -16,14 +16,17 @@ struct StoryboardStructGenerator: StructGenerator {
     self.storyboards = storyboards
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
+    let structName: SwiftIdentifier = "storyboard"
+    let qualifiedName = prefix + structName
     let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardTypes = groupedStoryboards
       .uniques
       .map { storyboard -> (Struct, Let, Function) in
-        let _struct = storyboardStruct(for: storyboard, at: externalAccessLevel)
+        let _struct = storyboardStruct(for: storyboard, at: externalAccessLevel, prefix: qualifiedName)
+        let _storyboardName = qualifiedName + _struct.type.name
 
         let _property = Let(
           comments: ["Storyboard `\(storyboard.name)`."],
@@ -31,7 +34,7 @@ struct StoryboardStructGenerator: StructGenerator {
           isStatic: true,
           name: _struct.type.name,
           typeDefinition: .inferred(Type.StoryboardResourceType),
-          value: "_R.storyboard.\(_struct.type.name)()"
+          value: "_\(_storyboardName)()"
         )
 
         let _function = Function(
@@ -52,9 +55,9 @@ struct StoryboardStructGenerator: StructGenerator {
       }
 
     let externalStruct = Struct(
-        comments: ["This `R.storyboard` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
+        comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
         accessModifier: externalAccessLevel,
-        type: Type(module: .host, name: "storyboard"),
+        type: Type(module: .host, name: structName),
         implements: [],
         typealiasses: [],
         properties: storyboardTypes.map { $0.1 },
@@ -66,7 +69,7 @@ struct StoryboardStructGenerator: StructGenerator {
     let internalStruct = Struct(
       comments: [],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "storyboard"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: [],
@@ -81,7 +84,10 @@ struct StoryboardStructGenerator: StructGenerator {
     )
   }
 
-  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel) -> Struct {
+  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName = SwiftIdentifier(name: storyboard.name)
+    let qualifiedName = prefix + structName
+
     var implements: [TypePrinter] = []
     var typealiasses: [Typealias] = []
     var functions: [Function] = []
@@ -153,7 +159,7 @@ struct StoryboardStructGenerator: StructGenerator {
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
       .flatMap { vc, _ in
         vc.storyboardIdentifier.map {
-          "if _R.storyboard.\(SwiftIdentifier(name: storyboard.name))().\(SwiftIdentifier(name: $0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
+          "if _\(qualifiedName)().\(SwiftIdentifier(name: $0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
         }
       }
     let validateLines = validateImagesLines + validateViewControllersLines
@@ -178,7 +184,7 @@ struct StoryboardStructGenerator: StructGenerator {
     return Struct(
       comments: [],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: SwiftIdentifier(name: storyboard.name)),
+      type: Type(module: .host, name: structName),
       implements: implements,
       typealiasses: typealiasses,
       properties: properties,

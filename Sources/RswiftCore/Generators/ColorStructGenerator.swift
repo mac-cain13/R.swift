@@ -17,35 +17,38 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     self.palettes = palettes
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName: SwiftIdentifier = "color"
+    let qualifiedName = prefix + structName
     let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
     return Struct(
-      comments: ["This `R.color` struct is generated, and contains static references to \(palettes.count) color palettes."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(palettes.count) color palettes."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "color"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel) },
+      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel, prefix: qualifiedName) },
       classes: []
     )
   }
 
-  private func colorStruct(from palette: ColorPalette, at externalAccessLevel: AccessLevel) -> Struct? {
+  private func colorStruct(from palette: ColorPalette, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct? {
     if palette.colors.isEmpty { return nil }
 
-    let name = SwiftIdentifier(name: palette.filename)
+    let structName = SwiftIdentifier(name: palette.filename)
+    let qualifiedName = prefix + structName
     let groupedColors = palette.colors.groupedBySwiftIdentifier { $0.0 }
 
     groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", container: "in palette '\(palette.filename)'", result: "color")
 
     return Struct(
-      comments: ["This `R.color.\(name)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: name),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },

@@ -47,6 +47,8 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Missing reference 'missing' in 'fault alpha' 'Generic.stringsdict'",
     "warning: [R.swift] Missing reference 'first_one' in 'fault epsilon' 'Generic.stringsdict'",
     "warning: [R.swift] Missing reference 'first' in 'incorrect in dutch' 'Settings.stringsdict' (nl)",
+    "warning: [R.swift] Skipping asset subfolder because symbol 'conflicting' would conflict with image: conflicting",
+    "warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, Second"
   ]
 
   func testWarningsAreLogged() {

@@ -21,7 +21,7 @@ struct SwiftIdentifier : CustomStringConvertible {
 
   init(name: String, lowercaseStartingCharacters: Bool = true) {
     // Remove all blacklisted characters from the name and uppercase the character after a blacklisted character
-    var nameComponents = name.components(separatedBy: BlacklistedCharacters)
+    var nameComponents = name.components(separatedBy: blacklistedCharacters)
     let firstComponent = nameComponents.remove(at: 0)
     let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
 
@@ -56,6 +56,10 @@ struct SwiftIdentifier : CustomStringConvertible {
       let lowercasedPrefix = (name as NSString).substring(with: prefixRange).lowercased()
       return (name as NSString).replacingCharacters(in: prefixRange, with: lowercasedPrefix)
     }
+  }
+
+  static func +(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> SwiftIdentifier {
+    return SwiftIdentifier(rawValue: "\(lhs.description).\(rhs.description)")
   }
 }
 
@@ -134,7 +138,7 @@ extension Sequence {
   }
 }
 
-private let BlacklistedCharacters: CharacterSet = {
+private let blacklistedCharacters: CharacterSet = {
   let blacklist = NSMutableCharacterSet(charactersIn: "")
   blacklist.formUnion(with: CharacterSet.whitespacesAndNewlines)
   blacklist.formUnion(with: CharacterSet.punctuationCharacters)
