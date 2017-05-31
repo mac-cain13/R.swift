@@ -116,3 +116,5 @@ We'll love contributions, read the [contribute docs](Documentation/Contribute.md
 ## License
 
 [R.swift](https://github.com/mac-cain13/R.swift) and [R.swift.Library](https://github.com/mac-cain13/R.swift.Library) are created by [Mathijs Kadijk](https://github.com/mac-cain13) and released under a [MIT License](License).
+
+Special thanks to [Tom Lokhorst](https://github.com/tomlokhorst) for his major contributions and help maintaining this project.
