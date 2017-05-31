@@ -1,3 +1,15 @@
+## 3.3.0
+
+*New features:*
+- Better checks for color spaces in clr files
+- Include base translation in R.strings code
+
+*Fixed issues:*
+- Validating images from nibs now respects bundle
+
+*Other:*
+- We now use swift package manager as our build tool
+
 ## 3.3.0.beta.1
 
 *New features:*
