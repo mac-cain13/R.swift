@@ -51,8 +51,14 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: groupedColors.uniques.map { colorLet($0, color: $1, at: externalAccessLevel) },
-      functions: groupedColors.uniques.map { colorFunction($0, color: $1, at: externalAccessLevel) },
+      properties: groupedColors.uniques.map { arg in
+        let (name, color) = arg
+        return colorLet(name, color: color, at: externalAccessLevel)
+      },
+      functions: groupedColors.uniques.map { arg in
+        let (name, color) = arg
+        return colorFunction(name, color: color, at: externalAccessLevel)
+      },
       structs: [],
       classes: []
     )

@@ -24,7 +24,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
-    let structs = groupedLocalized.uniques.flatMap { (key: String, value: [LocalizableStrings]) in
+    let structs = groupedLocalized.uniques.flatMap { arg -> Struct? in
+      let (key, value) = arg
       return stringStructFromLocalizableStrings(filename: key, strings: value, at: externalAccessLevel, prefix: qualifiedName)
     }
 
@@ -124,8 +125,13 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     var results: [StringValues] = []
     var badFormatSpecifiersKeys = Set<String>()
 
+    let filteredSortedParams = allParams
+      .map { $0 }
+      .filter { includeTranslation($0.0) }
+      .sorted(by: { $0.0 < $1.0 })
+
     // Unify format specifiers
-    for (key, keyParams) in allParams.filter({ includeTranslation($0.0) }).sorted(by: { $0.0 < $1.0 }) {
+    for (key, keyParams) in filteredSortedParams  {
       var params: [StringParam] = []
       var areCorrectFormatSpecifiers = true
 
@@ -216,7 +222,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
   private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
-    let params = values.params.enumerated().map { ix, param -> Function.Parameter in
+    let params = values.params.enumerated().map { arg -> Function.Parameter in
+      let (ix, param) = arg
       let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
 

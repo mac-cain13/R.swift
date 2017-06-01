@@ -118,7 +118,7 @@ command(
     .components(separatedBy: ",")
     .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
     .filter { !$0.isEmpty }
-    .map(Module.custom)
+    .map { Module.custom(name: $0) }
 
 
   let callInformation = CallInformation(
