@@ -20,16 +20,14 @@ extension Array {
 // MARK: Sequence operations
 
 extension Sequence {
-  func grouped<Key: Hashable>(by keySelector: (Iterator.Element) -> Key) -> [Key : [Iterator.Element]] {
+  func grouped<Key>(by keySelector: (Iterator.Element) -> Key) -> [Key : [Iterator.Element]] {
     var groupedBy = Dictionary<Key, [Iterator.Element]>()
 
     for element in self {
       let key = keySelector(element)
-      if let group = groupedBy[key] {
-        groupedBy[key] = group + [element]
-      } else {
-        groupedBy[key] = [element]
-      }
+      var array = groupedBy.removeValue(forKey: key) ?? []
+      array.append(element)
+      groupedBy[key] = array
     }
 
     return groupedBy
