@@ -184,7 +184,7 @@ let viewControllerWithNib = CustomViewController(nibName: "CustomView", bundle: 
 ```swift
 let nameOfNib = R.nib.customView.name
 let customViewNib = R.nib.customView()
-let rootViews = R.nib.customView.instantiateWithOwner(nil)
+let rootViews = R.nib.customView.instantiate(withOwner: nil)
 let customView = R.nib.customView.firstView(owner: nil)
 
 let viewControllerWithNib = CustomViewController(nib: R.nib.customView)
@@ -202,7 +202,7 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCellWithIdentifier("TextCellIdentifier", forIndexPath: indexPath) as! TextCell
+    let textCell = tableView.dequeueReusableCell(withIdentifier: "TextCellIdentifier", for: indexPath) as! TextCell
     textCell.mainLabel.text = "Hello World"
     return textCell
   }
@@ -218,7 +218,7 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCellWithIdentifier(R.nib.textCell.identifier, forIndexPath: indexPath)!
+    let textCell = tableView.dequeueReusableCell(withIdentifier: R.nib.textCell.identifier, for: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
   }
@@ -237,7 +237,7 @@ class RecentsController: UICollectionViewController {
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TalkCellIdentifier", forIndexPath: indexPath) as! TalkCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TalkCellIdentifier", for: indexPath) as! TalkCell
     cell.configureCell("Item \(indexPath.item)")
     return cell
   }
@@ -253,7 +253,7 @@ class RecentsController: UICollectionViewController {
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(R.reuseIdentifier.talkCell, forIndexPath: indexPath)!
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: R.reuseIdentifier.talkCell, for: indexPath)!
     cell.configureCell("Item \(indexPath.item)")
     return cell
   }
