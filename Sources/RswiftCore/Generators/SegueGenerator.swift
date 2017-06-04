@@ -9,7 +9,15 @@
 
 import Foundation
 
-typealias SegueWithInfo = (segue: Storyboard.Segue, sourceType: Type, destinationType: Type)
+private struct SegueWithInfo {
+  let segue: Storyboard.Segue
+  let sourceType: Type
+  let destinationType: Type
+
+  var groupKey: String {
+    return "\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
+  }
+}
 
 struct SegueStructGenerator: ExternalOnlyStructGenerator {
   private let storyboards: [Storyboard]
@@ -36,15 +44,13 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
             return nil
           }
 
-          return (segue: segue, sourceType: viewController.type, destinationType: destinationType)
+          return SegueWithInfo(segue: segue, sourceType: viewController.type, destinationType: destinationType)
         }
       }
     }
 
     let deduplicatedSeguesWithInfo = seguesWithInfo
-      .grouped { segue, sourceType, destinationType in
-        "\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
-      }
+      .grouped { $0.groupKey }
       .values
       .flatMap { $0.first }
 

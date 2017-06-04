@@ -124,7 +124,8 @@ fileprivate extension URL {
   func providesNamespace() -> Bool {
     guard isFileURL else { return false }
 
-    let isPropertiesFile = assetPropertiesFilenames.contains(where: { (fileName: String, fileExtension: String) -> Bool in
+    let isPropertiesFile = assetPropertiesFilenames.contains(where: { arg -> Bool in
+      let (fileName, fileExtension) = arg
       guard let pathFilename = self.filename else {
         return false
       }

@@ -117,16 +117,17 @@ struct StoryboardStructGenerator: StructGenerator {
     }
 
     let viewControllersWithResourceProperty = groupedViewControllersWithIdentifier.uniques
-      .map { (vc, identifier) -> (Storyboard.ViewController, Let) in
-        (
-          vc,
+      .map { arg -> (Storyboard.ViewController, Let) in
+        let (viewController, identifier) = arg
+        return (
+          viewController,
           Let(
             comments: [],
             accessModifier: externalAccessLevel,
             isStatic: false,
             name: SwiftIdentifier(name: identifier),
             typeDefinition: .inferred(Type.StoryboardViewControllerResource),
-            value:  "\(Type.StoryboardViewControllerResource.name)<\(vc.type)>(identifier: \"\(identifier)\")"
+            value:  "\(Type.StoryboardViewControllerResource.name)<\(viewController.type)>(identifier: \"\(identifier)\")"
           )
         )
       }
@@ -134,8 +135,9 @@ struct StoryboardStructGenerator: StructGenerator {
       .forEach { properties.append($0.1) }
 
     viewControllersWithResourceProperty
-      .map { (vc, resource) in
-        Function(
+      .map { arg in
+        let (vc, resource) = arg
+        return Function(
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
@@ -157,10 +159,11 @@ struct StoryboardStructGenerator: StructGenerator {
         "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
-      .flatMap { vc, _ in
-        vc.storyboardIdentifier.map {
-          "if _\(qualifiedName)().\(SwiftIdentifier(name: $0))() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(SwiftIdentifier(name: $0))' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
-        }
+      .flatMap { arg -> String? in
+        let (vc, _) = arg
+        guard let storyboardName = vc.storyboardIdentifier else { return nil }
+        let storyboardIdentifier = SwiftIdentifier(name: storyboardName)
+        return "if _\(qualifiedName)().\(storyboardIdentifier)() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(storyboardIdentifier)' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
       }
     let validateLines = validateImagesLines + validateViewControllersLines
 
