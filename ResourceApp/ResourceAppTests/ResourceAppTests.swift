@@ -59,10 +59,14 @@ class ResourceAppTests: XCTestCase {
 
     do {
       let logContent = try String(contentsOf: logURL)
-      let logLines = logContent.components(separatedBy: "\n")
+      let logLines = logContent.components(separatedBy: "\n").filter { !$0.isEmpty }
 
       for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")
+      }
+
+      for logLine in logLines {
+        XCTAssertTrue(expectedWarnings.contains(logLine), "Warning was not expected: '\(logLine)'")
       }
 
       XCTAssertEqual(logLines.count, expectedWarnings.count, "There are more/less warnings then expected")
