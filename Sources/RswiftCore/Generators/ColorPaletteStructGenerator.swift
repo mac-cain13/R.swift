@@ -1,5 +1,5 @@
 //
-//  ColorStructGenerator.swift
+//  ColorPaletteStructGenerator.swift
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-03-13.
@@ -10,15 +10,15 @@
 import Foundation
 import AppKit.NSColor
 
-struct ColorStructGenerator: ExternalOnlyStructGenerator {
+struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
   private let palettes: [ColorPalette]
 
-  init(colorPalettes palettes: [ColorPalette]) {
+  init(palettes: [ColorPalette]) {
     self.palettes = palettes
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
-    let structName: SwiftIdentifier = "color"
+    let structName: SwiftIdentifier = "clr"
     let qualifiedName = prefix + structName
     let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
