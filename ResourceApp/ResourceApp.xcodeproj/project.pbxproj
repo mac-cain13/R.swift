@@ -80,6 +80,7 @@
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E22A62091E8AE788009B7F9F /* Display P3.clr in Resources */ = {isa = PBXBuildFile; fileRef = E22A62081E8AE788009B7F9F /* Display P3.clr */; };
 		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
+		E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2562CD51EE70C68007D8938 /* Media.xcassets */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
 		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
@@ -196,6 +197,7 @@
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 		E22A62081E8AE788009B7F9F /* Display P3.clr */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Display P3.clr"; sourceTree = "<group>"; };
 		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
+		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.stringsdict; path = Generic.stringsdict; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
+				E2562CD51EE70C68007D8938 /* Media.xcassets */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */,
 				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
@@ -634,6 +637,7 @@
 				D5AD5C9B1B7A8F4300A8B96C /* CellView.xib in Resources */,
 				D5159E9E1BBC33680013F52A /* Colors@2x.jpg in Resources */,
 				D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */,
+				E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */,
 				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
