@@ -5,7 +5,7 @@ project 'ResourceApp/ResourceApp'
 
 abstract_target 'Shared' do
 
-  pod 'R.swift.Library', :git => 'git@github.com:mac-cain13/R.swift.Library.git' # for CI builds
+  pod 'R.swift.Library', :git => 'git@github.com:mac-cain13/R.swift.Library.git', :branch => 'color-asset-resource' # for CI builds
   # pod 'R.swift.Library', :path => '../R.swift.Library' # for development
 
   target 'ResourceApp' do
