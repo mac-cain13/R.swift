@@ -32,6 +32,10 @@ extension Sequence {
 
     return groupedBy
   }
+
+  func all(where predicate: (Self.Element) throws -> Bool) rethrows -> Bool {
+    return !(try contains(where: { !(try predicate($0)) }))
+  }
 }
 
 extension Sequence where Iterator.Element : Sequence {

@@ -43,7 +43,7 @@ public struct RswiftCore {
       do {
         let colorPaletteGenerator = ColorPaletteStructGenerator(palettes: resources.colors)
         let colorPaletteGeneratorStruct = colorPaletteGenerator.generatedStructs(at: callInformation.accessLevel, prefix: "")
-        if colorPaletteGeneratorStruct.externalStruct.structs.count > 0 {
+        if !colorPaletteGeneratorStruct.externalStruct.isEmpty {
           generators.append(colorPaletteGenerator)
         }
       }

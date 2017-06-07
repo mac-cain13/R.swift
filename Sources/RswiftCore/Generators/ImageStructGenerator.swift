@@ -43,6 +43,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 
     let structs = assetSubfolders.folders
       .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
       .uniques
@@ -115,6 +116,7 @@ private extension NamespacedAssetSubfolder {
     let qualifiedName = prefix + structName
     let structs = assetSubfolders.folders
       .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
       .uniques

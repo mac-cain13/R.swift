@@ -21,6 +21,13 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
   var structs: [Struct]
   var classes: [Class]
 
+  var isEmpty: Bool {
+    return properties.isEmpty
+      && functions.isEmpty
+      && (structs.isEmpty || structs.all { $0.isEmpty })
+      && classes.isEmpty
+  }
+
   var usedTypes: [UsedType] {
     return [
         type.usedTypes,

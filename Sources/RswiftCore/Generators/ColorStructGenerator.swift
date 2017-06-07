@@ -32,6 +32,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
 
     let structs = assetSubfolders.folders
       .map { $0.generatedColorStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let colorLets = groupedColors
       .uniques
@@ -104,6 +105,7 @@ private extension NamespacedAssetSubfolder {
     let qualifiedName = prefix + structName
     let structs = assetSubfolders.folders
       .map { $0.generatedColorStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let colorLets = groupedFunctions
       .uniques
@@ -119,7 +121,7 @@ private extension NamespacedAssetSubfolder {
     }
 
     return Struct(
-      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(colorLets.count) colors."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
