@@ -28,6 +28,7 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 view controllers because symbol 'validationClash' would be generated for all of these view controller identifiers: Validation clash, ValidationClash",
     "warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: ' '",
     "warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?",
+    "warning: [R.swift] Skipping 2 colors because symbol 'myRed' would be generated for all of these colors: My Red, My Red",
 
     "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these files: Duplicate, Duplicate#",
     "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for file: '@@'",
