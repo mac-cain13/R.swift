@@ -24,6 +24,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(palettes.count) color palettes."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -46,6 +47,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
     groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", container: "in palette '\(palette.filename)'", result: "color")
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedColors.uniques.count) colors."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

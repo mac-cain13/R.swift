@@ -30,6 +30,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -50,6 +51,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(params.count) localization keys."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

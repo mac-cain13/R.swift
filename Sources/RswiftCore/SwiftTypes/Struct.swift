@@ -10,6 +10,7 @@
 import Foundation
 
 struct Struct: UsedTypesProvider, SwiftCodeConverible {
+  let availables: [String]
   let comments: [String]
   let accessModifier: AccessLevel
   let type: Type
@@ -33,6 +34,7 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
 
   var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
     let accessModifierString = accessModifier.swiftCode
     let implementsString = implements.count > 0 ? ": " + implements.map { $0.swiftCode }.joined(separator: ", ") : ""
 
@@ -71,6 +73,6 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
     let bodyComponents = [typealiasString, varsString, functionsString, structsString, classesString, fileprivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joined(separator: "\n\n").indent(with: "  ")
 
-    return "\(commentsString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
+    return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
 }

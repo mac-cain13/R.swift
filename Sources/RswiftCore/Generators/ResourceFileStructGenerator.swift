@@ -28,6 +28,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     let firstLocales = groupedLocalized.uniques.map { ($0.0, Array($0.1.prefix(1))) }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(firstLocales.count) files."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

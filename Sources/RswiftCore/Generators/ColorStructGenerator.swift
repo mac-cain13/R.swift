@@ -47,6 +47,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
+      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(colorLets.count) colors."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -118,6 +119,7 @@ private extension NamespacedAssetSubfolder {
     }
 
     return Struct(
+      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(colorLets.count) colors."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

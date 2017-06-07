@@ -46,6 +46,7 @@ struct NibStructGenerator: StructGenerator {
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     let internalStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -67,6 +68,7 @@ struct NibStructGenerator: StructGenerator {
       .map { nibFunc(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
 
     let externalStruct = Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(nibProperties.count) nibs."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -206,6 +208,7 @@ struct NibStructGenerator: StructGenerator {
     let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
 
     return Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),
