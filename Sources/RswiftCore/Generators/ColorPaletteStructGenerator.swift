@@ -72,8 +72,8 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
       accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: name),
-      typeDefinition: .inferred(Type.ColorResource),
-      value: "Rswift.ColorResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
+      typeDefinition: .inferred(Type.ColorPaletteItemResource),
+      value: "Rswift.ColorPaletteItemResource(name: \"\(name)\", red: \(color.redComponent), green: \(color.greenComponent), blue: \(color.blueComponent), alpha: \(color.alphaComponent))"
     )
   }
 

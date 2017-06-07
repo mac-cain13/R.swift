@@ -42,7 +42,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     assetSubfolders.printWarningsForDuplicates()
 
     let structs = assetSubfolders.folders
-      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
 
     let imageLets = groupedFunctions
       .uniques
@@ -95,8 +95,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
   }
 }
 
-extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+private extension NamespacedAssetSubfolder {
+  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
@@ -113,7 +113,7 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
     let structName = SwiftIdentifier(name: self.name)
     let qualifiedName = prefix + structName
     let structs = assetSubfolders.folders
-      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
 
     let imageLets = groupedFunctions
       .uniques
