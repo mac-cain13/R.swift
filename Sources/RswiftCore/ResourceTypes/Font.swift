@@ -25,7 +25,7 @@ struct Font: WhiteListedExtensionsResourceType {
     }
     let font = CGFont(dataProvider)
 
-    guard let postScriptName = font.postScriptName else {
+    guard let postScriptName = font?.postScriptName else {
       throw ResourceParsingError.parsingFailed("No postscriptName associated to font at \(url)")
     }
 
