@@ -1,3 +1,7 @@
+## 4.0.0.alpha.2
+
+- Fix incorrectly merged color PR
+
 ## 4.0.0.alpha.1
 
 - Deprecate clr based color resources
