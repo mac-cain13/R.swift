@@ -28,6 +28,7 @@ class ResourceAppTests: XCTestCase {
     "warning: [R.swift] Skipping 2 view controllers because symbol 'validationClash' would be generated for all of these view controller identifiers: Validation clash, ValidationClash",
     "warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: ' '",
     "warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?",
+    "warning: [R.swift] Skipping 2 colors because symbol 'myRed' would be generated for all of these colors: My Red, My Red",
 
     "warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these files: Duplicate, Duplicate#",
     "warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for file: '@@'",
@@ -59,10 +60,14 @@ class ResourceAppTests: XCTestCase {
 
     do {
       let logContent = try String(contentsOf: logURL)
-      let logLines = logContent.components(separatedBy: "\n")
+      let logLines = logContent.components(separatedBy: "\n").filter { !$0.isEmpty }
 
       for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")
+      }
+
+      for logLine in logLines {
+        XCTAssertTrue(expectedWarnings.contains(logLine), "Warning was not expected: '\(logLine)'")
       }
 
       XCTAssertEqual(logLines.count, expectedWarnings.count, "There are more/less warnings then expected")

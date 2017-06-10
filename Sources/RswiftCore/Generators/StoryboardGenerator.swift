@@ -55,6 +55,7 @@ struct StoryboardStructGenerator: StructGenerator {
       }
 
     let externalStruct = Struct(
+      availables: [],
         comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
         accessModifier: externalAccessLevel,
         type: Type(module: .host, name: structName),
@@ -67,6 +68,7 @@ struct StoryboardStructGenerator: StructGenerator {
       )
 
     let internalStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -185,6 +187,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     // Return
     return Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

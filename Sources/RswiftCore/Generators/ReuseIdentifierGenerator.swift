@@ -32,6 +32,7 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
       .map { letFromReusable($0, at: externalAccessLevel) }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(reuseIdentifierProperties.count) reuse identifiers."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

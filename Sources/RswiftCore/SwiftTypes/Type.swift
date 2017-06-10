@@ -54,6 +54,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let NibResourceType = Type(module: "Rswift", name: "NibResourceType")
   static let FileResource = Type(module: "Rswift", name: "FileResource")
   static let FontResource = Type(module: "Rswift", name: "FontResource")
+  static let ColorPaletteItemResource = Type(module: "Rswift", name: "ColorPaletteItemResource")
   static let ColorResource = Type(module: "Rswift", name: "ColorResource")
   static let ImageResource = Type(module: "Rswift", name: "ImageResource")
   static let StringResource = Type(module: "Rswift", name: "StringResource")

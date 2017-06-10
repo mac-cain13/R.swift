@@ -10,7 +10,9 @@
 import Foundation
 
 // Note: "appiconset" is not loadable by default, so it's not included here
-private let assetExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
+private let imageExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
+
+private let colorExtensions: Set<String> = ["colorset"]
 
 // Ignore everything in folders with these extensions
 private let ignoredExtensions: Set<String> = ["brandassets", "imagestacklayer"]
@@ -26,6 +28,7 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
   let path = ""
   let resourcePath = ""
   var imageAssets: [String]
+  var colorAssets: [String]
   var subfolders: [NamespacedAssetSubfolder]
 
   init(url: URL, fileManager: FileManager) throws {
@@ -38,7 +41,8 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
     name = filename
 
     // Browse asset directory recursively and list only the assets folders
-    var assets = [URL]()
+    var imageAssetURLs = [URL]()
+    var colorAssetURLs = [URL]()
     var namespaces = [URL]()
     let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles, errorHandler: nil)
     if let enumerator = enumerator {
@@ -47,8 +51,11 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
         if fileURL.providesNamespace() {
           namespaces.append(fileURL.namespaceURL)
         }
-        if assetExtensions.contains(pathExtension) {
-          assets.append(fileURL)
+        if imageExtensions.contains(pathExtension) {
+          imageAssetURLs.append(fileURL)
+        }
+        if colorExtensions.contains(pathExtension) {
+          colorAssetURLs.append(fileURL)
         }
         if ignoredExtensions.contains(pathExtension) {
           enumerator.skipDescendants()
@@ -58,13 +65,18 @@ struct AssetFolder: WhiteListedExtensionsResourceType, NamespacedAssetSubfolderT
 
     subfolders = []
     imageAssets = []
+    colorAssets = []
     namespaces.sort { $0.absoluteString < $1.absoluteString }
     for namespace in namespaces.map(NamespacedAssetSubfolder.init) {
       populateSubfolders(subfolder: namespace)
     }
 
-    for asset in assets {
-      populateImageAssets(asset: asset)
+    for assetURL in imageAssetURLs {
+      populateImageAssets(asset: assetURL)
+    }
+
+    for assetURL in colorAssetURLs {
+      populateColorAssets(asset: assetURL)
     }
   }
 }
@@ -74,6 +86,7 @@ protocol NamespacedAssetSubfolderType {
   var path: String { get }
   var resourcePath: String { get }
   var imageAssets: [String] { get set }
+  var colorAssets: [String] { get set }
   var subfolders: [NamespacedAssetSubfolder] { get set }
 }
 
@@ -100,6 +113,16 @@ extension NamespacedAssetSubfolderType {
     }
   }
 
+  mutating func populateColorAssets(asset: URL) {
+    if var parent = subfolders.first(where: { asset.matches($0.url) }) {
+      parent.populateColorAssets(asset: asset)
+    } else {
+      if let filename = asset.filename {
+        colorAssets.append(filename)
+      }
+    }
+  }
+
   func isSubfolderOf(_ subfolder: NamespacedAssetSubfolder) -> Bool {
     return url.absoluteString != subfolder.url.absoluteString && url.matches(subfolder.url)
   }
@@ -111,6 +134,7 @@ class NamespacedAssetSubfolder: NamespacedAssetSubfolderType {
   var path: String = ""
   var resourcePath: String = ""
   var imageAssets: [String] = []
+  var colorAssets: [String] = []
   var subfolders: [NamespacedAssetSubfolder] = []
 
   init(url: URL) {

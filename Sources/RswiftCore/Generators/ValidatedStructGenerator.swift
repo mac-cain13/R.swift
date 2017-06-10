@@ -29,6 +29,7 @@ class ValidatedStructGenerator: StructGenerator {
     }
 
     let validationStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: .filePrivate,
       type: Type(module: .host, name: "intern"),

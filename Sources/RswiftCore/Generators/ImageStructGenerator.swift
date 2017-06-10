@@ -42,7 +42,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     assetSubfolders.printWarningsForDuplicates()
 
     let structs = assetSubfolders.folders
-      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
       .uniques
@@ -58,24 +59,28 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
-      comments: ["This `R.image` struct is generated, and contains static references to \(imageLets.count) images."],
+      availables: [],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(imageLets.count) images."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: "image"),
+      type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: imageLets,
-      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
+      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
       classes: []
     )
   }
 
-  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel) -> Function {
+  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
+    let structName = SwiftIdentifier(name: name)
+    let qualifiedName = prefix + structName
+
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: name),
+      name: structName,
       generics: nil,
       parameters: [
         Function.Parameter(
@@ -87,13 +92,13 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return UIKit.UIImage(resource: R.image.\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
+      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)"
     )
   }
 }
 
-extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+private extension NamespacedAssetSubfolder {
+  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
 
@@ -110,7 +115,8 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
     let structName = SwiftIdentifier(name: self.name)
     let qualifiedName = prefix + structName
     let structs = assetSubfolders.folders
-      .map { $0.generatedStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
       .uniques
@@ -126,24 +132,28 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
     }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(imageLets.count) images."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
       properties: imageLets,
-      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel) },
+      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
       classes: []
     )
   }
 
-  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel) -> Function {
+  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
+    let structName = SwiftIdentifier(name: name)
+    let qualifiedName = prefix + structName
+
     return Function(
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: name),
+      name: structName,
       generics: nil,
       parameters: [
         Function.Parameter(
@@ -155,35 +165,7 @@ extension NamespacedAssetSubfolder: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return UIKit.UIImage(resource: R.image.\(path).\(SwiftIdentifier(name: name)), compatibleWith: traitCollection)"
+      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)"
     )
-  }
-}
-
-struct AssetSubfolders {
-  let folders: [NamespacedAssetSubfolder]
-  let duplicates: [NamespacedAssetSubfolder]
-
-  init(all subfolders: [NamespacedAssetSubfolder], assetIdentifiers: [SwiftIdentifier]) {
-    var dict: [SwiftIdentifier: NamespacedAssetSubfolder] = [:]
-
-    for subfolder in subfolders {
-      let name = SwiftIdentifier(name: subfolder.name)
-      if let duplicate = dict[name] {
-        duplicate.subfolders += subfolder.subfolders
-        duplicate.imageAssets += subfolder.imageAssets
-      } else {
-        dict[name] = subfolder
-      }
-    }
-
-    self.folders = dict.values.filter { !assetIdentifiers.contains(SwiftIdentifier(name: $0.name)) }
-    self.duplicates = dict.values.filter { assetIdentifiers.contains(SwiftIdentifier(name: $0.name)) }
-  }
-
-  func printWarningsForDuplicates() {
-    for subfolder in duplicates {
-      warn("Skipping asset subfolder because symbol '\(subfolder.name)' would conflict with image: \(subfolder.name)")
-    }
   }
 }
