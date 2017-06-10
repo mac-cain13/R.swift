@@ -1,3 +1,8 @@
+## 4.0.0.alpha.1
+
+- Deprecate clr based color resources
+- Introduce color asset based color resources
+
 ## 3.3.0
 
 *New features:*
