@@ -40,7 +40,6 @@ extension ProcessInfo {
 // Flags grouped in struct for readability
 struct CommanderFlags {
   static let version = Flag("version", description: "Prints version information about this release.")
-  static let edge = Flag("edge", description: "Enable stable features that will be in the next major release.")
 }
 
 // Default values for non-optional Commander Options
@@ -80,7 +79,6 @@ struct CommanderArguments {
 
 command(
   CommanderFlags.version,
-  CommanderFlags.edge,
 
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
@@ -97,7 +95,7 @@ command(
   CommanderOptions.sdkRoot,
 
   CommanderArguments.outputDir
-) { version, edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { version, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
 
   let info = ProcessInfo()
 
@@ -125,7 +123,6 @@ command(
     outputURL: outputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
 
-    edgeEnabled: edgeFlag,
     accessLevel: accessLevel,
     imports: Set(modules),
 

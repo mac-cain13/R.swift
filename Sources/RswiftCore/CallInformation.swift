@@ -13,8 +13,7 @@ import XcodeEdit
 public struct CallInformation {
   let outputURL: URL
   let rswiftIgnoreURL: URL
-  
-  let edgeEnabled: Bool
+
   let accessLevel: AccessLevel
   let imports: Set<Module>
 
@@ -31,8 +30,7 @@ public struct CallInformation {
   public init(
     outputURL: URL,
     rswiftIgnoreURL: URL,
-  
-    edgeEnabled: Bool,
+
     accessLevel: AccessLevel,
     imports: Set<Module>,
 
@@ -49,7 +47,6 @@ public struct CallInformation {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
 
-    self.edgeEnabled = edgeEnabled
     self.accessLevel = accessLevel
     self.imports = imports
 

@@ -11,13 +11,9 @@ import Foundation
 import XcodeEdit
 
 public struct RswiftCore {
-  static var isEdgeEnabled = false
 
   static public func run(_ callInformation: CallInformation) throws {
-
     do {
-      RswiftCore.isEdgeEnabled = callInformation.edgeEnabled
-
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
