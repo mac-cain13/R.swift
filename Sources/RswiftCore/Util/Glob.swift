@@ -56,7 +56,7 @@ public class Glob: Collection {
     let includesFilesInResultsIfTrailingSlash: Bool
   }
 
-  static var defaultBehavior = GlobBehaviorBashV4
+  public static var defaultBehavior = GlobBehaviorBashV4
 
   private var isDirectoryCache = [String: Bool]()
 
