@@ -17,9 +17,20 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
   init(url: URL) throws {
     try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)
+    let projectFile: XCProjectFile
 
     // Parse project file
-    guard let projectFile = try? XCProjectFile(xcodeprojURL: url) else {
+    do {
+      do {
+        projectFile = try XCProjectFile(xcodeprojURL: url)
+      }
+      catch let error as ProjectFileError {
+        warn(error.description)
+
+        projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
+      }
+    }
+    catch {
       throw ResourceParsingError.parsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
     }
 
