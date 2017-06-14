@@ -13,6 +13,11 @@ import XCTest
 class ResourceAppTests: XCTestCase {
 
   let expectedWarnings = [
+    "warning: [R.swift] project.pbxproj is internally inconsistent.",
+    " - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) references missing fileRef C0FEFEC0FEFEC0FEFEC0FEFE",
+    " - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) is not used",
+    "Perhaps a merge conflict?",
+
     "warning: [R.swift] Skipping color 'Red' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB",
     "warning: [R.swift] Skipping color 'Green' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB",
 
