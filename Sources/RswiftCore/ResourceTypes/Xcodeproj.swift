@@ -17,9 +17,20 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
   init(url: URL) throws {
     try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)
+    let projectFile: XCProjectFile
 
     // Parse project file
-    guard let projectFile = try? XCProjectFile(xcodeprojURL: url) else {
+    do {
+      do {
+        projectFile = try XCProjectFile(xcodeprojURL: url)
+      }
+      catch let error as ProjectFileError {
+        warn(error.description)
+
+        projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
+      }
+    }
+    catch {
       throw ResourceParsingError.parsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
     }
 
@@ -28,25 +39,25 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
   func resourcePathsForTarget(_ targetName: String) throws -> [Path] {
     // Look for target in project file
-    let allTargets = projectFile.project.targets
+    let allTargets = projectFile.project.targets.flatMap { $0.value }
     guard let target = allTargets.filter({ $0.name == targetName }).first else {
-      let availableTargets = allTargets.map { $0.name }.joined(separator: ", ")
+      let availableTargets = allTargets.flatMap { $0.name }.joined(separator: ", ")
       throw ResourceParsingError.parsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
     }
 
     let resourcesFileRefs = target.buildPhases
-      .flatMap { $0 as? PBXResourcesBuildPhase }
+      .flatMap { $0.value as? PBXResourcesBuildPhase }
       .flatMap { $0.files }
-      .map { $0.fileRef }
+      .flatMap { $0.value?.fileRef }
 
     let fileRefPaths = resourcesFileRefs
-      .flatMap { $0 as? PBXFileReference }
-      .map { $0.fullPath }
+      .flatMap { $0.value as? PBXFileReference }
+      .flatMap { $0.fullPath }
 
     let variantGroupPaths = resourcesFileRefs
-      .flatMap { $0 as? PBXVariantGroup }
+      .flatMap { $0.value as? PBXVariantGroup }
       .flatMap { $0.fileRefs }
-      .map { $0.fullPath }
+      .flatMap { $0.value?.fullPath }
 
     return fileRefPaths + variantGroupPaths
   }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DEADBEEFDEADBEEFDEADBEEF /* Dummy build file that is'nt used */ = {isa = PBXBuildFile; fileRef = C0FEFEC0FEFEC0FEFEC0FEFE /* Localizable.strings */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		8A0FBCE6E8FF0950B8821B0B /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */; };

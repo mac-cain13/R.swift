@@ -23,9 +23,9 @@
         "package": "XcodeEdit",
         "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
         "state": {
-          "branch": null,
-          "revision": "3262eff18497ae856eb4fb4b7506cd5c15d28dd4",
-          "version": "1.1.0"
+          "branch": "release/2.0",
+          "revision": "2a6ab33948312a4342269099b548fb19af4ad16d",
+          "version": null
         }
       }
     ]
