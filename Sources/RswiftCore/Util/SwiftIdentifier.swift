@@ -125,7 +125,7 @@ extension Sequence {
     let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sorted()
     groupedBy[empty] = nil
 
-    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
+    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.joined())
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
       .map { ($0.0, $0.1.map(identifierSelector).sorted()) }

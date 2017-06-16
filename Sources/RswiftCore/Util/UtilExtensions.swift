@@ -20,27 +20,16 @@ extension Array {
 // MARK: Sequence operations
 
 extension Sequence {
-  func grouped<Key>(by keySelector: (Iterator.Element) -> Key) -> [Key : [Iterator.Element]] {
-    var groupedBy = Dictionary<Key, [Iterator.Element]>()
-
-    for element in self {
-      let key = keySelector(element)
-      var array = groupedBy.removeValue(forKey: key) ?? []
-      array.append(element)
-      groupedBy[key] = array
-    }
-
-    return groupedBy
+  func grouped<Key>(by keyForValue: (Element) -> Key) -> [Key: [Element]] {
+    return Dictionary(grouping: self, by: keyForValue)
   }
 
-  func all(where predicate: (Self.Element) throws -> Bool) rethrows -> Bool {
+  func all(where predicate: (Element) throws -> Bool) rethrows -> Bool {
     return !(try contains(where: { !(try predicate($0)) }))
   }
-}
 
-extension Sequence where Iterator.Element : Sequence {
-  func flatten() -> [Iterator.Element.Iterator.Element] {
-    return flatMap { $0 }
+  func array() -> [Element] {
+    return Array(self)
   }
 }
 

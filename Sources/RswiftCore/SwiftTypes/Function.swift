@@ -36,7 +36,9 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     return [
       returnType.usedTypes,
       parameters.flatMap(getUsedTypes),
-    ].flatten()
+    ]
+    .joined()
+    .array()
   }
 
   var swiftCode: String {
