@@ -57,7 +57,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     var structs: [Struct] = []
 
     for (sourceType, seguesBySourceType) in deduplicatedSeguesWithInfo.grouped(by: { $0.sourceType }) {
-      let groupedSeguesWithInfo = seguesBySourceType.groupedBySwiftIdentifier { $0.segue.identifier }
+      let groupedSeguesWithInfo = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
 
       groupedSeguesWithInfo.printWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType)'", result: "segue")
 

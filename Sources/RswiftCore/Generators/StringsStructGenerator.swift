@@ -19,8 +19,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "string"
     let qualifiedName = prefix + structName
-    let localized = localizableStrings.grouped { $0.filename }
-    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
+    let localized = localizableStrings.grouped(by: { $0.filename })
+    let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
@@ -81,7 +81,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupedBySwiftIdentifier { $0 }
+      let groupedKeys = ls.dictionary.keys.grouped(bySwiftIdentifier: { $0 })
 
       groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 

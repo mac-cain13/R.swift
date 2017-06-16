@@ -20,7 +20,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     let structName: SwiftIdentifier = "font"
     let qualifiedName = prefix + structName
 
-    let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
+    let groupedFonts = fonts.grouped(bySwiftIdentifier: { $0.name })
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
     let fontTypes = groupedFonts.uniques.map { font -> (Let, Function, String) in

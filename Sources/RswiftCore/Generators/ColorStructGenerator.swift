@@ -20,7 +20,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     let assetFolderColorNames = assetFolders
       .flatMap { $0.colorAssets }
 
-    let groupedColors = assetFolderColorNames.groupedBySwiftIdentifier { $0 }
+    let groupedColors = assetFolderColorNames.grouped(bySwiftIdentifier: { $0 })
     groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", result: "color")
 
 
@@ -89,7 +89,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
 private extension NamespacedAssetSubfolder {
   func generatedColorStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = colorAssets
-    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
+    let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "color", result: "color")
 

@@ -19,7 +19,7 @@ struct StoryboardStructGenerator: StructGenerator {
   func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "storyboard"
     let qualifiedName = prefix + structName
-    let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
+    let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardTypes = groupedStoryboards
@@ -112,7 +112,7 @@ struct StoryboardStructGenerator: StructGenerator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupedBySwiftIdentifier { $0.identifier }
+      .grouped(bySwiftIdentifier: { $0.identifier })
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
       warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joined(separator: ", "))")

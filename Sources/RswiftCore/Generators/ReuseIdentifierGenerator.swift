@@ -24,7 +24,7 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
       .values
       .flatMap { $0.first }
 
-    let groupedReusables = deduplicatedReusables.groupedBySwiftIdentifier { $0.identifier }
+    let groupedReusables = deduplicatedReusables.grouped(bySwiftIdentifier: { $0.identifier })
     groupedReusables.printWarningsForDuplicatesAndEmpties(source: "reuseIdentifier", result: "reuseIdentifier")
 
     let reuseIdentifierProperties = groupedReusables

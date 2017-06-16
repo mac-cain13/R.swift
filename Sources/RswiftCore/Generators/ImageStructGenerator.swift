@@ -30,7 +30,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       .flatMap { $0.first?.name }
 
     let allFunctions = assetFolderImageNames + imagesNames
-    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
+    let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 
@@ -100,7 +100,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 private extension NamespacedAssetSubfolder {
   func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = imageAssets
-    let groupedFunctions = allFunctions.groupedBySwiftIdentifier { $0 }
+    let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 
     groupedFunctions.printWarningsForDuplicatesAndEmpties(source: "image", result: "image")
 

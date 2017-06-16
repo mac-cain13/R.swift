@@ -20,7 +20,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "clr"
     let qualifiedName = prefix + structName
-    let groupedPalettes = palettes.groupedBySwiftIdentifier { $0.filename }
+    let groupedPalettes = palettes.grouped(bySwiftIdentifier: { $0.filename })
     groupedPalettes.printWarningsForDuplicatesAndEmpties(source: "color palette", result: "file")
 
     return Struct(
@@ -42,7 +42,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
 
     let structName = SwiftIdentifier(name: palette.filename)
     let qualifiedName = prefix + structName
-    let groupedColors = palette.colors.groupedBySwiftIdentifier { $0.0 }
+    let groupedColors = palette.colors.grouped(bySwiftIdentifier: { $0.0 })
 
     groupedColors.printWarningsForDuplicatesAndEmpties(source: "color", container: "in palette '\(palette.filename)'", result: "color")
 

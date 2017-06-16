@@ -42,7 +42,7 @@ struct NibStructGenerator: StructGenerator {
   func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "nib"
     let qualifiedName = prefix + structName
-    let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
+    let groupedNibs = nibs.grouped(bySwiftIdentifier: { $0.name })
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     let internalStruct = Struct(
