@@ -16,6 +16,7 @@ let package = Package(
       name: "RswiftCore",
       dependencies: ["Commander", "XcodeEdit"]
     ),
+    .testTarget(name: "RswiftCoreTests", dependencies: ["RswiftCore"]),
   ],
   swiftLanguageVersions: [4]
 )
