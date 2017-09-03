@@ -48,7 +48,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
-      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(colorLets.count) colors."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -66,6 +66,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     let qualifiedName = prefix + structName
 
     return Function(
+      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
       comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -139,6 +140,7 @@ private extension NamespacedAssetSubfolder {
     let qualifiedName = prefix + structName
 
     return Function(
+      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
       comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,

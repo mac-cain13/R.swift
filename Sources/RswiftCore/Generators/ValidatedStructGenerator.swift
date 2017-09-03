@@ -38,6 +38,7 @@ class ValidatedStructGenerator: StructGenerator {
       properties: [],
       functions: [
         Function(
+          availables: [],
           comments: [],
           accessModifier: .filePrivate,
           isStatic: true,
@@ -86,6 +87,7 @@ private extension Struct {
     outputStruct.implements.append(TypePrinter(type: Type.Validatable))
     outputStruct.functions.append(
       Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,

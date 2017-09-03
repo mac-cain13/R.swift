@@ -91,6 +91,7 @@ struct NibStructGenerator: StructGenerator {
     let qualifiedName = prefix + nibName
 
     return Function(
+      availables: [],
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -149,6 +150,7 @@ struct NibStructGenerator: StructGenerator {
         let viewIndex = viewInfo.ordinal.number - 1
         let viewTypeString = viewInfo.view.description
         return Function(
+          availables: [],
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
@@ -191,6 +193,7 @@ struct NibStructGenerator: StructGenerator {
     var validateImplements: [Type] = []
     if validateImagesLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,

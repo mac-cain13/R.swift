@@ -38,6 +38,7 @@ struct StoryboardStructGenerator: StructGenerator {
         )
 
         let _function = Function(
+          availables: [],
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
           accessModifier: externalAccessLevel,
           isStatic: true,
@@ -56,16 +57,16 @@ struct StoryboardStructGenerator: StructGenerator {
 
     let externalStruct = Struct(
       availables: [],
-        comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
-        accessModifier: externalAccessLevel,
-        type: Type(module: .host, name: structName),
-        implements: [],
-        typealiasses: [],
-        properties: storyboardTypes.map { $0.1 },
-        functions: storyboardTypes.map { $0.2 },
-        structs: [],
-        classes: []
-      )
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: structName),
+      implements: [],
+      typealiasses: [],
+      properties: storyboardTypes.map { $0.1 },
+      functions: storyboardTypes.map { $0.2 },
+      structs: [],
+      classes: []
+    )
 
     let internalStruct = Struct(
       availables: [],
@@ -140,6 +141,7 @@ struct StoryboardStructGenerator: StructGenerator {
       .map { arg in
         let (vc, resource) = arg
         return Function(
+          availables: [],
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
@@ -171,6 +173,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     if validateLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,

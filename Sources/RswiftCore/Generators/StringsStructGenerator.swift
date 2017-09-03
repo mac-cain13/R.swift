@@ -208,6 +208,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     return Function(
+      availables: [],
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -235,6 +236,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
 
     return Function(
+      availables: [],
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,

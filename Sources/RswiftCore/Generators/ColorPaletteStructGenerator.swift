@@ -81,6 +81,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
 
   private func colorFunction(_ name: String, color: NSColor, at externalAccessLevel: AccessLevel) -> Function {
     return Function(
+      availables: [],
       comments: [
         "<span style='background-color: #\(color.hexString); color: #\(color.opposite.hexString); padding: 1px 3px;'>#\(color.hexString)</span> \(name)",
         "",

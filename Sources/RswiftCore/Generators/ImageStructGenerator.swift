@@ -77,6 +77,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     let qualifiedName = prefix + structName
 
     return Function(
+      availables: [],
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -150,6 +151,7 @@ private extension NamespacedAssetSubfolder {
     let qualifiedName = prefix + structName
 
     return Function(
+      availables: [],
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
