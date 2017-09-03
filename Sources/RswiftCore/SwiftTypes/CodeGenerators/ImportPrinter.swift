@@ -19,9 +19,11 @@ struct ImportPrinter: SwiftCodeConverible {
       .flatMap(getUsedTypes)
       .map { $0.type.module }
 
-    swiftCode = modules
+    let modulesSet = modules
       .union(extractedModules)
       .subtracting(excludedModules)
+
+    swiftCode = Array(modulesSet)
       .filter { $0.isCustom }
       .sorted { $0.description < $1.description }
       .map { "import \($0)" }
