@@ -78,8 +78,78 @@ struct CommanderArguments {
   static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
 }
 
+
+let generate = command(
+  CommanderFlags.edge,
+
+  CommanderOptions.importModules,
+  CommanderOptions.accessLevel,
+  CommanderOptions.rswiftIgnore,
+
+  CommanderOptions.xcodeproj,
+  CommanderOptions.target,
+
+  CommanderOptions.bundleIdentifier,
+  CommanderOptions.productModuleName,
+  CommanderOptions.buildProductsDir,
+  CommanderOptions.developerDir,
+  CommanderOptions.sourceRoot,
+  CommanderOptions.sdkRoot,
+
+  CommanderArguments.outputDir
+) { edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+
+  let info = ProcessInfo()
+
+  let xcodeprojPath = try info.value(from: xcodeproj, name: "xcodeproj", key: EnvironmentKeys.xcodeproj)
+  let targetName = try info.value(from: target, name: "target", key: EnvironmentKeys.target)
+  let bundleIdentifier = try info.value(from: bundle, name: "bundleIdentifier", key: EnvironmentKeys.bundleIdentifier)
+  let productModuleName = try info.value(from: productModule, name: "productModuleName", key: EnvironmentKeys.productModuleName)
+
+  let buildProductsDirPath = try info.value(from: buildProductsDir, name: "buildProductsDir", key: EnvironmentKeys.buildProductsDir)
+  let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
+  let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
+  let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
+
+
+  let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
+  let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
+  let modules = importModules
+    .components(separatedBy: ",")
+    .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+    .filter { !$0.isEmpty }
+    .map { Module.custom(name: $0) }
+
+
+  let callInformation = CallInformation(
+    outputURL: outputURL,
+    rswiftIgnoreURL: rswiftIgnoreURL,
+
+    edgeEnabled: edgeFlag,
+    accessLevel: accessLevel,
+    imports: Set(modules),
+
+    xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
+    targetName: targetName,
+    bundleIdentifier: bundleIdentifier,
+    productModuleName: productModuleName,
+
+    buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
+    developerDirURL: URL(fileURLWithPath: developerDirPath),
+    sourceRootURL: URL(fileURLWithPath: sourceRootPath),
+    sdkRootURL: URL(fileURLWithPath: sdkRootPath)
+  )
+
+  try RswiftCore.run(callInformation)
+
+}
+
 // Temporary warning message during migration to R.swift 4
-if CommandLine.arguments.dropFirst().first != "generate" {
+let parser = ArgumentParser(arguments: CommandLine.arguments)
+_ = parser.shift()
+let exception = parser.hasOption("version") || parser.hasOption("help")
+
+if !exception && parser.shift() != "generate" {
   var arguments = CommandLine.arguments
   arguments.insert("generate", at: 1)
   let command = arguments
@@ -99,70 +169,6 @@ if CommandLine.arguments.dropFirst().first != "generate" {
   exit(EXIT_FAILURE)
 }
 
-Group {
-  $0.command("generate",
-    CommanderFlags.version,
-    CommanderFlags.edge,
-
-    CommanderOptions.importModules,
-    CommanderOptions.accessLevel,
-    CommanderOptions.rswiftIgnore,
-
-    CommanderOptions.xcodeproj,
-    CommanderOptions.target,
-
-    CommanderOptions.bundleIdentifier,
-    CommanderOptions.productModuleName,
-    CommanderOptions.buildProductsDir,
-    CommanderOptions.developerDir,
-    CommanderOptions.sourceRoot,
-    CommanderOptions.sdkRoot,
-
-    CommanderArguments.outputDir
-  ) { version, edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
-
-    let info = ProcessInfo()
-
-    let xcodeprojPath = try info.value(from: xcodeproj, name: "xcodeproj", key: EnvironmentKeys.xcodeproj)
-    let targetName = try info.value(from: target, name: "target", key: EnvironmentKeys.target)
-    let bundleIdentifier = try info.value(from: bundle, name: "bundleIdentifier", key: EnvironmentKeys.bundleIdentifier)
-    let productModuleName = try info.value(from: productModule, name: "productModuleName", key: EnvironmentKeys.productModuleName)
-
-    let buildProductsDirPath = try info.value(from: buildProductsDir, name: "buildProductsDir", key: EnvironmentKeys.buildProductsDir)
-    let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
-    let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
-    let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
-
-
-    let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
-    let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
-    let modules = importModules
-      .components(separatedBy: ",")
-      .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
-      .filter { !$0.isEmpty }
-      .map { Module.custom(name: $0) }
-
-
-    let callInformation = CallInformation(
-      outputURL: outputURL,
-      rswiftIgnoreURL: rswiftIgnoreURL,
-
-      edgeEnabled: edgeFlag,
-      accessLevel: accessLevel,
-      imports: Set(modules),
-
-      xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
-      targetName: targetName,
-      bundleIdentifier: bundleIdentifier,
-      productModuleName: productModuleName,
-
-      buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
-      developerDirURL: URL(fileURLWithPath: developerDirPath),
-      sourceRootURL: URL(fileURLWithPath: sourceRootPath),
-      sdkRootURL: URL(fileURLWithPath: sdkRootPath)
-    )
-
-    try RswiftCore.run(callInformation)
-
-  }
-}.run(Rswift.version)
+let group = Group()
+group.addCommand("generate", "Generates R.generated.swift file", generate)
+group.run(Rswift.version)
