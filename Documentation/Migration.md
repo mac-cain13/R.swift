@@ -2,6 +2,12 @@
 
 Pointers for migration between major versions.
 
+## Upgrading to 4.0
+
+- Make sure you use Xcode 9 since we've adjusted to the syntax changes.
+- Running R.swift now requires the `generate` command, check the error R.swift outputs for upgrade instructions
+- Color support for clr files is dropped in favor of Apples new color assets
+
 ## Upgrading to 3.0
 
 - Make sure you use Swift 3 / Xcode 8 since we've adjusted to the syntax changes.

@@ -78,8 +78,8 @@ struct CommanderArguments {
   static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
 }
 
-command(
-  CommanderFlags.version,
+
+let generate = command(
   CommanderFlags.edge,
 
   CommanderOptions.importModules,
@@ -97,7 +97,7 @@ command(
   CommanderOptions.sdkRoot,
 
   CommanderArguments.outputDir
-) { version, edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
 
   let info = ProcessInfo()
 
@@ -142,4 +142,29 @@ command(
 
   try RswiftCore.run(callInformation)
 
-}.run(Rswift.version)
+}
+
+// Temporary warning message during migration to R.swift 4
+let parser = ArgumentParser(arguments: CommandLine.arguments)
+_ = parser.shift()
+let exception = parser.hasOption("version") || parser.hasOption("help")
+
+if !exception && parser.shift() != "generate" {
+  var arguments = CommandLine.arguments
+  arguments.insert("generate", at: 1)
+  let command = arguments
+    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
+    .joined(separator: " ")
+
+  let message = "error: R.swift 4 requires \"generate\" command as first argument to the executable.\n"
+    + "Change your call to something similar to this:\n\n"
+    + "\(command)"
+    + "\n"
+
+  fputs("\(message)\n", stderr)
+  exit(EXIT_FAILURE)
+}
+
+let group = Group()
+group.addCommand("generate", "Generates R.generated.swift file", generate)
+group.run(Rswift.version)
