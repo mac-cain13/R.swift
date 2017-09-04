@@ -156,16 +156,12 @@ if !exception && parser.shift() != "generate" {
     .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
     .joined(separator: " ")
 
-  let message = "⚠️ R.swift 4 requires \"generate\" command as first argument to the executable.\n"
+  let message = "error: R.swift 4 requires \"generate\" command as first argument to the executable.\n"
     + "Change your call to something similar to this:\n\n"
     + "\(command)"
     + "\n"
 
-  if isatty(fileno(stderr)) != 0 {
-    fputs("\(message)\n", stderr)
-  } else {
-    fputs("\(message)\n", stderr)
-  }
+  fputs("\(message)\n", stderr)
   exit(EXIT_FAILURE)
 }
 
