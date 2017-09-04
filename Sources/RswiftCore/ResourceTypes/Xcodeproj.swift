@@ -31,7 +31,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
       }
     }
     catch {
-      throw ResourceParsingError.parsingFailed("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
+      throw ResourceParsingError.parsingFailed("\(error.localizedDescription)\nProject file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?")
     }
 
     self.projectFile = projectFile
