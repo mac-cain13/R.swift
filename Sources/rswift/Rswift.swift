@@ -10,6 +10,6 @@
 import Foundation
 
 struct Rswift {
-  static let version = "4.0.0.alpha.3"
+  static let version = "0.0.0-development"
   static let resourceFileName = "R.generated.swift"
 }

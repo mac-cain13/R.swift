@@ -853,7 +853,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/debug/rswift\" \"--import\" \"SWRevealViewController\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
+			shellScript = "\"$SRCROOT/../build/debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;

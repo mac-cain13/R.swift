@@ -210,6 +210,9 @@ class FaqAnswerController: UITableViewController {
 ```
 
 *With R.swift*
+
+On your reusable cell Interface Builder "Attributes" inspector panel, set the cell "Identifier" field to the same value you are going to register and dequeue.
+
 ```swift
 class FaqAnswerController: UITableViewController {
   override func viewDidLoad() {
@@ -245,6 +248,9 @@ class RecentsController: UICollectionViewController {
 ```
 
 *With R.swift*
+
+On your reusable cell Interface Builder "Attributes" inspector panel, set the cell "Identifier" field to the same value you are going to register and dequeue.
+
 ```swift
 class RecentsController: UICollectionViewController {
   override func viewDidLoad() {

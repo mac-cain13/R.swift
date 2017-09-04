@@ -5,6 +5,7 @@ Pointers for migration between major versions.
 ## Upgrading to 4.0
 
 - Make sure you use Swift 4 / Xcode 9 since we've adjusted to the syntax and SDK changes.
+- Running R.swift now requires the `generate` command, check the error R.swift outputs for upgrade instructions
 - Capitalization of methods and properties might have changed, in these cases the compiler should generate a fix-it for you.
 - Support for CLR-files is deprecated, use the new named Color assets instead where possible.
  * CLR based colors are moved from `R.color.*` to `R.clr.*`
