@@ -34,6 +34,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
       )
 
       let function = Function(
+        availables: [],
         comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
         accessModifier: externalAccessLevel,
         isStatic: true,
@@ -60,6 +61,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
 
     if validateLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,

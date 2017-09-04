@@ -66,6 +66,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
 
         return [
           Function(
+            availables: [],
             comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
             accessModifier: externalAccessLevel,
             isStatic: true,

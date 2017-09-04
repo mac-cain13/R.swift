@@ -131,6 +131,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
 
     let functions = seguesWithInfoForSourceType.map { segueWithInfo -> Function in
       Function(
+        availables: [],
         comments: [
           "Optionally returns a typed version of segue `\(segueWithInfo.segue.identifier)`.",
           "Returns nil if either the segue identifier, the source, destination, or segue types don't match.",

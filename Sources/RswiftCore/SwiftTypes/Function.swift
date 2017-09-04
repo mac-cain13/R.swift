@@ -10,6 +10,7 @@
 import Foundation
 
 struct Function: UsedTypesProvider, SwiftCodeConverible {
+  let availables: [String]
   let comments: [String]
   let accessModifier: AccessLevel
   let isStatic: Bool
@@ -19,18 +20,6 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   let doesThrow: Bool
   let returnType: Type
   let body: String
-
-  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, generics: String?, parameters: [Parameter], doesThrow: Bool, returnType: Type, body: String) {
-    self.comments = comments
-    self.accessModifier = accessModifier
-    self.isStatic = isStatic
-    self.name = name
-    self.generics = generics
-    self.parameters = parameters
-    self.doesThrow = doesThrow
-    self.returnType = returnType
-    self.body = body
-  }
 
   var usedTypes: [UsedType] {
     return [
@@ -43,6 +32,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
 
   var swiftCode: String {
     let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
     let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
@@ -51,7 +41,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indent(with: "  ")
 
-    return "\(commentsString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+    return "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {
