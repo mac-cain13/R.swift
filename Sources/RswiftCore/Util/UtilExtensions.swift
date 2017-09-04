@@ -39,13 +39,13 @@ extension String {
   var lowercaseFirstCharacter: String {
     if self.characters.count <= 1 { return self.lowercased() }
     let index = characters.index(startIndex, offsetBy: 1)
-    return substring(to: index).lowercased() + substring(from: index)
+    return self[..<index].lowercased() + self[index...]
   }
 
   var uppercaseFirstCharacter: String {
     if self.characters.count <= 1 { return self.uppercased() }
     let index = characters.index(startIndex, offsetBy: 1)
-    return substring(to: index).uppercased() + substring(from: index)
+    return self[..<index].uppercased() + self[index...]
   }
 
   func indent(with indentation: String) -> String {
