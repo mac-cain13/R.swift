@@ -40,7 +40,6 @@ extension ProcessInfo {
 // Flags grouped in struct for readability
 struct CommanderFlags {
   static let version = Flag("version", description: "Prints version information about this release.")
-  static let edge = Flag("edge", description: "Enable stable features that will be in the next major release.")
 }
 
 // Default values for non-optional Commander Options
@@ -78,9 +77,7 @@ struct CommanderArguments {
   static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
 }
 
-
 let generate = command(
-  CommanderFlags.edge,
 
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
@@ -97,7 +94,7 @@ let generate = command(
   CommanderOptions.sdkRoot,
 
   CommanderArguments.outputDir
-) { edgeFlag, importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
 
   let info = ProcessInfo()
 
@@ -125,7 +122,6 @@ let generate = command(
     outputURL: outputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
 
-    edgeEnabled: edgeFlag,
     accessLevel: accessLevel,
     imports: Set(modules),
 

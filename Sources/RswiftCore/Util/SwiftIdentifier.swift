@@ -44,10 +44,6 @@ struct SwiftIdentifier : CustomStringConvertible {
   }
 
   private static func lowercasePrefix(_ name: String) -> String {
-    guard RswiftCore.isEdgeEnabled else {
-      return name.lowercaseFirstCharacter
-    }
-
     let prefixRange = upperCasedPrefixRegex.rangeOfFirstMatch(in: name, options: [], range: name.fullRange)
 
     if prefixRange.location == NSNotFound {
@@ -123,13 +119,13 @@ struct SwiftNameGroups<T> {
 }
 
 extension Sequence {
-  func groupedBySwiftIdentifier(_ identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
+  func grouped(bySwiftIdentifier identifierSelector: @escaping (Iterator.Element) -> String) -> SwiftNameGroups<Iterator.Element> {
     var groupedBy = grouped { SwiftIdentifier(name: identifierSelector($0)) }
     let empty = SwiftIdentifier(name: "")
     let empties = groupedBy[empty]?.map { "'\(identifierSelector($0))'" }.sorted()
     groupedBy[empty] = nil
 
-    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.flatten())
+    let uniques = Array(groupedBy.values.filter { $0.count == 1 }.joined())
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
       .map { ($0.0, $0.1.map(identifierSelector).sorted()) }

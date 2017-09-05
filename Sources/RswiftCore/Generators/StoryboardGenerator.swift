@@ -19,7 +19,7 @@ struct StoryboardStructGenerator: StructGenerator {
   func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "storyboard"
     let qualifiedName = prefix + structName
-    let groupedStoryboards = storyboards.groupedBySwiftIdentifier { $0.name }
+    let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
     groupedStoryboards.printWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file")
 
     let storyboardTypes = groupedStoryboards
@@ -38,6 +38,7 @@ struct StoryboardStructGenerator: StructGenerator {
         )
 
         let _function = Function(
+          availables: [],
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
           accessModifier: externalAccessLevel,
           isStatic: true,
@@ -55,18 +56,20 @@ struct StoryboardStructGenerator: StructGenerator {
       }
 
     let externalStruct = Struct(
-        comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
-        accessModifier: externalAccessLevel,
-        type: Type(module: .host, name: structName),
-        implements: [],
-        typealiasses: [],
-        properties: storyboardTypes.map { $0.1 },
-        functions: storyboardTypes.map { $0.2 },
-        structs: [],
-        classes: []
-      )
+      availables: [],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(storyboardTypes.count) storyboards."],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: structName),
+      implements: [],
+      typealiasses: [],
+      properties: storyboardTypes.map { $0.1 },
+      functions: storyboardTypes.map { $0.2 },
+      structs: [],
+      classes: []
+    )
 
     let internalStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -110,7 +113,7 @@ struct StoryboardStructGenerator: StructGenerator {
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
-      .groupedBySwiftIdentifier { $0.identifier }
+      .grouped(bySwiftIdentifier: { $0.identifier })
 
     for (name, duplicates) in groupedViewControllersWithIdentifier.duplicates {
       warn("Skipping \(duplicates.count) view controllers because symbol '\(name)' would be generated for all of these view controller identifiers: \(duplicates.joined(separator: ", "))")
@@ -138,6 +141,7 @@ struct StoryboardStructGenerator: StructGenerator {
       .map { arg in
         let (vc, resource) = arg
         return Function(
+          availables: [],
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
@@ -169,6 +173,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     if validateLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,
@@ -185,6 +190,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     // Return
     return Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

@@ -19,8 +19,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "string"
     let qualifiedName = prefix + structName
-    let localized = localizableStrings.grouped { $0.filename }
-    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
+    let localized = localizableStrings.grouped(by: { $0.filename })
+    let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
 
@@ -30,6 +30,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -50,6 +51,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let params = computeParams(filename: filename, strings: strings)
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(params.count) localization keys."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -79,7 +81,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     // Warnings about duplicates and empties
     for ls in strings {
       let filenameLocale = ls.locale.withFilename(filename)
-      let groupedKeys = ls.dictionary.keys.groupedBySwiftIdentifier { $0 }
+      let groupedKeys = ls.dictionary.keys.grouped(bySwiftIdentifier: { $0 })
 
       groupedKeys.printWarningsForDuplicatesAndEmpties(source: "string", container: "in \(filenameLocale)", result: "key")
 
@@ -206,6 +208,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
     return Function(
+      availables: [],
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -233,6 +236,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
 
     return Function(
+      availables: [],
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,

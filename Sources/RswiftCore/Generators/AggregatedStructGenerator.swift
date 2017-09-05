@@ -26,6 +26,7 @@ class AggregatedStructGenerator: StructGenerator {
       .reduce(StructGeneratorResultCollector()) { collector, result in collector.appending(result) }
 
     let externalStruct = Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated and contains references to static resources."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -38,6 +39,7 @@ class AggregatedStructGenerator: StructGenerator {
     )
 
     let internalStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: internalStructName),

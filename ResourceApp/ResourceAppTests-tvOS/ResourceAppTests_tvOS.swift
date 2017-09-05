@@ -11,9 +11,7 @@ import XCTest
 
 class ResourceAppTests_tvOS: XCTestCase {
 
-  let expectedWarnings = [
-    ""
-  ]
+  let expectedWarnings = "warning: [R.swift] project.pbxproj is internally inconsistent.\n\n - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) references missing fileRef C0FEFEC0FEFEC0FEFEC0FEFE\n - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) is not used\n\nPerhaps a merge conflict?\n\n".components(separatedBy: "\n")
 
   func testWarningsAreLogged() {
     guard let logURL = Bundle(for: ResourceAppTests_tvOS.self).url(forResource: "rswift-tv", withExtension: "log") else {

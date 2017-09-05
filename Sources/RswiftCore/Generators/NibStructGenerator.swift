@@ -42,10 +42,11 @@ struct NibStructGenerator: StructGenerator {
   func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "nib"
     let qualifiedName = prefix + structName
-    let groupedNibs = nibs.groupedBySwiftIdentifier { $0.name }
+    let groupedNibs = nibs.grouped(bySwiftIdentifier: { $0.name })
     groupedNibs.printWarningsForDuplicatesAndEmpties(source: "xib", result: "file")
 
     let internalStruct = Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -67,6 +68,7 @@ struct NibStructGenerator: StructGenerator {
       .map { nibFunc(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
 
     let externalStruct = Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(nibProperties.count) nibs."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -89,6 +91,7 @@ struct NibStructGenerator: StructGenerator {
     let qualifiedName = prefix + nibName
 
     return Function(
+      availables: [],
       comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
@@ -147,6 +150,7 @@ struct NibStructGenerator: StructGenerator {
         let viewIndex = viewInfo.ordinal.number - 1
         let viewTypeString = viewInfo.view.description
         return Function(
+          availables: [],
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
@@ -189,6 +193,7 @@ struct NibStructGenerator: StructGenerator {
     var validateImplements: [Type] = []
     if validateImagesLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,
@@ -206,6 +211,7 @@ struct NibStructGenerator: StructGenerator {
     let sanitizedName = SwiftIdentifier(name: nib.name, lowercaseStartingCharacters: false)
 
     return Struct(
+      availables: [],
       comments: [],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: SwiftIdentifier(name: "_\(sanitizedName)")),

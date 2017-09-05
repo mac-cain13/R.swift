@@ -43,8 +43,6 @@ class MainTests: XCTestCase {
   ]
   
   func testSwiftNameSanitization() {
-    RswiftCore.isEdgeEnabled = true
-    
     swiftNameData.forEach {
       let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseStartingCharacters: true).description
       XCTAssertEqual(sanitizedResult, $0.1)

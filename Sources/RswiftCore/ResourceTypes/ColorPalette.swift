@@ -22,19 +22,19 @@ struct ColorPalette: WhiteListedExtensionsResourceType {
     guard let filename = url.filename else {
       throw ResourceParsingError.parsingFailed("Couldn't extract filename without extension from URL: \(url)")
     }
-    guard let colorList = NSColorList(name: "", fromFile: url.path) else {
+    guard let colorList = NSColorList(name: NSColorList.Name(rawValue: ""), fromFile: url.path) else {
       throw ResourceParsingError.parsingFailed("Couldn't parse as color palette: \(url)")
     }
 
     var colors: [String: NSColor] = [:]
     for key in colorList.allKeys {
       guard let color = colorList.color(withKey: key) else { continue }
-      guard color.colorSpaceName == NSCalibratedRGBColorSpace else {
-        warn("Skipping color '\(key)' in '\(url.lastPathComponent)' because it is colorspace '\(color.colorSpace.description)', R.swift currently only supports colorspace RGB")
+      guard color.colorSpaceName == NSColorSpaceName.calibratedRGB else {
+        warn("Skipping color '\(key.rawValue)' in '\(url.lastPathComponent)' because it is colorspace '\(color.colorSpace.description)', R.swift currently only supports colorspace RGB")
         continue
       }
 
-      colors[key] = color
+      colors[key.rawValue] = color
     }
 
     self.filename = filename

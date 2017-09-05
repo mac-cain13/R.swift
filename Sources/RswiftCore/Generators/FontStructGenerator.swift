@@ -20,7 +20,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     let structName: SwiftIdentifier = "font"
     let qualifiedName = prefix + structName
 
-    let groupedFonts = fonts.groupedBySwiftIdentifier { $0.name }
+    let groupedFonts = fonts.grouped(bySwiftIdentifier: { $0.name })
     groupedFonts.printWarningsForDuplicatesAndEmpties(source: "font resource", result: "file")
 
     let fontTypes = groupedFonts.uniques.map { font -> (Let, Function, String) in
@@ -34,6 +34,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
       )
 
       let function = Function(
+        availables: [],
         comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
         accessModifier: externalAccessLevel,
         isStatic: true,
@@ -60,6 +61,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
 
     if validateLines.count > 0 {
       let validateFunction = Function(
+        availables: [],
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,
@@ -75,6 +77,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     }
 
     return Struct(
+      availables: [],
       comments: ["This `R.font` struct is generated, and contains static references to \(fonts.count) fonts."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),

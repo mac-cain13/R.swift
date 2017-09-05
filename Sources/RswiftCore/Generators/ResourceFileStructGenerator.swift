@@ -19,8 +19,8 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "file"
     let qualifiedName = prefix + structName
-    let localized = resourceFiles.grouped { $0.fullname }
-    let groupedLocalized = localized.groupedBySwiftIdentifier { $0.0 }
+    let localized = resourceFiles.grouped(by: { $0.fullname })
+    let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "resource file", result: "file")
 
@@ -28,6 +28,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     let firstLocales = groupedLocalized.uniques.map { ($0.0, Array($0.1.prefix(1))) }
 
     return Struct(
+      availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(firstLocales.count) files."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
@@ -65,6 +66,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
 
         return [
           Function(
+            availables: [],
             comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
             accessModifier: externalAccessLevel,
             isStatic: true,

@@ -13,9 +13,9 @@ import XCTest
 class ColorsTests: XCTestCase {
 
   func testNoNilColors() {
-    XCTAssertNotNil(R.color.myRSwiftColors.allIsAOK())
-    XCTAssertNotNil(R.color.myRSwiftColors.severeError())
-    XCTAssertNotNil(R.color.myRSwiftColors.seeThroughGray)
+    XCTAssertNotNil(R.clr.myRSwiftColors.allIsAOK())
+    XCTAssertNotNil(R.clr.myRSwiftColors.severeError())
+    XCTAssertNotNil(R.clr.myRSwiftColors.seeThroughGray)
   }
 
 }

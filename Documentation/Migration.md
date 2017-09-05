@@ -4,9 +4,14 @@ Pointers for migration between major versions.
 
 ## Upgrading to 4.0
 
-- Make sure you use Xcode 9 since we've adjusted to the syntax changes.
+- Make sure you use Swift 4 / Xcode 9 since we've adjusted to the syntax and SDK changes.
 - Running R.swift now requires the `generate` command, check the error R.swift outputs for upgrade instructions
-- Color support for clr files is dropped in favor of Apples new color assets
+- Capitalization of methods and properties might have changed, in these cases the compiler should generate a fix-it for you.
+- Support for CLR-files is deprecated, use the new named Color assets instead where possible.
+ * CLR based colors are moved from `R.color.*` to `R.clr.*`
+ * Support for CLR files will be removed in a later version
+- At the moment we are compatible with both Swift 3.2 and Swift 4, this is more an accident then a feature, beware that we might drop Swift 3.2 support anytime.
+- If you upgrade from Swift 2 we advise you to first migrate to Swift 3 / R.swift 3.0 and when that is done apply the migration to Swift 4 / R.swift 4.0
 
 ## Upgrading to 3.0
 

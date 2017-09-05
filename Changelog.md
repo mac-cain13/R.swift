@@ -1,3 +1,19 @@
+## 4.0.0.alpha.3
+
+- New color assets are now supported
+- Better capitalization is now enabled by default
+- Use new XcodeEdit version that warns when your projectfile is corrupt
+- Xcode 9/Swift 4/SPM fixes
+
+## 4.0.0.alpha.2
+
+- Fix incorrectly merged color PR
+
+## 4.0.0.alpha.1
+
+- Deprecate clr based color resources
+- Introduce color asset based color resources
+
 ## 3.3.0
 
 *New features:*

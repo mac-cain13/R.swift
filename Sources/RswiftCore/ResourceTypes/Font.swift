@@ -23,9 +23,9 @@ struct Font: WhiteListedExtensionsResourceType {
     guard let dataProvider = CGDataProvider(url: url as CFURL) else {
       throw ResourceParsingError.parsingFailed("Unable to create data provider for font at \(url)")
     }
-    let font = CGFont(dataProvider)
 
-    guard let postScriptName = font.postScriptName else {
+    let font = CGFont(dataProvider)
+    guard let postScriptName = font?.postScriptName else {
       throw ResourceParsingError.parsingFailed("No postscriptName associated to font at \(url)")
     }
 
