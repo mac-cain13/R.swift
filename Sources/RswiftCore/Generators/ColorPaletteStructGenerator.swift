@@ -25,7 +25,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
 
     return Struct(
       availables: [],
-      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(palettes.count) color palettes."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(palettes.count) color palettes.", "NOTE: \(qualifiedName) is deprecated and will be removed in a future R.swift version."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: structName),
       implements: [],
