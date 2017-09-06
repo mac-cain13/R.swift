@@ -1,3 +1,8 @@
+## 4.0.0.alpha.4
+
+- Changes for latest Swift 4 betas
+- Improved Xcodeproj errors
+
 ## 4.0.0.alpha.3
 
 - New color assets are now supported
