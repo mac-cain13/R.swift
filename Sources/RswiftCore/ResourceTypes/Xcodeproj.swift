@@ -13,7 +13,7 @@ import XcodeEdit
 struct Xcodeproj: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcodeproj"]
 
-  private let projectFile: XCProjectFile
+ let projectFile: XCProjectFile
 
   init(url: URL) throws {
     try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)

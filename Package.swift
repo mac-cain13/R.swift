@@ -5,7 +5,7 @@ let package = Package(
   name: "rswift",
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", .upToNextMinor(from: "0.6.0")),
-    .package(url: "https://github.com/tomlokhorst/XcodeEdit", .branch("release/2.0"))
+    .package(url: "https://github.com/tomlokhorst/XcodeEdit", .branch("add-buildphase"))
   ],
   targets: [
     .target(
