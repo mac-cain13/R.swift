@@ -1,13 +1,13 @@
 About Colors
 ============
 
-R.swift can parse .clr color palette files and generate structs in `R.colors.*`.
+R.swift can parse .clr color palette files and generate structs in `R.clr.*`.
 This is useful if you're using .clr color palettes as the source of colors in your project.
 
 _NOTE: Make sure the .clr file is part of the project, and a member of the target, for R.swift to pick it up._ 
 
 A potential work flow is this:
-> A designer maintains a color palette called `App Colors.clr`, a developer refers to colors like so: `R.colors.appColors.errorColor()`.
+> A designer maintains a color palette called `App Colors.clr`, a developer refers to colors like so: `R.clr.appColors.errorColor()`.
 >
 > When the designer updates the color, the new `App Colors.clr` file is copied to the project, and R.swift will generate a new color constant with the same identifier.
 
