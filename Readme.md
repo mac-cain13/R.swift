@@ -13,6 +13,7 @@ Currently you type:
 ```swift
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
+let color = UIColor(named: "indictator highlight")
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
 let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Arthur Dent")
 ```
@@ -21,6 +22,7 @@ With R.swift it becomes:
 ```swift
 let icon = R.image.settingsIcon()
 let font = R.font.sanFrancisco(size: 42)
+let color = R.color.indicatorHighlight()
 let viewController = CustomViewController(nib: R.nib.customView)
 let string = R.string.localizable.welcomeWithName("Arthur Dent")
 ```
