@@ -20,13 +20,13 @@ struct Image: WhiteListedExtensionsResourceType {
 
     let filename = url.lastPathComponent
     let pathExtension = url.pathExtension
-    guard filename.characters.count > 0 && pathExtension.characters.count > 0 else {
+    guard filename.count > 0 && pathExtension.count > 0 else {
       throw ResourceParsingError.parsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
     }
 
     let extensions = Image.supportedExtensions.joined(separator: "|")
     let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .caseInsensitive)
-    let fullFileNameRange = NSRange(location: 0, length: filename.characters.count)
+    let fullFileNameRange = NSRange(location: 0, length: filename.count)
     let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
     name = regex.stringByReplacingMatches(in: filename, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
   }
