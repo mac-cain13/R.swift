@@ -221,7 +221,7 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCell(withIdentifier: R.nib.textCell.identifier, for: indexPath)!
+    let textCell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.textCell, for: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
   }
