@@ -16,7 +16,7 @@ public struct RswiftCore {
     let xcodeproj = try loadXcodeproj(url: xcodeprojURL)
     let projectFile = xcodeproj.projectFile
 
-    let generatedGuids = newGuids()
+    var hasBuildPhase = false
 
     for target in projectFile.project.targets.flatMap({ $0.value }) {
 
@@ -26,20 +26,21 @@ public struct RswiftCore {
       else { continue }
 
       let shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/TESTTEST\""
-      let fields: [String: Any] = [
-        "isa": "PBXShellScriptBuildPhase",
-        "files": [],
-        "name": "Run R.swift",
-        "runOnlyForDeploymentPostprocessing": 0,
-        "shellPath": "/bin/sh",
-        "inputPaths": [],
-        "outputPaths": [],
-        "shellScript": shellScript,
-        "buildActionMask": 0x7FFFFFFF]
-      let guid = generatedGuids.next()!
-      let scriptBuildPhase = try! projectFile.makeObject(type: PBXShellScriptBuildPhase.self, id: guid, fields: fields)
+      let scriptBuildPhase = try projectFile.createShellScript(name: "Run R.swift", shellScript: shellScript)
       let reference: Reference<PBXBuildPhase> = projectFile.addReference(value: scriptBuildPhase)
-      target.addBuildPhase(reference)
+
+      target.insertBuildPhase(reference, at: 0)
+
+      hasBuildPhase = true
+    }
+
+    if hasBuildPhase {
+      let fileReference = try projectFile.createFileReference(path: "R.generated.swift", sourceTree: .group)
+      let reference: Reference<PBXFileReference> = projectFile.addReference(value: fileReference)
+
+      if let group = projectFile.project.mainGroup.value?.children.first?.value as? PBXGroup {
+        group.insertFileReference(reference, at: group.children.count - 1)
+      }
     }
 
     try projectFile.write(to: xcodeprojURL)
@@ -144,14 +145,5 @@ extension PBXNativeTarget {
     }
 
     return false
-  }
-}
-
-func newGuids() -> AnyIterator<Guid> {
-  var x = 0
-
-  return AnyIterator() { () -> Guid in
-    defer { x += 1}
-    return Guid(String(format: "CAFECAFE%016X", x))
   }
 }

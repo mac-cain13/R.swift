@@ -78,6 +78,7 @@ struct CommanderArguments {
   static let xcodeproj = Argument<String>("xcodeproj", description: "Path to the xcodeproj file")
 }
 
+// Command `generate`
 let generate = command(
 
   CommanderOptions.importModules,
@@ -141,7 +142,7 @@ let generate = command(
 
 }
 
-
+// Command `install`
 let install = command(
 
   VariadicOption("target", [String](), description: "Target R.swift should be installed in (multiple allowed)"),
@@ -152,29 +153,8 @@ let install = command(
   try RswiftCore.install(xcodeprojURL: URL(fileURLWithPath: xcodeproj), targetNames: targets)
 }
 
-// Temporary warning message during migration to R.swift 4
-let parser = ArgumentParser(arguments: CommandLine.arguments)
-_ = parser.shift()
-let exception = parser.hasOption("version") || parser.hasOption("help")
-let firstCommand = parser.shift()
-
-if !exception && firstCommand != "generate" && firstCommand != "install" {
-  var arguments = CommandLine.arguments
-  arguments.insert("generate", at: 1)
-  let command = arguments
-    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
-    .joined(separator: " ")
-
-  let message = "error: R.swift 4 requires \"generate\" command as first argument to the executable.\n"
-    + "Change your call to something similar to this:\n\n"
-    + "\(command)"
-    + "\n"
-
-  fputs("\(message)\n", stderr)
-  exit(EXIT_FAILURE)
-}
-
+// Group and run commands
 let group = Group()
-group.addCommand("install", "Install R.swift into a Xcode project", install)
+group.addCommand("install", "Install R.swift into an Xcode project", install)
 group.addCommand("generate", "Generates R.generated.swift file", generate)
 group.run(Rswift.version)
