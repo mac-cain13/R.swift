@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
   name: "rswift",
   dependencies: [
-    .package(url: "https://github.com/kylef/Commander.git", .upToNextMinor(from: "0.6.0")),
-    .package(url: "https://github.com/tomlokhorst/XcodeEdit", .branch("add-buildphase"))
+    .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
+    .package(url: "https://github.com/tomlokhorst/XcodeEdit", .branch("add-buildphase")) // from: "2.1.0"
   ],
   targets: [
     .target(

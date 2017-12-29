@@ -112,7 +112,7 @@ extension FormatSpecifier : Unifiable {
   // Convenience initializer, uses last character of string,
   // ignoring lengt modifiers, e.g. "lld"
   init?(formatString string: String) {
-    guard let last = string.characters.last else {
+    guard let last = string.last else {
       return nil
     }
 
@@ -120,7 +120,7 @@ extension FormatSpecifier : Unifiable {
   }
 
   init?(formatChar char: Swift.Character) {
-    let lcChar = Swift.String(char).lowercased().characters.first!
+    let lcChar = Swift.String(char).lowercased().first!
     switch lcChar {
     case "@":
       self = .object
@@ -226,7 +226,7 @@ private func createFormatParts(_ formatString: String) -> [FormatPart] {
     if let reference = referenceRegEx.firstSubstring(input: str) {
       param = FormatPart.reference(reference)
     }
-    else if let char = str.characters.first, let fs = FormatSpecifier(formatChar: char)
+    else if let char = str.first, let fs = FormatSpecifier(formatChar: char)
     {
       param = FormatPart.spec(fs)
     }

@@ -37,14 +37,14 @@ extension Sequence {
 
 extension String {
   var lowercaseFirstCharacter: String {
-    if self.characters.count <= 1 { return self.lowercased() }
-    let index = characters.index(startIndex, offsetBy: 1)
+    if self.count <= 1 { return self.lowercased() }
+    let index = self.index(startIndex, offsetBy: 1)
     return self[..<index].lowercased() + self[index...]
   }
 
   var uppercaseFirstCharacter: String {
-    if self.characters.count <= 1 { return self.uppercased() }
-    let index = characters.index(startIndex, offsetBy: 1)
+    if self.count <= 1 { return self.uppercased() }
+    let index = self.index(startIndex, offsetBy: 1)
     return self[..<index].uppercased() + self[index...]
   }
 
@@ -54,7 +54,7 @@ extension String {
   }
 
   var fullRange: NSRange {
-    return NSRange(location: 0, length: characters.count)
+    return NSRange(location: 0, length: self.count)
   }
 
   var escapedStringLiteral: String {
@@ -79,6 +79,6 @@ extension String {
 extension URL {
   var filename: String? {
     let filename = deletingPathExtension().lastPathComponent
-    return filename.characters.count == 0 ? nil : filename
+    return filename.count == 0 ? nil : filename
   }
 }

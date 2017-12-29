@@ -1,3 +1,12 @@
+## 4.0.0
+
+- Improved Xcodeproj errors
+- New color assets are now supported
+- Better capitalization is now enabled by default
+- Xcode 9/Swift 4/SPM fixes
+- Deprecate clr based color resources
+- Introduce color asset based color resources
+
 ## 4.0.0.alpha.4
 
 - Changes for latest Swift 4 betas
