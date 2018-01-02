@@ -12,41 +12,7 @@ import XcodeEdit
 
 public struct RswiftCore {
 
-  static public func install(xcodeprojURL: URL, targetNames: [String]) throws {
-    let xcodeproj = try loadXcodeproj(url: xcodeprojURL)
-    let projectFile = xcodeproj.projectFile
-
-    var hasBuildPhase = false
-
-    for target in projectFile.project.targets.flatMap({ $0.value }) {
-
-      guard
-        targetNames.contains(target.name),
-        !target.contains(filename: "R.generated.swift")
-      else { continue }
-
-      let shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/TESTTEST\""
-      let scriptBuildPhase = try projectFile.createShellScript(name: "Run R.swift", shellScript: shellScript)
-      let reference: Reference<PBXBuildPhase> = projectFile.addReference(value: scriptBuildPhase)
-
-      target.insertBuildPhase(reference, at: 0)
-
-      hasBuildPhase = true
-    }
-
-    if hasBuildPhase {
-      let fileReference = try projectFile.createFileReference(path: "R.generated.swift", sourceTree: .group)
-      let reference: Reference<PBXFileReference> = projectFile.addReference(value: fileReference)
-
-      if let group = projectFile.project.mainGroup.value?.children.first?.value as? PBXGroup {
-        group.insertFileReference(reference, at: group.children.count - 1)
-      }
-    }
-
-    try projectFile.write(to: xcodeprojURL)
-  }
-
-  static public func run(_ callInformation: CallInformation) throws {
+  public static func run(_ callInformation: CallInformation) throws {
     let xcodeproj = try loadXcodeproj(url: callInformation.xcodeprojURL)
     let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
@@ -112,7 +78,34 @@ public struct RswiftCore {
     }
   }
 
-  static func loadXcodeproj(url: URL) throws -> Xcodeproj {
+  public static func install(xcodeprojURL: URL, targetNames: [String]) throws {
+    let xcodeproj = try loadXcodeproj(url: xcodeprojURL)
+    let projectFile = xcodeproj.projectFile
+
+    for target in projectFile.project.targets.flatMap({ $0.value }) {
+      guard targetNames.contains(target.name) else { continue }
+
+      guard
+        let buildConfiguration = target.buildConfigurationList.value?.defaultConfiguration,
+        let infoPlistFile = buildConfiguration.buildSettings["INFOPLIST_FILE"] as? String,
+        let directory = URL(string: infoPlistFile)?.deletingLastPathComponent()
+      else {
+        print("Skipping target `\(target.name)', missing INFOPLIST_FILE build setting")
+        continue
+      }
+
+      let fileReference = try projectFile.addRswiftFileReference(directory: directory)
+
+      try target.addRswiftBuildPhase(directory: directory, projectFile: projectFile)
+      try target.addRswiftBuildFile(fileReference: fileReference, projectFile: projectFile)
+    }
+
+    try projectFile.write(to: xcodeprojURL)
+
+    print("DONE!")
+  }
+
+  private static func loadXcodeproj(url: URL) throws -> Xcodeproj {
     do {
       return try Xcodeproj(url: url)
     }
@@ -132,18 +125,96 @@ public struct RswiftCore {
 }
 
 extension PBXNativeTarget {
-  func contains(filename: String) -> Bool {
-    for resourcesBuildPhase in buildPhases.flatMap({ $0.value }) {
-      let files = resourcesBuildPhase.files.flatMap { $0.value }
-      for file in files {
-        if let fileReference = file.fileRef?.value as? PBXFileReference {
-          if fileReference.name == filename {
-            return true
-          }
+
+  func addRswiftBuildPhase(directory: URL, projectFile: XCProjectFile) throws {
+    if buildPhases.contains(where: { $0.value?.containsRswift ?? false }) {
+      print("[!] Skipping target `\(name)', it already contains a R.swift build phase")
+      return
+    }
+
+    let shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/\(directory.description)\""
+    let scriptBuildPhase = try projectFile.createShellScript(name: "Run R.swift", shellScript: shellScript)
+    let reference: Reference<PBXBuildPhase> = projectFile.addReference(value: scriptBuildPhase)
+
+    let index = buildPhases.index(where: { $0.value is PBXSourcesBuildPhase }) ?? 0
+
+    self.insertBuildPhase(reference, at: index)
+    print("inserted buildphase")
+  }
+
+  func addRswiftBuildFile(fileReference: Reference<PBXFileReference>, projectFile: XCProjectFile) throws {
+
+    guard let sources = buildPhases.flatMap({ $0.value as? PBXSourcesBuildPhase }).first else {
+      throw ResourceParsingError.parsingFailed("Missing sources build phase")
+    }
+
+    let buildFile = try projectFile.createBuildFile(fileReference: fileReference)
+    let reference = projectFile.addReference(value: buildFile)
+
+    sources.insertFile(reference, at: 0)
+    print("inserted build file")
+  }
+}
+
+extension PBXBuildPhase {
+  var containsRswift: Bool {
+    guard let buildPhase = self as? PBXShellScriptBuildPhase else { return false }
+
+    return buildPhase.shellScript.contains("rswift generate") || buildPhase.shellScript.contains("rswift\" generate")
+  }
+}
+
+extension XCProjectFile {
+  func addRswiftFileReference(directory: URL) throws -> Reference<PBXFileReference> {
+    guard let mainGroup = project.mainGroup.value else {
+      throw ResourceParsingError.parsingFailed("Missing mainGroup")
+    }
+    let infoPath = Path.relativeTo(.sourceRoot, "/\(directory.appendingPathComponent("Info.plist").description)")
+
+    let group: PBXGroup
+    let path: String
+
+    if let (infoRef, container) = find(path: infoPath, reference: mainGroup, group: mainGroup) {
+      group = container
+      path = infoRef.path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift").description ?? "R.generated.swift"
+    }
+    else {
+      group = mainGroup
+      path = "R.generated.swift"
+    }
+
+    let fileReference = try self.createFileReference(path: path, name: "R.generated.swift", sourceTree: .group)
+    let reference: Reference<PBXFileReference> = self.addReference(value: fileReference)
+
+    group.insertFileReference(reference)
+    print("inserted file reference")
+
+    return reference
+  }
+
+  func find(path: Path, reference: PBXReference, group: PBXGroup) -> (PBXFileReference, PBXGroup)? {
+    if let fileRef = reference as? PBXFileReference {
+      if let fullPath = fileRef.fullPath, fullPath == path {
+        return (fileRef, group)
+      }
+    }
+
+    if let group = reference as? PBXGroup {
+      for child in group.children.flatMap({ $0.value }) {
+        if let result = find(path: path, reference: child, group: group) {
+          return result
         }
       }
     }
 
-    return false
+    return nil
+  }
+}
+
+extension PBXGroup {
+  func insertFileReference(_ reference: Reference<PBXFileReference>) {
+    let ix = children.index(where: { $0.value?.name ?? $0.value?.path ?? "" > "R.generated.swift" }) ?? children.count
+
+    self.insertFileReference(reference, at: ix)
   }
 }
