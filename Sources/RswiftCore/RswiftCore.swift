@@ -167,18 +167,18 @@ extension XCProjectFile {
     }
 
     let infoPath = Path.relativeTo(.sourceRoot, "/\(directory.appendingPathComponent("Info.plist").description)")
-    let fallbackPath = directory.appendingPathComponent("R.generated.swift")
+    let path = directory.appendingPathComponent("R.generated.swift")
 
     let group: PBXGroup
-    let path: URL
+    let sourceTree: SourceTree
 
     if let (infoRef, container) = find(path: infoPath, reference: mainGroup, group: mainGroup) {
       group = container
-      path = infoRef.path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? fallbackPath
+      sourceTree = infoRef.sourceTree
     }
     else {
       group = mainGroup
-      path = fallbackPath
+      sourceTree = .group
     }
 
     if group.children.contains(where: { $0.value?.containsRswift ?? false }) {
@@ -186,7 +186,7 @@ extension XCProjectFile {
       return nil
     }
 
-    let fileReference = try self.createFileReference(path: path.description, name: "R.generated.swift", sourceTree: .group)
+    let fileReference = try self.createFileReference(path: path.description, name: "R.generated.swift", sourceTree: sourceTree)
     let reference: Reference<PBXFileReference> = self.addReference(value: fileReference)
 
     group.insertFileReference(reference)
