@@ -165,18 +165,20 @@ extension XCProjectFile {
     guard let mainGroup = project.mainGroup.value else {
       throw ResourceParsingError.parsingFailed("Missing mainGroup")
     }
+
     let infoPath = Path.relativeTo(.sourceRoot, "/\(directory.appendingPathComponent("Info.plist").description)")
+    let fallbackPath = directory.appendingPathComponent("R.generated.swift")
 
     let group: PBXGroup
-    let path: String
+    let path: URL
 
     if let (infoRef, container) = find(path: infoPath, reference: mainGroup, group: mainGroup) {
       group = container
-      path = infoRef.path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift").description ?? "R.generated.swift"
+      path = infoRef.path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? fallbackPath
     }
     else {
       group = mainGroup
-      path = "R.generated.swift"
+      path = fallbackPath
     }
 
     if group.children.contains(where: { $0.value?.containsRswift ?? false }) {
@@ -184,7 +186,7 @@ extension XCProjectFile {
       return nil
     }
 
-    let fileReference = try self.createFileReference(path: path, name: "R.generated.swift", sourceTree: .group)
+    let fileReference = try self.createFileReference(path: path.description, name: "R.generated.swift", sourceTree: .group)
     let reference: Reference<PBXFileReference> = self.addReference(value: fileReference)
 
     group.insertFileReference(reference)
