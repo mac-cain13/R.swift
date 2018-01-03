@@ -138,7 +138,7 @@ let generate = command(
     sdkRootURL: URL(fileURLWithPath: sdkRootPath)
   )
 
-  try RswiftCore.run(callInformation)
+  try RswiftCore.generate(callInformation)
 
 }
 

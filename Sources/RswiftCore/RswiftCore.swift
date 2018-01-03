@@ -12,7 +12,7 @@ import XcodeEdit
 
 public struct RswiftCore {
 
-  public static func run(_ callInformation: CallInformation) throws {
+  public static func generate(_ callInformation: CallInformation) throws {
     let xcodeproj = try loadXcodeproj(url: callInformation.xcodeprojURL)
     let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
