@@ -82,6 +82,7 @@ public struct RswiftCore {
     let xcodeproj = try loadXcodeproj(url: xcodeprojURL)
     let projectFile = xcodeproj.projectFile
 
+    // Find correct targets
     for target in projectFile.project.targets.flatMap({ $0.value }) {
       guard targetNames.contains(target.name) else { continue }
 
@@ -94,10 +95,13 @@ public struct RswiftCore {
         continue
       }
 
+      // Install in 3 steps
+      try target.addRswiftBuildPhase(directory: directory, projectFile: projectFile)
       let fileReference = try projectFile.addRswiftFileReference(directory: directory)
 
-      try target.addRswiftBuildPhase(directory: directory, projectFile: projectFile)
-      try target.addRswiftBuildFile(fileReference: fileReference, projectFile: projectFile)
+      if let fileReference = fileReference {
+        try target.addRswiftBuildFile(fileReference: fileReference, projectFile: projectFile)
+      }
     }
 
     try projectFile.write(to: xcodeprojURL)
@@ -156,16 +160,8 @@ extension PBXNativeTarget {
   }
 }
 
-extension PBXBuildPhase {
-  var containsRswift: Bool {
-    guard let buildPhase = self as? PBXShellScriptBuildPhase else { return false }
-
-    return buildPhase.shellScript.contains("rswift generate") || buildPhase.shellScript.contains("rswift\" generate")
-  }
-}
-
 extension XCProjectFile {
-  func addRswiftFileReference(directory: URL) throws -> Reference<PBXFileReference> {
+  func addRswiftFileReference(directory: URL) throws -> Reference<PBXFileReference>? {
     guard let mainGroup = project.mainGroup.value else {
       throw ResourceParsingError.parsingFailed("Missing mainGroup")
     }
@@ -181,6 +177,11 @@ extension XCProjectFile {
     else {
       group = mainGroup
       path = "R.generated.swift"
+    }
+
+    if group.children.contains(where: { $0.value?.containsRswift ?? false }) {
+      print("[!] Skipping adding file reference, project already has a file")
+      return nil
     }
 
     let fileReference = try self.createFileReference(path: path, name: "R.generated.swift", sourceTree: .group)
@@ -216,5 +217,21 @@ extension PBXGroup {
     let ix = children.index(where: { $0.value?.name ?? $0.value?.path ?? "" > "R.generated.swift" }) ?? children.count
 
     self.insertFileReference(reference, at: ix)
+  }
+}
+
+extension PBXBuildPhase {
+  var containsRswift: Bool {
+    guard let buildPhase = self as? PBXShellScriptBuildPhase else { return false }
+
+    return buildPhase.shellScript.contains("rswift generate") || buildPhase.shellScript.contains("rswift\" generate")
+  }
+}
+
+extension PBXReference {
+  var containsRswift: Bool {
+    guard let fileReference = self as? PBXFileReference else { return false }
+
+    return fileReference.name == "R.generated.swift" || (fileReference.path ?? "").hasSuffix("R.generated.swift")
   }
 }
