@@ -167,16 +167,19 @@ extension XCProjectFile {
     }
 
     let infoPath = Path.relativeTo(.sourceRoot, "/\(directory.appendingPathComponent("Info.plist").description)")
-    let path = directory.appendingPathComponent("R.generated.swift")
+    let fallbackPath = directory.appendingPathComponent("R.generated.swift")
 
+    let path: URL
     let group: PBXGroup
     let sourceTree: SourceTree
 
     if let (infoRef, container) = find(path: infoPath, reference: mainGroup, group: mainGroup) {
+      path = infoRef.rswiftPath ?? fallbackPath
       group = container
       sourceTree = infoRef.sourceTree
     }
     else {
+      path = fallbackPath
       group = mainGroup
       sourceTree = .group
     }
@@ -235,5 +238,22 @@ extension PBXReference {
     guard let fileReference = self as? PBXFileReference else { return false }
 
     return fileReference.name == "R.generated.swift" || (fileReference.path ?? "").hasSuffix("R.generated.swift")
+  }
+}
+
+extension PBXFileReference {
+  var rswiftPath: URL? {
+    let rswiftURL = URL(string: "R.generated.swift")!
+    if case .group = sourceTree {
+      if path == "Info.plist" {
+        return rswiftURL
+      }
+      else {
+        return path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? rswiftURL
+      }
+    }
+    else {
+      return nil
+    }
   }
 }
