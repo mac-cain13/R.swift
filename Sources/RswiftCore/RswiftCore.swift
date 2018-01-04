@@ -249,7 +249,7 @@ extension PBXFileReference {
         return rswiftURL
       }
       else {
-        return path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? rswiftURL
+        return bpath.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? rswiftURL
       }
     }
     else {
