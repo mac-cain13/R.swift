@@ -102,6 +102,10 @@ public struct RswiftCore {
       if let fileReference = fileReference {
         try target.addRswiftBuildFile(fileReference: fileReference, projectFile: projectFile)
       }
+
+      // Generate empty R.generated.swift file
+      let path = "\(xcodeprojURL.deletingLastPathComponent().path)/\(directory)/R.generated.swift"
+      try generateEmptyRswiftFile(path: URL(fileURLWithPath: path), target: target.name)
     }
 
     try projectFile.write(to: xcodeprojURL)
@@ -125,6 +129,17 @@ public struct RswiftCore {
 
       exit(3)
     }
+  }
+
+  private static func generateEmptyRswiftFile(path: URL, target: String) throws {
+    let contents = """
+    // R.swift is installed.
+    // A build phase has been added in target \(target).
+    //
+    // Build your project to override this file with new contents.
+    """
+
+    try contents.write(to: path, atomically: true, encoding: .utf8)
   }
 }
 
@@ -249,7 +264,7 @@ extension PBXFileReference {
         return rswiftURL
       }
       else {
-        return bpath.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? rswiftURL
+        return path.flatMap(URL.init)?.deletingLastPathComponent().appendingPathComponent("R.generated.swift") ?? rswiftURL
       }
     }
     else {
