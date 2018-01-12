@@ -79,18 +79,13 @@ let jsonPath = R.file.seedDataJson.path()
 
 *Vanilla*
 ```swift
-label.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
-label.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+view.backgroundColor = UIColor(named: "primary background")
 ```
 
 *With R.swift*
 ```swift
-// Colors are extracted from the *.clr files that are in your Xcode project
-label.backgroundColor = R.clr.appColors.backgroundColor()
-label.textColor = R.clr.appColors.textColor()
+view.backgroundColor = R.color.primaryBackground()
 ```
-
-There are some points to keep in mind when using Color palettes, see [About Colors](Colors.md)
 
 ## Localized strings
 
@@ -221,7 +216,7 @@ class FaqAnswerController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let textCell = tableView.dequeueReusableCell(withIdentifier: R.nib.textCell.identifier, for: indexPath)!
+    let textCell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.textCell, for: indexPath)!
     textCell.mainLabel.text = "Hello World"
     return textCell
   }

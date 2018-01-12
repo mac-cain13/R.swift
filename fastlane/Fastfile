@@ -103,13 +103,11 @@ lane :runalltests do
     workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp",
     sdk: "iphonesimulator",
-    destination: "name=iPhone SE",
     clean: true
   )
   scan(
     workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp-tvOS",
-    destination: "name=Apple TV 1080p",
     clean: true
   )
 end
