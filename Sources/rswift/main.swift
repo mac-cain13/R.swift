@@ -56,19 +56,19 @@ struct EnvironmentKeys {
 
 // Options grouped in struct for readability
 struct CommanderOptions {
-  static let importModules = Option("import", "", description: "Add extra modules as import in the generated file, comma seperated.")
-  static let accessLevel = Option("accessLevel", AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file.")
-  static let rswiftIgnore = Option("rswiftignore", ".rswiftignore", description: "Path to pattern file that describes files that should be ignored.")
+  static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated.")
+  static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file.")
+  static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored.")
 
-  static let xcodeproj = Option("xcodeproj", EnvironmentKeys.xcodeproj, flag: "p", description: "Path to the xcodeproj file.")
-  static let target = Option("target", EnvironmentKeys.target, flag: "t", description: "Target the R-file should be generated for.")
+  static let xcodeproj = Option("xcodeproj", default: EnvironmentKeys.xcodeproj, flag: "p", description: "Path to the xcodeproj file.")
+  static let target = Option("target", default: EnvironmentKeys.target, flag: "t", description: "Target the R-file should be generated for.")
 
-  static let bundleIdentifier = Option("bundleIdentifier", EnvironmentKeys.bundleIdentifier, description: "Bundle identifier the R-file is be generated for.")
-  static let productModuleName = Option("productModuleName", EnvironmentKeys.productModuleName, description: "Product module name the R-file is generated for.")
-  static let buildProductsDir = Option("buildProductsDir", EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
-  static let developerDir = Option("developerDir", EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
-  static let sourceRoot = Option("sourceRoot", EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
-  static let sdkRoot = Option("sdkRoot", EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
+  static let bundleIdentifier = Option("bundleIdentifier", default: EnvironmentKeys.bundleIdentifier, description: "Bundle identifier the R-file is be generated for.")
+  static let productModuleName = Option("productModuleName", default: EnvironmentKeys.productModuleName, description: "Product module name the R-file is generated for.")
+  static let buildProductsDir = Option("buildProductsDir", default: EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
+  static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
+  static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
+  static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
 }
 
 
