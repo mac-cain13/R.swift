@@ -231,7 +231,7 @@ class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     let talkCellNib = UINib(nibName: "TalkCell", bundle: nil)
-    collectionView?.register(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
+    collectionView.register(talkCellNib, forCellWithReuseIdentifier: "TalkCellIdentifier")
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -250,7 +250,7 @@ On your reusable cell Interface Builder "Attributes" inspector panel, set the ce
 class RecentsController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    collectionView?.register(R.nib.talkCell)
+    collectionView.register(R.nib.talkCell)
   }
 
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
