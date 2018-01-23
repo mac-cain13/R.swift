@@ -41,7 +41,7 @@ Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.a
 
 This is only the beginning, check out [more examples](Documentation/Examples.md)!
 
-# CocoaHeadsNL presentation
+## CocoaHeadsNL presentation
 
 Mathijs Kadijk presented R.swift at the September 2016 CocoaHeadsNL meetup.
 Talking about the ideas behind R.swift and demonstrating how to move from plain stringly-typed iOS code to statically typed code.
