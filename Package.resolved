@@ -23,9 +23,9 @@
         "package": "XcodeEdit",
         "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
         "state": {
-          "branch": "add-buildphase",
-          "revision": "0ee50a5f97b0ccdec1fa6064a7669db7094e9be1",
-          "version": null
+          "branch": null,
+          "revision": "9f2f59cabd80a5e7515ad6f4d2943a320c8222af",
+          "version": "2.1.0"
         }
       }
     ]
