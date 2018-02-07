@@ -41,6 +41,13 @@ Check out [more examples](Documentation/Examples.md) or hear about [how Fabric.a
 
 This is only the beginning, check out [more examples](Documentation/Examples.md)!
 
+## CocoaHeadsNL presentation
+
+Mathijs Kadijk presented R.swift at the September 2016 CocoaHeadsNL meetup.
+Talking about the ideas behind R.swift and demonstrating how to move from plain stringly-typed iOS code to statically typed code.
+
+<a href="https://vimeo.com/185173151"><img src="https://i.vimeocdn.com/video/594835658.jpg?mw=1920&mh=1080&q=70" width="560" alt="R.swift presentation at CocoaHeadsNL"></a>
+
 ## Features
 
 After installing R.swift into your project you can use the `R`-struct to access resources. If the struct is outdated just build and R.swift will correct any missing/changed/added resources.
