@@ -22,6 +22,7 @@ class ResourceAppTests: XCTestCase {
 
     warning: [R.swift] Skipping color 'Red' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB
     warning: [R.swift] Skipping color 'Green' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB
+    warning: [R.swift] Can't unify '%1' in 'Generic.strings'
     warning: [R.swift] Missing reference 'missing' in 'fault delta' 'Generic.stringsdict'
     warning: [R.swift] Can't unify 'first' in 'fault beta' 'Generic.stringsdict'
     warning: [R.swift] Can't unify 'first' in 'fault gamma' 'Generic.stringsdict'

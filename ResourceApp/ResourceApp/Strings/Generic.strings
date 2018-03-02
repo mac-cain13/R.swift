@@ -12,3 +12,5 @@
 "precision2" = "two   - %12.2f";
 "precision3" = "three - %12.4f";
 "precision4" = "four  - %.2f";
+
+"multiple1" = "This %1$d should be same as %1$@";
