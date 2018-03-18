@@ -50,7 +50,8 @@ public struct RswiftCore {
       let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
         .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
-      let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
+        let resourceBundleName = callInformation.resourceBundleName.isEmpty ? nil : callInformation.resourceBundleName
+        let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier, withEmbeddedResourceBundle: resourceBundleName)
 
       let codeConvertibles: [SwiftCodeConverible?] = [
           HeaderPrinter(),

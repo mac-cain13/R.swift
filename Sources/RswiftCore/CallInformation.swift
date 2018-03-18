@@ -21,6 +21,7 @@ public struct CallInformation {
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
+  let resourceBundleName: String
 
   private let buildProductsDirURL: URL
   private let developerDirURL: URL
@@ -38,6 +39,7 @@ public struct CallInformation {
     targetName: String,
     bundleIdentifier: String,
     productModuleName: String,
+    resourceBundleName: String,
 
     buildProductsDirURL: URL,
     developerDirURL: URL,
@@ -54,6 +56,7 @@ public struct CallInformation {
     self.targetName = targetName
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName
+    self.resourceBundleName = resourceBundleName
 
     self.buildProductsDirURL = buildProductsDirURL
     self.developerDirURL = developerDirURL

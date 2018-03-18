@@ -29,11 +29,12 @@ extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
 
 
 extension ProcessInfo {
-  func value(from current: String, name: String, key: String) throws -> String {
+    func value(from current: String, name: String, key: String, isOptional: Bool = false) throws -> String {
     if current != key { return current }
-    guard let value = self.environment[key] else { throw ArgumentError.missingValue(argument: name) }
+    let value = self.environment[key]
+    guard value != nil || isOptional else { throw ArgumentError.missingValue(argument: name) }
 
-    return value
+    return value ?? ""
   }
 }
 
@@ -48,6 +49,7 @@ struct EnvironmentKeys {
   static let target = "TARGET_NAME"
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
+  static let resourceBundleName = "RESOURCE_BUNDLE_NAME"
   static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
   static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
@@ -65,6 +67,7 @@ struct CommanderOptions {
 
   static let bundleIdentifier = Option("bundleIdentifier", default: EnvironmentKeys.bundleIdentifier, description: "Bundle identifier the R-file is be generated for.")
   static let productModuleName = Option("productModuleName", default: EnvironmentKeys.productModuleName, description: "Product module name the R-file is generated for.")
+  static let resourceBundleName = Option("resourceBundleName", default: EnvironmentKeys.resourceBundleName, description: "Embedded Resource Bundle name the R-file is generated for.")
   static let buildProductsDir = Option("buildProductsDir", default: EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
   static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
   static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
@@ -88,13 +91,14 @@ let generate = command(
 
   CommanderOptions.bundleIdentifier,
   CommanderOptions.productModuleName,
+  CommanderOptions.resourceBundleName,
   CommanderOptions.buildProductsDir,
   CommanderOptions.developerDir,
   CommanderOptions.sourceRoot,
   CommanderOptions.sdkRoot,
 
   CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, resourceModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
 
   let info = ProcessInfo()
 
@@ -102,12 +106,12 @@ let generate = command(
   let targetName = try info.value(from: target, name: "target", key: EnvironmentKeys.target)
   let bundleIdentifier = try info.value(from: bundle, name: "bundleIdentifier", key: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try info.value(from: productModule, name: "productModuleName", key: EnvironmentKeys.productModuleName)
+  let resourceBundleName = try info.value(from: resourceModule, name: "resourceBundleName", key: EnvironmentKeys.resourceBundleName, isOptional: true)
 
   let buildProductsDirPath = try info.value(from: buildProductsDir, name: "buildProductsDir", key: EnvironmentKeys.buildProductsDir)
   let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
   let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
-
 
   let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
@@ -129,6 +133,7 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
+    resourceBundleName: resourceBundleName,
 
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
