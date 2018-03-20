@@ -22,7 +22,13 @@ class AggregatedStructGenerator: StructGenerator {
     let internalStructName: SwiftIdentifier = "_R"
 
     let collectedResult = subgenerators
-      .map { $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName) }
+      .flatMap {
+		  let result = $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName)
+		  if result.externalStruct.isEmpty { return nil }
+		  if let internalStruct = result.internalStruct, internalStruct.isEmpty { return nil }
+
+		  return result
+		}
       .reduce(StructGeneratorResultCollector()) { collector, result in collector.appending(result) }
 
     let externalStruct = Struct(
