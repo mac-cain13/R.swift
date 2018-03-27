@@ -16,11 +16,11 @@ class ResourceBundleAppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        do {
-          try R.validate()
-        } catch {
-          fatalError("R-Validation failed: \(error)")
-        }
+//        do {
+//          try R.validate()
+//        } catch {
+//          fatalError("R-Validation failed: \(error)")
+//        }
 
         // custom UIWindow-Main.storyboard hookup cause storyboard resides inside ResourceBundle
         window = UIWindow.init(frame: UIScreen.main.bounds)
