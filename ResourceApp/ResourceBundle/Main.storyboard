@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="x9V-dF-AON">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--First View Controller-->
+        <scene sceneID="iQb-Zb-3sO">
+            <objects>
+                <viewController id="x9V-dF-AON" customClass="FirstViewController" customModule="ResourceBundleApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Dl5-AR-03V">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="User" translatesAutoresizingMaskIntoConstraints="NO" id="6Ws-LO-9J6">
+                                <rect key="frame" x="123" y="92" width="128" height="128"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TitleLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Abs-UO-9CX">
+                                <rect key="frame" x="150" y="413" width="75" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="6Ws-LO-9J6" firstAttribute="centerX" secondItem="zP7-Yf-d6r" secondAttribute="centerX" id="X0k-jI-jES"/>
+                            <constraint firstItem="zP7-Yf-d6r" firstAttribute="bottom" secondItem="6Ws-LO-9J6" secondAttribute="bottom" constant="447" id="d9X-A3-dOh"/>
+                            <constraint firstItem="Abs-UO-9CX" firstAttribute="centerX" secondItem="zP7-Yf-d6r" secondAttribute="centerX" id="eQu-Qj-PQJ"/>
+                            <constraint firstItem="6Ws-LO-9J6" firstAttribute="top" secondItem="zP7-Yf-d6r" secondAttribute="top" constant="72" id="flr-SN-q8W"/>
+                            <constraint firstItem="Abs-UO-9CX" firstAttribute="top" secondItem="zP7-Yf-d6r" secondAttribute="top" constant="393" id="hX1-XS-Otl"/>
+                            <constraint firstItem="zP7-Yf-d6r" firstAttribute="bottom" secondItem="Abs-UO-9CX" secondAttribute="bottom" constant="233" id="p5Q-dB-psu"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="zP7-Yf-d6r"/>
+                    </view>
+                    <connections>
+                        <outlet property="titleLabel" destination="Abs-UO-9CX" id="vHp-s4-RK2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V9G-9Z-4zR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="470" y="-313"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="User" width="128" height="128"/>
+    </resources>
+</document>

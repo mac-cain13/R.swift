@@ -13,6 +13,9 @@ abstract_target 'Shared' do
 
         target 'ResourceApp'
         target 'ResourceAppTests'
+
+        target 'ResourceBundleApp'
+        target 'ResourceBundleAppTests'
     end
 
     target 'ResourceApp-tvOS' do
