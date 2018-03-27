@@ -13,7 +13,7 @@ extension Struct {
 
     var hostingBundleValue = "Bundle(for: R.Class.self)"
     if let resourceBundleName = resourceBundleName {
-        hostingBundleValue = "Bundle(url: \(hostingBundleValue).url(forResource: \"\(resourceBundleName)\", withExtension: \"bundle\")!) ?? \(hostingBundleValue)"
+        hostingBundleValue = "Bundle(url: \(hostingBundleValue).url(forResource: \"\(resourceBundleName)\", withExtension: \"bundle\") ?? \(hostingBundleValue).bundleURL) ?? \(hostingBundleValue)"
     }
 
     let internalProperties = [
