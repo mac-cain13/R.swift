@@ -109,7 +109,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     // View controllers with identifiers
     let groupedViewControllersWithIdentifier = storyboard.viewControllers
-      .flatMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
+      .compactMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
@@ -163,7 +163,7 @@ struct StoryboardStructGenerator: StructGenerator {
         "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
-      .flatMap { arg -> String? in
+      .compactMap { arg -> String? in
         let (vc, _) = arg
         guard let storyboardName = vc.storyboardIdentifier else { return nil }
         let storyboardIdentifier = SwiftIdentifier(name: storyboardName)

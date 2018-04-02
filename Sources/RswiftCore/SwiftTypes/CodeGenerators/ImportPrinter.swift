@@ -15,7 +15,7 @@ struct ImportPrinter: SwiftCodeConverible {
 
   init(modules: Set<Module>, extractFrom structs: [Struct?], exclude excludedModules: Set<Module>) {
     let extractedModules = structs
-      .flatMap { $0 }
+      .compactMap { $0 }
       .flatMap(getUsedTypes)
       .map { $0.type.module }
 

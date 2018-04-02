@@ -19,7 +19,7 @@ public struct RswiftCore {
 
       let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
-        .flatMap { $0 }
+        .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
@@ -64,7 +64,7 @@ public struct RswiftCore {
         ]
 
       let fileContents = codeConvertibles
-        .flatMap { $0?.swiftCode }
+        .compactMap { $0?.swiftCode }
         .joined(separator: "\n\n")
         + "\n" // Newline at end of file
 

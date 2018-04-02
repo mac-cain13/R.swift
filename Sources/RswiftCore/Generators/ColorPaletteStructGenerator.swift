@@ -32,7 +32,7 @@ struct ColorPaletteStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: groupedPalettes.uniques.flatMap { colorStruct(from: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      structs: groupedPalettes.uniques.compactMap { colorStruct(from: $0, at: externalAccessLevel, prefix: qualifiedName) },
       classes: []
     )
   }

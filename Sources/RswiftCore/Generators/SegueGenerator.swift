@@ -32,7 +32,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
 
     let seguesWithInfo = storyboards.flatMap { storyboard in
       storyboard.viewControllers.flatMap { viewController in
-        viewController.segues.flatMap { segue -> SegueWithInfo? in
+        viewController.segues.compactMap { segue -> SegueWithInfo? in
           guard let destinationType = resolveDestinationTypeForSegue(
             segue,
             inViewController: viewController,
@@ -52,7 +52,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     let deduplicatedSeguesWithInfo = seguesWithInfo
       .grouped { $0.groupKey }
       .values
-      .flatMap { $0.first }
+      .compactMap { $0.first }
 
     var structs: [Struct] = []
 
@@ -65,7 +65,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
         .uniques
         .grouped { $0.sourceType }
         .values
-        .flatMap { self.seguesWithInfoForSourceTypeToStruct($0, at: externalAccessLevel) }
+        .compactMap { self.seguesWithInfoForSourceTypeToStruct($0, at: externalAccessLevel) }
 
       structs = structs + sts
     }
