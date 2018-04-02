@@ -27,16 +27,16 @@ struct Resources {
   let reusables: [Reusable]
 
   init(resourceURLs: [URL], fileManager: FileManager) {
-    assetFolders = resourceURLs.flatMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
-    images = resourceURLs.flatMap { url in tryResourceParsing { try Image(url: url) } }
-    colors = resourceURLs.flatMap { url in tryResourceParsing { try ColorPalette(url: url) } }
-    fonts = resourceURLs.flatMap { url in tryResourceParsing { try Font(url: url) } }
-    nibs = resourceURLs.flatMap { url in tryResourceParsing { try Nib(url: url) } }
-    storyboards = resourceURLs.flatMap { url in tryResourceParsing { try Storyboard(url: url) } }
-    resourceFiles = resourceURLs.flatMap { url in tryResourceParsing { try ResourceFile(url: url) } }
+    assetFolders = resourceURLs.compactMap { url in tryResourceParsing { try AssetFolder(url: url, fileManager: fileManager) } }
+    images = resourceURLs.compactMap { url in tryResourceParsing { try Image(url: url) } }
+    colors = resourceURLs.compactMap { url in tryResourceParsing { try ColorPalette(url: url) } }
+    fonts = resourceURLs.compactMap { url in tryResourceParsing { try Font(url: url) } }
+    nibs = resourceURLs.compactMap { url in tryResourceParsing { try Nib(url: url) } }
+    storyboards = resourceURLs.compactMap { url in tryResourceParsing { try Storyboard(url: url) } }
+    resourceFiles = resourceURLs.compactMap { url in tryResourceParsing { try ResourceFile(url: url) } }
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
-    localizableStrings = resourceURLs.flatMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
+    localizableStrings = resourceURLs.compactMap { url in tryResourceParsing { try LocalizableStrings(url: url) } }
   }
 }
 

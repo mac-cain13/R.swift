@@ -99,8 +99,8 @@ struct SwiftNameGroups<T> {
 
   func printWarningsForDuplicatesAndEmpties(source: String, container: String? = nil, result: String) {
 
-    let sourceSingular = [source, container].flatMap { $0 }.joined(separator: " ")
-    let sourcePlural = ["\(source)s", container].flatMap { $0 }.joined(separator: " ")
+    let sourceSingular = [source, container].compactMap { $0 }.joined(separator: " ")
+    let sourcePlural = ["\(source)s", container].compactMap { $0 }.joined(separator: " ")
 
     let resultSingular = result
     let resultPlural = "\(result)s"

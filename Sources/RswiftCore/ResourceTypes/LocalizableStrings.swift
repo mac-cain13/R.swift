@@ -158,7 +158,7 @@ func lookup(key: String, in dict: [String: AnyObject], processedReferences: [Str
 
   var results = [StringParam(name: nil, spec: formatSpecifier)]
 
-  let stringValues = nested.values.flatMap { $0 as? String }.sorted()
+  let stringValues = nested.values.compactMap { $0 as? String }.sorted()
 
   for stringValue in stringValues {
     var alternative: [StringParam] = []
