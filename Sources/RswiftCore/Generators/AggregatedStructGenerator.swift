@@ -23,12 +23,12 @@ class AggregatedStructGenerator: StructGenerator {
 
     let collectedResult = subgenerators
       .flatMap {
-		  let result = $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName)
-		  if result.externalStruct.isEmpty { return nil }
-		  if let internalStruct = result.internalStruct, internalStruct.isEmpty { return nil }
+        let result = $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName)
+        if result.externalStruct.isEmpty { return nil }
+        if let internalStruct = result.internalStruct, internalStruct.isEmpty { return nil }
 
-		  return result
-		}
+        return result
+      }
       .reduce(StructGeneratorResultCollector()) { collector, result in collector.appending(result) }
 
     let externalStruct = Struct(
