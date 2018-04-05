@@ -11,9 +11,11 @@ import Foundation
 
 struct StoryboardStructGenerator: StructGenerator {
   private let storyboards: [Storyboard]
+  private let additions: Set<StoryboardInstantiationAdditions>
 
-  init(storyboards: [Storyboard]) {
+  init(storyboards: [Storyboard], additions: Set<StoryboardInstantiationAdditions>) {
     self.storyboards = storyboards
+    self.additions = additions
   }
 
   func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
@@ -136,26 +138,56 @@ struct StoryboardStructGenerator: StructGenerator {
       }
     viewControllersWithResourceProperty
       .forEach { properties.append($0.1) }
-
-    viewControllersWithResourceProperty
-      .map { arg in
-        let (vc, resource) = arg
-        return Function(
-          availables: [],
-          comments: [],
-          accessModifier: externalAccessLevel,
-          isStatic: false,
-          name: resource.name,
-          generics: nil,
-          parameters: [
-            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
-          ],
-          doesThrow: false,
-          returnType: vc.type.asOptional(),
-          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
-        )
+    
+    if !(additions.contains(.noregular) || additions.contains(.replaceRegularWithSwinject)) {
+      viewControllersWithResourceProperty
+        .map { arg in
+          let (vc, resource) = arg
+          return Function(
+            availables: [],
+            comments: [],
+            accessModifier: externalAccessLevel,
+            isStatic: false,
+            name: resource.name,
+            generics: nil,
+            parameters: [
+              Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
+            ],
+            doesThrow: false,
+            returnType: vc.type.asOptional(),
+            body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
+          )
+        }
+        .forEach { functions.append($0) }
+    }
+    
+    if additions.contains(.swinject) || additions.contains(.replaceRegularWithSwinject) {
+      let funcNameSuffix: String
+      if additions.contains(.replaceRegularWithSwinject) {
+        funcNameSuffix = ""
+      } else {
+        funcNameSuffix = "WithSwinject"
       }
-      .forEach { functions.append($0) }
+      viewControllersWithResourceProperty
+        .map { arg in
+          let (vc, resource) = arg
+          return Function(
+            availables: [],
+            comments: [],
+            accessModifier: externalAccessLevel,
+            isStatic: false,
+            name: SwiftIdentifier(name: "\(resource.name.description)\(funcNameSuffix)"),
+            generics: nil,
+            parameters: [
+              Function.Parameter(name: "container", type: Type._SwinjectResolver, defaultValue: "SwinjectStoryboard.defaultContainer")
+            ],
+            doesThrow: false,
+            returnType: vc.type.asOptional(),
+            body: "return SwinjectStoryboard.create(name: name, bundle: bundle, container: container).instantiateViewController(withResource: \(resource.name))"
+          )
+        }
+        .forEach { functions.append($0) }
+    }
 
     // Validation
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)

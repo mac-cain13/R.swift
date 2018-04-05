@@ -45,6 +45,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UIColor = Type(module: "UIKit", name: "UIColor")
   static let _CGFloat = Type(module: .stdLib, name: "CGFloat")
   static let _CVarArgType = Type(module: .stdLib, name: "CVarArgType...")
+  static let _SwinjectResolver = Type(module: "Swinject", name: "Resolver")
 
   static let ReuseIdentifier = Type(module: "Rswift", name: "ReuseIdentifier", genericArgs: [TypeVar(description: "T", usedTypes: [])])
   static let ReuseIdentifierType = Type(module: "Rswift", name: "ReuseIdentifierType")
