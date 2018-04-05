@@ -29,7 +29,7 @@ public struct RswiftCore {
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
         SegueStructGenerator(storyboards: resources.storyboards),
-        StoryboardStructGenerator(storyboards: resources.storyboards),
+        StoryboardStructGenerator(storyboards: resources.storyboards, additions: callInformation.storyboardAdditions),
         NibStructGenerator(nibs: resources.nibs),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
