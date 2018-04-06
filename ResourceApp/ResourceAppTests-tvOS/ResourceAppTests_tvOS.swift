@@ -26,6 +26,10 @@ class ResourceAppTests_tvOS: XCTestCase {
       for warning in expectedWarnings {
         XCTAssertTrue(logLines.contains(warning), "Warning is not logged: '\(warning)'")
       }
+      
+      for logLine in logLines {
+        XCTAssertTrue(expectedWarnings.contains(logLine), "Warning was not expected: '\(logLine)'")
+      }
 
       XCTAssertEqual(logLines.count, expectedWarnings.count, "There are more/less warnings then expected")
 
