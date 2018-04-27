@@ -69,7 +69,6 @@ struct CommanderOptions {
   static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
   static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
   static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
-  
   static let storyboardAdditionsParams = Option("storyboardInstantiationAdditions", default: "", description: "Control storyboard instantiation functions in the generated storyboards struct, comma separated")
 }
 
