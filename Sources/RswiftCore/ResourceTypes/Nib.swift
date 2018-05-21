@@ -24,6 +24,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
+  let usedColorResources: [String]
 
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
@@ -47,6 +48,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
+    usedColorResources = parserDelegate.usedColorReferences
   }
 }
 
@@ -55,6 +57,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
   var usedImageIdentifiers: [String] = []
+  var usedColorReferences: [String] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -70,12 +73,17 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         usedImageIdentifiers.append(imageIdentifier)
       }
 
+    case "color":
+      if let colorName = attributeDict["name"] {
+        usedColorReferences.append(colorName)
+      }
+
     default:
       if isObjectsTagOpened {
         levelSinceObjectsTagOpened += 1;
 
-        if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
-          , levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
+        if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
+           levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
             rootViews.append(rootView)
         }
       }

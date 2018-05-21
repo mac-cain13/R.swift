@@ -187,7 +187,14 @@ struct NibStructGenerator: StructGenerator {
     let validateImagesLines = Set(nib.usedImageIdentifiers)
       .map {
         "if UIKit.UIImage(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
-    }
+      }
+    let validateColorLines = Set(nib.usedColorResources)
+      .map {
+        "if UIKit.UIColor(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(nib.name)', but couldn't be loaded.\") }"
+      }
+    let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, *) {"] +
+      validateColorLines.map { $0.indent(with: "  ") } +
+      ["}"]
 
     var validateFunctions: [Function] = []
     var validateImplements: [Type] = []
@@ -202,7 +209,7 @@ struct NibStructGenerator: StructGenerator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateImagesLines.joined(separator: "\n")
+        body: (validateImagesLines + validateColorLinesWithAvailableIf).joined(separator: "\n")
       )
       validateFunctions.append(validateFunction)
       validateImplements.append(Type.Validatable)

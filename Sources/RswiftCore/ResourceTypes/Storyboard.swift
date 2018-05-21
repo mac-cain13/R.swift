@@ -30,6 +30,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   let viewControllers: [ViewController]
   let viewControllerPlaceholders: [ViewControllerPlaceholder]
   let usedImageIdentifiers: [String]
+  let usedColorResources: [String]
   let reusables: [Reusable]
 
   var initialViewController: ViewController? {
@@ -61,6 +62,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     viewControllers = parserDelegate.viewControllers
     viewControllerPlaceholders = parserDelegate.viewControllerPlaceholders
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
+    usedColorResources = parserDelegate.usedColorReferences
     reusables = parserDelegate.reusables
   }
 
@@ -125,6 +127,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var viewControllers: [Storyboard.ViewController] = []
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
   var usedImageIdentifiers: [String] = []
+  var usedColorReferences: [String] = []
   var reusables: [Reusable] = []
 
   // State
@@ -162,6 +165,11 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
+      }
+
+    case "color":
+      if let colorName = attributeDict["name"] {
+        usedColorReferences.append(colorName)
       }
 
     case "viewControllerPlaceholder":

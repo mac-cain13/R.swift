@@ -162,6 +162,13 @@ struct StoryboardStructGenerator: StructGenerator {
       .map {
         "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
+    let validateColorLines = Set(storyboard.usedColorResources)
+      .map {
+        "if UIKit.UIColor(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+      }
+    let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, *) {"] +
+      validateColorLines.map { $0.indent(with: "  ") } +
+      ["}"]
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
       .compactMap { arg -> String? in
         let (vc, _) = arg
@@ -169,7 +176,7 @@ struct StoryboardStructGenerator: StructGenerator {
         let storyboardIdentifier = SwiftIdentifier(name: storyboardName)
         return "if _\(qualifiedName)().\(storyboardIdentifier)() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(storyboardIdentifier)' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
       }
-    let validateLines = validateImagesLines + validateViewControllersLines
+    let validateLines = validateImagesLines + validateColorLinesWithAvailableIf + validateViewControllersLines
 
     if validateLines.count > 0 {
       let validateFunction = Function(
