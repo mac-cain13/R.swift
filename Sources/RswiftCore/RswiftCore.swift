@@ -24,7 +24,7 @@ public struct RswiftCore {
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-      var generators: [StructGenerator] = [
+      let generators: [StructGenerator] = [
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
@@ -35,14 +35,6 @@ public struct RswiftCore {
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
       ]
-
-      do {
-        let colorPaletteGenerator = ColorPaletteStructGenerator(palettes: resources.colors)
-        let colorPaletteGeneratorStruct = colorPaletteGenerator.generatedStructs(at: callInformation.accessLevel, prefix: "")
-        if !colorPaletteGeneratorStruct.externalStruct.isEmpty {
-          generators.append(colorPaletteGenerator)
-        }
-      }
 
       let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
         .generatedStructs(at: callInformation.accessLevel, prefix: "")

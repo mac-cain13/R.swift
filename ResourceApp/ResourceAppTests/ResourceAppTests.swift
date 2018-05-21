@@ -13,15 +13,12 @@ import XCTest
 class ResourceAppTests: XCTestCase {
 
   let expectedWarnings = """
-    warning: [R.swift] Skipping color 'Red' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB
-    warning: [R.swift] Skipping color 'Green' in 'Display P3.clr' because it is colorspace 'Display P3 colorspace', R.swift currently only supports colorspace RGB
     warning: [R.swift] Missing reference 'missing' in 'fault delta' 'Generic.stringsdict'
     warning: [R.swift] Can't unify 'first' in 'fault beta' 'Generic.stringsdict'
     warning: [R.swift] Can't unify 'first' in 'fault gamma' 'Generic.stringsdict'
     warning: [R.swift] Missing reference 'missing' in 'fault alpha' 'Generic.stringsdict'
     warning: [R.swift] Missing reference 'first_one' in 'fault epsilon' 'Generic.stringsdict'
     warning: [R.swift] Missing reference 'first' in 'incorrect in dutch' 'Settings.stringsdict' (nl)
-    warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?
     warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second
     warning: [R.swift] Skipping 2 images because symbol 'theAppIcon' would be generated for all of these images: The App Icon, TheAppIcon
     warning: [R.swift] Skipping asset subfolder because symbol 'conflicting' would conflict with image: conflicting
@@ -46,7 +43,6 @@ class ResourceAppTests: XCTestCase {
     warning: [R.swift] Skipping string for key FormatSpecifiers5 (Settings), format specifiers don't match for all locales: Base, nl
     warning: [R.swift] Skipping string for key mismatch (Settings), format specifiers don't match for all locales: Base, nl
     warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'
-    warning: [R.swift] Skipping 2 colors in palette 'My R.swift colors' because symbol 'black' would be generated for all of these colors: Black, Black?
     """
     .trimmingCharacters(in: .whitespacesAndNewlines)
     .components(separatedBy: "\n")
