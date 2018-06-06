@@ -86,7 +86,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 [CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
 
-_Note on Carthage: R.swift is a tool that used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
+_Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
 
 > ### ⚠️ Change between R.swift 3 and R.swift 4
 > Be aware:  
