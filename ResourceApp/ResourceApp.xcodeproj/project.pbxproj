@@ -78,7 +78,6 @@
 		E2156B6C1CC4293000F341DC /* Duplicate#.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6B1CC4293000F341DC /* Duplicate#.strings */; };
 		E2156B6E1CC42B6700F341DC /* @@.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6D1CC42B6700F341DC /* @@.strings */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
-		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
 		E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2562CD51EE70C68007D8938 /* Media.xcassets */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
@@ -86,8 +85,6 @@
 		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
-		E2CA68DE1EE74585009C4DB4 /* Display P3.clr in Resources */ = {isa = PBXBuildFile; fileRef = E22A62081E8AE788009B7F9F /* Display P3.clr */; };
-		E2CA68DF1EE74585009C4DB4 /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 /* End PBXBuildFile section */
 
@@ -195,8 +192,6 @@
 		E2156B6B1CC4293000F341DC /* Duplicate#.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Duplicate#.strings"; sourceTree = "<group>"; };
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
-		E22A62081E8AE788009B7F9F /* Display P3.clr */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Display P3.clr"; sourceTree = "<group>"; };
-		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
 		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
@@ -208,7 +203,6 @@
 		E2CD68631D7CACC100BEBE59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text; name = Base; path = Base.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
-		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 		EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -357,7 +351,6 @@
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
-				E2F268AF1C92BFE00093995D /* Colors */,
 				D5F05D401BB51FEA003AE55E /* Files */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D51E60BF1BB13612004BB376 /* Images */,
@@ -383,7 +376,6 @@
 		D55C6CD21B5D757300301B0D /* ResourceAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				E24720CD1C96B71B00DF291D /* ColorsTests.swift */,
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
@@ -477,15 +469,6 @@
 				E2CD68641D7CACC100BEBE59 /* hello.txt */,
 			);
 			path = Localized;
-			sourceTree = "<group>";
-		};
-		E2F268AF1C92BFE00093995D /* Colors */ = {
-			isa = PBXGroup;
-			children = (
-				E22A62081E8AE788009B7F9F /* Display P3.clr */,
-				E2F268B01C92BFE00093995D /* My R.swift colors.clr */,
-			);
-			path = Colors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -650,7 +633,6 @@
 				E2156B681CC41EB400F341DC /* Generic.strings in Resources */,
 				E296935A1CAD64D100401D53 /* associatedtype in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
-				E2CA68DE1EE74585009C4DB4 /* Display P3.clr in Resources */,
 				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
@@ -662,7 +644,6 @@
 				5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
-				E2CA68DF1EE74585009C4DB4 /* My R.swift colors.clr in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */,
 				E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */,
@@ -926,7 +907,6 @@
 			files = (
 				E20983241D585E78005ACBAA /* SegueTests.swift in Sources */,
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
-				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
