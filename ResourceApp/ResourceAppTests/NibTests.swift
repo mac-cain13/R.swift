@@ -17,6 +17,7 @@ class NibTests: XCTestCase {
   }
 
   func testRelativeToProjectGroup() {
+    XCTAssertTrue(R.nib.relativeToProject(owner: nil) != nil)
     XCTAssertTrue(R.nib.relativeToProject.firstView(owner: nil) != nil)
   }
 
