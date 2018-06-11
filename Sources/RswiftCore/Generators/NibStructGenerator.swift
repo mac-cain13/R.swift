@@ -70,11 +70,27 @@ struct NibStructGenerator: StructGenerator {
       .map { nibVar(for: $0, at: externalAccessLevel, prefix: qualifiedName) }
     let nibFunctions: [Function] = groupedNibs
       .uniques
-      .compactMap { nib -> Function? in
-        guard let firstViewInfo = nib.rootViews.first else { return nil }
+      .flatMap { nib -> [Function] in
         let qualifiedCurrentNibName = qualifiedName + SwiftIdentifier(name: nib.name)
 
-        return Function(
+        let deprecatedFunction = Function(
+          availables: ["*, deprecated, message: \"Use UINib(resource: \(qualifiedCurrentNibName)) instead\""],
+          comments: ["`UINib(name: \"\(nib.name)\", in: bundle)`"],
+          accessModifier: externalAccessLevel,
+          isStatic: true,
+          name: SwiftIdentifier(name: nib.name),
+          generics: nil,
+          parameters: [
+            Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
+          ],
+          doesThrow: false,
+          returnType: Type._UINib,
+          body: "return UIKit.UINib(resource: \(qualifiedCurrentNibName))"
+        )
+
+        guard let firstViewInfo = nib.rootViews.first else { return [deprecatedFunction] }
+
+        let newFunction = Function(
           availables: [],
           comments: [],
           accessModifier: externalAccessLevel,
@@ -86,6 +102,8 @@ struct NibStructGenerator: StructGenerator {
           returnType: firstViewInfo.asOptional(),
           body: "return \(qualifiedCurrentNibName).instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? \(firstViewInfo)"
         )
+
+        return [deprecatedFunction, newFunction]
       }
 
     let externalStruct = Struct(
