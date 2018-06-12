@@ -10,6 +10,8 @@
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		8A0FBCE6E8FF0950B8821B0B /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */; };
+		A3D0897420CF6FDA007ED462 /* Keep.dont.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */; };
+		A3D0897620CF6FE4007ED462 /* ExplicitInclude.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */; };
 		B9AD30832913E120484BAD10 /* Pods_Shared_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		CCBC9CB91EC4809D002F3D0E /* Images2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */; };
@@ -114,6 +116,8 @@
 		5D9E41331C96918E002172D3 /* StringsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsTests.swift; sourceTree = "<group>"; };
 		70B4C9EF7848D510D018EB8E /* Pods-Shared-ResourceApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		9C2D4D874D7A6B1F02578293 /* Pods-Shared-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Keep.dont.ignoreme.png; sourceTree = "<group>"; };
+		A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExplicitInclude.ignoreme.png; sourceTree = "<group>"; };
 		BA2177EF715BB7F766BD6216 /* Pods_Shared_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
 		CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images2.xcassets; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 		D51E60BF1BB13612004BB376 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */,
 				D59A04631DF3223800B9F65F /* icon.ignoreme.png */,
 				D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */,
 				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
@@ -330,6 +335,7 @@
 			children = (
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
+				A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
@@ -628,6 +634,8 @@
 				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
+				A3D0897420CF6FDA007ED462 /* Keep.dont.ignoreme.png in Resources */,
+				A3D0897620CF6FE4007ED462 /* ExplicitInclude.ignoreme.png in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
 				E2156B6C1CC4293000F341DC /* Duplicate#.strings in Resources */,
 				E2156B681CC41EB400F341DC /* Generic.strings in Resources */,
