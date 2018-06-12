@@ -10,20 +10,24 @@ import Foundation
 
 class IgnoreFile {
   private let ignoredURLs: [URL]
+  private let explicitlyIncludedURLs: [URL]
 
   init() {
     ignoredURLs = []
+    explicitlyIncludedURLs = []
   }
 
   init(ignoreFileURL: URL) throws {
     let workingDirectory = ignoreFileURL.deletingLastPathComponent()
+    let potentialPatterns = try String(contentsOf: ignoreFileURL).components(separatedBy: .newlines)
 
-    ignoredURLs = try String(contentsOf: ignoreFileURL)
-      .components(separatedBy: .newlines)
-      .filter(IgnoreFile.isPattern)
-      .map { workingDirectory.path + "/" + $0 } // This is a glob pattern, so we don't use URL here
-      .flatMap(IgnoreFile.listFilePaths)
-      .map { URL(fileURLWithPath: $0).standardizedFileURL }
+    ignoredURLs = potentialPatterns
+      .filter { IgnoreFile.isPattern(potentialPattern: $0) && !IgnoreFile.isExplicitlyIncludedPattern(potentialPattern: $0) }
+      .flatMap { IgnoreFile.expandPattern($0, workingDirectory: workingDirectory) }
+    explicitlyIncludedURLs = potentialPatterns
+      .filter { IgnoreFile.isPattern(potentialPattern: $0) && IgnoreFile.isExplicitlyIncludedPattern(potentialPattern: $0) }
+      .map { String($0.dropFirst()) }
+      .flatMap { IgnoreFile.expandPattern($0, workingDirectory: workingDirectory) }
   }
 
   static private func isPattern(potentialPattern: String) -> Bool {
@@ -35,7 +39,22 @@ class IgnoreFile {
 
     return true
   }
+    
+  static private func isExplicitlyIncludedPattern(potentialPattern: String) -> Bool {
+    // Check for explicitly included line
+    guard potentialPattern.trimmingCharacters(in: .whitespacesAndNewlines).first == "!" else { return false }
 
+    return true
+  }
+
+  static private func expandPattern(_ pattern: String, workingDirectory: URL) -> [URL] {
+    let globPattern = workingDirectory.path + "/" + pattern // This is a glob pattern, so we don't use URL here
+    let filePaths = IgnoreFile.listFilePaths(pattern: globPattern)
+    let urls = filePaths.map { URL(fileURLWithPath: $0).standardizedFileURL }
+
+    return urls
+  }
+    
   static private func listFilePaths(pattern: String) -> [String] {
     guard !pattern.isEmpty else {
       return []
@@ -45,6 +64,6 @@ class IgnoreFile {
   }
   
   func matches(url: URL) -> Bool {
-    return ignoredURLs.contains(url)
+    return ignoredURLs.contains(url) && !explicitlyIncludedURLs.contains(url)
   }
 }
