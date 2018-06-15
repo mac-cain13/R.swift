@@ -52,6 +52,7 @@
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */ = {isa = PBXBuildFile; fileRef = D5CE930C1CA966D9009D0E62 /* rswift-tv.log */; };
 		D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
+		D5D398EC20D43ADE00D67745 /* IgnoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */; };
 		D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */; };
@@ -163,6 +164,7 @@
 		D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellCollectionView.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5CE930C1CA966D9009D0E62 /* rswift-tv.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "rswift-tv.log"; sourceTree = SOURCE_ROOT; };
+		D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoreTests.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-B.ttf"; sourceTree = "<group>"; };
 		D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-BI.ttf"; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
 				5D9E41331C96918E002172D3 /* StringsTests.swift */,
 				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
+				D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
 			path = ResourceAppTests;
@@ -919,6 +922,7 @@
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
+				D5D398EC20D43ADE00D67745 /* IgnoreTests.swift in Sources */,
 				D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */,
 				D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */,
 			);
