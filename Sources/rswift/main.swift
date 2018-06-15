@@ -69,6 +69,7 @@ struct CommanderOptions {
   static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
   static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
   static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
+  static let storyboardAdditionsParams = Option("storyboardInstantiationAdditions", default: "", description: "Control storyboard instantiation functions in the generated storyboards struct, comma separated")
 }
 
 
@@ -92,9 +93,11 @@ let generate = command(
   CommanderOptions.developerDir,
   CommanderOptions.sourceRoot,
   CommanderOptions.sdkRoot,
+  
+  CommanderOptions.storyboardAdditionsParams,
 
   CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, storyboardAdditionsParams, outputDir in
 
   let info = ProcessInfo()
 
@@ -111,11 +114,19 @@ let generate = command(
 
   let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
-  let modules = importModules
+  let storyboardAdditions: [StoryboardInstantiationAdditions] = storyboardAdditionsParams
+    .components(separatedBy: ",")
+    .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+    .filter { !$0.isEmpty }
+    .compactMap { StoryboardInstantiationAdditions.load(name: $0) }
+  let storyboardAdditionsImports: [Module] = storyboardAdditions.flatMap { $0.requiredImportModules() }
+  let modulesFromImportModules: [Module] = importModules
     .components(separatedBy: ",")
     .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
+  
+  let modules: [Module] = [modulesFromImportModules, storyboardAdditionsImports].flatMap { $0 }
 
 
   let callInformation = CallInformation(
@@ -133,7 +144,9 @@ let generate = command(
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
-    sdkRootURL: URL(fileURLWithPath: sdkRootPath)
+    sdkRootURL: URL(fileURLWithPath: sdkRootPath),
+    
+    storyboardAdditions: Set(storyboardAdditions)
   )
 
   try RswiftCore.run(callInformation)

@@ -21,6 +21,8 @@ public struct CallInformation {
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
+  
+  let storyboardAdditions: Set<StoryboardInstantiationAdditions>
 
   private let buildProductsDirURL: URL
   private let developerDirURL: URL
@@ -42,7 +44,9 @@ public struct CallInformation {
     buildProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
-    sdkRootURL: URL
+    sdkRootURL: URL,
+    
+    storyboardAdditions: Set<StoryboardInstantiationAdditions>
   ) {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
@@ -59,6 +63,8 @@ public struct CallInformation {
     self.developerDirURL = developerDirURL
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
+    
+    self.storyboardAdditions = storyboardAdditions
   }
 
 
