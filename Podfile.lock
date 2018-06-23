@@ -1,5 +1,5 @@
 PODS:
-  - R.swift.Library (4.0.0.alpha.2)
+  - R.swift.Library (5.0.0.alpha.1)
   - SWRevealViewController (2.3.0)
 
 DEPENDENCIES:
@@ -16,11 +16,11 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   R.swift.Library:
-    :commit: 151210a33b3bceeec343719065fa6ee1916a5182
+    :commit: b6d4ccb5042f933b9b7acb2fb1d424f93512033e
     :git: "git@github.com:mac-cain13/R.swift.Library.git"
 
 SPEC CHECKSUMS:
-  R.swift.Library: cb1ffb8ad84a275486e72b834e6d4bf48b59d11b
+  R.swift.Library: 50421682fe36726a830ad2b727c5362b8959cc1e
   SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
 
 PODFILE CHECKSUM: 60ef58c3328649cce6ac12481f40d26d722e5079
