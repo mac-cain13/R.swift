@@ -10,12 +10,17 @@ abstract_target 'Shared' do
   # pod 'R.swift.Library', :path => '../R.swift.Library' # for development
 
   target 'ResourceApp' do
+    platform :ios, '9.0'
+
     pod 'SWRevealViewController'
   end
   target 'ResourceAppTests' do
+    platform :ios, '9.0'
+
     pod 'SWRevealViewController'
   end
-  target 'ResourceApp-tvOS'
-
+  target 'ResourceApp-tvOS' do
+    platform :tvos, '9.0'
+  end
 end
 
