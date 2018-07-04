@@ -25,7 +25,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
-
+  
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
@@ -65,10 +65,15 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
   var levelSinceObjectsTagOpened = 0;
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-    switch elementName {
-    case "objects":
+    if elementName == "objects" {
       isObjectsTagOpened = true
-
+    }
+    
+    if isObjectsTagOpened {
+        levelSinceObjectsTagOpened += 1;
+    }
+    
+    switch elementName {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
@@ -80,17 +85,13 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
       }
 
     default:
-      if isObjectsTagOpened {
-        levelSinceObjectsTagOpened += 1;
-
-        if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
-           levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
+      if isObjectsTagOpened, levelSinceObjectsTagOpened == 1,
+            ignoredRootViewElements.filter({ $0 == elementName }).count == 0,
+        let rootView = viewWithAttributes(attributeDict, elementName: elementName) {
             rootViews.append(rootView)
         }
-      }
-
-      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
-        reusables.append(reusable)
+        if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+          reusables.append(reusable)
       }
     }
   }
