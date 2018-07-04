@@ -23,7 +23,7 @@ class NibParserTests: XCTestCase {
         <objects>
             <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
             <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCellIdentifier" rowHeight="200" id="ypE-6P-i0e">
+            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCellIdentifier" rowHeight="200" id="ypE-6P-i0e" customClass="MyCell" customModule="MyTest" customModuleProvider="target">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ypE-6P-i0e" id="aZO-BP-7IV">
@@ -70,6 +70,23 @@ class NibParserTests: XCTestCase {
         }
         
         XCTAssert(parserDelegate.rootViews.count == 1)
+        XCTAssert(parserDelegate.reusables.count == 1)
     }
 
+    func testRootViewTypeIsCorrectlyExposed() {
+        guard let data = nibContents.data(using: String.Encoding.utf8) else {
+            return XCTFail("Unable to create nibContents")
+        }
+        
+        let parser = XMLParser(data: data)
+        
+        let parserDelegate = NibParserDelegate()
+        parser.delegate = parserDelegate
+        
+        guard parser.parse() else {
+            return XCTFail("Invalid XML")
+        }
+        
+        XCTAssert(parserDelegate.rootViews.first != Type._UIView)
+    }
 }
