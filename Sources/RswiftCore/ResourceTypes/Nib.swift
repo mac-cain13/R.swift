@@ -50,9 +50,10 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
   }
+
 }
 
-private class NibParserDelegate: NSObject, XMLParserDelegate {
+class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
