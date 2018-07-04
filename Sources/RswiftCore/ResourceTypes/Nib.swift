@@ -25,7 +25,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
-  
+
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
 
@@ -50,7 +50,6 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
   }
-
 }
 
 class NibParserDelegate: NSObject, XMLParserDelegate {
@@ -62,7 +61,7 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
 
   // State
   var isObjectsTagOpened = false;
-  var levelSinceObjectsTagOpened = 0;
+  var levelSinceObjectsTagOpened = -1;
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     if elementName == "objects" {
