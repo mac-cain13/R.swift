@@ -61,15 +61,14 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
 
   // State
   var isObjectsTagOpened = false;
-  var levelSinceObjectsTagOpened = -1;
+  var levelSinceObjectsTagOpened = 0;
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-    if elementName == "objects" {
-      isObjectsTagOpened = true
-    }
-    
     if isObjectsTagOpened {
         levelSinceObjectsTagOpened += 1;
+    }
+    if elementName == "objects" {
+      isObjectsTagOpened = true
     }
     
     switch elementName {
