@@ -12,7 +12,7 @@ import XcodeEdit
 
 struct BuildConfiguration {
   let name: String
-  let infoPlistFile: String
+  let infoPlistPath: Path
 }
 
 struct Xcodeproj: WhiteListedExtensionsResourceType {
@@ -82,7 +82,8 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
       .compactMap { $0.value }
       .compactMap { configuration -> BuildConfiguration? in
         guard let infoPlistFile = configuration.buildSettings["INFOPLIST_FILE"] as? String else { return nil }
-        return BuildConfiguration(name: configuration.name, infoPlistFile: infoPlistFile)
+        let path = Path.relativeTo(.sourceRoot, infoPlistFile)
+        return BuildConfiguration(name: configuration.name, infoPlistPath: path)
       }
 
     return buildConfigurations

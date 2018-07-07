@@ -17,7 +17,11 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-      let buildConfigurations = try xcodeproj.infoPlists(forTarget: callInformation.targetName)
+      let infoPlists = try xcodeproj.infoPlists(forTarget: callInformation.targetName)
+        .compactMap { configuration -> InfoPlist? in
+          let url = configuration.infoPlistPath.url(with: callInformation.urlForSourceTreeFolder)
+          return infoPlist(name: configuration.name, url: url)
+        }
 
       let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
@@ -33,7 +37,7 @@ public struct RswiftCore {
         SegueStructGenerator(storyboards: resources.storyboards),
         StoryboardStructGenerator(storyboards: resources.storyboards),
         NibStructGenerator(nibs: resources.nibs),
-        InfoStructGenerator(buildConfigurations: buildConfigurations),
+        InfoStructGenerator(infoPlists: infoPlists),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
@@ -84,6 +88,18 @@ public struct RswiftCore {
       }
 
       exit(3)
+    }
+  }
+
+  private static func infoPlist(name: String, url: URL) -> InfoPlist? {
+    do {
+      return try InfoPlist(buildConfigurationName: name, url: url)
+    } catch let ResourceParsingError.parsingFailed(humanReadableError) {
+      warn(humanReadableError)
+      return nil
+    }
+    catch {
+      return nil
     }
   }
 }

@@ -22,6 +22,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _Any = Type(module: .stdLib, name: "Any")
   static let _AnyObject = Type(module: .stdLib, name: "AnyObject")
   static let _String = Type(module: .stdLib, name: "String")
+  static let _Bool = Type(module: .stdLib, name: "Bool")
   static let _Int = Type(module: .stdLib, name: "Int")
   static let _UInt = Type(module: .stdLib, name: "UInt")
   static let _Double = Type(module: .stdLib, name: "Double")
