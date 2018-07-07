@@ -26,6 +26,7 @@ public struct CallInformation {
   private let developerDirURL: URL
   private let sourceRootURL: URL
   private let sdkRootURL: URL
+  private let platformDirURL: URL
 
   public init(
     outputURL: URL,
@@ -42,7 +43,8 @@ public struct CallInformation {
     buildProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
-    sdkRootURL: URL
+    sdkRootURL: URL,
+    platformDirURL: URL
   ) {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
@@ -59,6 +61,7 @@ public struct CallInformation {
     self.developerDirURL = developerDirURL
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
+    self.platformDirURL = platformDirURL
   }
 
 
@@ -72,6 +75,8 @@ public struct CallInformation {
       return sdkRootURL
     case .sourceRoot:
       return sourceRootURL
+    case .platformDir:
+      return platformDirURL
     }
   }
 }

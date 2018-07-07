@@ -52,6 +52,7 @@ struct EnvironmentKeys {
   static let developerDir = SourceTreeFolder.developerDir.rawValue
   static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
   static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
+  static let platformDir = SourceTreeFolder.platformDir.rawValue
 }
 
 // Options grouped in struct for readability
@@ -68,6 +69,7 @@ struct CommanderOptions {
   static let buildProductsDir = Option("buildProductsDir", default: EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
   static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
   static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
+  static let platformDir = Option("platformDir", default: EnvironmentKeys.sourceRoot, description: "Platform folder that Xcode uses during build.")
   static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
 }
 
@@ -92,9 +94,10 @@ let generate = command(
   CommanderOptions.developerDir,
   CommanderOptions.sourceRoot,
   CommanderOptions.sdkRoot,
+  CommanderOptions.platformDir,
 
   CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, platformDir, outputDir in
 
   let info = ProcessInfo()
 
@@ -107,6 +110,7 @@ let generate = command(
   let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
   let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
+  let platformDir = try info.value(from: platformDir, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
 
 
   let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
@@ -133,7 +137,8 @@ let generate = command(
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
-    sdkRootURL: URL(fileURLWithPath: sdkRootPath)
+    sdkRootURL: URL(fileURLWithPath: sdkRootPath),
+    platformDirURL: URL(fileURLWithPath: platformDir)
   )
 
   try RswiftCore.run(callInformation)
