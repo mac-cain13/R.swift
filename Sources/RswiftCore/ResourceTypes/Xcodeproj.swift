@@ -10,6 +10,11 @@
 import Foundation
 import XcodeEdit
 
+struct BuildConfiguration {
+  let name: String
+  let infoPlistFile: String
+}
+
 struct Xcodeproj: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["xcodeproj"]
 
@@ -37,13 +42,19 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     self.projectFile = projectFile
   }
 
-  func resourcePathsForTarget(_ targetName: String) throws -> [Path] {
+  private func findTarget(name: String) throws -> PBXTarget {
     // Look for target in project file
     let allTargets = projectFile.project.targets.compactMap { $0.value }
-    guard let target = allTargets.filter({ $0.name == targetName }).first else {
+    guard let target = allTargets.filter({ $0.name == name }).first else {
       let availableTargets = allTargets.compactMap { $0.name }.joined(separator: ", ")
-      throw ResourceParsingError.parsingFailed("Target '\(targetName)' not found in project file, available targets are: \(availableTargets)")
+      throw ResourceParsingError.parsingFailed("Target '\(name)' not found in project file, available targets are: \(availableTargets)")
     }
+
+    return target
+  }
+
+  func resourcePaths(forTarget targetName: String) throws -> [Path] {
+    let target = try findTarget(name: targetName)
 
     let resourcesFileRefs = target.buildPhases
       .compactMap { $0.value as? PBXResourcesBuildPhase }
@@ -60,5 +71,20 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
       .compactMap { $0.value?.fullPath }
 
     return fileRefPaths + variantGroupPaths
+  }
+
+  func infoPlists(forTarget targetName: String) throws -> [BuildConfiguration] {
+    let target = try findTarget(name: targetName)
+
+    guard let buildConfigurationList = target.buildConfigurationList.value else { return [] }
+
+    let buildConfigurations = buildConfigurationList.buildConfigurations
+      .compactMap { $0.value }
+      .compactMap { configuration -> BuildConfiguration? in
+        guard let infoPlistFile = configuration.buildSettings["INFOPLIST_FILE"] as? String else { return nil }
+        return BuildConfiguration(name: configuration.name, infoPlistFile: infoPlistFile)
+      }
+
+    return buildConfigurations
   }
 }

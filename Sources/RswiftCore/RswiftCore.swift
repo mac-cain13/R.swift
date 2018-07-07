@@ -17,7 +17,9 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-      let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+      let buildConfigurations = try xcodeproj.infoPlists(forTarget: callInformation.targetName)
+
+      let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
         .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
@@ -31,6 +33,7 @@ public struct RswiftCore {
         SegueStructGenerator(storyboards: resources.storyboards),
         StoryboardStructGenerator(storyboards: resources.storyboards),
         NibStructGenerator(nibs: resources.nibs),
+        InfoStructGenerator(buildConfigurations: buildConfigurations),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
