@@ -1,41 +1,44 @@
 //
-//  InfoGenerator.swift
-//  Commander
+//  PropertyListGenerator.swift
+//  R.swift
 //
 //  Created by Tom Lokhorst on 2018-07-07.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 
-struct InfoStructGenerator: ExternalOnlyStructGenerator {
-  private let infoPlists: [InfoPlist]
+struct PropertyListGenerator: ExternalOnlyStructGenerator {
+  private let name: SwiftIdentifier
+  private let plists: [PropertyList]
 
-  init(infoPlists: [InfoPlist]) {
-    self.infoPlists = infoPlists
+  init(name: SwiftIdentifier, plists: [PropertyList]) {
+    self.name = name
+    self.plists = plists
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
-    guard let infoPlist = infoPlists.first else { return .empty }
+    guard let plist = plists.first else { return .empty }
 
-    guard infoPlists.all(where: { $0.url == infoPlist.url }) else {
-      let configs = infoPlists.map { $0.buildConfigurationName }
-      warn("Build configrurations \(configs) use different Info.plist files, this is not yet supported")
+    guard plists.all(where: { $0.url == plist.url }) else {
+      let configs = plists.map { $0.buildConfigurationName }
+      warn("Build configrurations \(configs) use different \(name) files, this is not yet supported")
       return .empty
     }
 
-    let structName: SwiftIdentifier = "info"
-    let qualifiedName = prefix + structName
+    let qualifiedName = prefix + name
 
     return Struct(
       availables: [],
-      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(infoPlist.contents.count) properties."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(plist.contents.count) properties."],
       accessModifier: externalAccessLevel,
-      type: Type(module: .host, name: structName),
+      type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: propertiesFromInfoPlist(contents: infoPlist.contents, at: externalAccessLevel),
+      properties: propertiesFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
       functions: [],
-      structs: structsFromInfoPlist(contents: infoPlist.contents, at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
       classes: []
     )
   }

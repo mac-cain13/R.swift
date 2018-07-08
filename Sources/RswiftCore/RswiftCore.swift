@@ -17,11 +17,13 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-      let infoPlists = try xcodeproj.infoPlists(forTarget: callInformation.targetName)
-        .compactMap { configuration -> InfoPlist? in
-          let url = configuration.infoPlistPath.url(with: callInformation.urlForSourceTreeFolder)
-          return infoPlist(name: configuration.name, url: url)
-        }
+      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
+      let infoPlists = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.infoPlistPath, callInformation: callInformation)
+      }
+      let entitlements = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.entitlementsPath, callInformation: callInformation)
+      }
 
       let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
@@ -31,13 +33,14 @@ public struct RswiftCore {
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
       let generators: [StructGenerator] = [
+        PropertyListGenerator(name: "info", plists: infoPlists),
+        PropertyListGenerator(name: "entitlements", plists: entitlements),
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
         SegueStructGenerator(storyboards: resources.storyboards),
         StoryboardStructGenerator(storyboards: resources.storyboards),
         NibStructGenerator(nibs: resources.nibs),
-        InfoStructGenerator(infoPlists: infoPlists),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
@@ -91,9 +94,11 @@ public struct RswiftCore {
     }
   }
 
-  private static func infoPlist(name: String, url: URL) -> InfoPlist? {
+  private static func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
+    guard let path = path else { return nil }
     do {
-      return try InfoPlist(buildConfigurationName: name, url: url)
+      let url = path.url(with: callInformation.urlForSourceTreeFolder)
+      return try PropertyList(buildConfigurationName: name, url: url)
     } catch let ResourceParsingError.parsingFailed(humanReadableError) {
       warn(humanReadableError)
       return nil

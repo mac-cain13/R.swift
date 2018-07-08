@@ -13,6 +13,7 @@ import XcodeEdit
 struct BuildConfiguration {
   let name: String
   let infoPlistPath: Path
+  let entitlementsPath: Path?
 }
 
 struct Xcodeproj: WhiteListedExtensionsResourceType {
@@ -73,7 +74,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     return fileRefPaths + variantGroupPaths
   }
 
-  func infoPlists(forTarget targetName: String) throws -> [BuildConfiguration] {
+  func buildConfigurations(forTarget targetName: String) throws -> [BuildConfiguration] {
     let target = try findTarget(name: targetName)
 
     guard let buildConfigurationList = target.buildConfigurationList.value else { return [] }
@@ -82,8 +83,15 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
       .compactMap { $0.value }
       .compactMap { configuration -> BuildConfiguration? in
         guard let infoPlistFile = configuration.buildSettings["INFOPLIST_FILE"] as? String else { return nil }
-        let path = Path.relativeTo(.sourceRoot, infoPlistFile)
-        return BuildConfiguration(name: configuration.name, infoPlistPath: path)
+        let infoPlistPath = Path.relativeTo(.sourceRoot, infoPlistFile)
+
+        let codeSignEntitlements = configuration.buildSettings["CODE_SIGN_ENTITLEMENTS"] as? String
+        let entitlementsPath = codeSignEntitlements.map { Path.relativeTo(.sourceRoot, $0) }
+
+        return BuildConfiguration(
+          name: configuration.name,
+          infoPlistPath: infoPlistPath,
+          entitlementsPath: entitlementsPath)
       }
 
     return buildConfigurations
