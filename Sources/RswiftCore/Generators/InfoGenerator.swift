@@ -29,7 +29,7 @@ struct InfoStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: propertiesFromInfoPlist(contents: infoPlist.contents, at: externalAccessLevel),
       functions: [],
-      structs: [],
+      structs: structsFromInfoPlist(contents: infoPlist.contents, at: externalAccessLevel),
       classes: []
     )
   }
@@ -60,6 +60,54 @@ struct InfoStructGenerator: ExternalOnlyStructGenerator {
         default:
           return nil
         }
+    }
+  }
+
+  private func structsFromInfoPlist(contents: [String: Any], at externalAccessLevel: AccessLevel) -> [Struct] {
+
+    return contents
+      .compactMap { (key, value) -> Struct? in
+        switch value {
+        case let array as [String]:
+          return Struct(
+            availables: [],
+            comments: [],
+            accessModifier: externalAccessLevel,
+            type: Type(module: .host, name: SwiftIdentifier(name: key)),
+            implements: [],
+            typealiasses: [],
+            properties: array.map { item in
+              return Let(
+                comments: [],
+                accessModifier: externalAccessLevel,
+                isStatic: true,
+                name: SwiftIdentifier(name: item),
+                typeDefinition: .inferred(Type._Bool),
+                value: "\"\(item.escapedStringLiteral)\""
+              )
+            },
+            functions: [],
+            structs: [],
+            classes: []
+          )
+
+        case let dict as [String: Any]:
+          return Struct(
+            availables: [],
+            comments: [],
+            accessModifier: externalAccessLevel,
+            type: Type(module: .host, name: SwiftIdentifier(name: key)),
+            implements: [],
+            typealiasses: [],
+            properties: propertiesFromInfoPlist(contents: dict, at: externalAccessLevel),
+            functions: [],
+            structs: structsFromInfoPlist(contents: dict, at: externalAccessLevel),
+            classes: []
+          )
+
+        default:
+          return nil
+      }
     }
   }
 }
