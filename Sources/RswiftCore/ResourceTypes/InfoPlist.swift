@@ -10,9 +10,9 @@ import Foundation
 struct InfoPlist {
   let buildConfigurationName: String
   let contents: [String: Any]
+  let url: URL
 
   init(buildConfigurationName: String, url: URL) throws {
-
     guard
       let nsDictionary = NSDictionary(contentsOf: url),
       let dictionary = nsDictionary as? [String: Any]
@@ -22,5 +22,6 @@ struct InfoPlist {
 
     self.buildConfigurationName = buildConfigurationName
     self.contents = dictionary
+    self.url = url
   }
 }

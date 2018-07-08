@@ -15,7 +15,13 @@ struct InfoStructGenerator: ExternalOnlyStructGenerator {
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
-    let infoPlist = infoPlists.first! // TODO: Not this here, duh
+    guard let infoPlist = infoPlists.first else { return .empty }
+
+    guard infoPlists.all(where: { $0.url == infoPlist.url }) else {
+      let configs = infoPlists.map { $0.buildConfigurationName }
+      warn("Build configrurations \(configs) use different Info.plist files, this is not yet supported")
+      return .empty
+    }
 
     let structName: SwiftIdentifier = "info"
     let qualifiedName = prefix + structName
@@ -105,9 +111,32 @@ struct InfoStructGenerator: ExternalOnlyStructGenerator {
             classes: []
           )
 
+        case let dicts as [[String: Any]] where key == "UIApplicationShortcutItems":
+          return applicationShortcutItems(key: key, dicts: dicts, at: externalAccessLevel)
+
         default:
           return nil
       }
     }
+  }
+
+  private func applicationShortcutItems(key: String, dicts: [[String: Any]], at externalAccessLevel: AccessLevel) -> Struct {
+    let kvs = dicts.compactMap { dict -> (String, [String: Any])? in
+      guard let type = dict["UIApplicationShortcutItemType"] as? String else { return nil }
+      return (type, dict)
+    }
+    let contents = Dictionary(kvs, uniquingKeysWith: { (l, _) in l })
+    return Struct(
+      availables: [],
+      comments: [],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: SwiftIdentifier(name: key)),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: [],
+      structs: structsFromInfoPlist(contents: contents, at: externalAccessLevel),
+      classes: []
+    )
   }
 }

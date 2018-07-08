@@ -84,4 +84,19 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
 
     return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
+
+  static var empty: Struct {
+    return Struct(
+      availables: [],
+      comments: [],
+      accessModifier: .publicLevel,
+      type: Type(module: .host, name: "empty"),
+      implements: [],
+      typealiasses: [],
+      properties: [],
+      functions: [],
+      structs: [],
+      classes: []
+    )
+  }
 }
