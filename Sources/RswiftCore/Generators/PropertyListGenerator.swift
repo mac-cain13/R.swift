@@ -63,7 +63,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             accessModifier: externalAccessLevel,
             isStatic: true,
             name: SwiftIdentifier(name: key),
-            typeDefinition: .inferred(Type._Bool),
+            typeDefinition: .inferred(Type._String),
             value: "\"\(value.escapedStringLiteral)\""
           )
         default:
@@ -91,7 +91,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
                 accessModifier: externalAccessLevel,
                 isStatic: true,
                 name: SwiftIdentifier(name: item),
-                typeDefinition: .inferred(Type._Bool),
+                typeDefinition: .inferred(Type._String),
                 value: "\"\(item.escapedStringLiteral)\""
               )
             },
@@ -100,7 +100,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             classes: []
           )
 
-        case let dict as [String: Any]:
+        case var dict as [String: Any]:
+          dict["_key"] = key
           return Struct(
             availables: [],
             comments: [],
