@@ -122,7 +122,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 
 ### Building from source
 
-R.swift is build using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
+R.swift is built using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
 
 1. Check out the code
 2. Run `swift build -c release -Xswiftc -static-stdlib` from the root directory
