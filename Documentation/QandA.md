@@ -37,7 +37,7 @@ Work around this problem by [*emptying* the module field in the xib or storyboar
 
 Yes, just add R.swift as a buildstep in your library project and it will work just like normal. If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift.
 
-For example Cocoapods users would change their build step to: `"$SRCROOT/rswift" --accessLevel public "$SRCROOT"`
+For example Cocoapods users would change their build step to: `"$SRCROOT/rswift" generate --accessLevel public "$SRCROOT"`
 
 ## How does R.swift work?
 
