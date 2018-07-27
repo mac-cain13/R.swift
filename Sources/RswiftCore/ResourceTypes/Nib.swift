@@ -52,7 +52,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   }
 }
 
-class NibParserDelegate: NSObject, XMLParserDelegate {
+internal class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
@@ -65,7 +65,7 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
     if isObjectsTagOpened {
-        levelSinceObjectsTagOpened += 1;
+      levelSinceObjectsTagOpened += 1
     }
     if elementName == "objects" {
       isObjectsTagOpened = true
@@ -83,13 +83,12 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
       }
 
     default:
-      if isObjectsTagOpened, levelSinceObjectsTagOpened == 1,
-            ignoredRootViewElements.filter({ $0 == elementName }).count == 0,
-        let rootView = viewWithAttributes(attributeDict, elementName: elementName) {
-            rootViews.append(rootView)
-        }
-        if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
-          reusables.append(reusable)
+      if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
+        levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.allSatisfy({ $0 != elementName }) {
+        rootViews.append(rootView)
+      }
+      if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
+        reusables.append(reusable)
       }
     }
   }
@@ -101,7 +100,7 @@ class NibParserDelegate: NSObject, XMLParserDelegate {
 
     default:
       if isObjectsTagOpened {
-        levelSinceObjectsTagOpened -= 1;
+        levelSinceObjectsTagOpened -= 1
       }
     }
   }
