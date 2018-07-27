@@ -35,9 +35,9 @@ Work around this problem by [*emptying* the module field in the xib or storyboar
 
 ## Can I use R.swift in a library?
 
-Yes, just add R.swift as a buildstep in your library project and it will work just like normal. If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift.
+Yes, just add R.swift as a buildstep in your library project and it will work just like normal. This works best if you have a dedicated Xcode project you can use to add the build script to. For Cocoapod users: this is [not the case](https://github.com/mac-cain13/R.swift/issues/430#issue-344112657) if you've used `pod lib create MyNewLib` to scaffold your library.
 
-For example Cocoapods users would change their build step to: `"$SRCROOT/rswift" generate --accessLevel public "$SRCROOT"`
+If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift. For example, if you included R.swift as a cocoapod dependency to your library project, you would change your build step to: `"$PODS_ROOT/R.swift/rswift" generate --accessLevel public "$SRCROOT"`
 
 ## How does R.swift work?
 
