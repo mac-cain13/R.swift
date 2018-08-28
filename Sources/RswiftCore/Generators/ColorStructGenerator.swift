@@ -59,7 +59,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       properties: colorLets,
       functions: groupedColors.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -134,7 +135,8 @@ private extension NamespacedAssetSubfolder {
       properties: colorLets,
       functions: groupedFunctions.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 

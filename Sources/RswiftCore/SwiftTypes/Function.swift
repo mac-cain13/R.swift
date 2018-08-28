@@ -42,22 +42,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indent(with: "  ")
 
-    let code = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
-    guard os.count > 0 else {
-        return code
-    }
-
-    let preprocessorStartString = os.enumerated().reduce("") { result, item in
-        let (index, os) = item
-        var result = result
-        if index == 0 {
-            result += "#if "
-        } else {
-            result += " || "
-        }
-        return result + "os(\(os))"
-    }
-    return "\(preprocessorStartString)\n\(code)\n#endif"
+    return OSPrinter(code: "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}", supportedOS: os).swiftCode
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

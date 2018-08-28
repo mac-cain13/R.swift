@@ -66,7 +66,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: storyboardTypes.map { $0.1 },
       functions: storyboardTypes.map { $0.2 },
       structs: [],
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
 
     let internalStruct = Struct(
@@ -79,7 +80,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: [],
       functions: [],
       structs: storyboardTypes.map { $0.0 },
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
 
     return (
@@ -154,7 +156,7 @@ struct StoryboardStructGenerator: StructGenerator {
           doesThrow: false,
           returnType: vc.type.asOptional(),
           body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))",
-          os: ["iOS", "tvOS"]
+          os: []
         )
       }
       .forEach { functions.append($0) }
@@ -209,7 +211,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: properties,
       functions: functions,
       structs: [],
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
   }
 }

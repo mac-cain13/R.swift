@@ -88,7 +88,8 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
       properties: properties,
       functions: functions,
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 }

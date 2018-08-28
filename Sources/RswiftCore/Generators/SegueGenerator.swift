@@ -80,7 +80,8 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
       properties: [],
       functions: [],
       structs: structs,
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
   }
 
@@ -165,7 +166,8 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
       properties: properties,
       functions: functions,
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 }

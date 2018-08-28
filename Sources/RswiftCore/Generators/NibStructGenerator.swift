@@ -62,7 +62,8 @@ struct NibStructGenerator: StructGenerator {
       structs: groupedNibs
         .uniques
         .map { nibStruct(for: $0, at: externalAccessLevel) },
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
 
     let nibProperties: [Let] = groupedNibs
@@ -118,7 +119,8 @@ struct NibStructGenerator: StructGenerator {
       properties: nibProperties,
       functions: nibFunctions,
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
 
     return (
@@ -245,7 +247,8 @@ struct NibStructGenerator: StructGenerator {
       properties: [bundleLet, nameVar] + reuseIdentifierProperties,
       functions: viewFuncs + validateFunctions,
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 }
