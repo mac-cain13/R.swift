@@ -85,7 +85,8 @@ struct NibStructGenerator: StructGenerator {
           ],
           doesThrow: false,
           returnType: Type._UINib,
-          body: "return UIKit.UINib(resource: \(qualifiedCurrentNibName))"
+          body: "return UIKit.UINib(resource: \(qualifiedCurrentNibName))",
+          os: ["iOS", "tvOS"]
         )
 
         guard let firstViewInfo = nib.rootViews.first else { return [deprecatedFunction] }
@@ -100,7 +101,8 @@ struct NibStructGenerator: StructGenerator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: firstViewInfo.asOptional(),
-          body: "return \(qualifiedCurrentNibName).instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? \(firstViewInfo)"
+          body: "return \(qualifiedCurrentNibName).instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? \(firstViewInfo)",
+          os: []
         )
 
         return [deprecatedFunction, newFunction]
@@ -173,7 +175,8 @@ struct NibStructGenerator: StructGenerator {
           parameters: instantiateParameters,
           doesThrow: false,
           returnType: viewInfo.view.asOptional(),
-          body: "return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)"
+          body: "return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[\(viewIndex)] as? \(viewTypeString)",
+          os: []
         )
       }
 
@@ -223,7 +226,8 @@ struct NibStructGenerator: StructGenerator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: (validateImagesLines + validateColorLinesWithAvailableIf).joined(separator: "\n")
+        body: (validateImagesLines + validateColorLinesWithAvailableIf).joined(separator: "\n"),
+        os: []
       )
       validateFunctions.append(validateFunction)
       validateImplements.append(Type.Validatable)

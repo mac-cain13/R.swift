@@ -4,6 +4,10 @@
       "idiom" : "tv",
       "filename" : "second.pdf",
       "scale" : "1x"
+    },
+    {
+      "idiom" : "tv",
+      "scale" : "2x"
     }
   ],
   "info" : {

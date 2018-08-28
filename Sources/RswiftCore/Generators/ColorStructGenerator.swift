@@ -84,7 +84,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }
@@ -158,7 +159,8 @@ private extension NamespacedAssetSubfolder {
       ],
       doesThrow: false,
       returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }

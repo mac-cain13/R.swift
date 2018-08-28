@@ -77,7 +77,8 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
             ],
             doesThrow: false,
             returnType: Type._URL.asOptional(),
-            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)"
+            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
+            os: []
           )
         ]
     }

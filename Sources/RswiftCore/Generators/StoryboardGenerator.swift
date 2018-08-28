@@ -49,7 +49,8 @@ struct StoryboardStructGenerator: StructGenerator {
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
-          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(_struct.type.name))"
+          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(_struct.type.name))",
+          os: ["iOS", "tvOS"]
         )
 
         return (_struct, _property, _function)
@@ -152,7 +153,8 @@ struct StoryboardStructGenerator: StructGenerator {
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
+          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))",
+          os: ["iOS", "tvOS"]
         )
       }
       .forEach { functions.append($0) }
@@ -189,7 +191,8 @@ struct StoryboardStructGenerator: StructGenerator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateLines.joined(separator: "\n")
+        body: validateLines.joined(separator: "\n"),
+        os: []
       )
       functions.append(validateFunction)
       implements.append(TypePrinter(type: Type.Validatable))

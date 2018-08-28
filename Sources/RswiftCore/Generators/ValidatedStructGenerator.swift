@@ -47,7 +47,8 @@ class ValidatedStructGenerator: StructGenerator {
           parameters: [],
           doesThrow: true,
           returnType: Type._Void,
-          body: validationFunctionBody
+          body: validationFunctionBody,
+          os: []
         )
       ],
       structs: [],
@@ -98,7 +99,8 @@ private extension Struct {
         returnType: Type._Void,
         body: validatableStructs
           .map { "try \($0.type).validate()" }
-          .joined(separator: "\n")
+            .joined(separator: "\n"),
+        os: []
       )
     )
 

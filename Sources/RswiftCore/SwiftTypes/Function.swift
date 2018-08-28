@@ -20,6 +20,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   let doesThrow: Bool
   let returnType: Type
   let body: String
+  let os: [String]
 
   var usedTypes: [UsedType] {
     return [
@@ -41,7 +42,22 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indent(with: "  ")
 
-    return "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+    let code = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+    guard os.count > 0 else {
+        return code
+    }
+
+    let preprocessorStartString = os.enumerated().reduce("") { result, item in
+        let (index, os) = item
+        var result = result
+        if index == 0 {
+            result += "#if "
+        } else {
+            result += " || "
+        }
+        return result + "os(\(os))"
+    }
+    return "\(preprocessorStartString)\n\(code)\n#endif"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

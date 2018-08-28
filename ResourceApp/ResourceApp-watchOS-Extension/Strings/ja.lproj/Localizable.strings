@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  ResourceApp
+
+  Created by Lammert Westerhoff on 28/08/2018.
+  Copyright © 2018 Mathijs Kadijk. All rights reserved.
+*/
+
+
+one = "一つ";
+two = 2;
+
+"quote" = "%dつの光があります！";
+"japanese only" = "Not translated in other languages, and there is no Base";

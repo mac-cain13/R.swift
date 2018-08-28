@@ -219,7 +219,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: "return \(values.localizedString)"
+      body: "return \(values.localizedString)",
+      os: []
     )
   }
 
@@ -245,7 +246,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))"
+      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))",
+      os: []
     )
   }
 

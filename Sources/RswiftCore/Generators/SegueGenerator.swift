@@ -148,7 +148,8 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
         returnType: Type.TypedStoryboardSegueInfo
           .asOptional()
           .withGenericArgs([segueWithInfo.segue.type, segueWithInfo.sourceType, segueWithInfo.destinationType]),
-        body: "return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(SwiftIdentifier(name: sourceType.description)).\(SwiftIdentifier(name: segueWithInfo.segue.identifier)), segue: segue)"
+        body: "return Rswift.TypedStoryboardSegueInfo(segueIdentifier: R.segue.\(SwiftIdentifier(name: sourceType.description)).\(SwiftIdentifier(name: segueWithInfo.segue.identifier)), segue: segue)",
+        os: ["iOS", "tvOS"]
       )
     }
 

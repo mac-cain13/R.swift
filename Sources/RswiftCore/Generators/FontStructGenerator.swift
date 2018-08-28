@@ -45,7 +45,8 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
         ],
         doesThrow: false,
         returnType: Type._UIFont.asOptional(),
-        body: "return UIKit.UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)"
+        body: "return UIKit.UIFont(resource: \(SwiftIdentifier(name: font.name)), size: size)",
+        os: []
       )
 
       let fontName = qualifiedName + SwiftIdentifier(name: font.name)
@@ -70,7 +71,8 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateLines.joined(separator: "\n")
+        body: validateLines.joined(separator: "\n"),
+        os: []
       )
       functions.append(validateFunction)
       implements.append(TypePrinter(type: Type.Validatable))
