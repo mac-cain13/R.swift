@@ -1,3 +1,7 @@
+## 5.0.0.alpha.2
+
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
 ## 5.0.0.alpha.1
 
 - Removed CLR file support, use color resources instead
