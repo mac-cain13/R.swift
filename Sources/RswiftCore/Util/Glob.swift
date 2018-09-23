@@ -132,17 +132,28 @@ public class Glob: Collection {
     let fileManager = FileManager.default
 
     var directories: [String]
+    
+    let blacklist = [
+      "node_modules",
+      "Pods"
+    ]
 
     do {
-      directories = try fileManager.subpathsOfDirectory(atPath: firstPart).compactMap { subpath in
-        let fullPath = NSString(string: firstPart).appendingPathComponent(subpath)
-        var isDirectory = ObjCBool(false)
-        if fileManager.fileExists(atPath: fullPath, isDirectory: &isDirectory) && isDirectory.boolValue {
-          return fullPath
-        } else {
+      directories = try fileManager.contentsOfDirectory(atPath: firstPart).compactMap { subpath -> [String]? in
+        if blacklist.contains(subpath) {
           return nil
         }
-      }
+        let secondPart = NSString(string: firstPart).appendingPathComponent(subpath)
+        return try fileManager.subpathsOfDirectory(atPath: secondPart).compactMap { subpath in
+          let fullPath = NSString(string: secondPart).appendingPathComponent(subpath)
+          var isDirectory = ObjCBool(false)
+          if fileManager.fileExists(atPath: fullPath, isDirectory: &isDirectory) && isDirectory.boolValue {
+            return fullPath
+          } else {
+            return nil
+          }
+        }
+      }.joined().array()
     } catch {
       directories = []
       print("Error parsing file system item: \(error)")
