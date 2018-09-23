@@ -126,9 +126,11 @@ extension Sequence {
     groupedBy[empty] = nil
 
     let uniques = Array(groupedBy.values.filter { $0.count == 1 }.joined())
+        .sorted { identifierSelector($0) < identifierSelector($1) }
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
       .map { ($0.0, $0.1.map(identifierSelector).sorted()) }
+        .sorted { $0.0.description < $1.0.description }
 
     return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
   }

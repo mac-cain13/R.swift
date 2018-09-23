@@ -17,6 +17,12 @@ extension Array {
   }
 }
 
+extension Array where Element: Comparable, Element: Hashable {
+  func uniqueAndSorted() -> [Element] {
+    return Set<Element>(self).array().sorted()
+  }
+}
+
 // MARK: Sequence operations
 
 extension Sequence {
