@@ -8,15 +8,16 @@ _Get strong typed, autocompleted resources like images, fonts and segues in Swif
 The currently latest release of R.swift (5.0.0.alpha.2) supports Swift 4.2, but with a couple of known issues:
 
 When using the new build system and using R.swift as a build step:
- - The initial compile will fail if no output file is configured (https://github.com/mac-cain13/R.swift/issues/438#issuecomment-416982928)
+ - The initial compile will fail if no output file is configured
  - However, when setting an output file, subsequent incremental build won't run the R.swift build step
 
 Current known work-arounds for these issues:
- 1. Don't configure an output file, but compile twice (difficult on a CI)
- 2. Configure an output file, but always do a clean build when an asset has been added (difficult to remember when developing)
- 3. Commit the R.generated.swift file to source control, so the CI has the lastest version from development
+ 1. Use the Legacy Build System
+ 2. Don't configure an output file, but compile twice (difficult on a CI)
+ 3. Configure an output file, but always do a clean build when an asset has been added (difficult to remember when developing)
+ 4. Commit the R.generated.swift file to source control, so the CI has the lastest version from development 
 
-We're working on finding a better solution to these issues.
+We're working on finding a better solution to these issues, see also: https://github.com/mac-cain13/R.swift/issues/456
 
 ---
 
