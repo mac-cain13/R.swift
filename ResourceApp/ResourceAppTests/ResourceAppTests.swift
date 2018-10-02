@@ -45,8 +45,7 @@ class ResourceAppTests: XCTestCase {
     warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'
     """
     .trimmingCharacters(in: .whitespacesAndNewlines)
-    .components(separatedBy: "\n") + "warning: [R.swift] project.pbxproj is internally inconsistent.\n\n - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) references missing fileRef C0FEFEC0FEFEC0FEFEC0FEFE\n - PBXBuildFile (DEADBEEFDEADBEEFDEADBEEF) is not used\n\nPerhaps a merge conflict?\n"
-      .components(separatedBy: "\n")
+    .components(separatedBy: "\n")
 
   func testWarningsAreLogged() {
     guard let logURL = Bundle(for: ResourceAppTests.self).url(forResource: "rswift", withExtension: "log") else {
