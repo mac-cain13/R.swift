@@ -158,11 +158,11 @@ struct StoryboardStructGenerator: StructGenerator {
       .forEach { functions.append($0) }
 
     // Validation
-    let validateImagesLines = Set(storyboard.usedImageIdentifiers)
+    let validateImagesLines = storyboard.usedImageIdentifiers.uniqueAndSorted()
       .map {
         "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
-    let validateColorLines = Set(storyboard.usedColorResources)
+    let validateColorLines = storyboard.usedColorResources.uniqueAndSorted()
       .map {
         "if UIKit.UIColor(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
