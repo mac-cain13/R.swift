@@ -188,16 +188,15 @@ public class Glob: Collection {
   }
 
   private func isDirectory(path: String) -> Bool {
-    var isDirectory = isDirectoryCache[path]
-    if let isDirectory = isDirectory {
+    if let isDirectory = isDirectoryCache[path] {
       return isDirectory
     }
 
     var isDirectoryBool = ObjCBool(false)
-    isDirectory = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
-    isDirectoryCache[path] = isDirectory!
+    let isDirectory = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
+    isDirectoryCache[path] = isDirectory
 
-    return isDirectory!
+    return isDirectory
   }
 
   private func clearCaches() {
