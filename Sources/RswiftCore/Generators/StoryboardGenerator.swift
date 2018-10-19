@@ -160,7 +160,7 @@ struct StoryboardStructGenerator: StructGenerator {
     // Validation
     let validateImagesLines = Set(storyboard.usedImageIdentifiers)
       .map {
-        "if UIKit.UIImage(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+        "if UIKit.UIImage(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
       .flatMap { arg -> String? in
