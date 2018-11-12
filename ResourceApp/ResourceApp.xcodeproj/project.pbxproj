@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DEADBEEFDEADBEEFDEADBEEF /* Dummy build file that is'nt used */ = {isa = PBXBuildFile; fileRef = C0FEFEC0FEFEC0FEFEC0FEFE /* Localizable.strings */; };
 		5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D1AFAAF1C858637003FE7AB /* Localizable.strings */; };
 		5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E41331C96918E002172D3 /* StringsTests.swift */; };
 		8A0FBCE6E8FF0950B8821B0B /* Pods_Shared_ResourceApp_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */; };
+		A3D0897420CF6FDA007ED462 /* Keep.dont.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */; };
+		A3D0897620CF6FE4007ED462 /* ExplicitInclude.ignoreme.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */; };
 		B9AD30832913E120484BAD10 /* Pods_Shared_ResourceAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */; };
 		C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */ = {isa = PBXBuildFile; fileRef = C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */; };
 		CCBC9CB91EC4809D002F3D0E /* Images2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */; };
@@ -51,6 +52,7 @@
 		D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CBCE481B7682B800C5D96B /* MyViewController.swift */; };
 		D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */ = {isa = PBXBuildFile; fileRef = D5CE930C1CA966D9009D0E62 /* rswift-tv.log */; };
 		D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */; };
+		D5D398EC20D43ADE00D67745 /* IgnoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */; };
 		D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */; };
 		D5E513BA1B8E111A0035ECAA /* AveriaLibre-B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */; };
 		D5E513BB1B8E111A0035ECAA /* AveriaLibre-BI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */; };
@@ -79,7 +81,6 @@
 		E2156B6C1CC4293000F341DC /* Duplicate#.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6B1CC4293000F341DC /* Duplicate#.strings */; };
 		E2156B6E1CC42B6700F341DC /* @@.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6D1CC42B6700F341DC /* @@.strings */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
-		E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24720CD1C96B71B00DF291D /* ColorsTests.swift */; };
 		E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2562CD51EE70C68007D8938 /* Media.xcassets */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
@@ -87,8 +88,6 @@
 		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
-		E2CA68DE1EE74585009C4DB4 /* Display P3.clr in Resources */ = {isa = PBXBuildFile; fileRef = E22A62081E8AE788009B7F9F /* Display P3.clr */; };
-		E2CA68DF1EE74585009C4DB4 /* My R.swift colors.clr in Resources */ = {isa = PBXBuildFile; fileRef = E2F268B01C92BFE00093995D /* My R.swift colors.clr */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +117,8 @@
 		5D9E41331C96918E002172D3 /* StringsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringsTests.swift; sourceTree = "<group>"; };
 		70B4C9EF7848D510D018EB8E /* Pods-Shared-ResourceApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		9C2D4D874D7A6B1F02578293 /* Pods-Shared-ResourceAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-ResourceAppTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Keep.dont.ignoreme.png; sourceTree = "<group>"; };
+		A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ExplicitInclude.ignoreme.png; sourceTree = "<group>"; };
 		BA2177EF715BB7F766BD6216 /* Pods_Shared_ResourceApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupplementaryElement.xib; sourceTree = "<group>"; };
 		CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images2.xcassets; sourceTree = "<group>"; };
@@ -163,6 +164,7 @@
 		D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellCollectionView.xib; sourceTree = "<group>"; };
 		D5CBCE481B7682B800C5D96B /* MyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		D5CE930C1CA966D9009D0E62 /* rswift-tv.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "rswift-tv.log"; sourceTree = SOURCE_ROOT; };
+		D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoreTests.swift; sourceTree = "<group>"; };
 		D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		D5E513B51B8E111A0035ECAA /* AveriaLibre-B.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-B.ttf"; sourceTree = "<group>"; };
 		D5E513B61B8E111A0035ECAA /* AveriaLibre-BI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AveriaLibre-BI.ttf"; sourceTree = "<group>"; };
@@ -185,7 +187,7 @@
 		DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ResourceAppTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests_tvOS.swift; sourceTree = "<group>"; };
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; };
 		E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20983231D585E78005ACBAA /* SegueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTests.swift; sourceTree = "<group>"; };
 		E20983251D585F8C005ACBAA /* Xib with ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Xib with ViewController.xib"; sourceTree = "<group>"; };
@@ -196,8 +198,6 @@
 		E2156B6B1CC4293000F341DC /* Duplicate#.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Duplicate#.strings"; sourceTree = "<group>"; };
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
-		E22A62081E8AE788009B7F9F /* Display P3.clr */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Display P3.clr"; sourceTree = "<group>"; };
-		E24720CD1C96B71B00DF291D /* ColorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsTests.swift; sourceTree = "<group>"; };
 		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
@@ -209,7 +209,6 @@
 		E2CD68631D7CACC100BEBE59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text; name = Base; path = Base.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
-		E2F268B01C92BFE00093995D /* My R.swift colors.clr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "My R.swift colors.clr"; sourceTree = "<group>"; };
 		EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -290,6 +289,7 @@
 		D51E60BF1BB13612004BB376 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A3D0897320CF6FDA007ED462 /* Keep.dont.ignoreme.png */,
 				D59A04631DF3223800B9F65F /* icon.ignoreme.png */,
 				D52725FB1C4A7C6A0005C8D4 /* Sky.tiff */,
 				D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */,
@@ -337,6 +337,7 @@
 			children = (
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
 				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
+				A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
@@ -358,7 +359,6 @@
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
-				E2F268AF1C92BFE00093995D /* Colors */,
 				D5F05D401BB51FEA003AE55E /* Files */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D51E60BF1BB13612004BB376 /* Images */,
@@ -384,7 +384,6 @@
 		D55C6CD21B5D757300301B0D /* ResourceAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				E24720CD1C96B71B00DF291D /* ColorsTests.swift */,
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
@@ -393,6 +392,7 @@
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
 				5D9E41331C96918E002172D3 /* StringsTests.swift */,
 				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
+				D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
 			path = ResourceAppTests;
@@ -478,15 +478,6 @@
 				E2CD68641D7CACC100BEBE59 /* hello.txt */,
 			);
 			path = Localized;
-			sourceTree = "<group>";
-		};
-		E2F268AF1C92BFE00093995D /* Colors */ = {
-			isa = PBXGroup;
-			children = (
-				E22A62081E8AE788009B7F9F /* Display P3.clr */,
-				E2F268B01C92BFE00093995D /* My R.swift colors.clr */,
-			);
-			path = Colors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -578,7 +569,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
 					D55C6CB71B5D757300301B0D = {
@@ -643,12 +634,13 @@
 				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
 				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
+				A3D0897420CF6FDA007ED462 /* Keep.dont.ignoreme.png in Resources */,
+				A3D0897620CF6FE4007ED462 /* ExplicitInclude.ignoreme.png in Resources */,
 				D5F05D461BB52078003AE55E /* duplicateJson in Resources */,
 				E2156B6C1CC4293000F341DC /* Duplicate#.strings in Resources */,
 				E2156B681CC41EB400F341DC /* Generic.strings in Resources */,
 				E296935A1CAD64D100401D53 /* associatedtype in Resources */,
 				D51E60C71BB1E600004BB376 /* User@white@3x.png in Resources */,
-				E2CA68DE1EE74585009C4DB4 /* Display P3.clr in Resources */,
 				D5B799851C1B8DB6009EA901 /* Settings.bundle in Resources */,
 				D5B799871C1B8DD2009EA901 /* Specials.storyboard in Resources */,
 				D5E513BD1B8E111A0035ECAA /* AveriaLibre.ttf in Resources */,
@@ -660,7 +652,6 @@
 				5D1AFAB11C858637003FE7AB /* Localizable.strings in Resources */,
 				D5E513BC1B8E111A0035ECAA /* AveriaLibre-L.ttf in Resources */,
 				D51E60C51BB1E600004BB376 /* User@white.png in Resources */,
-				E2CA68DF1EE74585009C4DB4 /* My R.swift colors.clr in Resources */,
 				D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */,
 				C378DD7A1C68C2BF003598B8 /* SupplementaryElement.xib in Resources */,
 				E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */,
@@ -824,7 +815,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../.build/debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"";
+			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -838,7 +829,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS\" > \"$SRCROOT/rswift-tv.log\"";
+			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS\" > \"$SRCROOT/rswift-tv.log\"\n";
 		};
 		ED8FCF67313DC003391627B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -879,11 +870,11 @@
 			files = (
 				E20983241D585E78005ACBAA /* SegueTests.swift in Sources */,
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
-				E24720CE1C96B71B00DF291D /* ColorsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
+				D5D398EC20D43ADE00D67745 /* IgnoreTests.swift in Sources */,
 				D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */,
 				D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */,
 			);
@@ -1009,12 +1000,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1066,12 +1059,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1107,6 +1102,7 @@
 			baseConfigurationReference = 22ACD120062243785169391F /* Pods-Shared-ResourceApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ResourceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1121,6 +1117,7 @@
 			baseConfigurationReference = 3677277BC1C4F3F77310381B /* Pods-Shared-ResourceApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ResourceApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

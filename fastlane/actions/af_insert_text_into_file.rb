@@ -25,7 +25,7 @@ module Fastlane
           open(params[:file_path], 'w') { |f| f << params[:text] << file} 
         end
 
-        Helper.log.info "#{params[:file_path]} has been updated".green
+        UI.message "#{params[:file_path]} has been updated".green
       end
 
       #####################################################

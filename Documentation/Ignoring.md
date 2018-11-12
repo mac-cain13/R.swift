@@ -4,7 +4,7 @@ R.swift will discover resources used in your project automatically. To make sure
 
 ## How does it work?
 
-Create a `.rswiftignore` file in the source root of your project, this file will automatically be discovered by R.swift. The format of the file is nearly the same as [a `.gitignore` file](https://git-scm.com/docs/gitignore#_pattern_format). Wildcards like `*` and `**` are supported and you can add comments by starting a line with a `#`.
+Create a `.rswiftignore` file in the source root of your project, this file will automatically be discovered by R.swift. The format of the file is nearly the same as [a `.gitignore` file](https://git-scm.com/docs/gitignore#_pattern_format). Wildcards like `*` and `**` are supported and you can add comments by starting a line with a `#`. Explicitly including single or multiple files that are otherwise globally ignored is also supported by starting a pattern with `!`.
 
 _Note:_ All patterns are file paths relative to the path of the `.rswiftignore` file.
 
@@ -23,6 +23,12 @@ images/*.tiff
 
 # Ignore all files containing '.ignore.'
 **/*.ignore.*
+
+# Explicitly include a single file
+!keepme.ignore.png
+
+# Explicitly include all files containing '.keepme.'
+!**/*.keepme.*
 ```
 
 ## Custom file location

@@ -27,7 +27,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     let imagesNames = images
       .grouped { $0.name }
       .values
-      .flatMap { $0.first?.name }
+      .compactMap { $0.first?.name }
 
     let allFunctions = assetFolderImageNames + imagesNames
     let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })

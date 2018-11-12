@@ -109,7 +109,7 @@ struct StoryboardStructGenerator: StructGenerator {
 
     // View controllers with identifiers
     let groupedViewControllersWithIdentifier = storyboard.viewControllers
-      .flatMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
+      .compactMap { (vc) -> (vc: Storyboard.ViewController, identifier: String)? in
         guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
         return (vc, storyboardIdentifier)
       }
@@ -158,18 +158,25 @@ struct StoryboardStructGenerator: StructGenerator {
       .forEach { functions.append($0) }
 
     // Validation
-    let validateImagesLines = Set(storyboard.usedImageIdentifiers)
+    let validateImagesLines = storyboard.usedImageIdentifiers.uniqueAndSorted()
       .map {
         "if UIKit.UIImage(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
+    let validateColorLines = storyboard.usedColorResources.uniqueAndSorted()
+      .map {
+        "if UIKit.UIColor(named: \"\($0)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+      }
+    let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, *) {"] +
+      validateColorLines.map { $0.indent(with: "  ") } +
+      ["}"]
     let validateViewControllersLines = groupedViewControllersWithIdentifier.uniques
-      .flatMap { arg -> String? in
+      .compactMap { arg -> String? in
         let (vc, _) = arg
         guard let storyboardName = vc.storyboardIdentifier else { return nil }
         let storyboardIdentifier = SwiftIdentifier(name: storyboardName)
         return "if _\(qualifiedName)().\(storyboardIdentifier)() == nil { throw Rswift.ValidationError(description:\"[R.swift] ViewController with identifier '\(storyboardIdentifier)' could not be loaded from storyboard '\(storyboard.name)' as '\(vc.type)'.\") }"
       }
-    let validateLines = validateImagesLines + validateViewControllersLines
+    let validateLines = validateImagesLines + validateColorLinesWithAvailableIf + validateViewControllersLines
 
     if validateLines.count > 0 {
       let validateFunction = Function(

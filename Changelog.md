@@ -1,3 +1,16 @@
+## 5.0.0.alpha.2
+
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
+## 5.0.0.alpha.1
+
+- Removed CLR file support, use color resources instead
+- Easier nib loading with new method
+- Ignore file supports explicit include (by @renrawnalon)
+- Validation for named colors
+- Empty structs are not generated anymore (by @soberman)
+- Compatible with Xcode 10 / Swift 4.2 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility
+
 ## 4.0.0
 
 - Improved Xcodeproj errors

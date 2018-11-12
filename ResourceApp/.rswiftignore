@@ -5,3 +5,9 @@ ResourceApp/Images/Sky.tiff
 
 # Ignore all files containing '.ignoreme.'
 **/*.ignoreme.*
+
+# Explicitly include single file
+!ResourceApp/ExplicitInclude.ignoreme.png
+
+# Explicitly include all files containing '.dont.ignoreme.'
+!**/*.dont.ignoreme.*

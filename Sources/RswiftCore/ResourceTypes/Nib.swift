@@ -24,6 +24,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let rootViews: [Type]
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
+  let usedColorResources: [String]
 
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
@@ -47,39 +48,45 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     rootViews = parserDelegate.rootViews
     reusables = parserDelegate.reusables
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
+    usedColorResources = parserDelegate.usedColorReferences
   }
 }
 
-private class NibParserDelegate: NSObject, XMLParserDelegate {
+internal class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
   var usedImageIdentifiers: [String] = []
+  var usedColorReferences: [String] = []
 
   // State
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-    switch elementName {
-    case "objects":
+    if isObjectsTagOpened {
+      levelSinceObjectsTagOpened += 1
+    }
+    if elementName == "objects" {
       isObjectsTagOpened = true
-
+    }
+    
+    switch elementName {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
       }
 
-    default:
-      if isObjectsTagOpened {
-        levelSinceObjectsTagOpened += 1;
-
-        if let rootView = viewWithAttributes(attributeDict, elementName: elementName)
-          , levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
-            rootViews.append(rootView)
-        }
+    case "color":
+      if let colorName = attributeDict["name"] {
+        usedColorReferences.append(colorName)
       }
 
+    default:
+      if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
+        levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.allSatisfy({ $0 != elementName }) {
+        rootViews.append(rootView)
+      }
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
         reusables.append(reusable)
       }
@@ -93,7 +100,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
 
     default:
       if isObjectsTagOpened {
-        levelSinceObjectsTagOpened -= 1;
+        levelSinceObjectsTagOpened -= 1
       }
     }
   }

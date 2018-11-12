@@ -134,7 +134,7 @@ public class Glob: Collection {
     var directories: [String]
 
     do {
-      directories = try fileManager.subpathsOfDirectory(atPath: firstPart).flatMap { subpath in
+      directories = try fileManager.subpathsOfDirectory(atPath: firstPart).compactMap { subpath in
         let fullPath = NSString(string: firstPart).appendingPathComponent(subpath)
         var isDirectory = ObjCBool(false)
         if fileManager.fileExists(atPath: fullPath, isDirectory: &isDirectory) && isDirectory.boolValue {

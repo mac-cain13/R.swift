@@ -19,12 +19,12 @@ public struct RswiftCore {
 
       let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
-        .flatMap { $0 }
+        .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-      var generators: [StructGenerator] = [
+      let generators: [StructGenerator] = [
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
@@ -35,14 +35,6 @@ public struct RswiftCore {
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
       ]
-
-      do {
-        let colorPaletteGenerator = ColorPaletteStructGenerator(palettes: resources.colors)
-        let colorPaletteGeneratorStruct = colorPaletteGenerator.generatedStructs(at: callInformation.accessLevel, prefix: "")
-        if !colorPaletteGeneratorStruct.externalStruct.isEmpty {
-          generators.append(colorPaletteGenerator)
-        }
-      }
 
       let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
         .generatedStructs(at: callInformation.accessLevel, prefix: "")
@@ -64,7 +56,7 @@ public struct RswiftCore {
         ]
 
       let fileContents = codeConvertibles
-        .flatMap { $0?.swiftCode }
+        .compactMap { $0?.swiftCode }
         .joined(separator: "\n\n")
         + "\n" // Newline at end of file
 
