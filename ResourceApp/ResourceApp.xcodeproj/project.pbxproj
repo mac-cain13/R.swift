@@ -71,7 +71,6 @@
 		DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559991CA4873D009B8C51 /* AppDelegate.swift */; };
 		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
-		DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */; };
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
 		E20983241D585E78005ACBAA /* SegueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20983231D585E78005ACBAA /* SegueTests.swift */; };
 		E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20983251D585F8C005ACBAA /* Xib with ViewController.xib */; };
@@ -185,7 +184,6 @@
 		DEF559A01CA4873D009B8C51 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF559A21CA4873D009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ResourceAppTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests_tvOS.swift; sourceTree = "<group>"; };
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; };
 		E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -456,7 +454,6 @@
 		DEF559AC1CA48892009B8C51 /* ResourceAppTests-tvOS */ = {
 			isa = PBXGroup;
 			children = (
-				DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */,
 				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
 				D5CE930B1CA966C6009D0E62 /* Supporting Files */,
 			);
@@ -893,7 +890,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */,
 				D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
