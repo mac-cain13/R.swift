@@ -1,3 +1,9 @@
+## 5.0.0.alpha.3
+
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+
 ## 5.0.0.alpha.2
 
 - Nib parsing fixes for Xcode 10 from @rafaelnobrepd
