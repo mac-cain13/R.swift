@@ -12,7 +12,6 @@ import Commander
 import RswiftCore
 import XcodeEdit
 
-
 // Argument convertibles
 extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
   public init(parser: ArgumentParser) throws {
@@ -26,7 +25,6 @@ extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
     return rawValue
   }
 }
-
 
 extension ProcessInfo {
   func environmentVariable(name: String) throws -> String {
@@ -42,15 +40,19 @@ struct CommanderFlags {
 
 // Default values for non-optional Commander Options
 struct EnvironmentKeys {
-  static let xcodeproj = "PROJECT_FILE_PATH"
-  static let target = "TARGET_NAME"
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
+  static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
+  static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
+  static let target = "TARGET_NAME"
+  static let tempDir = "TEMP_DIR"
+  static let xcodeproj = "PROJECT_FILE_PATH"
+
   static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
-  static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
-  static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
   static let platformDir = SourceTreeFolder.platformDir.rawValue
+  static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
+  static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
 }
 
 // Options grouped in struct for readability
@@ -116,27 +118,16 @@ let generate = command(
   try RswiftCore.run(callInformation)
 }
 
-// Temporary warning message during migration to R.swift 4
-let parser = ArgumentParser(arguments: CommandLine.arguments)
-_ = parser.shift()
-let exception = parser.hasOption("version") || parser.hasOption("help")
-
-if !exception && parser.shift() != "generate" {
-  var arguments = CommandLine.arguments
-  arguments.insert("generate", at: 1)
-  let command = arguments
-    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
-    .joined(separator: " ")
-
-  let message = "error: R.swift 4 requires \"generate\" command as first argument to the executable.\n"
-    + "Change your call to something similar to this:\n\n"
-    + "\(command)"
-    + "\n"
-
-  fputs("\(message)\n", stderr)
-  exit(EXIT_FAILURE)
+// Touch last run file
+do {
+  let tempDirPath = try ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
+  let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent("rswift-lastrun")
+  try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
+} catch {
+  warn("Failed to write out to 'rswift-lastrun', this might cause Xcode to not run the R.swift build phase: \(error)")
 }
 
+// Start parsing the launch arguments
 let group = Group()
 group.addCommand("generate", "Generates R.generated.swift file", generate)
 group.run(Rswift.version)
