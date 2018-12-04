@@ -11,5 +11,4 @@ import Foundation
 
 struct Rswift {
   static let version = "5.0.0.alpha.3"
-  static let resourceFileName = "R.generated.swift"
 }

@@ -29,10 +29,8 @@ extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
 
 
 extension ProcessInfo {
-  func value(from current: String, name: String, key: String) throws -> String {
-    if current != key { return current }
-    guard let value = self.environment[key] else { throw ArgumentError.missingValue(argument: name) }
-
+  func environmentVariable(name: String) throws -> String {
+    guard let value = self.environment[name] else { throw ArgumentError.missingValue(argument: name) }
     return value
   }
 }
@@ -60,66 +58,41 @@ struct CommanderOptions {
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated.")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file.")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored.")
-
-  static let xcodeproj = Option("xcodeproj", default: EnvironmentKeys.xcodeproj, flag: "p", description: "Path to the xcodeproj file.")
-  static let target = Option("target", default: EnvironmentKeys.target, flag: "t", description: "Target the R-file should be generated for.")
-
-  static let bundleIdentifier = Option("bundleIdentifier", default: EnvironmentKeys.bundleIdentifier, description: "Bundle identifier the R-file is be generated for.")
-  static let productModuleName = Option("productModuleName", default: EnvironmentKeys.productModuleName, description: "Product module name the R-file is generated for.")
-  static let buildProductsDir = Option("buildProductsDir", default: EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
-  static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
-  static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
-  static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
-  static let platformDir = Option("platformDir", default: EnvironmentKeys.platformDir, description: "Platform folder folder that Xcode uses during build.")
 }
-
 
 // Options grouped in struct for readability
 struct CommanderArguments {
-  static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
+  static let outputPath = Argument<String>("outputPath", description: "Output path for the generated file.")
 }
 
 let generate = command(
-
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
 
-  CommanderOptions.xcodeproj,
-  CommanderOptions.target,
+  CommanderArguments.outputPath
+) { importModules, accessLevel, rswiftIgnore, outputPath in
 
-  CommanderOptions.bundleIdentifier,
-  CommanderOptions.productModuleName,
-  CommanderOptions.buildProductsDir,
-  CommanderOptions.developerDir,
-  CommanderOptions.sourceRoot,
-  CommanderOptions.sdkRoot,
+  let processInfo = ProcessInfo()
 
-  CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+  let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+  let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
+  let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
+  let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
 
-  let info = ProcessInfo()
+  let buildProductsDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.buildProductsDir)
+  let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
+  let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
+  let sdkRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
+  let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
-  let xcodeprojPath = try info.value(from: xcodeproj, name: "xcodeproj", key: EnvironmentKeys.xcodeproj)
-  let targetName = try info.value(from: target, name: "target", key: EnvironmentKeys.target)
-  let bundleIdentifier = try info.value(from: bundle, name: "bundleIdentifier", key: EnvironmentKeys.bundleIdentifier)
-  let productModuleName = try info.value(from: productModule, name: "productModuleName", key: EnvironmentKeys.productModuleName)
-
-  let buildProductsDirPath = try info.value(from: buildProductsDir, name: "buildProductsDir", key: EnvironmentKeys.buildProductsDir)
-  let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
-  let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
-  let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
-  let platformPath = try info.value(from: sdkRoot, name: "platformDir", key: EnvironmentKeys.platformDir)
-
-
-  let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
+  let outputURL = URL(fileURLWithPath: outputPath)
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
   let modules = importModules
     .components(separatedBy: ",")
     .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
-
 
   let callInformation = CallInformation(
     outputURL: outputURL,
@@ -141,7 +114,6 @@ let generate = command(
   )
 
   try RswiftCore.run(callInformation)
-
 }
 
 // Temporary warning message during migration to R.swift 4
