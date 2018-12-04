@@ -77,6 +77,7 @@ struct CommanderOptions {
 // Options grouped in struct for readability
 struct CommanderArguments {
   static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
+  static let useStringsHierachy = Flag.init("useStringsHierachy")
 }
 
 let generate = command(
@@ -95,8 +96,9 @@ let generate = command(
   CommanderOptions.sourceRoot,
   CommanderOptions.sdkRoot,
 
-  CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir in
+  CommanderArguments.outputDir,
+  CommanderArguments.useStringsHierachy
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir, useStringsHierachy in
 
   let info = ProcessInfo()
 
@@ -111,7 +113,6 @@ let generate = command(
   let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
   let platformPath = try info.value(from: sdkRoot, name: "platformDir", key: EnvironmentKeys.platformDir)
 
-
   let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
   let modules = importModules
@@ -120,6 +121,8 @@ let generate = command(
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
 
+  //TODO: Support Json/Plist for other options, cause commander support 14 total parameters in call
+  let parsingInfo = ParsingInformation(useStringsHierarchy: useStringsHierachy)
 
   let callInformation = CallInformation(
     outputURL: outputURL,
@@ -137,7 +140,8 @@ let generate = command(
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
     sdkRootURL: URL(fileURLWithPath: sdkRootPath),
-    platformURL: URL(fileURLWithPath: platformPath)
+    platformURL: URL(fileURLWithPath: platformPath),
+    parsingInformation: parsingInfo
   )
 
   try RswiftCore.run(callInformation)

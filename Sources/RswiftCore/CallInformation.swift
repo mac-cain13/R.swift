@@ -28,6 +28,8 @@ public struct CallInformation {
   private let sdkRootURL: URL
   private let platformURL: URL
 
+  let parsingInformation: ParsingInformation
+  
   public init(
     outputURL: URL,
     rswiftIgnoreURL: URL,
@@ -44,7 +46,8 @@ public struct CallInformation {
     developerDirURL: URL,
     sourceRootURL: URL,
     sdkRootURL: URL,
-    platformURL: URL
+    platformURL: URL,
+    parsingInformation: ParsingInformation
   ) {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
@@ -62,6 +65,7 @@ public struct CallInformation {
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
     self.platformURL = platformURL
+    self.parsingInformation = parsingInformation
   }
 
 
