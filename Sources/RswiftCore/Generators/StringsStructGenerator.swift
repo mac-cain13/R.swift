@@ -27,10 +27,16 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
 
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
-
-    let structs = groupedLocalized.uniques.compactMap { arg -> Struct? in
-      let (key, value) = arg
-      return stringStructFromLocalizableStrings(filename: key, strings: value, at: externalAccessLevel, prefix: qualifiedName)
+    
+    let structs: [Struct]
+    switch useStringsHierarchy {
+    case true:
+      structs = []
+    case false:
+      structs = groupedLocalized.uniques.compactMap { arg -> Struct? in
+        let (key, value) = arg
+        return stringStructFromLocalizableStrings(filename: key, strings: value, at: externalAccessLevel, prefix: qualifiedName)
+      }
     }
 
     return Struct(
