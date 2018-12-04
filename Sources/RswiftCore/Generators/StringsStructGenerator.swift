@@ -12,8 +12,12 @@ import Foundation
 struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
 
-  init(localizableStrings: [LocalizableStrings]) {
+  //Stored in ParsingInformation.useStringsHierarchy
+  private let useStringsHierarchy: Bool
+  
+  init(localizableStrings: [LocalizableStrings], useStringsHierarchy: Bool = false ) {
     self.localizableStrings = localizableStrings
+    self.useStringsHierarchy = useStringsHierarchy
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {

@@ -23,7 +23,8 @@ public struct RswiftCore {
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
-
+      let parsingInfo = callInformation.parsingInformation
+      
       let generators: [StructGenerator] = [
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
@@ -33,7 +34,7 @@ public struct RswiftCore {
         NibStructGenerator(nibs: resources.nibs),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
-        StringsStructGenerator(localizableStrings: resources.localizableStrings),
+        StringsStructGenerator(localizableStrings: resources.localizableStrings, useStringsHierarchy: parsingInfo.useStringsHierarchy),
       ]
 
       let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
