@@ -11,3 +11,8 @@ one = Uno;
 two = 2;
 
 "quote" = "Hay %d luces!";
+
+//Hierarchycal structs testing
+"myComponent.errors.catLoad" = "No se pueden cargar datos de componentes";
+"myComponent.errors.unknown" = "Error desconocido";
+"myComponent.title" = "Título";

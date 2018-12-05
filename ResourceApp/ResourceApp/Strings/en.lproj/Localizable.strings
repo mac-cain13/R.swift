@@ -11,3 +11,7 @@ one = One;
 two = 2;
 
 "quote" = "There are %d lights!";
+
+"myComponent.errors.catLoad" = "Unable to load component data";
+"myComponent.errors.unknown" = "Unknown error";
+"myComponent.title" = "Title";
