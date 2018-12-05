@@ -335,3 +335,15 @@ private struct StringValues {
     return results
   }
 }
+
+private struct LocalizableStringsNode {
+  static var nameSeparator: String = "."
+  let name: String
+  var childs = [String: LocalizableStringsNode]()
+  let filename: String
+  
+  init(_ name: String, filename: String) {
+    self.name = name
+    self.filename = filename
+  }
+}
