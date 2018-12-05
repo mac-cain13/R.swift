@@ -23,7 +23,6 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "string"
     let qualifiedName = prefix + structName
-    let filenames = localizableStrings.map{ $0.filename }.uniqueAndSorted()
     let localized = localizableStrings.grouped(by: { $0.filename })
     let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
     
@@ -32,7 +31,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let structs: [Struct]
     switch useStringsHierarchy {
     case true:
-      structs = filenames.map({ stringHieharchicalStructFromLocalizableStrings(filename: $0, at: externalAccessLevel, prefix: qualifiedName)})
+      structs = groupedLocalized.uniques.map { stringHieharchicalStructFromLocalizableStrings(filename: $0.key, values: $0.value, at: externalAccessLevel, prefix: qualifiedName) }
     case false:
       structs = groupedLocalized.uniques.compactMap { arg -> Struct? in
         let (key, value) = arg
@@ -59,6 +58,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let qualifiedName = prefix + structName
     let params = computeParams(filename: node.filename, strings: node.stringsForParams)
     let subNodes = node.childs.values.map{ stringHieharchicalStructForNode($0, at: externalAccessLevel, prefix: qualifiedName) }
+    let getCustomName: (String) -> String? = { $0.components(separatedBy: LocalizableStringsNode.nameSeparator).filter({ !$0.isEmpty }).last }
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(params.count) localization keys."],
@@ -66,18 +66,17 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: params.map { stringLet(values: $0, at: externalAccessLevel, node.name) },
-      functions: params.map { stringFunction(values: $0, at: externalAccessLevel, node.name) },
+      properties: params.map { stringLet(values: $0, at: externalAccessLevel, getCustomName($0.key)) },
+      functions: params.map { stringFunction(values: $0, at: externalAccessLevel, getCustomName($0.key)) },
       structs: subNodes,
       classes: []
     )
   }
   
-  private func stringHieharchicalStructFromLocalizableStrings(filename: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  private func stringHieharchicalStructFromLocalizableStrings(filename: String, values: [LocalizableStrings], at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     var rootFileNode = LocalizableStringsNode(filename, filename: filename) //root struct for file
-    let fileStrings = localizableStrings.filter({ $0.filename == filename })
     
-    for lStrings in fileStrings {
+    for lStrings in values {
       for (key, value) in lStrings.dictionary {
         rootFileNode.addChild(withName: key, locale: lStrings.locale, filename: lStrings.filename, key: key, value: value)
       }
@@ -381,7 +380,7 @@ private struct LocalizableStringsNode {
   }
   
   mutating func addChild(withName childName: String, locale: Locale, filename: String, key: String, value: (params: [StringParam], commentValue: String)) {
-    let splittedName = childName.components(separatedBy: LocalizableStringsNode.nameSeparator)
+    let splittedName = childName.components(separatedBy: LocalizableStringsNode.nameSeparator).filter{ !$0.isEmpty }
     guard filename == self.filename else {
       return //Incorrect call
     }
