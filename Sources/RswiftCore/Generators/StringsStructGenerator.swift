@@ -23,15 +23,16 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let structName: SwiftIdentifier = "string"
     let qualifiedName = prefix + structName
+    let filenames = localizableStrings.map{ $0.filename }.uniqueAndSorted()
     let localized = localizableStrings.grouped(by: { $0.filename })
     let groupedLocalized = localized.grouped(bySwiftIdentifier: { $0.0 })
-
+    
     groupedLocalized.printWarningsForDuplicatesAndEmpties(source: "strings file", result: "file")
     
     let structs: [Struct]
     switch useStringsHierarchy {
     case true:
-      structs = []
+      structs = filenames.map({ stringHieharchicalStructFromLocalizableStrings(filename: $0, at: externalAccessLevel, prefix: qualifiedName)})
     case false:
       structs = groupedLocalized.uniques.compactMap { arg -> Struct? in
         let (key, value) = arg
@@ -52,6 +53,38 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       classes: []
     )
   }
+  
+  private func stringHieharchicalStructForNode(_ node: LocalizableStringsNode, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    let structName = SwiftIdentifier(name: node.name)
+    let qualifiedName = prefix + structName
+    let params = computeParams(filename: node.filename, strings: node.stringsForParams)
+    let subNodes = node.childs.values.map{ stringHieharchicalStructForNode($0, at: externalAccessLevel, prefix: qualifiedName) }
+    return Struct(
+      availables: [],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(params.count) localization keys."],
+      accessModifier: externalAccessLevel,
+      type: Type(module: .host, name: structName),
+      implements: [],
+      typealiasses: [],
+      properties: params.map { stringLet(values: $0, at: externalAccessLevel, node.name) },
+      functions: params.map { stringFunction(values: $0, at: externalAccessLevel, node.name) },
+      structs: subNodes,
+      classes: []
+    )
+  }
+  
+  private func stringHieharchicalStructFromLocalizableStrings(filename: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    var rootFileNode = LocalizableStringsNode(filename, filename: filename) //root struct for file
+    let fileStrings = localizableStrings.filter({ $0.filename == filename })
+    
+    for lStrings in fileStrings {
+      for (key, value) in lStrings.dictionary {
+        rootFileNode.addChild(withName: key, locale: lStrings.locale, filename: lStrings.filename, key: key, value: value)
+      }
+    }
+    return stringHieharchicalStructForNode(rootFileNode, at: externalAccessLevel, prefix: prefix)
+  }
+  
 
   private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct? {
 
@@ -188,41 +221,40 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     return results
   }
 
-  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel, _ customName: String? = nil) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
       .compactMap { $0.localeDescription }
       .map { "\"\($0)\"" }
       .joined(separator: ", ")
-
     return Let(
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: values.key),
+      name: SwiftIdentifier(name: customName ?? values.key),
       typeDefinition: .inferred(Type.StringResource),
       value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
   }
 
-  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel, _ customName: String? = nil) -> Function {
     if values.params.isEmpty {
-      return stringFunctionNoParams(for: values, at: externalAccessLevel)
+      return stringFunctionNoParams(for: values, at: externalAccessLevel, customName)
     }
     else {
       return stringFunctionParams(for: values, at: externalAccessLevel)
     }
   }
 
-  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel, _ customName: String? = nil) -> Function {
 
     return Function(
       availables: [],
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: values.key),
+      name: SwiftIdentifier(name: customName ?? values.key),
       generics: nil,
       parameters: [
         Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
@@ -233,7 +265,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel, _ customName: String? = nil) -> Function {
 
     let params = values.params.enumerated().map { arg -> Function.Parameter in
       let (ix, param) = arg
@@ -250,7 +282,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: values.key),
+      name: SwiftIdentifier(name: customName ?? values.key),
       generics: nil,
       parameters: params,
       doesThrow: false,
@@ -367,5 +399,11 @@ private struct LocalizableStringsNode {
       childs[currentChildName] = LocalizableStringsNode(currentChildName, filename: filename)
     }
     childs[currentChildName]?.addChild(withName: nextChildName, locale: locale, filename: filename, key: key, value: value)
+  }
+  
+  var stringsForParams: [LocalizableStrings] {
+    get {
+      return values.map({ LocalizableStrings(filename: filename, locale: $0.0, dictionary: $0.1) })
+    }
   }
 }
