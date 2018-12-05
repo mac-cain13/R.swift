@@ -341,9 +341,31 @@ private struct LocalizableStringsNode {
   let name: String
   var childs = [String: LocalizableStringsNode]()
   let filename: String
+  var values = [Locale: [String: (params: [StringParam], commentValue: String)]]()
   
   init(_ name: String, filename: String) {
     self.name = name
     self.filename = filename
+  }
+  
+  mutating func addChild(withName childName: String, locale: Locale, filename: String, key: String, value: (params: [StringParam], commentValue: String)) {
+    let splittedName = childName.components(separatedBy: LocalizableStringsNode.nameSeparator)
+    guard filename == self.filename else {
+      return //Incorrect call
+    }
+    guard splittedName.count > 1 else {
+      if values[locale] == nil {
+        values[locale] = [key: value]
+      } else {
+        values[locale]?[key] = value
+      }
+      return
+    }
+    let currentChildName = splittedName.first!
+    let nextChildName = splittedName.dropFirst().joined(separator: LocalizableStringsNode.nameSeparator)
+    if childs[currentChildName] == nil {
+      childs[currentChildName] = LocalizableStringsNode(currentChildName, filename: filename)
+    }
+    childs[currentChildName]?.addChild(withName: nextChildName, locale: locale, filename: filename, key: key, value: value)
   }
 }
