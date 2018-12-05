@@ -77,7 +77,7 @@ struct CommanderOptions {
 // Options grouped in struct for readability
 struct CommanderArguments {
   static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
-  static let useStringsHierachy = Flag.init("useStringsHierachy")
+  static let useStringsHierarchy = Flag.init("useStringsHierarchy")
 }
 
 let generate = command(
@@ -97,8 +97,8 @@ let generate = command(
   CommanderOptions.sdkRoot,
 
   CommanderArguments.outputDir,
-  CommanderArguments.useStringsHierachy
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir, useStringsHierachy in
+  CommanderArguments.useStringsHierarchy
+) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, outputDir, useStringsHierarchy in
 
   let info = ProcessInfo()
 
@@ -122,7 +122,7 @@ let generate = command(
     .map { Module.custom(name: $0) }
 
   //TODO: Support Json/Plist for other options, cause commander support 14 total parameters in call
-  let parsingInfo = ParsingInformation(useStringsHierarchy: useStringsHierachy)
+  let parsingInfo = ParsingInformation(useStringsHierarchy: useStringsHierarchy)
 
   let callInformation = CallInformation(
     outputURL: outputURL,
