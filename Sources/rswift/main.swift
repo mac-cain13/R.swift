@@ -53,6 +53,14 @@ struct EnvironmentKeys {
   static let platformDir = SourceTreeFolder.platformDir.rawValue
   static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
   static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
+
+  static func scriptInputFile(number: Int) -> String {
+    return "SCRIPT_INPUT_FILE_\(number)"
+  }
+
+  static func scriptOutputFile(number: Int) -> String {
+    return "SCRIPT_OUTPUT_FILE_\(number)"
+  }
 }
 
 // Options grouped in struct for readability
@@ -86,6 +94,7 @@ let generate = command(
   let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
   let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
+  let tempDir = try processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
   let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   let outputURL = URL(fileURLWithPath: outputPath)
@@ -95,6 +104,22 @@ let generate = command(
     .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
+
+  let scriptInputFileCountString = try processInfo.environmentVariable(name: EnvironmentKeys.scriptInputFileCount)
+  guard let scriptInputFileCount = Int(scriptInputFileCountString) else {
+    throw ArgumentError.invalidType(value: scriptInputFileCountString, type: "Int", argument: EnvironmentKeys.scriptInputFileCount)
+  }
+  let scriptInputFiles = try (0..<scriptInputFileCount)
+    .map(EnvironmentKeys.scriptInputFile)
+    .map(processInfo.environmentVariable)
+
+  let scriptOutputFileCountString = try processInfo.environmentVariable(name: EnvironmentKeys.scriptOutputFileCount)
+  guard let scriptOutputFileCount = Int(scriptOutputFileCountString) else {
+    throw ArgumentError.invalidType(value: scriptOutputFileCountString, type: "Int", argument: EnvironmentKeys.scriptOutputFileCount)
+  }
+  let scriptOutputFiles = try (0..<scriptOutputFileCount)
+    .map(EnvironmentKeys.scriptOutputFile)
+    .map(processInfo.environmentVariable)
 
   let callInformation = CallInformation(
     outputURL: outputURL,
@@ -107,6 +132,10 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
+
+    scriptInputFiles: scriptInputFiles,
+    scriptOutputFiles: scriptOutputFiles,
+    tempDir: URL(fileURLWithPath: tempDir),
 
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),

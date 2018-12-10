@@ -22,6 +22,10 @@ public struct CallInformation {
   let bundleIdentifier: String
   let productModuleName: String
 
+  let scriptInputFiles: [String]
+  let scriptOutputFiles: [String]
+  let tempDir: URL
+
   private let buildProductsDirURL: URL
   private let developerDirURL: URL
   private let sourceRootURL: URL
@@ -40,6 +44,10 @@ public struct CallInformation {
     bundleIdentifier: String,
     productModuleName: String,
 
+    scriptInputFiles: [String],
+    scriptOutputFiles: [String],
+    tempDir: URL,
+
     buildProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
@@ -56,6 +64,10 @@ public struct CallInformation {
     self.targetName = targetName
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName
+
+    self.scriptInputFiles = scriptInputFiles
+    self.scriptOutputFiles = scriptOutputFiles
+    self.tempDir = tempDir
 
     self.buildProductsDirURL = buildProductsDirURL
     self.developerDirURL = developerDirURL
