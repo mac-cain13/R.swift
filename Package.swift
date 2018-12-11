@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
@@ -17,6 +17,5 @@ let package = Package(
       dependencies: ["Commander", "XcodeEdit"]
     ),
     .testTarget(name: "RswiftCoreTests", dependencies: ["RswiftCore"]),
-  ],
-  swiftLanguageVersions: [4]
+  ]
 )
