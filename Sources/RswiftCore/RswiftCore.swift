@@ -14,18 +14,18 @@ public struct RswiftCore {
 
   static public func run(_ callInformation: CallInformation) throws {
     guard callInformation.scriptInputFiles.contains(callInformation.lastRunURL.path) else {
-      fail("Build phase input files do not contain '$(TEMP_DIR)/\(callInformation.lastRunURL.lastPathComponent)'")
-      exit(2)
+      fail("Missing '$(TEMP_DIR)/\(callInformation.lastRunURL.lastPathComponent)' from Input Files. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
+      exit(EXIT_FAILURE)
     }
-    print(callInformation.outputURL.path)
+
     guard callInformation.outputURL.pathExtension == "swift" else {
-      fail("Output path must be a specific swift file, folders are not allowed anymore")
-      exit(2)
+      fail("Output path must be a specific Swift file, folders are not allowed anymore. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
+      exit(EXIT_FAILURE)
     }
 
     guard callInformation.scriptOutputFiles.contains(callInformation.outputURL.path) else {
-      fail("Build phase output files do not contain '\(callInformation.outputURL.path)'")
-      exit(2)
+      fail("Build phase output files do not contain '\(callInformation.outputURL.path)'. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
+      exit(EXIT_FAILURE)
     }
 
     do {
@@ -95,7 +95,7 @@ public struct RswiftCore {
         fail("File extension '\(String(describing: givenExtension))' is not one of the supported extensions: \(joinedSupportedExtensions)")
       }
 
-      exit(3)
+      exit(EXIT_FAILURE)
     }
   }
 }
