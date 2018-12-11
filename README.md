@@ -2,25 +2,6 @@
 
 _Get strong typed, autocompleted resources like images, fonts and segues in Swift projects_
 
----
-
-### ⚠️ R.swift and Xcode 10 / Swift 4.2
-The currently latest release of R.swift (5.0.0.alpha.2) supports Swift 4.2, but with a couple of known issues:
-
-When using the new build system and using R.swift as a build step:
- - The initial compile will fail if no output file is configured
- - However, when setting an output file, subsequent incremental build won't run the R.swift build step
-
-Current known work-arounds for these issues:
- 1. Use the Legacy Build System
- 2. Don't configure an output file, but compile twice (difficult on a CI)
- 3. Configure an output file, but always do a clean build when an asset has been added (difficult to remember when developing)
- 4. Commit the R.generated.swift file to source control, so the CI has the lastest version from development 
-
-We're working on finding a better solution to these issues, see also: https://github.com/mac-cain13/R.swift/issues/456
-
----
-
 ## Why use this?
 
 It makes your code that uses resources:
@@ -107,22 +88,18 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 _Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
 
-> ### ⚠️ Change between R.swift 3 and R.swift 4
-> Be aware:  
-> For R.swift 3.x and below, the `rswift` executable should be called with only one argument: `rswift $SRCROOT`  
-> For R.swift 4, the `rswift` executable should be called with two arguments: `rswift generate $SRCROOT`
-
 ### CocoaPods (recommended)
-
-_There is also a [short video](https://vimeo.com/122888912) of this instruction._
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:  
    ```
-   "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT"
+   "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
    ```
-4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
@@ -133,9 +110,12 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
    ```
-   "$SRCROOT/rswift" generate "$SRCROOT"
+   "$SRCROOT/rswift" generate "$SRCROOT/R.generated.swift"
    ```
-4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
