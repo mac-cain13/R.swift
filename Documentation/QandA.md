@@ -15,7 +15,7 @@ There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliS
 
 ## What are the requirements to run R.swift?
 
-R.swift works with iOS 8 and tvOS 9 and higher, your development machine should be on OS X 10.11 with Xcode 7 or higher.
+R.swift works with Xcode 10 for apps targetting iOS 8 and tvOS 9 and higher.
 
 ## How to use methods with a `Void` argument?
 
