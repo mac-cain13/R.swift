@@ -24,7 +24,7 @@ public struct CallInformation {
 
   let scriptInputFiles: [String]
   let scriptOutputFiles: [String]
-  let tempDir: URL
+  let lastRunURL: URL
 
   private let buildProductsDirURL: URL
   private let developerDirURL: URL
@@ -46,7 +46,7 @@ public struct CallInformation {
 
     scriptInputFiles: [String],
     scriptOutputFiles: [String],
-    tempDir: URL,
+    lastRunURL: URL,
 
     buildProductsDirURL: URL,
     developerDirURL: URL,
@@ -67,7 +67,7 @@ public struct CallInformation {
 
     self.scriptInputFiles = scriptInputFiles
     self.scriptOutputFiles = scriptOutputFiles
-    self.tempDir = tempDir
+    self.lastRunURL = lastRunURL
 
     self.buildProductsDirURL = buildProductsDirURL
     self.developerDirURL = developerDirURL

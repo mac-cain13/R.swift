@@ -135,7 +135,7 @@ let generate = command(
 
     scriptInputFiles: scriptInputFiles,
     scriptOutputFiles: scriptOutputFiles,
-    tempDir: URL(fileURLWithPath: tempDir),
+    lastRunURL: URL(fileURLWithPath: tempDir).appendingPathComponent(Rswift.lastRunFile),
 
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
@@ -150,10 +150,10 @@ let generate = command(
 // Touch last run file
 do {
   let tempDirPath = try ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
-  let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent("rswift-lastrun")
+  let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent(Rswift.lastRunFile)
   try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
 } catch {
-  warn("Failed to write out to 'rswift-lastrun', this might cause Xcode to not run the R.swift build phase: \(error)")
+  warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
 }
 
 // Start parsing the launch arguments

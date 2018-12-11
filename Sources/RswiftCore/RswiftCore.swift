@@ -13,15 +13,19 @@ import XcodeEdit
 public struct RswiftCore {
 
   static public func run(_ callInformation: CallInformation) throws {
-    let lastRunPath = callInformation.tempDir.appendingPathComponent("rswift-lastrun").path
-    guard callInformation.scriptInputFiles.contains(lastRunPath) else {
-      fail("Build phase input files do not contain '$(TEMP_DIR)/rswift-lastrun'")
-      return
+    guard callInformation.scriptInputFiles.contains(callInformation.lastRunURL.path) else {
+      fail("Build phase input files do not contain '$(TEMP_DIR)/\(callInformation.lastRunURL.lastPathComponent)'")
+      exit(2)
+    }
+    print(callInformation.outputURL.path)
+    guard callInformation.outputURL.pathExtension == "swift" else {
+      fail("Output path must be a specific swift file, folders are not allowed anymore")
+      exit(2)
     }
 
     guard callInformation.scriptOutputFiles.contains(callInformation.outputURL.path) else {
       fail("Build phase output files do not contain '\(callInformation.outputURL.path)'")
-      return
+      exit(2)
     }
 
     do {
