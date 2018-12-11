@@ -1,3 +1,7 @@
+## 5.0.0.rc.1
+
+- Xcode 10 compatibility fixes
+
 ## 5.0.0.alpha.3
 
 - Update XcodeEdit
