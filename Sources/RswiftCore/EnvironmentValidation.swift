@@ -17,10 +17,9 @@ public func validateRswiftEnvironment(
   commandLineArguments: [String]) -> [String]
 {
   var errors: [String] = []
-  var outputIsDirectory = false
+  var outputFileForError = outputURL.path
 
   if outputURL.pathExtension != "swift" {
-    outputIsDirectory = true
 
     var error = "Output path must specify a file, it should not be a directory."
     if FileManager.default.directoryExists(atPath: outputURL.path) {
@@ -30,7 +29,10 @@ public func validateRswiftEnvironment(
         .map { $0.replacingOccurrences(of: outputURL.path, with: rswiftGeneratedFile) }
         .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
         .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
+
       error += "\nExample: " + commandParts.joined(separator: " ")
+
+      outputFileForError = rswiftGeneratedFile
     }
 
     errors.append(error)
@@ -41,11 +43,8 @@ public func validateRswiftEnvironment(
   }
 
   if !scriptOutputFiles.contains(outputURL.path) {
-    var prettyPath = outputURL.path.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT")
-    if outputIsDirectory {
-      prettyPath += "/R.generated.swift"
-    }
-    errors.append("Build phase Output Files do not contain '\(prettyPath)'.")
+    let path = outputFileForError.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT")
+    errors.append("Build phase Output Files do not contain '\(path)'.")
   }
 
   return errors
