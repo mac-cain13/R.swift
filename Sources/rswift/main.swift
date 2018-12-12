@@ -85,6 +85,15 @@ let generate = command(
 
   let processInfo = ProcessInfo()
 
+  // Touch last run file
+  do {
+    let tempDirPath = try ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
+    let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent(Rswift.lastRunFile)
+    try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
+  } catch {
+    warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
+  }
+
   let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
@@ -105,6 +114,8 @@ let generate = command(
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
 
+  let lastRunURL = URL(fileURLWithPath: tempDir).appendingPathComponent(Rswift.lastRunFile)
+
   let scriptInputFileCountString = try processInfo.environmentVariable(name: EnvironmentKeys.scriptInputFileCount)
   guard let scriptInputFileCount = Int(scriptInputFileCountString) else {
     throw ArgumentError.invalidType(value: scriptInputFileCountString, type: "Int", argument: EnvironmentKeys.scriptInputFileCount)
@@ -121,6 +132,22 @@ let generate = command(
     .map(EnvironmentKeys.scriptOutputFile)
     .map(processInfo.environmentVariable)
 
+  let errors = validateRswiftEnvironment(
+    outputURL: outputURL,
+    sourceRootPath: sourceRootPath,
+    scriptInputFiles: scriptInputFiles,
+    scriptOutputFiles: scriptOutputFiles,
+    lastRunURL: lastRunURL,
+    podsRoot: processInfo.environment["PODS_ROOT"],
+    commandLineArguments: CommandLine.arguments)
+  guard errors.isEmpty else {
+    for error in errors {
+      fail(error)
+    }
+    warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
+    exit(EXIT_FAILURE)
+  }
+
   let callInformation = CallInformation(
     outputURL: outputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
@@ -135,7 +162,7 @@ let generate = command(
 
     scriptInputFiles: scriptInputFiles,
     scriptOutputFiles: scriptOutputFiles,
-    lastRunURL: URL(fileURLWithPath: tempDir).appendingPathComponent(Rswift.lastRunFile),
+    lastRunURL: lastRunURL,
 
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
@@ -145,15 +172,6 @@ let generate = command(
   )
 
   try RswiftCore.run(callInformation)
-}
-
-// Touch last run file
-do {
-  let tempDirPath = try ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
-  let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent(Rswift.lastRunFile)
-  try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
-} catch {
-  warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
 }
 
 // Start parsing the launch arguments

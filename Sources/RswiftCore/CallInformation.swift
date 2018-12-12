@@ -26,11 +26,11 @@ public struct CallInformation {
   let scriptOutputFiles: [String]
   let lastRunURL: URL
 
-  private let buildProductsDirURL: URL
-  private let developerDirURL: URL
-  private let sourceRootURL: URL
-  private let sdkRootURL: URL
-  private let platformURL: URL
+  let buildProductsDirURL: URL
+  let developerDirURL: URL
+  let sourceRootURL: URL
+  let sdkRootURL: URL
+  let platformURL: URL
 
   public init(
     outputURL: URL,

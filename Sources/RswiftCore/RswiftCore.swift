@@ -13,21 +13,6 @@ import XcodeEdit
 public struct RswiftCore {
 
   static public func run(_ callInformation: CallInformation) throws {
-    guard callInformation.scriptInputFiles.contains(callInformation.lastRunURL.path) else {
-      fail("Missing '$(TEMP_DIR)/\(callInformation.lastRunURL.lastPathComponent)' from Input Files. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
-      exit(EXIT_FAILURE)
-    }
-
-    guard callInformation.outputURL.pathExtension == "swift" else {
-      fail("Output path must be a specific Swift file, folders are not allowed anymore. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
-      exit(EXIT_FAILURE)
-    }
-
-    guard callInformation.scriptOutputFiles.contains(callInformation.outputURL.path) else {
-      fail("Build phase output files do not contain '\(callInformation.outputURL.path)'. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
-      exit(EXIT_FAILURE)
-    }
-
     do {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
