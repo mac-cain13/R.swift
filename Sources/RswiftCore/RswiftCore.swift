@@ -13,18 +13,15 @@ import XcodeEdit
 public struct RswiftCore {
 
   static public func run(_ callInformation: CallInformation) throws {
-    guard callInformation.scriptInputFiles.contains(callInformation.lastRunURL.path) else {
-      fail("Missing '$(TEMP_DIR)/\(callInformation.lastRunURL.lastPathComponent)' from Input Files. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
-      exit(EXIT_FAILURE)
-    }
+    let errors = callInformation.inputOutputFilesErrors()
 
-    guard callInformation.outputURL.pathExtension == "swift" else {
-      fail("Output path must be a specific Swift file, folders are not allowed anymore. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
-      exit(EXIT_FAILURE)
-    }
+    guard errors.isEmpty else {
+      for error in errors {
+        fail(error)
+      }
 
-    guard callInformation.scriptOutputFiles.contains(callInformation.outputURL.path) else {
-      fail("Build phase output files do not contain '\(callInformation.outputURL.path)'. See upgrading to R.swift 5.0: http://bit.ly/2PsO9IF")
+      warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
+
       exit(EXIT_FAILURE)
     }
 
@@ -97,5 +94,47 @@ public struct RswiftCore {
 
       exit(EXIT_FAILURE)
     }
+  }
+}
+
+extension CallInformation {
+  func inputOutputFilesErrors() -> [String] {
+    var errors: [String] = []
+    var outputIsDirectory = false
+
+    if outputURL.pathExtension != "swift" {
+      outputIsDirectory = true
+
+      var error = "Output path must specify a file, it should not be a directory."
+      if FileManager.default.directoryExists(atPath: outputURL.path) {
+        let prettyPath = outputURL.path.replacingOccurrences(of: sourceRootURL.path, with: "$SRCROOT")
+        error += " Example: rswift generate \(prettyPath)/R.generated.swift"
+      }
+
+      errors.append(error)
+    }
+
+    if !scriptInputFiles.contains(lastRunURL.path) {
+      errors.append("Build phase Intput Files does not contain '$TEMP_DIR/\(lastRunURL.lastPathComponent)'.")
+    }
+
+    if !self.scriptOutputFiles.contains(outputURL.path) {
+      var prettyPath = outputURL.path.replacingOccurrences(of: sourceRootURL.path, with: "$SRCROOT")
+      if outputIsDirectory {
+        prettyPath += "/R.generated.swift"
+      }
+      errors.append("Build phase Output Files do not contain '\(prettyPath)'.")
+    }
+
+    return errors
+  }
+}
+
+extension FileManager {
+  func directoryExists(atPath path: String) -> Bool {
+    var isDir: ObjCBool = false
+    let exists = fileExists(atPath: path, isDirectory: &isDir)
+
+    return exists && isDir.boolValue
   }
 }
