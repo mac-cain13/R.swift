@@ -1,3 +1,16 @@
+## 5.0.0
+
+- Compatible with Xcode 10 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility
+- Removed CLR file support, use color resources instead
+- Easier nib loading with new method
+- Ignore file supports explicit include (by @renrawnalon)
+- Validation for named colors
+- Empty structs are not generated anymore (by @soberman)
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
 ## 5.0.0.rc.2
 
 - Improve R.swift 5 migration errors
