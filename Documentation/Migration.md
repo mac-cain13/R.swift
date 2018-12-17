@@ -5,9 +5,9 @@ Pointers for migration between major versions.
 ## Upgrading to 5.0
 
 - In the Build Phase you must perform some changes, [see an example screenshot](Images/BuildPhaseExample.png):
-  * Change the script to give the explicit output file, for example: `"$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"`
+  * Change the script to give the explicit output file, for example: `"$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/[YOUR_PATH]/R.generated.swift"`
   * Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" of the Build Phase
-  * Add `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+  * Add `$SRCROOT/[YOUR_PATH]/R.generated.swift` to the "Output Files" of the Build Phase
 - Make sure you use Xcode 10 since we've adjusted to the SDK changes
 - At the moment we are compatible with both Swift 4 and 4.2, this is more an accident then a feature, beware that we might drop Swift 4 support anytime.
 
