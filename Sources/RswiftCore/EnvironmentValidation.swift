@@ -14,26 +14,23 @@ public func validateRswiftEnvironment(
   scriptOutputFiles: [String],
   lastRunURL: URL,
   podsRoot: String?,
+  podsTargetSrcroot: String?,
   commandLineArguments: [String]) -> [String]
 {
-  // All comparisons are performed over path strings so we should use standardized paths to address cases like
-  // /foo/../bar <=> /bar
-  let standardizedOutputURL = outputURL.standardized
-  let standardizedSourceRootPath = URL(fileURLWithPath: sourceRootPath).standardized.path
-  
   var errors: [String] = []
-  var outputFileForError = standardizedOutputURL.path
+  var outputFileForError = outputURL.path
 
   if outputURL.pathExtension != "swift" {
 
     var error = "Output path must specify a file, it should not be a directory."
     if FileManager.default.directoryExists(atPath: outputURL.path) {
-      let rswiftGeneratedFile = standardizedOutputURL.appendingPathComponent("R.generated.swift").path
-      let standardizedPodsRoot = podsRoot.map { URL(fileURLWithPath: $0).standardized.path }
+      let rswiftGeneratedFile = outputURL.appendingPathComponent("R.generated.swift").path
+
       let commandParts = commandLineArguments
-        .map { $0.replacingOccurrences(of: standardizedPodsRoot ?? "", with: "$PODS_ROOT") }
-        .map { $0.replacingOccurrences(of: standardizedOutputURL.path, with: rswiftGeneratedFile) }
-        .map { $0.replacingOccurrences(of: standardizedSourceRootPath, with: "$SRCROOT") }
+        .map { $0.replacingOccurrences(of: outputURL.path, with: rswiftGeneratedFile) }
+        .map { $0.replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT") }
+        .map { $0.replacingOccurrences(of: podsRoot ?? "", with: "$PODS_ROOT") }
+        .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
         .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
 
       error += "\nExample: " + commandParts.joined(separator: " ")
@@ -44,15 +41,16 @@ public func validateRswiftEnvironment(
     errors.append(error)
   }
 
-  let standardizedScriptInputFiles = scriptInputFiles.map { URL(fileURLWithPath: $0).standardized.path }
-  let standardizedLastRun = lastRunURL.standardized.path
-  if !standardizedScriptInputFiles.contains(standardizedLastRun) {
+  let scriptInputPaths = scriptInputFiles.map { URL(fileURLWithPath: $0).standardized.path }
+  if !scriptInputPaths.contains(lastRunURL.standardized.path) {
     errors.append("Build phase Intput Files does not contain '$TEMP_DIR/\(lastRunURL.lastPathComponent)'.")
   }
 
-  let standardizedScriptOutputFiles = scriptOutputFiles.map { URL(fileURLWithPath: $0).standardized.path }
-  if !standardizedScriptOutputFiles.contains(standardizedOutputURL.path) {
-    let path = outputFileForError.replacingOccurrences(of: standardizedSourceRootPath, with: "$SRCROOT")
+  let scriptOutputPaths = scriptOutputFiles.map { URL(fileURLWithPath: $0).standardized.path }
+  if !scriptOutputPaths.contains(outputURL.standardized.path) && !scriptOutputPaths.contains(outputFileForError) {
+    let path = outputFileForError
+      .replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT")
+      .replacingOccurrences(of: sourceRootPath, with: "$SRCROOT")
     errors.append("Build phase Output Files do not contain '\(path)'.")
   }
 

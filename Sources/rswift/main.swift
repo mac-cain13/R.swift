@@ -139,6 +139,7 @@ let generate = command(
     scriptOutputFiles: scriptOutputFiles,
     lastRunURL: lastRunURL,
     podsRoot: processInfo.environment["PODS_ROOT"],
+    podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
     commandLineArguments: CommandLine.arguments)
   guard errors.isEmpty else {
     for error in errors {
