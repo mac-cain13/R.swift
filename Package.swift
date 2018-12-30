@@ -5,7 +5,7 @@ let package = Package(
   name: "rswift",
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
-    .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.4.1")
+    .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.5.0")
   ],
   targets: [
     .target(
