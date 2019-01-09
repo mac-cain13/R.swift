@@ -1,3 +1,7 @@
+## 5.0.1
+
+- Fixes for relative paths
+
 ## 5.0.0
 
 - Compatible with Xcode 10 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility

@@ -10,6 +10,6 @@
 import Foundation
 
 struct Rswift {
-  static let version = "5.0.0"
+  static let version = "5.0.1"
   static let lastRunFile = "rswift-lastrun"
 }
