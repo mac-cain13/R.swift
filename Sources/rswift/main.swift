@@ -65,9 +65,10 @@ struct EnvironmentKeys {
 
 // Options grouped in struct for readability
 struct CommanderOptions {
-  static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated.")
-  static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file.")
-  static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored.")
+  static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
+  static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
+  static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
+  static let inputOutputFilesValidation = Flag("input-output-files-validation", default: true, flag: nil, disabledName: "disable-input-output-files-validation", disabledFlag: nil, description: "Validate input and output files configured in a build phase")
 }
 
 // Options grouped in struct for readability
@@ -79,9 +80,10 @@ let generate = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.inputOutputFilesValidation,
 
   CommanderArguments.outputPath
-) { importModules, accessLevel, rswiftIgnore, outputPath in
+) { importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
 
   let processInfo = ProcessInfo()
 
@@ -132,21 +134,25 @@ let generate = command(
     .map(EnvironmentKeys.scriptOutputFile)
     .map(processInfo.environmentVariable)
 
-  let errors = validateRswiftEnvironment(
-    outputURL: outputURL,
-    sourceRootPath: sourceRootPath,
-    scriptInputFiles: scriptInputFiles,
-    scriptOutputFiles: scriptOutputFiles,
-    lastRunURL: lastRunURL,
-    podsRoot: processInfo.environment["PODS_ROOT"],
-    podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
-    commandLineArguments: CommandLine.arguments)
-  guard errors.isEmpty else {
-    for error in errors {
-      fail(error)
+  if inputOutputFilesValidation {
+
+    let errors = validateRswiftEnvironment(
+      outputURL: outputURL,
+      sourceRootPath: sourceRootPath,
+      scriptInputFiles: scriptInputFiles,
+      scriptOutputFiles: scriptOutputFiles,
+      lastRunURL: lastRunURL,
+      podsRoot: processInfo.environment["PODS_ROOT"],
+      podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
+      commandLineArguments: CommandLine.arguments)
+
+    guard errors.isEmpty else {
+      for error in errors {
+        fail(error)
+      }
+      warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
+      exit(EXIT_FAILURE)
     }
-    warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
-    exit(EXIT_FAILURE)
   }
 
   let callInformation = CallInformation(
