@@ -103,6 +103,11 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPha
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
+### [Mint](https://github.com/yonaskolb/mint)
+```
+$ mint install mac-cain13/R.swift
+```
+
 ### Manually
 
 0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library#Installation) to your project
