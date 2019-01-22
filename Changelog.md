@@ -1,3 +1,7 @@
+## 5.0.2
+
+- Fix issues with legacy build system by adding option to disable input checks
+
 ## 5.0.1
 
 - Fixes for relative paths
