@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
         "state": {
           "branch": null,
-          "revision": "90fd97fd8b298319edbb5093f5825b8b44e48680",
-          "version": "2.5.2"
+          "revision": "6cf2916aac748b9a687c2bfd1ef27d2adb70453b",
+          "version": "2.6.0"
         }
       }
     ]
