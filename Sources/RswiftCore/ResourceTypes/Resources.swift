@@ -40,6 +40,9 @@ struct Resources {
         nibs.append(nib)
       } else if let image = tryResourceParsing({ try Image(url: url) }) {
         images.append(image)
+        if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
+            resourceFiles.append(resourceFile)
+        }
       } else if let asset = tryResourceParsing({ try AssetFolder(url: url, fileManager: fileManager) }) {
         assetFolders.append(asset)
       } else if let font = tryResourceParsing({ try Font(url: url) }) {
