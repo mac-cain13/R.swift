@@ -1,3 +1,7 @@
+## 5.0.3
+
+- Fix for stand alone image files (Thanks @CraigsOverItAll)
+
 ## 5.0.2
 
 - Fix issues with legacy build system by adding option to disable input checks
