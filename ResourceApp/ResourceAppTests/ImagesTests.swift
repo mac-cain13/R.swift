@@ -12,7 +12,7 @@ import XCTest
 
 class ImagesTests: XCTestCase {
   
-  func testNonNilImages() {
-//    XCTAssertNotNil(R.image.imageStackAsset())
+  func testNonNilImages() throws {
+    XCTAssertNotNil(R.image.imageStackAsset())
   }
 }
