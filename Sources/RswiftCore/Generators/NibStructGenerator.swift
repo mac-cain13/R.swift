@@ -206,7 +206,7 @@ struct NibStructGenerator: StructGenerator {
       .map {
         "if UIKit.UIColor(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(nib.name)', but couldn't be loaded.\") }"
       }
-    let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, *) {"] +
+    let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, tvOS 11.0, *) {"] +
       validateColorLines.map { $0.indent(with: "  ") } +
       ["}"]
 
