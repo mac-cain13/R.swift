@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct Struct: UsedTypesProvider, SwiftCodeConverible {
+struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
   let availables: [String]
   let comments: [String]
   let accessModifier: AccessLevel
@@ -84,4 +84,13 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
 
     return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
+    
+    func objcCode(prefix: String?) -> String {
+        switch type.name.description {
+        case "R":
+            return "// Images yay"
+        default:
+            return ""
+        }
+    }
 }

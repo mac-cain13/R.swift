@@ -12,3 +12,7 @@ import Foundation
 protocol SwiftCodeConverible {
   var swiftCode: String { get }
 }
+
+protocol ObjcCodeConvertible {
+  func objcCode(prefix: String?) -> String
+}

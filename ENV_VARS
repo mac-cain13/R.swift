@@ -1,0 +1,14 @@
+PRODUCT_BUNDLE_IDENTIFIER=nl.mathijskadijk.ResourceApp
+SCRIPT_INPUT_FILE_COUNT=1
+SCRIPT_INPUT_FILE_0=./temp/rswift-lastrun
+SCRIPT_OUTPUT_FILE_COUNT=1
+SCRIPT_OUTPUT_FILE_0=../../ResourceApp/R.generated.swift
+PLATFORM_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform
+TEMP_DIR=./temp
+SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator12.2.sdk
+SOURCE_ROOT=../../ResourceApp
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+BUILT_PRODUCTS_DIR=.
+PRODUCT_MODULE_NAME=ResourceApp
+PROJECT_FILE_PATH=../../ResourceApp/ResourceApp.xcodeproj
+TARGET_NAME=ResourceApp
