@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct Function: UsedTypesProvider, SwiftCodeConverible {
+struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
   let availables: [String]
   let comments: [String]
   let accessModifier: AccessLevel
@@ -42,6 +42,38 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let bodyString = body.indent(with: "  ")
 
     return "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}"
+  }
+    
+  func objcCode(prefix: String) -> String {
+    guard returnType == Type._UIImage || returnType == Type._UIImage.asOptional() else { return "" }
+    //let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
+    let accessModifierString = accessModifier.swiftCode
+    let staticString = isStatic ? "static " : ""
+    let genericsString = generics.map { "<\($0)>" } ?? ""
+    let parameterString = parameters.map { $0.description }.joined(separator: ", ")
+    let parameterInjection = parameters
+        .map {
+            let argName = ($0.name == "_") ? "" : "\($0.name): "
+            return "\(argName)\($0.localName ?? $0.name)"
+        }
+        .joined(separator: ", ")
+    let throwString = doesThrow ? " throws" : ""
+    let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
+    //let bodyStringWithParams = "return \(prefix).\(name)(\(parameterInjection))".indent(with: "  ")
+    let bodyStringWithoutParams = "return \(prefix).\(name)()".indent(with: "  ")
+    let functionName = "\(prefix)_\(name)"
+        .replacingOccurrences(of: ".", with: "_")
+        .replacingOccurrences(of: "R_", with: "")
+    
+    // This is really all I need. Unsure if I should make all options available to Obj-C.
+    return "  \(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)()\(throwString)\(returnString){ \(bodyStringWithoutParams) }"
+    
+//    let withParams = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyStringWithParams)\n}"
+//
+//    let withoutParams = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)()\(throwString)\(returnString) {\n\(bodyStringWithoutParams)\n}"
+//
+//    return "\(withParams)\n\n\(withoutParams)"
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

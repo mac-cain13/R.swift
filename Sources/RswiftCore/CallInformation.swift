@@ -31,6 +31,7 @@ public struct CallInformation {
   let sourceRootURL: URL
   let sdkRootURL: URL
   let platformURL: URL
+  let objcCompat: Bool
 
   public init(
     outputURL: URL,
@@ -52,7 +53,8 @@ public struct CallInformation {
     developerDirURL: URL,
     sourceRootURL: URL,
     sdkRootURL: URL,
-    platformURL: URL
+    platformURL: URL,
+    objcCompat: Bool
   ) {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
@@ -74,6 +76,7 @@ public struct CallInformation {
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
     self.platformURL = platformURL
+    self.objcCompat = objcCompat
   }
 
 

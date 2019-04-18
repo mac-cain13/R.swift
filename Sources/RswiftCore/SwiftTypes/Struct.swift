@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct Struct: UsedTypesProvider, SwiftCodeConverible {
+struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
   let availables: [String]
   let comments: [String]
   let accessModifier: AccessLevel
@@ -84,4 +84,26 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
 
     return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
+    
+    func objcCode(prefix: String) -> String {
+        
+        let maybeDot = prefix.isEmpty ? "" : "."
+        let newPrefix = "\(prefix)\(maybeDot)\(type.name.description)"
+        
+        let functionsString = functions
+            .map { $0.objcCode(prefix: newPrefix) }
+            .sorted()
+            .map { $0.description }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
+        
+        let structsString = structs
+            .map { $0.objcCode(prefix: newPrefix) }
+            .sorted()
+            .map { $0.description }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
+        
+        return functionsString + structsString
+    }
 }

@@ -36,6 +36,7 @@ extension ProcessInfo {
 // Flags grouped in struct for readability
 struct CommanderFlags {
   static let version = Flag("version", description: "Prints version information about this release.")
+  static let objc = Flag("objc", description: "Generates ObjC compatible definitions in RObjc")
 }
 
 // Default values for non-optional Commander Options
@@ -81,9 +82,11 @@ let generate = command(
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
   CommanderOptions.inputOutputFilesValidation,
+  
+  CommanderFlags.objc,
 
   CommanderArguments.outputPath
-) { importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
+) { importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, objc, outputPath in
 
   let processInfo = ProcessInfo()
 
@@ -175,7 +178,8 @@ let generate = command(
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
     sdkRootURL: URL(fileURLWithPath: sdkRootPath),
-    platformURL: URL(fileURLWithPath: platformPath)
+    platformURL: URL(fileURLWithPath: platformPath),
+    objcCompat: objc
   )
 
   try RswiftCore.run(callInformation)

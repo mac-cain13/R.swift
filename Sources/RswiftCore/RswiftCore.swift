@@ -54,11 +54,21 @@ public struct RswiftCore {
           externalStruct,
           internalStruct
         ]
+        
+        let objcConvertibles: [ObjcCodeConvertible] = [
+            ObjcHeaderPrinter(),
+            externalStruct,
+            ObjcFooterPrinter(),
+        ]
 
-      let fileContents = codeConvertibles
+      var fileContents = codeConvertibles
         .compactMap { $0?.swiftCode }
         .joined(separator: "\n\n")
-        + "\n" // Newline at end of file
+        + "\n\n" // Newline at end of file
+      
+      if callInformation.objcCompat {
+        fileContents += objcConvertibles.compactMap { $0.objcCode(prefix: "") }.joined(separator: "\n") + "\n"
+      }
 
       // Write file if we have changes
       let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)
