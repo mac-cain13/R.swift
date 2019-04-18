@@ -65,8 +65,10 @@ public struct RswiftCore {
         .compactMap { $0?.swiftCode }
         .joined(separator: "\n\n")
         + "\n\n" // Newline at end of file
-        
-        fileContents += objcConvertibles.compactMap { $0.objcCode(prefix: nil) }.joined(separator: "\n\n") + "\n"
+      
+      if callInformation.objcCompat {
+        fileContents += objcConvertibles.compactMap { $0.objcCode(prefix: "") }.joined(separator: "\n\n") + "\n"
+      }
 
       // Write file if we have changes
       let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)

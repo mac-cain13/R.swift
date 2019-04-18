@@ -85,12 +85,25 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
     
-    func objcCode(prefix: String?) -> String {
-        switch type.name.description {
-        case "R":
-            return "// Images yay"
-        default:
-            return ""
-        }
+    func objcCode(prefix: String) -> String {
+        
+        let maybeDot = prefix.isEmpty ? "" : "."
+        let newPrefix = "\(prefix)\(maybeDot)\(type.name.description)"
+        
+        let functionsString = functions
+            .map { $0.objcCode(prefix: newPrefix) }
+            .sorted()
+            .map { $0.description }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n\n")
+        
+        let structsString = structs
+            .map { $0.objcCode(prefix: newPrefix) }
+            .sorted()
+            .map { $0.description }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n\n")
+        
+        return functionsString + structsString
     }
 }

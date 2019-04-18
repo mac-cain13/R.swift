@@ -14,5 +14,5 @@ protocol SwiftCodeConverible {
 }
 
 protocol ObjcCodeConvertible {
-  func objcCode(prefix: String?) -> String
+  func objcCode(prefix: String) -> String
 }
