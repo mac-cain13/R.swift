@@ -95,14 +95,14 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
             .sorted()
             .map { $0.description }
             .filter { !$0.isEmpty }
-            .joined(separator: "\n\n")
+            .joined(separator: "\n")
         
         let structsString = structs
             .map { $0.objcCode(prefix: newPrefix) }
             .sorted()
             .map { $0.description }
             .filter { !$0.isEmpty }
-            .joined(separator: "\n\n")
+            .joined(separator: "\n")
         
         return functionsString + structsString
     }
