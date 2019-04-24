@@ -53,7 +53,6 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     else {
       return ""
     }
-    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
     let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""
@@ -83,14 +82,17 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    let bodyStringAllParams = "return \(prefix).\(name)(\(allParameterInjection))".indent(with: "  ")
-    let bodyStringRequiredParams = "return \(prefix).\(name)(\(requiredParameterInjection))".indent(with: "  ")
+    let bodyStringAllParams = "return \(prefix).\(name)(\(allParameterInjection))"
+    let bodyStringRequiredParams = "return \(prefix).\(name)(\(requiredParameterInjection))"
     let functionName = "\(prefix)_\(name)"
       .replacingOccurrences(of: ".", with: "_")
       .replacingOccurrences(of: "R_", with: "")
     
-    let requiredParamsFunction = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams)\n}"
-    let allParamsFunction = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams)\n}"
+    let commentsStringAllParams = bodyStringAllParams.replacingOccurrences(of: "return", with: "//")
+    let commentsStringRequiredParams = bodyStringRequiredParams.replacingOccurrences(of: "return", with: "//")
+    
+    let requiredParamsFunction = "\(commentsStringRequiredParams)\n\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams.indent(with: "  "))\n}"
+    let allParamsFunction = "\(commentsStringAllParams)\n\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams.indent(with: "  "))\n}"
     if shouldHaveShortenedFunction {
       return "\(requiredParamsFunction)\n\n\(allParamsFunction)\n"
     } else {
