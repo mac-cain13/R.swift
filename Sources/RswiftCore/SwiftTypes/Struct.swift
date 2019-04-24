@@ -97,7 +97,6 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
         .map { $0.description }
         .filter { !$0.isEmpty }
         .joined(separator: "\n")
-        .indent(with: isInitialStruct ? "  " : "")
     
     let structsString = structs
         .map { $0.objcCode(prefix: newPrefix) }
