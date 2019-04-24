@@ -1,3 +1,7 @@
+Arguments:
+generate "../../ResourceApp/R.generated.swift" --objc
+
+Env Vars:
 PRODUCT_BUNDLE_IDENTIFIER=nl.mathijskadijk.ResourceApp
 SCRIPT_INPUT_FILE_COUNT=1
 SCRIPT_INPUT_FILE_0=./temp/rswift-lastrun
