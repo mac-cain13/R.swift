@@ -85,25 +85,28 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
   }
     
-    func objcCode(prefix: String) -> String {
-        
-        let maybeDot = prefix.isEmpty ? "" : "."
-        let newPrefix = "\(prefix)\(maybeDot)\(type.name.description)"
-        
-        let functionsString = functions
-            .map { $0.objcCode(prefix: newPrefix) }
-            .sorted()
-            .map { $0.description }
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n")
-        
-        let structsString = structs
-            .map { $0.objcCode(prefix: newPrefix) }
-            .sorted()
-            .map { $0.description }
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n")
-        
-        return functionsString + structsString
-    }
+  func objcCode(prefix: String) -> String {
+    
+    let isInitialStruct = prefix.isEmpty
+    let maybeDot = isInitialStruct ? "" : "."
+    let newPrefix = "\(prefix)\(maybeDot)\(type.name.description)"
+    
+    let functionsString = functions
+        .map { $0.objcCode(prefix: newPrefix) }
+        .sorted()
+        .map { $0.description }
+        .filter { !$0.isEmpty }
+        .joined(separator: "\n")
+        .indent(with: isInitialStruct ? "  " : "")
+    
+    let structsString = structs
+        .map { $0.objcCode(prefix: newPrefix) }
+        .sorted()
+        .map { $0.description }
+        .filter { !$0.isEmpty }
+        .joined(separator: "\n")
+        .indent(with: isInitialStruct ? "  " : "")
+    
+    return functionsString + structsString
+  }
 }

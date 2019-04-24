@@ -45,35 +45,57 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
   }
     
   func objcCode(prefix: String) -> String {
-    guard returnType == Type._UIImage || returnType == Type._UIImage.asOptional() else { return "" }
-    //let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    guard
+      name != "validate", // We won't be calling this from Objective-C code.
+      returnType.name != Type.TypedStoryboardSegueInfo.name, // This is a Swift only type.
+      !availables.contains(where: { $0.contains("deprecated") }), // Don't bring over deprecated functions.
+      !name.description.contains("`") // Don't convert functions with a name Objective-C can't understand
+    else {
+      return ""
+    }
+    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
     let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
     let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
-    let parameterString = parameters.map { $0.description }.joined(separator: ", ")
-    let parameterInjection = parameters
-        .map {
-            let argName = ($0.name == "_") ? "" : "\($0.name): "
-            return "\(argName)\($0.localName ?? $0.name)"
-        }
-        .joined(separator: ", ")
+
+    let objcParams = parameters.filter { $0.type != Type._Void }
+    
+    let allParameterString = objcParams.map { $0.descriptionWithoutDefaultValue }.joined(separator: ", ")
+    let allParameterInjection = objcParams
+      .map {
+        let argName = ($0.name == "_") ? "" : "\($0.name): "
+        return "\(argName)\($0.localName ?? $0.name)"
+      }
+      .joined(separator: ", ")
+
+    // Required if the param is not optional, or there isn't a default value.
+    let requiredParams = objcParams.filter { !$0.type.optional || $0.defaultValue == nil }
+    let requiredParameterString = requiredParams.map { $0.descriptionWithoutDefaultValue }.joined(separator: ", ")
+    let requiredParameterInjection = requiredParams
+      .map {
+        let argName = ($0.name == "_") ? "" : "\($0.name): "
+        return "\(argName)\($0.localName ?? $0.name)"
+      }
+      .joined(separator: ", ")
+    
+    let shouldHaveShortenedFunction = requiredParams.count != objcParams.count
+    
     let throwString = doesThrow ? " throws" : ""
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
-    //let bodyStringWithParams = "return \(prefix).\(name)(\(parameterInjection))".indent(with: "  ")
-    let bodyStringWithoutParams = "return \(prefix).\(name)()".indent(with: "  ")
+    let bodyStringAllParams = "return \(prefix).\(name)(\(allParameterInjection))".indent(with: "  ")
+    let bodyStringRequiredParams = "return \(prefix).\(name)(\(requiredParameterInjection))".indent(with: "  ")
     let functionName = "\(prefix)_\(name)"
-        .replacingOccurrences(of: ".", with: "_")
-        .replacingOccurrences(of: "R_", with: "")
+      .replacingOccurrences(of: ".", with: "_")
+      .replacingOccurrences(of: "R_", with: "")
     
-    // This is really all I need. Unsure if I should make all options available to Obj-C.
-    return "  \(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)()\(throwString)\(returnString){ \(bodyStringWithoutParams) }"
-    
-//    let withParams = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyStringWithParams)\n}"
-//
-//    let withoutParams = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)()\(throwString)\(returnString) {\n\(bodyStringWithoutParams)\n}"
-//
-//    return "\(withParams)\n\n\(withoutParams)"
+    let requiredParamsFunction = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(requiredParameterString))\(throwString)\(returnString) {\n\(bodyStringRequiredParams)\n}"
+    let allParamsFunction = "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(functionName)\(genericsString)(\(allParameterString))\(throwString)\(returnString) {\n\(bodyStringAllParams)\n}"
+    if shouldHaveShortenedFunction {
+      return "\(requiredParamsFunction)\n\n\(allParamsFunction)\n"
+    } else {
+      return "\(allParamsFunction)\n"
+    }
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {
@@ -91,8 +113,11 @@ struct Function: UsedTypesProvider, SwiftCodeConverible, ObjcCodeConvertible {
     }
 
     var description: String {
-      let definition = localName.map({ "\(swiftIdentifier) \($0): \(type)" }) ?? "\(swiftIdentifier): \(type)"
-      return defaultValue.map({ "\(definition) = \($0)" }) ?? definition
+      return defaultValue.map({ "\(descriptionWithoutDefaultValue) = \($0)" }) ?? descriptionWithoutDefaultValue
+    }
+    
+    var descriptionWithoutDefaultValue: String {
+        return localName.map({ "\(swiftIdentifier) \($0): \(type)" }) ?? "\(swiftIdentifier): \(type)"
     }
 
     init(name: String, type: Type, defaultValue: String? = nil) {
