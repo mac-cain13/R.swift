@@ -13,12 +13,18 @@ struct Reusable: Hashable {
   let identifier: String
   let type: Type
 
+  #if swift(<4.2)
   var hashValue: Int {
     return "\(identifier)|\(type)".hashValue
   }
+  #else
+  func hash(into hasher: inout Hasher) {
+    hasher.combine("\(identifier)|\(type)")
+  }
+  #endif
 }
 
-func ==(lhs: Reusable, rhs: Reusable) -> Bool {
+func == (lhs: Reusable, rhs: Reusable) -> Bool {
   return lhs.hashValue == rhs.hashValue
 }
 

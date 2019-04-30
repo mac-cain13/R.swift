@@ -60,9 +60,15 @@ struct SwiftIdentifier : CustomStringConvertible {
 }
 
 extension SwiftIdentifier : Hashable {
+  #if swift(<4.2)
   var hashValue: Int {
     return description.hashValue
   }
+  #else
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(description)
+  }
+  #endif
 }
 
 func ==(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {

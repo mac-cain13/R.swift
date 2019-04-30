@@ -63,6 +63,7 @@ extension Locale {
 }
 
 extension Locale: Hashable {
+  #if swift(<4.2)
   var hashValue: Int {
     switch self {
     case .none:
@@ -75,9 +76,22 @@ extension Locale: Hashable {
       return 2 &+ language.hashValue
     }
   }
+  #else
+  func hash(into hasher: inout Hasher) {
+    switch self {
+    case .none:
+      hasher.combine(0)
+    case .base:
+      hasher.combine(1)
+    case .language(let languageCode):
+      hasher.combine(2)
+      hasher.combine(languageCode)
+    }
+  }
+  #endif
 }
 
-func ==(lhs: Locale, rhs: Locale) -> Bool {
+func == (lhs: Locale, rhs: Locale) -> Bool {
   switch (lhs, rhs) {
   case (.none, .none):
     return true

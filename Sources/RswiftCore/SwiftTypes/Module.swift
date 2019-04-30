@@ -17,6 +17,7 @@ public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashabl
   public typealias UnicodeScalarLiteralType = StringLiteralType
   public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
+  #if swift(<4.2)
   public var hashValue: Int {
     switch self {
     case .host: return "--HOSTINGBUNDLE".hashValue
@@ -24,6 +25,18 @@ public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashabl
     case let .custom(name: name): return name.hashValue
     }
   }
+  #else
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case .host:
+      hasher.combine("--HOSTINGBUNDLE")
+    case .stdLib:
+      hasher.combine("--STDLIB")
+    case let .custom(name: name):
+      hasher.combine(name)
+    }
+  }
+  #endif
 
   public var description: String {
     switch self {
