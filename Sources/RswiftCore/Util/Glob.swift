@@ -60,8 +60,6 @@ public class Glob: Collection {
 
   public static let defaultBlacklistedDirectories = ["node_modules", "Pods"]
 
-  private var isDirectoryCache = [String: Bool]()
-
   public let behavior: Behavior
   public let blacklistedDirectories: [String]
   var paths = [String]()
@@ -105,8 +103,6 @@ public class Glob: Collection {
     paths = Array(Set(paths)).sorted { lhs, rhs in
       lhs.compare(rhs) != ComparisonResult.orderedDescending
     }
-
-    clearCaches()
   }
   
   // MARK: Subscript Support
@@ -187,19 +183,8 @@ public class Glob: Collection {
   }
 
   private func isDirectory(path: String) -> Bool {
-    if let isDirectory = isDirectoryCache[path] {
-      return isDirectory
-    }
-
     var isDirectoryBool = ObjCBool(false)
-    let isDirectory = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
-    isDirectoryCache[path] = isDirectory
-
-    return isDirectory
-  }
-
-  private func clearCaches() {
-    isDirectoryCache.removeAll()
+    return FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
   }
 
   private func populateFiles(gt: glob_t, includeFiles: Bool) {
