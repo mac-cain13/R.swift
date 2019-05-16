@@ -69,21 +69,23 @@ public struct RswiftCore {
       if callInformation.objcCompat {
         fileContents += objcConvertibles.compactMap { $0.objcCode(prefix: "") }.joined(separator: "\n") + "\n"
       }
-        
-      let allImages =
-        resources.images.map { $0.name } +
-        resources.assetFolders.flatMap { $0.imageAssets }
+    
+      if callInformation.unusedImages {
+        let allImages =
+          resources.images.map { $0.name } +
+          resources.assetFolders.flatMap { $0.imageAssets }
 
-      let allUsedImages =
-        resources.nibs.flatMap { $0.usedImageIdentifiers } +
-        resources.storyboards.flatMap { $0.usedImageIdentifiers }
+        let allUsedImages =
+          resources.nibs.flatMap { $0.usedImageIdentifiers } +
+          resources.storyboards.flatMap { $0.usedImageIdentifiers }
 
-      let unusedImages = Set(allImages).subtracting(Set(allUsedImages))
-      let unusedImageGeneratedNames = unusedImages.map { SwiftIdentifier(name: $0).description }.uniqueAndSorted()
+        let unusedImages = Set(allImages).subtracting(Set(allUsedImages))
+        let unusedImageGeneratedNames = unusedImages.map { SwiftIdentifier(name: $0).description }.uniqueAndSorted()
 
-      fileContents += "/* Potentially Unused Images\n"
-      fileContents += unusedImageGeneratedNames.joined(separator: "\n")
-      fileContents += "\n*/"
+        fileContents += "/* Potentially Unused Images\n"
+        fileContents += unusedImageGeneratedNames.joined(separator: "\n")
+        fileContents += "\n*/"
+      }
 
       // Write file if we have changes
       let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)
