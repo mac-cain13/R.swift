@@ -59,10 +59,6 @@ struct SwiftIdentifier : CustomStringConvertible, Hashable {
   }
 }
 
-func ==(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {
-  return lhs.description == rhs.description
-}
-
 extension SwiftIdentifier : ExpressibleByStringLiteral {
   typealias StringLiteralType = String
   typealias UnicodeScalarLiteralType = String

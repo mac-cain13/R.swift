@@ -61,19 +61,3 @@ extension Locale: Hashable {
     }
   }
 }
-
-func == (lhs: Locale, rhs: Locale) -> Bool {
-  switch (lhs, rhs) {
-  case (.none, .none):
-    return true
-
-  case (.base, .base):
-    return true
-
-  case let (.language(lLang), .language(rLang)):
-    return lLang == rLang
-
-  default:
-    return false
-  }
-}

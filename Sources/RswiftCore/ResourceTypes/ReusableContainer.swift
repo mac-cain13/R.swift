@@ -14,10 +14,6 @@ struct Reusable: Hashable {
   let type: Type
 }
 
-func == (lhs: Reusable, rhs: Reusable) -> Bool {
-  return lhs.hashValue == rhs.hashValue
-}
-
 protocol ReusableContainer {
   var reusables: [Reusable] { get }
 }

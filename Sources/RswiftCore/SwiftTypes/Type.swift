@@ -106,5 +106,5 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
 }
 
 func ==(lhs: Type, rhs: Type) -> Bool {
-  return (lhs.hashValue == rhs.hashValue)
+  return (lhs.description == rhs.description)
 }
