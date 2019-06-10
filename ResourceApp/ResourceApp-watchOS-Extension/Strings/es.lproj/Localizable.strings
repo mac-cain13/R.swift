@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  ResourceApp
+
+  Created by Lammert Westerhoff on 28/08/2018.
+  Copyright © 2018 Mathijs Kadijk. All rights reserved.
+*/
+
+
+one = Uno;
+two = 2;
+
+"quote" = "Hay %d luces!";
+

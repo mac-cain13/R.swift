@@ -23,7 +23,7 @@ class ValidatedStructGenerator: StructGenerator {
 
     let validationFunctionBody: String
     if let internalStruct = internalStruct, internalStruct.implements.map({ $0.type }).contains(Type.Validatable) {
-      validationFunctionBody = "try \(internalStruct.type).validate()"
+      validationFunctionBody = OSPrinter(code: "try \(internalStruct.type).validate()", supportedOS: internalStruct.os).swiftCode
     } else {
       validationFunctionBody = "// There are no resources to validate"
     }
@@ -47,11 +47,13 @@ class ValidatedStructGenerator: StructGenerator {
           parameters: [],
           doesThrow: true,
           returnType: Type._Void,
-          body: validationFunctionBody
+          body: validationFunctionBody,
+          os: []
         )
       ],
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
 
     var externalStruct = validationSubject.externalStruct
@@ -97,8 +99,9 @@ private extension Struct {
         doesThrow: true,
         returnType: Type._Void,
         body: validatableStructs
-          .map { "try \($0.type).validate()" }
-          .joined(separator: "\n")
+          .map { OSPrinter(code: "try \($0.type).validate()", supportedOS: $0.os).swiftCode }
+            .joined(separator: "\n"),
+        os: []
       )
     )
 

@@ -22,5 +22,8 @@ abstract_target 'Shared' do
   target 'ResourceApp-tvOS' do
     platform :tvos, '9.0'
   end
+  target 'ResourceApp-watchOS-Extension' do
+    platform :watchos, '2.2'
+  end
 end
 

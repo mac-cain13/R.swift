@@ -39,7 +39,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       properties: [],
       functions: [],
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -60,7 +61,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
       functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -219,7 +221,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: "return \(values.localizedString)"
+      body: "return \(values.localizedString)",
+      os: []
     )
   }
 
@@ -245,7 +248,8 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))"
+      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))",
+      os: []
     )
   }
 

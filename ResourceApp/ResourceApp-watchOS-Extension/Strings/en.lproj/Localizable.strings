@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  ResourceApp
+
+  Created by Lammert Westerhoff on 28/08/2018.
+  Copyright © 2018 Mathijs Kadijk. All rights reserved.
+*/
+
+one = Zero; // Duplicate keys are ignored, a warning from R.swift would be nice
+one = One;
+two = 2;
+
+"quote" = "There are %d lights!";

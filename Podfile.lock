@@ -16,13 +16,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   R.swift.Library:
-    :commit: ae88152aab915b35acd333c23836e22ea44246f4
+    :commit: 4002f22dbc6dbc2fe76c364c46dbd25911af6dd1
     :git: https://github.com/mac-cain13/R.swift.Library.git
 
 SPEC CHECKSUMS:
-  R.swift.Library: cfe85d569d9bae6cb262922db130e7c3a7a5fad1
+  R.swift.Library: 08f4e67e3cf6ce0f1802d6a477933ddc6c2cf439
   SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
 
-PODFILE CHECKSUM: dcf609a63a9cb222b7167b110c27de036120bae0
+PODFILE CHECKSUM: feb2d125d56abaa9101403aedbf488a7d5445eab
 
 COCOAPODS: 1.7.1

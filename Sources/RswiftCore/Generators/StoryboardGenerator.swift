@@ -49,7 +49,8 @@ struct StoryboardStructGenerator: StructGenerator {
           ],
           doesThrow: false,
           returnType: Type._UIStoryboard,
-          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(_struct.type.name))"
+          body: "return UIKit.UIStoryboard(resource: R.storyboard.\(_struct.type.name))",
+          os: ["iOS", "tvOS"]
         )
 
         return (_struct, _property, _function)
@@ -65,7 +66,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: storyboardTypes.map { $0.1 },
       functions: storyboardTypes.map { $0.2 },
       structs: [],
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
 
     let internalStruct = Struct(
@@ -78,7 +80,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: [],
       functions: [],
       structs: storyboardTypes.map { $0.0 },
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
 
     return (
@@ -152,7 +155,8 @@ struct StoryboardStructGenerator: StructGenerator {
           ],
           doesThrow: false,
           returnType: vc.type.asOptional(),
-          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))"
+          body: "return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: \(resource.name))",
+          os: []
         )
       }
       .forEach { functions.append($0) }
@@ -189,7 +193,8 @@ struct StoryboardStructGenerator: StructGenerator {
         parameters: [],
         doesThrow: true,
         returnType: Type._Void,
-        body: validateLines.joined(separator: "\n")
+        body: validateLines.joined(separator: "\n"),
+        os: []
       )
       functions.append(validateFunction)
       implements.append(TypePrinter(type: Type.Validatable))
@@ -206,7 +211,8 @@ struct StoryboardStructGenerator: StructGenerator {
       properties: properties,
       functions: functions,
       structs: [],
-      classes: []
+      classes: [],
+      os: ["iOS", "tvOS"]
     )
   }
 }

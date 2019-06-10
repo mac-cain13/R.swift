@@ -37,7 +37,8 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
       properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       functions: firstLocales.flatMap { functionsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -77,7 +78,8 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
             ],
             doesThrow: false,
             returnType: Type._URL.asOptional(),
-            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)"
+            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
+            os: []
           )
         ]
     }
