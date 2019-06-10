@@ -716,7 +716,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-tvOS/Rswift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -725,7 +725,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		45EF1C0CF8F1496731872E16 /* [CP] Embed Pods Frameworks */ = {
@@ -734,7 +734,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -745,7 +745,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		89BF8D4EC08D38DB6564C369 /* [CP] Embed Pods Frameworks */ = {
@@ -754,7 +754,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -765,7 +765,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		978E4B8123C372F370555011 /* [CP] Check Pods Manifest.lock */ = {

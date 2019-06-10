@@ -17,14 +17,6 @@ public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashabl
   public typealias UnicodeScalarLiteralType = StringLiteralType
   public typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
 
-  public var hashValue: Int {
-    switch self {
-    case .host: return "--HOSTINGBUNDLE".hashValue
-    case .stdLib: return "--STDLIB".hashValue
-    case let .custom(name: name): return name.hashValue
-    }
-  }
-
   public var description: String {
     switch self {
     case .host: return ""

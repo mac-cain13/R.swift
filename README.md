@@ -124,7 +124,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 R.swift is built using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
 
 1. Check out the code
-2. Run `swift build -c release -Xswiftc -static-stdlib -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"` from the root directory
+2. Run `swift build -c release` from the root directory
 3. Follow the manual installation steps with the binary you now have
 
 For developing on R.swift in Xcode, run `swift package generate-xcodeproj --xcconfig-overrides RswiftConfig.xcconfig`.
