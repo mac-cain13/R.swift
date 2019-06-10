@@ -22,10 +22,15 @@ public struct CallInformation {
   let bundleIdentifier: String
   let productModuleName: String
 
-  private let buildProductsDirURL: URL
-  private let developerDirURL: URL
-  private let sourceRootURL: URL
-  private let sdkRootURL: URL
+  let scriptInputFiles: [String]
+  let scriptOutputFiles: [String]
+  let lastRunURL: URL
+
+  let buildProductsDirURL: URL
+  let developerDirURL: URL
+  let sourceRootURL: URL
+  let sdkRootURL: URL
+  let platformURL: URL
 
   public init(
     outputURL: URL,
@@ -39,10 +44,15 @@ public struct CallInformation {
     bundleIdentifier: String,
     productModuleName: String,
 
+    scriptInputFiles: [String],
+    scriptOutputFiles: [String],
+    lastRunURL: URL,
+
     buildProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
-    sdkRootURL: URL
+    sdkRootURL: URL,
+    platformURL: URL
   ) {
     self.outputURL = outputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
@@ -55,10 +65,15 @@ public struct CallInformation {
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName
 
+    self.scriptInputFiles = scriptInputFiles
+    self.scriptOutputFiles = scriptOutputFiles
+    self.lastRunURL = lastRunURL
+
     self.buildProductsDirURL = buildProductsDirURL
     self.developerDirURL = developerDirURL
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
+    self.platformURL = platformURL
   }
 
 
@@ -72,6 +87,8 @@ public struct CallInformation {
       return sdkRootURL
     case .sourceRoot:
       return sourceRootURL
+    case .platformDir:
+      return platformURL
     }
   }
 }

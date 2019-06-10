@@ -80,7 +80,7 @@ public struct RswiftCore {
         fail("File extension '\(String(describing: givenExtension))' is not one of the supported extensions: \(joinedSupportedExtensions)")
       }
 
-      exit(3)
+      exit(EXIT_FAILURE)
     }
   }
 }

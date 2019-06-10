@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -39,7 +38,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="User@white.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZJc-88-QRk">
-                                <rect key="frame" x="102.5" y="52" width="170" height="170"/>
+                                <rect key="frame" x="59.5" y="32" width="256" height="256"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -115,7 +114,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Second" image="Second" id="cPa-gy-q4n"/>
                     <connections>
-                        <segue destination="oSY-nF-Ci0" kind="show" identifier="toThird" id="yGR-hV-SHy"/>
+                        <segue destination="oSY-nF-Ci0" kind="push" identifier="toThird" id="yGR-hV-SHy"/>
                         <segue destination="YCO-tr-k3L" kind="show" identifier="ToFirst" id="z6s-e4-G9Z"/>
                     </connections>
                 </viewController>
@@ -130,7 +129,7 @@
                 </button>
                 <tapGestureRecognizer id="tzp-w1-Hfz">
                     <connections>
-                        <segue destination="oSY-nF-Ci0" kind="show" identifier="recognizerSegue" id="oyV-dS-wZu"/>
+                        <segue destination="oSY-nF-Ci0" kind="custom" identifier="recognizerSegue" customClass="CustomSegue" customModule="ResourceApp" customModuleProvider="target" id="oyV-dS-wZu"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -152,7 +151,7 @@
                                 <rect key="frame" x="161.5" y="318.5" width="52" height="30"/>
                                 <state key="normal" title="Unwind"/>
                                 <connections>
-                                    <segue destination="gh1-ro-RFV" kind="unwind" identifier="unwindSegue" unwindAction="unwindSomethingSomthing:" id="UNt-3N-uEw"/>
+                                    <segue destination="gh1-ro-RFV" kind="unwind" identifier="unwindSegue" customClass="CustomSegue" customModule="ResourceApp" customModuleProvider="target" unwindAction="unwindSomethingSomthing:" id="UNt-3N-uEw"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -162,6 +161,7 @@
                             <constraint firstItem="8B6-zH-yBB" firstAttribute="centerX" secondItem="Xle-dW-hVf" secondAttribute="centerX" id="vuH-Hu-ZP0"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="0Bm-UV-nCz"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="thV-Zl-Ztw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gh1-ro-RFV" userLabel="Exit" sceneMemberID="exit"/>
@@ -199,7 +199,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lre-Cj-0QS" id="sq1-mW-7Wa">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -207,7 +207,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L8j-6T-BZ6" id="Vn1-wc-sJz">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>

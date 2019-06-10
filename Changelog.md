@@ -1,3 +1,46 @@
+## 5.0.3
+
+- Fix for stand alone image files (Thanks @CraigsOverItAll)
+
+## 5.0.2
+
+- Fix issues with legacy build system by adding option to disable input checks
+
+## 5.0.1
+
+- Fixes for relative paths
+
+## 5.0.0
+
+- Compatible with Xcode 10 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility
+- Removed CLR file support, use color resources instead
+- Easier nib loading with new method
+- Ignore file supports explicit include (by @renrawnalon)
+- Validation for named colors
+- Empty structs are not generated anymore (by @soberman)
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
+## 5.0.0.rc.2
+
+- Improve R.swift 5 migration errors
+
+## 5.0.0.rc.1
+
+- Xcode 10 compatibility fixes
+
+## 5.0.0.alpha.3
+
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+
+## 5.0.0.alpha.2
+
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
 ## 5.0.0.alpha.1
 
 - Removed CLR file support, use color resources instead

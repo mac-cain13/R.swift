@@ -9,10 +9,10 @@
 
 import Foundation
 
-func warn(_ warning: String) {
+public func warn(_ warning: String) {
   print("warning: [R.swift] \(warning)")
 }
 
-func fail(_ error: String) {
+public func fail(_ error: String) {
   print("error: [R.swift] \(error)")
 }

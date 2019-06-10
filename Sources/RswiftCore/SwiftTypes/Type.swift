@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct UsedType {
+struct UsedType: Hashable {
   let type: Type
 
   fileprivate init(type: Type) {
@@ -72,10 +72,6 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
 
   var description: String {
     return TypePrinter(type: self).swiftCode
-  }
-
-  var hashValue: Int {
-    return description.hashValue
   }
 
   init(module: Module, name: SwiftIdentifier, genericArgs: [TypeVar] = [], optional: Bool = false) {

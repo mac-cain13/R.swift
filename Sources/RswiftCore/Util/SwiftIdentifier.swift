@@ -16,7 +16,7 @@ private let upperCasedPrefixRegex = try! NSRegularExpression(pattern: "^([A-Z]+)
  Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
  Special rules: Can't begin with a number
  */
-struct SwiftIdentifier : CustomStringConvertible {
+struct SwiftIdentifier : CustomStringConvertible, Hashable {
   let description: String
 
   init(name: String, lowercaseStartingCharacters: Bool = true) {
@@ -56,12 +56,6 @@ struct SwiftIdentifier : CustomStringConvertible {
 
   static func +(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> SwiftIdentifier {
     return SwiftIdentifier(rawValue: "\(lhs.description).\(rhs.description)")
-  }
-}
-
-extension SwiftIdentifier : Hashable {
-  var hashValue: Int {
-    return description.hashValue
   }
 }
 
@@ -126,9 +120,11 @@ extension Sequence {
     groupedBy[empty] = nil
 
     let uniques = Array(groupedBy.values.filter { $0.count == 1 }.joined())
+      .sorted { identifierSelector($0) < identifierSelector($1) }
     let duplicates = groupedBy
       .filter { $0.1.count > 1 }
       .map { ($0.0, $0.1.map(identifierSelector).sorted()) }
+      .sorted { $0.0.description < $1.0.description }
 
     return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
   }
@@ -157,7 +153,7 @@ private let blacklistedCharacters: CharacterSet = {
   return blacklist as CharacterSet
 }()
 
-// Based on https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/LexicalStructure.html#//apple_ref/doc/uid/TP40014097-CH30-ID413
+// Based on https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID413
 private let SwiftKeywords = [
   // Keywords used in declarations
   "associatedtype", "class", "deinit", "enum", "extension", "fileprivate", "func", "import", "init", "inout", "internal", "let", "open", "operator", "private", "protocol", "public", "static", "struct", "subscript", "typealias", "var",
@@ -169,7 +165,7 @@ private let SwiftKeywords = [
   "as", "Any", "catch", "false", "is", "nil", "rethrows", "super", "self", "Self", "throw", "throws", "true", "try",
 
   // Keywords that begin with a number sign (#)
-  "#available", "#colorLiteral", "#column", "#else", "#elseif", "#endif", "#file", "#fileLiteral", "#function", "#if", "#imageLiteral", "#line", "#selector", "#sourceLocation",
+  "#available", "#colorLiteral", "#column", "#else", "#elseif", "#endif", "#error", "#file", "#fileLiteral", "#function", "#if", "#imageLiteral", "#line", "#selector", "#sourceLocation", "#warning",
 
   // Keywords from Swift 2 that are still reserved
   "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__",

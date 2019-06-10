@@ -44,6 +44,7 @@
 		D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC81B5D757300301B0D /* LaunchScreen.xib */; };
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
+		D56470312258CA8A005F5E7A /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56470302258CA8A005F5E7A /* ValidationTests.swift */; };
 		D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76F1C42A5E700623437 /* StoryboardTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
@@ -82,7 +83,6 @@
 		DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559991CA4873D009B8C51 /* AppDelegate.swift */; };
 		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
-		DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */; };
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
 		E20983241D585E78005ACBAA /* SegueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20983231D585E78005ACBAA /* SegueTests.swift */; };
 		E20983261D585F8C005ACBAA /* Xib with ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E20983251D585F8C005ACBAA /* Xib with ViewController.xib */; };
@@ -93,6 +93,7 @@
 		E2156B6E1CC42B6700F341DC /* @@.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6D1CC42B6700F341DC /* @@.strings */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2562CD51EE70C68007D8938 /* Media.xcassets */; };
+		E25984A122AEE89B00467E1E /* CustomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25984A022AEE89B00467E1E /* CustomSegue.swift */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
 		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
@@ -214,6 +215,7 @@
 		D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResourceAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
+		D56470302258CA8A005F5E7A /* ValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		D56DC76F1C42A5E700623437 /* StoryboardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
 		D59A04631DF3223800B9F65F /* icon.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.ignoreme.png; sourceTree = "<group>"; };
@@ -253,9 +255,8 @@
 		DEF559A01CA4873D009B8C51 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF559A21CA4873D009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ResourceAppTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests_tvOS.swift; sourceTree = "<group>"; };
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; };
 		E1B2B4287A3B52DAB3098AA2 /* Pods_Shared_ResourceAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20983231D585E78005ACBAA /* SegueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueTests.swift; sourceTree = "<group>"; };
 		E20983251D585F8C005ACBAA /* Xib with ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Xib with ViewController.xib"; sourceTree = "<group>"; };
@@ -267,6 +268,7 @@
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		E25984A022AEE89B00467E1E /* CustomSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegue.swift; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.stringsdict; path = Generic.stringsdict; sourceTree = "<group>"; };
@@ -459,19 +461,20 @@
 			isa = PBXGroup;
 			children = (
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
-				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */,
+				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
 				D5B799861C1B8DD2009EA901 /* Specials.storyboard */,
 				D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */,
+				E25984A022AEE89B00467E1E /* CustomSegue.swift */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
-				E2562CD51EE70C68007D8938 /* Media.xcassets */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */,
+				E2562CD51EE70C68007D8938 /* Media.xcassets */,
 				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
 				D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */,
 				D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */,
@@ -579,9 +582,9 @@
 		DEF559AC1CA48892009B8C51 /* ResourceAppTests-tvOS */ = {
 			isa = PBXGroup;
 			children = (
-				DEF559AD1CA48892009B8C51 /* ResourceAppTests_tvOS.swift */,
 				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
 				D5CE930B1CA966C6009D0E62 /* Supporting Files */,
+				D56470302258CA8A005F5E7A /* ValidationTests.swift */,
 			);
 			path = "ResourceAppTests-tvOS";
 			sourceTree = "<group>";
@@ -629,7 +632,7 @@
 			buildConfigurationList = 2F5FBC332135561400A83A69 /* Build configuration list for PBXNativeTarget "ResourceApp-watchOS-Extension" */;
 			buildPhases = (
 				073281458C0F14597F1672BC /* [CP] Check Pods Manifest.lock */,
-				2F5FBC5B21355F2000A83A69 /* ShellScript */,
+				2F5FBC5B21355F2000A83A69 /* R.swift */,
 				2F5FBC1D2135561300A83A69 /* Sources */,
 				2F5FBC1E2135561300A83A69 /* Frameworks */,
 				2F5FBC1F2135561300A83A69 /* Resources */,
@@ -768,6 +771,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				es,
@@ -906,7 +910,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-watchOS-Extension/Pods-Shared-ResourceApp-watchOS-Extension-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-watchOS-Extension/Pods-Shared-ResourceApp-watchOS-Extension-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-watchOS/Rswift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -915,7 +919,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-watchOS-Extension/Pods-Shared-ResourceApp-watchOS-Extension-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-watchOS-Extension/Pods-Shared-ResourceApp-watchOS-Extension-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		073281458C0F14597F1672BC /* [CP] Check Pods Manifest.lock */ = {
@@ -942,7 +946,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-tvOS/Rswift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -951,10 +955,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2F5FBC5B21355F2000A83A69 /* ShellScript */ = {
+		2F5FBC5B21355F2000A83A69 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -962,14 +966,17 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(TEMP_DIR)/rswift-lastrun",
 			);
+			name = R.swift;
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../.build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension\" > \"$SRCROOT/rswift-watchos.log\"\n";
+			shellScript = "\"$SRCROOT/../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n";
 		};
 		45EF1C0CF8F1496731872E16 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -977,7 +984,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -988,7 +995,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		89BF8D4EC08D38DB6564C369 /* [CP] Embed Pods Frameworks */ = {
@@ -997,7 +1004,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -1008,7 +1015,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		978E4B8123C372F370555011 /* [CP] Check Pods Manifest.lock */ = {
@@ -1053,13 +1060,15 @@
 			files = (
 			);
 			inputPaths = (
+				"$(TEMP_DIR)/rswift-lastrun",
 			);
 			name = R.swift;
 			outputPaths = (
+				"$(SRCROOT)/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../.build/debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1067,13 +1076,15 @@
 			files = (
 			);
 			inputPaths = (
+				"$(TEMP_DIR)/rswift-lastrun",
 			);
 			name = R.swift;
 			outputPaths = (
+				"$SRCROOT/ResourceApp-tvOS/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS\" > \"$SRCROOT/rswift-tv.log\"\n";
+			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS/R.generated.swift\" > \"$SRCROOT/rswift-tv.log\"\n";
 		};
 		ED8FCF67313DC003391627B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1115,6 +1126,7 @@
 				D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */,
 				D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */,
 				D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */,
+				E25984A122AEE89B00467E1E /* CustomSegue.swift in Sources */,
 				D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1148,7 +1160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF559AE1CA48892009B8C51 /* ResourceAppTests_tvOS.swift in Sources */,
+				D56470312258CA8A005F5E7A /* ValidationTests.swift in Sources */,
 				D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

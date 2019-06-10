@@ -53,7 +53,7 @@ lane :release do |options|
     UI.message "Skipping tests!".yellow
   end
 
-  sh "cd .. && swift build -c release -Xswiftc -static-stdlib"
+  sh "cd .. && swift build -c release -Xswiftc -static-stdlib -Xswiftc \"-target\" -Xswiftc \"x86_64-apple-macosx10.11\""
 
   zipPath = "/tmp/rswift-#{newVersion}.zip"
   sh "rm -f #{zipPath}"
@@ -97,7 +97,7 @@ desc "Runs all the tests"
 lane :runalltests do
   cocoapods(repo_update: false)
 
-  sh "cd .. && swift test && mkdir -p build/debug && cp .build/debug/rswift build/debug"
+  sh "cd .. && swift test -Xswiftc -static-stdlib -Xswiftc \"-target\" -Xswiftc \"x86_64-apple-macosx10.11\" && mkdir -p build/debug && cp .build/debug/rswift build/debug"
 
   scan(
     workspace: "ResourceApp.xcworkspace",
