@@ -13,7 +13,7 @@ Currently you type:
 ```swift
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
-let color = UIColor(named: "indictator highlight")
+let color = UIColor(named: "indicator highlight")
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
 let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Arthur Dent")
 ```
