@@ -82,6 +82,7 @@
 		E2156B6E1CC42B6700F341DC /* @@.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2156B6D1CC42B6700F341DC /* @@.strings */; };
 		E22070771C92E137007A090B /* WhitespaceReuseIdentifer.xib in Resources */ = {isa = PBXBuildFile; fileRef = E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */; };
 		E2562CD61EE70C68007D8938 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2562CD51EE70C68007D8938 /* Media.xcassets */; };
+		E25984A122AEE89B00467E1E /* CustomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25984A022AEE89B00467E1E /* CustomSegue.swift */; };
 		E2762AC01CCCDFDA0009BCAA /* Settings.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762AC21CCCDFDA0009BCAA /* Settings.stringsdict */; };
 		E2762AE01CCE62CC0009BCAA /* Generic.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */; };
 		E29693581CAD64B500401D53 /* __FILE__ in Resources */ = {isa = PBXBuildFile; fileRef = E29693571CAD64B500401D53 /* __FILE__ */; };
@@ -199,6 +200,7 @@
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
 		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		E25984A022AEE89B00467E1E /* CustomSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegue.swift; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762AC31CCCDFE10009BCAA /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Settings.stringsdict; sourceTree = "<group>"; };
 		E2762ADF1CCE62CC0009BCAA /* Generic.stringsdict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.stringsdict; path = Generic.stringsdict; sourceTree = "<group>"; };
@@ -336,19 +338,20 @@
 			isa = PBXGroup;
 			children = (
 				D5B799841C1B8DB6009EA901 /* Settings.bundle */,
-				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				A3D0897520CF6FE4007ED462 /* ExplicitInclude.ignoreme.png */,
+				D59A04651DF3225500B9F65F /* hand.ignoreme.png */,
 				D5AD5C961B7A7CDA00A8B96C /* duplicate.storyboard */,
 				D5AD5C981B7A7CE700A8B96C /* Duplicate.storyboard */,
 				D52725FD1C4BB6BC0005C8D4 /* References.storyboard */,
 				D5B799861C1B8DD2009EA901 /* Specials.storyboard */,
 				D5AD5C9E1B7A924000A8B96C /* AppDelegate.swift */,
+				E25984A022AEE89B00467E1E /* CustomSegue.swift */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
-				E2562CD51EE70C68007D8938 /* Media.xcassets */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */,
+				E2562CD51EE70C68007D8938 /* Media.xcassets */,
 				D5AD5C9C1B7A901F00A8B96C /* ADuplicateCellView.xib */,
 				D5BA2E5E1C90086C0025C9E3 /* CellCollectionView.xib */,
 				D5AD5C9A1B7A8F4300A8B96C /* CellView.xib */,
@@ -865,6 +868,7 @@
 				D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */,
 				D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */,
 				D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */,
+				E25984A122AEE89B00467E1E /* CustomSegue.swift in Sources */,
 				D5DE480E1B5E1CC7000F6A85 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
