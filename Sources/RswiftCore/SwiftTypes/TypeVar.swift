@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct TypeVar: UsedTypesProvider, CustomStringConvertible {
+struct TypeVar: UsedTypesProvider, CustomStringConvertible, Hashable {
   let description: String
   let usedTypes: [UsedType]
 

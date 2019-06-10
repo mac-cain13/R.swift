@@ -33,6 +33,7 @@
 		D55C6CC71B5D757300301B0D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		D55C6CCA1B5D757300301B0D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC81B5D757300301B0D /* LaunchScreen.xib */; };
 		D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */; };
+		D56470312258CA8A005F5E7A /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56470302258CA8A005F5E7A /* ValidationTests.swift */; };
 		D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56DC76F1C42A5E700623437 /* StoryboardTests.swift */; };
 		D575E25D1B766CD800C22F0B /* My View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D575E25C1B766CD800C22F0B /* My View.xib */; };
 		D58AF2811B708CB300FB2A4E /* rswift.log in Resources */ = {isa = PBXBuildFile; fileRef = D50175BA1B5FEF6E00DB8314 /* rswift.log */; };
@@ -145,6 +146,7 @@
 		D55C6CCF1B5D757300301B0D /* ResourceAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResourceAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55C6CD41B5D757300301B0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceAppTests.swift; sourceTree = "<group>"; };
+		D56470302258CA8A005F5E7A /* ValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		D56DC76F1C42A5E700623437 /* StoryboardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardTests.swift; sourceTree = "<group>"; };
 		D575E25C1B766CD800C22F0B /* My View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "My View.xib"; sourceTree = "<group>"; };
 		D59A04631DF3223800B9F65F /* icon.ignoreme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.ignoreme.png; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 			children = (
 				D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */,
 				D5CE930B1CA966C6009D0E62 /* Supporting Files */,
+				D56470302258CA8A005F5E7A /* ValidationTests.swift */,
 			);
 			path = "ResourceAppTests-tvOS";
 			sourceTree = "<group>";
@@ -594,6 +597,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				es,
@@ -712,7 +716,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-tvOS/Rswift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -721,7 +725,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp-tvOS/Pods-Shared-ResourceApp-tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		45EF1C0CF8F1496731872E16 /* [CP] Embed Pods Frameworks */ = {
@@ -730,7 +734,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -741,7 +745,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceAppTests/Pods-Shared-ResourceAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		89BF8D4EC08D38DB6564C369 /* [CP] Embed Pods Frameworks */ = {
@@ -750,7 +754,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
@@ -761,7 +765,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shared-ResourceApp/Pods-Shared-ResourceApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		978E4B8123C372F370555011 /* [CP] Check Pods Manifest.lock */ = {
@@ -894,6 +898,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D56470312258CA8A005F5E7A /* ValidationTests.swift in Sources */,
 				D5CE930E1CA96714009D0E62 /* ImagesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
