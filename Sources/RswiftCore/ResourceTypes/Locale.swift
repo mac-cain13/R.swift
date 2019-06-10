@@ -31,7 +31,7 @@ enum Locale {
   }
 }
 
-extension Locale {
+extension Locale: Hashable {
   init(url: URL) {
     if let localeComponent = url.pathComponents.dropLast().last , localeComponent.hasSuffix(".lproj") {
       let lang = localeComponent.replacingOccurrences(of: ".lproj", with: "")
@@ -60,35 +60,6 @@ extension Locale {
       return language
     }
   }
-}
-
-extension Locale: Hashable {
-  #if swift(<4.2)
-  var hashValue: Int {
-    switch self {
-    case .none:
-      return 0
-
-    case .base:
-      return 1
-
-    case .language(let language):
-      return 2 &+ language.hashValue
-    }
-  }
-  #else
-  func hash(into hasher: inout Hasher) {
-    switch self {
-    case .none:
-      hasher.combine(0)
-    case .base:
-      hasher.combine(1)
-    case .language(let languageCode):
-      hasher.combine(2)
-      hasher.combine(languageCode)
-    }
-  }
-  #endif
 }
 
 func == (lhs: Locale, rhs: Locale) -> Bool {
