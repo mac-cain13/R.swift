@@ -37,7 +37,7 @@ struct NibStructGenerator: StructGenerator {
 
   private let instantiateParameters = [
     Function.Parameter(name: "owner", localName: "ownerOrNil", type: Type._AnyObject.asOptional()),
-    Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .stdLib, name: SwiftIdentifier(rawValue: "[UINib.OptionsKey : Any]"), optional: true), defaultValue: "nil")
+    Function.Parameter(name: "options", localName: "optionsOrNil", type: Type(module: .stdLib, name: SwiftIdentifier(rawValue: "[NSString : Any]"), optional: true), defaultValue: "nil")
   ]
 
   init(nibs: [Nib]) {
