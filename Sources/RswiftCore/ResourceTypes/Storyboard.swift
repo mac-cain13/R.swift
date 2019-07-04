@@ -29,6 +29,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let viewControllerPlaceholders: [ViewControllerPlaceholder]
+  let usedAccessibilityIdentifiers: [String]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
   let reusables: [Reusable]
@@ -61,6 +62,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     viewControllerPlaceholders = parserDelegate.viewControllerPlaceholders
+    usedAccessibilityIdentifiers = parserDelegate.usedAccessibilityIdentifiers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
     reusables = parserDelegate.reusables
@@ -128,6 +130,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
   var usedImageIdentifiers: [String] = []
   var usedColorReferences: [String] = []
+  var usedAccessibilityIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
   // State
@@ -170,6 +173,11 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     case "color":
       if let colorName = attributeDict["name"] {
         usedColorReferences.append(colorName)
+      }
+
+    case "accessibility":
+      if let accessibilityIdentifier = attributeDict["identifier"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
     case "viewControllerPlaceholder":

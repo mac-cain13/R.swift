@@ -34,6 +34,7 @@ public struct RswiftCore {
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
+        AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
       ]
 
       let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)

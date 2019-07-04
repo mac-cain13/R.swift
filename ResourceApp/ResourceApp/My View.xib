@@ -18,7 +18,7 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="The App Icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="mpi-yw-TUg">
                     <rect key="frame" x="127.5" y="273.5" width="120" height="120"/>
-                    <accessibility key="accessibilityConfiguration" identifier="appIconImageView"/>
+                    <accessibility key="accessibilityConfiguration" identifier="AppIcon ImageView"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" name="Not dupe"/>

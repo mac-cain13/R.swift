@@ -25,6 +25,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
+  let usedAccessibilityIdentifiers: [String]
 
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
@@ -49,6 +50,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     reusables = parserDelegate.reusables
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
+    usedAccessibilityIdentifiers = parserDelegate.usedAccessibilityIdentifiers
   }
 }
 
@@ -58,6 +60,7 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
   var reusables: [Reusable] = []
   var usedImageIdentifiers: [String] = []
   var usedColorReferences: [String] = []
+  var usedAccessibilityIdentifiers: [String] = []
 
   // State
   var isObjectsTagOpened = false;
@@ -80,6 +83,11 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
     case "color":
       if let colorName = attributeDict["name"] {
         usedColorReferences.append(colorName)
+      }
+
+    case "accessibility":
+      if let accessibilityIdentifier = attributeDict["identifier"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
     default:
