@@ -102,7 +102,6 @@ lane :runalltests do
   scan(
     workspace: "ResourceApp.xcworkspace",
     scheme: "ResourceApp",
-    sdk: "iphonesimulator",
     clean: true
   )
   scan(
