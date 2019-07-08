@@ -1,3 +1,8 @@
+## 5.1.0.alpha.1
+
+- WatchOS support (by @lammertw)
+- Introduced R.id for accessibility identifiers
+
 ## 5.0.3
 
 - Fix for stand alone image files (Thanks @CraigsOverItAll)
