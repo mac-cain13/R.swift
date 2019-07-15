@@ -30,7 +30,7 @@ public struct RswiftCore {
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
       // Generate regular R file
-      let fileContents = generateFileContents(resources: resources, generators: [
+      let fileContents = generateRegularFileContents(resources: resources, generators: [
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
@@ -45,7 +45,7 @@ public struct RswiftCore {
 
       // Generate UITest R file
       if let uiTestOutputURL = callInformation.uiTestOutputURL {
-        let uiTestFileContents = generateFileContents(resources: resources, generators: [
+        let uiTestFileContents = generateUITestFileContents(resources: resources, generators: [
           AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
         ])
         writeIfChanged(contents: uiTestFileContents, toURL: uiTestOutputURL)
@@ -65,7 +65,7 @@ public struct RswiftCore {
     }
   }
 
-  private func generateFileContents(resources: Resources, generators: [StructGenerator]) -> String {
+  private func generateRegularFileContents(resources: Resources, generators: [StructGenerator]) -> String {
     let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
       .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
@@ -83,6 +83,21 @@ public struct RswiftCore {
       ),
       externalStruct,
       internalStruct
+    ]
+
+    return codeConvertibles
+      .compactMap { $0?.swiftCode }
+      .joined(separator: "\n\n")
+      + "\n" // Newline at end of file
+  }
+
+  private func generateUITestFileContents(resources: Resources, generators: [StructGenerator]) -> String {
+    let (externalStruct, _) =  AggregatedStructGenerator(subgenerators: generators)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let codeConvertibles: [SwiftCodeConverible?] = [
+      HeaderPrinter(),
+      externalStruct
     ]
 
     return codeConvertibles
