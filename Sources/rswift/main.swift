@@ -65,6 +65,7 @@ struct EnvironmentKeys {
 
 // Options grouped in struct for readability
 struct CommanderOptions {
+  static let uiTest = Option("generateUITestFile", default: "", description: "Output path for an extra generated file that contains resources commonly used in UI tests such as accessibility identifiers")
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
@@ -73,17 +74,18 @@ struct CommanderOptions {
 
 // Options grouped in struct for readability
 struct CommanderArguments {
-  static let outputPath = Argument<String>("outputPath", description: "Output path for the generated file.")
+  static let outputPath = Argument<String>("outputPath", description: "Output path for the generated file")
 }
 
 let generate = command(
+  CommanderOptions.uiTest,
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
   CommanderOptions.inputOutputFilesValidation,
 
   CommanderArguments.outputPath
-) { importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
+) { uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
 
   let processInfo = ProcessInfo()
 
@@ -109,6 +111,7 @@ let generate = command(
   let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   let outputURL = URL(fileURLWithPath: outputPath)
+  let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
   let modules = importModules
     .components(separatedBy: ",")
@@ -138,6 +141,7 @@ let generate = command(
 
     let errors = validateRswiftEnvironment(
       outputURL: outputURL,
+      uiTestOutputURL: uiTestOutputURL,
       sourceRootPath: sourceRootPath,
       scriptInputFiles: scriptInputFiles,
       scriptOutputFiles: scriptOutputFiles,
@@ -157,6 +161,7 @@ let generate = command(
 
   let callInformation = CallInformation(
     outputURL: outputURL,
+    uiTestOutputURL: uiTestOutputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
 
     accessLevel: accessLevel,
@@ -178,7 +183,7 @@ let generate = command(
     platformURL: URL(fileURLWithPath: platformPath)
   )
 
-  try RswiftCore.run(callInformation)
+  try RswiftCore(callInformation).run()
 }
 
 // Start parsing the launch arguments

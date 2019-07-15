@@ -11,8 +11,13 @@ import Foundation
 import XcodeEdit
 
 public struct RswiftCore {
+  private let callInformation: CallInformation
 
-  static public func run(_ callInformation: CallInformation) throws {
+  public init(_ callInformation: CallInformation) {
+    self.callInformation = callInformation
+  }
+
+  public func run() throws {
     do {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
@@ -24,7 +29,8 @@ public struct RswiftCore {
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-      let generators: [StructGenerator] = [
+      // Generate regular R file
+      let fileContents = generateFileContents(resources: resources, generators: [
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
@@ -34,42 +40,14 @@ public struct RswiftCore {
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
+      ])
+      writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)
+
+      // Generate UITest R file
+      let uiTestFileContents = generateFileContents(resources: resources, generators: [
         AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
-      ]
-
-      let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
-        .generatedStructs(at: callInformation.accessLevel, prefix: "")
-
-      let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
-        .generatedStructs(at: callInformation.accessLevel, prefix: "")
-
-      let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
-
-      let codeConvertibles: [SwiftCodeConverible?] = [
-          HeaderPrinter(),
-          ImportPrinter(
-            modules: callInformation.imports,
-            extractFrom: [externalStruct, internalStruct],
-            exclude: [Module.custom(name: callInformation.productModuleName)]
-          ),
-          externalStruct,
-          internalStruct
-        ]
-
-      let fileContents = codeConvertibles
-        .compactMap { $0?.swiftCode }
-        .joined(separator: "\n\n")
-        + "\n" // Newline at end of file
-
-      // Write file if we have changes
-      let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)
-      if currentFileContents != fileContents  {
-        do {
-          try fileContents.write(to: callInformation.outputURL, atomically: true, encoding: .utf8)
-        } catch {
-          fail(error.localizedDescription)
-        }
-      }
+      ])
+      writeIfChanged(contents: uiTestFileContents, toURL: callInformation.outputURL)
 
     } catch let error as ResourceParsingError {
       switch error {
@@ -83,5 +61,41 @@ public struct RswiftCore {
 
       exit(EXIT_FAILURE)
     }
+  }
+
+  private func generateFileContents(resources: Resources, generators: [StructGenerator]) -> String {
+    let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
+
+    let codeConvertibles: [SwiftCodeConverible?] = [
+      HeaderPrinter(),
+      ImportPrinter(
+        modules: callInformation.imports,
+        extractFrom: [externalStruct, internalStruct],
+        exclude: [Module.custom(name: callInformation.productModuleName)]
+      ),
+      externalStruct,
+      internalStruct
+    ]
+
+    return codeConvertibles
+      .compactMap { $0?.swiftCode }
+      .joined(separator: "\n\n")
+      + "\n" // Newline at end of file
+  }
+}
+
+private func writeIfChanged(contents: String, toURL outputURL: URL) {
+  let currentFileContents = try? String(contentsOf: outputURL, encoding: .utf8)
+  guard currentFileContents != contents else { return }
+  do {
+    try contents.write(to: outputURL, atomically: true, encoding: .utf8)
+  } catch {
+    fail(error.localizedDescription)
   }
 }

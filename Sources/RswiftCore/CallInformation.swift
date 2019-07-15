@@ -12,6 +12,7 @@ import XcodeEdit
 
 public struct CallInformation {
   let outputURL: URL
+  let uiTestOutputURL: URL?
   let rswiftIgnoreURL: URL
 
   let accessLevel: AccessLevel
@@ -34,6 +35,7 @@ public struct CallInformation {
 
   public init(
     outputURL: URL,
+    uiTestOutputURL: URL?,
     rswiftIgnoreURL: URL,
 
     accessLevel: AccessLevel,
@@ -55,6 +57,7 @@ public struct CallInformation {
     platformURL: URL
   ) {
     self.outputURL = outputURL
+    self.uiTestOutputURL = uiTestOutputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
 
     self.accessLevel = accessLevel
