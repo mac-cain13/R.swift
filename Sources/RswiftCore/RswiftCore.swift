@@ -44,10 +44,12 @@ public struct RswiftCore {
       writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)
 
       // Generate UITest R file
-      let uiTestFileContents = generateFileContents(resources: resources, generators: [
-        AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
-      ])
-      writeIfChanged(contents: uiTestFileContents, toURL: callInformation.outputURL)
+      if let uiTestOutputURL = callInformation.uiTestOutputURL {
+        let uiTestFileContents = generateFileContents(resources: resources, generators: [
+          AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
+        ])
+        writeIfChanged(contents: uiTestFileContents, toURL: uiTestOutputURL)
+      }
 
     } catch let error as ResourceParsingError {
       switch error {
