@@ -1,3 +1,7 @@
+## 5.1.0.alpha.2
+
+- Add generateUITestFile option
+
 ## 5.1.0.alpha.1
 
 - WatchOS support (by @lammertw)
