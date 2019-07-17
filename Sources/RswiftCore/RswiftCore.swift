@@ -40,6 +40,7 @@ public struct RswiftCore {
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
+        AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards),
       ])
       writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)
 
