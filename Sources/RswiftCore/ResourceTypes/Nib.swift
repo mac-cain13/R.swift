@@ -90,6 +90,11 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
         usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
+    case "userDefinedRuntimeAttribute":
+      if let accessibilityIdentifier = attributeDict["value"], "accessibilityIdentifier" == attributeDict["keyPath"] && "string" == attributeDict["type"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
+      }
+
     default:
       if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
         levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.allSatisfy({ $0 != elementName }) {

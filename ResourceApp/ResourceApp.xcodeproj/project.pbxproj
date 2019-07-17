@@ -73,6 +73,7 @@
 		D5E513BE1B8E111A0035ECAA /* GdyBkltter1911.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E513B91B8E111A0035ECAA /* GdyBkltter1911.ttf */; };
 		D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E513BF1B8E11810035ECAA /* FontsTests.swift */; };
 		D5EB32701B63AD6B005C7B47 /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */; };
+		D5EE1B5622DEEF3E00A901EC /* TabBarItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5EE1B5522DEEF3E00A901EC /* TabBarItem.storyboard */; };
 		D5F05D3F1BB3CDF3003AE55E /* The App Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */; };
 		D5F05D421BB52002003AE55E /* Some.json in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D411BB52002003AE55E /* Some.json */; };
 		D5F05D441BB52063003AE55E /* Duplicate.json in Resources */ = {isa = PBXBuildFile; fileRef = D5F05D431BB52063003AE55E /* Duplicate.json */; };
@@ -244,6 +245,8 @@
 		D5E513BF1B8E11810035ECAA /* FontsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontsTests.swift; sourceTree = "<group>"; };
 		D5EB326D1B63AD6B005C7B47 /* ImagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImagesTests.swift; path = ../ResourceAppTests/ImagesTests.swift; sourceTree = "<group>"; };
 		D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
+		D5EE1B5522DEEF3E00A901EC /* TabBarItem.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TabBarItem.storyboard; sourceTree = "<group>"; };
+		D5EE1B5722DEEFBF00A901EC /* R.UITest.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.UITest.generated.swift; sourceTree = "<group>"; };
 		D5F05D3E1BB3CDF3003AE55E /* The App Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "The App Icon.png"; sourceTree = "<group>"; };
 		D5F05D411BB52002003AE55E /* Some.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Some.json; sourceTree = "<group>"; };
 		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
@@ -429,6 +432,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
+				D5EE1B5722DEEFBF00A901EC /* R.UITest.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
 				D55C6CD21B5D757300301B0D /* ResourceAppTests */,
 				DEF559981CA4873D009B8C51 /* ResourceApp-tvOS */,
@@ -485,6 +489,7 @@
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
+				D5EE1B5522DEEF3E00A901EC /* TabBarItem.storyboard */,
 				D5F05D401BB51FEA003AE55E /* Files */,
 				D5E513B41B8E10F90035ECAA /* Fonts */,
 				D51E60BF1BB13612004BB376 /* Images */,
@@ -828,6 +833,7 @@
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,
+				D5EE1B5622DEEF3E00A901EC /* TabBarItem.storyboard in Resources */,
 				E29693581CAD64B500401D53 /* __FILE__ in Resources */,
 				A3D0897420CF6FDA007ED462 /* Keep.dont.ignoreme.png in Resources */,
 				A3D0897620CF6FE4007ED462 /* ExplicitInclude.ignoreme.png in Resources */,
@@ -1065,10 +1071,11 @@
 			name = R.swift;
 			outputPaths = (
 				"$(SRCROOT)/R.generated.swift",
+				"$(SRCROOT)/R.UITest.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"--import\" \"SWRevealViewController\" \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;

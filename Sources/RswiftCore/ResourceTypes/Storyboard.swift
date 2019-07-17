@@ -180,6 +180,11 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
+    case "userDefinedRuntimeAttribute":
+      if let accessibilityIdentifier = attributeDict["value"], "accessibilityIdentifier" == attributeDict["keyPath"] && "string" == attributeDict["type"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
+      }
+
     case "viewControllerPlaceholder":
       if let id = attributeDict["id"] , attributeDict["sceneMemberID"] == "viewController" {
         let placeholder = Storyboard.ViewControllerPlaceholder(

@@ -2,7 +2,7 @@
 xcuserdata
 *.xccheckout
 ResourceApp/rswift
-R.generated.swift
+*.generated.swift
 ResourceApp/rswift.log
 ResourceApp/rswift-tv.log
 ResourceApp/rswift-watchos.log
