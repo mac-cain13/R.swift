@@ -1,3 +1,7 @@
+## 5.1.0.alpha.3
+
+- Support for accessibilityIdentifiers in userDefinedRuntimeAttributes
+
 ## 5.1.0.alpha.2
 
 - Add generateUITestFile option
