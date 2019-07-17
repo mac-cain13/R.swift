@@ -1,3 +1,7 @@
+## 5.1.0.alpha.4
+
+- Also generate a11y identifiers for app generated file
+
 ## 5.1.0.alpha.3
 
 - Support for accessibilityIdentifiers in userDefinedRuntimeAttributes
