@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/kylef/Commander.git",
         "state": {
           "branch": null,
-          "revision": "e5b50ad7b2e91eeb828393e89b03577b16be7db9",
-          "version": "0.8.0"
+          "revision": "dc97e80a1cf5df6c5768528f039c65ad8c564712",
+          "version": "0.9.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
         "state": {
           "branch": null,
-          "revision": "1af368143ca4843136df5b3945f2cc3c49b980e0",
-          "version": "2.7.1"
+          "revision": "7da909d01bb34e8d3dccc48bb62558cf05db50c8",
+          "version": "2.7.2"
         }
       }
     ]
