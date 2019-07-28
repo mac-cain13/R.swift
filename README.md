@@ -104,9 +104,32 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPha
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
 ### [Mint](https://github.com/yonaskolb/mint)
-```
-$ mint install mac-cain13/R.swift
-```
+
+#### First, Install `R.Swift` Binary and Run Script Phase
+
+1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
+2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
+   ```
+   if mint list | grep -q 'R.swift'; then
+     mint run R.swift rswift generate "$SRCROOT/R.generated.swift"
+   else
+     echo "error: R.swift not installed; run 'mint bootstrap' to install"
+     return -1
+   fi
+   ```
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+#### Second, Install `R.Swift.Library` via the Swift Package Manager (requires Xcode 11)
+
+If you see a build error `No such module 'Rswift'` when trying to `#import Rswift` at the top of the `R.generated.swift` file, then you will also need to install the *library* via the Swift Package Manager available in Xcode 11+.
+
+Head over to the [R.Swift.Library](https://github.com/mac-cain13/R.swift.Library) repo and follow the [Swift Package Manager installation instructions](https://github.com/mac-cain13/R.swift.Library#swift-package-manager-requires-xcode-11).
 
 ### Manually
 
