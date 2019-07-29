@@ -16,3 +16,4 @@ rswift.xcodeproj
 .build
 build
 DerivedData
+.swiftpm
