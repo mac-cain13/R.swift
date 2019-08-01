@@ -118,8 +118,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             os: []
           )
 
-        case let dicts as [[String: Any]] where key == "UIApplicationShortcutItems":
-          return applicationShortcutItems(key: key, dicts: dicts, at: externalAccessLevel)
+        case let dicts as [[String: Any]] where arrayOfDictionariesPrimaryKeys.keys.contains(key):
+          return structForArrayOfDictionaries(key: key, dicts: dicts, at: externalAccessLevel)
 
         default:
           return nil
@@ -127,11 +127,28 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
     }
   }
 
-  private func applicationShortcutItems(key: String, dicts: [[String: Any]], at externalAccessLevel: AccessLevel) -> Struct {
+  // For arrays of dictionaries we need a primary key.
+  // This key will be used as a name for the struct in the generated code.
+  private let arrayOfDictionariesPrimaryKeys: [String: String] = [
+    "UIWindowSceneSessionRoleExternalDisplay": "UISceneConfigurationName",
+    "UIWindowSceneSessionRoleApplication": "UISceneConfigurationName",
+    "UIApplicationShortcutItems": "UIApplicationShortcutItemType",
+    "CFBundleDocumentTypes": "CFBundleTypeName",
+    "CFBundleURLTypes": "CFBundleURLName"
+  ]
+
+  private func structForArrayOfDictionaries(key: String, dicts: [[String: Any]], at externalAccessLevel: AccessLevel) -> Struct {
     let kvs = dicts.compactMap { dict -> (String, [String: Any])? in
-      guard let type = dict["UIApplicationShortcutItemType"] as? String else { return nil }
-      return (type, dict)
+      if
+        let primaryKey = arrayOfDictionariesPrimaryKeys[key],
+        let type = dict[primaryKey] as? String
+      {
+        return (type, dict)
+      }
+
+      return nil
     }
+
     let contents = Dictionary(kvs, uniquingKeysWith: { (l, _) in l })
     return Struct(
       availables: [],
