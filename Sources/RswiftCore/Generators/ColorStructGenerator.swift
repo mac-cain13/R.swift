@@ -59,7 +59,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       properties: colorLets,
       functions: groupedColors.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -84,7 +85,8 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }
@@ -133,7 +135,8 @@ private extension NamespacedAssetSubfolder {
       properties: colorLets,
       functions: groupedFunctions.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -158,7 +161,8 @@ private extension NamespacedAssetSubfolder {
       ],
       doesThrow: false,
       returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }

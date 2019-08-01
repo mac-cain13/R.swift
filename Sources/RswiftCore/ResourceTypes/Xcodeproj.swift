@@ -31,7 +31,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
         projectFile = try XCProjectFile(xcodeprojURL: url)
       }
       catch let error as ProjectFileError {
-        warn(error.description)
+        warn(error.localizedDescription)
 
         projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
       }

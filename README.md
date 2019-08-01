@@ -13,7 +13,7 @@ Currently you type:
 ```swift
 let icon = UIImage(named: "settings-icon")
 let font = UIFont(name: "San Francisco", size: 42)
-let color = UIColor(named: "indictator highlight")
+let color = UIColor(named: "indicator highlight")
 let viewController = CustomViewController(nibName: "CustomView", bundle: nil)
 let string = String(format: NSLocalizedString("welcome.withName", comment: ""), locale: NSLocale.current, "Arthur Dent")
 ```
@@ -88,24 +88,48 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 _Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
 
-> ### ⚠️ Change between R.swift 3 and R.swift 4
-> Be aware:  
-> For R.swift 3.x and below, the `rswift` executable should be called with only one argument: `rswift $SRCROOT`  
-> For R.swift 4, the `rswift` executable should be called with two arguments: `rswift generate $SRCROOT`
-
 ### CocoaPods (recommended)
-
-_There is also a [short video](https://vimeo.com/122888912) of this instruction._
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:  
    ```
-   "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT"
+   "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
    ```
-4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+### [Mint](https://github.com/yonaskolb/mint)
+
+#### First, Install `R.Swift` Binary and Run Script Phase
+
+1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
+2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
+   ```
+   if mint list | grep -q 'R.swift'; then
+     mint run R.swift rswift generate "$SRCROOT/R.generated.swift"
+   else
+     echo "error: R.swift not installed; run 'mint bootstrap' to install"
+     return -1
+   fi
+   ```
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+#### Second, Install `R.Swift.Library` via the Swift Package Manager (requires Xcode 11)
+
+If you see a build error `No such module 'Rswift'` when trying to `#import Rswift` at the top of the `R.generated.swift` file, then you will also need to install the *library* via the Swift Package Manager available in Xcode 11+.
+
+Head over to the [R.Swift.Library](https://github.com/mac-cain13/R.swift.Library) repo and follow the [Swift Package Manager installation instructions](https://github.com/mac-cain13/R.swift.Library#swift-package-manager-requires-xcode-11).
 
 ### Manually
 
@@ -114,18 +138,21 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
    ```
-   "$SRCROOT/rswift" generate "$SRCROOT"
+   "$SRCROOT/rswift" generate "$SRCROOT/R.generated.swift"
    ```
-4. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
 ### Building from source
 
-R.swift is build using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
+R.swift is built using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
 
 1. Check out the code
-2. Run `swift build -c release -Xswiftc -static-stdlib` from the root directory
+2. Run `swift build -c release` from the root directory
 3. Follow the manual installation steps with the binary you now have
 
 For developing on R.swift in Xcode, run `swift package generate-xcodeproj --xcconfig-overrides RswiftConfig.xcconfig`.

@@ -12,6 +12,7 @@ import XcodeEdit
 
 public struct CallInformation {
   let outputURL: URL
+  let uiTestOutputURL: URL?
   let rswiftIgnoreURL: URL
 
   let accessLevel: AccessLevel
@@ -22,14 +23,19 @@ public struct CallInformation {
   let bundleIdentifier: String
   let productModuleName: String
 
-  private let buildProductsDirURL: URL
-  private let developerDirURL: URL
-  private let sourceRootURL: URL
-  private let sdkRootURL: URL
-  private let platformDirURL: URL
+  let scriptInputFiles: [String]
+  let scriptOutputFiles: [String]
+  let lastRunURL: URL
+
+  let buildProductsDirURL: URL
+  let developerDirURL: URL
+  let sourceRootURL: URL
+  let sdkRootURL: URL
+  let platformURL: URL
 
   public init(
     outputURL: URL,
+    uiTestOutputURL: URL?,
     rswiftIgnoreURL: URL,
 
     accessLevel: AccessLevel,
@@ -40,13 +46,18 @@ public struct CallInformation {
     bundleIdentifier: String,
     productModuleName: String,
 
+    scriptInputFiles: [String],
+    scriptOutputFiles: [String],
+    lastRunURL: URL,
+
     buildProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
     sdkRootURL: URL,
-    platformDirURL: URL
+    platformURL: URL
   ) {
     self.outputURL = outputURL
+    self.uiTestOutputURL = uiTestOutputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
 
     self.accessLevel = accessLevel
@@ -57,11 +68,15 @@ public struct CallInformation {
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName
 
+    self.scriptInputFiles = scriptInputFiles
+    self.scriptOutputFiles = scriptOutputFiles
+    self.lastRunURL = lastRunURL
+
     self.buildProductsDirURL = buildProductsDirURL
     self.developerDirURL = developerDirURL
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
-    self.platformDirURL = platformDirURL
+    self.platformURL = platformURL
   }
 
 
@@ -76,7 +91,7 @@ public struct CallInformation {
     case .sourceRoot:
       return sourceRootURL
     case .platformDir:
-      return platformDirURL
+      return platformURL
     }
   }
 }

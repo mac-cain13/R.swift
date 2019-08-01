@@ -16,9 +16,8 @@ class GlobTests : XCTestCase {
   
   override func setUp() {
     super.setUp()
-    
-    var tmpDirTmpl = "/tmp/glob-test.XXXXX".cString(using: .utf8)!
-    self.tmpDir = String(validatingUTF8: mkdtemp(&tmpDirTmpl))!
+
+    self.tmpDir = newTmpDir()
     
     let flags = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH
     mkdir("\(tmpDir)/dir1/", flags)
@@ -40,6 +39,11 @@ class GlobTests : XCTestCase {
     rmdir(self.tmpDir)
     
     super.tearDown()
+  }
+
+  private func newTmpDir() -> String {
+    var tmpDirTmpl = "/tmp/glob-test.XXXXX".cString(using: .utf8)!
+    return String(validatingUTF8: mkdtemp(&tmpDirTmpl))!
   }
   
   func testBraces() {
@@ -258,6 +262,18 @@ class GlobTests : XCTestCase {
     let glob = Glob(pattern: pattern, behavior: GlobBehaviorGradle)
     XCTAssertEqual(glob.paths, [
       "\(tmpDir)/dir1/dir2/dir3/file2.ext",
+      ])
+  }
+
+  func testBlacklistedDirectories() {
+    let pattern = "\(tmpDir)/**/*"
+
+    let glob = Glob(pattern: pattern, behavior: GlobBehaviorGradle, blacklistedDirectories: ["dir1"])
+
+    XCTAssertEqual(glob.paths, [
+      "\(tmpDir)/bar",
+      "\(tmpDir)/baz",
+      "\(tmpDir)/foo",
       ])
   }
 }

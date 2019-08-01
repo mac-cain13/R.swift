@@ -58,16 +58,26 @@ public class Glob: Collection {
 
   public static var defaultBehavior = GlobBehaviorBashV4
 
+  public static let defaultBlacklistedDirectories = ["node_modules", "Pods"]
+
   private var isDirectoryCache = [String: Bool]()
 
   public let behavior: Behavior
+  public let blacklistedDirectories: [String]
   var paths = [String]()
   public var startIndex: Int { return paths.startIndex }
   public var endIndex: Int   { return paths.endIndex   }
 
-  public init(pattern: String, behavior: Behavior = Glob.defaultBehavior) {
+  /// Initialize a glob
+  ///
+  /// - Parameters:
+  ///   - pattern: The pattern to use when building the list of matching directories.
+  ///   - behavior: See individual descriptions on `Glob.Behavior` values.
+  ///   - blacklistedDirectories: An array of directories to ignore at the root level of the project.
+  public init(pattern: String, behavior: Behavior = Glob.defaultBehavior, blacklistedDirectories: [String] = defaultBlacklistedDirectories) {
 
     self.behavior = behavior
+    self.blacklistedDirectories = blacklistedDirectories
 
     var adjustedPattern = pattern
     let hasTrailingGlobstarSlash = pattern.hasSuffix("**/")
@@ -134,15 +144,22 @@ public class Glob: Collection {
     var directories: [String]
 
     do {
-      directories = try fileManager.subpathsOfDirectory(atPath: firstPart).compactMap { subpath in
-        let fullPath = NSString(string: firstPart).appendingPathComponent(subpath)
-        var isDirectory = ObjCBool(false)
-        if fileManager.fileExists(atPath: fullPath, isDirectory: &isDirectory) && isDirectory.boolValue {
-          return fullPath
+      directories = try fileManager.contentsOfDirectory(atPath: firstPart).compactMap { subpath -> [String]? in
+        if blacklistedDirectories.contains(subpath) {
+          return nil
+        }
+        let firstLevelPath = NSString(string: firstPart).appendingPathComponent(subpath)
+        if isDirectory(path: firstLevelPath) {
+          var subDirs: [String] = try fileManager.subpathsOfDirectory(atPath: firstLevelPath).compactMap { subpath -> String? in
+            let fullPath = NSString(string: firstLevelPath).appendingPathComponent(subpath)
+            return isDirectory(path: fullPath) ? fullPath : nil
+          }
+          subDirs.append(firstLevelPath)
+          return subDirs
         } else {
           return nil
         }
-      }
+      }.joined().array()
     } catch {
       directories = []
       print("Error parsing file system item: \(error)")
@@ -170,16 +187,15 @@ public class Glob: Collection {
   }
 
   private func isDirectory(path: String) -> Bool {
-    var isDirectory = isDirectoryCache[path]
-    if let isDirectory = isDirectory {
+    if let isDirectory = isDirectoryCache[path] {
       return isDirectory
     }
 
     var isDirectoryBool = ObjCBool(false)
-    isDirectory = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
-    isDirectoryCache[path] = isDirectory!
+    let isDirectory = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectoryBool) && isDirectoryBool.boolValue
+    isDirectoryCache[path] = isDirectory
 
-    return isDirectory!
+    return isDirectory
   }
 
   private func clearCaches() {

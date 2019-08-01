@@ -11,8 +11,13 @@ import Foundation
 import XcodeEdit
 
 public struct RswiftCore {
+  private let callInformation: CallInformation
 
-  static public func run(_ callInformation: CallInformation) throws {
+  public init(_ callInformation: CallInformation) {
+    self.callInformation = callInformation
+  }
+
+  public func run() throws {
     do {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
@@ -32,7 +37,8 @@ public struct RswiftCore {
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
-      let generators: [StructGenerator] = [
+      // Generate regular R file
+      let fileContents = generateRegularFileContents(resources: resources, generators: [
         PropertyListGenerator(name: "info", plists: infoPlists),
         PropertyListGenerator(name: "entitlements", plists: entitlements),
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
@@ -44,40 +50,16 @@ public struct RswiftCore {
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
         StringsStructGenerator(localizableStrings: resources.localizableStrings),
-      ]
+        AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards),
+      ])
+      writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)
 
-      let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
-        .generatedStructs(at: callInformation.accessLevel, prefix: "")
-
-      let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
-        .generatedStructs(at: callInformation.accessLevel, prefix: "")
-
-      let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
-
-      let codeConvertibles: [SwiftCodeConverible?] = [
-          HeaderPrinter(),
-          ImportPrinter(
-            modules: callInformation.imports,
-            extractFrom: [externalStruct, internalStruct],
-            exclude: [Module.custom(name: callInformation.productModuleName)]
-          ),
-          externalStruct,
-          internalStruct
-        ]
-
-      let fileContents = codeConvertibles
-        .compactMap { $0?.swiftCode }
-        .joined(separator: "\n\n")
-        + "\n" // Newline at end of file
-
-      // Write file if we have changes
-      let currentFileContents = try? String(contentsOf: callInformation.outputURL, encoding: .utf8)
-      if currentFileContents != fileContents  {
-        do {
-          try fileContents.write(to: callInformation.outputURL, atomically: true, encoding: .utf8)
-        } catch {
-          fail(error.localizedDescription)
-        }
+      // Generate UITest R file
+      if let uiTestOutputURL = callInformation.uiTestOutputURL {
+        let uiTestFileContents = generateUITestFileContents(resources: resources, generators: [
+          AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards)
+        ])
+        writeIfChanged(contents: uiTestFileContents, toURL: uiTestOutputURL)
       }
 
     } catch let error as ResourceParsingError {
@@ -90,21 +72,72 @@ public struct RswiftCore {
         fail("File extension '\(String(describing: givenExtension))' is not one of the supported extensions: \(joinedSupportedExtensions)")
       }
 
-      exit(3)
+      exit(EXIT_FAILURE)
     }
   }
 
-  private static func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
-    guard let path = path else { return nil }
-    do {
-      let url = path.url(with: callInformation.urlForSourceTreeFolder)
-      return try PropertyList(buildConfigurationName: name, url: url)
-    } catch let ResourceParsingError.parsingFailed(humanReadableError) {
-      warn(humanReadableError)
-      return nil
-    }
-    catch {
-      return nil
-    }
+  private func generateRegularFileContents(resources: Resources, generators: [StructGenerator]) -> String {
+    let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
+
+    let codeConvertibles: [SwiftCodeConverible?] = [
+      HeaderPrinter(),
+      ImportPrinter(
+        modules: callInformation.imports,
+        extractFrom: [externalStruct, internalStruct],
+        exclude: [Module.custom(name: callInformation.productModuleName)]
+      ),
+      externalStruct,
+      internalStruct
+    ]
+
+    return codeConvertibles
+      .compactMap { $0?.swiftCode }
+      .joined(separator: "\n\n")
+      + "\n" // Newline at end of file
+  }
+
+  private func generateUITestFileContents(resources: Resources, generators: [StructGenerator]) -> String {
+    let (externalStruct, _) =  AggregatedStructGenerator(subgenerators: generators)
+      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+
+    let codeConvertibles: [SwiftCodeConverible?] = [
+      HeaderPrinter(),
+      externalStruct
+    ]
+
+    return codeConvertibles
+      .compactMap { $0?.swiftCode }
+      .joined(separator: "\n\n")
+      + "\n" // Newline at end of file
+  }
+}
+
+private func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
+  guard let path = path else { return nil }
+  do {
+    let url = path.url(with: callInformation.urlForSourceTreeFolder)
+    return try PropertyList(buildConfigurationName: name, url: url)
+  } catch let ResourceParsingError.parsingFailed(humanReadableError) {
+    warn(humanReadableError)
+    return nil
+  }
+  catch {
+    return nil
+  }
+}
+
+private func writeIfChanged(contents: String, toURL outputURL: URL) {
+  let currentFileContents = try? String(contentsOf: outputURL, encoding: .utf8)
+  guard currentFileContents != contents else { return }
+  do {
+    try contents.write(to: outputURL, atomically: true, encoding: .utf8)
+  } catch {
+    fail(error.localizedDescription)
   }
 }

@@ -25,6 +25,7 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let reusables: [Reusable]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
+  let usedAccessibilityIdentifiers: [String]
 
   init(url: URL) throws {
     try Nib.throwIfUnsupportedExtension(url.pathExtension)
@@ -49,25 +50,31 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
     reusables = parserDelegate.reusables
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
+    usedAccessibilityIdentifiers = parserDelegate.usedAccessibilityIdentifiers
   }
 }
 
-private class NibParserDelegate: NSObject, XMLParserDelegate {
+internal class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
   var usedImageIdentifiers: [String] = []
   var usedColorReferences: [String] = []
+  var usedAccessibilityIdentifiers: [String] = []
 
   // State
   var isObjectsTagOpened = false;
   var levelSinceObjectsTagOpened = 0;
 
   @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-    switch elementName {
-    case "objects":
+    if isObjectsTagOpened {
+      levelSinceObjectsTagOpened += 1
+    }
+    if elementName == "objects" {
       isObjectsTagOpened = true
-
+    }
+    
+    switch elementName {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
         usedImageIdentifiers.append(imageIdentifier)
@@ -78,16 +85,21 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         usedColorReferences.append(colorName)
       }
 
-    default:
-      if isObjectsTagOpened {
-        levelSinceObjectsTagOpened += 1;
-
-        if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
-           levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.filter({ $0 == elementName }).count == 0 {
-            rootViews.append(rootView)
-        }
+    case "accessibility":
+      if let accessibilityIdentifier = attributeDict["identifier"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
+    case "userDefinedRuntimeAttribute":
+      if let accessibilityIdentifier = attributeDict["value"], "accessibilityIdentifier" == attributeDict["keyPath"] && "string" == attributeDict["type"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
+      }
+
+    default:
+      if let rootView = viewWithAttributes(attributeDict, elementName: elementName),
+        levelSinceObjectsTagOpened == 1 && ignoredRootViewElements.allSatisfy({ $0 != elementName }) {
+        rootViews.append(rootView)
+      }
       if let reusable = reusableFromAttributes(attributeDict, elementName: elementName) {
         reusables.append(reusable)
       }
@@ -101,7 +113,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
 
     default:
       if isObjectsTagOpened {
-        levelSinceObjectsTagOpened -= 1;
+        levelSinceObjectsTagOpened -= 1
       }
     }
   }

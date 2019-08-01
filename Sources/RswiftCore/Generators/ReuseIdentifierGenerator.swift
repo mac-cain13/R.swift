@@ -41,7 +41,8 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
       properties: reuseIdentifierProperties,
       functions: [],
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 

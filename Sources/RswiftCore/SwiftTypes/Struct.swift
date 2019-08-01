@@ -20,6 +20,7 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
   var functions: [Function]
   var structs: [Struct]
   var classes: [Class]
+  let os: [String]
 
   var isEmpty: Bool {
     return properties.isEmpty
@@ -82,7 +83,7 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
     let bodyComponents = [typealiasString, varsString, functionsString, structsString, classesString, fileprivateInit].filter { $0 != "" }
     let bodyString = bodyComponents.joined(separator: "\n\n").indent(with: "  ")
 
-    return "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}"
+    return OSPrinter(code: "\(commentsString)\(availablesString)\(accessModifierString)struct \(type)\(implementsString) {\n\(bodyString)\n}", supportedOS: os).swiftCode
   }
 
   static var empty: Struct {
@@ -96,7 +97,8 @@ struct Struct: UsedTypesProvider, SwiftCodeConverible {
       properties: [],
       functions: [],
       structs: [],
-      classes: []
+      classes: [],
+      os: []
     )
   }
 }

@@ -29,6 +29,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   private let initialViewControllerIdentifier: String?
   let viewControllers: [ViewController]
   let viewControllerPlaceholders: [ViewControllerPlaceholder]
+  let usedAccessibilityIdentifiers: [String]
   let usedImageIdentifiers: [String]
   let usedColorResources: [String]
   let reusables: [Reusable]
@@ -61,6 +62,7 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
     initialViewControllerIdentifier = parserDelegate.initialViewControllerIdentifier
     viewControllers = parserDelegate.viewControllers
     viewControllerPlaceholders = parserDelegate.viewControllerPlaceholders
+    usedAccessibilityIdentifiers = parserDelegate.usedAccessibilityIdentifiers
     usedImageIdentifiers = parserDelegate.usedImageIdentifiers
     usedColorResources = parserDelegate.usedColorReferences
     reusables = parserDelegate.reusables
@@ -128,6 +130,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
   var usedImageIdentifiers: [String] = []
   var usedColorReferences: [String] = []
+  var usedAccessibilityIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
   // State
@@ -148,7 +151,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         .map { SwiftIdentifier(name: $0, lowercaseStartingCharacters: false) }
         .map { Type(module: Module(name: customModule), name: $0, optional: false) }
 
-      if let customType = customType , attributeDict["kind"] != "custom" {
+      if let customType = customType , attributeDict["kind"] != "custom" , attributeDict["kind"] != "unwind" {
         warn("Set the segue of class \(customType) with identifier '\(attributeDict["identifier"] ?? "-no identifier-")' to type custom, using segue subclasses with other types can cause crashes on iOS 8 and lower.")
       }
 
@@ -170,6 +173,16 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     case "color":
       if let colorName = attributeDict["name"] {
         usedColorReferences.append(colorName)
+      }
+
+    case "accessibility":
+      if let accessibilityIdentifier = attributeDict["identifier"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
+      }
+
+    case "userDefinedRuntimeAttribute":
+      if let accessibilityIdentifier = attributeDict["value"], "accessibilityIdentifier" == attributeDict["keyPath"] && "string" == attributeDict["type"] {
+        usedAccessibilityIdentifiers.append(accessibilityIdentifier)
       }
 
     case "viewControllerPlaceholder":

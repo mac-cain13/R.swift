@@ -12,7 +12,6 @@ import Commander
 import RswiftCore
 import XcodeEdit
 
-
 // Argument convertibles
 extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
   public init(parser: ArgumentParser) throws {
@@ -27,12 +26,9 @@ extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
   }
 }
 
-
 extension ProcessInfo {
-  func value(from current: String, name: String, key: String) throws -> String {
-    if current != key { return current }
-    guard let value = self.environment[key] else { throw ArgumentError.missingValue(argument: name) }
-
+  func environmentVariable(name: String) throws -> String {
+    guard let value = self.environment[name] else { throw ArgumentError.missingValue(argument: name) }
     return value
   }
 }
@@ -44,76 +40,78 @@ struct CommanderFlags {
 
 // Default values for non-optional Commander Options
 struct EnvironmentKeys {
-  static let xcodeproj = "PROJECT_FILE_PATH"
-  static let target = "TARGET_NAME"
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
+  static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
+  static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
+  static let target = "TARGET_NAME"
+  static let tempDir = "TEMP_DIR"
+  static let xcodeproj = "PROJECT_FILE_PATH"
+
   static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
-  static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
-  static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
   static let platformDir = SourceTreeFolder.platformDir.rawValue
+  static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
+  static let sourceRoot = SourceTreeFolder.sourceRoot.rawValue
+
+  static func scriptInputFile(number: Int) -> String {
+    return "SCRIPT_INPUT_FILE_\(number)"
+  }
+
+  static func scriptOutputFile(number: Int) -> String {
+    return "SCRIPT_OUTPUT_FILE_\(number)"
+  }
 }
 
 // Options grouped in struct for readability
 struct CommanderOptions {
-  static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated.")
-  static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file.")
-  static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored.")
-
-  static let xcodeproj = Option("xcodeproj", default: EnvironmentKeys.xcodeproj, flag: "p", description: "Path to the xcodeproj file.")
-  static let target = Option("target", default: EnvironmentKeys.target, flag: "t", description: "Target the R-file should be generated for.")
-
-  static let bundleIdentifier = Option("bundleIdentifier", default: EnvironmentKeys.bundleIdentifier, description: "Bundle identifier the R-file is be generated for.")
-  static let productModuleName = Option("productModuleName", default: EnvironmentKeys.productModuleName, description: "Product module name the R-file is generated for.")
-  static let buildProductsDir = Option("buildProductsDir", default: EnvironmentKeys.buildProductsDir, description: "Build products folder that Xcode uses during build.")
-  static let developerDir = Option("developerDir", default: EnvironmentKeys.developerDir, description: "Developer folder that Xcode uses during build.")
-  static let sourceRoot = Option("sourceRoot", default: EnvironmentKeys.sourceRoot, description: "Source root folder that Xcode uses during build.")
-  static let platformDir = Option("platformDir", default: EnvironmentKeys.sourceRoot, description: "Platform folder that Xcode uses during build.")
-  static let sdkRoot = Option("sdkRoot", default: EnvironmentKeys.sdkRoot, description: "SDK root folder that Xcode uses during build.")
+  static let uiTest = Option("generateUITestFile", default: "", description: "Output path for an extra generated file that contains resources commonly used in UI tests such as accessibility identifiers")
+  static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
+  static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
+  static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
+  static let inputOutputFilesValidation = Flag("input-output-files-validation", default: true, flag: nil, disabledName: "disable-input-output-files-validation", disabledFlag: nil, description: "Validate input and output files configured in a build phase")
 }
-
 
 // Options grouped in struct for readability
 struct CommanderArguments {
-  static let outputDir = Argument<String>("outputDir", description: "Output directory for the 'R.generated.swift' file.")
+  static let outputPath = Argument<String>("outputPath", description: "Output path for the generated file")
 }
 
 let generate = command(
-
+  CommanderOptions.uiTest,
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.inputOutputFilesValidation,
 
-  CommanderOptions.xcodeproj,
-  CommanderOptions.target,
+  CommanderArguments.outputPath
+) { uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
 
-  CommanderOptions.bundleIdentifier,
-  CommanderOptions.productModuleName,
-  CommanderOptions.buildProductsDir,
-  CommanderOptions.developerDir,
-  CommanderOptions.sourceRoot,
-  CommanderOptions.sdkRoot,
-  CommanderOptions.platformDir,
+  let processInfo = ProcessInfo()
 
-  CommanderArguments.outputDir
-) { importModules, accessLevel, rswiftIgnore, xcodeproj, target, bundle, productModule, buildProductsDir, developerDir, sourceRoot, sdkRoot, platformDir, outputDir in
+  // Touch last run file
+  do {
+    let tempDirPath = try ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
+    let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent(Rswift.lastRunFile)
+    try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
+  } catch {
+    warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
+  }
 
-  let info = ProcessInfo()
+  let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+  let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
+  let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
+  let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
 
-  let xcodeprojPath = try info.value(from: xcodeproj, name: "xcodeproj", key: EnvironmentKeys.xcodeproj)
-  let targetName = try info.value(from: target, name: "target", key: EnvironmentKeys.target)
-  let bundleIdentifier = try info.value(from: bundle, name: "bundleIdentifier", key: EnvironmentKeys.bundleIdentifier)
-  let productModuleName = try info.value(from: productModule, name: "productModuleName", key: EnvironmentKeys.productModuleName)
+  let buildProductsDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.buildProductsDir)
+  let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
+  let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
+  let sdkRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
+  let tempDir = try processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
+  let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
-  let buildProductsDirPath = try info.value(from: buildProductsDir, name: "buildProductsDir", key: EnvironmentKeys.buildProductsDir)
-  let developerDirPath = try info.value(from: developerDir, name: "developerDir", key: EnvironmentKeys.developerDir)
-  let sourceRootPath = try info.value(from: sourceRoot, name: "sourceRoot", key: EnvironmentKeys.sourceRoot)
-  let sdkRootPath = try info.value(from: sdkRoot, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
-  let platformDir = try info.value(from: platformDir, name: "sdkRoot", key: EnvironmentKeys.sdkRoot)
-
-
-  let outputURL = URL(fileURLWithPath: outputDir).appendingPathComponent(Rswift.resourceFileName, isDirectory: false)
+  let outputURL = URL(fileURLWithPath: outputPath)
+  let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
   let modules = importModules
     .components(separatedBy: ",")
@@ -121,9 +119,49 @@ let generate = command(
     .filter { !$0.isEmpty }
     .map { Module.custom(name: $0) }
 
+  let lastRunURL = URL(fileURLWithPath: tempDir).appendingPathComponent(Rswift.lastRunFile)
+
+  let scriptInputFileCountString = try processInfo.environmentVariable(name: EnvironmentKeys.scriptInputFileCount)
+  guard let scriptInputFileCount = Int(scriptInputFileCountString) else {
+    throw ArgumentError.invalidType(value: scriptInputFileCountString, type: "Int", argument: EnvironmentKeys.scriptInputFileCount)
+  }
+  let scriptInputFiles = try (0..<scriptInputFileCount)
+    .map(EnvironmentKeys.scriptInputFile)
+    .map(processInfo.environmentVariable)
+
+  let scriptOutputFileCountString = try processInfo.environmentVariable(name: EnvironmentKeys.scriptOutputFileCount)
+  guard let scriptOutputFileCount = Int(scriptOutputFileCountString) else {
+    throw ArgumentError.invalidType(value: scriptOutputFileCountString, type: "Int", argument: EnvironmentKeys.scriptOutputFileCount)
+  }
+  let scriptOutputFiles = try (0..<scriptOutputFileCount)
+    .map(EnvironmentKeys.scriptOutputFile)
+    .map(processInfo.environmentVariable)
+
+  if inputOutputFilesValidation {
+
+    let errors = validateRswiftEnvironment(
+      outputURL: outputURL,
+      uiTestOutputURL: uiTestOutputURL,
+      sourceRootPath: sourceRootPath,
+      scriptInputFiles: scriptInputFiles,
+      scriptOutputFiles: scriptOutputFiles,
+      lastRunURL: lastRunURL,
+      podsRoot: processInfo.environment["PODS_ROOT"],
+      podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
+      commandLineArguments: CommandLine.arguments)
+
+    guard errors.isEmpty else {
+      for error in errors {
+        fail(error)
+      }
+      warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
+      exit(EXIT_FAILURE)
+    }
+  }
 
   let callInformation = CallInformation(
     outputURL: outputURL,
+    uiTestOutputURL: uiTestOutputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
 
     accessLevel: accessLevel,
@@ -134,38 +172,21 @@ let generate = command(
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
 
+    scriptInputFiles: scriptInputFiles,
+    scriptOutputFiles: scriptOutputFiles,
+    lastRunURL: lastRunURL,
+
     buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
     sdkRootURL: URL(fileURLWithPath: sdkRootPath),
-    platformDirURL: URL(fileURLWithPath: platformDir)
+    platformURL: URL(fileURLWithPath: platformPath)
   )
 
-  try RswiftCore.run(callInformation)
-
+  try RswiftCore(callInformation).run()
 }
 
-// Temporary warning message during migration to R.swift 4
-let parser = ArgumentParser(arguments: CommandLine.arguments)
-_ = parser.shift()
-let exception = parser.hasOption("version") || parser.hasOption("help")
-
-if !exception && parser.shift() != "generate" {
-  var arguments = CommandLine.arguments
-  arguments.insert("generate", at: 1)
-  let command = arguments
-    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
-    .joined(separator: " ")
-
-  let message = "error: R.swift 4 requires \"generate\" command as first argument to the executable.\n"
-    + "Change your call to something similar to this:\n\n"
-    + "\(command)"
-    + "\n"
-
-  fputs("\(message)\n", stderr)
-  exit(EXIT_FAILURE)
-}
-
+// Start parsing the launch arguments
 let group = Group()
 group.addCommand("generate", "Generates R.generated.swift file", generate)
 group.run(Rswift.version)

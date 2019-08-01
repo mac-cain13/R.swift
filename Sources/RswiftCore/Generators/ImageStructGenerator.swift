@@ -68,7 +68,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       properties: imageLets,
       functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -93,7 +94,8 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }
@@ -142,7 +144,8 @@ private extension NamespacedAssetSubfolder {
       properties: imageLets,
       functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -167,7 +170,8 @@ private extension NamespacedAssetSubfolder {
       ],
       doesThrow: false,
       returnType: Type._UIImage.asOptional(),
-      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)"
+      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)",
+      os: ["iOS", "tvOS"]
     )
   }
 }

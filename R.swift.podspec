@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "R.swift"
-  spec.version      = "5.0.0.alpha.1"
+  spec.version      = "5.1.0.alpha.4"
   spec.license      = "MIT"
 
   spec.summary      = "Get strong typed, autocompleted resources like images, fonts and segues in Swift projects"
@@ -25,8 +25,9 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target     = '8.0'
   spec.tvos.deployment_target    = '9.0'
+  spec.watchos.deployment_target = '2.2'
 
-  spec.dependency "R.swift.Library", "~> 5.0.0.alpha.1"
+  spec.dependency "R.swift.Library", "~> 5.1.0.alpha.1"
 
   spec.preserve_paths = "rswift"
 

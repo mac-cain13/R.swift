@@ -39,7 +39,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       properties: propertiesFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
       functions: [],
       structs: structsFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
-      classes: []
+      classes: [],
+      os: []
     )
   }
 
@@ -97,7 +98,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             },
             functions: [],
             structs: [],
-            classes: []
+            classes: [],
+            os: []
           )
 
         case var dict as [String: Any]:
@@ -112,7 +114,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             properties: propertiesFromInfoPlist(contents: dict, at: externalAccessLevel),
             functions: [],
             structs: structsFromInfoPlist(contents: dict, at: externalAccessLevel),
-            classes: []
+            classes: [],
+            os: []
           )
 
         case let dicts as [[String: Any]] where key == "UIApplicationShortcutItems":
@@ -140,7 +143,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       properties: [],
       functions: [],
       structs: structsFromInfoPlist(contents: contents, at: externalAccessLevel),
-      classes: []
+      classes: [],
+      os: []
     )
   }
 }
