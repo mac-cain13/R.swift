@@ -40,19 +40,19 @@ struct Resources {
         nibs.append(nib)
       } else if let image = tryResourceParsing({ try Image(url: url) }) {
         images.append(image)
-        if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
-            resourceFiles.append(resourceFile)
-        }
       } else if let asset = tryResourceParsing({ try AssetFolder(url: url, fileManager: fileManager) }) {
         assetFolders.append(asset)
       } else if let font = tryResourceParsing({ try Font(url: url) }) {
         fonts.append(font)
       } else if let storyboard = tryResourceParsing({ try Storyboard(url: url) }) {
         storyboards.append(storyboard)
-      } else if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
-        resourceFiles.append(resourceFile)
       } else if let localizableString = tryResourceParsing({ try LocalizableStrings(url: url) }) {
         localizableStrings.append(localizableString)
+      }
+
+      // All previous assets can also possibly be used as files
+      if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
+        resourceFiles.append(resourceFile)
       }
     }
     
