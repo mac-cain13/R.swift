@@ -35,10 +35,8 @@ public enum Module: ExpressibleByStringLiteral, CustomStringConvertible, Hashabl
   }
 
   public init(name: String?, fallback: Module = .host) {
-    switch name {
-    case .none: self = fallback
-    case let .some(name): self = .custom(name: name)
-    }
+    let cleaned = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    self = cleaned.isEmpty ? fallback : .custom(name: cleaned)
   }
 
   public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
