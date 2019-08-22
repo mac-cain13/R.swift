@@ -25,6 +25,8 @@ struct ImportPrinter: SwiftCodeConverible {
       .filter { $0.isCustom }
       .sorted { $0.description < $1.description }
 
+    // Note that the modules specified to the --import flag are always specified first
+    // See: https://github.com/mac-cain13/R.swift/issues/534
     var modulesToImport = modules
     modulesToImport.append(contentsOf: extractedModulesArray)
 
