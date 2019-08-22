@@ -165,7 +165,7 @@ let generate = command(
     rswiftIgnoreURL: rswiftIgnoreURL,
 
     accessLevel: accessLevel,
-    imports: Set(modules),
+    imports: modules,
 
     xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
     targetName: targetName,
