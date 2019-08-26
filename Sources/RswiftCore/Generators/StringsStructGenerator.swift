@@ -119,6 +119,24 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
+    // Warnings about extra translations
+    for (locale, lss) in strings.grouped(by: { $0.locale }) {
+      let filenameLocale = locale.withFilename(filename)
+      let sourceKeys = developmentKeys ?? Set(allParams.keys)
+
+      let usedKeys = Set(lss.flatMap { $0.dictionary.keys })
+      let extra = usedKeys.subtracting(sourceKeys)
+
+      if extra.isEmpty {
+        continue
+      }
+
+      let paddedKeys = extra.sorted().map { "'\($0)'" }
+      let paddedKeysString = paddedKeys.joined(separator: ", ")
+
+      warn("Strings file \(filenameLocale) has extra translations (not in \(developmentLanguage)) for keys: \(paddedKeysString)")
+    }
+
     // Only include translation if it exists in the development language
     func includeTranslation(_ key: String) -> Bool {
       if let developmentKeys = developmentKeys {
