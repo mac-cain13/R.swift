@@ -12,10 +12,12 @@ import Foundation
 struct PropertyListGenerator: ExternalOnlyStructGenerator {
   private let name: SwiftIdentifier
   private let plists: [PropertyList]
+  private let toplevelKeysWhitelist: [String]?
 
-  init(name: SwiftIdentifier, plists: [PropertyList]) {
+  init(name: SwiftIdentifier, plists: [PropertyList], toplevelKeysWhitelist: [String]?) {
     self.name = name
     self.plists = plists
+    self.toplevelKeysWhitelist = toplevelKeysWhitelist
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
@@ -27,18 +29,25 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       return .empty
     }
 
+    let contents: PropertyList.Contents
+    if let whitelist = toplevelKeysWhitelist {
+      contents = plist.contents.filter { (key, _) in whitelist.contains(key) }
+    } else {
+      contents = plist.contents
+    }
+
     let qualifiedName = prefix + name
 
     return Struct(
       availables: [],
-      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(plist.contents.count) properties."],
+      comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(contents.count) properties."],
       accessModifier: externalAccessLevel,
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: propertiesFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
+      properties: propertiesFromInfoPlist(contents: contents, at: externalAccessLevel),
       functions: [],
-      structs: structsFromInfoPlist(contents: plist.contents, at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: contents, at: externalAccessLevel),
       classes: [],
       os: []
     )

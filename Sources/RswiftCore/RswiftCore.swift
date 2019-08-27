@@ -36,11 +36,12 @@ public struct RswiftCore {
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UISceneConfigurations", "NSUserActivityTypes", "NSExtension"]
 
       // Generate regular R file
       let fileContents = generateRegularFileContents(resources: resources, generators: [
-        PropertyListGenerator(name: "info", plists: infoPlists),
-        PropertyListGenerator(name: "entitlements", plists: entitlements),
+        PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist),
+        PropertyListGenerator(name: "entitlements", plists: entitlements, toplevelKeysWhitelist: nil),
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),

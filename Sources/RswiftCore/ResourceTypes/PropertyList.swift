@@ -10,8 +10,10 @@
 import Foundation
 
 struct PropertyList {
+  typealias Contents = [String: Any]
+
   let buildConfigurationName: String
-  let contents: [String: Any]
+  let contents: Contents
   let url: URL
 
   init(buildConfigurationName: String, url: URL) throws {
