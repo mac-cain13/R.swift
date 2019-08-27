@@ -11,8 +11,16 @@ import Foundation
 
 enum Locale {
   case none
-  case base
+  case base // Older projects use a "Base" locale
   case language(String)
+
+  var isNone: Bool {
+    if case .none = self {
+      return true
+    }
+
+    return false
+  }
 
   var isBase: Bool {
     if case .base = self {
@@ -22,12 +30,12 @@ enum Locale {
     return false
   }
 
-  var isNone: Bool {
-    if case .none = self {
-      return true
+  var language: String? {
+    if case .language(let language) = self {
+      return language
     }
 
-    return false
+    return nil
   }
 }
 
@@ -38,8 +46,7 @@ extension Locale: Hashable {
 
       if lang == "Base" {
         self = .base
-      }
-      else {
+      } else {
         self = .language(lang)
       }
     }

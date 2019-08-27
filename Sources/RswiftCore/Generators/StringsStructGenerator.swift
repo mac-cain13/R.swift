@@ -11,9 +11,11 @@ import Foundation
 
 struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
+  private let developmentLanguage: String
 
-  init(localizableStrings: [LocalizableStrings]) {
+  init(localizableStrings: [LocalizableStrings], developmentLanguage: String) {
     self.localizableStrings = localizableStrings
+    self.developmentLanguage = developmentLanguage
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
@@ -71,13 +73,20 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private func computeParams(filename: String, strings: [LocalizableStrings]) -> [StringValues] {
 
     var allParams: [String: [(Locale, String, [StringParam])]] = [:]
-    let baseKeys: Set<String>?
+    let primaryLanguage: String
+    let primaryKeys: Set<String>?
     let bases = strings.filter { $0.locale.isBase }
-    if bases.isEmpty {
-      baseKeys = nil
-    }
-    else {
-      baseKeys = Set(bases.flatMap { $0.dictionary.keys })
+    let developments = strings.filter { $0.locale.language == developmentLanguage }
+
+    if !bases.isEmpty {
+      primaryKeys = Set(bases.flatMap { $0.dictionary.keys })
+      primaryLanguage = "Base"
+    } else if !developments.isEmpty {
+      primaryKeys = Set(developments.flatMap { $0.dictionary.keys })
+      primaryLanguage = developmentLanguage
+    } else {
+      primaryKeys = nil
+      primaryLanguage = developmentLanguage
     }
 
     // Warnings about duplicates and empties
@@ -103,7 +112,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     // Warnings about missing translations
     for (locale, lss) in strings.grouped(by: { $0.locale }) {
       let filenameLocale = locale.withFilename(filename)
-      let sourceKeys = baseKeys ?? Set(allParams.keys)
+      let sourceKeys = primaryKeys ?? Set(allParams.keys)
 
       let missing = sourceKeys.subtracting(lss.flatMap { $0.dictionary.keys })
 
@@ -117,10 +126,28 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
     }
 
-    // Only include translation if it exists in Base
+    // Warnings about extra translations
+    for (locale, lss) in strings.grouped(by: { $0.locale }) {
+      let filenameLocale = locale.withFilename(filename)
+      let sourceKeys = primaryKeys ?? Set(allParams.keys)
+
+      let usedKeys = Set(lss.flatMap { $0.dictionary.keys })
+      let extra = usedKeys.subtracting(sourceKeys)
+
+      if extra.isEmpty {
+        continue
+      }
+
+      let paddedKeys = extra.sorted().map { "'\($0)'" }
+      let paddedKeysString = paddedKeys.joined(separator: ", ")
+
+      warn("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+    }
+
+    // Only include translation if it exists in the primary language
     func includeTranslation(_ key: String) -> Bool {
-      if let baseKeys = baseKeys {
-        return baseKeys.contains(key)
+      if let primaryKeys = primaryKeys {
+        return primaryKeys.contains(key)
       }
 
       return true
@@ -164,7 +191,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       if !areCorrectFormatSpecifiers { continue }
 
       let vals = keyParams.map { ($0.0, $0.1) }
-      let values = StringValues(key: key, params: params, tableName: filename, values: vals )
+      let values = StringValues(key: key, params: params, tableName: filename, values: vals, developmentLanguage: developmentLanguage)
       results.append(values)
     }
 
@@ -273,13 +300,14 @@ private struct StringValues {
   let params: [StringParam]
   let tableName: String
   let values: [(Locale, String)]
+  let developmentLanguage: String
 
   var localizedString: String {
     let escapedKey = key.escapedStringLiteral
 
     var valueArgument: String = ""
-    if let baseValue = baseValue {
-      valueArgument = ", value: \"\(baseValue.escapedStringLiteral)\""
+    if let value = primaryLanguageValue {
+      valueArgument = ", value: \"\(value.escapedStringLiteral)\""
     }
 
     if tableName == "Localizable" {
@@ -290,30 +318,28 @@ private struct StringValues {
     }
   }
 
-  private var baseValue: String? {
-    return values.filter { $0.0.isBase }.map { $0.1 }.first
+  private var primaryLanguageValues:  [(Locale, String)] {
+    return values.filter { $0.0.isBase } + values.filter { $0.0.language == developmentLanguage }
+  }
+
+  private var primaryLanguageValue: String? {
+    return primaryLanguageValues.map { $0.1 }.first
   }
 
   var comments: [String] {
     var results: [String] = []
 
-    let containsBase = values.contains { $0.0.isBase }
     let anyNone = values.contains { $0.0.isNone }
+    let vs = primaryLanguageValues + values
 
-    if let baseValue = baseValue {
-      let str = "Base translation: \(baseValue)".commentString
-      results.append(str)
-    }
-    else if !containsBase {
-      if let (locale, value) = values.first {
-        if let localeDescription = locale.localeDescription {
-          let str = "\(localeDescription) translation: \(value)".commentString
-          results.append(str)
-        }
-        else {
-          let str = "Value: \(value)".commentString
-          results.append(str)
-        }
+    if let (locale, value) = vs.first {
+      if let localeDescription = locale.localeDescription {
+        let str = "\(localeDescription) translation: \(value)".commentString
+        results.append(str)
+      }
+      else {
+        let str = "Value: \(value)".commentString
+        results.append(str)
       }
     }
 
