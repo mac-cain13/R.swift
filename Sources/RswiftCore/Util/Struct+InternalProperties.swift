@@ -47,32 +47,34 @@ extension Struct {
         doesThrow: false,
         returnType: Type._Tuple.withGenericArgs([Type._Locale, Type._Bundle]).asOptional(),
         body: """
+          // Filter preferredLanguages to localizations, use first locale
           var languages = preferredLanguages
             .map(Locale.init)
-            .filter { locale in
-              return hostingBundle.localizations.contains(locale.identifier)
-                || hostingBundle.localizations.contains(locale.languageCode ?? "")
-            }
+            .prefix(1)
             .flatMap { locale -> [String] in
-              if let language = locale.languageCode {
-                return [locale.identifier, language]
+              if hostingBundle.localizations.contains(locale.identifier) {
+                if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+                  return [locale.identifier, language]
+                } else {
+                  return [locale.identifier]
+                }
+              } else if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+                return [language]
+              } else {
+                return []
               }
-              return [locale.identifier]
             }
 
+          // If there's no languages, use development language as backstop
           if languages.isEmpty {
             if let developmentLocalization = hostingBundle.developmentLocalization {
               languages = [developmentLocalization]
             }
           } else {
-            // Insert Base as second item
-            if languages.count > 1 {
-              languages.insert("Base", at: 1)
-            } else {
-              languages.append("Base")
-            }
+            // Insert Base as second item (between locale identifier and languageCode)
+            languages.insert("Base", at: 1)
 
-            // Add development language as backstops
+            // Add development language as backstop
             if let developmentLocalization = hostingBundle.developmentLocalization {
               languages.append(developmentLocalization)
             }
