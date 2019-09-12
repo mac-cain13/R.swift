@@ -60,6 +60,13 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let Strings = Type(module: "Rswift", name: "Strings")
   static let Validatable = Type(module: "Rswift", name: "Validatable")
   static let TypedStoryboardSegueInfo = Type(module: "Rswift", name: "TypedStoryboardSegueInfo", genericArgs: [TypeVar(description: "Segue", usedTypes: []), TypeVar(description: "Source", usedTypes: []), TypeVar(description: "Destination", usedTypes: [])])
+  static let LocalizedStringNoArg = Type(module: "Rswift", name: "LocalizedStringNoArg")
+  static let LocalizedStringOneArg = Type(module: "Rswift", name: "LocalizedStringOneArg")
+  static let LocalizedStringTwoArgs = Type(module: "Rswift", name: "LocalizedStringTwoArgs")
+  static let LocalizedStringThreeArgs = Type(module: "Rswift", name: "LocalizedStringThreeArgs")
+  static let LocalizedStringFourArgs = Type(module: "Rswift", name: "LocalizedStringFourArgs")
+  static let LocalizedStringFiveArgs = Type(module: "Rswift", name: "LocalizedStringFiveArgs")
+
 
   let module: Module
   let name: SwiftIdentifier

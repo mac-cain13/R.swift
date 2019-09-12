@@ -60,8 +60,11 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: params.map { stringLet(values: $0, at: externalAccessLevel) },
-      functions: params.map { stringFunction(values: $0, at: externalAccessLevel) },
+      properties: params.flatMap {[
+        stringLet(values: $0, at: externalAccessLevel),
+        resourceLet(values: $0),
+        ]},
+      functions: [],
       structs: [],
       classes: [],
       os: []
@@ -188,6 +191,11 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
       }
 
+      if params.count > 5 {
+        warn("Skipping string \(key), key has too many arguments (\(params.count)), maximum supported is 5")
+        areCorrectFormatSpecifiers = false
+      }
+
       if !areCorrectFormatSpecifiers { continue }
 
       let vals = keyParams.map { ($0.0, $0.1) }
@@ -207,7 +215,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     return results
   }
 
-  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
+  private func resourceLet(values: StringValues) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -216,70 +224,37 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       .joined(separator: ", ")
 
     return Let(
-      comments: values.comments,
-      accessModifier: externalAccessLevel,
+      comments: [],
+      accessModifier: .privateLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: values.key),
+      name: SwiftIdentifier(name: "_" + values.key),
       typeDefinition: .inferred(Type.StringResource),
       value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
   }
 
-  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
-    if values.params.isEmpty {
-      return stringFunctionNoParams(for: values, at: externalAccessLevel)
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel) -> Let {
+    let type: Type
+    let argTypes = values.params.map { $0.spec.type }
+    switch argTypes.count {
+      case 0: type = .LocalizedStringNoArg
+      case 1: type = .LocalizedStringOneArg
+      case 2: type = .LocalizedStringTwoArgs
+      case 3: type = .LocalizedStringThreeArgs
+      case 4: type = .LocalizedStringFourArgs
+      case 5: type = .LocalizedStringFiveArgs
+      default: fatalError("Unhandled argument count. Maximum supported is 5")
     }
-    else {
-      return stringFunctionParams(for: values, at: externalAccessLevel)
-    }
-  }
 
-  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
-
-    return Function(
-      availables: [],
+    return Let(
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
-      generics: nil,
-      parameters: [
-        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
-      ],
-      doesThrow: false,
-      returnType: Type._String,
-      body: "return \(values.localizedString)",
-      os: []
+      typeDefinition: .specified(type.withGenericArgs(argTypes)),
+      value: "\(type.name)(resource: _\(values.key))"
     )
   }
-
-  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
-
-    let params = values.params.enumerated().map { arg -> Function.Parameter in
-      let (ix, param) = arg
-      let argumentLabel = param.name ?? "_"
-      let valueName = "value\(ix + 1)"
-
-      return Function.Parameter(name: argumentLabel, localName: valueName, type: param.spec.type)
-    }
-
-    let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
-
-    return Function(
-      availables: [],
-      comments: values.comments,
-      accessModifier: externalAccessLevel,
-      isStatic: true,
-      name: SwiftIdentifier(name: values.key),
-      generics: nil,
-      parameters: params,
-      doesThrow: false,
-      returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))",
-      os: []
-    )
-  }
-
 }
 
 extension Locale {
