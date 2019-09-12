@@ -982,7 +982,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n";
+			shellScript = "\"$SRCROOT/../.build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n";
 		};
 		45EF1C0CF8F1496731872E16 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1075,7 +1075,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "\"$SRCROOT/../.build/Debug/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		DEF559A61CA487D6009B8C51 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1091,7 +1091,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS/R.generated.swift\" > \"$SRCROOT/rswift-tv.log\"\n";
+			shellScript = "\"$SRCROOT/../.build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS/R.generated.swift\" > \"$SRCROOT/rswift-tv.log\"\n";
 		};
 		ED8FCF67313DC003391627B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
