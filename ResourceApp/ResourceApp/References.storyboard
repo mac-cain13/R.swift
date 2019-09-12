@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="IfC-nk-yIu">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="IfC-nk-yIu">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment version="4352" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,6 +28,7 @@
                         <segue destination="IcN-B5-zUv" kind="show" identifier="toAVPlayerController" id="5eO-0j-fVU"/>
                         <segue destination="kne-1k-ozT" kind="show" identifier="toSomeStoryboard" id="b6z-Sc-6eL"/>
                         <segue destination="Zbd-89-K73" kind="show" identifier="toUnknown" id="6N8-Dg-FOm"/>
+                        <segue destination="u1T-ai-agK" kind="show" identifier="" id="oqv-1x-7pF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3t-vu-4W6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -64,10 +67,28 @@
             </objects>
             <point key="canvasLocation" x="768.5" y="121"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="fd2-1N-CYg">
+            <objects>
+                <viewController id="u1T-ai-agK" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0Em-Bg-9d0"/>
+                        <viewControllerLayoutGuide type="bottom" id="Zd6-E6-4pe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nqg-7c-dWU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Ta-hL-My2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="244" y="581"/>
+        </scene>
     </scenes>
     <resources>
         <namedColor name="My Red">
-            <color red="0.72156864404678345" green="0.027450980618596077" blue="0.10196078568696976" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.87843137979507446" green="0.43921568989753723" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
 </document>
