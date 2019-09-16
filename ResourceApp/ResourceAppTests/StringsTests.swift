@@ -31,6 +31,7 @@ class StringsTests: XCTestCase {
   func testCorrectValues() {
 
     // Question: Why is this different between iOS 12 and 13?
+    // "precision1" = "one   - %012.2f";
     if #available(iOS 13, *) {
       XCTAssertEqual(R.string.generic.precision1(12345.678), "one   -    12,345.68")
     } else {
