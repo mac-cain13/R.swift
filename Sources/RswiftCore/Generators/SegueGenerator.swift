@@ -44,6 +44,10 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
             return nil
           }
 
+          guard !segue.identifier.isEmpty else {
+            return nil
+          }
+
           return SegueWithInfo(segue: segue, sourceType: viewController.type, destinationType: destinationType)
         }
       }

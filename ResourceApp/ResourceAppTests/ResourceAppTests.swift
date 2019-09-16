@@ -43,6 +43,8 @@ class ResourceAppTests: XCTestCase {
     warning: [R.swift] Skipping string for key FormatSpecifiers5 (Settings), format specifiers don't match for all locales: Base, nl
     warning: [R.swift] Skipping string for key mismatch (Settings), format specifiers don't match for all locales: Base, nl
     warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'
+    warning: [R.swift] Strings file 'Settings' (nl) has extra translations (not in Base) for keys: 'Only Dutch'
+    warning: [R.swift] Strings file 'Generic' has extra translations (not in English) for keys: '#'
     """
     .trimmingCharacters(in: .whitespacesAndNewlines)
     .components(separatedBy: "\n")
