@@ -344,7 +344,7 @@ private struct StringValues {
     }
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: \(bundle)\(valueArgument) comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
     }
     else {
       return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
