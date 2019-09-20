@@ -258,7 +258,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
 
         guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key)"
+          return "\(values.key.escapedStringLiteral)"
         }
 
         return \(values.swiftCode(bundle: "bundle"))
