@@ -1,0 +1,10 @@
+/* 
+  seven.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-22.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"seven1" = "seven 1, localized english";
+"seven2" = "seven 2, localized english";

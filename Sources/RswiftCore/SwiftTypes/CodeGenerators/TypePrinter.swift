@@ -17,20 +17,24 @@ struct TypePrinter: SwiftCodeConverible, UsedTypesProvider {
   }
 
   var swiftCode: String {
-    let optionalString = type.optional ? "?" : ""
+    let optionalSuffix = type.optional ? "?" : ""
+    let args = type.genericArgs.map { $0.description }.joined(separator: ", ")
 
     let withoutModule: String
-    if type.genericArgs.count > 0 {
-      let args = type.genericArgs.map { $0.description }.joined(separator: ", ")
-      withoutModule = "\(type.name)<\(args)>\(optionalString)"
+    if type.genericArgs.isEmpty {
+      withoutModule = "\(type.name)"
+    } else if type.name == Type._Tuple.name {
+      withoutModule = "(\(args))"
+    } else if type.name == Type._Array.name {
+      withoutModule = "[\(args)]"
     } else {
-      withoutModule = "\(type.name)\(optionalString)"
+      withoutModule = "\(type.name)<\(args)>"
     }
 
     if case let .custom(name: moduleName) = type.module {
-      return "\(moduleName).\(withoutModule)"
+      return "\(moduleName).\(withoutModule)\(optionalSuffix)"
     } else {
-      return withoutModule
+      return "\(withoutModule)\(optionalSuffix)"
     }
   }
 

@@ -244,18 +244,32 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
-        Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
+        Function.Parameter(
+          name: "preferredLanguages",
+          type: Type._Array.withGenericArgs([Type._String]).asOptional(),
+          defaultValue: "nil"
+        )
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: "return \(values.localizedString)",
+      body: """
+        guard let preferredLanguages = preferredLanguages else {
+          return \(values.swiftCode(bundle: "hostingBundle"))
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key)"
+        }
+
+        return \(values.swiftCode(bundle: "bundle"))
+        """,
       os: []
     )
   }
 
   private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel) -> Function {
 
-    let params = values.params.enumerated().map { arg -> Function.Parameter in
+    var params = values.params.enumerated().map { arg -> Function.Parameter in
       let (ix, param) = arg
       let argumentLabel = param.name ?? "_"
       let valueName = "value\(ix + 1)"
@@ -264,6 +278,13 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     }
 
     let args = params.map { $0.localName ?? $0.name }.joined(separator: ", ")
+
+    let prefereredLanguages = Function.Parameter(
+      name: "preferredLanguages",
+      type: Type._Array.withGenericArgs([Type._String]).asOptional(),
+      defaultValue: "nil"
+    )
+    params.append(prefereredLanguages)
 
     return Function(
       availables: [],
@@ -275,7 +296,19 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: "return String(format: \(values.localizedString), locale: R.applicationLocale, \(args))",
+      body: """
+        guard let preferredLanguages = preferredLanguages else {
+          let format = \(values.swiftCode(bundle: "hostingBundle"))
+          return String(format: format, locale: applicationLocale, \(args))
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key)"
+        }
+
+        let format = \(values.swiftCode(bundle: "bundle"))
+        return String(format: format, locale: locale, \(args))
+        """,
       os: []
     )
   }
@@ -302,28 +335,28 @@ private struct StringValues {
   let values: [(Locale, String)]
   let developmentLanguage: String
 
-  var localizedString: String {
+  func swiftCode(bundle: String) -> String {
     let escapedKey = key.escapedStringLiteral
 
     var valueArgument: String = ""
-    if let value = primaryLanguageValue {
+    if let value = baseLanguageValue {
       valueArgument = ", value: \"\(value.escapedStringLiteral)\""
     }
 
     if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: R.hostingBundle\(valueArgument), comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
     }
     else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: R.hostingBundle\(valueArgument), comment: \"\")"
+      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
     }
+  }
+
+  var baseLanguageValue: String? {
+    return values.filter { $0.0.isBase }.map { $0.1 }.first
   }
 
   private var primaryLanguageValues:  [(Locale, String)] {
     return values.filter { $0.0.isBase } + values.filter { $0.0.language == developmentLanguage }
-  }
-
-  private var primaryLanguageValue: String? {
-    return primaryLanguageValues.map { $0.1 }.first
   }
 
   var comments: [String] {

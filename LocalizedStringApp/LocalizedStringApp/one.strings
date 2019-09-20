@@ -1,0 +1,10 @@
+/* 
+  one.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-21.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"one1" = "one 1, not localized";
+"one2" = "one 2, not localized";
