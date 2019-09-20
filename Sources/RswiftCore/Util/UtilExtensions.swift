@@ -55,8 +55,10 @@ extension String {
   }
 
   func indent(with indentation: String) -> String {
-    let components = self.components(separatedBy: "\n")
-    return indentation + components.joined(separator: "\n\(indentation)")
+    return self
+      .components(separatedBy: "\n")
+      .map { line in line .isEmpty ? "" : "\(indentation)\(line)" }
+      .joined(separator: "\n")
   }
 
   var fullRange: NSRange {

@@ -1,0 +1,11 @@
+/* 
+  eight.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-26.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"eight1" = "eight 1, localized base";
+"eight2" = "eight 2, localized base";
+"eight3" = "eight 3, localized base";

@@ -50,7 +50,7 @@ public struct RswiftCore {
         NibStructGenerator(nibs: resources.nibs),
         ReuseIdentifierStructGenerator(reusables: resources.reusables),
         ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
-        StringsStructGenerator(localizableStrings: resources.localizableStrings),
+        StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage),
         AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards),
       ])
       writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)

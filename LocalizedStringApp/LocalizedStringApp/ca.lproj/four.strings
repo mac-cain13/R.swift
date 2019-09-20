@@ -1,0 +1,9 @@
+/* 
+  four.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-21.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"four1" = "four 1, localized catalan";

@@ -21,6 +21,8 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
 
   private let projectFile: XCProjectFile
 
+  let developmentLanguage: String
+
   init(url: URL) throws {
     try Xcodeproj.throwIfUnsupportedExtension(url.pathExtension)
     let projectFile: XCProjectFile
@@ -41,6 +43,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     }
 
     self.projectFile = projectFile
+    self.developmentLanguage = projectFile.project.developmentRegion
   }
 
   private func findTarget(name: String) throws -> PBXTarget {

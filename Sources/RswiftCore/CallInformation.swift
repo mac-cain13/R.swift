@@ -16,7 +16,7 @@ public struct CallInformation {
   let rswiftIgnoreURL: URL
 
   let accessLevel: AccessLevel
-  let imports: Set<Module>
+  let imports: [Module]
 
   let xcodeprojURL: URL
   let targetName: String
@@ -39,7 +39,7 @@ public struct CallInformation {
     rswiftIgnoreURL: URL,
 
     accessLevel: AccessLevel,
-    imports: Set<Module>,
+    imports: [Module],
 
     xcodeprojURL: URL,
     targetName: String,

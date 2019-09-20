@@ -32,7 +32,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   }
 
   var swiftCode: String {
-    let commentsString = comments.map { "/// \($0)\n" }.joined(separator: "")
+    let commentsString = comments.map { $0.isEmpty ? "///\n" : "/// \($0)\n" }.joined(separator: "")
     let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
     let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""

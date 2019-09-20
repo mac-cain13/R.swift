@@ -81,6 +81,7 @@
 		D5F05D481BB520B1003AE55E /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F05D471BB520B1003AE55E /* FilesTests.swift */; };
 		D5FAD9091B63B05700ECE230 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55C6CC61B5D757300301B0D /* Images.xcassets */; };
 		D80B9E2AC049322EF7FFB2BA /* Pods_Shared_ResourceApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA2177EF715BB7F766BD6216 /* Pods_Shared_ResourceApp.framework */; };
+		DD0CD0C4232A950A00A555A3 /* SegueIdentifiers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD0CD0C3232A950A00A555A3 /* SegueIdentifiers.storyboard */; };
 		DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559991CA4873D009B8C51 /* AppDelegate.swift */; };
 		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
@@ -252,6 +253,7 @@
 		D5F05D431BB52063003AE55E /* Duplicate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Duplicate.json; sourceTree = "<group>"; };
 		D5F05D451BB52078003AE55E /* duplicateJson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = duplicateJson; sourceTree = "<group>"; };
 		D5F05D471BB520B1003AE55E /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
+		DD0CD0C3232A950A00A555A3 /* SegueIdentifiers.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SegueIdentifiers.storyboard; sourceTree = "<group>"; };
 		DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ResourceApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559991CA4873D009B8C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEF5599E1CA4873D009B8C51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -475,6 +477,7 @@
 				E25984A022AEE89B00467E1E /* CustomSegue.swift */,
 				D55C6CBF1B5D757300301B0D /* FirstViewController.swift */,
 				D5CBCE481B7682B800C5D96B /* MyViewController.swift */,
+				DD0CD0C3232A950A00A555A3 /* SegueIdentifiers.storyboard */,
 				D55C6CC11B5D757300301B0D /* SecondViewController.swift */,
 				D55C6CC61B5D757300301B0D /* Images.xcassets */,
 				CCBC9CB81EC4809D002F3D0E /* Images2.xcassets */,
@@ -830,6 +833,7 @@
 				D50175BE1B5FEFD000DB8314 /* Secondary.storyboard in Resources */,
 				D5AD5C911B78FC0500A8B96C /* duplicate.xib in Resources */,
 				D575E25D1B766CD800C22F0B /* My View.xib in Resources */,
+				DD0CD0C4232A950A00A555A3 /* SegueIdentifiers.storyboard in Resources */,
 				D5AD5C941B78FC4E00A8B96C /* Duplicate.xib in Resources */,
 				E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */,
 				D55C6CC51B5D757300301B0D /* Main.storyboard in Resources */,

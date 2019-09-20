@@ -13,19 +13,24 @@ import Foundation
 struct ImportPrinter: SwiftCodeConverible {
   let swiftCode: String
 
-  init(modules: Set<Module>, extractFrom structs: [Struct?], exclude excludedModules: Set<Module>) {
+  init(modules: [Module], extractFrom structs: [Struct?], exclude excludedModules: Set<Module>) {
     let extractedModules = structs
       .compactMap { $0 }
       .flatMap(getUsedTypes)
       .map { $0.type.module }
 
-    let modulesSet = modules
-      .union(extractedModules)
+    let extractedModulesArray = Set(extractedModules)
       .subtracting(excludedModules)
-
-    swiftCode = Array(modulesSet)
+      .subtracting(modules)
       .filter { $0.isCustom }
       .sorted { $0.description < $1.description }
+
+    // Note that the modules specified to the --import flag are always specified first
+    // See: https://github.com/mac-cain13/R.swift/issues/534
+    var modulesToImport = modules
+    modulesToImport.append(contentsOf: extractedModulesArray)
+
+    swiftCode = modulesToImport
       .map { "import \($0)" }
       .joined(separator: "\n")
   }
