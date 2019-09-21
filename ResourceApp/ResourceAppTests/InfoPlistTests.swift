@@ -17,27 +17,6 @@ class InfoPlistTests: XCTestCase {
   }
 
   func testVariable() {
-//    let x = (Bundle.main.object(forInfoDictionaryKey: "NSExtension") as? [String: Any])?["NSExtensionPrincipalClass"] as? String
     XCTAssertEqual(R.info.nsExtension.nsExtensionPrincipalClass, "ResourceApp.IntentHandler")
   }
 }
-
-//<key>NSExtension</key>
-//<dict>
-//  <key>NSExtensionAttributes</key>
-//  <dict>
-//    <key>IntentsRestrictedWhileLocked</key>
-//    <array/>
-//    <key>IntentsRestrictedWhileProtectedDataUnavailable</key>
-//    <array/>
-//    <key>IntentsSupported</key>
-//    <array>
-//      <string>PlanTripIntent</string>
-//      <string>ShowDeparturesIntent</string>
-//    </array>
-//  </dict>
-//  <key>NSExtensionPointIdentifier</key>
-//  <string>com.apple.intents-service</string>
-//  <key>NSExtensionPrincipalClass</key>
-//  <string>$(PRODUCT_MODULE_NAME).IntentHandler</string>
-//</dict>

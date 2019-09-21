@@ -77,13 +77,15 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
   private func propertyFromInfoString(key: String, value: String, path: [String], at externalAccessLevel: AccessLevel) -> Let {
 
+    let steps = path.map { "\"\($0.escapedStringLiteral)\"" }.joined(separator: ", ")
+
     let isKey = key == "_key"
     let letValue: String = isKey
       ? "\"\(value.escapedStringLiteral)\""
-      : "_infoDictionary?[\"\(key)\"] as? String ?? \"\(value.escapedStringLiteral)\""
+      : "infoPlistString(path: [\(steps)], key: \"\(key.escapedStringLiteral)\") ?? \"\(value.escapedStringLiteral)\""
 
     return Let(
-      comments: isKey ? [] : [value],
+      comments: [],
       accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: key),
@@ -99,27 +101,8 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
         var ps = path
         ps.append(key)
 
-        let info = path.reduce("hostingBundle.infoDictionary", { (source, step) in
-          "(\(source)?[\"\(step)\"] as? [String: Any])"
-        })
-        let object = Let(
-          comments: [],
-          accessModifier: .privateLevel,
-          isStatic: true,
-          name: "_infoDictionary",
-          typeDefinition: .inferred(nil),
-          value: info
-        )
-
         switch value {
         case let array as [String]:
-          var props = array.map { item in
-            propertyFromInfoString(key: item, value: item, path: ps, at: externalAccessLevel)
-          }
-          if !props.isEmpty {
-            props.append(object)
-          }
-
           return Struct(
             availables: [],
             comments: [],
@@ -127,7 +110,9 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             type: Type(module: .host, name: SwiftIdentifier(name: key)),
             implements: [],
             typealiasses: [],
-            properties: props,
+            properties: array.map { item in
+              propertyFromInfoString(key: item, value: item, path: ps, at: externalAccessLevel)
+            },
             functions: [],
             structs: [],
             classes: [],
@@ -136,10 +121,6 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
         case var dict as [String: Any]:
           dict["_key"] = key
-          var props = propertiesFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel)
-          if !props.isEmpty {
-            props.append(object)
-          }
 
           return Struct(
             availables: [],
@@ -148,7 +129,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             type: Type(module: .host, name: SwiftIdentifier(name: key)),
             implements: [],
             typealiasses: [],
-            properties: props,
+            properties: propertiesFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel),
             functions: [],
             structs: structsFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel),
             classes: [],
