@@ -25,7 +25,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
     guard plists.all(where: { $0.url == plist.url }) else {
       let configs = plists.map { $0.buildConfigurationName }
-      warn("Build configrurations \(configs) use different \(name) files, this is not yet supported")
+      warn("Build configurations \(configs) use different \(name) files, this is not yet supported")
       return .empty
     }
 
@@ -45,15 +45,15 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: propertiesFromInfoPlist(contents: contents, at: externalAccessLevel),
+      properties: propertiesFromInfoPlist(contents: contents, path: [], at: externalAccessLevel),
       functions: [],
-      structs: structsFromInfoPlist(contents: contents, at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: contents, path: [], at: externalAccessLevel),
       classes: [],
       os: []
     )
   }
 
-  private func propertiesFromInfoPlist(contents: [String: Any], at externalAccessLevel: AccessLevel) -> [Let] {
+  private func propertiesFromInfoPlist(contents: [String: Any], path: [String], at externalAccessLevel: AccessLevel) -> [Let] {
 
     return contents
       .compactMap { (key, value) -> Let? in
@@ -68,26 +68,58 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             value: "\(value)"
           )
         case let value as String:
-          return Let(
-            comments: [],
-            accessModifier: externalAccessLevel,
-            isStatic: true,
-            name: SwiftIdentifier(name: key),
-            typeDefinition: .inferred(Type._String),
-            value: "\"\(value.escapedStringLiteral)\""
-          )
+          return propertyFromInfoString(key: key, value: value, path: path, at: externalAccessLevel)
         default:
           return nil
         }
-    }
+      }
   }
 
-  private func structsFromInfoPlist(contents: [String: Any], at externalAccessLevel: AccessLevel) -> [Struct] {
+  private func propertyFromInfoString(key: String, value: String, path: [String], at externalAccessLevel: AccessLevel) -> Let {
+
+    let isKey = key == "_key"
+    let letValue: String = isKey
+      ? "\"\(value.escapedStringLiteral)\""
+      : "_infoDictionary?[\"\(key)\"] as? String ?? \"\(value.escapedStringLiteral)\""
+
+    return Let(
+      comments: isKey ? [] : [value],
+      accessModifier: externalAccessLevel,
+      isStatic: true,
+      name: SwiftIdentifier(name: key),
+      typeDefinition: .inferred(Type._String),
+      value: letValue
+    )
+  }
+
+  private func structsFromInfoPlist(contents: [String: Any], path: [String], at externalAccessLevel: AccessLevel) -> [Struct] {
 
     return contents
       .compactMap { (key, value) -> Struct? in
+        var ps = path
+        ps.append(key)
+
+        let info = path.reduce("hostingBundle.infoDictionary", { (source, step) in
+          "(\(source)?[\"\(step)\"] as? [String: Any])"
+        })
+        let object = Let(
+          comments: [],
+          accessModifier: .privateLevel,
+          isStatic: true,
+          name: "_infoDictionary",
+          typeDefinition: .inferred(nil),
+          value: info
+        )
+
         switch value {
         case let array as [String]:
+          var props = array.map { item in
+            propertyFromInfoString(key: item, value: item, path: ps, at: externalAccessLevel)
+          }
+          if !props.isEmpty {
+            props.append(object)
+          }
+
           return Struct(
             availables: [],
             comments: [],
@@ -95,16 +127,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             type: Type(module: .host, name: SwiftIdentifier(name: key)),
             implements: [],
             typealiasses: [],
-            properties: array.map { item in
-              return Let(
-                comments: [],
-                accessModifier: externalAccessLevel,
-                isStatic: true,
-                name: SwiftIdentifier(name: item),
-                typeDefinition: .inferred(Type._String),
-                value: "\"\(item.escapedStringLiteral)\""
-              )
-            },
+            properties: props,
             functions: [],
             structs: [],
             classes: [],
@@ -113,6 +136,11 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
         case var dict as [String: Any]:
           dict["_key"] = key
+          var props = propertiesFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel)
+          if !props.isEmpty {
+            props.append(object)
+          }
+
           return Struct(
             availables: [],
             comments: [],
@@ -120,15 +148,15 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             type: Type(module: .host, name: SwiftIdentifier(name: key)),
             implements: [],
             typealiasses: [],
-            properties: propertiesFromInfoPlist(contents: dict, at: externalAccessLevel),
+            properties: props,
             functions: [],
-            structs: structsFromInfoPlist(contents: dict, at: externalAccessLevel),
+            structs: structsFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel),
             classes: [],
             os: []
           )
 
         case let dicts as [[String: Any]] where arrayOfDictionariesPrimaryKeys.keys.contains(key):
-          return structForArrayOfDictionaries(key: key, dicts: dicts, at: externalAccessLevel)
+          return structForArrayOfDictionaries(key: key, dicts: dicts, path: path, at: externalAccessLevel)
 
         default:
           return nil
@@ -146,7 +174,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
     "CFBundleURLTypes": "CFBundleURLName"
   ]
 
-  private func structForArrayOfDictionaries(key: String, dicts: [[String: Any]], at externalAccessLevel: AccessLevel) -> Struct {
+  private func structForArrayOfDictionaries(key: String, dicts: [[String: Any]], path: [String], at externalAccessLevel: AccessLevel) -> Struct {
     let kvs = dicts.compactMap { dict -> (String, [String: Any])? in
       if
         let primaryKey = arrayOfDictionariesPrimaryKeys[key],
@@ -158,6 +186,9 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       return nil
     }
 
+    var ps = path
+    ps.append(key)
+
     let contents = Dictionary(kvs, uniquingKeysWith: { (l, _) in l })
     return Struct(
       availables: [],
@@ -168,7 +199,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: [],
       functions: [],
-      structs: structsFromInfoPlist(contents: contents, at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: contents, path: ps, at: externalAccessLevel),
       classes: [],
       os: []
     )
