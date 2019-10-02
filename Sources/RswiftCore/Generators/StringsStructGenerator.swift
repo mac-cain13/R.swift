@@ -12,10 +12,12 @@ import Foundation
 struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
   private let developmentLanguage: String
+  private let useDevelopmentLanguageDefaults: Bool
 
-  init(localizableStrings: [LocalizableStrings], developmentLanguage: String) {
+  init(localizableStrings: [LocalizableStrings], developmentLanguage: String, useDevelopmentLanguageDefaults: Bool) {
     self.localizableStrings = localizableStrings
     self.developmentLanguage = developmentLanguage
+    self.useDevelopmentLanguageDefaults = useDevelopmentLanguageDefaults
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
@@ -191,7 +193,12 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       if !areCorrectFormatSpecifiers { continue }
 
       let vals = keyParams.map { ($0.0, $0.1) }
-      let values = StringValues(key: key, params: params, tableName: filename, values: vals, developmentLanguage: developmentLanguage)
+      let values = StringValues(key: key,
+                                params: params, 
+                                tableName: filename, 
+                                values: vals, 
+                                developmentLanguage: developmentLanguage, 
+                                useDevelopmentLanguageDefaults: useDevelopmentLanguageDefaults)
       results.append(values)
     }
 
@@ -334,14 +341,15 @@ private struct StringValues {
   let tableName: String
   let values: [(Locale, String)]
   let developmentLanguage: String
+  let useDevelopmentLanguageDefaults: Bool
 
   func swiftCode(bundle: String) -> String {
     let escapedKey = key.escapedStringLiteral
 
     var valueArgument: String = ""
-    if let value = baseLanguageValue {
+    if let value = baseLanguageValue ?? developmentLanguageValue {
       valueArgument = ", value: \"\(value.escapedStringLiteral)\""
-    }
+    } 
 
     if tableName == "Localizable" {
       return "NSLocalizedString(\"\(escapedKey)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
@@ -353,6 +361,11 @@ private struct StringValues {
 
   var baseLanguageValue: String? {
     return values.filter { $0.0.isBase }.map { $0.1 }.first
+  }
+
+  var developmentLanguageValue: String? {
+    guard useDevelopmentLanguageDefaults else { return nil }
+    return values.filter { $0.0.language == developmentLanguage }.map { $0.1 }.first
   }
 
   private var primaryLanguageValues:  [(Locale, String)] {

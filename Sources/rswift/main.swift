@@ -72,6 +72,7 @@ struct CommanderOptions {
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
+  static let useDevelopmentLanguageDefaults = Flag("use-development-language-defaults", description: "If true, The generated LocalizedString macros will use the development language values as the default for cases where Base localization is not in use")
   static let inputOutputFilesValidation = Flag("input-output-files-validation", default: true, flag: nil, disabledName: "disable-input-output-files-validation", disabledFlag: nil, description: "Validate input and output files configured in a build phase")
 }
 
@@ -105,10 +106,11 @@ let generate = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.useDevelopmentLanguageDefaults,
   CommanderOptions.inputOutputFilesValidation,
 
   CommanderArguments.outputPath
-) { generatorNames, uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
+) { generatorNames, uiTestOutputPath, importModules, accessLevel, rswiftIgnore, useDevelopmentLanguageDefaults, inputOutputFilesValidation, outputPath in
 
   let processInfo = ProcessInfo()
 
@@ -202,6 +204,7 @@ let generate = command(
     generators: generators,
     accessLevel: accessLevel,
     imports: modules,
+    useDevelopmentLanguageDefaults: useDevelopmentLanguageDefaults,
 
     xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
     targetName: targetName,

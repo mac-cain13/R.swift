@@ -18,6 +18,7 @@ public struct CallInformation {
   let generators: [Generator]
   let accessLevel: AccessLevel
   let imports: [Module]
+  let useDevelopmentLanguageDefaults: Bool
 
   let xcodeprojURL: URL
   let targetName: String
@@ -44,6 +45,7 @@ public struct CallInformation {
     generators: [Generator],
     accessLevel: AccessLevel,
     imports: [Module],
+    useDevelopmentLanguageDefaults: Bool,
 
     xcodeprojURL: URL,
     targetName: String,
@@ -69,6 +71,7 @@ public struct CallInformation {
     self.accessLevel = accessLevel
     self.imports = imports
     self.generators = generators
+    self.useDevelopmentLanguageDefaults = useDevelopmentLanguageDefaults
 
     self.xcodeprojURL = xcodeprojURL
     self.targetName = targetName
