@@ -10,6 +10,20 @@
 import Foundation
 import XcodeEdit
 
+public typealias RswiftGenerator = Generator
+public enum Generator: String, CaseIterable {
+  case image
+  case color
+  case font
+  case segue
+  case storyboard
+  case nib
+  case reuseIdentifier
+  case file
+  case string
+  case id
+}
+
 public struct RswiftCore {
   private let callInformation: CallInformation
 
@@ -29,19 +43,40 @@ public struct RswiftCore {
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
 
+      var structGenerators: [StructGenerator] = []
+      if callInformation.generators.contains(.image) {
+        structGenerators.append(ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images))
+      }
+      if callInformation.generators.contains(.color) {
+        structGenerators.append(ColorStructGenerator(assetFolders: resources.assetFolders))
+      }
+      if callInformation.generators.contains(.font) {
+        structGenerators.append(FontStructGenerator(fonts: resources.fonts))
+      }
+      if callInformation.generators.contains(.segue) {
+        structGenerators.append(SegueStructGenerator(storyboards: resources.storyboards))
+      }
+      if callInformation.generators.contains(.storyboard) {
+        structGenerators.append(StoryboardStructGenerator(storyboards: resources.storyboards))
+      }
+      if callInformation.generators.contains(.nib) {
+        structGenerators.append(NibStructGenerator(nibs: resources.nibs))
+      }
+      if callInformation.generators.contains(.reuseIdentifier) {
+        structGenerators.append(ReuseIdentifierStructGenerator(reusables: resources.reusables))
+      }
+      if callInformation.generators.contains(.file) {
+        structGenerators.append(ResourceFileStructGenerator(resourceFiles: resources.resourceFiles))
+      }
+      if callInformation.generators.contains(.string) {
+        structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage))
+      }
+      if callInformation.generators.contains(.id) {
+        structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
+      }
+
       // Generate regular R file
-      let fileContents = generateRegularFileContents(resources: resources, generators: [
-        ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
-        ColorStructGenerator(assetFolders: resources.assetFolders),
-        FontStructGenerator(fonts: resources.fonts),
-        SegueStructGenerator(storyboards: resources.storyboards),
-        StoryboardStructGenerator(storyboards: resources.storyboards),
-        NibStructGenerator(nibs: resources.nibs),
-        ReuseIdentifierStructGenerator(reusables: resources.reusables),
-        ResourceFileStructGenerator(resourceFiles: resources.resourceFiles),
-        StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage),
-        AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards),
-      ])
+      let fileContents = generateRegularFileContents(resources: resources, generators: structGenerators)
       writeIfChanged(contents: fileContents, toURL: callInformation.outputURL)
 
       // Generate UITest R file
