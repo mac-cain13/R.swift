@@ -15,6 +15,7 @@ public struct CallInformation {
   let uiTestOutputURL: URL?
   let rswiftIgnoreURL: URL
 
+  let generators: [Generator]
   let accessLevel: AccessLevel
   let imports: [Module]
 
@@ -38,6 +39,7 @@ public struct CallInformation {
     uiTestOutputURL: URL?,
     rswiftIgnoreURL: URL,
 
+    generators: [Generator],
     accessLevel: AccessLevel,
     imports: [Module],
 
@@ -62,6 +64,7 @@ public struct CallInformation {
 
     self.accessLevel = accessLevel
     self.imports = imports
+    self.generators = generators
 
     self.xcodeprojURL = xcodeprojURL
     self.targetName = targetName

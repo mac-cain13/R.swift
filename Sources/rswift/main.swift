@@ -65,6 +65,7 @@ struct EnvironmentKeys {
 
 // Options grouped in struct for readability
 struct CommanderOptions {
+  static let generators = Option("generators", default: "", description: "Only run specified generators, comma seperated")
   static let uiTest = Option("generateUITestFile", default: "", description: "Output path for an extra generated file that contains resources commonly used in UI tests such as accessibility identifiers")
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
@@ -77,7 +78,27 @@ struct CommanderArguments {
   static let outputPath = Argument<String>("outputPath", description: "Output path for the generated file")
 }
 
+func parseGenerators(_ string: String) -> ([RswiftGenerator], [String]) {
+  var generators: [Generator] = []
+  var unknowns: [String] = []
+
+  let parts = string.components(separatedBy: ",")
+    .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
+    .filter { !$0.isEmpty }
+
+  for part in parts {
+    if let generator = RswiftGenerator(rawValue: part) {
+      generators.append(generator)
+    } else {
+      unknowns.append(part)
+    }
+  }
+
+  return (generators, unknowns)
+}
+
 let generate = command(
+  CommanderOptions.generators,
   CommanderOptions.uiTest,
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
@@ -85,7 +106,7 @@ let generate = command(
   CommanderOptions.inputOutputFilesValidation,
 
   CommanderArguments.outputPath
-) { uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
+) { generatorNames, uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
 
   let processInfo = ProcessInfo()
 
@@ -113,6 +134,16 @@ let generate = command(
   let outputURL = URL(fileURLWithPath: outputPath)
   let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
+
+  let (knownGenerators, unknownGenerators) = parseGenerators(generatorNames)
+  if !unknownGenerators.isEmpty {
+    warn("Unknown generator options: \(unknownGenerators.joined(separator: ", "))")
+    if knownGenerators.isEmpty {
+      warn("No known generators, falling back to all generators")
+    }
+  }
+  let generators = knownGenerators.isEmpty ? RswiftGenerator.allCases : knownGenerators
+
   let modules = importModules
     .components(separatedBy: ",")
     .map { $0.trimmingCharacters(in: CharacterSet.whitespaces) }
@@ -164,6 +195,7 @@ let generate = command(
     uiTestOutputURL: uiTestOutputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
 
+    generators: generators,
     accessLevel: accessLevel,
     imports: modules,
 
@@ -185,6 +217,7 @@ let generate = command(
 
   try RswiftCore(callInformation).run()
 }
+
 
 // Start parsing the launch arguments
 let group = Group()
