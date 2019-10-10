@@ -22,15 +22,26 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-      let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
+      let infoPlists = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.infoPlistPath, callInformation: callInformation)
+      }
+      let entitlements = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.entitlementsPath, callInformation: callInformation)
+      }
+
+      let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
         .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UISceneConfigurations", "NSUserActivityTypes", "NSExtension"]
 
       // Generate regular R file
       let fileContents = generateRegularFileContents(resources: resources, generators: [
+        PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist),
+        PropertyListGenerator(name: "entitlements", plists: entitlements, toplevelKeysWhitelist: nil),
         ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images),
         ColorStructGenerator(assetFolders: resources.assetFolders),
         FontStructGenerator(fonts: resources.fonts),
@@ -105,6 +116,20 @@ public struct RswiftCore {
       .compactMap { $0?.swiftCode }
       .joined(separator: "\n\n")
       + "\n" // Newline at end of file
+  }
+}
+
+private func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
+  guard let path = path else { return nil }
+  do {
+    let url = path.url(with: callInformation.urlForSourceTreeFolder)
+    return try PropertyList(buildConfigurationName: name, url: url)
+  } catch let ResourceParsingError.parsingFailed(humanReadableError) {
+    warn(humanReadableError)
+    return nil
+  }
+  catch {
+    return nil
   }
 }
 

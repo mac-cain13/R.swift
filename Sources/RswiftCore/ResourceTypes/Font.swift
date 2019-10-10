@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 struct Font: WhiteListedExtensionsResourceType {
   static let supportedExtensions: Set<String> = ["otf", "ttf"]
