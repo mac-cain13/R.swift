@@ -35,6 +35,29 @@ extension Struct {
     let internalFunctions = [
       Function(
         availables: [],
+        comments: ["Load string from Info.plist file"],
+        accessModifier: .filePrivate,
+        isStatic: true,
+        name: "infoPlistString",
+        generics: nil,
+        parameters: [
+          .init(name: "path", type: Type._Array.withGenericArgs([Type._String])),
+          .init(name: "key", type: Type._String)
+        ],
+        doesThrow: false,
+        returnType: Type._String.asOptional(),
+        body: """
+          var dict = hostingBundle.infoDictionary
+          for step in path {
+            guard let obj = dict?[step] as? [String: Any] else { return nil }
+            dict = obj
+          }
+          return dict?[key] as? String
+          """,
+        os: []
+      ),
+      Function(
+        availables: [],
         comments: ["Find first language and bundle for which the table exists"],
         accessModifier: .filePrivate,
         isStatic: true,
@@ -106,7 +129,8 @@ extension Struct {
           // If table is not found for requested languages, key will be shown
           return nil
           """,
-        os: [])
+        os: []
+      )
     ]
 
     var externalStruct = self

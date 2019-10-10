@@ -13,14 +13,16 @@ import XcodeEdit
 public typealias RswiftGenerator = Generator
 public enum Generator: String, CaseIterable {
   case image
+  case string
   case color
+  case file
   case font
+  case nib
   case segue
   case storyboard
-  case nib
   case reuseIdentifier
-  case file
-  case string
+  case entitlements
+  case info
   case id
 }
 
@@ -36,12 +38,21 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
-      let resourceURLs = try xcodeproj.resourcePathsForTarget(callInformation.targetName)
+      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
+      let infoPlists = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.infoPlistPath, callInformation: callInformation)
+      }
+      let entitlements = buildConfigurations.compactMap {
+        return loadPropertyList(name: $0.name, path: $0.entitlementsPath, callInformation: callInformation)
+      }
+
+      let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
         .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UISceneConfigurations", "NSUserActivityTypes", "NSExtension"]
 
       var structGenerators: [StructGenerator] = []
       if callInformation.generators.contains(.image) {
@@ -73,6 +84,12 @@ public struct RswiftCore {
       }
       if callInformation.generators.contains(.id) {
         structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
+      }
+      if callInformation.generators.contains(.info) {
+        structGenerators.append(PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist))
+      }
+      if callInformation.generators.contains(.entitlements) {
+        structGenerators.append(PropertyListGenerator(name: "entitlements", plists: entitlements, toplevelKeysWhitelist: nil))
       }
 
       // Generate regular R file
@@ -140,6 +157,20 @@ public struct RswiftCore {
       .compactMap { $0?.swiftCode }
       .joined(separator: "\n\n")
       + "\n" // Newline at end of file
+  }
+}
+
+private func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
+  guard let path = path else { return nil }
+  do {
+    let url = path.url(with: callInformation.urlForSourceTreeFolder)
+    return try PropertyList(buildConfigurationName: name, url: url)
+  } catch let ResourceParsingError.parsingFailed(humanReadableError) {
+    warn(humanReadableError)
+    return nil
+  }
+  catch {
+    return nil
   }
 }
 

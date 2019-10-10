@@ -103,6 +103,7 @@
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
+		E2DB0EB02334DCC100815AAF /* InfoPlistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,6 +285,7 @@
 		E2CD68631D7CACC100BEBE59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text; name = Base; path = Base.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
+		E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPlistTests.swift; sourceTree = "<group>"; };
 		EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -520,13 +522,14 @@
 			children = (
 				D5F05D471BB520B1003AE55E /* FilesTests.swift */,
 				D5E513BF1B8E11810035ECAA /* FontsTests.swift */,
+				D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */,
+				E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */,
 				D51F47221B8FAF9F0028BAFD /* NibTests.swift */,
 				D55C6CD51B5D757300301B0D /* ResourceAppTests.swift */,
 				E20983231D585E78005ACBAA /* SegueTests.swift */,
 				D56DC76F1C42A5E700623437 /* StoryboardTests.swift */,
 				5D9E41331C96918E002172D3 /* StringsTests.swift */,
 				D5EB326E1B63AD6B005C7B47 /* ValidationTests.swift */,
-				D5D398EB20D43ADE00D67745 /* IgnoreTests.swift */,
 				D55C6CD31B5D757300301B0D /* Supporting Files */,
 			);
 			path = ResourceAppTests;
@@ -1150,6 +1153,7 @@
 				D5E513C01B8E11810035ECAA /* FontsTests.swift in Sources */,
 				D56DC7701C42A5E700623437 /* StoryboardTests.swift in Sources */,
 				5D9E41341C96918E002172D3 /* StringsTests.swift in Sources */,
+				E2DB0EB02334DCC100815AAF /* InfoPlistTests.swift in Sources */,
 				D51F47231B8FAF9F0028BAFD /* NibTests.swift in Sources */,
 				D55C6CD61B5D757300301B0D /* ResourceAppTests.swift in Sources */,
 				D5D398EC20D43ADE00D67745 /* IgnoreTests.swift in Sources */,
