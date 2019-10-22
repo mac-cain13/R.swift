@@ -1,3 +1,13 @@
+## 5.1.0
+
+- WatchOS support (by @lammertw)
+- Introduced R.id for accessibility identifiers
+- Add generateUITestFile option
+- Fix order of imports (by @mfcollins3)
+- Mint support
+- Info plist support
+- Fix fonts also available in R.file
+
 ## 5.1.0.alpha.4
 
 - Also generate a11y identifiers for app generated file
