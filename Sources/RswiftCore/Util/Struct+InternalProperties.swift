@@ -25,7 +25,7 @@ extension Struct {
         isStatic: true,
         name: "applicationLocale",
         typeDefinition: .inferred(Type._Locale),
-        value: "hostingBundle.preferredLocalizations.first.flatMap(Locale.init) ?? Locale.current")
+        value: "hostingBundle.preferredLocalizations.first.flatMap { Locale(identifier: $0) } ?? Locale.current")
     ]
 
     let internalClasses = [
@@ -72,7 +72,7 @@ extension Struct {
         body: """
           // Filter preferredLanguages to localizations, use first locale
           var languages = preferredLanguages
-            .map(Locale.init)
+            .map { Locale(identifier: $0) }
             .prefix(1)
             .flatMap { locale -> [String] in
               if hostingBundle.localizations.contains(locale.identifier) {
