@@ -121,8 +121,6 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
 5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
 
-_Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
-
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
 #### Second, Install `R.Swift.Library` via the Swift Package Manager (requires Xcode 11)
