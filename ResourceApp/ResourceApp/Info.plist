@@ -88,9 +88,15 @@
 	<array>
 		<string>PlanTripIntent</string>
 		<string>ShowDeparturesIntent</string>
+		<string>DuplicatePlistValue</string>
+		<string>DuplicatePlistValue</string>
 	</array>
 	<key>NSExtension</key>
 	<dict>
+		<key>DuplicatePlistKey#</key>
+		<string>Foo</string>
+		<key>DuplicatePlistKey*</key>
+		<string>Bar</string>
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>IntentsRestrictedWhileLocked</key>

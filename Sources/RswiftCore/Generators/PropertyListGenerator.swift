@@ -38,10 +38,6 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
     let qualifiedName = prefix + name
 
-    let groupedContents = contents.grouped(bySwiftIdentifier: { $0.key })
-    groupedContents.printWarningsForDuplicatesAndEmpties(source: name.description, result: name.description)
-    let uniqueContents = Dictionary(uniqueKeysWithValues: groupedContents.uniques)
-
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(contents.count) properties."],
@@ -49,15 +45,19 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: propertiesFromInfoPlist(contents: uniqueContents, path: [], at: externalAccessLevel),
+      properties: propertiesFromInfoPlist(contents: contents, path: [], at: externalAccessLevel, printWarnings: false),
       functions: [],
-      structs: structsFromInfoPlist(contents: uniqueContents, path: [], at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: contents, path: [], at: externalAccessLevel),
       classes: [],
       os: []
     )
   }
 
-  private func propertiesFromInfoPlist(contents: [String: Any], path: [String], at externalAccessLevel: AccessLevel) -> [Let] {
+  private func propertiesFromInfoPlist(contents duplicateContents: [String: Any], path: [String], at externalAccessLevel: AccessLevel, printWarnings: Bool) -> [Let] {
+    let groupedContents = duplicateContents.grouped(bySwiftIdentifier: { $0.key })
+    // We do never print the warnings because this method is always called together with `structsFromInfoPlist` that will print the warning.
+    // If we did print warnings they will be duplicate.
+    let contents = Dictionary(uniqueKeysWithValues: groupedContents.uniques)
 
     return contents
       .compactMap { (key, value) -> Let? in
@@ -98,7 +98,10 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func structsFromInfoPlist(contents: [String: Any], path: [String], at externalAccessLevel: AccessLevel) -> [Struct] {
+  private func structsFromInfoPlist(contents duplicateContents: [String: Any], path: [String], at externalAccessLevel: AccessLevel) -> [Struct] {
+    let groupedContents = duplicateContents.grouped(bySwiftIdentifier: { $0.key })
+    groupedContents.printWarningsForDuplicatesAndEmpties(source: name.description, result: name.description)
+    let contents = Dictionary(uniqueKeysWithValues: groupedContents.uniques)
 
     return contents
       .compactMap { (key, value) -> Struct? in
@@ -106,7 +109,11 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
         ps.append(key)
 
         switch value {
-        case let array as [String]:
+        case let duplicateArray as [String]:
+          let groupedArray = duplicateArray.grouped(bySwiftIdentifier: { $0 })
+          groupedArray.printWarningsForDuplicatesAndEmpties(source: name.description, result: name.description)
+          let array = groupedArray.uniques
+
           return Struct(
             availables: [],
             comments: [],
@@ -133,7 +140,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
             type: Type(module: .host, name: SwiftIdentifier(name: key)),
             implements: [],
             typealiasses: [],
-            properties: propertiesFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel),
+            properties: propertiesFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel, printWarnings: false),
             functions: [],
             structs: structsFromInfoPlist(contents: dict, path: ps, at: externalAccessLevel),
             classes: [],
