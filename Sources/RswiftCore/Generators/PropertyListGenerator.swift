@@ -38,6 +38,10 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
 
     let qualifiedName = prefix + name
 
+    let groupedContents = contents.grouped(bySwiftIdentifier: { $0.key })
+    groupedContents.printWarningsForDuplicatesAndEmpties(source: name.description, result: name.description)
+    let uniqueContents = Dictionary(uniqueKeysWithValues: groupedContents.uniques)
+
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(contents.count) properties."],
@@ -45,9 +49,9 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: name),
       implements: [],
       typealiasses: [],
-      properties: propertiesFromInfoPlist(contents: contents, path: [], at: externalAccessLevel),
+      properties: propertiesFromInfoPlist(contents: uniqueContents, path: [], at: externalAccessLevel),
       functions: [],
-      structs: structsFromInfoPlist(contents: contents, path: [], at: externalAccessLevel),
+      structs: structsFromInfoPlist(contents: uniqueContents, path: [], at: externalAccessLevel),
       classes: [],
       os: []
     )
