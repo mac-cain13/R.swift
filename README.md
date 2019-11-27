@@ -81,6 +81,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 - [Can I use R.swift in a library?](Documentation/QandA.md#can-i-use-rswift-in-a-library)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [How to upgrade to a new major version?](Documentation/Migration.md)
+- [How can I only run specific generators?](https://github.com/mac-cain13/R.swift/blob/master/Documentation/Ignoring.md#only-run-specific-generators-exclude-rsomething)
 
 ## Installation
 
