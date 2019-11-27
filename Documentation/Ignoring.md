@@ -40,7 +40,7 @@ It is also possible to call the binary with the `--rswiftignore` flag and give a
 
 
 ## Only run specific generators (exclude R.something)
-By default, R.swift runs all generators, for images, nibs, strings and many more. In some situations you may not want to generate R structs for all these types. You can choose to run only certain generators by adding a flag like this: `--generators image,string` to the call to https://github.com/mac-cain13/R.swift/blob/master/Documentation/Images/BuildPhaseExample.png
+By default, R.swift runs all generators, for images, nibs, strings and many more. In some situations you may not want to generate R structs for all these types. You can choose to run only certain generators by adding a flag like this: `--generators image,string` to the call to the [Build Phase](https://github.com/mac-cain13/R.swift/blob/master/Documentation/Images/BuildPhaseExample.png)
 
 These are the available generators:
 
