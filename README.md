@@ -99,7 +99,7 @@ let package = Package(
     name: "BuildTools",
 	platforms: [.macOS(.v10_11)],
     dependencies: [
-        .package(url: "https://github.com/apptekstudios/R.swift", from: "5.1.0"),
+        .package(url: "https://github.com/mac-cain13/R.swift", from: "5.1.0"),
     ]
 )
 ```
