@@ -133,6 +133,14 @@ private extension NamespacedAssetSubfolder {
           value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(imagePath)\(name)\")"
         )
     }
+	
+	let allImageNames = imageLets.map { $0.name.description }
+	let allImagesLet = Let(comments: ["An array of all image assets contained in this namespaced folder (not including subfolders)"],
+						   accessModifier: externalAccessLevel,
+						   isStatic: true,
+						   name: "allImages",
+						   typeDefinition: .inferred(Type._Array.withGenericArgs([Type.ImageResource])),
+						   value: "[" + allImageNames.joined(separator: ", ") + "]")
 
     return Struct(
       availables: [],
@@ -141,7 +149,7 @@ private extension NamespacedAssetSubfolder {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: imageLets,
+	  properties: [allImagesLet] + imageLets,
       functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
       classes: [],
