@@ -88,11 +88,21 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 **SwiftPackageManager** is the recommended way of installation, as this uses the built in XCode package manager.
 
 ### SwiftPackageManager (recommended)
-#### 1) Add R.swift as a xcodeproject dependency
-1. In Xcode, go to File -> Swift Packages -> Add Package Dependency
-2. Paste the url of this repository: [https://github.com/mac-cain13/R.swift](https://github.com/mac-cain13/R.swift)
-3. Select 'Version: up to next major' and press *Next*
-4. Ensure that your targets are **NOT** ticked, and press **Finish**
+#### 1) Add build tools to project
+1. Create a folder called `BuildTools` in the same folder as your xcodeproj file
+2. In this folder, create a file called `Package.swift`, with the following contents:
+```swift
+// swift-tools-version:5.1
+import PackageDescription
+
+let package = Package(
+    name: "BuildTools",
+	platforms: [.iOS(.v13)],
+    dependencies: [
+        .package(url: "https://github.com/apptekstudios/R.swift", from: "5.1.0"),
+    ]
+)
+```
 
 #### 2) Add the R.swift Library to your app target
 1. Go again to File -> Swift Packages -> Add Package Dependency
@@ -102,11 +112,11 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 #### 3) Add Build phases to your app target
 1. Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab
-2. Go to `Dependencies` and press the plus button (add a dependency), and select `rswift`
-3. Next, add a `New Run Script Phase` by clicking the little plus icon in the top left
-3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **after** `Dependencies`, expand it and paste the following script:  
+2. Add a `New Run Script Phase` by clicking the little plus icon in the top left
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
    ```
-   "$SYMROOT/$CONFIGURATION/rswift generate "$SRCROOT/R.generated.swift""
+   cd BuildTools
+   swift run -c release rswift generate "$SRCROOT/R.generated.swift"
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
 5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder
