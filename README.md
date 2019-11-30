@@ -97,7 +97,7 @@ import PackageDescription
 
 let package = Package(
     name: "BuildTools",
-	platforms: [.iOS(.v13)],
+	platforms: [.macOS(.v10_11)],
     dependencies: [
         .package(url: "https://github.com/apptekstudios/R.swift", from: "5.1.0"),
     ]
@@ -105,8 +105,8 @@ let package = Package(
 ```
 
 #### 2) Add the R.swift Library to your app target
-1. Go again to File -> Swift Packages -> Add Package Dependency
-2. Paste the url of the Library repository: [https://github.com/mac-cain13/R.swift.Library](https://github.com/mac-cain13/R.swift.Library)
+1. Go to File -> Swift Packages -> Add Package Dependency
+2. Paste the url of the **R.swift.Library** repository: [https://github.com/mac-cain13/R.swift.Library](https://github.com/mac-cain13/R.swift.Library)
 3. Select 'Version: up to next major' and press *Next*
 4. **Tick any targets from which you will use R**, and press **Finish**
 
