@@ -116,6 +116,7 @@ let package = Package(
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
    ```
    cd BuildTools
+   #swift package update #Uncomment this line temporarily to update the version of R.swift used based on your BuildTools/Package.swift file
    swift run -c release rswift generate "$SRCROOT/R.generated.swift"
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
