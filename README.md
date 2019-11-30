@@ -92,7 +92,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 1. In Xcode, go to File -> Swift Packages -> Add Package Dependency
 2. Paste the url of this repository: [https://github.com/mac-cain13/R.swift](https://github.com/mac-cain13/R.swift)
 3. Select 'Version: up to next major' and press *Next*
-4. Ensure that your targets are **not** ticked, and press **Finish**
+4. Ensure that your targets are **NOT** ticked, and press **Finish**
 
 #### 2) Add the R.swift Library to your app target
 1. Go again to File -> Swift Packages -> Add Package Dependency
@@ -104,12 +104,17 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 1. Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab
 2. Go to `Dependencies` and press the plus button (add a dependency), and select `rswift`
 3. Next, add a `New Run Script Phase` by clicking the little plus icon in the top left
-3. Drag the new `Run Script` phase **above** the `Compile Sources` phase to be **just below** `Dependencies`, expand it and paste the following script:  
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **after** `Dependencies`, expand it and paste the following script:  
    ```
    "$SYMROOT/$CONFIGURATION/rswift generate "$SRCROOT/R.generated.swift""
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
-5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder
+
+#### 4) Add the generated file to your project
+1) Drag the `R.generated.swift` file into your project
+2) **Uncheck** `Copy items if needed` - so that the file is added still in its current location (as it will be automatically regenerated when you build your project)
+3) Once the file is added, you're ready to use R.swift!
 
 
 ### CocoaPods
