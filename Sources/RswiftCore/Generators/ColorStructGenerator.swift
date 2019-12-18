@@ -131,7 +131,7 @@ private extension NamespacedAssetSubfolder {
 						   isStatic: true,
 						   name: "allColors",
 						   typeDefinition: .specified(Type._Array.withGenericArgs([Type.ColorResource])),
-						   value: "[" + allImageNames.joined(separator: ", ") + "]")
+						   value: "[" + allColorNames.joined(separator: ", ") + "]")
 
     return Struct(
       availables: [],
