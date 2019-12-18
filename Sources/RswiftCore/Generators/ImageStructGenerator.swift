@@ -139,7 +139,7 @@ private extension NamespacedAssetSubfolder {
 						   accessModifier: externalAccessLevel,
 						   isStatic: true,
 						   name: "allImages",
-						   typeDefinition: .inferred(Type._Array.withGenericArgs([Type.ImageResource])),
+						   typeDefinition: .specified(Type._Array.withGenericArgs([Type.ImageResource])),
 						   value: "[" + allImageNames.joined(separator: ", ") + "]")
 
     return Struct(

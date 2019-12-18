@@ -124,6 +124,14 @@ private extension NamespacedAssetSubfolder {
           value: "Rswift.ColorResource(bundle: R.hostingBundle, name: \"\(colorPath)\(name)\")"
         )
     }
+	
+	let allColorNames = colorLets.map { $0.name.description }
+	let allColorsLet = Let(comments: ["An array of all color assets contained in this namespaced folder (not including subfolders)"],
+						   accessModifier: externalAccessLevel,
+						   isStatic: true,
+						   name: "allColors",
+						   typeDefinition: .specified(Type._Array.withGenericArgs([Type.ColorResource])),
+						   value: "[" + allImageNames.joined(separator: ", ") + "]")
 
     return Struct(
       availables: [],
@@ -132,7 +140,7 @@ private extension NamespacedAssetSubfolder {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: colorLets,
+      properties: [allColorsLet] + colorLets,
       functions: groupedFunctions.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
       structs: structs,
       classes: [],
