@@ -227,7 +227,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: [],
       accessModifier: .privateLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: "_" + values.key),
+      name: resourceName(values: values),
       typeDefinition: .inferred(Type.StringResource),
       value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
@@ -252,9 +252,13 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       isStatic: true,
       name: SwiftIdentifier(name: values.key),
       typeDefinition: .specified(type.withGenericArgs(argTypes)),
-      value: "\(type.name)(resource: _\(values.key))"
+      value: "\(type.name)(resource: \(resourceName(values: values)))"
     )
   }
+}
+
+private func resourceName(values: StringValues) -> SwiftIdentifier {
+    return SwiftIdentifier(name: "_" + values.key)
 }
 
 extension Locale {
