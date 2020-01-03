@@ -227,7 +227,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: [],
       accessModifier: .privateLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: "_\(values.key)"),
+      name: SwiftIdentifier(name: "_" + values.key),
       typeDefinition: .inferred(Type.StringResource),
       value: "Rswift.StringResource(key: \"\(escapedKey)\", tableName: \"\(values.tableName)\", bundle: R.hostingBundle, locales: [\(locales)], comment: nil)"
     )
@@ -250,9 +250,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
-      name: SwiftIdentifier(name: values.key.snakeToCamel()),
+      name: SwiftIdentifier(name: values.key),
       typeDefinition: .specified(type.withGenericArgs(argTypes)),
-      value: "\(type.name)(resource: \(SwiftIdentifier(name: "_\(values.key)")))"
+      value: "\(type.name)(resource: _\(values.key))"
     )
   }
 }
@@ -266,28 +266,6 @@ extension Locale {
       return "'\(filename)' (Base)"
     case .language(let language):
       return "'\(filename)' (\(language))"
-    }
-  }
-}
-
-private extension String {
-  func snakeToCamel() -> String {
-    return split(separator: "_")
-      .enumerated()
-      .map { (index, substr) -> String in
-        let str = String(substr)
-        if index == 0 { return str }
-        else { return str.capitalizingFirstChar() }
-      }
-      .joined()
-  }
-
-  private func capitalizingFirstChar() -> String {
-    if let uppercasedFirst = first?.uppercased() {
-      return replacingCharacters(in: ...startIndex,
-                                 with: uppercasedFirst)
-    } else {
-      return self
     }
   }
 }
