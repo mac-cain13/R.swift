@@ -33,6 +33,7 @@ public struct RswiftCore {
     self.callInformation = callInformation
   }
 
+  @available(iOS 9.0, *)
   public func run() throws {
     do {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
@@ -160,6 +161,7 @@ public struct RswiftCore {
   }
 }
 
+@available(iOS 9.0, *)
 private func loadPropertyList(name: String, path: Path?, callInformation: CallInformation) -> PropertyList? {
   guard let path = path else { return nil }
   do {
