@@ -120,7 +120,7 @@ let progress = R.string.localizable.copyProgress(completed: 4, total: 23)
 ```swift
 let storyboard = UIStoryboard(name: "Main", bundle: nil)
 let initialTabBarController = storyboard.instantiateInitialViewController() as? UITabBarController
-let settingsController = storyboard.instantiateViewController(withIdentifier: "settingsController") as? SettingsControllerSettingsController
+let settingsController = storyboard.instantiateViewController(withIdentifier: "settingsController") as? SettingsController
 ```
 
 *With R.swift*
