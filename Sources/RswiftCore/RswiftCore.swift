@@ -39,13 +39,7 @@ public struct RswiftCore {
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
       let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
-      let infoPlists = buildConfigurations.compactMap {
-        return loadPropertyList(name: $0.name, path: $0.infoPlistPath, callInformation: callInformation)
-      }
-      let entitlements = buildConfigurations.compactMap {
-        return loadPropertyList(name: $0.name, path: $0.entitlementsPath, callInformation: callInformation)
-      }
-
+      
       let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
         .compactMap { $0 }
@@ -86,9 +80,19 @@ public struct RswiftCore {
         structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
       }
       if callInformation.generators.contains(.info) {
+        
+        let infoPlists = buildConfigurations.compactMap {
+          return loadPropertyList(name: $0.name, path: $0.infoPlistPath, callInformation: callInformation)
+        }
+        
         structGenerators.append(PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist))
       }
       if callInformation.generators.contains(.entitlements) {
+        
+        let entitlements = buildConfigurations.compactMap {
+          return loadPropertyList(name: $0.name, path: $0.entitlementsPath, callInformation: callInformation)
+        }
+        
         structGenerators.append(PropertyListGenerator(name: "entitlements", plists: entitlements, toplevelKeysWhitelist: nil))
       }
 
