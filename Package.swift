@@ -7,7 +7,8 @@ let package = Package(
     .macOS(.v10_11)
   ],
   products: [
-    .executable(name: "rswift", targets: ["rswift"])
+    .executable(name: "rswift", targets: ["rswift"]),
+    .executable(name: "rswift-dynamic", type: .dynamic, targets: ["rswift"])
   ],
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
