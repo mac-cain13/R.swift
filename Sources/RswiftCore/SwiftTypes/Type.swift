@@ -29,7 +29,7 @@ struct Type: UsedTypesProvider, CustomStringConvertible, Hashable {
   static let _UInt = Type(module: .stdLib, name: "UInt")
   static let _Double = Type(module: .stdLib, name: "Double")
   static let _Character = Type(module: .stdLib, name: "Character")
-  static let _CStringPointer = Type(module: .stdLib, name: "UnsafePointer<unichar>")
+  static let _CStringPointer = Type(module: .stdLib, name: "UnsafePointer<CChar>")
   static let _VoidPointer = Type(module: .stdLib, name: "UnsafePointer<Void>")
   static let _URL = Type(module: "Foundation", name: "URL")
   static let _Bundle = Type(module: "Foundation", name: "Bundle")
