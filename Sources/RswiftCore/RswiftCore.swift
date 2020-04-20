@@ -46,7 +46,7 @@ public struct RswiftCore {
         .filter { !ignoreFile.matches(url: $0) }
 
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
-      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UISceneConfigurations", "NSUserActivityTypes", "NSExtension"]
+      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
 
       var structGenerators: [StructGenerator] = []
       if callInformation.generators.contains(.image) {
