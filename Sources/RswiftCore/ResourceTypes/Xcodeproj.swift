@@ -12,8 +12,6 @@ import XcodeEdit
 
 struct BuildConfiguration {
   let name: String
-  let infoPlistPath: Path
-  let entitlementsPath: Path?
 }
 
 struct Xcodeproj: WhiteListedExtensionsResourceType {
@@ -85,16 +83,7 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     let buildConfigurations = buildConfigurationList.buildConfigurations
       .compactMap { $0.value }
       .compactMap { configuration -> BuildConfiguration? in
-        guard let infoPlistFile = configuration.buildSettings["INFOPLIST_FILE"] as? String else { return nil }
-        let infoPlistPath = Path.relativeTo(.sourceRoot, infoPlistFile)
-
-        let codeSignEntitlements = configuration.buildSettings["CODE_SIGN_ENTITLEMENTS"] as? String
-        let entitlementsPath = codeSignEntitlements.map { Path.relativeTo(.sourceRoot, $0) }
-
-        return BuildConfiguration(
-          name: configuration.name,
-          infoPlistPath: infoPlistPath,
-          entitlementsPath: entitlementsPath)
+        return BuildConfiguration(name: configuration.name)
       }
 
     return buildConfigurations
