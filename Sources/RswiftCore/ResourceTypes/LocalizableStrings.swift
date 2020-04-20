@@ -34,7 +34,7 @@ struct LocalizableStrings : WhiteListedExtensionsResourceType {
 
     // Check to make sure url can be parsed as a dictionary
     guard let nsDictionary = NSDictionary(contentsOf: url) else {
-      throw ResourceParsingError.parsingFailed("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
+      throw ResourceParsingError.parsingFailed("File could not be parsed as a strings file: \(url.absoluteString)")
     }
 
     // Parse dicts from NSDictionary
