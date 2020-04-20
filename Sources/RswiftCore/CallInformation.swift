@@ -23,6 +23,8 @@ public struct CallInformation {
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
+  let infoPlistFile: URL
+  let codeSignEntitlements: URL?
 
   let scriptInputFiles: [String]
   let scriptOutputFiles: [String]
@@ -47,6 +49,8 @@ public struct CallInformation {
     targetName: String,
     bundleIdentifier: String,
     productModuleName: String,
+    infoPlistFile: URL,
+    codeSignEntitlements: URL?,
 
     scriptInputFiles: [String],
     scriptOutputFiles: [String],
@@ -70,6 +74,8 @@ public struct CallInformation {
     self.targetName = targetName
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName
+    self.infoPlistFile = infoPlistFile
+    self.codeSignEntitlements = codeSignEntitlements
 
     self.scriptInputFiles = scriptInputFiles
     self.scriptOutputFiles = scriptOutputFiles
