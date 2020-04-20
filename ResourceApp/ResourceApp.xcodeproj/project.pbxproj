@@ -104,6 +104,7 @@
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 		E2DB0EB02334DCC100815AAF /* InfoPlistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */; };
+		E2F768FC244D92A200761E14 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F768FB244D92A200761E14 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -286,6 +287,7 @@
 		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
 		E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPlistTests.swift; sourceTree = "<group>"; };
+		E2F768FB244D92A200761E14 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		EF513940333862726B930435 /* Pods_Shared_ResourceApp_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shared_ResourceApp_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -491,6 +493,7 @@
 				D5AD5C931B78FC4E00A8B96C /* Duplicate.xib */,
 				D5AD5CA01B7A926200A8B96C /* DuplicateCellView.xib */,
 				D575E25C1B766CD800C22F0B /* My View.xib */,
+				E2F768FB244D92A200761E14 /* SceneDelegate.swift */,
 				C378DD791C68C2BF003598B8 /* SupplementaryElement.xib */,
 				E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */,
 				E20983251D585F8C005ACBAA /* Xib with ViewController.xib */,
@@ -1137,6 +1140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5AD5C9F1B7A924000A8B96C /* AppDelegate.swift in Sources */,
+				E2F768FC244D92A200761E14 /* SceneDelegate.swift in Sources */,
 				D55C6CC21B5D757300301B0D /* SecondViewController.swift in Sources */,
 				D55C6CC01B5D757300301B0D /* FirstViewController.swift in Sources */,
 				D5CBCE491B7682B800C5D96B /* MyViewController.swift in Sources */,
