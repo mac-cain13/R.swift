@@ -20,16 +20,26 @@ struct SwiftIdentifier : CustomStringConvertible, Hashable {
   let description: String
 
   init(name: String, lowercaseStartingCharacters: Bool = true) {
+    // Spellout numbers at the start of the name
+    let spelledOutSwiftName: String = {
+        let numberRange = numberPrefixRegex.rangeOfFirstMatch(in: name, options: [], range: name.fullRange)
+        if let range = Range(numberRange, in: name), range.lowerBound == name.startIndex {
+            return """
+            \(String(name.prefix(upTo: range.upperBound)).spelledOut ?? "")\
+            \(String(name.suffix(from: range.upperBound)))
+            """
+        }
+
+        return name
+    }()
+
     // Remove all blacklisted characters from the name and uppercase the character after a blacklisted character
-    var nameComponents = name.components(separatedBy: blacklistedCharacters)
+    var nameComponents = spelledOutSwiftName.components(separatedBy: blacklistedCharacters)
     let firstComponent = nameComponents.remove(at: 0)
     let cleanedSwiftName = nameComponents.reduce(firstComponent) { $0 + $1.uppercaseFirstCharacter }
 
-    // Remove numbers at the start of the name
-    let sanitizedSwiftName = numberPrefixRegex.stringByReplacingMatches(in: cleanedSwiftName, options: [], range: cleanedSwiftName.fullRange, withTemplate: "")
-
     // Lowercase the start of the name
-    let capitalizedSwiftName = lowercaseStartingCharacters ? SwiftIdentifier.lowercasePrefix(sanitizedSwiftName) : sanitizedSwiftName
+    let capitalizedSwiftName = lowercaseStartingCharacters ? SwiftIdentifier.lowercasePrefix(cleanedSwiftName) : cleanedSwiftName
 
     // Escape the name if it is a keyword
     if SwiftKeywords.contains(capitalizedSwiftName) {
@@ -123,6 +133,20 @@ extension Sequence {
       .sorted { $0.0.description < $1.0.description }
 
     return SwiftNameGroups(uniques: uniques, duplicates: duplicates, empties: empties ?? [])
+  }
+}
+
+extension String {
+  static let spelledOutFormatter: NumberFormatter = {
+    let numberFormatter = NumberFormatter()
+    numberFormatter.numberStyle = .spellOut
+    return numberFormatter
+  }()
+
+  var spelledOut: String? {
+    Int(self)
+        .flatMap { String.spelledOutFormatter.string(from: $0 as NSNumber) }
+        .flatMap { $0.components(separatedBy:CharacterSet(charactersIn: " ")).joined(separator: "-") }
   }
 }
 

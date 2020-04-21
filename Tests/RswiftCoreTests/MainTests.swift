@@ -28,9 +28,9 @@ class MainTests: XCTestCase {
     "looks+like^some-kind*of%easy": "looksLikeSomeKindOfEasy",
     "(looks) easy, but it's not really NeXT that easy!": "looksEasyButItSNotReallyNeXTThatEasy",
     "easy 123 and done...": "easy123AndDone",
-    "123 easy!": "easy",
-    "123 456easy": "easy",
-    "123 😄": "😄",
+    "123 easy!": "oneHundredTwentyThreeEasy",
+    "123 456easy": "oneHundredTwentyThree456easy",
+    "123 😄": "oneHundredTwentyThree😄",
     "🇳🇱": "🇳🇱",
     "🌂MakeItRain!": "🌂MakeItRain",
     "PRFXMyClass": "prfxMyClass",
@@ -38,8 +38,11 @@ class MainTests: XCTestCase {
     "MyClass": "myClass",
     "PRFX_MyClass": "prfx_MyClass",
     "PRFX-myClass": "prfxMyClass",
-    "123NSSomeThing": "nsSomeThing",
-    "PR123FXMyClass": "pr123FXMyClass"
+    "123NSSomeThing": "oneHundredTwentyThreeNSSomeThing",
+    "PR123FXMyClass": "pr123FXMyClass",
+    "1_second": "one_second",
+    "2hours": "twohours",
+    "3_Minutes": "three_Minutes"
   ]
   
   func testSwiftNameSanitization() {
