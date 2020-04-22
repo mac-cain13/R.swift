@@ -1,3 +1,11 @@
+## 5.2.0
+
+- Fix duplicate names in entitlements
+- Readme & documentation updates
+- Fix only parse plist/entitlements when generator is enabled (by @roelspruit)
+- Change type for C strings to make usage of format strings containing c style placeholders easier (by @schroepf)
+- Use info plist location & entitlements location as exposed in env variables
+
 ## 5.1.0
 
 - WatchOS support (by @lammertw)
