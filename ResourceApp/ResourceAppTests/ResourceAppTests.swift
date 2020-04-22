@@ -45,6 +45,8 @@ class ResourceAppTests: XCTestCase {
     warning: [R.swift] Skipping 1 string in 'Generic' because no swift identifier can be generated for key: '#'
     warning: [R.swift] Strings file 'Settings' (nl) has extra translations (not in Base) for keys: 'Only Dutch'
     warning: [R.swift] Strings file 'Generic' has extra translations (not in English) for keys: '#'
+    warning: [R.swift] Skipping 2 infos because symbol 'duplicatePlistKey' would be generated for all of these infos: DuplicatePlistKey#, DuplicatePlistKey*
+    warning: [R.swift] Skipping 2 infos because symbol 'duplicatePlistValue' would be generated for all of these infos: DuplicatePlistValue, DuplicatePlistValue
     """
     .trimmingCharacters(in: .whitespacesAndNewlines)
     .components(separatedBy: "\n")
