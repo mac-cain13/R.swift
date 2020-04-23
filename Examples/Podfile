@@ -24,13 +24,6 @@ target 'ResourceAppTests' do
   rswiftlib
 end
 
-target 'ResourceApp-tvOS' do
-  platform :tvos, '9.0'
-  project 'RtvApp/RtvApp'
-
-  rswiftlib
-end
-
 target 'ResourceApp-watchOS-Extension' do
   platform :watchos, '2.2'
   project 'RwatchApp/RwatchApp'
