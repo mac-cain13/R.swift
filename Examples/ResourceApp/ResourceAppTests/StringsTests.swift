@@ -14,7 +14,7 @@ class StringsTests: XCTestCase {
 
   func testNoNilStrings() {
     XCTAssertNotNil(R.string.generic.loremipsum())
-    XCTAssertNotNil(R.string.localizable.japaneseOnly())
+//    XCTAssertNotNil(R.string.localizable.japaneseOnly())
     XCTAssertNotNil(R.string.localizable.one())
     XCTAssertNotNil(R.string.localizable.quote(4))
     XCTAssertNotNil(R.string.localizable.two())
