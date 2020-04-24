@@ -1,0 +1,28 @@
+name: Checks
+
+on:
+  pull_request:
+    branches: '*'
+
+jobs:
+  run-all-tests:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Run all tests w/fastlane
+      uses: maierj/fastlane-action@v1.4.0
+      with:
+        lane: 'runalltests'
+  release-build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build release
+      run: swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"
+    - name: Upload build
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: "Release binary"
+        path: .build/release/rswift
