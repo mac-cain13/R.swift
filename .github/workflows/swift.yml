@@ -15,3 +15,5 @@ jobs:
       run: swift build -v -c release
     - name: Run tests
       run: swift test -v
+    - name: Run tests
+      run: fastlane runalltests
