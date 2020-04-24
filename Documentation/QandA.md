@@ -15,7 +15,7 @@ There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliS
 
 ## What are the requirements to run R.swift?
 
-R.swift works with iOS 8 and tvOS 9 and higher, your development machine should be on OS X 10.11 with Xcode 7 or higher.
+R.swift works with Xcode 10 for apps targetting iOS 8 and tvOS 9 and higher.
 
 ## How to use methods with a `Void` argument?
 
@@ -26,6 +26,18 @@ The reason this happens is because of the availability of the var `R.image.setti
 ## How to fix missing imports in the generated file?
 
 If you get errors like `Use of undeclared type 'SomeType'` in the `R.generated.swift` file most of the time this can be fixed by [explicitly stating the module in your xib or storyboard](Images/ExplicitCustomModule.png). This will make R.swift recognize that an import is necessary.
+
+## How to use classes with the same name as their module?
+
+If you get errors like `'SomeType' is not a member type of 'SomeType'` you're using a module that contains a class/struct/enum with the same name as the module itself. This is a known [Swift issue](https://bugs.swift.org/browse/SR-898).
+
+Work around this problem by [*emptying* the module field in the xib or storyboard](Images/ExplicitCustomModule.png). Then [add `--import SomeType` as a flag](Images/CustomImport.png) to the R.swift build phase to make sure R.swift imports the module in the generated file.
+
+## Can I use R.swift in a library?
+
+Yes, just add R.swift as a buildstep in your library project and it will work just like normal. This works best if you have a dedicated Xcode project you can use to add the build script to. For Cocoapod users: this is [not the case](https://github.com/mac-cain13/R.swift/issues/430#issue-344112657) if you've used `pod lib create MyNewLib` to scaffold your library.
+
+If you want to expose the resources to users of your library you have to make the generated code public, you can do this by adding `--accessLevel public` to the call to R.swift. For example, if you included R.swift as a cocoapod dependency to your library project, you would change your build step to: `"$PODS_ROOT/R.swift/rswift" generate --accessLevel public "$SRCROOT"`
 
 ## How does R.swift work?
 

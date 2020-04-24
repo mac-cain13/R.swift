@@ -1,0 +1,14 @@
+/* 
+  Generic.strings
+  ResourceApp
+
+  Created by Tom Lokhorst on 2016-04-17.
+  Copyright © 2016 Mathijs Kadijk. All rights reserved.
+*/
+
+"loremipsum" = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+"#" = "hashtag";
+"precision1" = "one   - %012.2f";
+"precision2" = "two   - %12.2f";
+"precision3" = "three - %12.4f";
+"precision4" = "four  - %.2f";

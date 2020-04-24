@@ -1,0 +1,14 @@
+//
+//  Localizable.strings
+//  ResourceApp
+//
+//  Created by Nolan Warner on 2016/03/01.
+//  Copyright © 2016 Nolan Warner. All rights reserved.
+//
+
+
+one = "一つ";
+two = 2;
+
+"quote" = "%dつの光があります！";
+"japanese only" = "Not translated in other languages, and there is no Base";

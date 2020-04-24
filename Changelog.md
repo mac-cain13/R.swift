@@ -1,4 +1,265 @@
-# Changelog
+## 5.2.0
+
+- Fix duplicate names in entitlements
+- Readme & documentation updates
+- Fix only parse plist/entitlements when generator is enabled (by @roelspruit)
+- Change type for C strings to make usage of format strings containing c style placeholders easier (by @schroepf)
+- Use info plist location & entitlements location as exposed in env variables
+
+## 5.1.0
+
+- WatchOS support (by @lammertw)
+- Introduced R.id for accessibility identifiers
+- Add generateUITestFile option
+- Fix order of imports (by @mfcollins3)
+- Mint support
+- Info plist support
+- Fix fonts also available in R.file
+
+## 5.1.0.alpha.4
+
+- Also generate a11y identifiers for app generated file
+
+## 5.1.0.alpha.3
+
+- Support for accessibilityIdentifiers in userDefinedRuntimeAttributes
+
+## 5.1.0.alpha.2
+
+- Add generateUITestFile option
+
+## 5.1.0.alpha.1
+
+- WatchOS support (by @lammertw)
+- Introduced R.id for accessibility identifiers
+
+## 5.0.3
+
+- Fix for stand alone image files (Thanks @CraigsOverItAll)
+
+## 5.0.2
+
+- Fix issues with legacy build system by adding option to disable input checks
+
+## 5.0.1
+
+- Fixes for relative paths
+
+## 5.0.0
+
+- Compatible with Xcode 10 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility
+- Removed CLR file support, use color resources instead
+- Easier nib loading with new method
+- Ignore file supports explicit include (by @renrawnalon)
+- Validation for named colors
+- Empty structs are not generated anymore (by @soberman)
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
+## 5.0.0.rc.2
+
+- Improve R.swift 5 migration errors
+
+## 5.0.0.rc.1
+
+- Xcode 10 compatibility fixes
+
+## 5.0.0.alpha.3
+
+- Update XcodeEdit
+- Performance tweaks by @bclymer
+- Fix for validate images by @cooler333
+
+## 5.0.0.alpha.2
+
+- Nib parsing fixes for Xcode 10 from @rafaelnobrepd
+
+## 5.0.0.alpha.1
+
+- Removed CLR file support, use color resources instead
+- Easier nib loading with new method
+- Ignore file supports explicit include (by @renrawnalon)
+- Validation for named colors
+- Empty structs are not generated anymore (by @soberman)
+- Compatible with Xcode 10 / Swift 4.2 / iOS 12 SDK, this release is not compatible with older versions use R.swift 4 if you still need that compatibility
+
+## 4.0.0
+
+- Improved Xcodeproj errors
+- New color assets are now supported
+- Better capitalization is now enabled by default
+- Xcode 9/Swift 4/SPM fixes
+- Deprecate clr based color resources
+- Introduce color asset based color resources
+
+## 4.0.0.alpha.4
+
+- Changes for latest Swift 4 betas
+- Improved Xcodeproj errors
+
+## 4.0.0.alpha.3
+
+- New color assets are now supported
+- Better capitalization is now enabled by default
+- Use new XcodeEdit version that warns when your projectfile is corrupt
+- Xcode 9/Swift 4/SPM fixes
+
+## 4.0.0.alpha.2
+
+- Fix incorrectly merged color PR
+
+## 4.0.0.alpha.1
+
+- Deprecate clr based color resources
+- Introduce color asset based color resources
+
+## 3.3.0
+
+*New features:*
+- Better checks for color spaces in clr files
+- Include base translation in R.strings code
+
+*Fixed issues:*
+- Validating images from nibs now respects bundle
+
+*Other:*
+- We now use swift package manager as our build tool
+
+## 3.3.0.beta.1
+
+*New features:*
+- Better checks for color spaces in clr files
+
+*Fixed issues:*
+- Validating images from nibs now respects bundle
+
+*Other:*
+- We now use swift package manager as our build tool
+
+## 3.2.0
+
+New features:
+- Added option to explicitly import modules (fixes #277)
+- Support for an ignore file to skip resources (thanks @shiraji / fixes #276)
+- Add edge flag to enable new stable feature that are breaking changes
+- New nicer casing of identifiers (is behind the edge flag)
+
+Bugfix:
+- Load hosting bundle by class instead of identifier (fixes #293)
+
+## 3.1.0
+
+New features:
+
+- Support for `--accessLevel public` flag that makes all `R` things public (handy for libraries)
+- Handle multiple locales for resource files (`R.file.*`) by @tomlokhorst
+- Add some more checks while parsing nibs by @Tvede-dk
+- Use fully qualified names in the generated file to prevent naming conflicts
+- Validation for custom fonts and images in nibs
+
+Deprecated:
+- Deprecated `assertValid` method, use `validate` from a test instead
+
+Bugfix:
+
+- Duplicate printed errors on storyboards
+- Validation generated not compilable code when duplicate storyboard identifiers where present
+
+## 3.0.0
+
+New features:
+
+- Swift 3 support
+
+**Breaking changes:**
+- Swift 2 is not supported anymore, use the 2.* versions for Swift 2
+- Some methods are renamed, those are annotated with an availability annotation so the compiler will help you rename
+
+## 2.5.0
+
+New features:
+
+- Bundle is used in string resources
+
+Bugfix:
+
+- Detect all segues correctly
+- Fix namespace problems with validation errors
+
+## 2.4.0
+
+New features:
+
+- Swift 2.3 support
+
+## 2.3.0
+
+New features:
+- Add `--version` parameter that shows the version of R.swift you are running
+
+Fixed issues:
+- Use correct locale for localized strings
+- Fix typo in generated comments (by @waywalker)
+
+## 2.2.2
+
+Fixed issues:
+
+- Fix for using CR + LF in localized strings (by @tomlokhorst)
+
+## 2.2.1
+
+This is an incorrectly released version and is therefore exactly the same as 2.2.0.
+
+## 2.2.0
+
+New features:
+- Localized string support (by @renrawnalon and @tomlokhorst)
+
+Fixed issues:
+- Updated reserved keywords (by @tomlokhorst)
+
+## 2.1.0
+
+New features:
+- Add support for "imagestack" assets, parallax images used on AppleTV (@chillpop) 
+
+## 2.0.0
+
+Fixed issue:
+- Use new version of R.swift.Library to avoid Swift 2.2 warnings
+- This version is not compatible with Swift 2.1 and therefore a breaking change, use 1.4.2 if you need Swift 2.1 compatibility.
+
+## 1.4.2
+
+Fixed issue:
+- Make this version compatible with Swift 2.1
+- This release is exactly the same version as 1.4.0
+
+## 1.4.1
+
+**Note: Do not use this version, use version 2.0.0 or 1.4.2 instead.**
+
+Fixed issue:
+- Use new version of R.swift.Library to avoid Swift 2.2 warnings
+
+## 1.4.0
+
+New features:
+- Added support for CLR color lists (@tomlokhorst)
+- SwiftDoc comments are generated in the `R.generated.swift` file (@tomlokhorst)
+- R.swift is made available on Homebrew (maintained by @tomasharkema)
+- Synthesizing let accessors for storyboard identifiers (@JaviSoto)
+- New `NSData(resource: R.file.someFile)` constructor is now available (@tomlokhorst)
+
+Fixed issues:
+- **Breaking:** `R.file.someFile() as String` is removed to prevent ambiguity errors, use `R.file.someFile.path()` instead (@tomlokhorst)
+- Generated variable/function names will never be empty anymore (@tomlokhorst)
+- If the first view in a nib is a standard Apple Interface Builder class it will now typecast correctly instead of falling back to `UIView`
+- NSBundle now falls correctly back on the main bundle, this was documented as such but did not always happen
+- Swift keyword list updated to avoid generation of invalid variable/function names
 
 ## 1.3.0
 New features:
@@ -120,7 +381,7 @@ Fixes incorrect handling of Nib names with a space in them, see issue #56.
 
 ## 0.8.4
 
-When using the assistant editor XCode will not sugged the R.generated.swift file as a good place to add outlets and such.
+When using the assistant editor Xcode will not sugged the R.generated.swift file as a good place to add outlets and such.
 
 ## 0.8.3
 
@@ -158,7 +419,7 @@ Fixed a bug where some files where skipped during search and not included in the
 - Added support for nibs(/xibs) use R.nib.[name].firstView to get the first view in your nib fully typed!
 - All reuse identifiers in your project (nibs and storyboards) are available under R.reuseIdentifier.[name]
 - We now leave the generated file untouched if there are no updates
-- Errors in executing R.swift will now appear in between you XCode build errors/warnings
+- Errors in executing R.swift will now appear in between you Xcode build errors/warnings
 - UIViewController subclasses in your storyboard (like UINavigationController or UISplitviewController) are now correctly typed
 - Internal rewrite in the way we generate the R-struct
 

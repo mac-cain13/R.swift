@@ -16,8 +16,13 @@ class NibTests: XCTestCase {
     XCTAssertEqual(R.nib.myView.name, "My View")
   }
 
+  func testRelativeToProjectGroup() {
+    XCTAssertTrue(R.nib.relativeToProject(owner: nil) != nil)
+    XCTAssertTrue(R.nib.relativeToProject.firstView(owner: nil) != nil)
+  }
+
   func testNibIsOfCorrectType() {
-    XCTAssertTrue(R.nib.supplementaryElement.dynamicType.ReusableType.classForCoder() == UICollectionReusableView.classForCoder())
+    XCTAssertTrue(type(of: R.nib.supplementaryElement).ReusableType.classForCoder() == UICollectionReusableView.classForCoder())
   }
 
 }

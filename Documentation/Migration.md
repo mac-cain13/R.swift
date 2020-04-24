@@ -2,6 +2,41 @@
 
 Pointers for migration between major versions.
 
+## Upgrading to 5.0
+
+- Make sure you use Xcode 10 since we've adjusted to the SDK changes
+- At the moment we are compatible with both Swift 4 and 4.2, this is more an accident then a feature, beware that we might drop Swift 4 support anytime.
+
+If you are using the "New Build System":
+- In the Build Phase you must perform some changes, [see an example screenshot](Images/BuildPhaseExample.png):
+  * Change the script to give the explicit output file, for example: `"$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/[YOUR_PATH]/R.generated.swift"`
+  * Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" of the Build Phase
+  * Add `$SRCROOT/[YOUR_PATH]/R.generated.swift` to the "Output Files" of the Build Phase
+
+If you are using the "Legacy Build System":
+- Add the flag `--disable-input-output-files-validation` and *do not* add input/output files to the Build Phase, [See an example screenshot](Images/BuildPhaseExample_LegacyBuildSystem.png).
+
+## Upgrading to 4.0
+
+- Make sure you use Swift 4 / Xcode 9 since we've adjusted to the syntax and SDK changes.
+- Running R.swift now requires the `generate` command, check the error R.swift outputs for upgrade instructions
+- Capitalization of methods and properties might have changed, in these cases the compiler should generate a fix-it for you.
+- Support for CLR-files is deprecated, use the new named Color assets instead where possible.
+ * CLR based colors are moved from `R.color.*` to `R.clr.*`
+ * Support for CLR files will be removed in a later version
+- At the moment we are compatible with both Swift 3.2 and Swift 4, this is more an accident then a feature, beware that we might drop Swift 3.2 support anytime.
+- If you upgrade from Swift 2 we advise you to first migrate to Swift 3 / R.swift 3.0 and when that is done apply the migration to Swift 4 / R.swift 4.0
+
+## Upgrading to 3.0
+
+- Make sure you use Swift 3 / Xcode 8 since we've adjusted to the syntax changes.
+- If you want to use Swift 2.3 / Xcode 8 use the latest R.swift 2 release.
+- Some methods are renamed to match the new Swift 3 naming conventions, there are annotations available so the compiler can help you migrate.
+
+## Upgrading to 2.0
+
+- Make sure you use Swift 2.2 / Xcode 7.3 since we've adjusted to the syntax changes.
+
 ## Upgrading to 1.0
 
 - iOS 7 support is dropped, use [R.swift 0.13](https://github.com/mac-cain13/R.swift/releases/tag/v0.13.0) if you still have to support it.

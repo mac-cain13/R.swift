@@ -8,20 +8,11 @@
 
 import UIKit
 import XCTest
-@testable import ResourceApp
+@testable import ResourceApp_tvOS
 
 class ImagesTests: XCTestCase {
   
-  func testNoNilAssetImages() {
-    XCTAssertNotNil(R.image.eerste())
-    XCTAssertNotNil(R.image.first())
-    XCTAssertNotNil(R.image.firstNested())
-    XCTAssertNotNil(R.image.secondNested())
-    XCTAssertNotNil(R.image.skyTiff())
-  }
-
-  func testNoNilFilebasedImages() {
-    XCTAssertNotNil(R.image.colorsJpg())
-    XCTAssertNotNil(R.image.userWhite())
+  func testNonNilImages() throws {
+    XCTAssertNotNil(R.image.imageStackAsset())
   }
 }

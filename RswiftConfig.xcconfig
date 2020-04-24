@@ -1,0 +1,19 @@
+//
+//  RswiftConfig.xcconfig
+//  R.swift
+//
+//  Created by Tom Lokhorst on 2017-04-23.
+//  Copyright © 2017 Mathijs Kadijk. All rights reserved.
+//
+
+// Intermediate build files go here
+PROJECT_TEMP_DIR = $(SRCROOT)/build/$(PROJECT_NAME).build
+
+// Build-related files for the active build configuration go here
+CONFIGURATION_BUILD_DIR = $(SRCROOT)/build/$CONFIGURATION
+
+// The final product executables and other build products go here
+BUILT_PRODUCTS_DIR = $(SRCROOT)/build/$CONFIGURATION
+
+// Mac OS SDK 10.11
+MACOSX_DEPLOYMENT_TARGET = 10.11

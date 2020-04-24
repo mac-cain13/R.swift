@@ -4,6 +4,17 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>MKDirectionsRequest</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.apple.maps.directionsrequest</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,10 +33,6 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AveriaLibre-B.ttf</string>
@@ -34,10 +41,82 @@
 		<string>AveriaLibre.ttf</string>
 		<string>GdyBkltter1911.ttf</string>
 	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>ShortcutQrScanning</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Scan QR-code</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>nl.mathijskadijk.shortcuts.qr-scanning</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>ShortcutSendParcel</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Send a Parcel</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>nl.mathijskadijk.shortcuts.send-parcel</string>
+		</dict>
+	</array>
+	<key>UIApplicationSupportsMultipleScenes</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+  <key>UIApplicationSceneManifest</key>
+  <dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <false/>
+    <key>UISceneConfigurations</key>
+    <dict>
+      <key>UIWindowSceneSessionRoleApplication</key>
+      <array>
+        <dict>
+          <key>UISceneConfigurationName</key>
+          <string>Default Configuration</string>
+          <key>UISceneDelegateClassName</key>
+          <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+        </dict>
+      </array>
+    </dict>
+  </dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>PlanTripIntent</string>
+		<string>ShowDeparturesIntent</string>
+		<string>DuplicatePlistValue</string>
+		<string>DuplicatePlistValue</string>
+	</array>
+	<key>NSExtension</key>
+	<dict>
+		<key>DuplicatePlistKey#</key>
+		<string>Foo</string>
+		<key>DuplicatePlistKey*</key>
+		<string>Bar</string>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>IntentsRestrictedWhileLocked</key>
+			<array/>
+			<key>IntentsRestrictedWhileProtectedDataUnavailable</key>
+			<array/>
+			<key>IntentsSupported</key>
+			<array>
+				<string>PlanTripIntent</string>
+				<string>ShowDeparturesIntent</string>
+			</array>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.intents-service</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).IntentHandler</string>
+	</dict>
 	<key>UIStatusBarTintParameters</key>
 	<dict>
 		<key>UINavigationBar</key>
