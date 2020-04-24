@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: "Release binary"
-        path: ${{ runner.temp }}/.build/release/rswift
+        path: .build/release/rswift
