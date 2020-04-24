@@ -14,6 +14,7 @@ jobs:
     - name: Build
       run: swift build -v -c release
     - name: Run tests
-      run: swift test -v
-    - name: Run tests
-      run: fastlane runalltests
+      run: swift test -
+    - uses: maierj/fastlane-action@v1.4.0
+      with:
+        lane: 'runalltests'
