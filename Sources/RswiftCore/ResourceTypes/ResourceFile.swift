@@ -21,9 +21,12 @@ struct ResourceFile {
 
   let fullname: String
   let filename: String
+  let filenameWithNamespace: String
   let pathExtension: String
+  let isDirectory: Bool
+  let subfiles: [ResourceFile]
 
-  init(url: URL) throws {
+  init(url: URL, withNamespace namespace: String? = nil, fileManager: FileManager) throws {
     pathExtension = url.pathExtension
     if ResourceFile.unsupportedExtensions.contains(pathExtension) {
       throw ResourceParsingError.unsupportedExtension(givenExtension: pathExtension, supportedExtensions: ["*"])
@@ -33,8 +36,19 @@ struct ResourceFile {
     guard let filename = url.filename else {
       throw ResourceParsingError.parsingFailed("Couldn't extract filename from URL: \(url)")
     }
-
+    let filenameWithNamespace = namespace.map { "\($0)/\(filename)" } ?? filename
+	
     self.fullname = fullname
     self.filename = filename
+    self.filenameWithNamespace = filenameWithNamespace
+    
+    if let subfileURLs = try? fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) {
+      let subfileNamespace = namespace.map { "\($0)/\(filename)"} ?? filename
+      self.subfiles = subfileURLs.compactMap { try? ResourceFile(url: $0, withNamespace: subfileNamespace, fileManager: fileManager) }
+      self.isDirectory = true
+    } else {
+      self.subfiles = []
+      self.isDirectory = false
+    }
   }
 }

@@ -36,52 +36,86 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
       typealiasses: [],
       properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       functions: firstLocales.flatMap { functionsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
-      structs: [],
+      structs: firstLocales.flatMap { directoryStructsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       classes: [],
       os: []
     )
   }
 
-  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Let] {
-
-    return resourceFiles
-      .map {
-        return Let(
-          comments: ["Resource file `\($0.fullname)`."],
-          accessModifier: externalAccessLevel,
-          isStatic: true,
-          name: SwiftIdentifier(name: $0.fullname),
-          typeDefinition: .inferred(Type.FileResource),
-          value: "Rswift.FileResource(bundle: R.hostingBundle, name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
-        )
+  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], includeAllFileLet: Bool = false, at externalAccessLevel: AccessLevel) -> [Let] {
+    let filteredFiles = resourceFiles.filter { !$0.isDirectory }
+    let filteredFileLets = filteredFiles.map { propertyForResourceFile($0, at: externalAccessLevel) }
+    
+    guard includeAllFileLet && !filteredFiles.isEmpty else {
+      return filteredFileLets
     }
+    
+    let allFilesLet = Let(comments: ["An array of all fileResources contained in this namespaced folder (not including subfolders)"],
+                          accessModifier: externalAccessLevel,
+                          isStatic: true,
+                          name: "allFiles",
+                          typeDefinition: .specified(Type._Array.withGenericArgs([Type.FileResource])),
+                          value: "[" + filteredFileLets.map { $0.name.description }.joined(separator: ", ") + "]")
+    return [allFilesLet] + filteredFileLets
+  }
+  
+  private func propertyForResourceFile(_ resourceFile: ResourceFile, at externalAccessLevel: AccessLevel, overrideLabel: String? = nil) -> Let {
+    Let(
+      comments: ["Resource file `\(resourceFile.fullname)`."],
+      accessModifier: externalAccessLevel,
+      isStatic: true,
+      name: SwiftIdentifier(name: overrideLabel ?? resourceFile.fullname),
+      typeDefinition: .inferred(Type.FileResource),
+      value: "Rswift.FileResource(bundle: R.hostingBundle, name: \"\(resourceFile.filenameWithNamespace)\", pathExtension: \"\(resourceFile.pathExtension)\")"
+    )
   }
 
   private func functionsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Function] {
 
     return resourceFiles
-      .flatMap { resourceFile -> [Function] in
-        let fullname = resourceFile.fullname
-        let filename = resourceFile.filename
-        let pathExtension = resourceFile.pathExtension
-
-        return [
-          Function(
-            availables: [],
-            comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
-            accessModifier: externalAccessLevel,
-            isStatic: true,
-            name: SwiftIdentifier(name: fullname),
-            generics: nil,
-            parameters: [
-              Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
-            ],
-            doesThrow: false,
-            returnType: Type._URL.asOptional(),
-            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
-            os: []
-          )
-        ]
-    }
+      .filter { !$0.isDirectory }
+      .flatMap { functionsFromResourceFile($0, at: externalAccessLevel) }
   }
+  
+  private func functionsFromResourceFile(_ resourceFile: ResourceFile, at externalAccessLevel: AccessLevel, overrideLabel: String? = nil) -> [Function] {
+    let fullname = resourceFile.fullname
+    let filenameWithNamespace = resourceFile.filenameWithNamespace
+    let pathExtension = resourceFile.pathExtension
+    return [
+      Function(
+        availables: [],
+        comments: ["`bundle.url(forResource: \"\(filenameWithNamespace)\", withExtension: \"\(pathExtension)\")`"],
+        accessModifier: externalAccessLevel,
+        isStatic: true,
+        name: SwiftIdentifier(name: "\(overrideLabel ?? fullname)Url"),
+        generics: nil,
+        parameters: [],
+        doesThrow: false,
+        returnType: Type._URL.asOptional(),
+        body: "Self.\(SwiftIdentifier(name: overrideLabel ?? fullname)).bundle.url(forResource: Self.\(SwiftIdentifier(name: overrideLabel ?? fullname)))",
+        os: []
+      )
+    ]
+  }
+	
+	private func directoryStructsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Struct] {
+		resourceFiles
+      .filter { $0.isDirectory }
+      .compactMap { resource in
+			let structName = SwiftIdentifier(name: resource.filename)
+			return Struct(
+				availables: [],
+				comments: ["This struct is generated, and contains static references to \(resource.subfiles.count) files."],
+				accessModifier: externalAccessLevel,
+				type: Type(module: .host, name: structName),
+				implements: [],
+				typealiasses: [],
+				properties: propertiesFromResourceFiles(resourceFiles: resource.subfiles, includeAllFileLet: true, at: externalAccessLevel) + [propertyForResourceFile(resource, at: externalAccessLevel, overrideLabel: "directory")],
+				functions: functionsFromResourceFiles(resourceFiles: resource.subfiles, at: externalAccessLevel) + functionsFromResourceFile(resource, at: externalAccessLevel, overrideLabel: "directory"),
+				structs: [],
+				classes: [],
+				os: []
+			)
+		}
+	}
 }
