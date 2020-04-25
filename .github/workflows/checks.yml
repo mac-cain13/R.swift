@@ -15,6 +15,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Pull cache
+      uses: actions/cache@v1
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
     - name: Test
       run: swift test -v
 
@@ -33,7 +40,8 @@ jobs:
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
-    - uses: actions/cache@v1
+    - name: Pull cache
+      uses: actions/cache@v1
       id: pod-cache
       with:
         path: Pods
@@ -61,7 +69,8 @@ jobs:
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
-    - uses: actions/cache@v1
+    - name: Pull cache
+      uses: actions/cache@v1
       id: pod-cache
       with:
         path: Pods
@@ -79,6 +88,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Pull cache
+      uses: actions/cache@v1
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
     - name: Set version
       run: |
         sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
