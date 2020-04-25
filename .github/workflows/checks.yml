@@ -32,6 +32,7 @@ jobs:
       run: |
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
+        chmod +x build/Debug/rswift
     - name: Install pods
       run: pod install
     - name: Test
@@ -51,6 +52,7 @@ jobs:
       run: |
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
+        chmod +x build/Debug/rswift
     - name: Install pods
       run: pod install
     - name: Test
