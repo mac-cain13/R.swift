@@ -2,8 +2,7 @@ name: Release
 
 on:
   release:
-    types:
-    - created
+    types: [ created, published ]
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
@@ -41,6 +40,13 @@ jobs:
         name: rswift-${{ github.event.release.upload_url }}
         path: .build/release/rswift
 
+  publish-to-cocoapods:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    needs: release-build
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Publish to Cocoapods
       run: |
         export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
