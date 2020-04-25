@@ -30,7 +30,7 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir build/debug
+        mkdir -p build/debug
         mv rswift-dev/rswift build/debug/rswift
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
@@ -47,7 +47,7 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir build/debug
+        mkdir -p build/debug
         mv rswift-dev/rswift build/debug/rswift
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
