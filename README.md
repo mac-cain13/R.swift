@@ -85,11 +85,9 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 ## Installation
 
-[CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
-
 _Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
 
-### CocoaPods (recommended)
+### CocoaPods
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
@@ -104,7 +102,33 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPha
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 
-### [Mint](https://github.com/yonaskolb/mint)
+
+### Swift Package manager only
+
+Installing R.swift via SPM is a bit weird, because it is not only a library, but also a development-time tool.
+
+1. Adding SPM Dependencies in Xcode
+  1. Select `File > Swift Packages > Add Package Dependency...`
+  1. Add the Swift Package `https://github.com/mac-cain13/R.swift.git` for the commandline tool
+  1. Also add the associated runtime library `https://github.com/mac-cain13/R.swift.Library.git`
+      See detailed [library instructions](https://github.com/mac-cain13/R.swift.Library#swift-package-manager-requires-xcode-11)
+1. Update target build phases
+  1. Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab
+  1. Add a Depencency by expanding the section and clicking the little plus icon at the bottom of the section and select the  `rswift` executable
+  1. Add a `New Run Script Phase` by clicking the little plus icon in the top left
+  1. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:
+      ```
+      "$SYMROOT/$CONFIGURATION/rswift" generate "$SRCROOT/R.generated.swift"
+      ```
+  1. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+1. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Screenshot of the Dependency and Build Phase can be found [here](Documentation/Images/BuildPhaseExample_TargetDependency.png)_
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+
+
+### [Mint](https://github.com/yonaskolb/mint) (system-wide installation)
 
 #### First, Install `R.Swift` Binary and Run Script Phase
 
