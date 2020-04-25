@@ -49,7 +49,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pods-
     - name: Install pods
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.pod-cache.outputs.cache-hit != 'true'
       run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
@@ -78,7 +78,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pods-
     - name: Install pods
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.pod-cache.outputs.cache-hit != 'true'
       run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
