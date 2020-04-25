@@ -32,6 +32,8 @@ jobs:
       run: |
         mkdir -p build/debug
         mv rswift-dev/rswift build/debug/rswift
+    - name: Install pods
+      run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
 
@@ -49,6 +51,8 @@ jobs:
       run: |
         mkdir -p build/debug
         mv rswift-dev/rswift build/debug/rswift
+    - name: Install pods
+      run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
 
