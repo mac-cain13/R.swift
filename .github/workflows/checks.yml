@@ -10,15 +10,47 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
 
 jobs:
-  test:
+  unit-tests:
     runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Test
-      uses: maierj/fastlane-action@v1.4.0
+      run: swift test -v
+
+  test-iOS:
+    runs-on: macos-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
       with:
-        lane: runalltests
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir build/debug
+        mv rswift-dev/rswift build/debug/rswift
+    - name: Test
+      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
+
+  test-tvOS:
+    runs-on: macos-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
+      with:
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir build/debug
+        mv rswift-dev/rswift build/debug/rswift
+    - name: Test
+      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
 
   build:
     runs-on: macos-latest
