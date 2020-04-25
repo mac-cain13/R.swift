@@ -26,7 +26,7 @@ jobs:
       run: |
         sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
     - name: Build
-      run: swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"
+      run: swift build -v -c release
     - name: Store artifact
       uses: actions/upload-artifact@v1
       with:
