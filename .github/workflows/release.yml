@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  release:
+    types:
+    - created
+
+jobs:
+  release-build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set version
+      run: sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
+      env:
+        TAG: ${{ github.event.release.tag_name }}
+
+    - name: Test
+      uses: maierj/fastlane-action@v1.4.0
+      with:
+        lane: 'runalltests'
+    - name: Build
+      run: swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"
+
+    - name: Archive
+      run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
+    - name: Upload
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/archive.zip
+        asset_name: rswift-${{ github.ref }}.zip
+        asset_content_type: application/zip
+    
+    - name: Store artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.ref }}
+        path: .build/release/rswift
+
+    - name: Publish to Cocoapods
+      run: pod trunk push
+      env:
+        POD_VERSION: ${{ github.event.release.tag_name }}
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+  

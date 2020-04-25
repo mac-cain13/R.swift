@@ -1,28 +1,36 @@
 name: Checks
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
     branches: '*'
 
 jobs:
-  run-all-tests:
+  test:
     runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Run all tests w/fastlane
+    - name: Test
       uses: maierj/fastlane-action@v1.4.0
       with:
         lane: 'runalltests'
-  release-build:
+
+  build:
     runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Build release
+    - name: Set version
+      run: |
+        TAG=$(git describe --abbrev=0 --tags)
+        SHA=$(git rev-parse --short "$GITHUB_SHA")
+        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1${TAG}+dev.${SHA}\2/" Sources/rswift/Rswift.swift
+    - name: Build
       run: swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"
-    - name: Upload build
-      uses: actions/upload-artifact@v1.0.0
+    - name: Store artifact
+      uses: actions/upload-artifact@v1
       with:
-        name: "Release binary"
+        name: rswift-dev
         path: .build/release/rswift
