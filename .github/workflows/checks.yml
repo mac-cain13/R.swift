@@ -24,9 +24,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Set version
       run: |
-        TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-        SHA=$(git rev-parse --short "$GITHUB_SHA")
-        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1${TAG}+dev.${SHA}\2/" Sources/rswift/Rswift.swift
+        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
     - name: Build
       run: swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.11"
     - name: Store artifact
