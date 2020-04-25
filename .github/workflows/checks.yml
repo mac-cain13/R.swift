@@ -33,7 +33,15 @@ jobs:
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
+    - uses: actions/cache@v1
+      id: pod-cache
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
     - name: Install pods
+      if: steps.cache.outputs.cache-hit != 'true'
       run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
@@ -53,7 +61,15 @@ jobs:
         mkdir -p build/Debug
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
+    - uses: actions/cache@v1
+      id: pod-cache
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
     - name: Install pods
+      if: steps.cache.outputs.cache-hit != 'true'
       run: pod install
     - name: Test
       run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
