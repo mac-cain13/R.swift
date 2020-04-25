@@ -30,8 +30,8 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir -p build/debug
-        mv rswift-dev/rswift build/debug/rswift
+        mkdir -p build/Debug
+        mv rswift-dev/rswift build/Debug/rswift
     - name: Install pods
       run: pod install
     - name: Test
@@ -49,8 +49,8 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir -p build/debug
-        mv rswift-dev/rswift build/debug/rswift
+        mkdir -p build/Debug
+        mv rswift-dev/rswift build/Debug/rswift
     - name: Install pods
       run: pod install
     - name: Test
