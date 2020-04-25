@@ -18,17 +18,14 @@ jobs:
       env:
         TAG: ${{ github.event.release.tag_name }}
 
-    - name: Test
-      uses: maierj/fastlane-action@v1.4.0
-      with:
-        lane: runalltests
-
     - name: Build
       run: swift build -v -c release
     - name: Archive
       run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
     - name: Upload
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ${{ runner.temp }}/archive.zip
