@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: '*'
 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+
 jobs:
   test:
     runs-on: macos-latest
