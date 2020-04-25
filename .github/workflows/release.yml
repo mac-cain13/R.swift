@@ -38,7 +38,7 @@ jobs:
     - name: Store artifact
       uses: actions/upload-artifact@v1
       with:
-        name: rswift-${{ github.ref }}
+        name: rswift-${{ github.event.release.upload_url }}
         path: .build/release/rswift
 
     - name: Publish to Cocoapods
