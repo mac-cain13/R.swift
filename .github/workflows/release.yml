@@ -34,6 +34,13 @@ jobs:
         asset_path: ${{ runner.temp }}/archive.zip
         asset_name: rswift-${{ github.event.release.tag_name }}.zip
         asset_content_type: application/zip
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.ref }}
+        path: .build/release/rswift
+
     - name: Publish to Cocoapods
       run: |
         export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
@@ -41,9 +48,3 @@ jobs:
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Store artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: rswift-${{ github.ref }}
-        path: .build/release/rswift
