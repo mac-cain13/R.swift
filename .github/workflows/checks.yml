@@ -15,7 +15,7 @@ jobs:
     - name: Test
       uses: maierj/fastlane-action@v1.4.0
       with:
-        lane: 'runalltests'
+        lane: runalltests
 
   build:
     runs-on: macos-latest
