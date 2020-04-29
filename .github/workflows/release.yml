@@ -101,6 +101,3 @@ jobs:
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Publish to homebrew
-      run: brew bump-formula-pr --tag $TAG_NAME rswift
