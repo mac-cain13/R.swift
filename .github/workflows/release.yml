@@ -22,6 +22,16 @@ jobs:
 
     - name: Build
       run: swift build -v -c release
+    - name: Import Installer Siging
+      uses: apple-actions/import-codesign-certs@v1
+      with: 
+        p12-file-base64: ${{ secrets.CERTIFICATES_INSTALLER_P12 }}
+        p12-password: ${{ secrets.CERTIFICATES_INSTALLER_P12_PASSWORD }}
+    - name: Import Application Siging
+      uses: apple-actions/import-codesign-certs@v1
+      with: 
+        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
+        p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
