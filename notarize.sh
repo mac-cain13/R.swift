@@ -52,4 +52,3 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
 }
 
 notarizefile "$FILENAME" "$BUNDLE_ID"
-xcrun stapler staple "$FILENAME"

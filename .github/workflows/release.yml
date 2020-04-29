@@ -51,7 +51,7 @@ jobs:
         PKG_ROOT: ${{ runner.temp }}/pkgroot
     - name: Notarize PKG
       run: |
-        sh notarize.sh
+        sh notarize.sh && xcrun stapler staple "$FILENAME"
       env:
         BUNDLE_ID: nl.mathijskadijk.rswift
         DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
