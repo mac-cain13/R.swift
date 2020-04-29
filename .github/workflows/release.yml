@@ -21,7 +21,7 @@ jobs:
         TAG: ${{ github.event.release.tag_name }}
     - name: Tarball updated source
       run: |
-        git archive --format=tar.gz -o $TARGET $TAG_NAME
+        tar -zcvf $TARGET .
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         TARGET: ${{ runner.temp }}/release.tar.gz
