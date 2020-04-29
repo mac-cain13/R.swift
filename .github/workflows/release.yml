@@ -28,12 +28,14 @@ jobs:
         p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
         create-keychain: true
+        keychain-password: ${{ secrets.APPLE_TEAM_ID }}
     - name: Import Installer Siging
       uses: apple-actions/import-codesign-certs@v1
       with: 
         p12-file-base64: ${{ secrets.CERTIFICATES_INSTALLER_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_INSTALLER_P12_PASSWORD }}
         create-keychain: false
+        keychain-password: ${{ secrets.APPLE_TEAM_ID }}
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
@@ -65,7 +67,7 @@ jobs:
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
-    - name: Upload
+    - name: Upload ZIP
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
