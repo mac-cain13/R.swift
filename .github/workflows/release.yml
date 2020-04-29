@@ -22,15 +22,10 @@ jobs:
 
     - name: Build
       run: swift build -v -c release
-    - name: Import Installer Siging
-      uses: apple-actions/import-codesign-certs@v1
-      with: 
-        p12-file-base64: ${{ secrets.CERTIFICATES_INSTALLER_P12 }}
-        p12-password: ${{ secrets.CERTIFICATES_INSTALLER_P12_PASSWORD }}
     - name: Import Application Siging
       uses: apple-actions/import-codesign-certs@v1
       with: 
-        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
+        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
         p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
     - name: Code Sign
       run: |
@@ -39,10 +34,10 @@ jobs:
       run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
     - name: Package
       run: |
-        pkgbuild --root .build/release --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/Applications" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+        pkgbuild --root .build/release --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/Applications" --sign "Developer ID Application: Mathijs Kadijk (5Z49PA849J)" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
-        FILENAME: rswift-${{ github.event.release.tag_name }}.pkg
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         BUNDLE_ID: nl.mathijskadijk.rswift
     - name: Notarize
       run: |
@@ -51,8 +46,8 @@ jobs:
         BUNDLE_ID: nl.mathijskadijk.rswift
         DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: 5Z49PA849J
-        FILENAME: rswift-${{ github.event.release.tag_name }}.pkg
+        DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
     - name: Upload
       uses: actions/upload-release-asset@v1
       env:
@@ -62,6 +57,15 @@ jobs:
         asset_path: ${{ runner.temp }}/archive.zip
         asset_name: rswift-${{ github.event.release.tag_name }}.zip
         asset_content_type: application/zip
+    - name: Upload PKG
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
+        asset_name: rswift-${{ github.event.release.tag_name }}.pkg
+        asset_content_type: application/pkg
 
     - name: Store artifact
       uses: actions/upload-artifact@v1
