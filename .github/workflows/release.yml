@@ -27,19 +27,27 @@ jobs:
       with: 
         p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
+        create-keychain: true
+    - name: Import Installer Siging
+      uses: apple-actions/import-codesign-certs@v1
+      with: 
+        p12-file-base64: ${{ secrets.CERTIFICATES_INSTALLER_P12 }}
+        p12-password: ${{ secrets.CERTIFICATES_INSTALLER_P12_PASSWORD }}
+        create-keychain: false
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
     - name: Archive
-      run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
+      run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/release/rswift License
     - name: Package
       run: |
-        pkgbuild --root .build/release --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/Applications" --sign "Developer ID Application: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+        mkdir $PKG_ROOT && cp .build/release/rswift $PKG_ROOT && pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/usr/local/bin" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         BUNDLE_ID: nl.mathijskadijk.rswift
-    - name: Notarize
+        PKG_ROOT: ${{ runner.temp }}/pkgroot
+    - name: Notarize PKG
       run: |
         sh notarize.sh
       env:
@@ -48,13 +56,22 @@ jobs:
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
+    - name: Notarize ZIP
+      run: |
+        sh notarize.sh
+      env:
+        BUNDLE_ID: nl.mathijskadijk.rswift
+        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
+        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Upload
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ runner.temp }}/archive.zip
+        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
         asset_name: rswift-${{ github.event.release.tag_name }}.zip
         asset_content_type: application/zip
     - name: Upload PKG
