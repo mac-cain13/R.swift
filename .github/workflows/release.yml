@@ -86,11 +86,21 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
 
-    - name: Store artifact
+    - name: Store artifact binary
       uses: actions/upload-artifact@v1
       with:
         name: rswift-${{ github.event.release.tag_name }}
         path: .build/release/rswift
+    - name: Store artifact PKG
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.event.release.tag_name }}
+        path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg    
+    - name: Store artifact ZIP
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.event.release.tag_name }}
+        path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
 
     - name: Publish to Cocoapods
       run: |
