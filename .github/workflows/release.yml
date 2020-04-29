@@ -19,7 +19,12 @@ jobs:
         sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
       env:
         TAG: ${{ github.event.release.tag_name }}
-
+    - name: Tarball updated source
+      run: |
+        git archive --format=tar.gz -o $TARGET $TAG_NAME
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
+        TARGET: ${{ runner.temp }}/Sources.tar.gz
     - name: Build
       run: swift build -v -c release
     - name: Import Application Siging
@@ -78,6 +83,16 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
 
+    - name: Upload sources tarball
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
+        asset_name: rswift-${{ github.event.release.tag_name }}.pkg
+        asset_content_type: application/pkg
+
     - name: Store artifact binary
       uses: actions/upload-artifact@v1
       with:
@@ -101,3 +116,9 @@ jobs:
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Publish to homebrew
+      run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
+        REVISION: ${{ github.sha }}
