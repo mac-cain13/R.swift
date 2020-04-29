@@ -22,8 +22,27 @@ jobs:
 
     - name: Build
       run: swift build -v -c release
+    - name: Code Sign
+      run: |
+        codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
     - name: Archive
       run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
+    - name: Package
+      run: |
+        pkgbuild --root .build/release --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/Applications" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
+        FILENAME: rswift-${{ github.event.release.tag_name }}.pkg
+        BUNDLE_ID: nl.mathijskadijk.rswift
+    - name: Notarize
+      run: |
+        sh notarize.sh
+      env:
+        BUNDLE_ID: nl.mathijskadijk.rswift
+        DEV_ACCOUNT: mkadijk@gmail.com
+        PASSWORD: ${{ secrets.PASSWORD }}
+        DEV_TEAM: 5Z49PA849J
+        FILENAME: rswift-${{ github.event.release.tag_name }}.pkg
     - name: Upload
       uses: actions/upload-release-asset@v1
       env:
