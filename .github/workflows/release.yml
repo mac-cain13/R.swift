@@ -24,7 +24,17 @@ jobs:
         git archive --format=tar.gz -o $TARGET $TAG_NAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
-        TARGET: ${{ runner.temp }}/Sources.tar.gz
+        TARGET: ${{ runner.temp }}/release.tar.gz
+    - name: Upload sources tarball
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/release.tar.gz
+        asset_name: release.tar.gz
+        asset_content_type: application/tar+gzip
+
     - name: Build
       run: swift build -v -c release
     - name: Import Application Siging
@@ -74,16 +84,6 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}.zip
         asset_content_type: application/zip
     - name: Upload PKG
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
-        asset_name: rswift-${{ github.event.release.tag_name }}.pkg
-        asset_content_type: application/pkg
-
-    - name: Upload sources tarball
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
