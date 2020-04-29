@@ -20,7 +20,7 @@ jobs:
         TAG: ${{ github.event.release.tag_name }}
     - name: Tarball source
       run: |
-        tar -zcvf $TARGET .
+        tar -zcvf $TARGET --exclude .git .
       env:
         TARGET: ${{ runner.temp }}/source.tar.gz
     - name: Attach tarball to release
