@@ -1,0 +1,107 @@
+name: Checks
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: '*'
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+
+jobs:
+  unit-tests:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Pull cache
+      uses: actions/cache@v1
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    - name: Test
+      run: swift test -v
+
+  test-iOS:
+    runs-on: macos-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
+      with:
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir -p build/Debug
+        mv rswift-dev/rswift build/Debug/rswift
+        chmod +x build/Debug/rswift
+    - name: Pull cache
+      uses: actions/cache@v1
+      id: pod-cache
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+    - name: Install pods
+      if: steps.pod-cache.outputs.cache-hit != 'true'
+      run: pod install
+    - name: Test
+      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
+
+  test-tvOS:
+    runs-on: macos-latest
+    needs: build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
+      with:
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir -p build/Debug
+        mv rswift-dev/rswift build/Debug/rswift
+        chmod +x build/Debug/rswift
+    - name: Pull cache
+      uses: actions/cache@v1
+      id: pod-cache
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+    - name: Install pods
+      if: steps.pod-cache.outputs.cache-hit != 'true'
+      run: pod install
+    - name: Test
+      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
+
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Pull cache
+      uses: actions/cache@v1
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    - name: Set version
+      run: |
+        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
+    - name: Build
+      run: swift build -v -c release
+    - name: Store artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-dev
+        path: .build/release/rswift

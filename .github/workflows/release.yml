@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  release:
+    types: created
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+
+jobs:
+  release-build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set version
+      run: |
+        sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
+      env:
+        TAG: ${{ github.event.release.tag_name }}
+
+    - name: Build
+      run: swift build -v -c release
+    - name: Archive
+      run: zip --junk-paths ${{ runner.temp }}/archive.zip .build/release/rswift License
+    - name: Upload
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/archive.zip
+        asset_name: rswift-${{ github.event.release.tag_name }}.zip
+        asset_content_type: application/zip
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.event.release.tag_name }}
+        path: .build/release/rswift
+
+    - name: Publish to Cocoapods
+      run: |
+        export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
+        pod trunk push
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
