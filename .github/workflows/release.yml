@@ -78,10 +78,8 @@ jobs:
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        
-    - name: Publish to homebrew
+    - name: Publish to Homebrew
       run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
-
     - name: Archive PKG
       run: |
         mkdir -p $PKG_ROOT/$BINARY_ROOT
