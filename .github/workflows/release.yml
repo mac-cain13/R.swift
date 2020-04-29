@@ -51,7 +51,7 @@ jobs:
 
     - name: Archive ZIP
       run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/release/rswift License
-      - name: Notarize ZIP
+    - name: Notarize ZIP
       run: |
         sh notarize.sh
       env:
