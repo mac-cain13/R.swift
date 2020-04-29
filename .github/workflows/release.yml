@@ -25,17 +25,8 @@ jobs:
     - name: Import Application Siging
       uses: apple-actions/import-codesign-certs@v1
       with: 
-        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
-        p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
-        create-keychain: true
-        keychain-password: ${{ secrets.APPLE_TEAM_ID }}
-    - name: Import Installer Siging
-      uses: apple-actions/import-codesign-certs@v1
-      with: 
-        p12-file-base64: ${{ secrets.CERTIFICATES_INSTALLER_P12 }}
-        p12-password: ${{ secrets.CERTIFICATES_INSTALLER_P12_PASSWORD }}
-        create-keychain: false
-        keychain-password: ${{ secrets.APPLE_TEAM_ID }}
+        p12-file-base64: ${{ secrets.APPLE_CERTS }}
+        p12-password: ${{ secrets.APPLE_CERTS_PASSWORD }}
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
@@ -43,12 +34,13 @@ jobs:
       run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/release/rswift License
     - name: Package
       run: |
-        mkdir $PKG_ROOT && cp .build/release/rswift $PKG_ROOT && pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/usr/local/bin" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+        mkdir -p $PKG_ROOT/$BINARY_ROOT && cp .build/release/rswift $PKG_ROOT/$BINARY_ROOT && pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         BUNDLE_ID: nl.mathijskadijk.rswift
         PKG_ROOT: ${{ runner.temp }}/pkgroot
+        BINARY_ROOT: /usr/local/bin
     - name: Notarize PKG
       run: |
         sh notarize.sh && xcrun stapler staple "$FILENAME"
@@ -56,7 +48,7 @@ jobs:
         BUNDLE_ID: nl.mathijskadijk.rswift
         DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        DEV_TEAM: 5Z49PA849J
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
     - name: Notarize ZIP
       run: |
@@ -65,7 +57,7 @@ jobs:
         BUNDLE_ID: nl.mathijskadijk.rswift
         DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+        DEV_TEAM: 5Z49PA849J
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Upload ZIP
       uses: actions/upload-release-asset@v1
