@@ -130,6 +130,10 @@ If you see a build error `No such module 'Rswift'` when trying to `#import Rswif
 
 Head over to the [R.Swift.Library](https://github.com/mac-cain13/R.swift.Library) repo and follow the [Swift Package Manager installation instructions](https://github.com/mac-cain13/R.swift.Library#swift-package-manager-requires-xcode-11).
 
+### [Homebrew](https://brew.sh)
+
+R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
+
 ### Manually
 
 0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library#Installation) to your project
