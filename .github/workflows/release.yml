@@ -13,27 +13,26 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
     - name: Set version
       run: |
         sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
       env:
         TAG: ${{ github.event.release.tag_name }}
-    - name: Tarball updated source
+    - name: Tarball source
       run: |
         tar -zcvf $TARGET .
       env:
-        TAG_NAME: ${{ github.event.release.tag_name }}
-        TARGET: ${{ runner.temp }}/release.tar.gz
-    - name: Upload sources tarball
+        TARGET: ${{ runner.temp }}/source.tar.gz
+    - name: Attach tarball to release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ runner.temp }}/release.tar.gz
-        asset_name: release.tar.gz
+        asset_path: ${{ runner.temp }}/source.tar.gz
+        asset_name: ${{ github.event.release.tag_name }}-source.tar.gz
         asset_content_type: application/tar+gzip
+
     - name: Build
       run: swift build -v -c release
     - name: Import Signing Certificates
