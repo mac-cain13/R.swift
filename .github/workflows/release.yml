@@ -30,7 +30,7 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ${{ runner.temp }}/source.tar.gz
-        asset_name: ${{ github.event.release.tag_name }}-source.tar.gz
+        asset_name: rswift-${{ github.event.release.tag_name }}-source.tar.gz
         asset_content_type: application/tar+gzip
 
     - name: Build
