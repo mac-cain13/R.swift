@@ -25,7 +25,7 @@ jobs:
     - name: Import Application Siging
       uses: apple-actions/import-codesign-certs@v1
       with: 
-        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
+        p12-file-base64: ${{ secrets.CERTIFICATES_APPLICATION_P12 }}
         p12-password: ${{ secrets.CERTIFICATES_APPLICATION_P12_PASSWORD }}
     - name: Code Sign
       run: |
