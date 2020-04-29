@@ -34,22 +34,59 @@ jobs:
         asset_path: ${{ runner.temp }}/release.tar.gz
         asset_name: release.tar.gz
         asset_content_type: application/tar+gzip
-
     - name: Build
       run: swift build -v -c release
-    - name: Import Application Siging
+    - name: Import Signing Certificates
       uses: apple-actions/import-codesign-certs@v1
-      with: 
+      with:
         p12-file-base64: ${{ secrets.APPLE_CERTS }}
         p12-password: ${{ secrets.APPLE_CERTS_PASSWORD }}
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
-    - name: Archive
+    - name: Store build artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: rswift-${{ github.event.release.tag_name }}
+        path: .build/release/rswift
+
+    - name: Archive ZIP
       run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/release/rswift License
-    - name: Package
+      - name: Notarize ZIP
       run: |
-        mkdir -p $PKG_ROOT/$BINARY_ROOT && cp .build/release/rswift $PKG_ROOT/$BINARY_ROOT && pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+        sh notarize.sh
+      env:
+        BUNDLE_ID: nl.mathijskadijk.rswift
+        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
+        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        DEV_TEAM: 5Z49PA849J
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
+    - name: Attach ZIP to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
+        asset_name: rswift-${{ github.event.release.tag_name }}.zip
+        asset_content_type: application/zip
+
+    - name: Publish to Cocoapods
+      run: |
+        export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
+        pod trunk push
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        
+    - name: Publish to homebrew
+      run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
+
+    - name: Archive PKG
+      run: |
+        mkdir -p $PKG_ROOT/$BINARY_ROOT
+        cp .build/release/rswift $PKG_ROOT/$BINARY_ROOT
+        pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
@@ -65,25 +102,7 @@ jobs:
         PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         DEV_TEAM: 5Z49PA849J
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
-    - name: Notarize ZIP
-      run: |
-        sh notarize.sh
-      env:
-        BUNDLE_ID: nl.mathijskadijk.rswift
-        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
-        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: 5Z49PA849J
-        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
-    - name: Upload ZIP
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
-        asset_name: rswift-${{ github.event.release.tag_name }}.zip
-        asset_content_type: application/zip
-    - name: Upload PKG
+    - name: Attach PKG to release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -92,33 +111,3 @@ jobs:
         asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
-
-    - name: Store artifact binary
-      uses: actions/upload-artifact@v1
-      with:
-        name: rswift-${{ github.event.release.tag_name }}
-        path: .build/release/rswift
-    - name: Store artifact PKG
-      uses: actions/upload-artifact@v1
-      with:
-        name: rswift-${{ github.event.release.tag_name }}
-        path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg    
-    - name: Store artifact ZIP
-      uses: actions/upload-artifact@v1
-      with:
-        name: rswift-${{ github.event.release.tag_name }}
-        path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
-
-    - name: Publish to Cocoapods
-      run: |
-        export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
-        pod trunk push
-      env:
-        TAG_NAME: ${{ github.event.release.tag_name }}
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Publish to homebrew
-      run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
-      env:
-        TAG_NAME: ${{ github.event.release.tag_name }}
-        REVISION: ${{ github.sha }}
