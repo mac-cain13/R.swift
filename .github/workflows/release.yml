@@ -13,12 +13,26 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
     - name: Set version
       run: |
         sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
       env:
         TAG: ${{ github.event.release.tag_name }}
+    - name: Tarball source
+      run: |
+        tar -zcvf $TARGET .
+      env:
+        TARGET: ${{ runner.temp }}/source.tar.gz
+    - name: Attach tarball to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/source.tar.gz
+        asset_name: ${{ github.event.release.tag_name }}-source.tar.gz
+        asset_content_type: application/tar+gzip
+
     - name: Build
       run: swift build -v -c release
     - name: Import Signing Certificates
@@ -93,3 +107,6 @@ jobs:
         asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
+
+    - name: Publish to Homebrew
+      run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
