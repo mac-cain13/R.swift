@@ -49,8 +49,8 @@ jobs:
         sh notarize.sh
       env:
         BUNDLE_ID: nl.mathijskadijk.rswift
-        DEV_ACCOUNT: mkadijk@gmail.com
-        PASSWORD: ${{ secrets.PASSWORD }}
+        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
+        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         DEV_TEAM: 5Z49PA849J
         FILENAME: rswift-${{ github.event.release.tag_name }}.pkg
     - name: Upload
