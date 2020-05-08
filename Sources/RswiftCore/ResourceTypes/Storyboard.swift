@@ -30,8 +30,8 @@ struct Storyboard: WhiteListedExtensionsResourceType, ReusableContainer {
   let viewControllers: [ViewController]
   let viewControllerPlaceholders: [ViewControllerPlaceholder]
   let usedAccessibilityIdentifiers: [String]
-  let usedImageIdentifiers: [String]
-  let usedColorResources: [String]
+  let usedImageIdentifiers: [NameCatalog]
+  let usedColorResources: [NameCatalog]
   let reusables: [Reusable]
 
   var initialViewController: ViewController? {
@@ -128,8 +128,8 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
   var initialViewControllerIdentifier: String?
   var viewControllers: [Storyboard.ViewController] = []
   var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
-  var usedImageIdentifiers: [String] = []
-  var usedColorReferences: [String] = []
+  var usedImageIdentifiers: [NameCatalog] = []
+  var usedColorReferences: [NameCatalog] = []
   var usedAccessibilityIdentifiers: [String] = []
   var reusables: [Reusable] = []
 
@@ -167,12 +167,12 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
 
     case "image":
       if let imageIdentifier = attributeDict["name"] {
-        usedImageIdentifiers.append(imageIdentifier)
+        usedImageIdentifiers.append(NameCatalog(name: imageIdentifier, catalog: attributeDict["catalog"]))
       }
 
     case "color":
       if let colorName = attributeDict["name"] {
-        usedColorReferences.append(colorName)
+        usedColorReferences.append(NameCatalog(name: colorName, catalog: attributeDict["catalog"]))
       }
 
     case "accessibility":

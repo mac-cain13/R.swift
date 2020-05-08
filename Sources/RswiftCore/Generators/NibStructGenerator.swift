@@ -204,12 +204,17 @@ struct NibStructGenerator: StructGenerator {
 
     // Validation
     let validateImagesLines = nib.usedImageIdentifiers.uniqueAndSorted()
-      .map {
-        "if UIKit.UIImage(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\($0)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+      .map { nameCatalog -> String in
+        if nameCatalog.isSystemCatalog {
+          return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") } }"
+        } else {
+          return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+        }
       }
     let validateColorLines = nib.usedColorResources.uniqueAndSorted()
-      .map {
-        "if UIKit.UIColor(named: \"\($0)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\($0)' is used in storyboard '\(nib.name)', but couldn't be loaded.\") }"
+      .compactMap { nameCatalog -> String? in
+        if nameCatalog.isSystemCatalog { return nil }
+        return "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
       }
     let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, tvOS 11.0, *) {"] +
       validateColorLines.map { $0.indent(with: "  ") } +
