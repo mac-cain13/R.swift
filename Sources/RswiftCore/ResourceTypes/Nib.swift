@@ -23,8 +23,8 @@ struct Nib: WhiteListedExtensionsResourceType, ReusableContainer {
   let name: String
   let rootViews: [Type]
   let reusables: [Reusable]
-  let usedImageIdentifiers: [String]
-  let usedColorResources: [String]
+  let usedImageIdentifiers: [NameCatalog]
+  let usedColorResources: [NameCatalog]
   let usedAccessibilityIdentifiers: [String]
 
   init(url: URL) throws {
@@ -58,8 +58,8 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
   let ignoredRootViewElements = ["placeholder"]
   var rootViews: [Type] = []
   var reusables: [Reusable] = []
-  var usedImageIdentifiers: [String] = []
-  var usedColorReferences: [String] = []
+  var usedImageIdentifiers: [NameCatalog] = []
+  var usedColorReferences: [NameCatalog] = []
   var usedAccessibilityIdentifiers: [String] = []
 
   // State
@@ -77,12 +77,12 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
     switch elementName {
     case "image":
       if let imageIdentifier = attributeDict["name"] {
-        usedImageIdentifiers.append(imageIdentifier)
+        usedImageIdentifiers.append(NameCatalog(name: imageIdentifier, catalog: attributeDict["catalog"]))
       }
 
     case "color":
       if let colorName = attributeDict["name"] {
-        usedColorReferences.append(colorName)
+        usedColorReferences.append(NameCatalog(name: colorName, catalog: attributeDict["catalog"]))
       }
 
     case "accessibility":
