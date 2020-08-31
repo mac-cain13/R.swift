@@ -39,8 +39,8 @@ public struct RswiftCore {
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
       let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
-      
-      let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
+      let target = !callInformation.resourceBundleTargetName.isEmpty ? callInformation.resourceBundleTargetName : callInformation.targetName
+      let resourceURLs = try xcodeproj.resourcePaths(forTarget: target)
         .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
         .compactMap { $0 }
         .filter { !ignoreFile.matches(url: $0) }
@@ -130,7 +130,7 @@ public struct RswiftCore {
     let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
       .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
-    let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
+    let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier, withEmbeddedResourceBundle: callInformation.resourceBundleName)
 
     let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),

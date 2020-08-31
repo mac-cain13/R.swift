@@ -49,7 +49,8 @@ struct EnvironmentKeys {
   static let xcodeproj = "PROJECT_FILE_PATH"
   static let infoPlistFile = "INFOPLIST_FILE"
   static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
-
+  static let resourceBundleName = "RESOURCE_BUNDLE_NAME"
+  static let resourceBundleTargetName = "RESOURCE_BUNDLE_TARGET_NAME"
   static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
   static let platformDir = SourceTreeFolder.platformDir.rawValue
@@ -125,6 +126,8 @@ let generate = command(
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
+  let resourceBundleName = try processInfo.environmentVariable(name: EnvironmentKeys.resourceBundleName)
+  let resourceBundleTargetName = try processInfo.environmentVariable(name: EnvironmentKeys.resourceBundleTargetName)
   let infoPlistFile = try processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
   let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
@@ -207,9 +210,10 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
+    resourceBundleName: resourceBundleName,
+    resourceBundleTargetName: resourceBundleTargetName,
     infoPlistFile: URL(fileURLWithPath: infoPlistFile),
     codeSignEntitlements: codeSignEntitlements.map { URL(fileURLWithPath: $0) },
-
     scriptInputFiles: scriptInputFiles,
     scriptOutputFiles: scriptOutputFiles,
     lastRunURL: lastRunURL,

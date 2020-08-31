@@ -9,7 +9,11 @@
 import Foundation
 
 extension Struct {
-  func addingInternalProperties(forBundleIdentifier bundleIdentifier: String) -> Struct {
+  func addingInternalProperties(forBundleIdentifier bundleIdentifier: String, withEmbeddedResourceBundle resourceBundleName: String) -> Struct {
+    var hostingBundleValue = "Bundle(for: R.Class.self)"
+    if !resourceBundleName.isEmpty {
+      hostingBundleValue = "Bundle(for: R.Class.self).path(forResource: \"\(resourceBundleName)\", ofType: \"bundle\").flatMap(Bundle.init(path:)) ?? Bundle(for: R.Class.self)"
+    }
 
     let internalProperties = [
       Let(
@@ -18,7 +22,7 @@ extension Struct {
         isStatic: true,
         name: "hostingBundle",
         typeDefinition: .inferred(Type._Bundle),
-        value: "Bundle(for: R.Class.self)"),
+        value: hostingBundleValue),
       Let(
         comments: [],
         accessModifier: .filePrivate,
