@@ -96,6 +96,13 @@
 			remoteGlobalIDString = D55C6CB71B5D757300301B0D;
 			remoteInfo = ResourceApp;
 		};
+		E243EFA72510DFA600DC653F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E243EF912510DF9100DC653F;
+			remoteInfo = RswiftUI;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -197,6 +204,7 @@
 		E2156B6B1CC4293000F341DC /* Duplicate#.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Duplicate#.strings"; sourceTree = "<group>"; };
 		E2156B6D1CC42B6700F341DC /* @@.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "@@.strings"; sourceTree = "<group>"; };
 		E22070761C92E137007A090B /* WhitespaceReuseIdentifer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhitespaceReuseIdentifer.xib; sourceTree = "<group>"; };
+		E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RswiftUI.xcodeproj; path = ../RswiftUI/RswiftUI.xcodeproj; sourceTree = "<group>"; };
 		E2562CD51EE70C68007D8938 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E25984A022AEE89B00467E1E /* CustomSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegue.swift; sourceTree = "<group>"; };
 		E2762AC11CCCDFDA0009BCAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = Base; path = Base.lproj/Settings.stringsdict; sourceTree = "<group>"; };
@@ -296,6 +304,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */,
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D5EE1B5722DEEFBF00A901EC /* R.UITest.generated.swift */,
 				D55C6CBA1B5D757300301B0D /* ResourceApp */,
@@ -423,6 +432,14 @@
 			path = Files;
 			sourceTree = "<group>";
 		};
+		E243EFA42510DFA600DC653F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E243EFA82510DFA600DC653F /* RswiftUI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E2A10EF61CD13768006BFC63 /* Relative To Project */ = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +538,12 @@
 			mainGroup = D55C6CAF1B5D757300301B0D;
 			productRefGroup = D55C6CB91B5D757300301B0D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E243EFA42510DFA600DC653F /* Products */;
+					ProjectRef = E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				D55C6CB71B5D757300301B0D /* ResourceApp */,
@@ -528,6 +551,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E243EFA82510DFA600DC653F /* RswiftUI.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = RswiftUI.app;
+			remoteRef = E243EFA72510DFA600DC653F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D55C6CB61B5D757300301B0D /* Resources */ = {
