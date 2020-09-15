@@ -16,7 +16,7 @@ struct ContentView: View {
             .resizable()
             .aspectRatio(1, contentMode: .fit)
             .frame(width: 140)
-            .border(Color.red)
+            .border(Color(R.color.myColor()!))
     }
 }
 
