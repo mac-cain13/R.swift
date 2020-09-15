@@ -11,7 +11,36 @@
 		E243EF972510DF9100DC653F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EF962510DF9100DC653F /* ContentView.swift */; };
 		E243EF992510DF9200DC653F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF982510DF9200DC653F /* Assets.xcassets */; };
 		E243EF9C2510DF9200DC653F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF9B2510DF9200DC653F /* Preview Assets.xcassets */; };
+		E243EFB02510E08D00DC653F /* RswiftUIAppClipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EFAF2510E08D00DC653F /* RswiftUIAppClipApp.swift */; };
+		E243EFB22510E08D00DC653F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EFB12510E08D00DC653F /* ContentView.swift */; };
+		E243EFB42510E08E00DC653F /* ClipAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EFB32510E08E00DC653F /* ClipAssets.xcassets */; };
+		E243EFB72510E08E00DC653F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EFB62510E08E00DC653F /* Preview Assets.xcassets */; };
+		E243EFBC2510E08E00DC653F /* RswiftUIAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E243EFBA2510E08E00DC653F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E243EF892510DF9100DC653F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E243EFAC2510E08D00DC653F;
+			remoteInfo = RswiftUIAppClip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E243EFBD2510E08E00DC653F /* Embed App Clips */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
+			dstSubfolderSpec = 16;
+			files = (
+				E243EFBC2510E08E00DC653F /* RswiftUIAppClip.app in Embed App Clips */,
+			);
+			name = "Embed App Clips";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E243EF912510DF9100DC653F /* RswiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RswiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -20,10 +49,25 @@
 		E243EF982510DF9200DC653F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E243EF9B2510DF9200DC653F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E243EF9D2510DF9200DC653F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RswiftUIAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E243EFAF2510E08D00DC653F /* RswiftUIAppClipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RswiftUIAppClipApp.swift; sourceTree = "<group>"; };
+		E243EFB12510E08D00DC653F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E243EFB32510E08E00DC653F /* ClipAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ClipAssets.xcassets; sourceTree = "<group>"; };
+		E243EFB62510E08E00DC653F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E243EFB82510E08E00DC653F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E243EFB92510E08E00DC653F /* RswiftUIAppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RswiftUIAppClip.entitlements; sourceTree = "<group>"; };
+		E243EFC22510E0D900DC653F /* Rswift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Rswift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E243EF8E2510DF9100DC653F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E243EFAA2510E08D00DC653F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -37,7 +81,9 @@
 			isa = PBXGroup;
 			children = (
 				E243EF932510DF9100DC653F /* RswiftUI */,
+				E243EFAE2510E08D00DC653F /* RswiftUIAppClip */,
 				E243EF922510DF9100DC653F /* Products */,
+				E243EFC12510E0D900DC653F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -45,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				E243EF912510DF9100DC653F /* RswiftUI.app */,
+				E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,6 +116,35 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		E243EFAE2510E08D00DC653F /* RswiftUIAppClip */ = {
+			isa = PBXGroup;
+			children = (
+				E243EFAF2510E08D00DC653F /* RswiftUIAppClipApp.swift */,
+				E243EFB12510E08D00DC653F /* ContentView.swift */,
+				E243EFB32510E08E00DC653F /* ClipAssets.xcassets */,
+				E243EFB82510E08E00DC653F /* Info.plist */,
+				E243EFB92510E08E00DC653F /* RswiftUIAppClip.entitlements */,
+				E243EFB52510E08E00DC653F /* Preview Content */,
+			);
+			path = RswiftUIAppClip;
+			sourceTree = "<group>";
+		};
+		E243EFB52510E08E00DC653F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E243EFB62510E08E00DC653F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E243EFC12510E0D900DC653F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E243EFC22510E0D900DC653F /* Rswift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -79,15 +155,34 @@
 				E243EF8D2510DF9100DC653F /* Sources */,
 				E243EF8E2510DF9100DC653F /* Frameworks */,
 				E243EF8F2510DF9100DC653F /* Resources */,
+				E243EFBD2510E08E00DC653F /* Embed App Clips */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E243EFBB2510E08E00DC653F /* PBXTargetDependency */,
 			);
 			name = RswiftUI;
 			productName = RswiftUI;
 			productReference = E243EF912510DF9100DC653F /* RswiftUI.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E243EFAC2510E08D00DC653F /* RswiftUIAppClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E243EFC02510E08E00DC653F /* Build configuration list for PBXNativeTarget "RswiftUIAppClip" */;
+			buildPhases = (
+				E243EFA92510E08D00DC653F /* Sources */,
+				E243EFAA2510E08D00DC653F /* Frameworks */,
+				E243EFAB2510E08D00DC653F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RswiftUIAppClip;
+			productName = RswiftUIAppClip;
+			productReference = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
 /* End PBXNativeTarget section */
 
@@ -99,6 +194,9 @@
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					E243EF902510DF9100DC653F = {
+						CreatedOnToolsVersion = 12.0;
+					};
+					E243EFAC2510E08D00DC653F = {
 						CreatedOnToolsVersion = 12.0;
 					};
 				};
@@ -117,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				E243EF902510DF9100DC653F /* RswiftUI */,
+				E243EFAC2510E08D00DC653F /* RswiftUIAppClip */,
 			);
 		};
 /* End PBXProject section */
@@ -128,6 +227,15 @@
 			files = (
 				E243EF9C2510DF9200DC653F /* Preview Assets.xcassets in Resources */,
 				E243EF992510DF9200DC653F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E243EFAB2510E08D00DC653F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E243EFB72510E08E00DC653F /* Preview Assets.xcassets in Resources */,
+				E243EFB42510E08E00DC653F /* ClipAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +251,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E243EFA92510E08D00DC653F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E243EFB22510E08D00DC653F /* ContentView.swift in Sources */,
+				E243EFB02510E08D00DC653F /* RswiftUIAppClipApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E243EFBB2510E08E00DC653F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E243EFAC2510E08D00DC653F /* RswiftUIAppClip */;
+			targetProxy = E243EFBA2510E08E00DC653F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E243EF9E2510DF9200DC653F /* Debug */ = {
@@ -265,6 +390,7 @@
 		E243EFA12510DF9200DC653F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -286,6 +412,7 @@
 		E243EFA22510DF9200DC653F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -298,6 +425,50 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.RswiftUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E243EFBE2510E08E00DC653F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RswiftUIAppClip/RswiftUIAppClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"RswiftUIAppClip/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = RswiftUIAppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.RswiftUI.Clip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E243EFBF2510E08E00DC653F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RswiftUIAppClip/RswiftUIAppClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"RswiftUIAppClip/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = RswiftUIAppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.mathijskadijk.RswiftUI.Clip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -321,6 +492,15 @@
 			buildConfigurations = (
 				E243EFA12510DF9200DC653F /* Debug */,
 				E243EFA22510DF9200DC653F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E243EFC02510E08E00DC653F /* Build configuration list for PBXNativeTarget "RswiftUIAppClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E243EFBE2510E08E00DC653F /* Debug */,
+				E243EFBF2510E08E00DC653F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

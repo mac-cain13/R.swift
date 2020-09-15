@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  RswiftUI
+//  RswiftUIAppClip
 //
 //  Created by Tom Lokhorst on 2020-09-15.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, SwiftUI App!")
+        Text("Hello, App Clip!")
             .padding()
 
         Image("hand.ignoreme")
