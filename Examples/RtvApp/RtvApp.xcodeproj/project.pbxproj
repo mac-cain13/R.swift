@@ -13,8 +13,8 @@
 		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
 		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
+		E223B7B22510E46700060B16 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = E223B7B12510E46700060B16 /* Rswift */; };
 		E26B761B2451E7D100E1170F /* ImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B761A2451E7D100E1170F /* ImageTests.swift */; };
-		E26B761E2451EAB900E1170F /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = E26B761D2451EAB900E1170F /* Rswift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E26B761E2451EAB900E1170F /* Rswift in Frameworks */,
+				E223B7B22510E46700060B16 /* Rswift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +140,7 @@
 			);
 			name = "ResourceApp-tvOS";
 			packageProductDependencies = (
-				E26B761D2451EAB900E1170F /* Rswift */,
+				E223B7B12510E46700060B16 /* Rswift */,
 			);
 			productName = "ResourceApp-tvOS";
 			productReference = DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */;
@@ -200,7 +200,7 @@
 			);
 			mainGroup = D55C6CAF1B5D757300301B0D;
 			packageReferences = (
-				E26B761C2451EAB900E1170F /* XCRemoteSwiftPackageReference "R.swift.Library" */,
+				E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */,
 			);
 			productRefGroup = D55C6CB91B5D757300301B0D /* Products */;
 			projectDirPath = "";
@@ -515,9 +515,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E26B761C2451EAB900E1170F /* XCRemoteSwiftPackageReference "R.swift.Library" */ = {
+		E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:mac-cain13/R.swift.Library.git";
+			repositoryURL = "https://github.com/mac-cain13/R.swift.Library.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.2.0;
@@ -526,9 +526,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E26B761D2451EAB900E1170F /* Rswift */ = {
+		E223B7B12510E46700060B16 /* Rswift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E26B761C2451EAB900E1170F /* XCRemoteSwiftPackageReference "R.swift.Library" */;
+			package = E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */;
 			productName = Rswift;
 		};
 /* End XCSwiftPackageProductDependency section */
