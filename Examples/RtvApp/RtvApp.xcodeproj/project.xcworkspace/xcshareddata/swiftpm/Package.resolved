@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "R.swift.Library",
-        "repositoryURL": "git@github.com:mac-cain13/R.swift.Library.git",
+        "repositoryURL": "https://github.com/mac-cain13/R.swift.Library.git",
         "state": {
           "branch": null,
           "revision": "5a54805e3d08077e46edb2274ff27b20b700f568",

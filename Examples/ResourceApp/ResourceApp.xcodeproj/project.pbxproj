@@ -96,6 +96,13 @@
 			remoteGlobalIDString = D55C6CB71B5D757300301B0D;
 			remoteInfo = ResourceApp;
 		};
+		E22C7596251235D900124573 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E243EFAD2510E08D00DC653F;
+			remoteInfo = RswiftUIAppClip;
+		};
 		E243EFA72510DFA600DC653F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */;
@@ -436,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				E243EFA82510DFA600DC653F /* RswiftUI.app */,
+				E22C7597251235D900124573 /* RswiftUIAppClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -553,6 +561,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		E22C7597251235D900124573 /* RswiftUIAppClip.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = RswiftUIAppClip.app;
+			remoteRef = E22C7596251235D900124573 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E243EFA82510DFA600DC653F /* RswiftUI.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
