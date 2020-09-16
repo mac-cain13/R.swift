@@ -50,7 +50,7 @@ jobs:
           ${{ runner.os }}-pods-
     - name: Install pods
       if: steps.pod-cache.outputs.cache-hit != 'true'
-      run: pod install
+      run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
 
@@ -79,7 +79,7 @@ jobs:
           ${{ runner.os }}-pods-
     - name: Install pods
       if: steps.pod-cache.outputs.cache-hit != 'true'
-      run: pod install
+      run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
 
