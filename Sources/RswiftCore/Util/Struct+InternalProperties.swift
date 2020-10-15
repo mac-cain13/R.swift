@@ -9,12 +9,11 @@
 import Foundation
 
 extension Struct {
-  func addingInternalProperties(forBundleIdentifier bundleIdentifier: String, withEmbeddedResourceBundle resourceBundleName: String) -> Struct {
+  func addingInternalProperties(forBundleIdentifier bundleIdentifier: String, hostingBundleName: String? = nil) -> Struct {
     var hostingBundleValue = "Bundle(for: R.Class.self)"
-    if !resourceBundleName.isEmpty {
-      hostingBundleValue = "Bundle(for: R.Class.self).path(forResource: \"\(resourceBundleName)\", ofType: \"bundle\").flatMap(Bundle.init(path:)) ?? Bundle(for: R.Class.self)"
+    if let bundleName = hostingBundleName, !bundleName.isEmpty {
+      hostingBundleValue = "Bundle(for: R.Class.self).path(forResource: \"\(bundleName)\", ofType: \"bundle\").flatMap(Bundle.init(path:)) ?? Bundle(for: R.Class.self)"
     }
-
     let internalProperties = [
       Let(
         comments: [],

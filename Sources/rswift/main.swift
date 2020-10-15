@@ -42,6 +42,7 @@ struct CommanderFlags {
 struct EnvironmentKeys {
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
+  static let hostingBundleName = "HOSTING_BUNDLE_NAME"
   static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
   static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
   static let target = "TARGET_NAME"
@@ -49,8 +50,7 @@ struct EnvironmentKeys {
   static let xcodeproj = "PROJECT_FILE_PATH"
   static let infoPlistFile = "INFOPLIST_FILE"
   static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
-  static let resourceBundleName = "RESOURCE_BUNDLE_NAME"
-  static let resourceBundleTargetName = "RESOURCE_BUNDLE_TARGET_NAME"
+
   static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
   static let platformDir = SourceTreeFolder.platformDir.rawValue
@@ -126,8 +126,7 @@ let generate = command(
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let resourceBundleName = try processInfo.environmentVariable(name: EnvironmentKeys.resourceBundleName)
-  let resourceBundleTargetName = try processInfo.environmentVariable(name: EnvironmentKeys.resourceBundleTargetName)
+  let hostingBundleName: String? = try? processInfo.environmentVariable(name: EnvironmentKeys.hostingBundleName)
   let infoPlistFile = try processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
   let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
@@ -210,10 +209,10 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
-    resourceBundleName: resourceBundleName,
-    resourceBundleTargetName: resourceBundleTargetName,
+    hostingBundleName: hostingBundleName,
     infoPlistFile: URL(fileURLWithPath: infoPlistFile),
     codeSignEntitlements: codeSignEntitlements.map { URL(fileURLWithPath: $0) },
+
     scriptInputFiles: scriptInputFiles,
     scriptOutputFiles: scriptOutputFiles,
     lastRunURL: lastRunURL,
