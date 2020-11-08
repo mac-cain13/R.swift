@@ -47,12 +47,7 @@ fileprivate func watchOSColorFunction(for name: String, at externalAccessLevel: 
     name: structName,
     generics: nil,
     parameters: [
-      Function.Parameter(
-        name: "compatibleWith",
-        localName: "traitCollection",
-        type: Type._Any.asOptional(), // We're doing this because UITraitCollection is not present on WatchOS
-        defaultValue: "nil"
-      )
+      Function.Parameter(name: "_", type: Type._Void, defaultValue: "()")
     ],
     doesThrow: false,
     returnType: Type._UIColor.asOptional(),
