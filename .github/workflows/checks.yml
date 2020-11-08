@@ -19,9 +19,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: .build
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
-          ${{ runner.os }}-spm-
+          ${{ runner.os }}spm
     - name: Test
       run: swift test -v
 
@@ -42,14 +42,14 @@ jobs:
         chmod +x build/Debug/rswift
     - name: Pull cache
       uses: actions/cache@v1
-      id: pod-cache
+      id: podcache
       with:
         path: Examples/Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-pods-
+          ${{ runner.os }}pods
     - name: Install pods
-      if: steps.pod-cache.outputs.cache-hit != 'true'
+      if: steps.podcache.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
@@ -71,14 +71,14 @@ jobs:
         chmod +x build/Debug/rswift
     - name: Pull cache
       uses: actions/cache@v1
-      id: pod-cache
+      id: podcache
       with:
         path: Examples/Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-pods-
+          ${{ runner.os }}pods
     - name: Install pods
-      if: steps.pod-cache.outputs.cache-hit != 'true'
+      if: steps.podcache.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
@@ -92,9 +92,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: .build
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
-          ${{ runner.os }}-spm-
+          ${{ runner.os }}spm
     - name: Set version
       run: |
         sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
