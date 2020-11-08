@@ -2,7 +2,7 @@
   "colors" : [
     {
       "color" : {
-        "platform" : "osx",
+        "platform" : "ios",
         "reference" : "systemTealColor"
       },
       "idiom" : "universal"
