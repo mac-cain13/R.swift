@@ -9,6 +9,58 @@
 
 import Foundation
 
+fileprivate func colorFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
+  let structName = SwiftIdentifier(name: name)
+  let qualifiedName = prefix + structName
+
+  return Function(
+    availables: ["tvOS 11.0, *", "iOS 11.0, *"],
+    comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
+    accessModifier: externalAccessLevel,
+    isStatic: true,
+    name: structName,
+    generics: nil,
+    parameters: [
+      Function.Parameter(
+        name: "compatibleWith",
+        localName: "traitCollection",
+        type: Type._UITraitCollection.asOptional(),
+        defaultValue: "nil"
+      )
+    ],
+    doesThrow: false,
+    returnType: Type._UIColor.asOptional(),
+    body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
+    os: ["iOS", "tvOS"]
+  )
+}
+
+fileprivate func watchOSColorFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
+  let structName = SwiftIdentifier(name: name)
+  let qualifiedName = prefix + structName
+
+  return Function(
+    availables: ["watchOSApplicationExtension 4.0, *"],
+    comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
+    accessModifier: externalAccessLevel,
+    isStatic: true,
+    name: structName,
+    generics: nil,
+    parameters: [
+      Function.Parameter(
+        name: "compatibleWith",
+        localName: "traitCollection",
+        type: Type._Any.asOptional(), // We're doing this because UITraitCollection is not present on WatchOS
+        defaultValue: "nil"
+      )
+    ],
+    doesThrow: false,
+    returnType: Type._UIColor.asOptional(),
+    body: "return UIKit.UIColor(named: \(qualifiedName).name)",
+    os: ["watchOS"]
+  )
+}
+
 struct ColorStructGenerator: ExternalOnlyStructGenerator {
   private let assetFolders: [AssetFolder]
 
@@ -57,38 +109,15 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       implements: [],
       typealiasses: [],
       properties: colorLets,
-      functions: groupedColors.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      functions: groupedColors.uniques.map { [ colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName),
+                                               watchOSColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName)] }.flatMap { $0 },
       structs: structs,
       classes: [],
       os: []
     )
   }
 
-  private func colorFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
-    let structName = SwiftIdentifier(name: name)
-    let qualifiedName = prefix + structName
 
-    return Function(
-      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
-      comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
-      accessModifier: externalAccessLevel,
-      isStatic: true,
-      name: structName,
-      generics: nil,
-      parameters: [
-        Function.Parameter(
-          name: "compatibleWith",
-          localName: "traitCollection",
-          type: Type._UITraitCollection.asOptional(),
-          defaultValue: "nil"
-        )
-      ],
-      doesThrow: false,
-      returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
-      os: ["iOS", "tvOS"]
-    )
-  }
 }
 
 private extension NamespacedAssetSubfolder {
@@ -133,36 +162,11 @@ private extension NamespacedAssetSubfolder {
       implements: [],
       typealiasses: [],
       properties: colorLets,
-      functions: groupedFunctions.uniques.map { colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      functions: groupedFunctions.uniques.map { [ colorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName),
+                                                  watchOSColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName)] }.flatMap { $0 },
       structs: structs,
       classes: [],
       os: []
-    )
-  }
-
-  private func colorFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
-    let structName = SwiftIdentifier(name: name)
-    let qualifiedName = prefix + structName
-
-    return Function(
-      availables: ["tvOS 11.0, *", "iOS 11.0, *"],
-      comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
-      accessModifier: externalAccessLevel,
-      isStatic: true,
-      name: structName,
-      generics: nil,
-      parameters: [
-        Function.Parameter(
-          name: "compatibleWith",
-          localName: "traitCollection",
-          type: Type._UITraitCollection.asOptional(),
-          defaultValue: "nil"
-        )
-      ],
-      doesThrow: false,
-      returnType: Type._UIColor.asOptional(),
-      body: "return UIKit.UIColor(resource: \(qualifiedName), compatibleWith: traitCollection)",
-      os: ["iOS", "tvOS"]
     )
   }
 }
