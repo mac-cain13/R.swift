@@ -44,15 +44,15 @@ jobs:
       uses: actions/cache@v1
       id: podcache
       with:
-        path: Pods
+        path: Examples/Pods
         key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}pods
     - name: Install pods
       if: steps.podcache.outputs.cache-hit != 'true'
-      run: pod install
+      run: pod install --project-directory=Examples
     - name: Test
-      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp"
+      run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
 
   test-tvOS:
     runs-on: macos-latest
@@ -73,15 +73,15 @@ jobs:
       uses: actions/cache@v1
       id: podcache
       with:
-        path: Pods
+        path: Examples/Pods
         key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}pods
     - name: Install pods
       if: steps.podcache.outputs.cache-hit != 'true'
-      run: pod install
+      run: pod install --project-directory=Examples
     - name: Test
-      run: fastlane scan --workspace "ResourceApp.xcworkspace" --scheme "ResourceApp-tvOS"
+      run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
 
   build:
     runs-on: macos-latest
