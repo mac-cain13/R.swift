@@ -19,6 +19,7 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
 
         label.setText(R.string.localizable.quote(11))
+        label.setTextColor(R.color.myColor())
     }
     
     override func willActivate() {
