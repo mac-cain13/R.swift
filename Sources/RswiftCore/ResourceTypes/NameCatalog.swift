@@ -18,6 +18,6 @@ struct NameCatalog: Hashable, Comparable {
   }
 
   static func < (lhs: NameCatalog, rhs: NameCatalog) -> Bool {
-    lhs.name < lhs.name
+    lhs.name < rhs.name
   }
 }
