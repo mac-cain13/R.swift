@@ -303,7 +303,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
 
         guard let (locale, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key)"
+          return "\(values.key.escapedStringLiteral)"
         }
 
         let format = \(values.swiftCode(bundle: "bundle"))
