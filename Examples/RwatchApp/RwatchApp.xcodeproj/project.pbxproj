@@ -315,7 +315,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/R.swift.Library-watchOS/Rswift.framework",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library-watchOS2.2/Rswift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

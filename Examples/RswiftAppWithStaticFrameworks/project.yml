@@ -1,0 +1,87 @@
+#This is a manifest for .xcodeproj generation with https://github.com/yonaskolb/XcodeGen
+name: RswiftAppWithStaticFrameworks
+configs:
+  Debug: debug
+  Release: release
+options:
+  postGenCommand: pod install
+targets:
+  App: 
+    type: application
+    platform: iOS
+    settings: 
+      PRODUCT_BUNDLE_IDENTIFIER: com.rswift.$(PRODUCT_NAME:c99extidentifier)
+    sources:
+      - path: App
+    dependencies:
+      - target: Foo
+      - target: Bar
+    postbuildScripts:
+      - name: Copy Bundles
+        script: ./copy_bundles.sh
+
+  Foo: 
+    type: framework.static
+    platform: iOS
+    settings: 
+      INFOPLIST_FILE: Foo/Info.plist
+      INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+      PRODUCT_BUNDLE_IDENTIFIER: com.rswift.$(PRODUCT_NAME:c99extidentifier)
+    sources:
+      - path: Foo/Sources
+        createIntermediateGroups: true
+    dependencies:
+      - target: FooBundle
+        embed: true    
+    prebuildScripts:
+      - name: R.swift
+        script: "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Foo/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\""
+        inputFiles:
+          - $(TEMP_DIR)/rswift-lastrun
+        outputFiles:
+          - $(SRCROOT)/Foo/Sources/R.generated.swift
+
+  FooBundle: 
+    type: bundle
+    platform: iOS
+    settings: 
+      MACH_O_TYPE: mh_bundle
+      INFOPLIST_FILE: Foo/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.rswift.$(PRODUCT_NAME:c99extidentifier)
+      PRODUCT_NAME: Foo
+    sources:
+      - path: Foo/Resources
+        createIntermediateGroups: true
+
+  Bar: 
+    type: framework.static
+    platform: iOS
+    settings: 
+      INFOPLIST_FILE: Bar/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.rswift.$(PRODUCT_NAME:c99extidentifier)
+      PRODUCT_NAME: Bar
+    sources:
+      - path: Bar/Sources
+        createIntermediateGroups: true
+    dependencies:
+      - target: BarBundle
+        embed: true   
+    prebuildScripts:
+      - name: R.swift
+        script: "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Bar/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\""
+        inputFiles:
+          - $(TEMP_DIR)/rswift-lastrun
+        outputFiles:
+          - $(SRCROOT)/Bar/Sources/R.generated.swift
+
+  BarBundle: 
+    type: bundle
+    platform: iOS
+    settings: 
+      PRODUCT_BUNDLE_IDENTIFIER: com.rswift.$(PRODUCT_NAME:c99extidentifier)
+      MACH_O_TYPE: mh_bundle
+      INFOPLIST_FILE: Bar/Info.plist
+      PRODUCT_NAME: Bar
+    sources:
+      - path: Bar/Resources
+        createIntermediateGroups: true

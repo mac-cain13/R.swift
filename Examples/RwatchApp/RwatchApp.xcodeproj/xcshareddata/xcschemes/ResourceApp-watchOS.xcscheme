@@ -41,8 +41,10 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       notificationPayloadFile = "ResourceApp-watchOS-Extension/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/ResourceApp">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2F5FBC142135561200A83A69"
@@ -50,7 +52,7 @@
             BlueprintName = "ResourceApp-watchOS"
             ReferencedContainer = "container:RwatchApp.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -58,8 +60,10 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/ResourceApp">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2F5FBC142135561200A83A69"
@@ -67,7 +71,16 @@
             BlueprintName = "ResourceApp-watchOS"
             ReferencedContainer = "container:RwatchApp.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2F5FBC142135561200A83A69"
+            BuildableName = "ResourceApp-watchOS.app"
+            BlueprintName = "ResourceApp-watchOS"
+            ReferencedContainer = "container:RwatchApp.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
