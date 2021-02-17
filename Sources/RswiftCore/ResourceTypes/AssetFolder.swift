@@ -10,7 +10,7 @@
 import Foundation
 
 // Note: "appiconset" is not loadable by default, so it's not included here
-private let imageExtensions: Set<String> = ["launchimage", "imageset", "imagestack"]
+private let imageExtensions: Set<String> = ["launchimage", "imageset", "imagestack", "symbolset"]
 
 private let colorExtensions: Set<String> = ["colorset"]
 
