@@ -5,7 +5,7 @@ on:
     types: created
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 
 jobs:
   release-build:
@@ -33,8 +33,14 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}-source.tar.gz
         asset_content_type: application/tar+gzip
 
-    - name: Build
-      run: swift build -v -c release
+    - name: Build fat binary
+      run: |
+        swift build -v -c release -Xswiftc "-target" -Xswiftc "arm64-apple-macos11"
+        mv .build/release/rswift .build/release/rswift-arm64
+        swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macos11"
+        mv .build/release/rswift .build/release/rswift-x86_64
+        lipo -create .build/release/rswift-arm64 .build-x86_64/release/rswift-x86_64 -create .build/release/rswift
+
     - name: Import Signing Certificates
       uses: apple-actions/import-codesign-certs@v1
       with:
