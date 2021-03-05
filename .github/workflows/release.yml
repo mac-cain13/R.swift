@@ -35,11 +35,7 @@ jobs:
 
     - name: Build fat binary
       run: |
-        swift build -v -c release -Xswiftc "-target" -Xswiftc "arm64-apple-macos11"
-        mv .build/release/rswift .build/release/rswift-arm64
-        swift build -v -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macos11"
-        mv .build/release/rswift .build/release/rswift-x86_64
-        lipo -create .build/release/rswift-arm64 .build/release/rswift-x86_64 -output .build/release/rswift
+        swift build -c release --arch x86_64 --arch arm64
 
     - name: Import Signing Certificates
       uses: apple-actions/import-codesign-certs@v1
@@ -48,15 +44,15 @@ jobs:
         p12-password: ${{ secrets.APPLE_CERTS_PASSWORD }}
     - name: Code Sign
       run: |
-        codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/release/rswift
+        codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/apple/Products/Release/rswift
     - name: Store build artifact
       uses: actions/upload-artifact@v1
       with:
         name: rswift-${{ github.event.release.tag_name }}
-        path: .build/release/rswift
+        path: .build/apple/Products/Release/rswift
 
     - name: Archive ZIP
-      run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/release/rswift License
+      run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/apple/Products/Release/rswift License
     - name: Notarize ZIP
       run: |
         sh notarize.sh
@@ -87,7 +83,7 @@ jobs:
     - name: Archive PKG
       run: |
         mkdir -p $PKG_ROOT/$BINARY_ROOT
-        cp .build/release/rswift $PKG_ROOT/$BINARY_ROOT
+        cp .build/apple/Products/Release/rswift $PKG_ROOT/$BINARY_ROOT
         pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
