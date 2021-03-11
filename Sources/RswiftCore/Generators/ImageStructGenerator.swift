@@ -66,7 +66,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       implements: [],
       typealiasses: [],
       properties: imageLets,
-      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      functions: [],
       structs: structs,
       classes: [],
       os: []
@@ -142,36 +142,10 @@ private extension NamespacedAssetSubfolder {
       implements: [],
       typealiasses: [],
       properties: imageLets,
-      functions: groupedFunctions.uniques.map { imageFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName) },
+      functions: [],
       structs: structs,
       classes: [],
       os: []
-    )
-  }
-
-  private func imageFunction(for name: String, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Function {
-    let structName = SwiftIdentifier(name: name)
-    let qualifiedName = prefix + structName
-
-    return Function(
-      availables: [],
-      comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
-      accessModifier: externalAccessLevel,
-      isStatic: true,
-      name: structName,
-      generics: nil,
-      parameters: [
-        Function.Parameter(
-          name: "compatibleWith",
-          localName: "traitCollection",
-          type: Type._UITraitCollection.asOptional(),
-          defaultValue: "nil"
-        )
-      ],
-      doesThrow: false,
-      returnType: Type._UIImage.asOptional(),
-      body: "return UIKit.UIImage(resource: \(qualifiedName), compatibleWith: traitCollection)",
-      os: ["iOS", "tvOS"]
     )
   }
 }
