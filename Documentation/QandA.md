@@ -4,7 +4,7 @@
 
 Swift is a beautiful language and one of it's main advantages is its increasing popularity. However, it can be frustrating to deal with errors that compile but fail during runtime due to missing resources. This makes refactoring difficult while making it easy to create bugs (e.g. missing images etc).
 
-Android tackles this problem by generating sosmething called the R class. It inspired me to create this very project, R.swift, which, thankfully, was well received by colleagues, friends and Github stargazers, so here we are now.``
+Android tackles this problem by generating something called the R class. It inspired me to create this very project, R.swift, which, thankfully, was well received by colleagues, friends and Github stargazers, so here we are now.``
 
 ## Why should I choose R.swift over alternative X or Y?
 
