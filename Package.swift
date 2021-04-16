@@ -14,6 +14,9 @@ let package = Package(
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.7.0")
   ],
   targets: [
+    .target(name: "RswiftCore", dependencies: ["XcodeEdit"]),
+    .testTarget(name: "RswiftCoreTests", dependencies: ["RswiftCore"]),
+    
     .target(name: "rswift5", dependencies: ["RswiftCore5"]),
     .target(name: "RswiftCore5", dependencies: ["Commander", "XcodeEdit"]),
     .testTarget(name: "RswiftCore5Tests", dependencies: ["RswiftCore5"]),
