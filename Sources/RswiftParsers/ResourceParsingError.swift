@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct ResourceParsingError: LocalizedError {
-    var errorDescription: String
+public struct ResourceParsingError: LocalizedError {
+    public var errorDescription: String
 
-    init(_ errorDescription: String) {
+    public init(_ errorDescription: String) {
         self.errorDescription = errorDescription
     }
 }

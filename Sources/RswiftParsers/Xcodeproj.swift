@@ -2,24 +2,22 @@
 //  Xcodeproj.swift
 //  RswiftCore
 //
-//  Created by Tom Lokhorst on 2021-04-16.
+//  Created by Mathijs Kadijk on 09-12-15.
+//  From: https://github.com/mac-cain13/R.swift
+//  License: MIT License
 //
 
 import Foundation
 import XcodeEdit
 
-struct BuildConfiguration {
-    let name: String
-}
-
-struct Xcodeproj {
+public struct Xcodeproj {
     static let supportedExtensions: Set<String> = ["xcodeproj"]
 
     private let projectFile: XCProjectFile
 
     let developmentLanguage: String
 
-    init(url: URL, warning: (String) -> Void) throws {
+    public init(url: URL, warning: (String) -> Void) throws {
         let projectFile: XCProjectFile
 
         // Parse project file
@@ -52,7 +50,7 @@ struct Xcodeproj {
         return target
     }
 
-    func resourcePaths(forTarget targetName: String) throws -> [Path] {
+    public func resourcePaths(forTarget targetName: String) throws -> [Path] {
         let target = try findTarget(name: targetName)
 
         let resourcesFileRefs = target.buildPhases
@@ -72,14 +70,13 @@ struct Xcodeproj {
         return fileRefPaths + variantGroupPaths
     }
 
-    func buildConfigurations(forTarget targetName: String) throws -> [BuildConfiguration] {
+    public func buildConfigurations(forTarget targetName: String) throws -> [XCBuildConfiguration] {
         let target = try findTarget(name: targetName)
 
         guard let buildConfigurationList = target.buildConfigurationList.value else { return [] }
 
         let buildConfigurations = buildConfigurationList.buildConfigurations
             .compactMap { $0.value }
-            .compactMap { configuration in BuildConfiguration(name: configuration.name) }
 
         return buildConfigurations
     }

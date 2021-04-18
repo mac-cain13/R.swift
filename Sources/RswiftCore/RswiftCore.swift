@@ -7,6 +7,7 @@
 
 import Foundation
 import XcodeEdit
+import RswiftParsers
 
 public struct RswiftCore {
 
