@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol SupportedExtensions {
+public protocol SupportedExtensions {
     static var supportedExtensions: Set<String> { get }
 }
 

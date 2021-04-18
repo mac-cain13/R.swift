@@ -13,11 +13,9 @@ import CoreGraphics
 
 
 extension Font: SupportedExtensions {
-    static let supportedExtensions: Set<String> = ["otf", "ttf"]
+    static public let supportedExtensions: Set<String> = ["otf", "ttf"]
 
     static public func parse(url: URL) throws -> Font {
-        try Font.throwIfUnsupportedExtension(url)
-
         guard let dataProvider = CGDataProvider(url: url as CFURL) else {
             throw ResourceParsingError("Unable to create data provider for font at \(url)")
         }

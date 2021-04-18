@@ -11,7 +11,7 @@ import Foundation
 import XcodeEdit
 
 public struct Xcodeproj: SupportedExtensions {
-    static let supportedExtensions: Set<String> = ["xcodeproj"]
+    static public let supportedExtensions: Set<String> = ["xcodeproj"]
 
     private let projectFile: XCProjectFile
 

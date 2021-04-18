@@ -6,5 +6,8 @@
 //
 
 import Foundation
+import RswiftCore
+import ArgumentParser
 
 print("R.swift")
+try RswiftCore.developRun()
