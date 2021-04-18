@@ -10,7 +10,7 @@
 import Foundation
 import XcodeEdit
 
-public struct Xcodeproj {
+public struct Xcodeproj: SupportedExtensions {
     static let supportedExtensions: Set<String> = ["xcodeproj"]
 
     private let projectFile: XCProjectFile
@@ -18,6 +18,7 @@ public struct Xcodeproj {
     let developmentLanguage: String
 
     public init(url: URL, warning: (String) -> Void) throws {
+        try Xcodeproj.throwIfUnsupportedExtension(url)
         let projectFile: XCProjectFile
 
         // Parse project file
