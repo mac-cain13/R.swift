@@ -29,8 +29,8 @@ let package = Package(
         .target(name: "rswift", dependencies: ["RswiftCore", "ArgumentParser"]),
 
         // R.swift 5 stuff
-        .target(name: "rswift5", dependencies: ["RswiftCore5"]),
-        .target(name: "RswiftCore5", dependencies: ["Commander", "XcodeEdit"]),
+        .target(name: "rswift5", dependencies: ["Commander", "RswiftCore5"]),
+        .target(name: "RswiftCore5", dependencies: ["XcodeEdit"]),
         .testTarget(name: "RswiftCore5Tests", dependencies: ["RswiftCore5"]),
     ]
 )
