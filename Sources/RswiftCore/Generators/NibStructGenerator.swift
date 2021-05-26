@@ -44,7 +44,7 @@ struct NibStructGenerator: StructGenerator {
     self.nibs = nibs
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "nib"
     let qualifiedName = prefix + structName
     let groupedNibs = nibs.grouped(bySwiftIdentifier: { $0.name })
@@ -61,7 +61,7 @@ struct NibStructGenerator: StructGenerator {
       functions: [],
       structs: groupedNibs
         .uniques
-        .map { nibStruct(for: $0, at: externalAccessLevel) },
+        .map { nibStruct(for: $0, at: externalAccessLevel, bundle: bundle) },
       classes: [],
       os: ["iOS", "tvOS"]
     )
@@ -143,14 +143,14 @@ struct NibStructGenerator: StructGenerator {
     )
   }
 
-  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessLevel) -> Struct {
+  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessLevel, bundle: String) -> Struct {
     let bundleLet = Let(
       comments: [],
       accessModifier: externalAccessLevel,
       isStatic: false,
       name: "bundle",
       typeDefinition: .inferred(Type._Bundle),
-      value: "R.hostingBundle"
+      value: bundle
     )
 
     let nameVar = Let(
@@ -208,13 +208,13 @@ struct NibStructGenerator: StructGenerator {
         if nameCatalog.isSystemCatalog {
           return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") } }"
         } else {
-          return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+          return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: \(bundle), compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
         }
       }
     let validateColorLines = nib.usedColorResources.uniqueAndSorted()
       .compactMap { nameCatalog -> String? in
         if nameCatalog.isSystemCatalog { return nil }
-        return "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
+        return "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: \(bundle), compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(nib.name)', but couldn't be loaded.\") }"
       }
     let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, tvOS 11.0, *) {"] +
       validateColorLines.map { $0.indent(with: "  ") } +

@@ -24,6 +24,7 @@ public enum Generator: String, CaseIterable {
   case entitlements
   case info
   case id
+  case bundle
 }
 
 public struct RswiftCore {
@@ -48,37 +49,22 @@ public struct RswiftCore {
       let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
       let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
 
-      var structGenerators: [StructGenerator] = []
-      if callInformation.generators.contains(.image) {
-        structGenerators.append(ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images))
+      var structGenerators: [StructGenerator] = makeStructGenerators(availableGenerators: callInformation.generators, resources: resources, developmentLanguage: xcodeproj.developmentLanguage)
+      
+      if callInformation.generators.contains(.bundle) {
+        var bundleInfos: [BundleStructGenerator.BundleInfo] = []
+        // Enhance this list after testing:
+        let supportedGenerators: [Generator] = [.image, .string, .color, .file, .font]
+        let availableGenerators = Array(Set(supportedGenerators).intersection(Set(callInformation.generators)))
+        for bundle in resources.bundles {
+          let bundleStructGenerators = makeStructGenerators(availableGenerators: availableGenerators, resources: bundle, developmentLanguage: xcodeproj.developmentLanguage)
+          let bundleInfo = BundleStructGenerator.BundleInfo(bundle: bundle, structGenerators: bundleStructGenerators)
+          bundleInfos.append(bundleInfo)
+        }
+
+        structGenerators.append(BundleStructGenerator(bundleInfos: bundleInfos))
       }
-      if callInformation.generators.contains(.color) {
-        structGenerators.append(ColorStructGenerator(assetFolders: resources.assetFolders))
-      }
-      if callInformation.generators.contains(.font) {
-        structGenerators.append(FontStructGenerator(fonts: resources.fonts))
-      }
-      if callInformation.generators.contains(.segue) {
-        structGenerators.append(SegueStructGenerator(storyboards: resources.storyboards))
-      }
-      if callInformation.generators.contains(.storyboard) {
-        structGenerators.append(StoryboardStructGenerator(storyboards: resources.storyboards))
-      }
-      if callInformation.generators.contains(.nib) {
-        structGenerators.append(NibStructGenerator(nibs: resources.nibs))
-      }
-      if callInformation.generators.contains(.reuseIdentifier) {
-        structGenerators.append(ReuseIdentifierStructGenerator(reusables: resources.reusables))
-      }
-      if callInformation.generators.contains(.file) {
-        structGenerators.append(ResourceFileStructGenerator(resourceFiles: resources.resourceFiles))
-      }
-      if callInformation.generators.contains(.string) {
-        structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage))
-      }
-      if callInformation.generators.contains(.id) {
-        structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
-      }
+      
       if callInformation.generators.contains(.info) {
 
         let infoPlists = buildConfigurations.compactMap { config in
@@ -122,13 +108,49 @@ public struct RswiftCore {
       exit(EXIT_FAILURE)
     }
   }
+  
+  func makeStructGenerators(availableGenerators: [Generator], resources: Resources, developmentLanguage: String) -> [StructGenerator] {
+    var structGenerators: [StructGenerator] = []
+    if availableGenerators.contains(.image) {
+      structGenerators.append(ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images))
+    }
+    if availableGenerators.contains(.color) {
+      structGenerators.append(ColorStructGenerator(assetFolders: resources.assetFolders))
+    }
+    if availableGenerators.contains(.font) {
+      structGenerators.append(FontStructGenerator(fonts: resources.fonts))
+    }
+    if availableGenerators.contains(.segue) {
+      structGenerators.append(SegueStructGenerator(storyboards: resources.storyboards))
+    }
+    if availableGenerators.contains(.storyboard) {
+      structGenerators.append(StoryboardStructGenerator(storyboards: resources.storyboards))
+    }
+    if availableGenerators.contains(.nib) {
+      structGenerators.append(NibStructGenerator(nibs: resources.nibs))
+    }
+    if availableGenerators.contains(.reuseIdentifier) {
+      structGenerators.append(ReuseIdentifierStructGenerator(reusables: resources.reusables))
+    }
+    if availableGenerators.contains(.file) {
+      structGenerators.append(ResourceFileStructGenerator(resourceFiles: resources.resourceFiles))
+    }
+    if availableGenerators.contains(.string) {
+      structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: developmentLanguage))
+    }
+    if availableGenerators.contains(.id) {
+      structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
+    }
+    
+    return structGenerators
+  }
 
   private func generateRegularFileContents(resources: Resources, generators: [StructGenerator]) -> String {
     let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
 
     let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
 
     let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
 
@@ -151,7 +173,7 @@ public struct RswiftCore {
 
   private func generateUITestFileContents(resources: Resources, generators: [StructGenerator]) -> String {
     let (externalStruct, _) =  AggregatedStructGenerator(subgenerators: generators)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
 
     let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),

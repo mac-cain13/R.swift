@@ -26,7 +26,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
     self.storyboards = storyboards
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName: SwiftIdentifier = "segue"
     let qualifiedName = prefix + structName
 

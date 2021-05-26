@@ -16,14 +16,14 @@ class AggregatedStructGenerator: StructGenerator {
     self.subgenerators = subgenerators
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "R"
     let qualifiedName = structName
     let internalStructName: SwiftIdentifier = "_R"
 
     let collectedResult = subgenerators
       .compactMap {
-        let result = $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName)
+        let result = $0.generatedStructs(at: externalAccessLevel, prefix: qualifiedName, bundle: bundle)
         if result.externalStruct.isEmpty { return nil }
         if let internalStruct = result.internalStruct, internalStruct.isEmpty { return nil }
 

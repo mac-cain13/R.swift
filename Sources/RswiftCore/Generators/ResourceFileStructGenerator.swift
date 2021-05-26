@@ -16,7 +16,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     self.resourceFiles = resourceFiles
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName: SwiftIdentifier = "file"
     let qualifiedName = prefix + structName
     let localized = resourceFiles.grouped(by: { $0.fullname })
@@ -34,7 +34,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
+      properties: firstLocales.flatMap { propertiesFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel, bundle: bundle) },
       functions: firstLocales.flatMap { functionsFromResourceFiles(resourceFiles: $0.1, at: externalAccessLevel) },
       structs: [],
       classes: [],
@@ -42,7 +42,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Let] {
+  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel, bundle: String) -> [Let] {
 
     return resourceFiles
       .map {
@@ -52,13 +52,13 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
           isStatic: true,
           name: SwiftIdentifier(name: $0.fullname),
           typeDefinition: .inferred(Type.FileResource),
-          value: "Rswift.FileResource(bundle: R.hostingBundle, name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
+          value: "Rswift.FileResource(bundle: \(bundle), name: \"\($0.filename)\", pathExtension: \"\($0.pathExtension)\")"
         )
     }
   }
 
   private func functionsFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel) -> [Function] {
-
+    
     return resourceFiles
       .flatMap { resourceFile -> [Function] in
         let fullname = resourceFile.fullname
@@ -78,7 +78,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
             ],
             doesThrow: false,
             returnType: Type._URL.asOptional(),
-            body: "let fileResource = R.file.\(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
+            body: "let fileResource = \(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
             os: []
           )
         ]

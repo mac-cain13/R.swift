@@ -18,7 +18,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     self.images = images
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName: SwiftIdentifier = "image"
     let qualifiedName = prefix + structName
     let assetFolderImageNames = assetFolders
@@ -42,7 +42,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     assetSubfolders.printWarningsForDuplicates()
 
     let structs = assetSubfolders.folders
-      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName, bundle: bundle) }
       .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
@@ -54,7 +54,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
           isStatic: true,
           name: SwiftIdentifier(name: name),
           typeDefinition: .inferred(Type.ImageResource),
-          value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(name)\")"
+          value: "Rswift.ImageResource(bundle: \(bundle), name: \"\(name)\")"
         )
     }
 
@@ -101,7 +101,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 }
 
 private extension NamespacedAssetSubfolder {
-  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 
@@ -118,7 +118,7 @@ private extension NamespacedAssetSubfolder {
     let structName = SwiftIdentifier(name: self.name)
     let qualifiedName = prefix + structName
     let structs = assetSubfolders.folders
-      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName) }
+      .map { $0.generatedImageStruct(at: externalAccessLevel, prefix: qualifiedName, bundle: bundle) }
       .filter { !$0.isEmpty }
 
     let imageLets = groupedFunctions
@@ -130,7 +130,7 @@ private extension NamespacedAssetSubfolder {
           isStatic: true,
           name: SwiftIdentifier(name: name),
           typeDefinition: .inferred(Type.ImageResource),
-          value: "Rswift.ImageResource(bundle: R.hostingBundle, name: \"\(imagePath)\(name)\")"
+          value: "Rswift.ImageResource(bundle: \(bundle), name: \"\(imagePath)\(name)\")"
         )
     }
 

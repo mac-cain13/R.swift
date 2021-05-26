@@ -14,7 +14,7 @@ enum ResourceParsingError: Error {
   case parsingFailed(String)
 }
 
-struct Resources {
+class Resources {
   let assetFolders: [AssetFolder]
   let images: [Image]
   let fonts: [Font]
@@ -22,9 +22,10 @@ struct Resources {
   let storyboards: [Storyboard]
   let resourceFiles: [ResourceFile]
   let localizableStrings: [LocalizableStrings]
-    
-  let reusables: [Reusable]
+  let bundles: [Bundle]
 
+  let reusables: [Reusable]
+  
   init(resourceURLs: [URL], fileManager: FileManager) {
     
     var assetFolders = [AssetFolder]()
@@ -34,7 +35,8 @@ struct Resources {
     var storyboards = [Storyboard]()
     var resourceFiles = [ResourceFile]()
     var localizableStrings = [LocalizableStrings]()
-    
+    var bundles = [Bundle]()
+
     resourceURLs.forEach { url in
       if let nib = tryResourceParsing({ try Nib(url: url) }) {
         nibs.append(nib)
@@ -52,7 +54,14 @@ struct Resources {
 
       // All previous assets can also possibly be used as files
       if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
-        resourceFiles.append(resourceFile)
+        if resourceFile.pathExtension == "bundle" {
+          let bundle = Bundle(bundleUrl: url, fileManager: fileManager)
+          if bundle.resourceFiles.count != 0 {
+            bundles.append(bundle)
+          }
+        } else {
+          resourceFiles.append(resourceFile)
+        }
       }
     }
     
@@ -63,9 +72,74 @@ struct Resources {
     self.storyboards = storyboards
     self.resourceFiles = resourceFiles
     self.localizableStrings = localizableStrings
+    self.bundles = bundles
     
     reusables = (nibs.map { $0 as ReusableContainer } + storyboards.map { $0 as ReusableContainer })
       .flatMap { $0.reusables }
+  }
+}
+
+class Bundle: Resources {
+  let bundleName: String
+
+  init(bundleUrl: URL, fileManager: FileManager) {
+    let resourceURLs = Bundle.resourceURLs(for: bundleUrl, fileManager: fileManager)
+
+    let bundleNameWithExtension = bundleUrl.lastPathComponent
+    bundleName = bundleNameWithExtension.replacingOccurrences(of: ".bundle", with: "")
+
+    super.init(resourceURLs: resourceURLs, fileManager: fileManager)
+  }
+  
+  fileprivate static func resourceURLs(for bundleUrl: URL, fileManager: FileManager) -> [URL] {
+    var resourceURLs = [URL]()
+    
+    let resourceDirectoryTypes: [WhiteListedExtensionsResourceType.Type] = [AssetFolder.self]
+    var resourceDirectorySuffixes = Set<String>()
+    resourceDirectoryTypes.forEach { resourceType in
+      resourceType.supportedExtensions.forEach { ext in
+        resourceDirectorySuffixes.insert(ext)
+      }
+    }
+
+    var prefixesToSkip = Set<String>()
+    prefixesToSkip.insert(".") // Ignore files like .DS_Store, etc.
+    
+    let isResourceDirectory: ((URL) -> Bool) = { url in
+      for suffix in resourceDirectorySuffixes {
+        if url.absoluteString.hasSuffix(suffix + "/") {
+          return true
+        }
+      }
+      return false
+    }
+    
+    let shouldSkip: ((URL) -> Bool) = { url in
+      let name = url.lastPathComponent
+      for prefix in prefixesToSkip {
+        if name.hasPrefix(prefix) {
+          return true
+        }
+      }
+      return false
+    }
+    
+    guard let enumerator = fileManager.enumerator(at: bundleUrl, includingPropertiesForKeys: nil) else {
+      return []
+    }
+
+    for case let itemURL as URL in enumerator {
+      if itemURL.isDirectory() {
+        if isResourceDirectory(itemURL) {
+          resourceURLs.append(itemURL)
+          enumerator.skipDescendents()
+        }
+      } else if !shouldSkip(itemURL) {
+        resourceURLs.append(itemURL)
+      }
+    }
+    
+    return resourceURLs
   }
 }
 
@@ -79,5 +153,17 @@ private func tryResourceParsing<T>(_ parse: () throws -> T) -> T? {
     return nil
   } catch {
     return nil
+  }
+}
+
+fileprivate extension URL {
+  func isDirectory() -> Bool {
+    do {
+      let value = try resourceValues(forKeys:[.isDirectoryKey])
+      return value.isDirectory ?? false
+    }
+    catch {
+      return false
+    }
   }
 }

@@ -16,7 +16,7 @@ struct StoryboardStructGenerator: StructGenerator {
     self.storyboards = storyboards
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "storyboard"
     let qualifiedName = prefix + structName
     let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
@@ -25,7 +25,7 @@ struct StoryboardStructGenerator: StructGenerator {
     let storyboardTypes = groupedStoryboards
       .uniques
       .map { storyboard -> (Struct, Let, Function) in
-        let _struct = storyboardStruct(for: storyboard, at: externalAccessLevel, prefix: qualifiedName)
+        let _struct = storyboardStruct(for: storyboard, at: externalAccessLevel, prefix: qualifiedName, bundle: bundle)
         let _storyboardName = qualifiedName + _struct.type.name
 
         let _property = Let(
@@ -90,7 +90,7 @@ struct StoryboardStructGenerator: StructGenerator {
     )
   }
 
-  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName = SwiftIdentifier(name: storyboard.name)
     let qualifiedName = prefix + structName
 
@@ -99,7 +99,7 @@ struct StoryboardStructGenerator: StructGenerator {
     var functions: [Function] = []
     var properties: [Let] = [
       Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: "R.hostingBundle")
+      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: bundle)
     ]
 
     // Initial view controller
@@ -167,13 +167,13 @@ struct StoryboardStructGenerator: StructGenerator {
         if nameCatalog.isSystemCatalog {
           return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw Rswift.ValidationError(description: \"[R.swift] System image named '\(nameCatalog.name)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") } }"
         } else {
-          return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\(nameCatalog.name)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+          return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: \(bundle), compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Image named '\(nameCatalog.name)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
         }
       }
     let validateColorLines = storyboard.usedColorResources.uniqueAndSorted()
       .compactMap { nameCatalog -> String? in
         if nameCatalog.isSystemCatalog { return nil }
-        return "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: R.hostingBundle, compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\(nameCatalog.name)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
+        return "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: \(bundle), compatibleWith: nil) == nil { throw Rswift.ValidationError(description: \"[R.swift] Color named '\(nameCatalog.name)' is used in storyboard '\(storyboard.name)', but couldn't be loaded.\") }"
       }
     let validateColorLinesWithAvailableIf = ["if #available(iOS 11.0, tvOS 11.0, *) {"] +
       validateColorLines.map { $0.indent(with: "  ") } +

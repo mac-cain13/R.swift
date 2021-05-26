@@ -16,7 +16,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
     self.fonts = fonts
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName: SwiftIdentifier = "font"
     let qualifiedName = prefix + structName
 

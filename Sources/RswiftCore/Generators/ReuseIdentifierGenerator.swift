@@ -16,7 +16,7 @@ struct ReuseIdentifierStructGenerator: ExternalOnlyStructGenerator {
     self.reusables = reusables
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
     let structName: SwiftIdentifier = "reuseIdentifier"
     let qualifiedName = prefix + structName
     let deduplicatedReusables = reusables
