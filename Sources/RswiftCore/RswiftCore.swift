@@ -54,7 +54,7 @@ public struct RswiftCore {
       if callInformation.generators.contains(.bundle) {
         var bundleInfos: [BundleStructGenerator.BundleInfo] = []
         // Enhance this list after testing:
-        let supportedGenerators: [Generator] = [.image, .string, .color, .file, .font]
+        let supportedGenerators: [Generator] = [.image, .string, .color, .file]
         let availableGenerators = Array(Set(supportedGenerators).intersection(Set(callInformation.generators)))
         for bundle in resources.bundles {
           let bundleStructGenerators = makeStructGenerators(availableGenerators: availableGenerators, resources: bundle, developmentLanguage: xcodeproj.developmentLanguage)
