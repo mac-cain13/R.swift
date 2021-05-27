@@ -90,7 +90,7 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
       isStatic: true,
       name: SwiftIdentifier(name: "bundle"),
       typeDefinition: .inferred(Type._Bundle),
-      value: "Bundle(url: bundleURL)!"
+      value: "Bundle(url: bundleURL)"
     )
   }
 }
