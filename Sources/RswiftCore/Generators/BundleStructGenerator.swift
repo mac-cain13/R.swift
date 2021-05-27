@@ -64,7 +64,7 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: [bundleURLLet(bundle: bundle), bundleLet(bundle: bundle)],
+      properties: [bundleURLLet(at: externalAccessLevel, bundle: bundle), bundleLet(at: externalAccessLevel, bundle: bundle)],
       functions: [],
       structs: structs,
       classes: [],
@@ -72,10 +72,10 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
     )
   }
   
-  private func bundleURLLet(bundle: String) -> Let {
+  private func bundleURLLet(at externalAccessLevel: AccessLevel, bundle: String) -> Let {
     return Let(
       comments: [],
-      accessModifier: .publicLevel,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: "bundleURL"),
       typeDefinition: .inferred(Type._URL),
@@ -83,10 +83,10 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func bundleLet(bundle: String) -> Let {
+  private func bundleLet(at externalAccessLevel: AccessLevel, bundle: String) -> Let {
     return Let(
       comments: [],
-      accessModifier: .publicLevel,
+      accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: "bundle"),
       typeDefinition: .inferred(Type._Bundle),
