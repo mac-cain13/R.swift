@@ -99,7 +99,7 @@ struct StoryboardStructGenerator: StructGenerator {
     var functions: [Function] = []
     var properties: [Let] = [
       Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: bundle.description)
+      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .specified(Type._Bundle.asOptional()), value: bundle.description)
     ]
 
     // Initial view controller
