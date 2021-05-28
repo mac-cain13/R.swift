@@ -1,5 +1,5 @@
 //
-//  NibStructGenerator.swift
+//  BundleStructGenerator.swift
 //  R.swift
 //
 //  Created by Ivan Zezyulya on 18-05-21.
