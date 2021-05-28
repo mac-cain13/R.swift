@@ -16,7 +16,7 @@ class ValidatedStructGenerator: StructGenerator {
     self.validationSubject = validationSubject
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> StructGenerator.Result {
 
     let internalStruct = validationSubject.internalStruct?
       .addingChildStructValidationMethods(at: externalAccessLevel)

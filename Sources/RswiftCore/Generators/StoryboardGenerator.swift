@@ -16,7 +16,7 @@ struct StoryboardStructGenerator: StructGenerator {
     self.storyboards = storyboards
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "storyboard"
     let qualifiedName = prefix + structName
     let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
@@ -90,7 +90,7 @@ struct StoryboardStructGenerator: StructGenerator {
     )
   }
 
-  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  private func storyboardStruct(for storyboard: Storyboard, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName = SwiftIdentifier(name: storyboard.name)
     let qualifiedName = prefix + structName
 
@@ -99,7 +99,7 @@ struct StoryboardStructGenerator: StructGenerator {
     var functions: [Function] = []
     var properties: [Let] = [
       Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "name", typeDefinition: .inferred(Type._String), value: "\"\(storyboard.name)\""),
-      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: bundle)
+      Let(comments: [], accessModifier: externalAccessLevel, isStatic: false, name: "bundle", typeDefinition: .inferred(Type._Bundle), value: bundle.description)
     ]
 
     // Initial view controller

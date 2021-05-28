@@ -20,7 +20,7 @@ struct PropertyListGenerator: ExternalOnlyStructGenerator {
     self.toplevelKeysWhitelist = toplevelKeysWhitelist
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     guard let plist = plists.first else { return .empty }
 
     guard plists.all(where: { $0.url == plist.url }) else {

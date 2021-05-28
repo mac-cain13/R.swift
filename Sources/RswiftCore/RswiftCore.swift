@@ -147,10 +147,10 @@ public struct RswiftCore {
 
   private func generateRegularFileContents(resources: Resources, generators: [StructGenerator]) -> String {
     let aggregatedResult = AggregatedStructGenerator(subgenerators: generators)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: .hostingBundle)
 
     let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: .hostingBundle)
 
     let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier)
 
@@ -173,7 +173,7 @@ public struct RswiftCore {
 
   private func generateUITestFileContents(resources: Resources, generators: [StructGenerator]) -> String {
     let (externalStruct, _) =  AggregatedStructGenerator(subgenerators: generators)
-      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: "R.hostingBundle")
+      .generatedStructs(at: callInformation.accessLevel, prefix: "", bundle: .hostingBundle)
 
     let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),

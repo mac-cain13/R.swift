@@ -16,7 +16,7 @@ class AggregatedStructGenerator: StructGenerator {
     self.subgenerators = subgenerators
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "R"
     let qualifiedName = structName
     let internalStructName: SwiftIdentifier = "_R"

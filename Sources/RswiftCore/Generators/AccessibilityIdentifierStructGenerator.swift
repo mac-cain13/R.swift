@@ -24,7 +24,7 @@ struct AccessibilityIdentifierStructGenerator: ExternalOnlyStructGenerator {
     accessibilityIdentifierContainers = nibs + storyboards
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "id"
     let qualifiedName = prefix + structName
     let structsForMergedContainers = accessibilityIdentifierContainers

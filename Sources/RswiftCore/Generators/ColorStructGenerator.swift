@@ -16,7 +16,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
     self.assetFolders = assetFolders
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "color"
     let qualifiedName = prefix + structName
     let assetFolderColorNames = assetFolders
@@ -69,7 +69,7 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
 }
 
 private extension NamespacedAssetSubfolder {
-  func generatedColorStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedColorStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let allFunctions = colorAssets
     let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 

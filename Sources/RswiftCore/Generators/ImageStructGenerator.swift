@@ -18,7 +18,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
     self.images = images
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "image"
     let qualifiedName = prefix + structName
     let assetFolderImageNames = assetFolders
@@ -101,7 +101,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 }
 
 private extension NamespacedAssetSubfolder {
-  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 

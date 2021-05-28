@@ -18,7 +18,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     self.developmentLanguage = developmentLanguage
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "string"
     let qualifiedName = prefix + structName
     let localized = localizableStrings.grouped(by: { $0.filename })
@@ -46,7 +46,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct? {
+  private func stringStructFromLocalizableStrings(filename: String, strings: [LocalizableStrings], at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct? {
 
     let structName = SwiftIdentifier(name: filename)
     let qualifiedName = prefix + structName
@@ -207,7 +207,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     return results
   }
 
-  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel, bundle: String) -> Let {
+  private func stringLet(values: StringValues, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Let {
     let escapedKey = values.key.escapedStringLiteral
     let locales = values.values
       .map { $0.0 }
@@ -225,7 +225,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel, bundle: String) -> Function {
+  private func stringFunction(values: StringValues, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Function {
     if values.params.isEmpty {
       return stringFunctionNoParams(for: values, at: externalAccessLevel, bundle: bundle)
     }
@@ -234,7 +234,40 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     }
   }
 
-  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel, bundle: String) -> Function {
+  private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Function {
+    
+    let body: String
+    
+    switch bundle {
+    case .hostingBundle:
+      body = """
+        guard let preferredLanguages = preferredLanguages else {
+          return \(values.swiftCode(bundle: bundle.description))
+        }
+
+        guard let (_, foundBundle) = localeBundle(parentBundle: \(bundle), tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        return \(values.swiftCode(bundle: "foundBundle"))
+        """
+    case .customBundle:
+      body = """
+        guard let bundle = \(bundle) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        guard let preferredLanguages = preferredLanguages else {
+          return \(values.swiftCode(bundle: "bundle"))
+        }
+
+        guard let (_, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        return \(values.swiftCode(bundle: "foundBundle"))
+        """
+    }
 
     return Function(
       availables: [],
@@ -252,22 +285,12 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       ],
       doesThrow: false,
       returnType: Type._String,
-      body: """
-        guard let preferredLanguages = preferredLanguages else {
-          return \(values.swiftCode(bundle: bundle))
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        return \(values.swiftCode(bundle: "bundle"))
-        """,
+      body: body,
       os: []
     )
   }
 
-  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel, bundle: String) -> Function {
+  private func stringFunctionParams(for values: StringValues, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Function {
 
     var params = values.params.enumerated().map { arg -> Function.Parameter in
       let (ix, param) = arg
@@ -285,6 +308,43 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       defaultValue: "nil"
     )
     params.append(prefereredLanguages)
+    
+    let body: String
+    
+    switch bundle {
+    case .hostingBundle:
+      body = """
+        guard let preferredLanguages = preferredLanguages else {
+          let format = \(values.swiftCode(bundle: bundle.description))
+          return String(format: format, locale: applicationLocale, \(args))
+        }
+
+        guard let (locale, foundBundle) = localeBundle(parentBundle: \(bundle), tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        let format = \(values.swiftCode(bundle: "foundBundle"))
+        return String(format: format, locale: locale, \(args))
+        """
+    case .customBundle:
+      body = """
+        guard let bundle = \(bundle) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        guard let preferredLanguages = preferredLanguages else {
+          let format = \(values.swiftCode(bundle: "bundle"))
+          return String(format: format, locale: applicationLocale, \(args))
+        }
+
+        guard let (locale, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+        let format = \(values.swiftCode(bundle: "foundBundle"))
+        return String(format: format, locale: locale, \(args))
+        """
+    }
 
     return Function(
       availables: [],
@@ -296,19 +356,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       parameters: params,
       doesThrow: false,
       returnType: Type._String,
-      body: """
-        guard let preferredLanguages = preferredLanguages else {
-          let format = \(values.swiftCode(bundle: bundle))
-          return String(format: format, locale: applicationLocale, \(args))
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        let format = \(values.swiftCode(bundle: "bundle"))
-        return String(format: format, locale: locale, \(args))
-        """,
+      body: body,
       os: []
     )
   }

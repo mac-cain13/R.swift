@@ -44,7 +44,7 @@ struct NibStructGenerator: StructGenerator {
     self.nibs = nibs
   }
 
-  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> StructGenerator.Result {
+  func generatedStructs(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> StructGenerator.Result {
     let structName: SwiftIdentifier = "nib"
     let qualifiedName = prefix + structName
     let groupedNibs = nibs.grouped(bySwiftIdentifier: { $0.name })
@@ -143,14 +143,14 @@ struct NibStructGenerator: StructGenerator {
     )
   }
 
-  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessLevel, bundle: String) -> Struct {
+  private func nibStruct(for nib: Nib, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Struct {
     let bundleLet = Let(
       comments: [],
       accessModifier: externalAccessLevel,
       isStatic: false,
       name: "bundle",
       typeDefinition: .inferred(Type._Bundle),
-      value: bundle
+      value: bundle.description
     )
 
     let nameVar = Let(

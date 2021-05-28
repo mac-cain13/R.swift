@@ -64,6 +64,7 @@ extension Struct {
         name: "localeBundle",
         generics: nil,
         parameters: [
+          .init(name: "parentBundle", type: Type._Bundle),
           .init(name: "tableName", type: Type._String),
           .init(name: "preferredLanguages", type: Type._Array.withGenericArgs([Type._String]))
         ],
@@ -75,13 +76,13 @@ extension Struct {
             .map { Locale(identifier: $0) }
             .prefix(1)
             .flatMap { locale -> [String] in
-              if hostingBundle.localizations.contains(locale.identifier) {
-                if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+              if parentBundle.localizations.contains(locale.identifier) {
+                if let language = locale.languageCode, parentBundle.localizations.contains(language) {
                   return [locale.identifier, language]
                 } else {
                   return [locale.identifier]
                 }
-              } else if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+              } else if let language = locale.languageCode, parentBundle.localizations.contains(language) {
                 return [language]
               } else {
                 return []
@@ -90,7 +91,7 @@ extension Struct {
 
           // If there's no languages, use development language as backstop
           if languages.isEmpty {
-            if let developmentLocalization = hostingBundle.developmentLocalization {
+            if let developmentLocalization = parentBundle.developmentLocalization {
               languages = [developmentLocalization]
             }
           } else {
@@ -98,7 +99,7 @@ extension Struct {
             languages.insert("Base", at: 1)
 
             // Add development language as backstop
-            if let developmentLocalization = hostingBundle.developmentLocalization {
+            if let developmentLocalization = parentBundle.developmentLocalization {
               languages.append(developmentLocalization)
             }
           }
@@ -106,7 +107,7 @@ extension Struct {
           // Find first language for which table exists
           // Note: key might not exist in chosen language (in that case, key will be shown)
           for language in languages {
-            if let lproj = hostingBundle.url(forResource: language, withExtension: "lproj"),
+            if let lproj = parentBundle.url(forResource: language, withExtension: "lproj"),
                let lbundle = Bundle(url: lproj)
             {
               let strings = lbundle.url(forResource: tableName, withExtension: "strings")
@@ -119,11 +120,11 @@ extension Struct {
           }
 
           // If table is available in main bundle, don't look for localized resources
-          let strings = hostingBundle.url(forResource: tableName, withExtension: "strings", subdirectory: nil, localization: nil)
-          let stringsdict = hostingBundle.url(forResource: tableName, withExtension: "stringsdict", subdirectory: nil, localization: nil)
+          let strings = parentBundle.url(forResource: tableName, withExtension: "strings", subdirectory: nil, localization: nil)
+          let stringsdict = parentBundle.url(forResource: tableName, withExtension: "stringsdict", subdirectory: nil, localization: nil)
 
           if strings != nil || stringsdict != nil {
-            return (applicationLocale, hostingBundle)
+            return (applicationLocale, parentBundle)
           }
 
           // If table is not found for requested languages, key will be shown

@@ -21,7 +21,7 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
     self.bundleInfos = bundleInfos
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "bundle"
     let qualifiedName = prefix + structName
 
@@ -45,18 +45,19 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
   }
   
   private func bundleStruct(info: BundleInfo, at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct? {
-    let bundle = info.bundle.bundleName
-    let structName = SwiftIdentifier(name: bundle)
+    let bundleName = info.bundle.bundleName
+    let structName = SwiftIdentifier(name: bundleName)
     let qualifiedName = prefix + structName
-    
+    let bundle = BundleExpression.customBundle("\(qualifiedName).bundle")
+
     let structs = info.structGenerators.compactMap { generator -> Struct? in
-      let resourceStructs = generator.generatedStructs(at: externalAccessLevel, prefix: qualifiedName, bundle: "\(qualifiedName).bundle")
+      let resourceStructs = generator.generatedStructs(at: externalAccessLevel, prefix: qualifiedName, bundle: bundle)
       return resourceStructs.externalStruct
     }
     .filter {
       !$0.isEmpty
     }
-
+    
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(structs.count) resource groups."],
@@ -64,7 +65,7 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
       type: Type(module: .host, name: structName),
       implements: [],
       typealiasses: [],
-      properties: [bundleURLLet(at: externalAccessLevel, bundle: bundle), bundleLet(at: externalAccessLevel, bundle: bundle)],
+      properties: [bundleLet(at: externalAccessLevel, bundleName: bundleName)],
       functions: [],
       structs: structs,
       classes: [],
@@ -72,25 +73,14 @@ struct BundleStructGenerator: ExternalOnlyStructGenerator {
     )
   }
   
-  private func bundleURLLet(at externalAccessLevel: AccessLevel, bundle: String) -> Let {
-    return Let(
-      comments: [],
-      accessModifier: externalAccessLevel,
-      isStatic: true,
-      name: SwiftIdentifier(name: "bundleURL"),
-      typeDefinition: .inferred(Type._URL),
-      value: "R.hostingBundle.bundleURL.appendingPathComponent(\"\(bundle).bundle\")"
-    )
-  }
-
-  private func bundleLet(at externalAccessLevel: AccessLevel, bundle: String) -> Let {
+  private func bundleLet(at externalAccessLevel: AccessLevel, bundleName: String) -> Let {
     return Let(
       comments: [],
       accessModifier: externalAccessLevel,
       isStatic: true,
       name: SwiftIdentifier(name: "bundle"),
       typeDefinition: .inferred(Type._Bundle),
-      value: "Bundle(url: bundleURL)"
+      value: "Bundle(url: R.hostingBundle.bundleURL.appendingPathComponent(\"\(bundleName).bundle\"))"
     )
   }
 }

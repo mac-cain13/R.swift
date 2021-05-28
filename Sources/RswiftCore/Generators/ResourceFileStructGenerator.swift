@@ -16,7 +16,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     self.resourceFiles = resourceFiles
   }
 
-  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: String) -> Struct {
+  func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier, bundle: BundleExpression) -> Struct {
     let structName: SwiftIdentifier = "file"
     let qualifiedName = prefix + structName
     let localized = resourceFiles.grouped(by: { $0.fullname })
@@ -42,7 +42,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
     )
   }
 
-  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel, bundle: String) -> [Let] {
+  private func propertiesFromResourceFiles(resourceFiles: [ResourceFile], at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> [Let] {
 
     return resourceFiles
       .map {
@@ -78,7 +78,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
             ],
             doesThrow: false,
             returnType: Type._URL.asOptional(),
-            body: "let fileResource = \(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle.url(forResource: fileResource)",
+            body: "let fileResource = \(SwiftIdentifier(name: fullname))\nreturn fileResource.bundle?.url(forResource: fileResource)",
             os: []
           )
         ]
