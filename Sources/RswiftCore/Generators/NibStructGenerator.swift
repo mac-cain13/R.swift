@@ -149,7 +149,7 @@ struct NibStructGenerator: StructGenerator {
       accessModifier: externalAccessLevel,
       isStatic: false,
       name: "bundle",
-      typeDefinition: .inferred(Type._Bundle),
+      typeDefinition: .specified(Type._Bundle.asOptional()),
       value: bundle.description
     )
 
