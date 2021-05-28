@@ -57,8 +57,13 @@ struct ColorStructGenerator: ExternalOnlyStructGenerator {
       implements: [],
       typealiasses: [],
       properties: colorLets,
-      functions: groupedColors.uniques.map { [ generateColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName),
-                                               generateWatchOSColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName)] }.flatMap { $0 },
+      functions: groupedColors.uniques.map { name -> [Function] in
+        var functions = [ generateColorFunction(for: name, at: externalAccessLevel, prefix: qualifiedName)]
+        if case .hostingBundle = bundle {
+          functions.append(generateWatchOSColorFunction(for: name, at: externalAccessLevel, prefix: qualifiedName))
+        }
+        return functions
+      }.flatMap { $0 },
       structs: structs,
       classes: [],
       os: []
@@ -101,7 +106,7 @@ private extension NamespacedAssetSubfolder {
           value: "Rswift.ColorResource(bundle: \(bundle), name: \"\(colorPath)\(name)\")"
         )
     }
-
+    
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(colorLets.count) colors."],
@@ -110,8 +115,13 @@ private extension NamespacedAssetSubfolder {
       implements: [],
       typealiasses: [],
       properties: colorLets,
-      functions: groupedFunctions.uniques.map { [ generateColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName),
-                                                  generateWatchOSColorFunction(for: $0, at: externalAccessLevel, prefix: qualifiedName)] }.flatMap { $0 },
+      functions: groupedFunctions.uniques.map { name -> [Function] in
+        var functions = [ generateColorFunction(for: name, at: externalAccessLevel, prefix: qualifiedName)]
+        if case .hostingBundle = bundle {
+          functions.append(generateWatchOSColorFunction(for: name, at: externalAccessLevel, prefix: qualifiedName))
+        }
+        return functions
+      }.flatMap { $0 },
       structs: structs,
       classes: [],
       os: []
