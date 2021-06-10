@@ -126,7 +126,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let paddedKeys = missing.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-      warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
+      //warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)") - Silence missing translation warnings
     }
 
     // Warnings about extra translations
@@ -144,7 +144,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let paddedKeys = extra.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-      warn("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+      //warn("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)") - Silence extra translation warnings
     }
 
     // Only include translation if it exists in the primary language
