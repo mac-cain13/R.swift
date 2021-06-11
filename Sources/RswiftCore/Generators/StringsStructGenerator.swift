@@ -402,14 +402,16 @@ fileprivate extension BundleExpression {
     switch self {
     case .hostingBundle:
       return """
-        guard let bundle = \(self) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
+        let bundle = \(self)
+
 
       """
     case .customBundle:
       return """
-        let bundle = \(self)
+        guard let bundle = \(self) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
 
       """
     }
