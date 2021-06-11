@@ -57,7 +57,7 @@ public struct RswiftCore {
         let supportedGenerators: [Generator] = [.image, .string, .color, .file]
         let availableGenerators = Array(Set(supportedGenerators).intersection(Set(callInformation.generators)))
         for bundle in resources.bundles {
-          let bundleStructGenerators = makeStructGenerators(availableGenerators: availableGenerators, resources: bundle, developmentLanguage: xcodeproj.developmentLanguage)
+          let bundleStructGenerators = makeStructGenerators(availableGenerators: availableGenerators, resources: bundle.resources, developmentLanguage: xcodeproj.developmentLanguage)
           let bundleInfo = BundleStructGenerator.BundleInfo(bundle: bundle, structGenerators: bundleStructGenerators)
           bundleInfos.append(bundleInfo)
         }
