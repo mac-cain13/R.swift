@@ -236,38 +236,19 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
 
   private func stringFunctionNoParams(for values: StringValues, at externalAccessLevel: AccessLevel, bundle: BundleExpression) -> Function {
     
-    let body: String
+    var body = bundle.letBundleBody(for: values)
     
-    switch bundle {
-    case .hostingBundle:
-      body = """
-        guard let preferredLanguages = preferredLanguages else {
-          return \(values.swiftCode(bundle: "\(bundle)"))
-        }
+    body += """
+      guard let preferredLanguages = preferredLanguages else {
+        return \(values.swiftCode(bundle: "bundle"))
+      }
 
-        guard let (_, foundBundle) = localeBundle(parentBundle: \(bundle), tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
+      guard let (_, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+        return "\(values.key.escapedStringLiteral)"
+      }
 
-        return \(values.swiftCode(bundle: "foundBundle"))
-        """
-    case .customBundle:
-      body = """
-        guard let bundle = \(bundle) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        guard let preferredLanguages = preferredLanguages else {
-          return \(values.swiftCode(bundle: "bundle"))
-        }
-
-        guard let (_, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        return \(values.swiftCode(bundle: "foundBundle"))
-        """
-    }
+      return \(values.swiftCode(bundle: "foundBundle"))
+    """
 
     return Function(
       availables: [],
@@ -308,43 +289,22 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       defaultValue: "nil"
     )
     params.append(prefereredLanguages)
+
+    var body = bundle.letBundleBody(for: values)
     
-    let body: String
-    
-    switch bundle {
-    case .hostingBundle:
-      body = """
-        guard let preferredLanguages = preferredLanguages else {
-          let format = \(values.swiftCode(bundle: "\(bundle)"))
-          return String(format: format, locale: applicationLocale, \(args))
-        }
+    body += """
+      guard let preferredLanguages = preferredLanguages else {
+        let format = \(values.swiftCode(bundle: "\(bundle)"))
+        return String(format: format, locale: applicationLocale, \(args))
+      }
 
-        guard let (locale, foundBundle) = localeBundle(parentBundle: \(bundle), tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
+      guard let (locale, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
+        return "\(values.key.escapedStringLiteral)"
+      }
 
-        let format = \(values.swiftCode(bundle: "foundBundle"))
-        return String(format: format, locale: locale, \(args))
-        """
-    case .customBundle:
-      body = """
-        guard let bundle = \(bundle) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        guard let preferredLanguages = preferredLanguages else {
-          let format = \(values.swiftCode(bundle: "bundle"))
-          return String(format: format, locale: applicationLocale, \(args))
-        }
-
-        guard let (locale, foundBundle) = localeBundle(parentBundle: bundle, tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
-        }
-
-        let format = \(values.swiftCode(bundle: "foundBundle"))
-        return String(format: format, locale: locale, \(args))
-        """
-    }
+      let format = \(values.swiftCode(bundle: "foundBundle"))
+      return String(format: format, locale: locale, \(args))
+    """
 
     return Function(
       availables: [],
@@ -434,5 +394,24 @@ private struct StringValues {
     }
 
     return results
+  }
+}
+
+fileprivate extension BundleExpression {
+  func letBundleBody(for values: StringValues) -> String {
+    switch self {
+    case .hostingBundle:
+      return """
+        guard let bundle = \(self) else {
+          return "\(values.key.escapedStringLiteral)"
+        }
+
+      """
+    case .customBundle:
+      return """
+        let bundle = \(self)
+
+      """
+    }
   }
 }
