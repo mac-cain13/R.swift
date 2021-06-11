@@ -1,8 +1,8 @@
 //
-//  Resources.swift
+//  Bundle.swift
 //  R.swift
 //
-//  Created by Mathijs Kadijk on 11-06-21.
+//  Created by Ivan Zezyulya on 11-06-21.
 //  From: https://github.com/mac-cain13/R.swift
 //  License: MIT License
 //
