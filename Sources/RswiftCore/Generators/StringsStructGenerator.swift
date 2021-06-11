@@ -294,7 +294,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     
     body += """
       guard let preferredLanguages = preferredLanguages else {
-        let format = \(values.swiftCode(bundle: "\(bundle)"))
+        let format = \(values.swiftCode(bundle: "bundle"))
         return String(format: format, locale: applicationLocale, \(args))
       }
 
