@@ -242,7 +242,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     case .hostingBundle:
       body = """
         guard let preferredLanguages = preferredLanguages else {
-          return \(values.swiftCode(bundle: bundle.description))
+          return \(values.swiftCode(bundle: "\(bundle)"))
         }
 
         guard let (_, foundBundle) = localeBundle(parentBundle: \(bundle), tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
@@ -315,7 +315,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     case .hostingBundle:
       body = """
         guard let preferredLanguages = preferredLanguages else {
-          let format = \(values.swiftCode(bundle: bundle.description))
+          let format = \(values.swiftCode(bundle: "\(bundle)"))
           return String(format: format, locale: applicationLocale, \(args))
         }
 
