@@ -17,7 +17,7 @@ public struct Xcodeproj: SupportedExtensions {
 
     let developmentLanguage: String
 
-    public init(url: URL, warning: (String) -> Void) throws {
+    public init(url: URL, warning: (Error) -> Void) throws {
         try Xcodeproj.throwIfUnsupportedExtension(url)
         let projectFile: XCProjectFile
 
@@ -27,7 +27,7 @@ public struct Xcodeproj: SupportedExtensions {
                 projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: false)
             }
             catch let error as ProjectFileError {
-                warning(error.localizedDescription)
+                warning(error)
 
                 projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
             }

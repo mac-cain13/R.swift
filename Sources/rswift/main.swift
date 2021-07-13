@@ -9,5 +9,19 @@ import Foundation
 import RswiftCore
 import ArgumentParser
 
-print("R.swift")
-try RswiftCore.developRun()
+struct Generate: ParsableCommand {
+    @Option(help: "The Xcode project path")
+    var project: String
+
+    @Option(help: "The target")
+    var target: String
+
+    func run() throws {
+        try RswiftCore.developRun(
+            projectPath: project,
+            targetName: target
+        )
+    }
+}
+
+Generate.main()
