@@ -11,11 +11,4 @@ import XCTest
 @testable import RswiftCore
 
 class MainTests: XCTestCase {
-
-    func testGetFiles() throws {
-        let xcodeprojURL = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp.xcodeproj")
-        let paths = try RswiftCore().developGetFiles(xcodeprojURL: xcodeprojURL, targetName: "ResourceApp")
-        XCTAssertFalse(paths.isEmpty)
-    }
-
 }

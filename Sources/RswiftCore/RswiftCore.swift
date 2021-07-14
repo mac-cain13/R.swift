@@ -10,50 +10,67 @@ import XcodeEdit
 import RswiftGenerators
 import RswiftParsers
 import RswiftResources
+import SwiftSyntax
 
 public struct RswiftCore {
-    
-    // Tempoary function for use during development
-    func developGetFiles(xcodeprojURL: URL, targetName: String) throws -> [String] {
-        let xcodeproj = try Xcodeproj(url: xcodeprojURL, warning: { print($0) })
-        return try xcodeproj.resourcePaths(forTarget: targetName).map { "\($0)" }
-    }
-    
-    static public func developRun(
+    public init() {}
+
+    public func run(
         projectPath: String,
-        targetName: String
+        targetName: String,
+        sourceRoot: String
     ) throws {
         let xcodeprojURL = URL(fileURLWithPath: projectPath)
-        
-        let xcodeproj = try Xcodeproj(url: xcodeprojURL, warning: { error in
-            print(error.localizedDescription)
-        })
+        let xcodeproj = try XcodeprojParser().parse(url: xcodeprojURL)
         let paths = try xcodeproj.resourcePaths(forTarget: targetName)
         let urls = paths
-            .map { $0.url(with: urlForSourceTreeFolder) }
+            .map {
+                $0.url(with: { sourceTreeFolder in
+                    switch sourceTreeFolder {
+                    case .sourceRoot:
+                        return URL(fileURLWithPath: sourceRoot)
+                    case .buildProductsDir:
+                        print("WARNING: buildProductsDir not implemented")
+                        return URL(fileURLWithPath: sourceRoot)
+                    case .developerDir:
+                        print("WARNING: developerDir not implemented")
+                        return URL(fileURLWithPath: sourceRoot)
+                    case .sdkRoot:
+                        print("WARNING: sdkRoot not implemented")
+                        return URL(fileURLWithPath: sourceRoot)
+                    case .platformDir:
+                        print("WARNING: platformDir not implemented")
+                        return URL(fileURLWithPath: sourceRoot)
+                    }
+                })
+            }
+
+        let fontParser = FontParser()
         let fonts = try urls
-            .filter { Font.supportedExtensions.contains($0.pathExtension) }
-            .map { try Font.parse(url: $0) }
-        
-        for font in fonts {
-            print(try font.generateResourceLet())
-        }
-        print()
-    }
-    
-    static func urlForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
-        switch sourceTreeFolder {
-        case .buildProductsDir:
-            return URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp")
-        case .developerDir:
-            return URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp")
-        case .sdkRoot:
-            return URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp")
-        case .sourceRoot:
-//            return projectPath.deletingLastPathComponent()
-            return URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp")
-        case .platformDir:
-            return URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp")
+            .filter { fontParser.supportedExtensions.contains($0.pathExtension) }
+            .map { try fontParser.parse(url: $0) }
+
+        let fontGenerator = FontGenerator()
+
+        let stringsParser = LocalizedStringsParser()
+        let strings = try urls
+            .filter { stringsParser.supportedExtensions.contains($0.pathExtension) }
+            .map { try stringsParser.parse(url: $0) }
+        let stringsGenerator = LocalizedStringGenerator()
+
+        let assetFolderParser = AssetFolderParser()
+        let assetFolders = try urls
+            .filter { assetFolderParser.supportedExtensions.contains($0.pathExtension) }
+            .map { try assetFolderParser.parse(url: $0) }
+        let imageGenerator = ImageGenerator()
+
+        let fontCode = try fonts.map { try fontGenerator.generateResourceLet(resource: $0) }
+        let assetCode = try assetFolders.map { try imageGenerator.generateResourceLet(resource: $0) }
+        let stringsCode = try strings.map { try stringsGenerator.generateResourceLet(resource: $0) }
+
+        let x = (fontCode + assetCode + stringsCode)
+        for syntax in x {
+            print(syntax)
         }
     }
 }

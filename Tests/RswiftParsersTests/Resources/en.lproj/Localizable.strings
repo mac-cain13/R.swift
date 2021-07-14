@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  ValidationKit
+
+  Created by Mathijs on 06/03/2021.
+  
+*/
+
+"is_empty" = "must be empty";
+"not_empty" = "may not be empty";
+"date_in_future" = "date must be in the future";
+"too_short" = "must be %d or more characters long";
+"too_long" = "must be %d or fewer characters long";
+"not_exact_length" = "must be exactly %d characters long";
+"invalid_prefix" = "must start with %@";
+"invalid_date" = "is not a valid date";
+"not_accepted" = "is not accepted";
+"invalid_option" = "invalid option %@";

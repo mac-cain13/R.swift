@@ -1,54 +1,36 @@
 //
-//  Xcodeproj.swift
-//  RswiftCore
+//  File.swift
+//  
 //
-//  Created by Mathijs Kadijk on 09-12-15.
-//  From: https://github.com/mac-cain13/R.swift
-//  License: MIT License
+//  Created by Mathijs on 14/07/2021.
 //
 
 import Foundation
 import XcodeEdit
 
-public struct Xcodeproj: SupportedExtensions {
-    static public let supportedExtensions: Set<String> = ["xcodeproj"]
-
+public struct Xcodeproj {
     private let projectFile: XCProjectFile
 
     let developmentLanguage: String
 
-    public init(url: URL, warning: (Error) -> Void) throws {
-        try Xcodeproj.throwIfUnsupportedExtension(url)
-        let projectFile: XCProjectFile
-
-        // Parse project file
-        do {
-            do {
-                projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: false)
-            }
-            catch let error as ProjectFileError {
-                warning(error)
-
-                projectFile = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
-            }
-        }
-        catch {
-            throw ResourceParsingError("Project file at '\(url)' could not be parsed, is this a valid Xcode project file ending in *.xcodeproj?\n\(error.localizedDescription)")
-        }
-
+    public init(projectFile: XCProjectFile) {
         self.projectFile = projectFile
         self.developmentLanguage = projectFile.project.developmentRegion
     }
 
     private func findTarget(name: String) throws -> PBXTarget {
         // Look for target in project file
-        let allTargets = projectFile.project.targets.compactMap { $0.value }
+        let allTargets = self.targets()
         guard let target = allTargets.filter({ $0.name == name }).first else {
             let availableTargets = allTargets.compactMap { $0.name }.joined(separator: ", ")
-            throw ResourceParsingError("Target '\(name)' not found in project file, available targets are: \(availableTargets)")
+            throw XcodeprojError(errorDescription: "Target '\(name)' not found in project file, available targets are: \(availableTargets)")
         }
 
         return target
+    }
+
+    public func targets() -> [PBXTarget] {
+        projectFile.project.targets.compactMap { $0.value }
     }
 
     public func resourcePaths(forTarget targetName: String) throws -> [Path] {
@@ -81,4 +63,8 @@ public struct Xcodeproj: SupportedExtensions {
 
         return buildConfigurations
     }
+}
+
+public struct XcodeprojError: LocalizedError {
+    public var errorDescription: String?
 }
