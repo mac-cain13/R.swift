@@ -12,10 +12,10 @@ let package = Package(
         .executable(name: "rswift5", targets: ["rswift5"])
     ],
     dependencies: [
-        .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
-        .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.7.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.4.3"),
-        .package(url: "https://github.com/apple/swift-format.git", .branch("swift-5.4-branch")),
+        .package(name: "Commander", url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
+        .package(name: "XcodeEdit", url: "https://github.com/tomlokhorst/XcodeEdit.git", from: "2.7.0"),
+        .package(name: "swift-argument-parser", url: "https://github.com/apple/swift-argument-parser.git", from: "0.4.3"),
+        .package(name: "swift-format", url: "https://github.com/apple/swift-format.git", .branch("swift-5.4-branch")),
         .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("0.50400.0")),
     ],
     targets: [
@@ -28,7 +28,7 @@ let package = Package(
         .target(name: "RswiftGenerators", dependencies: [
             "RswiftResources",
             .product(name: "SwiftFormat", package: "swift-format"),
-            "SwiftSyntax",
+            .product(name: "SwiftSyntax", package: "SwiftSyntax"),
             .product(name: "SwiftSyntaxBuilder", package: "SwiftSyntax")
         ]),
 

@@ -48,7 +48,7 @@
       },
       {
         "package": "XcodeEdit",
-        "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
+        "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit.git",
         "state": {
           "branch": null,
           "revision": "dab519997ca05833470c88f0926b27498911ecbf",
