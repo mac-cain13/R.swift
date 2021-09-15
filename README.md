@@ -116,9 +116,9 @@ Installing R.swift via SPM is a bit weird, because it is not only a library, but
   1. Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab
   1. Add a Depencency by expanding the section and clicking the little plus icon at the bottom of the section and select the  `rswift` executable
   1. Add a `New Run Script Phase` by clicking the little plus icon in the top left
-  1. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:
+  1. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:
       ```
-      "$SYMROOT/$CONFIGURATION/rswift" generate "$SRCROOT/R.generated.swift"
+      "$CONFIGURATION_BUILD_DIR/rswift" generate "$SRCROOT/R.generated.swift"
       ```
   1. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
 1. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
