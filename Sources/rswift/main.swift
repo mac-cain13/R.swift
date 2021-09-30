@@ -67,7 +67,6 @@ struct EnvironmentKeys {
   static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
   static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
   static let target = "TARGET_NAME"
-  static let tempDir = "TEMP_DIR"
   static let xcodeproj = "PROJECT_FILE_PATH"
   static let infoPlistFile = "INFOPLIST_FILE"
   static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
@@ -109,7 +108,6 @@ struct CommanderOptions {
   static let developerDir: Option<String?> = Option("developerDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.developerDir)")
   static let platformDir: Option<String?> = Option("platformDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.platformDir)")
   static let sdkRoot: Option<String?> = Option("sdkRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sdkRoot)")
-  static let tempDir: Option<String?> = Option("tempDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.tempDir)")
   static let sourceRoot: Option<String?> = Option("sourceRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sourceRoot)")
 }
 
@@ -180,7 +178,6 @@ let generate = command(
   CommanderOptions.developerDir,
   CommanderOptions.platformDir,
   CommanderOptions.sdkRoot,
-  CommanderOptions.tempDir,
   CommanderOptions.sourceRoot,
 
   CommanderArguments.outputPath
@@ -203,19 +200,9 @@ let generate = command(
   developerDirOption,
   platformDirOption,
   sdkRootOption,
-  tempDirOption,
   sourceRootOption,
 
   outputPath in
-
-  // Touch last run file
-  do {
-    let tempDirPath = try tempDirOption ?? ProcessInfo().environmentVariable(name: EnvironmentKeys.tempDir)
-    let lastRunFile = URL(fileURLWithPath: tempDirPath).appendingPathComponent(Rswift.lastRunFile)
-    try Date().description.write(to: lastRunFile, atomically: true, encoding: .utf8)
-  } catch {
-    warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
-  }
 
   let processInfo = ProcessInfo()
 
@@ -230,7 +217,6 @@ let generate = command(
   let developerDirPath = try developerDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
   let sourceRootPath = try sourceRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try sdkRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
-  let tempDir = try tempDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
   let platformPath = try platformDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   let outputURL = URL(fileURLWithPath: outputPath)
@@ -241,17 +227,13 @@ let generate = command(
 
   if inputOutputFilesValidation {
 
-    let lastRunURL = URL(fileURLWithPath: tempDir).appendingPathComponent(Rswift.lastRunFile)
-    let scriptInputFiles = try processInfo.scriptInputFiles()
     let scriptOutputFiles = try processInfo.scriptOutputFiles()
 
     let errors = validateRswiftEnvironment(
       outputURL: outputURL,
       uiTestOutputURL: uiTestOutputURL,
       sourceRootPath: sourceRootPath,
-      scriptInputFiles: scriptInputFiles,
       scriptOutputFiles: scriptOutputFiles,
-      lastRunURL: lastRunURL,
       podsRoot: processInfo.environment["PODS_ROOT"],
       podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
       commandLineArguments: CommandLine.arguments)
@@ -323,7 +305,6 @@ let printCommand = command(
   let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
   let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
-  let tempDir = try processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
   let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   var args: [String] = ["generate"]
@@ -362,7 +343,6 @@ let printCommand = command(
   args.append("--\(CommanderOptions.developerDir.name) \(escapePath(developerDirPath))")
   args.append("--\(CommanderOptions.platformDir.name) \(escapePath(platformPath))")
   args.append("--\(CommanderOptions.sdkRoot.name) \(escapePath(sdkRootPath))")
-  args.append("--\(CommanderOptions.tempDir.name) \(escapePath(tempDir))")
   args.append("--\(CommanderOptions.sourceRoot.name) \(escapePath(sourceRootPath))")
 
   args.append(escapePath(outputPath))

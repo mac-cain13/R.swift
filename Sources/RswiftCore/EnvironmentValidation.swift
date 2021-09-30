@@ -7,39 +7,17 @@
 
 import Foundation
 
-public func formatCommand(
-  sourceRootPath: String,
-  podsRoot: String?,
-  podsTargetSrcroot: String?,
-  commandLineArguments: [String]) -> String
-{
-  let commandParts = commandLineArguments
-    .map { $0.replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT") }
-    .map { $0.replacingOccurrences(of: podsRoot ?? "", with: "$PODS_ROOT") }
-    .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
-    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
-
-  return commandParts.joined(separator: " ")
-}
-
 // TODO: "Check XXX output file" codeblocks contain a lot of duplication and are error prone to mix up variables, needs refactor
 public func validateRswiftEnvironment(
   outputURL: URL,
   uiTestOutputURL: URL?,
   sourceRootPath: String,
-  scriptInputFiles: [String],
   scriptOutputFiles: [String],
-  lastRunURL: URL,
   podsRoot: String?,
   podsTargetSrcroot: String?,
   commandLineArguments: [String]) -> [String]
 {
   var errors: [String] = []
-
-  let scriptInputPaths = scriptInputFiles.map { URL(fileURLWithPath: $0).standardized.path }
-  if !scriptInputPaths.contains(lastRunURL.standardized.path) {
-    errors.append("Build phase Intput Files does not contain '$TEMP_DIR/\(lastRunURL.lastPathComponent)'.")
-  }
 
   // Check regular output file
   var outputFileForError = outputURL.path
@@ -53,7 +31,7 @@ public func validateRswiftEnvironment(
         .map { $0.replacingOccurrences(of: outputURL.path, with: rswiftGeneratedFile) }
         .map { $0.replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT") }
         .map { $0.replacingOccurrences(of: podsRoot ?? "", with: "$PODS_ROOT") }
-        .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
+        .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT") }
         .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
 
       error += "\nExample: " + commandParts.joined(separator: " ")
@@ -68,7 +46,7 @@ public func validateRswiftEnvironment(
   if !scriptOutputPaths.contains(outputURL.standardized.path) && !scriptOutputPaths.contains(outputFileForError) {
     let path = outputFileForError
       .replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT")
-      .replacingOccurrences(of: sourceRootPath, with: "$SRCROOT")
+      .replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT")
     errors.append("Build phase Output Files do not contain '\(path)'.")
   }
 
@@ -85,7 +63,7 @@ public func validateRswiftEnvironment(
           .map { $0.replacingOccurrences(of: uiTestOutputURL.path, with: rswiftGeneratedFile) }
           .map { $0.replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT") }
           .map { $0.replacingOccurrences(of: podsRoot ?? "", with: "$PODS_ROOT") }
-          .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
+          .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT") }
           .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
 
         error += "\nExample: " + commandParts.joined(separator: " ")
@@ -99,7 +77,7 @@ public func validateRswiftEnvironment(
     if !scriptOutputPaths.contains(uiTestOutputURL.standardized.path) && !scriptOutputPaths.contains(uiTestOutputFileForError) {
       let path = uiTestOutputFileForError
         .replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT")
-        .replacingOccurrences(of: sourceRootPath, with: "$SRCROOT")
+        .replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT")
       errors.append("Build phase Output Files do not contain '\(path)'.")
     }
   }
