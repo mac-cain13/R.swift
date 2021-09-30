@@ -14,13 +14,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
     identifier=${2:?"need an identifier"}
     
     # upload file
-    echo "## uploading $filepath for notarization 1"
-    xcrun altool --notarize-app \
-                   --primary-bundle-id "$BUNDLE_ID" \
-                   --username "$DEV_ACCOUNT" \
-                   --password "$PASSWORD" \
-                   --asc-provider "$DEV_TEAM" \
-                   --file "$FILENAME"
+    echo "## uploading $filepath for notarization"
     requestUUID=$(xcrun altool --notarize-app \
                                --primary-bundle-id "$BUNDLE_ID" \
                                --username "$DEV_ACCOUNT" \
