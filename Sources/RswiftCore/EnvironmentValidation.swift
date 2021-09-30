@@ -7,6 +7,21 @@
 
 import Foundation
 
+public func formatCommand(
+  sourceRootPath: String,
+  podsRoot: String?,
+  podsTargetSrcroot: String?,
+  commandLineArguments: [String]) -> String
+{
+  let commandParts = commandLineArguments
+    .map { $0.replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT") }
+    .map { $0.replacingOccurrences(of: podsRoot ?? "", with: "$PODS_ROOT") }
+    .map { $0.replacingOccurrences(of: sourceRootPath, with: "$SRCROOT") }
+    .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
+
+  return commandParts.joined(separator: " ")
+}
+
 // TODO: "Check XXX output file" codeblocks contain a lot of duplication and are error prone to mix up variables, needs refactor
 public func validateRswiftEnvironment(
   outputURL: URL,

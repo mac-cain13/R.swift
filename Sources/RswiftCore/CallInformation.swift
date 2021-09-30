@@ -26,10 +26,6 @@ public struct CallInformation {
   let infoPlistFile: URL
   let codeSignEntitlements: URL?
 
-  let scriptInputFiles: [String]
-  let scriptOutputFiles: [String]
-  let lastRunURL: URL
-
   let builtProductsDirURL: URL
   let developerDirURL: URL
   let sourceRootURL: URL
@@ -52,10 +48,6 @@ public struct CallInformation {
     infoPlistFile: URL,
     codeSignEntitlements: URL?,
 
-    scriptInputFiles: [String],
-    scriptOutputFiles: [String],
-    lastRunURL: URL,
-
     builtProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
@@ -76,10 +68,6 @@ public struct CallInformation {
     self.productModuleName = productModuleName
     self.infoPlistFile = infoPlistFile
     self.codeSignEntitlements = codeSignEntitlements
-
-    self.scriptInputFiles = scriptInputFiles
-    self.scriptOutputFiles = scriptOutputFiles
-    self.lastRunURL = lastRunURL
 
     self.builtProductsDirURL = builtProductsDirURL
     self.developerDirURL = developerDirURL
