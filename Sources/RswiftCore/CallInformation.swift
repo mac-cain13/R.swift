@@ -30,7 +30,7 @@ public struct CallInformation {
   let scriptOutputFiles: [String]
   let lastRunURL: URL
 
-  let buildProductsDirURL: URL
+  let builtProductsDirURL: URL
   let developerDirURL: URL
   let sourceRootURL: URL
   let sdkRootURL: URL
@@ -56,7 +56,7 @@ public struct CallInformation {
     scriptOutputFiles: [String],
     lastRunURL: URL,
 
-    buildProductsDirURL: URL,
+    builtProductsDirURL: URL,
     developerDirURL: URL,
     sourceRootURL: URL,
     sdkRootURL: URL,
@@ -81,7 +81,7 @@ public struct CallInformation {
     self.scriptOutputFiles = scriptOutputFiles
     self.lastRunURL = lastRunURL
 
-    self.buildProductsDirURL = buildProductsDirURL
+    self.builtProductsDirURL = builtProductsDirURL
     self.developerDirURL = developerDirURL
     self.sourceRootURL = sourceRootURL
     self.sdkRootURL = sdkRootURL
@@ -92,7 +92,7 @@ public struct CallInformation {
   func urlForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
     switch sourceTreeFolder {
     case .buildProductsDir:
-      return buildProductsDirURL
+      return builtProductsDirURL
     case .developerDir:
       return developerDirURL
     case .sdkRoot:

@@ -50,7 +50,7 @@ struct EnvironmentKeys {
   static let infoPlistFile = "INFOPLIST_FILE"
   static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
 
-  static let buildProductsDir = SourceTreeFolder.buildProductsDir.rawValue
+  static let builtProductsDir = SourceTreeFolder.buildProductsDir.rawValue
   static let developerDir = SourceTreeFolder.developerDir.rawValue
   static let platformDir = SourceTreeFolder.platformDir.rawValue
   static let sdkRoot = SourceTreeFolder.sdkRoot.rawValue
@@ -73,6 +73,22 @@ struct CommanderOptions {
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
   static let inputOutputFilesValidation = Flag("input-output-files-validation", default: true, flag: nil, disabledName: "disable-input-output-files-validation", disabledFlag: nil, description: "Validate input and output files configured in a build phase")
+
+  // Project specific - Environment variable overrides
+  static let xcodeproj: Option<String?> = Option("xcodeproj", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.xcodeproj)")
+  static let target: Option<String?> = Option("target", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.target)")
+  static let bundleIdentifier: Option<String?> = Option("bundleIdentifier", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.bundleIdentifier)")
+  static let productModuleName: Option<String?> = Option("productModuleName", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.productModuleName)")
+  static let infoPlistFile: Option<String?> = Option("infoPlistFile", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.infoPlistFile)")
+  static let codeSignEntitlements: Option<String?> = Option("codeSignEntitlements", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.codeSignEntitlements)")
+
+  // Xcode build - Environment variable overrides
+  static let builtProductsDir: Option<String?> = Option("builtProductsDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.builtProductsDir)")
+  static let developerDir: Option<String?> = Option("developerDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.developerDir)")
+  static let platformDir: Option<String?> = Option("platformDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.platformDir)")
+  static let sdkRoot: Option<String?> = Option("sdkRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sdkRoot)")
+  static let tempDir: Option<String?> = Option("tempDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.tempDir)")
+  static let sourceRoot: Option<String?> = Option("sourceRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sourceRoot)")
 }
 
 // Options grouped in struct for readability
@@ -107,10 +123,44 @@ let generate = command(
   CommanderOptions.rswiftIgnore,
   CommanderOptions.inputOutputFilesValidation,
 
-  CommanderArguments.outputPath
-) { generatorNames, uiTestOutputPath, importModules, accessLevel, rswiftIgnore, inputOutputFilesValidation, outputPath in
+  CommanderOptions.xcodeproj,
+  CommanderOptions.target,
+  CommanderOptions.bundleIdentifier,
+  CommanderOptions.productModuleName,
+  CommanderOptions.infoPlistFile,
+  CommanderOptions.codeSignEntitlements,
 
-  let processInfo = ProcessInfo()
+  CommanderOptions.builtProductsDir,
+  CommanderOptions.developerDir,
+  CommanderOptions.platformDir,
+  CommanderOptions.sdkRoot,
+  CommanderOptions.tempDir,
+  CommanderOptions.sourceRoot,
+
+  CommanderArguments.outputPath
+) {
+  generatorNames,
+  uiTestOutputPath,
+  importModules,
+  accessLevel,
+  rswiftIgnore,
+  inputOutputFilesValidation,
+
+  xcodeprojOption,
+  targetOption,
+  bundleIdentifierOption,
+  productModuleNameOption,
+  infoPlistFileOption,
+  codeSignEntitlementsOption,
+
+  builtProductsDirOption,
+  developerDirOption,
+  platformDirOption,
+  sdkRootOption,
+  tempDirOption,
+  sourceRootOption,
+
+  outputPath in
 
   // Touch last run file
   do {
@@ -121,19 +171,21 @@ let generate = command(
     warn("Failed to write out to '\(Rswift.lastRunFile)', this might cause Xcode to not run the R.swift build phase: \(error)")
   }
 
-  let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
-  let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
-  let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
-  let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let infoPlistFile = try processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
-  let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
+  let processInfo = ProcessInfo()
 
-  let buildProductsDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.buildProductsDir)
-  let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
-  let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
-  let sdkRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
-  let tempDir = try processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
-  let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
+  let xcodeprojPath = try xcodeprojOption ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+  let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
+  let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
+  let productModuleName = try productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
+  let infoPlistFile = try infoPlistFileOption ?? processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
+  let codeSignEntitlements = codeSignEntitlementsOption ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
+
+  let builtProductsDirPath = try builtProductsDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)
+  let developerDirPath = try developerDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
+  let sourceRootPath = try sourceRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
+  let sdkRootPath = try sdkRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
+  let tempDir = try tempDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.tempDir)
+  let platformPath = try platformDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   let outputURL = URL(fileURLWithPath: outputPath)
   let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
@@ -160,7 +212,7 @@ let generate = command(
   guard let scriptInputFileCount = Int(scriptInputFileCountString) else {
     throw ArgumentError.invalidType(value: scriptInputFileCountString, type: "Int", argument: EnvironmentKeys.scriptInputFileCount)
   }
-  let scriptInputFiles = try (0..<scriptInputFileCount)
+  let scriptInputFiles: [String] = try (0..<scriptInputFileCount)
     .map(EnvironmentKeys.scriptInputFile)
     .map(processInfo.environmentVariable)
 
@@ -168,7 +220,7 @@ let generate = command(
   guard let scriptOutputFileCount = Int(scriptOutputFileCountString) else {
     throw ArgumentError.invalidType(value: scriptOutputFileCountString, type: "Int", argument: EnvironmentKeys.scriptOutputFileCount)
   }
-  let scriptOutputFiles = try (0..<scriptOutputFileCount)
+    let scriptOutputFiles: [String] = try (0..<scriptOutputFileCount)
     .map(EnvironmentKeys.scriptOutputFile)
     .map(processInfo.environmentVariable)
 
@@ -214,7 +266,7 @@ let generate = command(
     scriptOutputFiles: scriptOutputFiles,
     lastRunURL: lastRunURL,
 
-    buildProductsDirURL: URL(fileURLWithPath: buildProductsDirPath),
+    builtProductsDirURL: URL(fileURLWithPath: builtProductsDirPath),
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
     sdkRootURL: URL(fileURLWithPath: sdkRootPath),
