@@ -206,6 +206,12 @@ let generate = command(
 
   let processInfo = ProcessInfo()
 
+  if let scriptInputFile = try? processInfo.environmentVariable(name: EnvironmentKeys.scriptInputFile(number: 0)),
+     scriptInputFile.hasSuffix("/rswift-lastrun")
+  {
+    warn("For updating to R.swift 6.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
+  }
+
   let xcodeprojPath = try xcodeprojOption ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
   let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
@@ -227,13 +233,10 @@ let generate = command(
 
   if inputOutputFilesValidation {
 
-    let scriptOutputFiles = try processInfo.scriptOutputFiles()
-
     let errors = validateRswiftEnvironment(
       outputURL: outputURL,
       uiTestOutputURL: uiTestOutputURL,
       sourceRootPath: sourceRootPath,
-      scriptOutputFiles: scriptOutputFiles,
       podsRoot: processInfo.environment["PODS_ROOT"],
       podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
       commandLineArguments: CommandLine.arguments)
@@ -242,7 +245,6 @@ let generate = command(
       for error in errors {
         fail(error)
       }
-      warn("For updating to R.swift 5.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
       exit(EXIT_FAILURE)
     }
   }

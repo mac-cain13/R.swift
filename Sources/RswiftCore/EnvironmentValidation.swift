@@ -12,7 +12,6 @@ public func validateRswiftEnvironment(
   outputURL: URL,
   uiTestOutputURL: URL?,
   sourceRootPath: String,
-  scriptOutputFiles: [String],
   podsRoot: String?,
   podsTargetSrcroot: String?,
   commandLineArguments: [String]) -> [String]
@@ -20,7 +19,6 @@ public func validateRswiftEnvironment(
   var errors: [String] = []
 
   // Check regular output file
-  var outputFileForError = outputURL.path
   if outputURL.pathExtension != "swift" {
 
     var error = "Output path must specify a file, it should not be a directory."
@@ -35,24 +33,13 @@ public func validateRswiftEnvironment(
         .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
 
       error += "\nExample: " + commandParts.joined(separator: " ")
-
-      outputFileForError = rswiftGeneratedFile
     }
 
     errors.append(error)
   }
 
-  let scriptOutputPaths = scriptOutputFiles.map { URL(fileURLWithPath: $0).standardized.path }
-  if !scriptOutputPaths.contains(outputURL.standardized.path) && !scriptOutputPaths.contains(outputFileForError) {
-    let path = outputFileForError
-      .replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT")
-      .replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT")
-    errors.append("Build phase Output Files do not contain '\(path)'.")
-  }
-
   // Check UITest output file
   if let uiTestOutputURL = uiTestOutputURL {
-    var uiTestOutputFileForError = uiTestOutputURL.path
     if uiTestOutputURL.pathExtension != "swift" {
 
       var error = "Output path for UI test file must specify a file, it should not be a directory."
@@ -67,18 +54,9 @@ public func validateRswiftEnvironment(
           .map { $0.contains(" ") ? "\"\($0)\"" : $0 }
 
         error += "\nExample: " + commandParts.joined(separator: " ")
-
-        uiTestOutputFileForError = rswiftGeneratedFile
       }
 
       errors.append(error)
-    }
-
-    if !scriptOutputPaths.contains(uiTestOutputURL.standardized.path) && !scriptOutputPaths.contains(uiTestOutputFileForError) {
-      let path = uiTestOutputFileForError
-        .replacingOccurrences(of: podsTargetSrcroot ?? "", with: "$PODS_TARGET_SRCROOT")
-        .replacingOccurrences(of: sourceRootPath, with: "$SOURCE_ROOT")
-      errors.append("Build phase Output Files do not contain '\(path)'.")
     }
   }
 
