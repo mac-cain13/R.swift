@@ -93,7 +93,6 @@ struct CommanderOptions {
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
-  static let inputOutputFilesValidation = Flag("input-output-files-validation", default: true, flag: nil, disabledName: "disable-input-output-files-validation", disabledFlag: nil, description: "Validate input and output files configured in a build phase")
 
   // Project specific - Environment variable overrides
   static let xcodeproj: Option<String?> = Option("xcodeproj", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.xcodeproj)")
@@ -165,7 +164,6 @@ let generate = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
-  CommanderOptions.inputOutputFilesValidation,
 
   CommanderOptions.xcodeproj,
   CommanderOptions.target,
@@ -187,7 +185,6 @@ let generate = command(
   importModules,
   accessLevel,
   rswiftIgnore,
-  inputOutputFilesValidation,
 
   xcodeprojOption,
   targetOption,
@@ -231,22 +228,19 @@ let generate = command(
   let generators = parseValidateGenerators(generatorNames)
   let modules = parseModules(importModules)
 
-  if inputOutputFilesValidation {
+  let errors = validateRswiftEnvironment(
+    outputURL: outputURL,
+    uiTestOutputURL: uiTestOutputURL,
+    sourceRootPath: sourceRootPath,
+    podsRoot: processInfo.environment["PODS_ROOT"],
+    podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
+    commandLineArguments: CommandLine.arguments)
 
-    let errors = validateRswiftEnvironment(
-      outputURL: outputURL,
-      uiTestOutputURL: uiTestOutputURL,
-      sourceRootPath: sourceRootPath,
-      podsRoot: processInfo.environment["PODS_ROOT"],
-      podsTargetSrcroot: processInfo.environment["PODS_TARGET_SRCROOT"],
-      commandLineArguments: CommandLine.arguments)
-
-    guard errors.isEmpty else {
-      for error in errors {
-        fail(error)
-      }
-      exit(EXIT_FAILURE)
+  guard errors.isEmpty else {
+    for error in errors {
+      fail(error)
     }
+    exit(EXIT_FAILURE)
   }
 
   let callInformation = CallInformation(
@@ -281,7 +275,6 @@ let printCommand = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
-  CommanderOptions.inputOutputFilesValidation,
 
   CommanderArguments.outputPath
 ) {
@@ -290,7 +283,6 @@ let printCommand = command(
   importModules,
   accessLevel,
   rswiftIgnore,
-  inputOutputFilesValidation,
 
   outputPath in
 
@@ -310,9 +302,6 @@ let printCommand = command(
   let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   var args: [String] = ["generate"]
-
-  // Always disable input/output files validation
-  args.append("--\(CommanderOptions.inputOutputFilesValidation.disabledName)")
 
   // Add args that differ from defaults
   if generatorNames != CommanderOptions.generators.default {
@@ -354,8 +343,21 @@ let printCommand = command(
   print("error: R.swift command logged (see build log)")
 }
 
+struct FailErrorsCommand: CommandType {
+  let original: CommandType
+
+  func run(_ parser: ArgumentParser) throws {
+    do {
+      try original.run(parser)
+    } catch {
+      fail("\(error)")
+      exit(EXIT_FAILURE)
+    }
+  }
+}
+
 // Start parsing the launch arguments
 let group = Group()
-group.addCommand("generate", "Generates R.generated.swift file", generate)
-group.addCommand("print-command", "Prints the command rswift for use in CLI", printCommand)
+group.addCommand("generate", "Generates R.generated.swift file", FailErrorsCommand(original: generate))
+group.addCommand("print-command", "Prints the command rswift for use in CLI", FailErrorsCommand(original: printCommand))
 group.run(Rswift.version)
