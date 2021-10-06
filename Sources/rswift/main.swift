@@ -13,7 +13,7 @@ import RswiftCore
 import XcodeEdit
 
 // Argument convertibles
-extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
+extension AccessLevel: ArgumentConvertible, CustomStringConvertible {
   public init(parser: ArgumentParser) throws {
     guard let value = parser.shift() else { throw ArgumentError.missingValue(argument: nil) }
     guard let level = AccessLevel(rawValue: value) else { throw ArgumentError.invalidType(value: value, type: "AccessLevel", argument: nil) }
@@ -22,6 +22,23 @@ extension AccessLevel : ArgumentConvertible, CustomStringConvertible {
   }
 
   public var description: String {
+    return rawValue
+  }
+}
+
+enum PrintCommandArguments: String, ArgumentConvertible {
+  case xcode
+  case portable
+  case complete
+
+  public init(parser: ArgumentParser) throws {
+    guard let value = parser.shift() else { throw ArgumentError.missingValue(argument: nil) }
+    guard let level = PrintCommandArguments(rawValue: value) else { throw ArgumentError.invalidType(value: value, type: "PrintCommandArguments", argument: nil) }
+
+    self = level
+  }
+
+  var description: String {
     return rawValue
   }
 }
@@ -108,6 +125,9 @@ struct CommanderOptions {
   static let platformDir: Option<String?> = Option("platformDir", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.platformDir)")
   static let sdkRoot: Option<String?> = Option("sdkRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sdkRoot)")
   static let sourceRoot: Option<String?> = Option("sourceRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sourceRoot)")
+
+  // Print-command
+  static let arguments: Option<PrintCommandArguments> = Option("arguments", default: .xcode, description: "Which arguments are printed [xcode|portable|complete]")
 }
 
 // Options grouped in struct for readability
@@ -270,6 +290,8 @@ let generate = command(
 }
 
 let printCommand = command(
+  CommanderOptions.arguments,
+
   CommanderOptions.generators,
   CommanderOptions.uiTest,
   CommanderOptions.importModules,
@@ -278,6 +300,8 @@ let printCommand = command(
 
   CommanderArguments.outputPath
 ) {
+  arguments,
+
   generatorNames,
   uiTestOutputPath,
   importModules,
@@ -288,13 +312,13 @@ let printCommand = command(
 
   let processInfo = ProcessInfo()
 
-  let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
   let infoPlistFile = try processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
   let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
+  let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
   let builtProductsDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)
   let developerDirPath = try processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
   let sourceRootPath = try processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
@@ -321,7 +345,6 @@ let printCommand = command(
   }
 
   // Add args for environment variables
-  args.append("--\(CommanderOptions.xcodeproj.name) \(escapePath(xcodeprojPath))")
   args.append("--\(CommanderOptions.target.name) \(escapePath(targetName))")
   args.append("--\(CommanderOptions.bundleIdentifier.name) \(escapePath(bundleIdentifier))")
   args.append("--\(CommanderOptions.productModuleName.name) \(escapePath(productModuleName))")
@@ -330,16 +353,41 @@ let printCommand = command(
     args.append("--\(CommanderOptions.codeSignEntitlements.name) \(escapePath(codeSignEntitlements))")
   }
 
-  args.append("--\(CommanderOptions.builtProductsDir.name) \(escapePath(builtProductsDirPath))")
-  args.append("--\(CommanderOptions.developerDir.name) \(escapePath(developerDirPath))")
-  args.append("--\(CommanderOptions.platformDir.name) \(escapePath(platformPath))")
-  args.append("--\(CommanderOptions.sdkRoot.name) \(escapePath(sdkRootPath))")
-  args.append("--\(CommanderOptions.sourceRoot.name) \(escapePath(sourceRootPath))")
+  let rswiftCommand: String
 
-  args.append(escapePath(outputPath))
+  switch arguments {
+  case .xcode:
+    rswiftCommand = CommandLine.arguments.first ?? "rswift"
 
-  let rswiftCommand = CommandLine.arguments.first ?? "rswift"
-  print("\(rswiftCommand) \(args.joined(separator: " \\\n  "))")
+    args.append(escapePath(outputPath.replacingOccurrences(of: "\(sourceRootPath)/", with: "")))
+
+  case .portable:
+    let libraryDirPath = try processInfo.environmentVariable(name: "USER_LIBRARY_DIR")
+    rswiftCommand = CommandLine.arguments.first?.replacingOccurrences(of: "\(sourceRootPath)/", with: "") ?? "rswift"
+
+    args.append("--\(CommanderOptions.xcodeproj.name) \(escapePath(xcodeprojPath.replacingOccurrences(of: "\(sourceRootPath)/", with: "")))")
+    args.append("--\(CommanderOptions.developerDir.name) $(xcrun xcode-select --print-path)")
+    args.append("--\(CommanderOptions.platformDir.name) $(xcrun xcode-select --print-path)\(platformPath.replacingOccurrences(of: developerDirPath, with: ""))")
+    args.append("--\(CommanderOptions.sdkRoot.name) $(xcrun xcode-select --print-path)\(sdkRootPath.replacingOccurrences(of: developerDirPath, with: ""))")
+    args.append("--\(CommanderOptions.builtProductsDir.name) \(builtProductsDirPath.replacingOccurrences(of: libraryDirPath, with: "~/Library"))")
+    args.append("--\(CommanderOptions.sourceRoot.name) .")
+
+    args.append(escapePath(outputPath.replacingOccurrences(of: "\(sourceRootPath)/", with: "")))
+
+  case .complete:
+    rswiftCommand = CommandLine.arguments.first ?? "rswift"
+
+    args.append("--\(CommanderOptions.xcodeproj.name) \(escapePath(xcodeprojPath))")
+    args.append("--\(CommanderOptions.developerDir.name) \(escapePath(developerDirPath))")
+    args.append("--\(CommanderOptions.platformDir.name) \(escapePath(platformPath))")
+    args.append("--\(CommanderOptions.sdkRoot.name) \(escapePath(sdkRootPath))")
+    args.append("--\(CommanderOptions.builtProductsDir.name) \(escapePath(builtProductsDirPath))")
+    args.append("--\(CommanderOptions.sourceRoot.name) \(escapePath(sourceRootPath))")
+
+    args.append(escapePath(outputPath))
+  }
+
+  print("\(rswiftCommand) \(args.joined(separator: arguments == .xcode ? " " : " \\\n  "))")
   print("error: R.swift command logged (see build log)")
 }
 
