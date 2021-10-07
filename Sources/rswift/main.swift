@@ -27,7 +27,6 @@ extension AccessLevel: ArgumentConvertible, CustomStringConvertible {
 }
 
 enum PrintCommandArguments: String, ArgumentConvertible {
-  case xcode
   case portable
   case complete
 
@@ -79,6 +78,8 @@ struct CommanderFlags {
 
 // Default values for non-optional Commander Options
 struct EnvironmentKeys {
+  static let action = "ACTION"
+
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
   static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
@@ -127,7 +128,7 @@ struct CommanderOptions {
   static let sourceRoot: Option<String?> = Option("sourceRoot", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.sourceRoot)")
 
   // Print-command
-  static let arguments: Option<PrintCommandArguments> = Option("arguments", default: .xcode, description: "Which arguments are printed [xcode|portable|complete]")
+  static let arguments: Option<PrintCommandArguments> = Option("arguments", default: .portable, description: "Which arguments are printed [portable|complete]")
 }
 
 // Options grouped in struct for readability
@@ -222,6 +223,11 @@ let generate = command(
   outputPath in
 
   let processInfo = ProcessInfo()
+
+  if let action = try? processInfo.environmentVariable(name: EnvironmentKeys.action), action == "indexbuild" {
+    warn("Not generating code during index build")
+    exit(EXIT_SUCCESS)
+  }
 
   if let scriptInputFile = try? processInfo.environmentVariable(name: EnvironmentKeys.scriptInputFile(number: 0)),
      scriptInputFile.hasSuffix("/rswift-lastrun")
@@ -356,11 +362,6 @@ let printCommand = command(
   let rswiftCommand: String
 
   switch arguments {
-  case .xcode:
-    rswiftCommand = CommandLine.arguments.first ?? "rswift"
-
-    args.append(escapePath(outputPath.replacingOccurrences(of: "\(sourceRootPath)/", with: "")))
-
   case .portable:
     let libraryDirPath = try processInfo.environmentVariable(name: "USER_LIBRARY_DIR")
     rswiftCommand = CommandLine.arguments.first?.replacingOccurrences(of: "\(sourceRootPath)/", with: "") ?? "rswift"
@@ -387,7 +388,7 @@ let printCommand = command(
     args.append(escapePath(outputPath))
   }
 
-  print("\(rswiftCommand) \(args.joined(separator: arguments == .xcode ? " " : " \\\n  "))")
+  print("\(rswiftCommand) \(args.joined(separator: " \\\n  "))")
   print("error: R.swift command logged (see build log)")
 }
 
