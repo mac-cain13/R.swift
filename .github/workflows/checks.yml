@@ -7,7 +7,7 @@ on:
     branches: '*'
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_11.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
 
 jobs:
   unit-tests:
@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Pull cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
@@ -41,7 +41,7 @@ jobs:
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
     - name: Pull cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       id: podcache
       with:
         path: Examples/Pods
@@ -70,7 +70,7 @@ jobs:
         mv rswift-dev/rswift build/Debug/rswift
         chmod +x build/Debug/rswift
     - name: Pull cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       id: podcache
       with:
         path: Examples/Pods
@@ -89,7 +89,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Pull cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
