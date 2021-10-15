@@ -94,8 +94,10 @@ _Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic l
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:  
-   ```
-   "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
+   ```bash
+   if [ $ACTION != "indexbuild" ]; then
+     "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
+   fi
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
 5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
@@ -111,12 +113,14 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
-   ```
-   if mint list | grep -q 'R.swift'; then
-     mint run R.swift rswift generate "$SRCROOT/R.generated.swift"
-   else
-     echo "error: R.swift not installed; run 'mint bootstrap' to install"
-     return -1
+   ```bash
+   if [ $ACTION != "indexbuild" ]; then
+     if mint list | grep -q 'R.swift'; then
+       mint run R.swift rswift generate "$SRCROOT/R.generated.swift"
+     else
+       echo "error: R.swift not installed; run 'mint bootstrap' to install"
+       return -1
+     fi
    fi
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
@@ -140,8 +144,10 @@ R.swift is also available through [Homebrew](http://brew.sh). This makes it poss
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
-   ```
-   "$SRCROOT/rswift" generate "$SRCROOT/R.generated.swift"
+   ```bash
+   if [ $ACTION != "indexbuild" ]; then
+     "$SRCROOT/rswift" generate "$SRCROOT/R.generated.swift"
+   fi
    ```
 4. Add `$TEMP_DIR/rswift-lastrun` to the "Input Files" and `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
 5. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
