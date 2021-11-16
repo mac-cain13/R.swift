@@ -42,14 +42,14 @@ jobs:
         chmod +x build/Debug/rswift
     - name: Pull cache
       uses: actions/cache@v2
-      id: podcache
+      id: podcache-ios
       with:
         path: Examples/Pods
         key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}pods
     - name: Install pods
-      if: steps.podcache.outputs.cache-hit != 'true'
+      if: steps.podcache-ios.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
@@ -71,14 +71,14 @@ jobs:
         chmod +x build/Debug/rswift
     - name: Pull cache
       uses: actions/cache@v2
-      id: podcache
+      id: podcache-tvos
       with:
         path: Examples/Pods
         key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}pods
     - name: Install pods
-      if: steps.podcache.outputs.cache-hit != 'true'
+      if: steps.podcache-tvos.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples
     - name: Test
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
