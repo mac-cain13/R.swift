@@ -38,6 +38,8 @@ public struct RswiftCore {
       let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
       let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
 
+      printWarningAboutDependencyAnalysis(for: try xcodeproj.scriptBuildPhases(forTarget: callInformation.targetName))
+
       let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
       
       let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
@@ -120,6 +122,29 @@ public struct RswiftCore {
       }
 
       exit(EXIT_FAILURE)
+    }
+  }
+
+  private func printWarningAboutDependencyAnalysis(for scriptBuildPhases: [PBXShellScriptBuildPhase]) {
+    let outputFiles = [
+      callInformation.outputURL.path,
+      callInformation.outputURL.path.replacingOccurrences(of: callInformation.sourceRootURL.path, with: "$SOURCE_ROOT"),
+      callInformation.outputURL.path.replacingOccurrences(of: callInformation.sourceRootURL.path, with: "$SRCROOT"),
+      callInformation.outputURL.path.replacingOccurrences(of: callInformation.sourceRootURL.path, with: "$(SOURCE_ROOT)"),
+      callInformation.outputURL.path.replacingOccurrences(of: callInformation.sourceRootURL.path, with: "$(SRCROOT)"),
+    ]
+
+    let rswiftPhase = scriptBuildPhases.first { buildPhase in
+      let outputs = buildPhase.outputPaths ?? []
+      let script = buildPhase.shellScript
+
+      return script.contains("rswift") && outputs.contains { outputFiles.contains($0) }
+    }
+
+    if let rswiftPhase = rswiftPhase {
+      if rswiftPhase.alwaysOutOfDate != true {
+        warn("In R.swift Run Script build phase, disable \"Based on dependency analysis\"")
+      }
     }
   }
 
