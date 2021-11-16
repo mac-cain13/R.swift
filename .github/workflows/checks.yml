@@ -11,7 +11,7 @@ env:
 
 jobs:
   unit-tests:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
       run: swift test -v
 
   test-iOS:
-    runs-on: macos-latest
+    runs-on: macos-11
     needs: build
     steps:
     - name: Checkout
@@ -55,7 +55,7 @@ jobs:
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
 
   test-tvOS:
-    runs-on: macos-latest
+    runs-on: macos-11
     needs: build
     steps:
     - name: Checkout
@@ -84,7 +84,7 @@ jobs:
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
 
   build:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
     - name: Checkout
       uses: actions/checkout@v2
