@@ -83,8 +83,9 @@ public struct RswiftCore {
       }
       if callInformation.generators.contains(.info) {
 
-        let infoPlists = buildConfigurations.compactMap { config in
-          return loadPropertyList(name: config.name, url: callInformation.infoPlistFile, callInformation: callInformation)
+        let infoPlists = buildConfigurations.compactMap { config -> PropertyList? in
+          guard let infoPlistFile = callInformation.infoPlistFile else { return nil }
+          return loadPropertyList(name: config.name, url: infoPlistFile, callInformation: callInformation)
         }
         
         structGenerators.append(PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist))

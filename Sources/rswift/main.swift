@@ -239,7 +239,7 @@ let generate = command(
   let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let infoPlistFile = try infoPlistFileOption ?? processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
+  let infoPlistFile = infoPlistFileOption ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = codeSignEntitlementsOption ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
   let builtProductsDirPath = try builtProductsDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)
@@ -282,7 +282,7 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
-    infoPlistFile: URL(fileURLWithPath: infoPlistFile),
+    infoPlistFile: infoPlistFile.map { URL(fileURLWithPath: $0) },
     codeSignEntitlements: codeSignEntitlements.map { URL(fileURLWithPath: $0) },
 
     builtProductsDirURL: URL(fileURLWithPath: builtProductsDirPath),
@@ -321,7 +321,7 @@ let printCommand = command(
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let infoPlistFile = try processInfo.environmentVariable(name: EnvironmentKeys.infoPlistFile)
+  let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
   let xcodeprojPath = try processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
@@ -354,7 +354,9 @@ let printCommand = command(
   args.append("--\(CommanderOptions.target.name) \(escapePath(targetName))")
   args.append("--\(CommanderOptions.bundleIdentifier.name) \(escapePath(bundleIdentifier))")
   args.append("--\(CommanderOptions.productModuleName.name) \(escapePath(productModuleName))")
-  args.append("--\(CommanderOptions.infoPlistFile.name) \(escapePath(infoPlistFile))")
+  if let infoPlistFile = infoPlistFile {
+    args.append("--\(CommanderOptions.infoPlistFile.name) \(escapePath(infoPlistFile))")
+  }
   if let codeSignEntitlements = codeSignEntitlements {
     args.append("--\(CommanderOptions.codeSignEntitlements.name) \(escapePath(codeSignEntitlements))")
   }

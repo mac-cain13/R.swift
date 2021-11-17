@@ -23,7 +23,7 @@ public struct CallInformation {
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
-  let infoPlistFile: URL
+  let infoPlistFile: URL?
   let codeSignEntitlements: URL?
 
   let builtProductsDirURL: URL
@@ -45,7 +45,7 @@ public struct CallInformation {
     targetName: String,
     bundleIdentifier: String,
     productModuleName: String,
-    infoPlistFile: URL,
+    infoPlistFile: URL?,
     codeSignEntitlements: URL?,
 
     builtProductsDirURL: URL,
