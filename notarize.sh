@@ -20,7 +20,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
                                --username "$DEV_ACCOUNT" \
                                --password "$PASSWORD" \
                                --asc-provider "$DEV_TEAM" \
-                               --file "$FILENAME" 2>&1 \
+                               --file "$FILENAME" \
                   | awk '/RequestUUID/ { print $NF; }')
                                
     echo "Notarization RequestUUID: $requestUUID"
