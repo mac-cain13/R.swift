@@ -11,5 +11,4 @@ import Foundation
 
 struct Rswift {
   static let version = "Unknown"
-  static let lastRunFile = "rswift-lastrun"
 }

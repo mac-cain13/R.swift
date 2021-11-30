@@ -75,6 +75,13 @@ struct Xcodeproj: WhiteListedExtensionsResourceType {
     return fileRefPaths + variantGroupPaths
   }
 
+  func scriptBuildPhases(forTarget targetName: String) throws -> [PBXShellScriptBuildPhase] {
+    let target = try findTarget(name: targetName)
+
+    return target.buildPhases
+      .compactMap { $0.value as? PBXShellScriptBuildPhase }
+  }
+
   func buildConfigurations(forTarget targetName: String) throws -> [BuildConfiguration] {
     let target = try findTarget(name: targetName)
 
