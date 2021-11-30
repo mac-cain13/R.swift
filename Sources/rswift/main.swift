@@ -192,6 +192,7 @@ let generate = command(
   CommanderOptions.target,
   CommanderOptions.bundleIdentifier,
   CommanderOptions.productModuleName,
+  CommanderOptions.hostingBundleName,
   CommanderOptions.infoPlistFile,
   CommanderOptions.codeSignEntitlements,
 
@@ -213,6 +214,7 @@ let generate = command(
   targetOption,
   bundleIdentifierOption,
   productModuleNameOption,
+  hostingBundleNameOption,
   infoPlistFileOption,
   codeSignEntitlementsOption,
 
@@ -241,6 +243,7 @@ let generate = command(
   let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
+  let hostingBundleName = try hostingBundleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.hostingBundleName)
   let infoPlistFile = infoPlistFileOption ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = codeSignEntitlementsOption ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
