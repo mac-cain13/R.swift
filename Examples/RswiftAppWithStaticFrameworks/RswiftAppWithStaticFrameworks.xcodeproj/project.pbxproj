@@ -454,7 +454,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Bar/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\"";
+			shellScript = "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Bar/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		4213D882A02A85E88A6D8CA9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -575,7 +575,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ./copy_bundles.sh;
+			shellScript = "./copy_bundles.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

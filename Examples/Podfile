@@ -32,19 +32,19 @@ target 'ResourceApp-watchOS-Extension' do
 end
 
 target 'App' do
-  platform :ios, '14.0'
+  platform :ios, '9.0'
   project 'RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks'
   rswiftlib
 end
 
 target 'Foo' do
-  platform :ios, '14.0'
+  platform :ios, '9.0'
   project 'RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks'
   rswiftlib
 end
 
 target 'Bar' do
-  platform :ios, '14.0'
+  platform :ios, '9.0'
   project 'RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks'
   rswiftlib
 end

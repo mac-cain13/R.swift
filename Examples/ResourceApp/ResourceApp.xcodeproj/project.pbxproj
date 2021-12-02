@@ -662,7 +662,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ResourceAppTests/Pods-ResourceAppTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS9.0/Rswift.framework",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -682,7 +682,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ResourceApp/Pods-ResourceApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS9.0/Rswift.framework",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library-iOS/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
