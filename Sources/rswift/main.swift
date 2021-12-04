@@ -111,6 +111,7 @@ struct CommanderOptions {
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
+  static let hostingBundle: Option<String?> = Option("hostingBundle", default: nil, description: "Override bundle from which resources are loaded")
 
   // Project specific - Environment variable overrides
   static let xcodeproj: Option<String?> = Option("xcodeproj", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.xcodeproj)")
@@ -185,6 +186,7 @@ let generate = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.hostingBundle,
 
   CommanderOptions.xcodeproj,
   CommanderOptions.target,
@@ -206,6 +208,7 @@ let generate = command(
   importModules,
   accessLevel,
   rswiftIgnore,
+  hostingBundle,
 
   xcodeprojOption,
   targetOption,
@@ -273,6 +276,7 @@ let generate = command(
     outputURL: outputURL,
     uiTestOutputURL: uiTestOutputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
+    hostingBundle: hostingBundle,
 
     generators: generators,
     accessLevel: accessLevel,
@@ -303,6 +307,7 @@ let printCommand = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.hostingBundle,
 
   CommanderArguments.outputPath
 ) {
@@ -313,6 +318,7 @@ let printCommand = command(
   importModules,
   accessLevel,
   rswiftIgnore,
+  hostingBundle,
 
   outputPath in
 
@@ -348,6 +354,9 @@ let printCommand = command(
   }
   if rswiftIgnore != CommanderOptions.rswiftIgnore.default {
     args.append("--\(CommanderOptions.rswiftIgnore.name) \(rswiftIgnore)")
+  }
+  if let hostingBundle = hostingBundle {
+    args.append("--\(CommanderOptions.hostingBundle.name) \(hostingBundle)")
   }
 
   // Add args for environment variables

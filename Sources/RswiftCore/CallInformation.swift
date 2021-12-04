@@ -14,6 +14,7 @@ public struct CallInformation {
   let outputURL: URL
   let uiTestOutputURL: URL?
   let rswiftIgnoreURL: URL
+  let hostingBundle: String?
 
   let generators: [Generator]
   let accessLevel: AccessLevel
@@ -36,6 +37,7 @@ public struct CallInformation {
     outputURL: URL,
     uiTestOutputURL: URL?,
     rswiftIgnoreURL: URL,
+    hostingBundle: String?,
 
     generators: [Generator],
     accessLevel: AccessLevel,
@@ -57,6 +59,7 @@ public struct CallInformation {
     self.outputURL = outputURL
     self.uiTestOutputURL = uiTestOutputURL
     self.rswiftIgnoreURL = rswiftIgnoreURL
+    self.hostingBundle = hostingBundle
 
     self.accessLevel = accessLevel
     self.imports = imports

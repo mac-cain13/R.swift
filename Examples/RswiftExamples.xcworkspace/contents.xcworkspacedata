@@ -14,6 +14,9 @@
       location = "group:RwatchApp/RwatchApp.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:RwatchApp/../RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
