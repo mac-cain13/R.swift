@@ -82,7 +82,6 @@ struct EnvironmentKeys {
 
   static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
   static let productModuleName = "PRODUCT_MODULE_NAME"
-  static let hostingBundleName = "HOSTING_BUNDLE_NAME"
   static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
   static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
   static let target = "TARGET_NAME"
@@ -112,13 +111,13 @@ struct CommanderOptions {
   static let importModules = Option("import", default: "", description: "Add extra modules as import in the generated file, comma seperated")
   static let accessLevel = Option("accessLevel", default: AccessLevel.internalLevel, description: "The access level [public|internal] to use for the generated R-file")
   static let rswiftIgnore = Option("rswiftignore", default: ".rswiftignore", description: "Path to pattern file that describes files that should be ignored")
+  static let hostingBundle: Option<String?> = Option("hostingBundle", default: nil, description: "Override bundle from which resources are loaded")
 
   // Project specific - Environment variable overrides
   static let xcodeproj: Option<String?> = Option("xcodeproj", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.xcodeproj)")
   static let target: Option<String?> = Option("target", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.target)")
   static let bundleIdentifier: Option<String?> = Option("bundleIdentifier", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.bundleIdentifier)")
   static let productModuleName: Option<String?> = Option("productModuleName", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.productModuleName)")
-  static let hostingBundleName: Option<String?> = Option("hostingBundleName", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.hostingBundleName)")
   static let infoPlistFile: Option<String?> = Option("infoPlistFile", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.infoPlistFile)")
   static let codeSignEntitlements: Option<String?> = Option("codeSignEntitlements", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.codeSignEntitlements)")
 
@@ -187,12 +186,12 @@ let generate = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.hostingBundle,
 
   CommanderOptions.xcodeproj,
   CommanderOptions.target,
   CommanderOptions.bundleIdentifier,
   CommanderOptions.productModuleName,
-  CommanderOptions.hostingBundleName,
   CommanderOptions.infoPlistFile,
   CommanderOptions.codeSignEntitlements,
 
@@ -209,12 +208,12 @@ let generate = command(
   importModules,
   accessLevel,
   rswiftIgnore,
+  hostingBundle,
 
   xcodeprojOption,
   targetOption,
   bundleIdentifierOption,
   productModuleNameOption,
-  hostingBundleNameOption,
   infoPlistFileOption,
   codeSignEntitlementsOption,
 
@@ -243,7 +242,6 @@ let generate = command(
   let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let hostingBundleName = hostingBundleNameOption ?? processInfo.environment[EnvironmentKeys.hostingBundleName]
   let infoPlistFile = infoPlistFileOption ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = codeSignEntitlementsOption ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
@@ -278,6 +276,7 @@ let generate = command(
     outputURL: outputURL,
     uiTestOutputURL: uiTestOutputURL,
     rswiftIgnoreURL: rswiftIgnoreURL,
+    hostingBundle: hostingBundle,
 
     generators: generators,
     accessLevel: accessLevel,
@@ -287,7 +286,6 @@ let generate = command(
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
-    hostingBundleName: hostingBundleName,
     infoPlistFile: infoPlistFile.map { URL(fileURLWithPath: $0) },
     codeSignEntitlements: codeSignEntitlements.map { URL(fileURLWithPath: $0) },
 
@@ -309,6 +307,7 @@ let printCommand = command(
   CommanderOptions.importModules,
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
+  CommanderOptions.hostingBundle,
 
   CommanderArguments.outputPath
 ) {
@@ -319,6 +318,7 @@ let printCommand = command(
   importModules,
   accessLevel,
   rswiftIgnore,
+  hostingBundle,
 
   outputPath in
 
@@ -327,7 +327,6 @@ let printCommand = command(
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
-  let hostingBundleName = try processInfo.environmentVariable(name: EnvironmentKeys.hostingBundleName)
   let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
@@ -356,12 +355,14 @@ let printCommand = command(
   if rswiftIgnore != CommanderOptions.rswiftIgnore.default {
     args.append("--\(CommanderOptions.rswiftIgnore.name) \(rswiftIgnore)")
   }
+  if let hostingBundle = hostingBundle {
+    args.append("--\(CommanderOptions.hostingBundle.name) \(hostingBundle)")
+  }
 
   // Add args for environment variables
   args.append("--\(CommanderOptions.target.name) \(escapePath(targetName))")
   args.append("--\(CommanderOptions.bundleIdentifier.name) \(escapePath(bundleIdentifier))")
   args.append("--\(CommanderOptions.productModuleName.name) \(escapePath(productModuleName))")
-  args.append("--\(CommanderOptions.hostingBundleName.name) \(escapePath(hostingBundleName))")
   if let infoPlistFile = infoPlistFile {
     args.append("--\(CommanderOptions.infoPlistFile.name) \(escapePath(infoPlistFile))")
   }

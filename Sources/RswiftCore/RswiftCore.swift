@@ -156,8 +156,8 @@ public struct RswiftCore {
     let (externalStructWithoutProperties, internalStruct) = ValidatedStructGenerator(validationSubject: aggregatedResult)
       .generatedStructs(at: callInformation.accessLevel, prefix: "")
 
-    let externalStruct = externalStructWithoutProperties.addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier,
-                                                                                  hostingBundleName: callInformation.hostingBundleName)
+    let externalStruct = externalStructWithoutProperties
+      .addingInternalProperties(forBundleIdentifier: callInformation.bundleIdentifier, hostingBundle: callInformation.hostingBundle)
 
     let codeConvertibles: [SwiftCodeConverible?] = [
       HeaderPrinter(),
