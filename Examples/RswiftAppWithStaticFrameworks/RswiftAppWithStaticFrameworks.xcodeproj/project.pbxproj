@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -438,13 +438,13 @@
 /* Begin PBXShellScriptBuildPhase section */
 		0B3751134FEE9BB94D60B6B8 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(TEMP_DIR)/rswift-lastrun",
 			);
 			name = R.swift;
 			outputFileListPaths = (
@@ -454,7 +454,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Bar/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "\"$SRCROOT/../../build/Debug/rswift\" generate \"$SRCROOT/Bar/Sources/R.generated.swift\"  --hostingBundle ${PRODUCT_NAME} --target ${PRODUCT_NAME}Bundle\n";
 		};
 		4213D882A02A85E88A6D8CA9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -519,13 +519,13 @@
 		};
 		77448D795985C19AF55A5F1F /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(TEMP_DIR)/rswift-lastrun",
 			);
 			name = R.swift;
 			outputFileListPaths = (
@@ -535,7 +535,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export HOSTING_BUNDLE_NAME=${PRODUCT_NAME}\nexport TARGET_NAME=${PRODUCT_NAME}Bundle\n\"$SRCROOT/../../.build/debug/rswift\" generate \"$SRCROOT/Foo/Sources/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "\"$SRCROOT/../../build/Debug/rswift\" generate \"$SRCROOT/Foo/Sources/R.generated.swift\" --hostingBundle ${PRODUCT_NAME} --target ${PRODUCT_NAME}Bundle\n";
 		};
 		795DD9FA56EF642DB2307F41 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -561,6 +561,7 @@
 		};
 		7F553EDAB894541615C8EB2C /* Copy Bundles */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
