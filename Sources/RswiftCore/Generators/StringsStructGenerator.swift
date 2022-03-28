@@ -12,10 +12,12 @@ import Foundation
 struct StringsStructGenerator: ExternalOnlyStructGenerator {
   private let localizableStrings: [LocalizableStrings]
   private let developmentLanguage: String
+  private let supressStringKeyWarnings: Bool
 
-  init(localizableStrings: [LocalizableStrings], developmentLanguage: String) {
+  init(localizableStrings: [LocalizableStrings], developmentLanguage: String, supressStringKeyWarnings: Bool) {
     self.localizableStrings = localizableStrings
     self.developmentLanguage = developmentLanguage
+    self.supressStringKeyWarnings = supressStringKeyWarnings
   }
 
   func generatedStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
@@ -123,7 +125,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let paddedKeys = missing.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-      warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
+      if !supressStringKeyWarnings {
+          warn("Strings file \(filenameLocale) is missing translations for keys: \(paddedKeysString)")
+      }
     }
 
     // Warnings about extra translations
@@ -141,7 +145,9 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       let paddedKeys = extra.sorted().map { "'\($0)'" }
       let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-      warn("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+      if !supressStringKeyWarnings {
+          warn("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+      }
     }
 
     // Only include translation if it exists in the primary language
@@ -247,7 +253,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         Function.Parameter(
           name: "preferredLanguages",
           type: Type._Array.withGenericArgs([Type._String]).asOptional(),
-          defaultValue: "nil"
+          defaultValue: "[affirm_preferredLanguageIdentifier]"
         )
       ],
       doesThrow: false,
@@ -282,7 +288,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
     let prefereredLanguages = Function.Parameter(
       name: "preferredLanguages",
       type: Type._Array.withGenericArgs([Type._String]).asOptional(),
-      defaultValue: "nil"
+      defaultValue: "[affirm_preferredLanguageIdentifier]"
     )
     params.append(prefereredLanguages)
 

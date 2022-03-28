@@ -32,14 +32,16 @@ struct Let: UsedTypesProvider, SwiftCodeConverible {
   let name: SwiftIdentifier
   let typeDefinition: TypeDefinition
   let value: String
+  let mutable: Bool
 
-  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, value: String) {
+  init(comments: [String], accessModifier: AccessLevel, isStatic: Bool, name: SwiftIdentifier, typeDefinition: TypeDefinition, mutable: Bool = false, value: String) {
     self.comments = comments
     self.accessModifier = accessModifier
     self.isStatic = isStatic
     self.name = name
     self.typeDefinition = typeDefinition
     self.value = value
+    self.mutable = mutable
   }
 
   var usedTypes: [UsedType] {
@@ -57,6 +59,6 @@ struct Let: UsedTypesProvider, SwiftCodeConverible {
     case .inferred: typeString = ""
     }
 
-    return "\(commentsString)\(accessModifierString)\(staticString)let \(name)\(typeString) = \(value)"
+    return "\(commentsString)\(accessModifierString)\(staticString)\(mutable ? "var" : "let") \(name)\(typeString) = \(value)"
   }
 }

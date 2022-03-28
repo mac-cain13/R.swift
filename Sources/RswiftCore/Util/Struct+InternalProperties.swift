@@ -20,6 +20,14 @@ extension Struct {
     let internalProperties = [
       Let(
         comments: [],
+        accessModifier: .publicLevel,
+        isStatic: true,
+        name: "affirm_preferredLanguageIdentifier",
+        typeDefinition: .inferred(Type._String),
+        mutable: true,
+        value: "\"en\""), // Default to the english development language.
+      Let(
+        comments: [],
         accessModifier: .filePrivate,
         isStatic: true,
         name: "hostingBundle",

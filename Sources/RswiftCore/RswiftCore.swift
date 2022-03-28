@@ -76,7 +76,7 @@ public struct RswiftCore {
         structGenerators.append(ResourceFileStructGenerator(resourceFiles: resources.resourceFiles))
       }
       if callInformation.generators.contains(.string) {
-        structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage))
+          structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage, supressStringKeyWarnings: callInformation.silenceLanguageWarnings))
       }
       if callInformation.generators.contains(.id) {
         structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))

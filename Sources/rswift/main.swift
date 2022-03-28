@@ -74,6 +74,10 @@ extension ProcessInfo {
 // Flags grouped in struct for readability
 struct CommanderFlags {
   static let version = Flag("version", description: "Prints version information about this release.")
+  static let silenceLanguageWarnings = Flag(
+      "silenceLanguageWarnings",
+      description: "Supress language key warnings if translations don't match the development string keys."
+  )
 }
 
 // Default values for non-optional Commander Options
@@ -201,6 +205,8 @@ let generate = command(
   CommanderOptions.sdkRoot,
   CommanderOptions.sourceRoot,
 
+  CommanderFlags.silenceLanguageWarnings,
+
   CommanderArguments.outputPath
 ) {
   generatorNames,
@@ -222,7 +228,7 @@ let generate = command(
   platformDirOption,
   sdkRootOption,
   sourceRootOption,
-
+  silenceLanguageWarningsFlag,
   outputPath in
 
   let processInfo = ProcessInfo()
@@ -250,13 +256,13 @@ let generate = command(
   let sourceRootPath = try sourceRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
   let sdkRootPath = try sdkRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
   let platformPath = try platformDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
-
+  
   let outputURL = URL(fileURLWithPath: outputPath)
   let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
   let rswiftIgnoreURL = URL(fileURLWithPath: sourceRootPath).appendingPathComponent(rswiftIgnore, isDirectory: false)
   let generators = parseValidateGenerators(generatorNames)
   let modules = parseModules(importModules)
-
+  
   let errors = validateRswiftEnvironment(
     outputURL: outputURL,
     uiTestOutputURL: uiTestOutputURL,
@@ -293,7 +299,8 @@ let generate = command(
     developerDirURL: URL(fileURLWithPath: developerDirPath),
     sourceRootURL: URL(fileURLWithPath: sourceRootPath),
     sdkRootURL: URL(fileURLWithPath: sdkRootPath),
-    platformURL: URL(fileURLWithPath: platformPath)
+    platformURL: URL(fileURLWithPath: platformPath),
+    silenceLanguageWarnings: silenceLanguageWarningsFlag
   )
 
   try RswiftCore(callInformation).run()
@@ -308,11 +315,10 @@ let printCommand = command(
   CommanderOptions.accessLevel,
   CommanderOptions.rswiftIgnore,
   CommanderOptions.hostingBundle,
-
+  
   CommanderArguments.outputPath
 ) {
   arguments,
-
   generatorNames,
   uiTestOutputPath,
   importModules,
@@ -323,7 +329,7 @@ let printCommand = command(
   outputPath in
 
   let processInfo = ProcessInfo()
-
+  
   let targetName = try processInfo.environmentVariable(name: EnvironmentKeys.target)
   let bundleIdentifier = try processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
   let productModuleName = try processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
@@ -338,7 +344,7 @@ let printCommand = command(
   let platformPath = try processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
 
   var args: [String] = ["generate"]
-
+  
   // Add args that differ from defaults
   if generatorNames != CommanderOptions.generators.default {
     args.append("--\(CommanderOptions.generators.name) \(generatorNames)")
