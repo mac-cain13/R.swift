@@ -7,8 +7,13 @@
 //  License: MIT License
 //
 
+import Basics
 import Foundation
+import PackageGraph
+import PackageModel
+import TSCBasic
 import XcodeEdit
+import Workspace
 
 public typealias RswiftGenerator = Generator
 public enum Generator: String, CaseIterable {
@@ -26,6 +31,8 @@ public enum Generator: String, CaseIterable {
   case id
 }
 
+public typealias URL = Foundation.URL
+
 public struct RswiftCore {
   private let callInformation: CallInformation
 
@@ -33,9 +40,8 @@ public struct RswiftCore {
     self.callInformation = callInformation
   }
 
-  private func resources(for xcodeproj: Xcodeproj, ignoreFile: IgnoreFile?) throws -> Resources {
+  private func findResources(for xcodeproj: Xcodeproj, ignoreFile: IgnoreFile?) throws -> Resources {
     let ignoreFile = ignoreFile ?? IgnoreFile()
-
     let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
       .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
       .compactMap { $0 }
@@ -44,7 +50,21 @@ public struct RswiftCore {
     return Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
   }
 
-  private func structGenerators(for resources: Resources, buildConfigurations: [BuildConfiguration]?, developmentLanguage: String) -> [StructGenerator] {
+  private func findResources(for target: PackageModel.Target, ignoreFile: IgnoreFile?) throws -> Resources {
+    let ignoreFile = ignoreFile ?? IgnoreFile()
+    let resourceURLs = target.resources.compactMap { resource -> URL? in
+      if resource.rule == .process, let ext = resource.path.extension {
+        // ExcludeProcessExtension(rawValue: ext) != nil {
+        // Skip processed resource named '\(resource.path.basename)'
+        return nil
+      }
+      return resource.path.asURL
+    }.filter { !ignoreFile.matches(url: $0) }
+
+    return Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+  }
+
+  private func buildStructGenerators(for resources: Resources, buildConfigurations: [BuildConfiguration]?, developmentLanguage: String) -> [StructGenerator] {
       var structGenerators: [StructGenerator] = []
       if callInformation.generators.contains(.image) {
         structGenerators.append(ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images))
@@ -107,14 +127,28 @@ public struct RswiftCore {
   public func run() throws {
     do {
 
-      let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
-
-      printWarningAboutDependencyAnalysis(for: try xcodeproj.scriptBuildPhases(forTarget: callInformation.targetName))
-
       let ignoreFile = try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)
-      let resources = try resources(for: xcodeproj, ignoreFile: ignoreFile)
-      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
-      let structGenerators = structGenerators(for: resources, buildConfigurations: buildConfigurations, developmentLanguage: xcodeproj.developmentLanguage)
+      let resources: Resources
+      let structGenerators: [StructGenerator]
+
+      switch callInformation.resourcesOrigin {
+      case .xcodeproj(let xcodeprojURL):
+        let xcodeproj = try Xcodeproj(url: xcodeprojURL)
+        let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
+        let scriptBuildPhrases = try xcodeproj.scriptBuildPhases(forTarget: callInformation.targetName)
+
+        printWarningAboutDependencyAnalysis(for: scriptBuildPhrases)
+
+        resources = try findResources(for: xcodeproj, ignoreFile: ignoreFile)
+        structGenerators = buildStructGenerators(for: resources, buildConfigurations: buildConfigurations, developmentLanguage: xcodeproj.developmentLanguage)
+
+      case .swiftPackage(let packageURL):
+        let packageGraph = try loadSwiftPackageGraph(packageURL: packageURL)
+        let target = try getSwiftPackageTarget(callInformation.targetName, from: packageGraph)
+
+        resources = try findResources(for: target, ignoreFile: ignoreFile)
+        structGenerators = buildStructGenerators(for: resources, buildConfigurations: nil, developmentLanguage: "en")
+      }
 
       // Generate regular R file
       let fileContents = generateRegularFileContents(resources: resources, generators: structGenerators)
@@ -227,4 +261,36 @@ private func writeIfChanged(contents: String, toURL outputURL: URL) {
   } catch {
     fail(error.localizedDescription)
   }
+}
+
+// MARK: - Swift Package Graph
+
+private func resolveSwiftCompilerPath() throws -> AbsolutePath {
+  let path: String
+  #if os(macOS)
+  path = try Process.checkNonZeroExit(args: "xcrun", "--sdk", "macosx", "-f", "swiftc").spm_chomp()
+  #else
+  path = try! Process.checkNonZeroExit(args: "which", "swiftc").spm_chomp()
+  #endif
+  return AbsolutePath(path)
+}
+
+func loadSwiftPackageGraph(packageURL: URL) throws -> PackageGraph {
+  let observability = ObservabilitySystem { scope, diagnotic in
+      print("\(scope):\(diagnotic)")
+  }
+
+  let packagePath = AbsolutePath(packageURL.path)
+  let workspace = try Workspace(forRootPackage: packagePath)
+
+  return try workspace.loadPackageGraph(rootPath: packagePath, observabilityScope: observability.topScope)
+}
+
+func getSwiftPackageTarget(_ targetName: String, from packageGraph: PackageGraph) throws -> Target {
+  guard let target = packageGraph.reachableTargets.first(where: { $0.name == targetName }) else {
+    let availableTargetNames = packageGraph.reachableTargets.map { $0.name }
+    throw ResourceParsingError.parsingFailed("Target '\(targetName)' not found in Swift Package, available targets are: \(availableTargetNames)")
+  }
+
+  return target.underlyingTarget
 }

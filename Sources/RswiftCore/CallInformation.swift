@@ -10,6 +10,11 @@
 import Foundation
 import XcodeEdit
 
+public enum ResourcesOrigin {
+    case swiftPackage(URL)
+    case xcodeproj(URL)
+}
+
 public struct CallInformation {
   let outputURL: URL
   let uiTestOutputURL: URL?
@@ -19,7 +24,7 @@ public struct CallInformation {
   let accessLevel: AccessLevel
   let imports: [Module]
 
-  let xcodeprojURL: URL
+  let resourcesOrigin: ResourcesOrigin
   let targetName: String
   let bundleIdentifier: String
   let productModuleName: String
@@ -41,7 +46,7 @@ public struct CallInformation {
     accessLevel: AccessLevel,
     imports: [Module],
 
-    xcodeprojURL: URL,
+    resourcesOrigin: ResourcesOrigin,
     targetName: String,
     bundleIdentifier: String,
     productModuleName: String,
@@ -62,7 +67,8 @@ public struct CallInformation {
     self.imports = imports
     self.generators = generators
 
-    self.xcodeprojURL = xcodeprojURL
+//    self.xcodeprojURL = xcodeprojURL
+    self.resourcesOrigin = resourcesOrigin
     self.targetName = targetName
     self.bundleIdentifier = bundleIdentifier
     self.productModuleName = productModuleName

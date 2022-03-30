@@ -1,21 +1,26 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
   name: "rswift",
   platforms: [
-    .macOS(.v10_11)
+    .macOS("10.15.4")
   ],
   products: [
     .executable(name: "rswift", targets: ["rswift"])
   ],
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
-    .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0")
+    .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
+    .package(url: "https://github.com/apple/swift-package-manager", branch: "release/5.6")
   ],
   targets: [
-    .target(name: "rswift", dependencies: ["RswiftCore"]),
-    .target(name: "RswiftCore", dependencies: ["Commander", "XcodeEdit"]),
+    .executableTarget(name: "rswift", dependencies: ["RswiftCore"]),
+    .target(name: "RswiftCore", dependencies: [
+        .product(name: "Commander", package: "Commander"),
+        .product(name: "XcodeEdit", package: "XcodeEdit"),
+        .product(name: "SwiftPM", package: "swift-package-manager")
+    ]),
     .testTarget(name: "RswiftCoreTests", dependencies: ["RswiftCore"]),
   ]
 )

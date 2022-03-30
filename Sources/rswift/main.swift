@@ -85,6 +85,7 @@ struct EnvironmentKeys {
   static let scriptInputFileCount = "SCRIPT_INPUT_FILE_COUNT"
   static let scriptOutputFileCount = "SCRIPT_OUTPUT_FILE_COUNT"
   static let target = "TARGET_NAME"
+  static let swiftPackage = "SWIFT_PACKAGE"
   static let xcodeproj = "PROJECT_FILE_PATH"
   static let infoPlistFile = "INFOPLIST_FILE"
   static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
@@ -114,6 +115,7 @@ struct CommanderOptions {
 
   // Project specific - Environment variable overrides
   static let xcodeproj: Option<String?> = Option("xcodeproj", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.xcodeproj)")
+  static let swiftPackage: Option<String?> = Option("swiftPackage", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.swiftPackage)")
   static let target: Option<String?> = Option("target", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.target)")
   static let bundleIdentifier: Option<String?> = Option("bundleIdentifier", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.bundleIdentifier)")
   static let productModuleName: Option<String?> = Option("productModuleName", default: nil, description: "Defaults to environment variable \(EnvironmentKeys.productModuleName)")
@@ -187,6 +189,7 @@ let generate = command(
   CommanderOptions.rswiftIgnore,
 
   CommanderOptions.xcodeproj,
+  CommanderOptions.swiftPackage,
   CommanderOptions.target,
   CommanderOptions.bundleIdentifier,
   CommanderOptions.productModuleName,
@@ -208,6 +211,7 @@ let generate = command(
   rswiftIgnore,
 
   xcodeprojOption,
+  swiftPackageOption,
   targetOption,
   bundleIdentifierOption,
   productModuleNameOption,
@@ -235,18 +239,30 @@ let generate = command(
     warn("For updating to R.swift 6.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
   }
 
-  let xcodeprojPath = try xcodeprojOption ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+  let xcodeproj = try? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+  let swiftPackage = try? processInfo.environmentVariable(name: EnvironmentKeys.swiftPackage)
+
+  let resourcesOrigin: ResourcesOrigin
+
+  if let xcodeprojPath = xcodeprojOption ?? xcodeproj {
+    resourcesOrigin = .xcodeproj(URL(fileURLWithPath: xcodeprojPath))
+  } else if let swiftPackagePath = swiftPackageOption ?? swiftPackage {
+    resourcesOrigin = .swiftPackage(URL(fileURLWithPath: swiftPackagePath))
+  } else {
+    fatalError()
+  }
+
   let targetName = try targetOption ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
-  let bundleIdentifier = try bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)
-  let productModuleName = try productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
+  let bundleIdentifier = (try? bundleIdentifierOption ?? processInfo.environmentVariable(name: EnvironmentKeys.bundleIdentifier)) ?? ""
+  let productModuleName = (try? productModuleNameOption ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)) ?? ""
   let infoPlistFile = infoPlistFileOption ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
   let codeSignEntitlements = codeSignEntitlementsOption ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
-  let builtProductsDirPath = try builtProductsDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)
-  let developerDirPath = try developerDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.developerDir)
-  let sourceRootPath = try sourceRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)
-  let sdkRootPath = try sdkRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)
-  let platformPath = try platformDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir)
+  let builtProductsDirPath = (try? builtProductsDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)) ?? ""
+  let developerDirPath = (try? developerDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.developerDir)) ?? ""
+  let sourceRootPath = (try? sourceRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)) ?? ""
+  let sdkRootPath = (try? sdkRootOption ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)) ?? ""
+  let platformPath = (try? platformDirOption ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir)) ?? ""
 
   let outputURL = URL(fileURLWithPath: outputPath)
   let uiTestOutputURL = uiTestOutputPath.count > 0 ? URL(fileURLWithPath: uiTestOutputPath) : nil
@@ -278,7 +294,7 @@ let generate = command(
     accessLevel: accessLevel,
     imports: modules,
 
-    xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
+    resourcesOrigin: resourcesOrigin,
     targetName: targetName,
     bundleIdentifier: bundleIdentifier,
     productModuleName: productModuleName,
