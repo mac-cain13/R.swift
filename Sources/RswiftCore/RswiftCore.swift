@@ -33,23 +33,18 @@ public struct RswiftCore {
     self.callInformation = callInformation
   }
 
-  public func run() throws {
-    do {
-      let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
-      let ignoreFile = (try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)) ?? IgnoreFile()
+  private func resources(for xcodeproj: Xcodeproj, ignoreFile: IgnoreFile?) throws -> Resources {
+    let ignoreFile = ignoreFile ?? IgnoreFile()
 
-      printWarningAboutDependencyAnalysis(for: try xcodeproj.scriptBuildPhases(forTarget: callInformation.targetName))
+    let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
+      .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
+      .compactMap { $0 }
+      .filter { !ignoreFile.matches(url: $0) }
 
-      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
-      
-      let resourceURLs = try xcodeproj.resourcePaths(forTarget: callInformation.targetName)
-        .map { path in path.url(with: callInformation.urlForSourceTreeFolder) }
-        .compactMap { $0 }
-        .filter { !ignoreFile.matches(url: $0) }
+    return Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
+  }
 
-      let resources = Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
-      let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
-
+  private func structGenerators(for resources: Resources, buildConfigurations: [BuildConfiguration]?, developmentLanguage: String) -> [StructGenerator] {
       var structGenerators: [StructGenerator] = []
       if callInformation.generators.contains(.image) {
         structGenerators.append(ImageStructGenerator(assetFolders: resources.assetFolders, images: resources.images))
@@ -76,13 +71,19 @@ public struct RswiftCore {
         structGenerators.append(ResourceFileStructGenerator(resourceFiles: resources.resourceFiles))
       }
       if callInformation.generators.contains(.string) {
-        structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: xcodeproj.developmentLanguage))
+        structGenerators.append(StringsStructGenerator(localizableStrings: resources.localizableStrings, developmentLanguage: developmentLanguage))
       }
       if callInformation.generators.contains(.id) {
         structGenerators.append(AccessibilityIdentifierStructGenerator(nibs: resources.nibs, storyboards: resources.storyboards))
       }
-      if callInformation.generators.contains(.info) {
 
+    guard let buildConfigurations = buildConfigurations else {
+      return structGenerators
+    }
+
+    let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
+
+      if callInformation.generators.contains(.info) {
         let infoPlists = buildConfigurations.compactMap { config -> PropertyList? in
           guard let infoPlistFile = callInformation.infoPlistFile else { return nil }
           return loadPropertyList(name: config.name, url: infoPlistFile, callInformation: callInformation)
@@ -90,8 +91,8 @@ public struct RswiftCore {
         
         structGenerators.append(PropertyListGenerator(name: "info", plists: infoPlists, toplevelKeysWhitelist: infoPlistWhitelist))
       }
+
       if callInformation.generators.contains(.entitlements) {
-        
         let entitlements = buildConfigurations.compactMap { config -> PropertyList? in
           guard let codeSignEntitlement = callInformation.codeSignEntitlements else { return nil }
           return loadPropertyList(name: config.name, url: codeSignEntitlement, callInformation: callInformation)
@@ -99,6 +100,21 @@ public struct RswiftCore {
         
         structGenerators.append(PropertyListGenerator(name: "entitlements", plists: entitlements, toplevelKeysWhitelist: nil))
       }
+
+    return structGenerators
+  }
+
+  public func run() throws {
+    do {
+
+      let xcodeproj = try Xcodeproj(url: callInformation.xcodeprojURL)
+
+      printWarningAboutDependencyAnalysis(for: try xcodeproj.scriptBuildPhases(forTarget: callInformation.targetName))
+
+      let ignoreFile = try? IgnoreFile(ignoreFileURL: callInformation.rswiftIgnoreURL)
+      let resources = try resources(for: xcodeproj, ignoreFile: ignoreFile)
+      let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: callInformation.targetName)
+      let structGenerators = structGenerators(for: resources, buildConfigurations: buildConfigurations, developmentLanguage: xcodeproj.developmentLanguage)
 
       // Generate regular R file
       let fileContents = generateRegularFileContents(resources: resources, generators: structGenerators)
