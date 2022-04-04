@@ -265,15 +265,6 @@ private func writeIfChanged(contents: String, toURL outputURL: URL) {
 
 // MARK: - Swift Package Graph
 
-private func resolveSwiftCompilerPath() throws -> AbsolutePath {
-  let path: String
-  #if os(macOS)
-  path = try Process.checkNonZeroExit(args: "xcrun", "--sdk", "macosx", "-f", "swiftc").spm_chomp()
-  #else
-  path = try! Process.checkNonZeroExit(args: "which", "swiftc").spm_chomp()
-  #endif
-  return AbsolutePath(path)
-}
 
 func loadSwiftPackageGraph(packageURL: URL) throws -> PackageGraph {
   let observability = ObservabilitySystem { scope, diagnotic in

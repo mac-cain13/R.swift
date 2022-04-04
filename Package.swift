@@ -19,7 +19,7 @@ let package = Package(
     .target(name: "RswiftCore", dependencies: [
         .product(name: "Commander", package: "Commander"),
         .product(name: "XcodeEdit", package: "XcodeEdit"),
-        .product(name: "SwiftPM", package: "swift-package-manager")
+        .product(name: "SwiftPMDataModel-auto", package: "swift-package-manager")
     ]),
     .testTarget(name: "RswiftCoreTests", dependencies: ["RswiftCore"]),
   ]
