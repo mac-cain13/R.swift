@@ -10,6 +10,7 @@
 import Basics
 import Foundation
 import PackageGraph
+import PackageLoading
 import PackageModel
 import TSCBasic
 import XcodeEdit
@@ -265,14 +266,21 @@ private func writeIfChanged(contents: String, toURL outputURL: URL) {
 
 // MARK: - Swift Package Graph
 
-
 func loadSwiftPackageGraph(packageURL: URL) throws -> PackageGraph {
   let observability = ObservabilitySystem { scope, diagnotic in
       print("\(scope):\(diagnotic)")
   }
 
   let packagePath = AbsolutePath(packageURL.path)
-  let workspace = try Workspace(forRootPackage: packagePath)
+
+  let customToolchain = try UserToolchain(destination: .hostDestination())
+  let manifestLoader = ManifestLoader(
+    toolchain: customToolchain.configuration,
+    isManifestSandboxEnabled: false)
+
+  let workspace = try Workspace(
+    forRootPackage: packagePath,
+    customManifestLoader: manifestLoader)
 
   return try workspace.loadPackageGraph(rootPath: packagePath, observabilityScope: observability.topScope)
 }
