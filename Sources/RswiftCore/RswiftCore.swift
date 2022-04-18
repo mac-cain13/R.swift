@@ -53,14 +53,13 @@ public struct RswiftCore {
 
   private func findResources(for target: PackageModel.Target, ignoreFile: IgnoreFile?) throws -> Resources {
     let ignoreFile = ignoreFile ?? IgnoreFile()
-    let resourceURLs = target.resources.compactMap { resource -> URL? in
-      if resource.rule == .process, let ext = resource.path.extension {
-        // ExcludeProcessExtension(rawValue: ext) != nil {
-        // Skip processed resource named '\(resource.path.basename)'
-        return nil
-      }
+    var resourceURLs = target.resources.compactMap { resource -> URL? in
       return resource.path.asURL
     }.filter { !ignoreFile.matches(url: $0) }
+
+    resourceURLs.append(contentsOf: target.others.compactMap { other -> URL? in
+        return other.asURL
+    }.filter { !ignoreFile.matches(url: $0) })
 
     return Resources(resourceURLs: resourceURLs, fileManager: FileManager.default)
   }
