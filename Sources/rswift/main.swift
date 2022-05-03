@@ -239,8 +239,14 @@ let generate = command(
     warn("For updating to R.swift 6.0, read our migration guide: https://github.com/mac-cain13/R.swift/blob/master/Documentation/Migration.md")
   }
 
-  let xcodeproj = try? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
-  let swiftPackage = try? processInfo.environmentVariable(name: EnvironmentKeys.swiftPackage)
+
+  var swiftPackage = try? processInfo.environmentVariable(name: EnvironmentKeys.swiftPackage)
+  var xcodeproj = try? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+
+  if (xcodeproj as? NSString)?.lastPathComponent == "Package.swift" {
+    swiftPackage = xcodeproj
+    xcodeproj = nil
+  }
 
   let resourcesOrigin: ResourcesOrigin
 
