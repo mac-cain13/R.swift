@@ -82,7 +82,6 @@ public struct CallInformation {
     self.platformURL = platformURL
   }
 
-
   func urlForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
     switch sourceTreeFolder {
     case .buildProductsDir:
@@ -96,5 +95,10 @@ public struct CallInformation {
     case .platformDir:
       return platformURL
     }
+  }
+
+  var isSwiftPackage: Bool {
+    guard case .swiftPackage = resourcesOrigin else { return false }
+    return true
   }
 }
