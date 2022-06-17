@@ -14,6 +14,9 @@ let package = Package(
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0")
   ],
   targets: [
+    .target(name: "RswiftResources"),
+
+    // Legacy code
     .target(name: "rswift-legacy", dependencies: ["RswiftCoreLegacy"]),
     .target(name: "RswiftCoreLegacy", dependencies: ["Commander", "XcodeEdit"]),
     .testTarget(name: "RswiftCoreLegacyTests", dependencies: ["RswiftCoreLegacy"]),
