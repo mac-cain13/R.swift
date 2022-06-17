@@ -14,8 +14,7 @@ import RswiftGenerators
 public struct RswiftCore {
     let xcodeprojURL: URL
     let targetName: String
-    let bundleIdentifier: String
-    let productModuleName: String
+    let productModuleName: String?
     let infoPlistFile: URL?
     let codeSignEntitlements: URL?
 
@@ -28,8 +27,7 @@ public struct RswiftCore {
     public init(
         xcodeprojURL: URL,
         targetName: String,
-        bundleIdentifier: String,
-        productModuleName: String,
+        productModuleName: String?,
         infoPlistFile: URL?,
         codeSignEntitlements: URL?,
         builtProductsDirURL: URL,
@@ -40,7 +38,6 @@ public struct RswiftCore {
     ) {
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
-        self.bundleIdentifier = bundleIdentifier
         self.productModuleName = productModuleName
         self.infoPlistFile = infoPlistFile
         self.codeSignEntitlements = codeSignEntitlements
@@ -63,7 +60,7 @@ public struct RswiftCore {
             .map { try Font.parse(url: $0) }
 
         for font in fonts {
-            print(try font.generateResourceLetString())
+            print(font.generateResourceLetCodeString())
         }
         print()
     }

@@ -9,8 +9,8 @@ import Foundation
 import RswiftResources
 
 extension Font {
-    public func generateResourceLetString() throws -> String {
-        "static let \(SwiftIdentifier(name: self.name).value) = \(self)"
+    public func generateResourceLetCodeString() -> String {
+        "let \(SwiftIdentifier(name: self.name).value) = \(self)"
     }
 }
 
