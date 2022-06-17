@@ -9,7 +9,7 @@
 
 import Foundation
 import Commander
-import RswiftCore
+import RswiftCoreLegacy
 import XcodeEdit
 
 // Argument convertibles

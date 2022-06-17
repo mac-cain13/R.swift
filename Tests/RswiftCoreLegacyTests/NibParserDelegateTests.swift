@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import RswiftCore
+@testable import RswiftCoreLegacy
 
 class NibParserTests: XCTestCase {
 
