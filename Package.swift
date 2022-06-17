@@ -15,6 +15,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "RswiftResources"),
+    .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
 
     // Legacy code
     .target(name: "rswift-legacy", dependencies: ["RswiftCoreLegacy"]),
