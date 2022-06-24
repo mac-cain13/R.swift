@@ -51,24 +51,27 @@ public struct RswiftCore {
     // Temporary function for use during development
     public func developRun() throws {
         let xcodeproj = try! Xcodeproj(url: xcodeprojURL, warning: { print($0) })
+
+        let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
+
         let paths = try xcodeproj.resourcePaths(forTarget: targetName)
         let urls = paths
             .map { $0.url(with: urlForSourceTreeFolder) }
 
-        let fonts = try urls
-            .filter { Font.supportedExtensions.contains($0.pathExtension) }
-            .map { try Font.parse(url: $0) }
-
-        let images = try urls
-            .filter { Image.supportedExtensions.contains($0.pathExtension) }
-            .map { try Image.parse(url: $0) }
-
+//        let fonts = try urls
+//            .filter { Font.supportedExtensions.contains($0.pathExtension) }
+//            .map { try Font.parse(url: $0) }
 //        for font in fonts {
 //            print(font.generateResourceLetCodeString())
 //        }
-        for image in images {
-            print(image.generateResourceLetCodeString())
-        }
+
+//        let images = try urls
+//            .filter { Image.supportedExtensions.contains($0.pathExtension) }
+//            .map { try Image.parse(url: $0) }
+//        for image in images {
+//            print(image.generateResourceLetCodeString())
+//        }
+
         print()
     }
 
