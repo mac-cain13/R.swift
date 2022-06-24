@@ -59,8 +59,15 @@ public struct RswiftCore {
             .filter { Font.supportedExtensions.contains($0.pathExtension) }
             .map { try Font.parse(url: $0) }
 
-        for font in fonts {
-            print(font.generateResourceLetCodeString())
+        let images = try urls
+            .filter { Image.supportedExtensions.contains($0.pathExtension) }
+            .map { try Image.parse(url: $0) }
+
+//        for font in fonts {
+//            print(font.generateResourceLetCodeString())
+//        }
+        for image in images {
+            print(image.generateResourceLetCodeString())
         }
         print()
     }
