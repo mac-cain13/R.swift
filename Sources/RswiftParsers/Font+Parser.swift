@@ -11,7 +11,6 @@ import Foundation
 import RswiftResources
 import CoreGraphics
 
-
 extension Font: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["otf", "ttf"]
 
