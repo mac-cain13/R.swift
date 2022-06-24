@@ -79,11 +79,19 @@ public struct RswiftCore {
 //            print(nib.generateResourceLetCodeString())
 //        }
 
-        let storyboards = try urls
-            .filter { Storyboard.supportedExtensions.contains($0.pathExtension) }
-            .map { try Storyboard.parse(url: $0) }
-        for storyboard in storyboards {
-            print(storyboard.generateResourceLetCodeString())
+//        let storyboards = try urls
+//            .filter { Storyboard.supportedExtensions.contains($0.pathExtension) }
+//            .map { try Storyboard.parse(url: $0) }
+//        for storyboard in storyboards {
+//            print(storyboard.generateResourceLetCodeString())
+//        }
+
+
+        let localizableStringses = try urls
+            .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
+            .map { try LocalizableStrings.parse(url: $0) }
+        for localizableStrings in localizableStringses {
+            print(localizableStrings.generateResourceLetCodeString())
         }
 
 //        let resources = try urls
