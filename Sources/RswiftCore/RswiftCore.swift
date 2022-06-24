@@ -72,11 +72,18 @@ public struct RswiftCore {
 //            print(image.generateResourceLetCodeString())
 //        }
 
-        let nibs = try urls
-            .filter { Nib.supportedExtensions.contains($0.pathExtension) }
-            .map { try Nib.parse(url: $0) }
-        for nib in nibs {
-            print(nib.generateResourceLetCodeString())
+//        let nibs = try urls
+//            .filter { Nib.supportedExtensions.contains($0.pathExtension) }
+//            .map { try Nib.parse(url: $0) }
+//        for nib in nibs {
+//            print(nib.generateResourceLetCodeString())
+//        }
+
+        let storyboards = try urls
+            .filter { Storyboard.supportedExtensions.contains($0.pathExtension) }
+            .map { try Storyboard.parse(url: $0) }
+        for storyboard in storyboards {
+            print(storyboard.generateResourceLetCodeString())
         }
 
 //        let resources = try urls
