@@ -58,47 +58,15 @@ public struct RswiftCore {
         let urls = paths
             .map { $0.url(with: urlForSourceTreeFolder) }
 
-//        let fonts = try urls
-//            .filter { Font.supportedExtensions.contains($0.pathExtension) }
-//            .map { try Font.parse(url: $0) }
-//        for font in fonts {
-//            print(font.generateResourceLetCodeString())
-//        }
 
-//        let images = try urls
-//            .filter { Image.supportedExtensions.contains($0.pathExtension) }
-//            .map { try Image.parse(url: $0) }
-//        for image in images {
-//            print(image.generateResourceLetCodeString())
-//        }
-
-//        let nibs = try urls
-//            .filter { Nib.supportedExtensions.contains($0.pathExtension) }
-//            .map { try Nib.parse(url: $0) }
-//        for nib in nibs {
-//            print(nib.generateResourceLetCodeString())
-//        }
-
-//        let storyboards = try urls
-//            .filter { Storyboard.supportedExtensions.contains($0.pathExtension) }
-//            .map { try Storyboard.parse(url: $0) }
-//        for storyboard in storyboards {
-//            print(storyboard.generateResourceLetCodeString())
-//        }
-
-
-        let localizableStringses = try urls
-            .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
-            .map { try LocalizableStrings.parse(url: $0) }
-        for localizableStrings in localizableStringses {
-            print(localizableStrings.generateResourceLetCodeString())
+        let catalogs = try urls
+            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+//            .filter { $0.lastPathComponent == "Images2.xcassets" }
+//            .reversed().prefix(1) // DEVELOP
+            .map { try AssetCatalog.parse(url: $0) }
+        for catalog in catalogs {
+            print("RSWIFTCORE", catalog)
         }
-
-//        let resources = try urls
-//            .map { try ResourceFile.parse(url: $0) }
-//        for resource in resources {
-//            print(resource.generateResourceLetCodeString())
-//        }
 
         print()
     }

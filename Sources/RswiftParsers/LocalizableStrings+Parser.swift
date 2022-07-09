@@ -14,8 +14,7 @@ extension LocalizableStrings: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["strings", "stringsdict"]
 
     static public func parse(url: URL) throws -> LocalizableStrings {
-        let basename = url.deletingPathExtension().lastPathComponent
-        if basename.isEmpty {
+        guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
@@ -102,6 +101,7 @@ private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) thro
                 let params = try parseStringsdictParams(localizedFormat, dict: dict)
                 dictionary[key] = .init(params: params, commentValue: localizedFormat)
             } catch let error as ResourceParsingError {
+                // TODO: Log warning
 //                warn("\(error) in '\(key)' \(source)")
             }
         }

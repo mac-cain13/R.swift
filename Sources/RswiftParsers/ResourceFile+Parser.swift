@@ -21,8 +21,7 @@ extension ResourceFile {
 //    .reduce([]) { $0.union($1) }
 
     static public func parse(url: URL) throws -> ResourceFile {
-        let basename = url.deletingPathExtension().lastPathComponent
-        if basename.isEmpty {
+        guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 

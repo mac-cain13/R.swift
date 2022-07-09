@@ -15,8 +15,7 @@ extension Nib: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["xib"]
 
     static public func parse(url: URL) throws -> Nib {
-        let basename = url.deletingPathExtension().lastPathComponent
-        if basename.isEmpty {
+        guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
