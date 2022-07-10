@@ -16,7 +16,7 @@ extension Image: SupportedExtensions {
     // See "Supported Image Formats" on https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/
     static public let supportedExtensions: Set<String> = ["tiff", "tif", "jpg", "jpeg", "gif", "png", "bmp", "bmpf", "ico", "cur", "xbm"]
 
-    static public func parse(url: URL) throws -> Image {
+    static public func parse(url: URL, assetTags: [String]?) throws -> Image {
         let filename = url.lastPathComponent
         let pathExtension = url.pathExtension
         guard filename.count > 0 && pathExtension.count > 0 else {
@@ -29,6 +29,6 @@ extension Image: SupportedExtensions {
         let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
         let name = regex.stringByReplacingMatches(in: filename, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
 
-        return Image(filename: url.lastPathComponent, name: name)
+        return Image(name: name, onDemandResourceTags: assetTags)
     }
 }

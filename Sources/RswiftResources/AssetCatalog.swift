@@ -20,20 +20,38 @@ public struct AssetCatalog {
 extension AssetCatalog {
     public struct Namespace {
         public var subnamespaces: [String: Namespace] = [:]
-        public var colors: [String] = []
-        public var images: [String] = []
-        public var files: [String] = []
+        public var colors: [Color] = []
+        public var images: [Image] = []
+        public var dataAssets: [DataAsset] = []
 
         public init(
             subnamespaces: [String: Namespace],
-            colors: [String],
-            images: [String],
-            files: [String]
+            colors: [Color],
+            images: [Image],
+            dataAssets: [DataAsset]
         ) {
             self.subnamespaces = subnamespaces
             self.colors = colors
             self.images = images
-            self.files = files
+            self.dataAssets = dataAssets
+        }
+    }
+
+    public struct Color {
+        public let name: String
+
+        public init(name: String) {
+            self.name = name
+        }
+    }
+
+    public struct DataAsset {
+        public let name: String
+        public let onDemandResourceTags: [String]?
+
+        public init(name: String, onDemandResourceTags: [String]?) {
+            self.name = name
+            self.onDemandResourceTags = onDemandResourceTags
         }
     }
 }

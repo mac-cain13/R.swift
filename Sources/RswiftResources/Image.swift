@@ -10,11 +10,11 @@
 import Foundation
 
 public struct Image {
-    public let filename: String
     public let name: String
+    public let onDemandResourceTags: [String]?
 
-    public init(filename: String, name: String) {
-        self.filename = filename
+    public init(name: String, onDemandResourceTags: [String]?) {
         self.name = name
+        self.onDemandResourceTags = onDemandResourceTags
     }
 }

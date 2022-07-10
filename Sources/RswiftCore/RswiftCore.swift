@@ -59,6 +59,7 @@ public struct RswiftCore {
             .map { $0.url(with: urlForSourceTreeFolder) }
 
 
+        let start = Date()
         let catalogs = try urls
             .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
 //            .filter { $0.lastPathComponent == "Images2.xcassets" }
@@ -68,6 +69,7 @@ public struct RswiftCore {
             print("RSWIFTCORE", catalog)
         }
 
+        print("TOTAL", Date().timeIntervalSince(start))
         print()
     }
 
