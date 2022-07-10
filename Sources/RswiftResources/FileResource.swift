@@ -11,11 +11,13 @@ import Foundation
 
 public struct FileResource {
     public let fullname: String
+    public let locale: LocaleReference?
     public let name: String
     public let pathExtension: String
 
-    public init(fullname: String, name: String, pathExtension: String) {
+    public init(fullname: String, locale: LocaleReference?, name: String, pathExtension: String) {
         self.fullname = fullname
+        self.locale = locale
         self.name = name
         self.pathExtension = pathExtension
     }

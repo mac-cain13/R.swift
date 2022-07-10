@@ -60,14 +60,14 @@ public struct RswiftCore {
 
 
         let start = Date()
-        let catalogs = try urls
-            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-//            .filter { $0.lastPathComponent == "Images2.xcassets" }
-//            .reversed().prefix(1) // DEVELOP
-            .map { try AssetCatalog.parse(url: $0) }
-        for catalog in catalogs {
-            print("RSWIFTCORE", catalog)
+        let items = try urls
+//            .filter { FileResource.supportedExtensions.contains($0.pathExtension) }
+            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+            .map { try FileResource.parse(url: $0) }
+        for item in items {
+            print(">>>", item)
         }
+
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()

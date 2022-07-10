@@ -23,12 +23,14 @@ extension Image: SupportedExtensions {
             throw ResourceParsingError("Filename and/or extension could not be parsed from URL: \(url.absoluteString)")
         }
 
+        let locale = LocaleReference(url: url)
+
         let extensions = Image.supportedExtensions.joined(separator: "|")
         let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .caseInsensitive)
         let fullFileNameRange = NSRange(location: 0, length: filename.count)
         let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
         let name = regex.stringByReplacingMatches(in: filename, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
 
-        return Image(name: name, onDemandResourceTags: assetTags)
+        return Image(name: name, locale: locale, onDemandResourceTags: assetTags)
     }
 }

@@ -12,19 +12,23 @@ import RswiftResources
 
 extension FileResource {
     // These are all extensions of resources that are passed to some special compiler step and not directly available at runtime
-    static let unsupportedExtensions: Set<String> = [
-//      AssetFolder.supportedExtensions,
-//      Storyboard.supportedExtensions,
-//      Nib.supportedExtensions,
-//      LocalizableStrings.supportedExtensions,
+    static public let unsupportedExtensions: Set<String> = [
+      AssetCatalog.supportedExtensions,
+      Font.supportedExtensions,
+      Image.supportedExtensions,
+      LocalizableStrings.supportedExtensions,
+      Nib.supportedExtensions,
+      Storyboard.supportedExtensions,
     ]
-//    .reduce([]) { $0.union($1) }
+    .reduce([]) { $0.union($1) }
 
     static public func parse(url: URL) throws -> FileResource {
         guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
-        return FileResource(fullname: url.lastPathComponent, name: basename, pathExtension: url.pathExtension)
+        let locale = LocaleReference(url: url)
+
+        return FileResource(fullname: url.lastPathComponent, locale: locale, name: basename, pathExtension: url.pathExtension)
     }
 }
