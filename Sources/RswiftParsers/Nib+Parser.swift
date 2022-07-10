@@ -32,6 +32,7 @@ extension Nib: SupportedExtensions {
 
         return Nib(
             name: basename,
+            deploymentTarget: parserDelegate.deploymentTarget,
             rootViews: parserDelegate.rootViews,
             reusables: parserDelegate.reusables,
             usedImageIdentifiers: parserDelegate.usedImageIdentifiers,
@@ -51,6 +52,7 @@ private let ElementNameToTypeMapping = [
 
 private class NibParserDelegate: NSObject, XMLParserDelegate {
     let ignoredRootViewElements = ["placeholder"]
+    var deploymentTarget: DeploymentTarget?
     var rootViews: [TypeReference] = []
     var reusables: [Reusable] = []
     var usedImageIdentifiers: [NameCatalog] = []
@@ -70,6 +72,12 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         }
 
         switch elementName {
+        case "deployment":
+            let version = attributeDict["version"]
+            if let platform = attributeDict["identifier"] {
+                deploymentTarget = DeploymentTarget(version: version.flatMap(parseDeploymentTargetVersion(_:)), platform: platform)
+            }
+
         case "image":
             if let imageIdentifier = attributeDict["name"] {
                 usedImageIdentifiers.append(NameCatalog(name: imageIdentifier, catalog: attributeDict["catalog"]))
@@ -138,4 +146,18 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
 
         return Reusable(identifier: reuseIdentifier, type: type)
     }
+}
+
+func parseDeploymentTargetVersion(_ str: String) -> DeploymentTarget.Version? {
+    guard str.count > 2 else { return nil }
+    guard let i = Int(str) else { return nil }
+    let s = String(i, radix: 16)
+    guard
+        let major = Int(s[..<s.index(s.endIndex, offsetBy: -2)]),
+        let minor = Int(s[s.index(s.endIndex, offsetBy: -2)..<s.index(s.endIndex, offsetBy: -1)])
+    else {
+        return nil
+    }
+
+    return (major, minor)
 }

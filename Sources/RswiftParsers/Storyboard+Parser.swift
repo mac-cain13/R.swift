@@ -32,6 +32,7 @@ extension Storyboard: SupportedExtensions {
 
         return Storyboard(
             name: basename,
+            deploymentTarget: parserDelegate.deploymentTarget,
             initialViewControllerIdentifier: parserDelegate.initialViewControllerIdentifier,
             viewControllers: parserDelegate.viewControllers,
             viewControllerPlaceholders: parserDelegate.viewControllerPlaceholders,
@@ -60,6 +61,7 @@ private let ElementNameToTypeMapping: [String: TypeReference] = [
 
 private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var initialViewControllerIdentifier: String?
+    var deploymentTarget: DeploymentTarget?
     var viewControllers: [Storyboard.ViewController] = []
     var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
     var usedImageIdentifiers: [NameCatalog] = []
@@ -72,6 +74,12 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
 
     @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         switch elementName {
+        case "deployment":
+            let version = attributeDict["version"]
+            if let platform = attributeDict["identifier"] {
+                deploymentTarget = DeploymentTarget(version: version.flatMap(parseDeploymentTargetVersion(_:)), platform: platform)
+            }
+
         case "document":
             if let initialViewController = attributeDict["initialViewController"] {
                 initialViewControllerIdentifier = initialViewController

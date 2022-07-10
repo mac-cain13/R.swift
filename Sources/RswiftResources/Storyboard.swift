@@ -11,6 +11,7 @@ import Foundation
 
 public struct Storyboard {
     public let name: String
+    public let deploymentTarget: DeploymentTarget?
     private let initialViewControllerIdentifier: String?
     public let viewControllers: [ViewController]
     public let viewControllerPlaceholders: [ViewControllerPlaceholder]
@@ -25,8 +26,19 @@ public struct Storyboard {
             .first
     }
 
-    public init(name: String, initialViewControllerIdentifier: String?, viewControllers: [ViewController], viewControllerPlaceholders: [ViewControllerPlaceholder], usedAccessibilityIdentifiers: [String], usedImageIdentifiers: [NameCatalog], usedColorResources: [NameCatalog], reusables: [Reusable]) {
+    public init(
+        name: String,
+        deploymentTarget: DeploymentTarget?,
+        initialViewControllerIdentifier: String?,
+        viewControllers: [ViewController],
+        viewControllerPlaceholders: [ViewControllerPlaceholder],
+        usedAccessibilityIdentifiers: [String],
+        usedImageIdentifiers: [NameCatalog],
+        usedColorResources: [NameCatalog],
+        reusables: [Reusable]
+    ) {
         self.name = name
+        self.deploymentTarget = deploymentTarget
         self.initialViewControllerIdentifier = initialViewControllerIdentifier
         self.viewControllers = viewControllers
         self.viewControllerPlaceholders = viewControllerPlaceholders
