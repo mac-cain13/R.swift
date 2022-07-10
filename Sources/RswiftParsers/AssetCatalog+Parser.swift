@@ -105,19 +105,22 @@ extension AssetCatalog: SupportedExtensions {
 
         var colors: [AssetCatalog.Color] = []
         for fileURL in directory.colors {
-            colors.append(.init(name: fileURL.filenameWithoutExtension!))
+            let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
+            colors.append(.init(name: name))
         }
 
         var images: [Image] = []
         for fileURL in directory.images {
+            let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
             let tags = onDemandResourceTags(directory: fileURL)
-            images.append(.init(name: fileURL.filenameWithoutExtension!, onDemandResourceTags: tags))
+            images.append(.init(name: name, onDemandResourceTags: tags))
         }
 
         var dataAssets: [AssetCatalog.DataAsset] = []
         for fileURL in directory.dataAssets {
+            let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
             let tags = onDemandResourceTags(directory: fileURL)
-            dataAssets.append(.init(name: fileURL.filenameWithoutExtension!, onDemandResourceTags: tags))
+            dataAssets.append(.init(name: name, onDemandResourceTags: tags))
         }
 
         return AssetCatalog.Namespace(
