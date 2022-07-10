@@ -82,7 +82,7 @@ extension AssetCatalog: SupportedExtensions {
                 parent.dataAssets.append(fileURL)
             } else if ignoredExtensions.contains(pathExtension) {
                 directoryEnumerator.skipDescendants()
-            } else if isDirectory && providesNamespace(directory: fileURL) {
+            } else if isDirectory && parseProvidesNamespace(directory: fileURL) {
                 let ns = NamespaceDirectory()
                 namespaces[relativeURL] = ns
                 parent.subnamespaces[filename] = ns
@@ -96,6 +96,7 @@ extension AssetCatalog: SupportedExtensions {
         return root
     }
 
+    // Note: ignore any localizations in Contents.json
     static private func createNamespace(directory: NamespaceDirectory, path: [String]) throws -> Namespace {
 
         var subnamespaces: [String: AssetCatalog.Namespace] = [:]
@@ -112,14 +113,14 @@ extension AssetCatalog: SupportedExtensions {
         var images: [Image] = []
         for fileURL in directory.images {
             let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
-            let tags = onDemandResourceTags(directory: fileURL)
+            let tags = parseOnDemandResourceTags(directory: fileURL)
             images.append(.init(name: name, locale: nil, onDemandResourceTags: tags))
         }
 
         var dataAssets: [AssetCatalog.DataAsset] = []
         for fileURL in directory.dataAssets {
             let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
-            let tags = onDemandResourceTags(directory: fileURL)
+            let tags = parseOnDemandResourceTags(directory: fileURL)
             dataAssets.append(.init(name: name, onDemandResourceTags: tags))
         }
 
@@ -143,7 +144,7 @@ private class NamespaceDirectory: CustomDebugStringConvertible {
     }
 }
 
-private func providesNamespace(directory: URL) -> Bool {
+private func parseProvidesNamespace(directory: URL) -> Bool {
     guard
         let contents = try? ContentsJson.parse(directory: directory),
         let providesNamespace = contents.properties.providesNamespace
@@ -152,7 +153,7 @@ private func providesNamespace(directory: URL) -> Bool {
     return providesNamespace
 }
 
-private func onDemandResourceTags(directory: URL) -> [String]? {
+private func parseOnDemandResourceTags(directory: URL) -> [String]? {
     guard
         let contents = try? ContentsJson.parse(directory: directory)
     else { return nil }
