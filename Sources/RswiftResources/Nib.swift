@@ -11,6 +11,7 @@ import Foundation
 
 public struct Nib {
     public let name: String
+    public let locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
     public let rootViews: [TypeReference]
     public let reusables: [Reusable]
@@ -20,6 +21,7 @@ public struct Nib {
 
     public init(
         name: String,
+        locale: LocaleReference,
         deploymentTarget: DeploymentTarget?,
         rootViews: [TypeReference],
         reusables: [Reusable],
@@ -28,6 +30,7 @@ public struct Nib {
         usedAccessibilityIdentifiers: [String]
     ) {
         self.name = name
+        self.locale = locale
         self.deploymentTarget = deploymentTarget
         self.rootViews = rootViews
         self.reusables = reusables

@@ -11,6 +11,7 @@ import Foundation
 
 public struct Storyboard {
     public let name: String
+    public let locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
     private let initialViewControllerIdentifier: String?
     public let viewControllers: [ViewController]
@@ -28,6 +29,7 @@ public struct Storyboard {
 
     public init(
         name: String,
+        locale: LocaleReference,
         deploymentTarget: DeploymentTarget?,
         initialViewControllerIdentifier: String?,
         viewControllers: [ViewController],
@@ -38,6 +40,7 @@ public struct Storyboard {
         reusables: [Reusable]
     ) {
         self.name = name
+        self.locale = locale
         self.deploymentTarget = deploymentTarget
         self.initialViewControllerIdentifier = initialViewControllerIdentifier
         self.viewControllers = viewControllers

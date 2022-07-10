@@ -19,6 +19,8 @@ extension Storyboard: SupportedExtensions {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
+        let locale = LocaleReference(url: url)
+
         guard let parser = XMLParser(contentsOf: url) else {
             throw ResourceParsingError("Couldn't load file at: '\(url)'")
         }
@@ -32,6 +34,7 @@ extension Storyboard: SupportedExtensions {
 
         return Storyboard(
             name: basename,
+            locale: locale,
             deploymentTarget: parserDelegate.deploymentTarget,
             initialViewControllerIdentifier: parserDelegate.initialViewControllerIdentifier,
             viewControllers: parserDelegate.viewControllers,

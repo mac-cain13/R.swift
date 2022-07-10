@@ -19,6 +19,8 @@ extension Nib: SupportedExtensions {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
+        let locale = LocaleReference(url: url)
+
         guard let parser = XMLParser(contentsOf: url) else {
             throw ResourceParsingError("Couldn't load file at: '\(url)'")
         }
@@ -32,6 +34,7 @@ extension Nib: SupportedExtensions {
 
         return Nib(
             name: basename,
+            locale: locale,
             deploymentTarget: parserDelegate.deploymentTarget,
             rootViews: parserDelegate.rootViews,
             reusables: parserDelegate.reusables,
