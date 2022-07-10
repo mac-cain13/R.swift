@@ -8,7 +8,7 @@
 import Foundation
 import RswiftResources
 
-extension ResourceFile {
+extension FileResource {
     public func generateResourceLetCodeString() -> String {
         "let \(SwiftIdentifier(name: self.fullname).value) = \(self)"
     }

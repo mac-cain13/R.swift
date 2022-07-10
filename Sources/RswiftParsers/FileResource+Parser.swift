@@ -10,7 +10,7 @@
 import Foundation
 import RswiftResources
 
-extension ResourceFile {
+extension FileResource {
     // These are all extensions of resources that are passed to some special compiler step and not directly available at runtime
     static let unsupportedExtensions: Set<String> = [
 //      AssetFolder.supportedExtensions,
@@ -20,11 +20,11 @@ extension ResourceFile {
     ]
 //    .reduce([]) { $0.union($1) }
 
-    static public func parse(url: URL) throws -> ResourceFile {
+    static public func parse(url: URL) throws -> FileResource {
         guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
 
-        return ResourceFile(fullname: url.lastPathComponent, name: basename, pathExtension: url.pathExtension)
+        return FileResource(fullname: url.lastPathComponent, name: basename, pathExtension: url.pathExtension)
     }
 }

@@ -6,12 +6,6 @@
 //  From: https://github.com/mac-cain13/R.swift
 //  License: MIT License
 //
-//  Parts of the content of this file are loosly based on StringsFileParser.swift from SwiftGen/GenumKit.
-//  We don't feel this is a "substantial portion of the Software" so are not including their MIT license,
-//  eventhough we would like to give credit where credit is due by referring to SwiftGen thanking Olivier
-//  Halligon for creating SwiftGen and GenumKit.
-//
-//  See: https://github.com/AliSoftware/SwiftGen/blob/master/GenumKit/Parsers/StringsFileParser.swift
 //
 
 import Foundation

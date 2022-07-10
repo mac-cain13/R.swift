@@ -1,5 +1,5 @@
 //
-//  ResourceFile.swift
+//  FileResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct ResourceFile {
+public struct FileResource {
     public let fullname: String
     public let name: String
     public let pathExtension: String
