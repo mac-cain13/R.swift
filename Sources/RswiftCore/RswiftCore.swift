@@ -69,12 +69,11 @@ public struct RswiftCore {
 //        }
 
         let items = try urls
-            .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
+            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
 //            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .map { try FontResource.parse(url: $0) }
+            .map { try AssetCatalog.parse(url: $0) }
         for item in items {
-//            print(">>>", item)
-            print(item.generateResourceLetCodeString())
+            print(item.generateColorResourceLetCodeString())
         }
 
         print("TOTAL", Date().timeIntervalSince(start))
