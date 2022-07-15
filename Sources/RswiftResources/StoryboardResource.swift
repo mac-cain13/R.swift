@@ -1,5 +1,5 @@
 //
-//  Storyboard.swift
+//  StoryboardResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct Storyboard {
+public struct StoryboardResource {
     public let name: String
     public let locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?

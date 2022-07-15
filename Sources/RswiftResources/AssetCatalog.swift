@@ -21,13 +21,13 @@ extension AssetCatalog {
     public struct Namespace {
         public var subnamespaces: [String: Namespace] = [:]
         public var colors: [Color] = []
-        public var images: [Image] = []
+        public var images: [ImageResource] = []
         public var dataAssets: [DataAsset] = []
 
         public init(
             subnamespaces: [String: Namespace],
             colors: [Color],
-            images: [Image],
+            images: [ImageResource],
             dataAssets: [DataAsset]
         ) {
             self.subnamespaces = subnamespaces

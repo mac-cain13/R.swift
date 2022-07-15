@@ -728,7 +728,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#\"$SRCROOT/../../build/Debug/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n/Users/tom/Library/Developer/Xcode/DerivedData/R-gzdnepbnjmlzctbxokifiegoyhmk/Build/Products/Debug/rswift generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "# \"$SRCROOT/../../build/Debug/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n# /Users/tom/Library/Developer/Xcode/DerivedData/R-gzdnepbnjmlzctbxokifiegoyhmk/Build/Products/Debug/rswift generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
 		};
 		ED8FCF67313DC003391627B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

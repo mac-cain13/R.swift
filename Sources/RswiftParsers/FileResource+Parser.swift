@@ -1,5 +1,5 @@
 //
-//  ResourceFile.swift
+//  FileResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -14,11 +14,11 @@ extension FileResource {
     // These are all extensions of resources that are passed to some special compiler step and not directly available at runtime
     static public let unsupportedExtensions: Set<String> = [
       AssetCatalog.supportedExtensions,
-      Font.supportedExtensions,
-      Image.supportedExtensions,
+      FontResource.supportedExtensions,
+      ImageResource.supportedExtensions,
       LocalizableStrings.supportedExtensions,
-      Nib.supportedExtensions,
-      Storyboard.supportedExtensions,
+      NibResource.supportedExtensions,
+      StoryboardResource.supportedExtensions,
     ]
     .reduce([]) { $0.union($1) }
 

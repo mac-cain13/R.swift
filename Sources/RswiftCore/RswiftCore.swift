@@ -60,11 +60,12 @@ public struct RswiftCore {
 
         let start = Date()
         let items = try urls
-//            .filter { FileResource.supportedExtensions.contains($0.pathExtension) }
-            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .map { try FileResource.parse(url: $0) }
+            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+//            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+            .map { try ImageResource.parse(url: $0, assetTags: nil) }
         for item in items {
-            print(">>>", item)
+//            print(">>>", item)
+            print(item.generateResourceLetCodeString())
         }
 
 

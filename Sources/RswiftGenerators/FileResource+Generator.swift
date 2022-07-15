@@ -1,5 +1,5 @@
 //
-//  ResourceFile+Generator.swift
+//  FileResource+Generator.swift
 //  
 //
 //  Created by Tom Lokhorst on 2022-06-24.

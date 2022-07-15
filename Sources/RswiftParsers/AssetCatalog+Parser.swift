@@ -110,7 +110,7 @@ extension AssetCatalog: SupportedExtensions {
             colors.append(.init(name: name))
         }
 
-        var images: [Image] = []
+        var images: [ImageResource] = []
         for fileURL in directory.images {
             let name = (path + [fileURL.filenameWithoutExtension!]).joined(separator: "/")
             let tags = parseOnDemandResourceTags(directory: fileURL)

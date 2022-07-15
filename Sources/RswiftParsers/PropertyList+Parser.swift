@@ -10,8 +10,8 @@
 import Foundation
 import RswiftResources
 
-extension PropertyList {
-    static public func parse(url: URL, buildConfigurationName: String) throws -> PropertyList {
+extension PropertyListResource {
+    static public func parse(url: URL, buildConfigurationName: String) throws -> PropertyListResource {
         guard
           let nsDictionary = NSDictionary(contentsOf: url),
           let dictionary = nsDictionary as? [String: Any]
@@ -19,6 +19,6 @@ extension PropertyList {
           throw ResourceParsingError("File could not be parsed as InfoPlist from URL: \(url.absoluteString)")
         }
 
-        return PropertyList(buildConfigurationName: buildConfigurationName, contents: dictionary, url: url)
+        return PropertyListResource(buildConfigurationName: buildConfigurationName, contents: dictionary, url: url)
     }
 }

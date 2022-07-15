@@ -11,10 +11,10 @@ import Foundation
 import RswiftResources
 
 
-extension Nib: SupportedExtensions {
+extension NibResource: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["xib"]
 
-    static public func parse(url: URL) throws -> Nib {
+    static public func parse(url: URL) throws -> NibResource {
         guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
@@ -32,7 +32,7 @@ extension Nib: SupportedExtensions {
             throw ResourceParsingError("Invalid XML in file at: '\(url)'")
         }
 
-        return Nib(
+        return NibResource(
             name: basename,
             locale: locale,
             deploymentTarget: parserDelegate.deploymentTarget,

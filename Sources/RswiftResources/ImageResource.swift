@@ -1,5 +1,5 @@
 //
-//  Image.swift
+//  ImageResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct Image {
+public struct ImageResource {
     public let name: String
     public let locale: LocaleReference?
     public let onDemandResourceTags: [String]?

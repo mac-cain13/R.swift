@@ -11,10 +11,10 @@ import Foundation
 import RswiftResources
 
 
-extension Storyboard: SupportedExtensions {
+extension StoryboardResource: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["storyboard"]
     
-    static public func parse(url: URL) throws -> Storyboard {
+    static public func parse(url: URL) throws -> StoryboardResource {
         guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
@@ -32,7 +32,7 @@ extension Storyboard: SupportedExtensions {
             throw ResourceParsingError("Invalid XML in file at: '\(url)'")
         }
 
-        return Storyboard(
+        return StoryboardResource(
             name: basename,
             locale: locale,
             deploymentTarget: parserDelegate.deploymentTarget,
@@ -66,8 +66,8 @@ private let ElementNameToTypeMapping: [String: TypeReference] = [
 private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var initialViewControllerIdentifier: String?
     var deploymentTarget: DeploymentTarget?
-    var viewControllers: [Storyboard.ViewController] = []
-    var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
+    var viewControllers: [StoryboardResource.ViewController] = []
+    var viewControllerPlaceholders: [StoryboardResource.ViewControllerPlaceholder] = []
     var generatedIds: [String] = []
     var usedImageIdentifiers: [NameCatalog] = []
     var usedColorReferences: [NameCatalog] = []
@@ -75,7 +75,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var reusables: [Reusable] = []
 
     // State
-    var currentViewController: Storyboard.ViewController?
+    var currentViewController: StoryboardResource.ViewController?
 
     @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         if let id = attributeDict["id"], isGenerated(id: id) {
@@ -107,7 +107,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
             {
                 let type = customType ?? TypeReference._UIStoryboardSegue
 
-                let segue = Storyboard.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
+                let segue = StoryboardResource.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
                 currentViewController?.segues.append(segue)
             }
 
@@ -133,7 +133,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
 
         case "viewControllerPlaceholder":
             if let id = attributeDict["id"] , attributeDict["sceneMemberID"] == "viewController" {
-                let placeholder = Storyboard.ViewControllerPlaceholder(
+                let placeholder = StoryboardResource.ViewControllerPlaceholder(
                     id: id,
                     storyboardName: attributeDict["storyboardName"],
                     referencedIdentifier: attributeDict["referencedIdentifier"],
@@ -170,7 +170,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         }
     }
 
-    func viewControllerFromAttributes(_ attributeDict: [String : String], elementName: String) -> Storyboard.ViewController? {
+    func viewControllerFromAttributes(_ attributeDict: [String : String], elementName: String) -> StoryboardResource.ViewController? {
         guard let id = attributeDict["id"] , attributeDict["sceneMemberID"] == "viewController" else {
             return nil
         }
@@ -185,7 +185,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
 
         let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference._UIViewController
 
-        return Storyboard.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
+        return StoryboardResource.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
     }
 
     func reusableFromAttributes(_ attributeDict: [String : String], elementName: String) -> Reusable? {

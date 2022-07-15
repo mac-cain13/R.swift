@@ -1,5 +1,5 @@
 //
-//  Font.swift
+//  FontResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -11,10 +11,10 @@ import Foundation
 import RswiftResources
 import CoreGraphics
 
-extension Font: SupportedExtensions {
+extension FontResource: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["otf", "ttf"]
 
-    static public func parse(url: URL) throws -> Font {
+    static public func parse(url: URL) throws -> FontResource {
         guard let dataProvider = CGDataProvider(url: url as CFURL) else {
             throw ResourceParsingError("Unable to create data provider for font at \(url)")
         }
@@ -24,6 +24,6 @@ extension Font: SupportedExtensions {
             throw ResourceParsingError("No postscriptName associated to font at \(url)")
         }
 
-        return Font(filename: url.lastPathComponent, name: postScriptName as String)
+        return FontResource(filename: url.lastPathComponent, name: postScriptName as String)
     }
 }
