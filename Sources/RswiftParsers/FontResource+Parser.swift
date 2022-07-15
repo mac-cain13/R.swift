@@ -24,6 +24,6 @@ extension FontResource: SupportedExtensions {
             throw ResourceParsingError("No postscriptName associated to font at \(url)")
         }
 
-        return FontResource(filename: url.lastPathComponent, name: postScriptName as String)
+        return FontResource(name: postScriptName as String, filename: url.lastPathComponent)
     }
 }

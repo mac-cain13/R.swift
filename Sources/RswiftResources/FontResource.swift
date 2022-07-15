@@ -10,11 +10,11 @@
 import Foundation
 
 public struct FontResource {
-    public let filename: String
     public let name: String
+    public let filename: String
 
-    public init(filename: String, name: String) {
-        self.filename = filename
+    public init(name: String, filename: String) {
         self.name = name
+        self.filename = filename
     }
 }

@@ -10,7 +10,6 @@ import RswiftResources
 
 extension FontResource {
     public func generateResourceLetCodeString() -> String {
-        "let \(SwiftIdentifier(name: self.name).value) = \(self)"
+        "static let \(SwiftIdentifier(name: self.name).value) = \(self)"
     }
 }
-

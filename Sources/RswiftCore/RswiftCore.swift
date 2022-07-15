@@ -59,15 +59,23 @@ public struct RswiftCore {
             .map { $0.url(with: urlForSourceTreeFolder) }
 
         let start = Date()
+//        let items = try urls
+//            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+//            .map { try ImageResource.parse(url: $0, assetTags: nil) }
+//        for item in items {
+////            print(">>>", item)
+//            print(item.generateResourceLetCodeString())
+//        }
+
         let items = try urls
-            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+            .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
 //            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .map { try ImageResource.parse(url: $0, assetTags: nil) }
+            .map { try FontResource.parse(url: $0) }
         for item in items {
 //            print(">>>", item)
             print(item.generateResourceLetCodeString())
         }
-
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()
