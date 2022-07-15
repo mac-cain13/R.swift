@@ -15,6 +15,7 @@ public struct Nib {
     public let deploymentTarget: DeploymentTarget?
     public let rootViews: [TypeReference]
     public let reusables: [Reusable]
+    public let generatedIds: [String]
     public let usedImageIdentifiers: [NameCatalog]
     public let usedColorResources: [NameCatalog]
     public let usedAccessibilityIdentifiers: [String]
@@ -25,6 +26,7 @@ public struct Nib {
         deploymentTarget: DeploymentTarget?,
         rootViews: [TypeReference],
         reusables: [Reusable],
+        generatedIds: [String],
         usedImageIdentifiers: [NameCatalog],
         usedColorResources: [NameCatalog],
         usedAccessibilityIdentifiers: [String]
@@ -34,6 +36,7 @@ public struct Nib {
         self.deploymentTarget = deploymentTarget
         self.rootViews = rootViews
         self.reusables = reusables
+        self.generatedIds = generatedIds
         self.usedImageIdentifiers = usedImageIdentifiers
         self.usedColorResources = usedColorResources
         self.usedAccessibilityIdentifiers = usedAccessibilityIdentifiers

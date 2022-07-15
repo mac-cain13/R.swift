@@ -39,6 +39,7 @@ extension Storyboard: SupportedExtensions {
             initialViewControllerIdentifier: parserDelegate.initialViewControllerIdentifier,
             viewControllers: parserDelegate.viewControllers,
             viewControllerPlaceholders: parserDelegate.viewControllerPlaceholders,
+            generatedIds: parserDelegate.generatedIds,
             usedAccessibilityIdentifiers: parserDelegate.usedAccessibilityIdentifiers,
             usedImageIdentifiers: parserDelegate.usedImageIdentifiers,
             usedColorResources: parserDelegate.usedColorReferences,
@@ -67,6 +68,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var deploymentTarget: DeploymentTarget?
     var viewControllers: [Storyboard.ViewController] = []
     var viewControllerPlaceholders: [Storyboard.ViewControllerPlaceholder] = []
+    var generatedIds: [String] = []
     var usedImageIdentifiers: [NameCatalog] = []
     var usedColorReferences: [NameCatalog] = []
     var usedAccessibilityIdentifiers: [String] = []
@@ -76,6 +78,10 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var currentViewController: Storyboard.ViewController?
 
     @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        if let id = attributeDict["id"], isGenerated(id: id) {
+            generatedIds.append(id)
+        }
+
         switch elementName {
         case "deployment":
             let version = attributeDict["version"]
@@ -198,4 +204,3 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         return Reusable(identifier: reuseIdentifier, type: type)
     }
 }
-

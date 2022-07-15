@@ -38,6 +38,7 @@ extension Nib: SupportedExtensions {
             deploymentTarget: parserDelegate.deploymentTarget,
             rootViews: parserDelegate.rootViews,
             reusables: parserDelegate.reusables,
+            generatedIds: parserDelegate.generatedIds,
             usedImageIdentifiers: parserDelegate.usedImageIdentifiers,
             usedColorResources: parserDelegate.usedColorReferences,
             usedAccessibilityIdentifiers: parserDelegate.usedAccessibilityIdentifiers
@@ -58,6 +59,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
     var deploymentTarget: DeploymentTarget?
     var rootViews: [TypeReference] = []
     var reusables: [Reusable] = []
+    var generatedIds: [String] = []
     var usedImageIdentifiers: [NameCatalog] = []
     var usedColorReferences: [NameCatalog] = []
     var usedAccessibilityIdentifiers: [String] = []
@@ -72,6 +74,10 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         }
         if elementName == "objects" {
             isObjectsTagOpened = true
+        }
+
+        if let id = attributeDict["id"], isGenerated(id: id) {
+            generatedIds.append(id)
         }
 
         switch elementName {

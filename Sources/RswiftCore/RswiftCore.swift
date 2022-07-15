@@ -58,7 +58,6 @@ public struct RswiftCore {
         let urls = paths
             .map { $0.url(with: urlForSourceTreeFolder) }
 
-
         let start = Date()
         let items = try urls
 //            .filter { FileResource.supportedExtensions.contains($0.pathExtension) }

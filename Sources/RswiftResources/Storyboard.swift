@@ -13,9 +13,10 @@ public struct Storyboard {
     public let name: String
     public let locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
-    private let initialViewControllerIdentifier: String?
+    public let initialViewControllerIdentifier: String?
     public let viewControllers: [ViewController]
     public let viewControllerPlaceholders: [ViewControllerPlaceholder]
+    public let generatedIds: [String]
     public let usedAccessibilityIdentifiers: [String]
     public let usedImageIdentifiers: [NameCatalog]
     public let usedColorResources: [NameCatalog]
@@ -34,6 +35,7 @@ public struct Storyboard {
         initialViewControllerIdentifier: String?,
         viewControllers: [ViewController],
         viewControllerPlaceholders: [ViewControllerPlaceholder],
+        generatedIds: [String],
         usedAccessibilityIdentifiers: [String],
         usedImageIdentifiers: [NameCatalog],
         usedColorResources: [NameCatalog],
@@ -45,6 +47,7 @@ public struct Storyboard {
         self.initialViewControllerIdentifier = initialViewControllerIdentifier
         self.viewControllers = viewControllers
         self.viewControllerPlaceholders = viewControllerPlaceholders
+        self.generatedIds = generatedIds
         self.usedAccessibilityIdentifiers = usedAccessibilityIdentifiers
         self.usedImageIdentifiers = usedImageIdentifiers
         self.usedColorResources = usedColorResources
