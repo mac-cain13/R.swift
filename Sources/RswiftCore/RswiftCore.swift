@@ -68,13 +68,18 @@ public struct RswiftCore {
 //            print(item.generateResourceLetCodeString())
 //        }
 
-        let items = try urls
-            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-//            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .map { try AssetCatalog.parse(url: $0) }
-        for item in items {
-            print(item.generateColorResourceLetCodeString())
-        }
+//        let items = try urls
+//            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+//            .map { try AssetCatalog.parse(url: $0) }
+//        for item in items {
+//            print(item.generateColorResourceLetCodeString())
+//        }
+
+//        let xs = try SyntaxParser.parse(source: "struct Hello {}")
+//        print(xs)
+
+        go()
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()

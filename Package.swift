@@ -13,11 +13,16 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
+//    .package(url: "https://github.com/apple/swift-syntax.git", .branchItem("swift-5.6-RELEASE")),
   ],
   targets: [
     .target(name: "RswiftResources"),
     .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
-    .target(name: "RswiftGenerators", dependencies: ["RswiftResources"]),
+    .target(name: "RswiftGenerators", dependencies: [
+        "RswiftResources",
+//        .product(name: "SwiftSyntax", package: "swift-syntax"),
+//        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+    ]),
 
     // Core of R.swift, brings all previous parts together
     .target(name: "RswiftCore", dependencies: ["RswiftParsers", "RswiftGenerators"]),
