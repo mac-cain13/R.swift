@@ -74,7 +74,7 @@ struct SwiftNameGroups<T> {
         let resultPlural = "\(result)s"
 
         for (sanitizedName, dups) in duplicates {
-            warning("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName)' would be generated for all of these \(resultPlural): \(dups.joined(separator: ", "))")
+            warning("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName.value)' would be generated for all of these \(resultPlural): \(dups.joined(separator: ", "))")
         }
 
         if let empty = empties.first , empties.count == 1 {

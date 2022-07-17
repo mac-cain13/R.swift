@@ -69,17 +69,27 @@ public struct RswiftCore {
 //        }
 
 //        let items = try urls
-//            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+//            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
 ////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-//            .map { try AssetCatalog.parse(url: $0) }
+//            .map { try StoryboardResource.parse(url: $0) }
 //        for item in items {
-//            print(item.generateColorResourceLetCodeString())
+//            print(item.name, item.viewControllers.map(\.type.rawName))
 //        }
 
-//        let xs = try SyntaxParser.parse(source: "struct Hello {}")
-//        print(xs)
+        let images = try urls
+            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+            .map { try ImageResource.parse(url: $0, assetTags: nil) }
+        let assetCatalogs = try urls
+            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+            .map { try AssetCatalog.parse(url: $0) }
 
-        go()
+        let structName = SwiftIdentifier(rawValue: "R")
+        let qualifiedName = structName
+        let s = Struct(name: structName) {
+            ImageResource.generateStruct(resources: images, assetCatalogs: assetCatalogs, prefix: qualifiedName)
+        }
+
+        print(s.prettyPrint())
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()

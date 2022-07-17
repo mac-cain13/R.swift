@@ -23,18 +23,48 @@ public enum AccessControl {
 }
 
 public struct LetBinding {
+    public let comments: [String]
     public var accessControl = AccessControl.none
+    public let isStatic: Bool
     public let name: SwiftIdentifier
-    public let typeReference: TypeReference
+    public let typeReference: TypeReference?
+    public let valueCodeString: String?
 
-    public init(accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, typeReference: TypeReference) {
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String?) {
+        self.comments = comments
         self.accessControl = accessControl
+        self.isStatic = isStatic
         self.name = name
         self.typeReference = typeReference
+        self.valueCodeString = valueCodeString
+    }
+
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, valueCodeString: String) {
+        self.comments = comments
+        self.accessControl = accessControl
+        self.isStatic = isStatic
+        self.name = name
+        self.typeReference = nil
+        self.valueCodeString = valueCodeString
     }
 
     func render(_ pp: inout PrettyPrinter) {
-        pp.append(words: [accessControl.code(), "let", "\(name.value):", typeReference.rawName])
+        var words: [String?] = [
+            accessControl.code(),
+            isStatic ? "static" : nil,
+            "let",
+            typeReference == nil ? name.value : "\(name.value):",
+            typeReference?.rawName
+        ]
+        if let valueCodeString {
+            words.append("=")
+            words.append(valueCodeString)
+        }
+
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+        pp.append(words: words)
     }
 }
 
@@ -46,8 +76,21 @@ public struct StructMembersBuilder {
     public static func buildExpression(_ expression: LetBinding) -> StructMembers {
         ([expression], [])
     }
+
+    public static func buildExpression(_ expressions: [LetBinding]) -> StructMembers {
+        (expressions, [])
+    }
+
     public static func buildExpression(_ expression: Struct) -> StructMembers {
         ([], [expression])
+    }
+
+    public static func buildExpression(_ expressions: [Struct]) -> StructMembers {
+        ([], expressions)
+    }
+
+    public static func buildArray(_ members: [StructMembers]) -> StructMembers {
+        (members.flatMap(\.0), members.flatMap(\.1))
     }
 
     public static func buildBlock(_ members: StructMembers...) -> StructMembers {
@@ -56,59 +99,49 @@ public struct StructMembersBuilder {
 }
 
 public struct Struct {
+    public let comments: [String]
     public var accessControl = AccessControl.none
     public let name: SwiftIdentifier
     public var lets: [LetBinding] = []
     public var structs: [Struct] = []
 
-    public init(accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, lets: [LetBinding]) {
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, @StructMembersBuilder membersBuilder: () -> StructMembers) {
+        self.comments = comments
         self.accessControl = accessControl
         self.name = name
-        self.lets = lets
-    }
-
-    public init(accessControl: AccessControl = AccessControl.none, _ rawName: String, @StructMembersBuilder membersBuilder: () -> StructMembers) {
-        self.accessControl = accessControl
-        self.name = SwiftIdentifier(rawValue: rawName)
         (self.lets, self.structs) = membersBuilder()
     }
 
     public func prettyPrint() -> String {
-//        render().joined(separator: "\n")
         var pp = PrettyPrinter()
         render(&pp)
         return pp.render()
     }
 
-    func render() -> [String] {
-        var ls: [String] = []
-        ls.append("struct \(name.value) {")
-//        ls.append(contentsOf: lets.map { "  \($0.render())" })
-        if !lets.isEmpty && !structs.isEmpty {
-            ls.append("")
-        }
-        ls.append(contentsOf: structs.flatMap { $0.render().map { "  \($0)" } })
-        ls.append("}")
-        return ls
-    }
-
     func render(_ pp: inout PrettyPrinter) {
-        pp.append(line: "struct \(name.value) {")
-        pp.increment()
-        for letb in lets {
-            letb.render(&pp)
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
         }
-        pp.decrement()
+        pp.append(line: "struct \(name.value) {")
+
+        pp.indented { pp in
+            for letb in lets {
+                if !letb.comments.isEmpty {
+                    pp.append(line: "")
+                }
+                letb.render(&pp)
+            }
+        }
 
         if !lets.isEmpty && !structs.isEmpty {
             pp.append(line: "")
         }
 
-        pp.increment()
-        for st in structs {
-            st.render(&pp)
+        pp.indented { pp in
+            for st in structs {
+                st.render(&pp)
+            }
         }
-        pp.decrement()
 
         pp.append(line: "}")
     }
@@ -118,11 +151,9 @@ struct PrettyPrinter {
     private var indent = 0
     private var lines: [(Int, String)] = []
 
-    mutating func increment() {
+    mutating func indented(perform: (inout PrettyPrinter) -> Void) {
         indent += 1
-    }
-
-    mutating func decrement() {
+        perform(&self)
         indent -= 1
     }
 
