@@ -101,7 +101,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
 }
 
 private extension NamespacedAssetSubfolder {
-  func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
+    func generatedImageStruct(at externalAccessLevel: AccessLevel, prefix: SwiftIdentifier) -> Struct {
     let allFunctions = imageAssets
     let groupedFunctions = allFunctions.grouped(bySwiftIdentifier: { $0 })
 

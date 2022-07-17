@@ -24,7 +24,8 @@ extension LocaleReference {
 extension ImageResource {
     func generateLetBinding() -> LetBinding {
         let locs = locale.map { $0.codeString() } ?? "nil"
-        let code = "ImageResource(name: \"\(name)\", locale: \(locs), onDemandResourceTags: \(String(describing: onDemandResourceTags)))"
+        let odrt = onDemandResourceTags?.debugDescription ?? "nil"
+        let code = "ImageResource(name: \"\(name)\", locale: \(locs), onDemandResourceTags: \(odrt))"
         return LetBinding(
             comments: ["Image `\(name)`."],
             isStatic: true,
@@ -32,15 +33,16 @@ extension ImageResource {
             valueCodeString: code)
     }
 
-    public static func generateStruct(resources: [ImageResource], assetCatalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
-        let structName = SwiftIdentifier(name: "image")
+    public static func generateStruct(resources: [ImageResource], namespaces: [AssetCatalog.Namespace], name: SwiftIdentifier, prefix: SwiftIdentifier) -> Struct {
+        let structName = name
         let qualifiedName = prefix + structName
 
         // Multiple resources can share same name,
         // for example: Colors.jpg and Colors@2x.jpg are both named "Colors.jpg"
         // Deduplicate these
         let namedResources = Dictionary(grouping: resources, by: \.name).values.map(\.first!)
-        let assetFolderImageResources = assetCatalogs.flatMap(\.root.images)
+
+        let assetFolderImageResources = namespaces.flatMap(\.images)
 
         let allResources = namedResources + assetFolderImageResources
         let groupedResources = allResources.grouped(bySwiftIdentifier: { $0.name })
@@ -49,11 +51,27 @@ extension ImageResource {
             print("warning:", l)
         }
 
-        let imageLets = groupedResources.uniques.map { $0.generateLetBinding() }
+        let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
 
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(imageLets.count) images."]
+        let structs = namespaces.flatMap(\.subnamespaces)
+            .sorted { $0.key < $1.key }
+            .map { (name, namespace) in
+                ImageResource.generateStruct(
+                    resources: [],
+                    namespaces: [namespace],
+                    name: SwiftIdentifier(name: name),
+                    prefix: qualifiedName
+                )
+            }
+            .filter { !$0.isEmpty }
+
+
+        // TODO group structs by name
+
+        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) images."]
         return Struct(comments: comments, name: structName) {
-            imageLets
+            letbindings
+            structs
         }
     }
 }

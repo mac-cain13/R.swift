@@ -34,6 +34,7 @@ let targetName = processInfo.environment[EnvironmentKeys.target] ?? "ResourceApp
 
 let xcodeprojURL = URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.xcodeproj] ?? "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp.xcodeproj")
 let sourceRootURL = xcodeprojURL.deletingLastPathComponent()
+let rswiftIgnoreURL = sourceRootURL.appendingPathComponent(".rswiftignore")
 let fakeURL = URL(fileURLWithPath: "/FAKE")
 
 let core = RswiftCore(
@@ -46,7 +47,8 @@ let core = RswiftCore(
     developerDirURL: fakeURL,
     sourceRootURL: sourceRootURL,
     sdkRootURL: fakeURL,
-    platformURL: fakeURL
+    platformURL: fakeURL,
+    rswiftIgnoreURL: rswiftIgnoreURL
 )
 
 print("Start")

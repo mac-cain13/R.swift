@@ -24,6 +24,8 @@ public struct RswiftCore {
     let sdkRootURL: URL
     let platformURL: URL
 
+    let rswiftIgnoreURL: URL
+
     public init(
         xcodeprojURL: URL,
         targetName: String,
@@ -34,22 +36,27 @@ public struct RswiftCore {
         developerDirURL: URL,
         sourceRootURL: URL,
         sdkRootURL: URL,
-        platformURL: URL
+        platformURL: URL,
+        rswiftIgnoreURL: URL
     ) {
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
         self.productModuleName = productModuleName
         self.infoPlistFile = infoPlistFile
         self.codeSignEntitlements = codeSignEntitlements
+
         self.builtProductsDirURL = builtProductsDirURL
         self.developerDirURL = developerDirURL
         self.sourceRootURL = sourceRootURL
         self.sdkRootURL = sdkRootURL
         self.platformURL = platformURL
+
+        self.rswiftIgnoreURL = rswiftIgnoreURL
     }
 
     // Temporary function for use during development
     public func developRun() throws {
+        let ignoreFile = (try? IgnoreFile(ignoreFileURL: rswiftIgnoreURL)) ?? IgnoreFile()
         let xcodeproj = try! Xcodeproj(url: xcodeprojURL, warning: { print($0) })
 
         let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
@@ -57,24 +64,25 @@ public struct RswiftCore {
         let paths = try xcodeproj.resourcePaths(forTarget: targetName)
         let urls = paths
             .map { $0.url(with: urlForSourceTreeFolder) }
+            .filter { !ignoreFile.matches(url: $0) }
 
         let start = Date()
-//        let items = try urls
-//            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-//            .map { try ImageResource.parse(url: $0, assetTags: nil) }
-//        for item in items {
-////            print(">>>", item)
-//            print(item.generateResourceLetCodeString())
-//        }
+        //        let items = try urls
+        //            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+        ////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+        //            .map { try ImageResource.parse(url: $0, assetTags: nil) }
+        //        for item in items {
+        ////            print(">>>", item)
+        //            print(item.generateResourceLetCodeString())
+        //        }
 
-//        let items = try urls
-//            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
-////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-//            .map { try StoryboardResource.parse(url: $0) }
-//        for item in items {
-//            print(item.name, item.viewControllers.map(\.type.rawName))
-//        }
+        //        let items = try urls
+        //            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
+        ////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+        //            .map { try StoryboardResource.parse(url: $0) }
+        //        for item in items {
+        //            print(item.name, item.viewControllers.map(\.type.rawName))
+        //        }
 
         let images = try urls
             .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
@@ -86,7 +94,12 @@ public struct RswiftCore {
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
         let s = Struct(name: structName) {
-            ImageResource.generateStruct(resources: images, assetCatalogs: assetCatalogs, prefix: qualifiedName)
+            ImageResource.generateStruct(
+                resources: images,
+                namespaces: assetCatalogs.map(\.root),
+                name: SwiftIdentifier(name: "image"),
+                prefix: qualifiedName
+            )
         }
 
         print(s.prettyPrint())

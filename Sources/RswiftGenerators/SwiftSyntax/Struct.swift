@@ -105,6 +105,8 @@ public struct Struct {
     public var lets: [LetBinding] = []
     public var structs: [Struct] = []
 
+    public var isEmpty: Bool { lets.isEmpty && structs.isEmpty }
+
     public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, @StructMembersBuilder membersBuilder: () -> StructMembers) {
         self.comments = comments
         self.accessControl = accessControl
