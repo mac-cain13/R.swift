@@ -20,12 +20,13 @@ extension AssetCatalog.Namespace {
             "static let \(SwiftIdentifier(name: color.name).value) = AssetCatalog.\(color)"
         }
 
-        for (name, namespace) in subnamespaces {
-            cs.append("struct \(SwiftIdentifier(name: name).value) {")
+        for namespace in subnamespaces {
+            cs.append("struct \(SwiftIdentifier(name: namespace.name).value) {")
             cs.append(contentsOf: namespace.generateColorResourceLetsCodeString().map { "  \($0)" })
             cs.append("}")
         }
 
         return cs
     }
+
 }

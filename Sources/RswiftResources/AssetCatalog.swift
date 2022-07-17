@@ -19,21 +19,33 @@ public struct AssetCatalog {
 
 extension AssetCatalog {
     public struct Namespace {
-        public var subnamespaces: [String: Namespace] = [:]
+        public let name: String
+        public var subnamespaces: [Namespace] = []
         public var colors: [Color] = []
         public var images: [ImageResource] = []
         public var dataAssets: [DataAsset] = []
 
         public init(
-            subnamespaces: [String: Namespace],
+            name: String,
+            subnamespaces: [Namespace],
             colors: [Color],
             images: [ImageResource],
             dataAssets: [DataAsset]
         ) {
+            self.name = name
             self.subnamespaces = subnamespaces
             self.colors = colors
             self.images = images
             self.dataAssets = dataAssets
+        }
+
+        public func merging(_ other: Namespace) -> Namespace {
+            var new = self
+            new.subnamespaces += other.subnamespaces
+            new.colors += other.colors
+            new.images += other.images
+            new.dataAssets += other.dataAssets
+            return new
         }
     }
 

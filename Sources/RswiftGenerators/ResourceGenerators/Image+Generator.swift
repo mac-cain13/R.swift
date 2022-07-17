@@ -53,20 +53,26 @@ extension ImageResource {
 
         let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
 
-        let structs = namespaces.flatMap(\.subnamespaces)
-            .sorted { $0.key < $1.key }
-            .map { (name, namespace) in
+        let allNamespaces = namespaces.flatMap(\.subnamespaces)
+        let assetSubfolders = AssetCatalogSubfolders(
+          all: allNamespaces,
+          assetIdentifiers: allResources.map { SwiftIdentifier(name: $0.name) })
+
+        assetSubfolders.printWarningsForDuplicates { l in
+            print("warning:", l)
+        }
+
+        let structs = assetSubfolders.folders.flatMap(\.subnamespaces)
+            .sorted { $0.name < $1.name }
+            .map { namespace in
                 ImageResource.generateStruct(
                     resources: [],
                     namespaces: [namespace],
-                    name: SwiftIdentifier(name: name),
+                    name: SwiftIdentifier(name: namespace.name),
                     prefix: qualifiedName
                 )
             }
             .filter { !$0.isEmpty }
-
-
-        // TODO group structs by name
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) images."]
         return Struct(comments: comments, name: structName) {
