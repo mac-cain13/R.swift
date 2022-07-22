@@ -11,11 +11,13 @@ import Foundation
 
 public struct ImageResource {
     public let name: String
+    public let path: [String]
     public let locale: LocaleReference?
     public let onDemandResourceTags: [String]?
 
-    public init(name: String, locale: LocaleReference?, onDemandResourceTags: [String]?) {
+    public init(name: String, path: [String], locale: LocaleReference?, onDemandResourceTags: [String]?) {
         self.name = name
+        self.path = path
         self.locale = locale
         self.onDemandResourceTags = onDemandResourceTags
     }

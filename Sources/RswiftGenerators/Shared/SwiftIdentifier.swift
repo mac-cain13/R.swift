@@ -16,7 +16,7 @@ private let upperCasedPrefixRegex = try! NSRegularExpression(pattern: "^([A-Z]+)
  Disallowed characters: whitespace, mathematical symbols, arrows, private-use and invalid Unicode points, line- and boxdrawing characters
  Special rules: Can't begin with a number
  */
-public struct SwiftIdentifier : Hashable {
+public struct SwiftIdentifier: Hashable, Comparable {
     public let value: String
 
     public init(name: String, lowercaseStartingCharacters: Bool = true) {
@@ -56,6 +56,10 @@ public struct SwiftIdentifier : Hashable {
 
     static func +(lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> SwiftIdentifier {
         return SwiftIdentifier(rawValue: "\(lhs.value).\(rhs.value)")
+    }
+
+    public static func < (lhs: SwiftIdentifier, rhs: SwiftIdentifier) -> Bool {
+        lhs.value < rhs.value
     }
 }
 

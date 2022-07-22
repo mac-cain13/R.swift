@@ -22,7 +22,7 @@ extension LocaleReference {
 }
 
 extension ImageResource {
-    func generateLetBinding(path: [String]) -> LetBinding {
+    func generateLetBinding() -> LetBinding {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
         let fullname = (path + [name]).joined(separator: "/")
@@ -35,10 +35,6 @@ extension ImageResource {
     }
 
     public static func generateStruct(resources: [ImageResource], namespaces: [AssetCatalog.Namespace], name: SwiftIdentifier, prefix: SwiftIdentifier) -> Struct {
-        generateStruct(resources: resources, namespaces: namespaces, path: [], name: name, prefix: prefix)
-    }
-
-    public static func generateStruct(resources: [ImageResource], namespaces: [AssetCatalog.Namespace], path: [String], name: SwiftIdentifier, prefix: SwiftIdentifier) -> Struct {
         let structName = name
         let qualifiedName = prefix + structName
 
@@ -56,24 +52,23 @@ extension ImageResource {
             print("warning:", l)
         }
 
-        let letbindings = groupedResources.uniques.map { $0.generateLetBinding(path: path) }
+        let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
 
-        let allNamespaces = namespaces.flatMap(\.subnamespaces)
+        let allNamespaces = Dictionary(namespaces.flatMap(\.subnamespaces)) { $0.merging($1) }
         let otherIdentifiers = groupedResources.uniques.map { SwiftIdentifier(name: $0.name) }
-        let assetSubfolders = AssetCatalogMergedNamespaces(all: allNamespaces, otherIdentifiers: otherIdentifiers)
+        let mergedNamespaces = AssetCatalogMergedNamespaces(all: allNamespaces, otherIdentifiers: otherIdentifiers)
 
-        assetSubfolders.printWarningsForDuplicates(result: "image") { l in
+        mergedNamespaces.printWarningsForDuplicates(result: "image") { l in
             print("warning:", l)
         }
 
-        let structs = assetSubfolders.namespaces
-            .sorted { $0.name < $1.name }
-            .map { namespace in
+        let structs = mergedNamespaces.namespaces
+            .sorted { $0.key < $1.key }
+            .map { (name, namespace) in
                 ImageResource.generateStruct(
                     resources: [],
                     namespaces: [namespace],
-                    path: namespace.path,
-                    name: SwiftIdentifier(name: namespace.name),
+                    name: name,
                     prefix: qualifiedName
                 )
             }

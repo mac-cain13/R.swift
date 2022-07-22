@@ -30,7 +30,7 @@ extension AssetCatalog: SupportedExtensions {
         }
 
         let directory = try parseDirectory(catalogURL: url)
-        let namespace = try createNamespace(name: "image", directory: directory, path: [])
+        let namespace = try createNamespace(directory: directory, path: [])
 
         return AssetCatalog(filename: basename, root: namespace)
     }
@@ -97,12 +97,12 @@ extension AssetCatalog: SupportedExtensions {
     }
 
     // Note: ignore any localizations in Contents.json
-    static private func createNamespace(name: String, directory: NamespaceDirectory, path: [String]) throws -> Namespace {
+    static private func createNamespace(directory: NamespaceDirectory, path: [String]) throws -> Namespace {
 
-        var subnamespaces: [AssetCatalog.Namespace] = []
+        var subnamespaces: [String: AssetCatalog.Namespace] = [:]
         for (name, directory) in directory.subnamespaces {
-            let namespace = try createNamespace(name: name, directory: directory, path: path + [name])
-            subnamespaces.append(namespace)
+            let namespace = try createNamespace(directory: directory, path: path + [name])
+            subnamespaces[name] = namespace
         }
 
         var colors: [AssetCatalog.Color] = []
@@ -115,7 +115,7 @@ extension AssetCatalog: SupportedExtensions {
         for fileURL in directory.images {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            images.append(.init(name: name, locale: nil, onDemandResourceTags: tags))
+            images.append(.init(name: name, path: path, locale: nil, onDemandResourceTags: tags))
         }
 
         var dataAssets: [AssetCatalog.DataAsset] = []
@@ -126,8 +126,6 @@ extension AssetCatalog: SupportedExtensions {
         }
 
         return AssetCatalog.Namespace(
-            name: name,
-            path: path,
             subnamespaces: subnamespaces,
             colors: colors,
             images: images,
