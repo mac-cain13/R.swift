@@ -21,12 +21,10 @@ extension FontResource {
     public static func generateStruct(resources: [FontResource], prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "font")
         let qualifiedName = prefix + structName
+        let warning: (String) -> Void = { print("warning:", $0) }
 
         let groupedResources = resources.grouped(bySwiftIdentifier: { $0.name })
-
-        groupedResources.reportWarningsForDuplicatesAndEmpties(source: "font resource", result: "font") { l in
-            print("warning:", l)
-        }
+        groupedResources.reportWarningsForDuplicatesAndEmpties(source: "font resource", result: "font", warning: warning)
 
         let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
 

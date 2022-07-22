@@ -21,7 +21,7 @@ extension ImageResource {
             valueCodeString: code)
     }
 
-    public static func generateStruct(resources: [ImageResource], catalogs: [AssetCatalog], name: SwiftIdentifier, prefix: SwiftIdentifier) -> Struct {
+    public static func generateStruct(resources: [ImageResource], catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
         // Multiple resources can share same name,
         // for example: Colors.jpg and Colors@2x.jpg are both named "Colors.jpg"
         // Deduplicate these
@@ -30,27 +30,22 @@ extension ImageResource {
         var merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
         merged.images += namedResources
 
-        return generateStruct(namespace: merged, name: name, prefix: prefix)
+        return generateStruct(namespace: merged, name: SwiftIdentifier(name: "image"), prefix: prefix)
     }
 
     public static func generateStruct(namespace: AssetCatalog.Namespace, name: SwiftIdentifier, prefix: SwiftIdentifier) -> Struct {
         let structName = name
         let qualifiedName = prefix + structName
+        let warning: (String) -> Void = { print("warning:", $0) }
 
         let groupedResources = namespace.images.grouped(bySwiftIdentifier: { $0.name })
-
-        groupedResources.reportWarningsForDuplicatesAndEmpties(source: "image", result: "image") { l in
-            print("warning:", l)
-        }
+        groupedResources.reportWarningsForDuplicatesAndEmpties(source: "image", result: "image", warning: warning)
 
         let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
-
         let otherIdentifiers = groupedResources.uniques.map { SwiftIdentifier(name: $0.name) }
-        let mergedNamespaces = AssetCatalogMergedNamespaces(all: namespace.subnamespaces, otherIdentifiers: otherIdentifiers)
 
-        mergedNamespaces.printWarningsForDuplicates(result: "image") { l in
-            print("warning:", l)
-        }
+        let mergedNamespaces = AssetCatalogMergedNamespaces(all: namespace.subnamespaces, otherIdentifiers: otherIdentifiers)
+        mergedNamespaces.printWarningsForDuplicates(result: "image", warning: warning)
 
         let structs = mergedNamespaces.namespaces
             .sorted { $0.key < $1.key }

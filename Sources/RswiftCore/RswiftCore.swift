@@ -76,14 +76,9 @@ public struct RswiftCore {
         //            print(item.generateResourceLetCodeString())
         //        }
 
-        //        let items = try urls
-        //            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
-        ////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-        //            .map { try StoryboardResource.parse(url: $0) }
-        //        for item in items {
-        //            print(item.name, item.viewControllers.map(\.type.rawName))
-        //        }
-
+        let storyboards = try urls
+            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
+            .map { try StoryboardResource.parse(url: $0) }
 
         let fonts = try urls
             .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
@@ -100,18 +95,20 @@ public struct RswiftCore {
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
 
-        let imageStruct = ImageResource.generateStruct(
-            resources: images,
-            catalogs: assetCatalogs,
-            name: SwiftIdentifier(name: "image"),
-            prefix: qualifiedName
-        )
+        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
+
+//        let imageStruct = ImageResource.generateStruct(
+//            resources: images,
+//            catalogs: assetCatalogs,
+//            prefix: qualifiedName
+//        )
 
         let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
 
         let s = Struct(name: structName) {
 //            imageStruct
-            fontStruct
+//            fontStruct
+            segueStruct
         }
 
         print(s.prettyPrint())
