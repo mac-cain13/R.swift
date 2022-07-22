@@ -9,7 +9,7 @@ import Foundation
 import RswiftResources
 
 extension ImageResource {
-    public static func generateStruct(resources: [ImageResource], catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
+    public static func generateStruct(catalogs: [AssetCatalog], resources: [ImageResource], prefix: SwiftIdentifier) -> Struct {
         // Multiple resources can share same name,
         // for example: Colors.jpg and Colors@2x.jpg are both named "Colors.jpg"
         // Deduplicate these

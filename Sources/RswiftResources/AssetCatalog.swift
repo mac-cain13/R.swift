@@ -20,18 +20,18 @@ public struct AssetCatalog {
 extension AssetCatalog {
     public struct Namespace {
         public var subnamespaces: [String: Namespace] = [:]
-        public var colors: [Color] = []
+        public var colors: [ColorResource] = []
         public var images: [ImageResource] = []
-        public var dataAssets: [DataAsset] = []
+        public var dataAssets: [DataAssetResource] = []
 
         public init() {
         }
 
         public init(
             subnamespaces: [String: Namespace],
-            colors: [Color],
+            colors: [ColorResource],
             images: [ImageResource],
-            dataAssets: [DataAsset]
+            dataAssets: [DataAssetResource]
         ) {
             self.subnamespaces = subnamespaces
             self.colors = colors
@@ -50,24 +50,6 @@ extension AssetCatalog {
             var new = self
             new.merge(other)
             return new
-        }
-    }
-
-    public struct Color {
-        public let name: String
-
-        public init(name: String) {
-            self.name = name
-        }
-    }
-
-    public struct DataAsset {
-        public let name: String
-        public let onDemandResourceTags: [String]?
-
-        public init(name: String, onDemandResourceTags: [String]?) {
-            self.name = name
-            self.onDemandResourceTags = onDemandResourceTags
         }
     }
 }

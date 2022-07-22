@@ -105,10 +105,10 @@ extension AssetCatalog: SupportedExtensions {
             subnamespaces[name] = namespace
         }
 
-        var colors: [AssetCatalog.Color] = []
+        var colors: [ColorResource] = []
         for fileURL in directory.colors {
             let name = fileURL.filenameWithoutExtension!
-            colors.append(.init(name: name))
+            colors.append(.init(name: name, path: path))
         }
 
         var images: [ImageResource] = []
@@ -118,11 +118,11 @@ extension AssetCatalog: SupportedExtensions {
             images.append(.init(name: name, path: path, locale: nil, onDemandResourceTags: tags))
         }
 
-        var dataAssets: [AssetCatalog.DataAsset] = []
+        var dataAssets: [DataAssetResource] = []
         for fileURL in directory.dataAssets {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            dataAssets.append(.init(name: name, onDemandResourceTags: tags))
+            dataAssets.append(.init(name: name, path: path, onDemandResourceTags: tags))
         }
 
         return AssetCatalog.Namespace(
