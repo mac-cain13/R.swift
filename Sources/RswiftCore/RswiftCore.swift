@@ -84,6 +84,11 @@ public struct RswiftCore {
         //            print(item.name, item.viewControllers.map(\.type.rawName))
         //        }
 
+
+        let fonts = try urls
+            .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
+            .map { try FontResource.parse(url: $0) }
+
         let images = try urls
             .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
             .map { try ImageResource.parse(url: $0, assetTags: nil) }
@@ -91,15 +96,22 @@ public struct RswiftCore {
             .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
             .map { try AssetCatalog.parse(url: $0) }
 
+
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
+
+        let imageStruct = ImageResource.generateStruct(
+            resources: images,
+            catalogs: assetCatalogs,
+            name: SwiftIdentifier(name: "image"),
+            prefix: qualifiedName
+        )
+
+        let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
+
         let s = Struct(name: structName) {
-            ImageResource.generateStruct(
-                resources: images,
-                catalogs: assetCatalogs,
-                name: SwiftIdentifier(name: "image"),
-                prefix: qualifiedName
-            )
+//            imageStruct
+            fontStruct
         }
 
         print(s.prettyPrint())

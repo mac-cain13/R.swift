@@ -8,19 +8,6 @@
 import Foundation
 import RswiftResources
 
-extension LocaleReference {
-    func codeString() -> String {
-        switch self {
-        case .none:
-            return ".none"
-        case .base:
-            return ".base"
-        case .language(let string):
-            return ".language(\(string))"
-        }
-    }
-}
-
 extension ImageResource {
     func generateLetBinding() -> LetBinding {
         let locs = locale.map { $0.codeString() } ?? "nil"
