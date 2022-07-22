@@ -33,14 +33,36 @@ extension StoryboardResource {
 extension StoryboardResource {
 
     func generateStruct(prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
-        // TODO filter lets with name `identifier`
+        let nameIdentifier = SwiftIdentifier(rawValue: "name")
 
-        let letIdentifier = LetBinding(
+        // View controllers with identifiers
+        let grouped = viewControllers
+          .compactMap { (vc) -> (identifier: String, vc: StoryboardResource.ViewController)? in
+            guard let storyboardIdentifier = vc.storyboardIdentifier else { return nil }
+            return (storyboardIdentifier, vc)
+          }
+          .grouped(bySwiftIdentifier: { $0.identifier })
+
+        grouped.reportWarningsForDuplicatesAndEmpties(source: "view controller", result: "view controller identifier", warning: warning)
+
+        let skip = grouped.uniques
+            .map(\.identifier)
+            .first { SwiftIdentifier(rawValue: $0) == nameIdentifier }
+        if let skip = skip {
+            warning("Skipping 1 view controller because symbol '\(skip)' conflicts with reserved name '\(nameIdentifier.value)'")
+        }
+
+        let letbindings = grouped.uniques
+            .filter { (id, _) in SwiftIdentifier(rawValue: id) != nameIdentifier }
+            .map { (id, vc) in vc.generateLetBinding(identifier: id) }
+            .sorted { $0.name < $1.name }
+
+        let letName = LetBinding(
             isStatic: true,
-            name: SwiftIdentifier(name: "identifier"),
+            name: nameIdentifier,
             valueCodeString: "\"\(name)\"")
 
-        let identifier = SwiftIdentifier(rawValue: name)
+        let identifier = SwiftIdentifier(name: name)
         let storyboardIdentifier = TypeReference(module: .host, rawName: "StoryboardIdentifier")
 
         return Struct(
@@ -48,16 +70,22 @@ extension StoryboardResource {
             name: identifier,
             protocols: [storyboardIdentifier]
         ) {
-            letIdentifier
+            letName
+
+            letbindings
         }
     }
+}
 
-    func generateLetBinding() -> LetBinding {
-        let code = "\"\(name)\""
+extension StoryboardResource.ViewController {
+
+    func generateLetBinding(identifier: String) -> LetBinding {
+        let type = TypeReference(module: .host, rawName: "ViewControllerIdentifier<\(self.type.rawName)>")
+        let code = #"ViewControllerIdentifier(identifier: "\#(identifier)")"#
         return LetBinding(
-            comments: ["Storyboard `\(name)`."],
             isStatic: true,
-            name: SwiftIdentifier(name: name),
+            name: SwiftIdentifier(name: identifier),
+            typeReference: type,
             valueCodeString: code)
     }
 }

@@ -77,6 +77,7 @@ public struct Segue {
             }
         }
 
+        // Deduplicate segues that are identical
         let deduplicatedSeguesWithInfo = Dictionary(grouping: allSegues, by: \.groupKey)
           .values
           .compactMap { $0.first }
