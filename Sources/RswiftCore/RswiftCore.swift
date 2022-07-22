@@ -96,7 +96,7 @@ public struct RswiftCore {
         let s = Struct(name: structName) {
             ImageResource.generateStruct(
                 resources: images,
-                namespaces: assetCatalogs.map(\.root),
+                catalogs: assetCatalogs,
                 name: SwiftIdentifier(name: "image"),
                 prefix: qualifiedName
             )
