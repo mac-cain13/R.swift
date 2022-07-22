@@ -54,15 +54,14 @@ extension ImageResource {
         let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
 
         let allNamespaces = namespaces.flatMap(\.subnamespaces)
-        let assetSubfolders = AssetCatalogSubfolders(
-          all: allNamespaces,
-          assetIdentifiers: allResources.map { SwiftIdentifier(name: $0.name) })
+        let otherIdentifiers = groupedResources.uniques.map { SwiftIdentifier(name: $0.name) }
+        let assetSubfolders = AssetCatalogMergedNamespaces(all: allNamespaces, otherIdentifiers: otherIdentifiers)
 
-        assetSubfolders.printWarningsForDuplicates { l in
+        assetSubfolders.printWarningsForDuplicates(result: "image") { l in
             print("warning:", l)
         }
 
-        let structs = assetSubfolders.folders.flatMap(\.subnamespaces)
+        let structs = assetSubfolders.namespaces
             .sorted { $0.name < $1.name }
             .map { namespace in
                 ImageResource.generateStruct(
@@ -73,8 +72,13 @@ extension ImageResource {
                 )
             }
             .filter { !$0.isEmpty }
-
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) images."]
+ 
+        let comment = [
+            "This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) images",
+            structs.isEmpty ? "" : ", and \(structs.count) namespaces",
+            "."
+        ].joined()
+        let comments = [comment]
         return Struct(comments: comments, name: structName) {
             letbindings
             structs

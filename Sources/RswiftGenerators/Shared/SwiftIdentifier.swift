@@ -65,6 +65,12 @@ struct SwiftNameGroups<T> {
     let duplicates: [(SwiftIdentifier, [String])] // Identifiers that result in duplicate Swift names
     let empties: [String] // Identifiers (wrapped in quotes) that result in empty swift names
 
+    // Example:
+    // source: "xib", container: nil, result: "file"
+    // "Skipping 1 xib, because ... for all these files"
+    //
+    // source: "segue", container: "for MyViewController", result: "segue"
+    // "Skipping 2 segues for MyViewController, because ... for all these segues"
     func reportWarningsForDuplicatesAndEmpties(source: String, container: String? = nil, result: String, warning: (String) -> Void) {
 
         let sourceSingular = [source, container].compactMap { $0 }.joined(separator: " ")

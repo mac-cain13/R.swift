@@ -515,6 +515,10 @@
 		D55C6CB01B5D757300301B0D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					one,
+					two,
+				);
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 1000;
 				LastUpgradeCheck = 1210;
