@@ -9,6 +9,10 @@
 
 import Foundation
 
+public protocol StoryboardIdentifier {
+    static var identifier: String { get }
+}
+
 public struct StoryboardResource {
     public let name: String
     public let locale: LocaleReference

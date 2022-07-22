@@ -95,7 +95,7 @@ public struct RswiftCore {
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
 
-        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
+//        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
 
 //        let imageStruct = ImageResource.generateStruct(
 //            resources: images,
@@ -103,12 +103,16 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
+//        let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
+
+        let storyboardStruct = StoryboardResource.generateStruct(storyboards: storyboards, prefix: qualifiedName)
 
         let s = Struct(name: structName) {
 //            imageStruct
 //            fontStruct
-            segueStruct
+//            segueStruct
+
+            storyboardStruct
         }
 
         print(s.prettyPrint())

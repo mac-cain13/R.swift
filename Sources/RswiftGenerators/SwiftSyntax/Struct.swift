@@ -102,15 +102,23 @@ public struct Struct {
     public let comments: [String]
     public var accessControl = AccessControl.none
     public let name: SwiftIdentifier
+    public var protocols: [TypeReference] = []
     public var lets: [LetBinding] = []
     public var structs: [Struct] = []
 
     public var isEmpty: Bool { lets.isEmpty && structs.isEmpty }
 
-    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, @StructMembersBuilder membersBuilder: () -> StructMembers) {
+    public init(
+        comments: [String] = [],
+        accessControl: AccessControl = AccessControl.none,
+        name: SwiftIdentifier,
+        protocols: [TypeReference] = [],
+        @StructMembersBuilder membersBuilder: () -> StructMembers
+    ) {
         self.comments = comments
         self.accessControl = accessControl
         self.name = name
+        self.protocols = protocols
         (self.lets, self.structs) = membersBuilder()
     }
 
@@ -124,7 +132,10 @@ public struct Struct {
         for c in comments {
             pp.append(words: ["///", c == "" ? nil : c])
         }
-        pp.append(line: "struct \(name.value) {")
+
+        let ps = protocols.map(\.rawName).joined(separator: ", ")
+        let implements = ps.isEmpty ? "" : ": \(ps)"
+        pp.append(line: "struct \(name.value)\(implements) {")
 
         pp.indented { pp in
             for letb in lets {
