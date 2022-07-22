@@ -20,6 +20,7 @@ public struct AssetCatalog {
 extension AssetCatalog {
     public struct Namespace {
         public let name: String
+        public let path: [String]
         public var subnamespaces: [Namespace] = []
         public var colors: [Color] = []
         public var images: [ImageResource] = []
@@ -27,12 +28,14 @@ extension AssetCatalog {
 
         public init(
             name: String,
+            path: [String],
             subnamespaces: [Namespace],
             colors: [Color],
             images: [ImageResource],
             dataAssets: [DataAsset]
         ) {
             self.name = name
+            self.path = path
             self.subnamespaces = subnamespaces
             self.colors = colors
             self.images = images
