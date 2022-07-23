@@ -13,10 +13,6 @@ public protocol AssetCatalogContent {
     func generateLetBinding() -> LetBinding
 }
 
-extension DataResource: AssetCatalogContent {}
-extension ColorResource: AssetCatalogContent {}
-extension ImageResource: AssetCatalogContent {}
-
 extension ColorResource {
     public static func generateStruct(catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
         let merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
@@ -88,7 +84,7 @@ extension AssetCatalog.Namespace {
     }
 }
 
-extension ColorResource {
+extension ColorResource: AssetCatalogContent {
     public func generateLetBinding() -> LetBinding {
         let fullname = (path + [name]).joined(separator: "/")
         let code = "ColorResource(name: \"\(fullname)\")"
@@ -101,7 +97,7 @@ extension ColorResource {
     }
 }
 
-extension DataResource {
+extension DataResource: AssetCatalogContent {
     public func generateLetBinding() -> LetBinding {
         let fullname = (path + [name]).joined(separator: "/")
         let code = "DataResource(name: \"\(fullname)\")"
@@ -114,7 +110,7 @@ extension DataResource {
     }
 }
 
-extension ImageResource {
+extension ImageResource: AssetCatalogContent {
     public func generateLetBinding() -> LetBinding {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"

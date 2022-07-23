@@ -56,7 +56,7 @@ public struct LetBinding {
             typeReference == nil ? name.value : "\(name.value):",
             typeReference?.rawName
         ]
-        if let valueCodeString {
+        if let valueCodeString = valueCodeString {
             words.append("=")
             words.append(valueCodeString)
         }
