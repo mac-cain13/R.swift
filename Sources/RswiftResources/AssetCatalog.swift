@@ -22,7 +22,7 @@ extension AssetCatalog {
         public var subnamespaces: [String: Namespace] = [:]
         public var colors: [ColorResource] = []
         public var images: [ImageResource] = []
-        public var dataAssets: [DataAssetResource] = []
+        public var dataAssets: [DataResource] = []
 
         public init() {
         }
@@ -31,7 +31,7 @@ extension AssetCatalog {
             subnamespaces: [String: Namespace],
             colors: [ColorResource],
             images: [ImageResource],
-            dataAssets: [DataAssetResource]
+            dataAssets: [DataResource]
         ) {
             self.subnamespaces = subnamespaces
             self.colors = colors

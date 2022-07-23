@@ -118,7 +118,7 @@ extension AssetCatalog: SupportedExtensions {
             images.append(.init(name: name, path: path, locale: nil, onDemandResourceTags: tags))
         }
 
-        var dataAssets: [DataAssetResource] = []
+        var dataAssets: [DataResource] = []
         for fileURL in directory.dataAssets {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)

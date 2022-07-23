@@ -97,9 +97,17 @@ public struct RswiftCore {
 
 //        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
 
-        let imageStruct = ImageResource.generateStruct(
+//        let imageStruct = ImageResource.generateStruct(
+//            catalogs: assetCatalogs,
+//            resources: images,
+//            prefix: qualifiedName
+//        )
+//        let colorStruct = ColorResource.generateStruct(
+//            catalogs: assetCatalogs,
+//            prefix: qualifiedName
+//        )
+        let dataStruct = DataResource.generateStruct(
             catalogs: assetCatalogs,
-            resources: images,
             prefix: qualifiedName
         )
 
@@ -108,7 +116,9 @@ public struct RswiftCore {
 //        let storyboardStruct = StoryboardResource.generateStruct(storyboards: storyboards, prefix: qualifiedName)
 
         let s = Struct(name: structName) {
-            imageStruct
+//            imageStruct
+//            colorStruct
+//            dataStruct
 //            fontStruct
 //            segueStruct
 
