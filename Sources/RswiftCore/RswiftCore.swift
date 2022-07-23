@@ -80,6 +80,10 @@ public struct RswiftCore {
             .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
             .map { try StoryboardResource.parse(url: $0) }
 
+        let nibs = try urls
+            .filter { NibResource.supportedExtensions.contains($0.pathExtension) }
+            .map { try NibResource.parse(url: $0) }
+
         let fonts = try urls
             .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
             .map { try FontResource.parse(url: $0) }
@@ -99,7 +103,7 @@ public struct RswiftCore {
 
 //        let imageStruct = ImageResource.generateStruct(
 //            catalogs: assetCatalogs,
-//            resources: images,
+//            toplevel: images,
 //            prefix: qualifiedName
 //        )
 //        let colorStruct = ColorResource.generateStruct(
@@ -111,10 +115,12 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let fileStruct = FileResource.generateStruct(
-            resources: files,
-            prefix: qualifiedName
-        )
+//        let fileStruct = FileResource.generateStruct(
+//            resources: files,
+//            prefix: qualifiedName
+//        )
+
+        let idStruct = AccessibilityIdentifier.generateStruct(nibs: nibs, storyboards: storyboards, prefix: qualifiedName)
 
 //        let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
 
@@ -126,7 +132,9 @@ public struct RswiftCore {
 //            dataStruct
 //            fontStruct
 //            segueStruct
-            fileStruct
+//            fileStruct
+
+            idStruct
 
 //            storyboardStruct
         }
