@@ -14,8 +14,6 @@ extension FileResource {
     // These are all extensions of resources that are passed to some special compiler step and not directly available at runtime
     static public let unsupportedExtensions: Set<String> = [
       AssetCatalog.supportedExtensions,
-      FontResource.supportedExtensions,
-      ImageResource.supportedExtensions,
       LocalizableStrings.supportedExtensions,
       NibResource.supportedExtensions,
       StoryboardResource.supportedExtensions,

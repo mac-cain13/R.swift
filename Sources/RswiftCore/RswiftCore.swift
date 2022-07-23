@@ -67,14 +67,14 @@ public struct RswiftCore {
             .filter { !ignoreFile.matches(url: $0) }
 
         let start = Date()
-        //        let items = try urls
-        //            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-        ////            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-        //            .map { try ImageResource.parse(url: $0, assetTags: nil) }
-        //        for item in items {
-        ////            print(">>>", item)
-        //            print(item.generateResourceLetCodeString())
-        //        }
+
+        let dontGenerateFileForFonts = false
+        let dontGenerateFileForImages = false
+        let files = try urls
+            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+            .filter { !(dontGenerateFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
+            .filter { !(dontGenerateFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
+            .map { try FileResource.parse(url: $0) }
 
         let storyboards = try urls
             .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
@@ -106,8 +106,13 @@ public struct RswiftCore {
 //            catalogs: assetCatalogs,
 //            prefix: qualifiedName
 //        )
-        let dataStruct = DataResource.generateStruct(
-            catalogs: assetCatalogs,
+//        let dataStruct = DataResource.generateStruct(
+//            catalogs: assetCatalogs,
+//            prefix: qualifiedName
+//        )
+
+        let fileStruct = FileResource.generateStruct(
+            resources: files,
             prefix: qualifiedName
         )
 
@@ -121,6 +126,7 @@ public struct RswiftCore {
 //            dataStruct
 //            fontStruct
 //            segueStruct
+            fileStruct
 
 //            storyboardStruct
         }

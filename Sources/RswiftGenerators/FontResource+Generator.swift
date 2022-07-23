@@ -9,15 +9,6 @@ import Foundation
 import RswiftResources
 
 extension FontResource {
-    func generateLetBinding() -> LetBinding {
-        let code = "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
-        return LetBinding(
-            comments: ["Font `\(name)`."],
-            isStatic: true,
-            name: SwiftIdentifier(name: name),
-            valueCodeString: code)
-    }
-
     public static func generateStruct(resources: [FontResource], prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "font")
         let qualifiedName = prefix + structName
@@ -33,5 +24,16 @@ extension FontResource {
         return Struct(comments: comments, name: structName) {
             letbindings
         }
+    }
+}
+
+extension FontResource {
+    func generateLetBinding() -> LetBinding {
+        let code = "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
+        return LetBinding(
+            comments: ["Font `\(name)`."],
+            isStatic: true,
+            name: SwiftIdentifier(name: name),
+            valueCodeString: code)
     }
 }
