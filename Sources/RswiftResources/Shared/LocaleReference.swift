@@ -67,4 +67,15 @@ extension LocaleReference {
             return language
         }
     }
+
+    public func debugDescription(filename: String) -> String {
+        switch self {
+        case .none:
+            return "'\(filename)'"
+        case .base:
+            return "'\(filename)' (Base)"
+        case .language(let language):
+            return "'\(filename)' (\(language))"
+        }
+    }
 }

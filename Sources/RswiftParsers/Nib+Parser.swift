@@ -46,12 +46,12 @@ extension NibResource: SupportedExtensions {
     }
 }
 
-private let ElementNameToTypeMapping = [
+private let ElementNameToTypeMapping: [String: TypeReference] = [
     // TODO: Should contain all standard view elements, like button -> UIButton, view -> UIView etc
-    "view": TypeReference._UIView,
-    "tableViewCell": TypeReference._UITableViewCell,
-    "collectionViewCell": TypeReference._UICollectionViewCell,
-    "collectionReusableView": TypeReference._UICollectionReusableView
+    "view": TypeReference.uiView,
+    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
+    "collectionViewCell": TypeReference(module: .uiKit, rawName: "UICollectionViewCell"),
+    "collectionReusableView": TypeReference(module: .uiKit, rawName: "UICollectionReusableView"),
 ]
 
 private class NibParserDelegate: NSObject, XMLParserDelegate {
@@ -137,7 +137,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        return customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference._UIView
+        return customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
     }
 
     func reusableFromAttributes(_ attributeDict: [String : String], elementName: String) -> Reusable? {
@@ -151,7 +151,7 @@ private class NibParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference._UIView
+        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
 
         return Reusable(identifier: reuseIdentifier, type: type)
     }

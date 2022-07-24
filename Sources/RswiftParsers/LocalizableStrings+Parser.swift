@@ -30,27 +30,14 @@ extension LocalizableStrings: SupportedExtensions {
         let dictionary: [LocalizableStrings.Key: LocalizableStrings.Value]
         switch url.pathExtension {
         case "strings":
-            dictionary = try parseStrings(nsDictionary, source: locale.withFilename("\(basename).strings"))
+            dictionary = try parseStrings(nsDictionary, source: locale.debugDescription(filename: "\(basename).strings"))
         case "stringsdict":
-            dictionary = try parseStringsdict(nsDictionary, source: locale.withFilename("\(basename).stringsdict"))
+            dictionary = try parseStringsdict(nsDictionary, source: locale.debugDescription(filename: "\(basename).stringsdict"))
         default:
             throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
         }
 
         return LocalizableStrings(filename: basename, locale: locale, dictionary: dictionary)
-    }
-}
-
-private extension LocaleReference {
-    func withFilename(_ filename: String) -> String {
-        switch self {
-        case .none:
-            return "'\(filename)'"
-        case .base:
-            return "'\(filename)' (Base)"
-        case .language(let language):
-            return "'\(filename)' (\(language))"
-        }
     }
 }
 
@@ -75,7 +62,7 @@ private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -
             }
 
 
-            dictionary[key] = .init(params: params, commentValue: val)
+            dictionary[key] = .init(params: params, originalValue: val)
         }
         else {
             throw ResourceParsingError("Non-string value in \(source): \(key) = \(obj)")
@@ -99,7 +86,7 @@ private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) thro
 
             do {
                 let params = try parseStringsdictParams(localizedFormat, dict: dict)
-                dictionary[key] = .init(params: params, commentValue: localizedFormat)
+                dictionary[key] = .init(params: params, originalValue: localizedFormat)
             } catch let error as ResourceParsingError {
                 // TODO: Log warning
 //                warn("\(error) in '\(key)' \(source)")

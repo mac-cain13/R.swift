@@ -1,5 +1,5 @@
 //
-//  StringParam.swift
+//  FormatPart.swift
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-04-18.
@@ -17,41 +17,9 @@
 import Foundation
 import RswiftResources
 
-extension StringParam: Unifiable {
-    public func unify(_ other: StringParam) -> StringParam? {
-        if let name = name, let otherName = other.name , name != otherName {
-            return nil
-        }
-
-        if let spec = spec.unify(other.spec) {
-            return StringParam(name: name ?? other.name, spec: spec)
-        }
-
-        return nil
-    }
-}
-
-extension FormatPart: Unifiable {
+extension FormatPart {
     static public func formatParts(formatString: String) -> [FormatPart] {
         createFormatParts(formatString)
-    }
-
-    public func unify(_ other: FormatPart) -> FormatPart? {
-        switch (self, other) {
-        case let (.spec(l), .spec(r)):
-            if let spec = l.unify(r) {
-                return .spec(spec)
-            }
-            else {
-                return nil
-            }
-
-        case let (.reference(l), .reference(r)) where l == r:
-            return .reference(l)
-
-        default:
-            return nil
-        }
     }
 }
 
@@ -59,27 +27,27 @@ extension FormatSpecifier {
     var type: TypeReference {
         switch self {
         case .object:
-            return ._String
+            return TypeReference(module: .stdLib, rawName: "String")
         case .double:
-            return ._Double
+            return TypeReference(module: .stdLib, rawName: "Double")
         case .int:
-            return ._Int
+            return TypeReference(module: .stdLib, rawName: "Int")
         case .uInt:
-            return ._UInt
+            return TypeReference(module: .stdLib, rawName: "UInt")
         case .character:
-            return ._Character
+            return TypeReference(module: .stdLib, rawName: "Character")
         case .cStringPointer:
-            return ._CStringPointer
+            return TypeReference(module: .stdLib, rawName: "UnsafePointer<CChar>")
         case .voidPointer:
-            return ._VoidPointer
+            return TypeReference(module: .stdLib, rawName: "UnsafePointer<Void>")
         case .topType:
-            return ._Any
+            return TypeReference(module: .stdLib, rawName: "Any")
         }
     }
 }
 
-extension FormatSpecifier : Unifiable {
-
+// https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1
+extension FormatSpecifier {
     // Convenience initializer, uses last character of string,
     // ignoring lengt modifiers, e.g. "lld"
     public init?(formatString string: String) {
@@ -110,22 +78,6 @@ extension FormatSpecifier : Unifiable {
         default:
             return nil
         }
-    }
-
-    public func unify(_ other: FormatSpecifier) -> FormatSpecifier? {
-        if self == .topType {
-            return other
-        }
-
-        if other == .topType {
-            return self
-        }
-
-        if self == other {
-            return self
-        }
-
-        return nil
     }
 }
 

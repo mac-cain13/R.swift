@@ -95,6 +95,10 @@ public struct RswiftCore {
             .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
             .map { try AssetCatalog.parse(url: $0) }
 
+        let localizableStrings = try urls
+            .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
+            .map { try LocalizableStrings.parse(url: $0) }
+
 
         let infoplist = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/Info.plist")
         let entitlementsURL = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/ResourceApp.entitlements")
@@ -164,13 +168,19 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let nibStruct = NibResource.generateStruct(
-            nibs: nibs,
+//        let nibStruct = NibResource.generateStruct(
+//            nibs: nibs,
+//            prefix: qualifiedName
+//        )
+
+        let stringStruct = LocalizableStrings.generateStruct(
+            resources: localizableStrings,
+            developmentLanguage: xcodeproj.developmentLanguage,
             prefix: qualifiedName
         )
 
         let s = Struct(name: structName) {
-            nibStruct
+            stringStruct
         }
 
         print(s.prettyPrint())

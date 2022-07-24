@@ -15,7 +15,7 @@ public struct Xcodeproj: SupportedExtensions {
 
     private let projectFile: XCProjectFile
 
-    let developmentLanguage: String
+    public let developmentLanguage: String
 
     public init(url: URL, warning: (String) -> Void) throws {
         try Xcodeproj.throwIfUnsupportedExtension(url)

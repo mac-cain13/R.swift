@@ -13,11 +13,11 @@ public struct LocalizableStrings {
     public typealias Key = String
     public struct Value {
         public let params: [StringParam]
-        public let commentValue: String
+        public let originalValue: String
 
-        public init(params: [StringParam], commentValue: String) {
+        public init(params: [StringParam], originalValue: String) {
             self.params = params
-            self.commentValue = commentValue
+            self.originalValue = originalValue
         }
     }
 

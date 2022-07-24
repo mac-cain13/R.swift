@@ -49,7 +49,7 @@ extension StoryboardResource: SupportedExtensions {
 }
 
 private let ElementNameToTypeMapping: [String: TypeReference] = [
-    "viewController": TypeReference._UIViewController,
+    "viewController": TypeReference(module: .uiKit, rawName: "UIViewController"),
     "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
     "tabBarController": TypeReference(module: .uiKit, rawName: "UITabBarController"),
     "glkViewController": TypeReference(module: .custom(name: "GLKit"), rawName: "GLKViewController"),
@@ -105,7 +105,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
                let destination = attributeDict["destination"],
                let kind = attributeDict["kind"]
             {
-                let type = customType ?? TypeReference._UIStoryboardSegue
+                let type = customType ?? TypeReference.uiStoryboardSegue
 
                 let segue = StoryboardResource.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
                 currentViewController?.segues.append(segue)
@@ -183,7 +183,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference._UIViewController
+        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiViewController
 
         return StoryboardResource.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
     }
@@ -199,7 +199,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference._UIView
+        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
 
         return Reusable(identifier: reuseIdentifier, type: type)
     }
