@@ -186,6 +186,9 @@ public struct Struct {
 
         pp.indented { pp in
             for st in structs {
+                if !st.comments.isEmpty {
+                    pp.append(line: "")
+                }
                 st.render(&pp)
             }
         }

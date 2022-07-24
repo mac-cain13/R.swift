@@ -51,7 +51,6 @@ extension FormatPart: Unifiable {
 }
 
 extension FormatSpecifier: Unifiable {
-
     public func unify(_ other: FormatSpecifier) -> FormatSpecifier? {
         if self == .topType {
             return other
@@ -66,5 +65,28 @@ extension FormatSpecifier: Unifiable {
         }
 
         return nil
+    }
+}
+
+extension FormatSpecifier {
+    public var typeReference: TypeReference {
+        switch self {
+        case .object:
+            return TypeReference(module: .stdLib, rawName: "String")
+        case .double:
+            return TypeReference(module: .stdLib, rawName: "Double")
+        case .int:
+            return TypeReference(module: .stdLib, rawName: "Int")
+        case .uInt:
+            return TypeReference(module: .stdLib, rawName: "UInt")
+        case .character:
+            return TypeReference(module: .stdLib, rawName: "Character")
+        case .cStringPointer:
+            return TypeReference(module: .stdLib, rawName: "UnsafePointer<CChar>")
+        case .voidPointer:
+            return TypeReference(module: .stdLib, rawName: "UnsafePointer<Void>")
+        case .topType:
+            return TypeReference(module: .stdLib, rawName: "Any")
+        }
     }
 }

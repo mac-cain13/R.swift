@@ -23,29 +23,6 @@ extension FormatPart {
     }
 }
 
-extension FormatSpecifier {
-    var type: TypeReference {
-        switch self {
-        case .object:
-            return TypeReference(module: .stdLib, rawName: "String")
-        case .double:
-            return TypeReference(module: .stdLib, rawName: "Double")
-        case .int:
-            return TypeReference(module: .stdLib, rawName: "Int")
-        case .uInt:
-            return TypeReference(module: .stdLib, rawName: "UInt")
-        case .character:
-            return TypeReference(module: .stdLib, rawName: "Character")
-        case .cStringPointer:
-            return TypeReference(module: .stdLib, rawName: "UnsafePointer<CChar>")
-        case .voidPointer:
-            return TypeReference(module: .stdLib, rawName: "UnsafePointer<Void>")
-        case .topType:
-            return TypeReference(module: .stdLib, rawName: "Any")
-        }
-    }
-}
-
 // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1
 extension FormatSpecifier {
     // Convenience initializer, uses last character of string,

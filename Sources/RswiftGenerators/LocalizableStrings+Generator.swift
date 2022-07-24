@@ -208,7 +208,16 @@ private struct StringWithParams {
     }
 
     private var valueCodeString: String {
-        #"StringResource(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", locales: "\#(values.compactMap(\.0.language))""#
+        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", developmentValue: "\#(developmentValue)", locales: \#(values.compactMap(\.0.language))"#
+    }
+
+    private var typeName: String {
+        "StringResource"
+        + (params.isEmpty ? "" : "\(params.count)<\(params.map(\.spec.typeReference.rawName).joined(separator: ", "))>")
+    }
+
+    private var developmentValue: String {
+        values.first(where: { $0.0.localeDescription == developmentLanguage })?.1 ?? ""
     }
 
     private var primaryLanguageValues:  [(LocaleReference, String)] {

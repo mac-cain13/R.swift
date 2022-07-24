@@ -59,7 +59,7 @@ public struct RswiftCore {
         let ignoreFile = (try? IgnoreFile(ignoreFileURL: rswiftIgnoreURL)) ?? IgnoreFile()
         let xcodeproj = try! Xcodeproj(url: xcodeprojURL, warning: { print($0) })
 
-        let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
+    let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
 
         let paths = try xcodeproj.resourcePaths(forTarget: targetName)
         let urls = paths
