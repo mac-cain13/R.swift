@@ -158,14 +158,19 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let reuseIdentifierStruct = Reusable.generateStruct(
+//        let reuseIdentifierStruct = Reusable.generateStruct(
+//            nibs: nibs,
+//            storyboards: storyboards,
+//            prefix: qualifiedName
+//        )
+
+        let nibStruct = NibResource.generateStruct(
             nibs: nibs,
-            storyboards: storyboards,
             prefix: qualifiedName
         )
 
         let s = Struct(name: structName) {
-            reuseIdentifierStruct
+            nibStruct
         }
 
         print(s.prettyPrint())

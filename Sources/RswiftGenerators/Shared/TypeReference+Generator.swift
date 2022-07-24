@@ -25,4 +25,7 @@ extension TypeReference {
             return rawName
         }
     }
+
+    static var uiView: TypeReference = .init(module: .uiKit, rawName: "UIView")
+    static var uiViewController: TypeReference = .init(module: .uiKit, rawName: "UIViewController")
 }
