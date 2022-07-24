@@ -63,7 +63,7 @@ extension StoryboardResource {
             valueCodeString: "\"\(name)\"")
 
         let identifier = SwiftIdentifier(name: name)
-        let storyboardIdentifier = TypeReference(module: .host, rawName: "StoryboardIdentifier")
+        let storyboardIdentifier = TypeReference(module: .rswift, rawName: "StoryboardIdentifier")
 
         return Struct(
             comments: ["Storyboard `\(name)`."],
@@ -79,13 +79,20 @@ extension StoryboardResource {
 
 extension StoryboardResource.ViewController {
 
+    var genericTypeReference: TypeReference {
+        TypeReference(
+            module: .rswift,
+            name: "ViewControllerIdentifier",
+            genericArgs: [self.type]
+        )
+    }
+
     func generateLetBinding(identifier: String) -> LetBinding {
-        let type = TypeReference(module: .host, rawName: "ViewControllerIdentifier<\(self.type.rawName)>")
-        let code = #"ViewControllerIdentifier(identifier: "\#(identifier)")"#
-        return LetBinding(
+        LetBinding(
             isStatic: true,
             name: SwiftIdentifier(name: identifier),
-            typeReference: type,
-            valueCodeString: code)
+            typeReference: genericTypeReference,
+            valueCodeString: #"ViewControllerIdentifier(identifier: "\#(identifier)")"#
+        )
     }
 }

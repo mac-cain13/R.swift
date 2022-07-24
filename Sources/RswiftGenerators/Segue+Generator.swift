@@ -86,7 +86,7 @@ public struct Segue {
     }
 
     private static func resolveDestinationType(for segue: StoryboardResource.Segue, inViewController: StoryboardResource.ViewController, inStoryboard storyboard: StoryboardResource, allStoryboards storyboards: [StoryboardResource]) -> TypeReference? {
-        let uiViewController = TypeReference(module: .custom(name: "UIKit"), rawName: "UIViewController")
+        let uiViewController = TypeReference(module: .uiKit, rawName: "UIViewController")
 
         if segue.kind == "unwind" {
             return uiViewController
@@ -157,12 +157,14 @@ struct SegueWithInfo {
 
     var genericTypeReference: TypeReference {
         TypeReference(
-            module: .host,
-            rawName: "SegueIdentifier<\(segue.type.rawName), \(sourceType.rawName), \(destinationType.rawName)>")
+            module: .rswift,
+            name: "SegueIdentifier",
+            genericArgs: [segue.type, sourceType, destinationType]
+        )
     }
 
     func generateLetBinding() -> LetBinding {
-        return LetBinding(
+        LetBinding(
             comments: ["Segue identifier `\(segue.identifier)`."],
             isStatic: true,
             name: SwiftIdentifier(name: segue.identifier),

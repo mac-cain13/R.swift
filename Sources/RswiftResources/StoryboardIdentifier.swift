@@ -19,6 +19,14 @@ public struct ViewControllerIdentifier<ViewController> {
     }
 }
 
+public struct ReuseIdentifier<Reusable> {
+    public let identifier: String
+
+    public init(identifier: String) {
+        self.identifier = identifier
+    }
+}
+
 public struct SegueIdentifier<Segue, Source, Destination> {
     public let identifier: String
 

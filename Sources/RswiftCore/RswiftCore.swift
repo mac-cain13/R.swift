@@ -144,12 +144,12 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let infoStruct = PropertyListResource.generateStruct(
-            resourceName: "info",
-            plists: [plist],
-            toplevelKeysWhitelist: infoPlistWhitelist,
-            prefix: qualifiedName
-        )
+//        let infoStruct = PropertyListResource.generateStruct(
+//            resourceName: "info",
+//            plists: [plist],
+//            toplevelKeysWhitelist: infoPlistWhitelist,
+//            prefix: qualifiedName
+//        )
 
 //        let entitlementsStruct = PropertyListResource.generateStruct(
 //            resourceName: "entitlements",
@@ -158,8 +158,14 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
+        let reuseIdentifierStruct = Reusable.generateStruct(
+            nibs: nibs,
+            storyboards: storyboards,
+            prefix: qualifiedName
+        )
+
         let s = Struct(name: structName) {
-            infoStruct
+            reuseIdentifierStruct
         }
 
         print(s.prettyPrint())
