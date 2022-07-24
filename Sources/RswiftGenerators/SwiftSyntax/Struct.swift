@@ -69,32 +69,62 @@ public struct LetBinding {
 }
 
 
-public typealias StructMembers = ([LetBinding], [Struct])
+public struct StructMembers {
+    var lets: [LetBinding] = []
+    var structs: [Struct] = []
+
+    func sorted() -> StructMembers {
+        var new = self
+        new.lets.sort { $0.name < $1.name }
+        new.structs.sort { $0.name < $1.name }
+        return new
+    }
+}
 
 @resultBuilder
 public struct StructMembersBuilder {
     public static func buildExpression(_ expression: LetBinding) -> StructMembers {
-        ([expression], [])
+        StructMembers(lets: [expression])
     }
 
     public static func buildExpression(_ expressions: [LetBinding]) -> StructMembers {
-        (expressions, [])
+        StructMembers(lets: expressions)
     }
 
     public static func buildExpression(_ expression: Struct) -> StructMembers {
-        ([], [expression])
+        StructMembers(structs: [expression])
     }
 
     public static func buildExpression(_ expressions: [Struct]) -> StructMembers {
-        ([], expressions)
+        StructMembers(structs: expressions)
+    }
+
+    public static func buildExpression(_ members: StructMembers) -> StructMembers {
+        members
+    }
+
+    public static func buildExpression(_ members: Void) -> StructMembers {
+        StructMembers()
     }
 
     public static func buildArray(_ members: [StructMembers]) -> StructMembers {
-        (members.flatMap(\.0), members.flatMap(\.1))
+        StructMembers(lets: members.flatMap(\.lets), structs: members.flatMap(\.structs))
+    }
+
+    public static func buildEither(first component: StructMembers) -> StructMembers {
+        component
+    }
+
+    public static func buildEither(second component: StructMembers) -> StructMembers {
+        component
+    }
+
+    public static func buildOptional(_ component: StructMembers?) -> StructMembers {
+        component ?? StructMembers()
     }
 
     public static func buildBlock(_ members: StructMembers...) -> StructMembers {
-        (members.flatMap(\.0), members.flatMap(\.1))
+        StructMembers(lets: members.flatMap(\.lets), structs: members.flatMap(\.structs))
     }
 }
 
@@ -108,6 +138,8 @@ public struct Struct {
 
     public var isEmpty: Bool { lets.isEmpty && structs.isEmpty }
 
+    public static var empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
+
     public init(
         comments: [String] = [],
         accessControl: AccessControl = AccessControl.none,
@@ -119,7 +151,9 @@ public struct Struct {
         self.accessControl = accessControl
         self.name = name
         self.protocols = protocols
-        (self.lets, self.structs) = membersBuilder()
+        let members = membersBuilder()
+        self.lets = members.lets
+        self.structs = members.structs
     }
 
     public func prettyPrint() -> String {

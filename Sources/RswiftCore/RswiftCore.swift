@@ -96,6 +96,14 @@ public struct RswiftCore {
             .map { try AssetCatalog.parse(url: $0) }
 
 
+        let infoplist = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/Info.plist")
+        let entitlementsURL = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/ResourceApp.entitlements")
+        let plist = try PropertyListResource.parse(url: infoplist, buildConfigurationName: "ResourceApp")
+        let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
+
+//        let entitlements = try PropertyListResource.parse(url: entitlementsURL, buildConfigurationName: "ResourceApp")
+
+
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
 
@@ -120,23 +128,38 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let idStruct = AccessibilityIdentifier.generateStruct(nibs: nibs, storyboards: storyboards, prefix: qualifiedName)
+//        let idStruct = AccessibilityIdentifier.generateStruct(
+//            nibs: nibs,
+//            storyboards: storyboards,
+//            prefix: qualifiedName
+//        )
 
-//        let fontStruct = FontResource.generateStruct(resources: fonts, prefix: qualifiedName)
+//        let fontStruct = FontResource.generateStruct(
+//            resources: fonts,
+//            prefix: qualifiedName
+//        )
 
-//        let storyboardStruct = StoryboardResource.generateStruct(storyboards: storyboards, prefix: qualifiedName)
+//        let storyboardStruct = StoryboardResource.generateStruct(
+//            storyboards: storyboards,
+//            prefix: qualifiedName
+//        )
+
+        let infoStruct = PropertyListResource.generateStruct(
+            resourceName: "info",
+            plists: [plist],
+            toplevelKeysWhitelist: infoPlistWhitelist,
+            prefix: qualifiedName
+        )
+
+//        let entitlementsStruct = PropertyListResource.generateStruct(
+//            resourceName: "entitlements",
+//            plists: [entitlements],
+//            toplevelKeysWhitelist: nil,
+//            prefix: qualifiedName
+//        )
 
         let s = Struct(name: structName) {
-//            imageStruct
-//            colorStruct
-//            dataStruct
-//            fontStruct
-//            segueStruct
-//            fileStruct
-
-            idStruct
-
-//            storyboardStruct
+            infoStruct
         }
 
         print(s.prettyPrint())
