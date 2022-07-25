@@ -179,8 +179,16 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
+        let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
+            LetBinding(name: SwiftIdentifier(name: "developmentLanguage"), valueCodeString: #""\#(xcodeproj.developmentLanguage)""#)
+
+            if let knownAssetTags = xcodeproj.knownAssetTags {
+                LetBinding(name: SwiftIdentifier(name: "knownAssetTags"), valueCodeString: "\(knownAssetTags)")
+            }
+        }
+
         let s = Struct(name: structName) {
-            stringStruct
+            projectStruct
         }
 
         print(s.prettyPrint())

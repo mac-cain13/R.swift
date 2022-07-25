@@ -16,6 +16,7 @@ public struct Xcodeproj: SupportedExtensions {
     private let projectFile: XCProjectFile
 
     public let developmentLanguage: String
+    public let knownAssetTags: [String]?
 
     public init(url: URL, warning: (String) -> Void) throws {
         try Xcodeproj.throwIfUnsupportedExtension(url)
@@ -38,6 +39,7 @@ public struct Xcodeproj: SupportedExtensions {
 
         self.projectFile = projectFile
         self.developmentLanguage = projectFile.project.developmentRegion
+        self.knownAssetTags = projectFile.project.knownAssetTags
     }
 
     private func findTarget(name: String) throws -> PBXTarget {
