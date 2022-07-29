@@ -68,6 +68,41 @@ public struct LetBinding {
     }
 }
 
+public struct VarGetter {
+    public let comments: [String]
+    public var accessControl = AccessControl.none
+    public let name: SwiftIdentifier
+    public let typeReference: TypeReference
+    public let valueCodeString: String
+
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isLazy: Bool = false, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String) {
+        self.comments = comments
+        self.accessControl = accessControl
+        self.name = name
+        self.typeReference = typeReference
+        self.valueCodeString = valueCodeString
+    }
+
+    func render(_ pp: inout PrettyPrinter) {
+        let words: [String?] = [
+            accessControl.code(),
+            "var",
+            "\(name.value):",
+            typeReference.codeString(),
+            "{",
+        ]
+
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+        pp.append(words: words)
+        pp.indented { pp in
+            pp.append(line: valueCodeString)
+        }
+        pp.append(line: "}")
+    }
+}
+
 
 public struct Function {
     public let comments: [String]
@@ -78,7 +113,7 @@ public struct Function {
     public let returnType: TypeReference
     public let valueCodeString: String
 
-    public init(comments: [String], accessControl: AccessControl = AccessControl.none, isStatic: Bool, name: SwiftIdentifier, params: [Parameter], returnType: TypeReference, valueCodeString: String) {
+    public init(comments: [String], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, params: [Parameter], returnType: TypeReference, valueCodeString: String) {
         self.comments = comments
         self.accessControl = accessControl
         self.isStatic = isStatic
@@ -137,6 +172,7 @@ public struct Struct {
     public let name: SwiftIdentifier
     public var protocols: [TypeReference] = []
     public var lets: [LetBinding] = []
+    public var vars: [VarGetter] = []
     public var funcs: [Function] = []
     public var structs: [Struct] = []
 
@@ -155,8 +191,10 @@ public struct Struct {
         self.accessControl = accessControl
         self.name = name
         self.protocols = protocols
+
         let members = membersBuilder()
         self.lets = members.lets
+        self.vars = members.vars
         self.funcs = members.funcs
         self.structs = members.structs
     }
@@ -185,7 +223,20 @@ public struct Struct {
             }
         }
 
-        if !lets.isEmpty && !funcs.isEmpty {
+        if !lets.isEmpty && !vars.isEmpty {
+            pp.append(line: "")
+        }
+
+        pp.indented { pp in
+            for varb in vars {
+                if !varb.comments.isEmpty {
+                    pp.append(line: "")
+                }
+                varb.render(&pp)
+            }
+        }
+
+        if !vars.isEmpty && !funcs.isEmpty {
             pp.append(line: "")
         }
 

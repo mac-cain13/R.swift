@@ -15,7 +15,7 @@ public struct Xcodeproj: SupportedExtensions {
 
     private let projectFile: XCProjectFile
 
-    public let developmentLanguage: String
+    public let developmentRegion: String
     public let knownAssetTags: [String]?
 
     public init(url: URL, warning: (String) -> Void) throws {
@@ -38,7 +38,7 @@ public struct Xcodeproj: SupportedExtensions {
         }
 
         self.projectFile = projectFile
-        self.developmentLanguage = projectFile.project.developmentRegion
+        self.developmentRegion = projectFile.project.developmentRegion
         self.knownAssetTags = projectFile.project.knownAssetTags
     }
 

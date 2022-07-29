@@ -43,13 +43,13 @@ extension LocalizableStrings {
         let qualifiedName = prefix + structName
 
         let strings = computeStringsWithParams(filename: filename, resources: resources, developmentLanguage: developmentLanguage, warning: warning)
-        let letbindings = strings.map { $0.generateLetBinding() }
+        let vargetters = strings.map { $0.generateVarGetter() }
         let functions = strings.filter { $0.params.count > 0 }.map { $0.generateFunction() }
 
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) localization keys."]
+        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) localization keys."]
 
         return Struct(comments: comments, name: structName) {
-            letbindings
+            vargetters
             functions
         }
     }
@@ -201,19 +201,19 @@ private struct StringWithParams {
     let values: [(LocaleReference, String)]
     let developmentLanguage: String
 
-    func generateLetBinding() -> LetBinding {
-        LetBinding(
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
             comments: self.comments,
-            isStatic: true,
+            isLazy: true,
             name: SwiftIdentifier(name: key),
-            valueCodeString: letValueCodeString
+            typeReference: typeReference,
+            valueCodeString: varValueCodeString
         )
     }
 
     func generateFunction() -> Function {
         Function(
             comments: self.comments,
-            isStatic: true,
             name: SwiftIdentifier(name: key),
             params: zip(params.indices, params).map { (ix, p) in
                 .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
@@ -223,19 +223,23 @@ private struct StringWithParams {
         )
     }
 
-    private var letValueCodeString: String {
-        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", locales: \#(values.compactMap(\.0.localeDescription)), developmentValue: "\#(developmentValue)")"#
+
+    private var varValueCodeString: String {
+        #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: _bundle, locale: _locale, defaultValue: "\#(fallbackValue.escapedStringLiteral)", comment: nil)"#
     }
 
     private var funcBodyCodeString: String {
-
-        var args = params.indices.map { "value\($0 + 1)" }
-        args.insert("format: format", at: 0)
+        let ps = params.indices.map { "value\($0 + 1)" }
+        let args = ["format: format", "locale: _locale"] + ps
 
         return """
-        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", comment: "")
+        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: _bundle, value: "\(fallbackValue.escapedStringLiteral)", comment: "")
         return String(\(args.joined(separator: ", ")))
         """
+    }
+
+    private var typeReference: TypeReference {
+        TypeReference(module: .host, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
     }
 
     private var typeName: String {
@@ -243,12 +247,12 @@ private struct StringWithParams {
         + (params.isEmpty ? "" : "\(params.count)<\(params.map(\.spec.typeReference.rawName).joined(separator: ", "))>")
     }
 
-    private var developmentValue: String {
-        values.first(where: { $0.0.localeDescription == developmentLanguage })?.1 ?? ""
+    private var primaryLanguageValues: [(LocaleReference, String)] {
+        values.filter { $0.0.isBase } + values.filter { $0.0.localeDescription == developmentLanguage }
     }
 
-    private var primaryLanguageValues:  [(LocaleReference, String)] {
-        return values.filter { $0.0.isBase } + values.filter { $0.0.localeDescription == developmentLanguage }
+    private var fallbackValue: String {
+        (primaryLanguageValues + values).first?.1 ?? ""
     }
 
     private var comments: [String] {
@@ -257,6 +261,7 @@ private struct StringWithParams {
         let anyNone = values.contains { $0.0.isNone }
         let vs = primaryLanguageValues + values
 
+        // Value
         if let (locale, value) = vs.first {
             if let localeDescription = locale.localeDescription {
                 let str = "\(localeDescription) translation: \(value)".commentString
@@ -268,6 +273,13 @@ private struct StringWithParams {
             }
         }
 
+        // Key
+        if !results.isEmpty {
+            results.append("")
+        }
+        results.append("Key: \(key)".commentString)
+
+        // Locales
         if !anyNone {
             if !results.isEmpty {
                 results.append("")

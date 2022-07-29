@@ -9,12 +9,14 @@ import Foundation
 
 public struct StructMembers {
     var lets: [LetBinding] = []
+    var vars: [VarGetter] = []
     var funcs: [Function] = []
     var structs: [Struct] = []
 
     func sorted() -> StructMembers {
         var new = self
         new.lets.sort { $0.name < $1.name }
+        new.vars.sort { $0.name < $1.name }
         new.funcs.sort { $0.name < $1.name }
         new.structs.sort { $0.name < $1.name }
         return new
@@ -33,6 +35,14 @@ public struct StructMembersBuilder {
 
     public static func buildExpression(_ expressions: [LetBinding]) -> StructMembers {
         StructMembers(lets: expressions)
+    }
+
+    public static func buildExpression(_ expression: VarGetter) -> StructMembers {
+        StructMembers(vars: [expression])
+    }
+
+    public static func buildExpression(_ expressions: [VarGetter]) -> StructMembers {
+        StructMembers(vars: expressions)
     }
 
     public static func buildExpression(_ expression: Function) -> StructMembers {
@@ -58,6 +68,7 @@ public struct StructMembersBuilder {
     public static func buildArray(_ members: [StructMembers]) -> StructMembers {
         StructMembers(
             lets: members.flatMap(\.lets),
+            vars: members.flatMap(\.vars),
             funcs: members.flatMap(\.funcs),
             structs: members.flatMap(\.structs)
         )
@@ -66,6 +77,7 @@ public struct StructMembersBuilder {
     public static func buildBlock(_ members: StructMembers...) -> StructMembers {
         StructMembers(
             lets: members.flatMap(\.lets),
+            vars: members.flatMap(\.vars),
             funcs: members.flatMap(\.funcs),
             structs: members.flatMap(\.structs)
         )

@@ -123,12 +123,12 @@ public struct RswiftCore {
 
         let stringStruct = LocalizableStrings.generateStruct(
             resources: project.localizableStrings,
-            developmentLanguage: project.xcodeproj.developmentLanguage,
+            developmentLanguage: project.xcodeproj.developmentRegion,
             prefix: qualifiedName
         )
 
         let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
-            LetBinding(name: SwiftIdentifier(name: "developmentLanguage"), valueCodeString: #""\#(project.xcodeproj.developmentLanguage)""#)
+            LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(project.xcodeproj.developmentRegion)""#)
 
             if let knownAssetTags = project.xcodeproj.knownAssetTags {
                 LetBinding(name: SwiftIdentifier(name: "knownAssetTags"), valueCodeString: "\(knownAssetTags)")
