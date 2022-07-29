@@ -44,9 +44,7 @@ extension LocalizableStrings {
 
         let strings = computeStringsWithParams(filename: filename, resources: resources, developmentLanguage: developmentLanguage, warning: warning)
         let letbindings = strings.map { $0.generateLetBinding() }
-        let functions = strings
-            .filter { $0.params.count > 0 }
-            .map { $0.generateFunction() }
+        let functions = strings.filter { $0.params.count > 0 }.map { $0.generateFunction() }
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) localization keys."]
 
@@ -63,7 +61,7 @@ extension LocalizableStrings {
         let primaryLanguage: String
         let primaryKeys: Set<String>?
         let bases = resources.filter { $0.locale.isBase }
-        let developments = resources.filter { $0.locale.language == developmentLanguage }
+        let developments = resources.filter { $0.locale.localeDescription == developmentLanguage }
 
         if !bases.isEmpty {
             primaryKeys = Set(bases.flatMap { $0.dictionary.keys })
@@ -226,7 +224,7 @@ private struct StringWithParams {
     }
 
     private var letValueCodeString: String {
-        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", locales: \#(values.compactMap(\.0.language)), developmentValue: "\#(developmentValue)")"#
+        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", locales: \#(values.compactMap(\.0.localeDescription)), developmentValue: "\#(developmentValue)")"#
     }
 
     private var funcBodyCodeString: String {
@@ -250,7 +248,7 @@ private struct StringWithParams {
     }
 
     private var primaryLanguageValues:  [(LocaleReference, String)] {
-        return values.filter { $0.0.isBase } + values.filter { $0.0.language == developmentLanguage }
+        return values.filter { $0.0.isBase } + values.filter { $0.0.localeDescription == developmentLanguage }
     }
 
     private var comments: [String] {

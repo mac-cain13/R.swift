@@ -29,14 +29,6 @@ public enum LocaleReference: Hashable {
 
         return false
     }
-
-    public var language: String? {
-        if case .language(let language) = self {
-            return language
-        }
-
-        return nil
-    }
 }
 
 extension LocaleReference {
