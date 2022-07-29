@@ -10,7 +10,7 @@ import RswiftResources
 
 extension LocalizableStrings {
     public static func generateStruct(resources: [LocalizableStrings], developmentLanguage: String, prefix: SwiftIdentifier) -> Struct {
-        let structName = SwiftIdentifier(name: "string")
+        let structName = SwiftIdentifier(name: "string", lowercaseStartingCharacters: false)
         let qualifiedName = prefix + structName
         let warning: (String) -> Void = { print("warning:", $0) }
 
@@ -33,6 +33,12 @@ extension LocalizableStrings {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."]
 
         return Struct(comments: comments, name: structName) {
+            Init.bundle
+            for name in groupedLocalized.uniques.map(\.0) {
+                generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name))
+                generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
+                generatePreferredLanguagesFunction(name: SwiftIdentifier(name: name), tableName: name)
+            }
             structs
         }
     }
@@ -49,9 +55,49 @@ extension LocalizableStrings {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) localization keys."]
 
         return Struct(comments: comments, name: structName) {
+            Init.bundleLocale
             vargetters
             functions
         }
+    }
+
+    public static func generateBundleLocaleVarGetter(name: SwiftIdentifier) -> VarGetter {
+        VarGetter(
+            name: name,
+            typeReference: TypeReference(module: .host, rawName: name.value),
+            valueCodeString: ".init(bundle: _bundle, locale: _bundle.firstPreferredLocale)"
+        )
+    }
+
+    public static func generateBundleLocaleFunction(name: SwiftIdentifier) -> Function {
+        Function(
+            comments: [],
+            name: name,
+            params: [
+                .init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),
+                .init(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil),
+            ],
+            returnType: TypeReference(module: .host, rawName: name.value),
+            valueCodeString: ".init(bundle: bundle, locale: locale)"
+        )
+    }
+
+    public static func generatePreferredLanguagesFunction(name: SwiftIdentifier, tableName: String) -> Function {
+        Function(
+            comments: [],
+            name: name,
+            params: [
+                .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil),
+            ],
+            returnType: TypeReference(module: .host, rawName: name.value),
+            valueCodeString: """
+                if let (bundle, locale) = _bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) {
+                    return .init(bundle: bundle, locale: locale)
+                } else {
+                    return .init(bundle: _bundle, locale: _bundle.firstPreferredLocale)
+                }
+                """
+        )
     }
 
     // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)

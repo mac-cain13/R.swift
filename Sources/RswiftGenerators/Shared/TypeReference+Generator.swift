@@ -26,6 +26,8 @@ extension TypeReference {
         }
     }
 
+    static var bundle: TypeReference = .init(module: .foundation, rawName: "Bundle")
+    static var locale: TypeReference = .init(module: .foundation, rawName: "Locale")
     static var string: TypeReference = .init(module: .stdLib, rawName: "String")
     static var uiView: TypeReference = .init(module: .uiKit, rawName: "UIView")
     static var uiViewController: TypeReference = .init(module: .uiKit, rawName: "UIViewController")

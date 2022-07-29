@@ -56,7 +56,7 @@ public struct RswiftCore {
             warning: { print("[warning]", $0) }
         )
 
-        let structName = SwiftIdentifier(rawValue: "R")
+        let structName = SwiftIdentifier(rawValue: "_S")
         let qualifiedName = structName
 
 //        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
@@ -136,11 +136,23 @@ public struct RswiftCore {
         }
 
         let s = Struct(name: structName) {
+            Init.bundle
             projectStruct
+
+            stringStruct.generateBundleVarGetter(name: "string")
+            stringStruct.generateBundleFunction(name: "string")
             stringStruct
         }
 
         print(s.prettyPrint())
+
+        print()
+
+        print("let S = _S(bundle: Bundle.main)")
+        print("")
+        print("extension R {")
+        print("  static let string = S.string")
+        print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()

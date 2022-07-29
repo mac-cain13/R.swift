@@ -129,6 +129,13 @@ public struct Function {
         public let typeReference: TypeReference
         public let defaultValue: String?
 
+        public init(name: String, localName: String?, typeReference: TypeReference, defaultValue: String?) {
+            self.name = name
+            self.localName = localName
+            self.typeReference = typeReference
+            self.defaultValue = defaultValue
+        }
+
         func codeString() -> String {
             var result = name
             if let localName {
@@ -166,6 +173,98 @@ public struct Function {
     }
 }
 
+
+public struct Init {
+    public let comments: [String]
+    public var accessControl = AccessControl.none
+    public let params: [Parameter]
+    public let valueCodeString: String
+
+    public init(comments: [String], accessControl: AccessControl = AccessControl.none, params: [Parameter], valueCodeString: String) {
+        self.comments = comments
+        self.accessControl = accessControl
+        self.params = params
+        self.valueCodeString = valueCodeString
+    }
+
+    public struct Parameter {
+        public let name: String
+        public let localName: String?
+        public let typeReference: TypeReference
+        public let defaultValue: String?
+
+        func codeString() -> String {
+            var result = name
+            if let localName {
+                result += " \(localName)"
+            }
+            result += ": \(typeReference.codeString())"
+            if let defaultValue {
+                result += " = \(defaultValue)"
+            }
+
+            return result
+        }
+
+        var privateLetCodeString: String {
+            let words: [String] = [
+                "private",
+                "let",
+                "\(localName ?? name):",
+                typeReference.codeString()
+            ]
+
+            return words.joined(separator: " ")
+        }
+    }
+
+    func render(_ pp: inout PrettyPrinter) {
+
+        for param in params {
+            pp.append(line: param.privateLetCodeString)
+        }
+
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+
+        let prs = params.map { $0.codeString() }.joined(separator: ", ")
+        let words: [String?] = [
+            accessControl.code(),
+            "init(\(prs))",
+            "{"
+        ]
+
+        pp.append(words: words)
+        pp.indented { pp in
+            pp.append(line: valueCodeString)
+        }
+        pp.append(line: "}")
+    }
+
+    public static var bundle: Init {
+        Init(
+            comments: [],
+            params: [Parameter(name: "bundle", localName: "_bundle", typeReference: .bundle, defaultValue: nil),],
+            valueCodeString: "self._bundle = _bundle"
+        )
+    }
+
+    public static var bundleLocale: Init {
+        Init(
+            comments: [],
+            params: [
+                Parameter(name: "bundle", localName: "_bundle", typeReference: .bundle, defaultValue: nil),
+                Parameter(name: "locale", localName: "_locale", typeReference: .locale, defaultValue: nil),
+            ],
+            valueCodeString: """
+                self._bundle = _bundle
+                self._locale = _locale
+                """
+        )
+    }
+}
+
 public struct Struct {
     public let comments: [String]
     public var accessControl = AccessControl.none
@@ -173,6 +272,7 @@ public struct Struct {
     public var protocols: [TypeReference] = []
     public var lets: [LetBinding] = []
     public var vars: [VarGetter] = []
+    public var inits: [Init] = []
     public var funcs: [Function] = []
     public var structs: [Struct] = []
 
@@ -195,6 +295,7 @@ public struct Struct {
         let members = membersBuilder()
         self.lets = members.lets
         self.vars = members.vars
+        self.inits = members.inits
         self.funcs = members.funcs
         self.structs = members.structs
     }
@@ -213,6 +314,19 @@ public struct Struct {
         let ps = protocols.map { $0.codeString() }.joined(separator: ", ")
         let implements = ps.isEmpty ? "" : ": \(ps)"
         pp.append(line: "struct \(name.value)\(implements) {")
+
+        pp.indented { pp in
+            for inib in inits {
+                if !inib.comments.isEmpty {
+                    pp.append(line: "")
+                }
+                inib.render(&pp)
+            }
+        }
+
+        if !inits.isEmpty && !lets.isEmpty {
+            pp.append(line: "")
+        }
 
         pp.indented { pp in
             for letb in lets {
@@ -297,5 +411,26 @@ struct PrettyPrinter {
             String(repeating: "  ", count: indent) + line
         }
         return ls.joined(separator: "\n")
+    }
+}
+
+
+extension Struct {
+    public func generateBundleVarGetter(name: String) -> VarGetter {
+        VarGetter(
+            name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: _bundle)"
+        )
+    }
+
+    public func generateBundleFunction(name: String) -> Function {
+        Function(
+            comments: [],
+            name: SwiftIdentifier(name: name),
+            params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle)"
+        )
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 public struct StructMembers {
     var lets: [LetBinding] = []
     var vars: [VarGetter] = []
+    var inits: [Init] = []
     var funcs: [Function] = []
     var structs: [Struct] = []
 
@@ -45,6 +46,14 @@ public struct StructMembersBuilder {
         StructMembers(vars: expressions)
     }
 
+    public static func buildExpression(_ expression: Init) -> StructMembers {
+        StructMembers(inits: [expression])
+    }
+
+    public static func buildExpression(_ expressions: [Init]) -> StructMembers {
+        StructMembers(inits: expressions)
+    }
+
     public static func buildExpression(_ expression: Function) -> StructMembers {
         StructMembers(funcs: [expression])
     }
@@ -69,6 +78,7 @@ public struct StructMembersBuilder {
         StructMembers(
             lets: members.flatMap(\.lets),
             vars: members.flatMap(\.vars),
+            inits: members.flatMap(\.inits),
             funcs: members.flatMap(\.funcs),
             structs: members.flatMap(\.structs)
         )
@@ -78,6 +88,7 @@ public struct StructMembersBuilder {
         StructMembers(
             lets: members.flatMap(\.lets),
             vars: members.flatMap(\.vars),
+            inits: members.flatMap(\.inits),
             funcs: members.flatMap(\.funcs),
             structs: members.flatMap(\.structs)
         )
