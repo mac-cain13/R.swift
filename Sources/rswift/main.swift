@@ -7,6 +7,7 @@
 
 import Foundation
 import RswiftCore
+import RswiftParsers
 import XcodeEdit
 
 
@@ -37,18 +38,22 @@ let sourceRootURL = xcodeprojURL.deletingLastPathComponent()
 let rswiftIgnoreURL = sourceRootURL.appendingPathComponent(".rswiftignore")
 let fakeURL = URL(fileURLWithPath: "/FAKE")
 
+let sourceTreeURLs = SourceTreeURLs(
+    builtProductsDirURL: fakeURL,
+    developerDirURL: fakeURL,
+    sourceRootURL: sourceRootURL,
+    sdkRootURL: fakeURL,
+    platformURL: fakeURL
+)
+
 let core = RswiftCore(
     xcodeprojURL: xcodeprojURL,
     targetName: targetName,
     productModuleName: processInfo.environment[EnvironmentKeys.productModuleName],
     infoPlistFile: processInfo.environment[EnvironmentKeys.infoPlistFile].map { URL(fileURLWithPath: $0) },
     codeSignEntitlements: processInfo.environment[EnvironmentKeys.codeSignEntitlements].map { URL(fileURLWithPath: $0) },
-    builtProductsDirURL: fakeURL,
-    developerDirURL: fakeURL,
-    sourceRootURL: sourceRootURL,
-    sdkRootURL: fakeURL,
-    platformURL: fakeURL,
-    rswiftIgnoreURL: rswiftIgnoreURL
+    rswiftIgnoreURL: rswiftIgnoreURL,
+    sourceTreeURLs: sourceTreeURLs
 )
 
 print("Start")

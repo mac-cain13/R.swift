@@ -8,16 +8,16 @@
 
 import Foundation
 
-class IgnoreFile {
-    let ignoredURLs: [URL]
-    let explicitlyIncludedURLs: [URL]
+public class IgnoreFile {
+    public let ignoredURLs: [URL]
+    public let explicitlyIncludedURLs: [URL]
 
-    init() {
+    public init() {
         ignoredURLs = []
         explicitlyIncludedURLs = []
     }
 
-    init(ignoreFileURL: URL) throws {
+    public init(ignoreFileURL: URL) throws {
         let workingDirectory = ignoreFileURL.deletingLastPathComponent()
         let potentialPatterns = try String(contentsOf: ignoreFileURL).components(separatedBy: .newlines)
 
@@ -28,6 +28,10 @@ class IgnoreFile {
             .filter { IgnoreFile.isPattern(potentialPattern: $0) && IgnoreFile.isExplicitlyIncludedPattern(potentialPattern: $0) }
             .map { String($0.dropFirst()) }
             .flatMap { IgnoreFile.expandPattern($0, workingDirectory: workingDirectory) }
+    }
+
+    public func matches(url: URL) -> Bool {
+        return ignoredURLs.contains(url) && !explicitlyIncludedURLs.contains(url)
     }
 
     static private func isPattern(potentialPattern: String) -> Bool {
@@ -61,9 +65,5 @@ class IgnoreFile {
         }
 
         return Glob(pattern: pattern).paths
-    }
-
-    func matches(url: URL) -> Bool {
-        return ignoredURLs.contains(url) && !explicitlyIncludedURLs.contains(url)
     }
 }

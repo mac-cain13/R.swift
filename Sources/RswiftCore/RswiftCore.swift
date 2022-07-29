@@ -18,11 +18,7 @@ public struct RswiftCore {
     let infoPlistFile: URL?
     let codeSignEntitlements: URL?
 
-    let builtProductsDirURL: URL
-    let developerDirURL: URL
-    let sourceRootURL: URL
-    let sdkRootURL: URL
-    let platformURL: URL
+    let sourceTreeURLs: SourceTreeURLs
 
     let rswiftIgnoreURL: URL
 
@@ -32,12 +28,8 @@ public struct RswiftCore {
         productModuleName: String?,
         infoPlistFile: URL?,
         codeSignEntitlements: URL?,
-        builtProductsDirURL: URL,
-        developerDirURL: URL,
-        sourceRootURL: URL,
-        sdkRootURL: URL,
-        platformURL: URL,
-        rswiftIgnoreURL: URL
+        rswiftIgnoreURL: URL,
+        sourceTreeURLs: SourceTreeURLs
     ) {
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
@@ -45,68 +37,24 @@ public struct RswiftCore {
         self.infoPlistFile = infoPlistFile
         self.codeSignEntitlements = codeSignEntitlements
 
-        self.builtProductsDirURL = builtProductsDirURL
-        self.developerDirURL = developerDirURL
-        self.sourceRootURL = sourceRootURL
-        self.sdkRootURL = sdkRootURL
-        self.platformURL = platformURL
-
         self.rswiftIgnoreURL = rswiftIgnoreURL
+
+        self.sourceTreeURLs = sourceTreeURLs
     }
 
     // Temporary function for use during development
     public func developRun() throws {
-        let ignoreFile = (try? IgnoreFile(ignoreFileURL: rswiftIgnoreURL)) ?? IgnoreFile()
-        let xcodeproj = try! Xcodeproj(url: xcodeprojURL, warning: { print($0) })
-
-    let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
-
-        let paths = try xcodeproj.resourcePaths(forTarget: targetName)
-        let urls = paths
-            .map { $0.url(with: urlForSourceTreeFolder) }
-            .filter { !ignoreFile.matches(url: $0) }
-
         let start = Date()
 
-        let dontGenerateFileForFonts = false
-        let dontGenerateFileForImages = false
-        let files = try urls
-            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .filter { !(dontGenerateFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
-            .filter { !(dontGenerateFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
-            .map { try FileResource.parse(url: $0) }
-
-        let storyboards = try urls
-            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try StoryboardResource.parse(url: $0) }
-
-        let nibs = try urls
-            .filter { NibResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try NibResource.parse(url: $0) }
-
-        let fonts = try urls
-            .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try FontResource.parse(url: $0) }
-
-        let images = try urls
-            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try ImageResource.parse(url: $0, assetTags: nil) }
-        let assetCatalogs = try urls
-            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-            .map { try AssetCatalog.parse(url: $0) }
-
-        let localizableStrings = try urls
-            .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
-            .map { try LocalizableStrings.parse(url: $0) }
-
-
-        let infoplist = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/Info.plist")
-        let entitlementsURL = URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/ResourceApp.entitlements")
-        let plist = try PropertyListResource.parse(url: infoplist, buildConfigurationName: "ResourceApp")
-        let infoPlistWhitelist = ["UIApplicationShortcutItems", "UIApplicationSceneManifest", "NSUserActivityTypes", "NSExtension"]
-
-//        let entitlements = try PropertyListResource.parse(url: entitlementsURL, buildConfigurationName: "ResourceApp")
-
+        let project = try Project.parseTarget(
+            name: targetName,
+            xcodeprojURL: xcodeprojURL,
+            rswiftIgnoreURL: rswiftIgnoreURL,
+            infoPlistFile: infoPlistFile,
+            codeSignEntitlements: codeSignEntitlements,
+            sourceTreeURLs: sourceTreeURLs,
+            warning: { print("[warning]", $0) }
+        )
 
         let structName = SwiftIdentifier(rawValue: "R")
         let qualifiedName = structName
@@ -174,15 +122,15 @@ public struct RswiftCore {
 //        )
 
         let stringStruct = LocalizableStrings.generateStruct(
-            resources: localizableStrings,
-            developmentLanguage: xcodeproj.developmentLanguage,
+            resources: project.localizableStrings,
+            developmentLanguage: project.xcodeproj.developmentLanguage,
             prefix: qualifiedName
         )
 
         let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
-            LetBinding(name: SwiftIdentifier(name: "developmentLanguage"), valueCodeString: #""\#(xcodeproj.developmentLanguage)""#)
+            LetBinding(name: SwiftIdentifier(name: "developmentLanguage"), valueCodeString: #""\#(project.xcodeproj.developmentLanguage)""#)
 
-            if let knownAssetTags = xcodeproj.knownAssetTags {
+            if let knownAssetTags = project.xcodeproj.knownAssetTags {
                 LetBinding(name: SwiftIdentifier(name: "knownAssetTags"), valueCodeString: "\(knownAssetTags)")
             }
         }
@@ -195,20 +143,5 @@ public struct RswiftCore {
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()
-    }
-
-    private func urlForSourceTreeFolder(_ sourceTreeFolder: SourceTreeFolder) -> URL {
-        switch sourceTreeFolder {
-        case .buildProductsDir:
-            return builtProductsDirURL
-        case .developerDir:
-            return developerDirURL
-        case .sdkRoot:
-            return sdkRootURL
-        case .sourceRoot:
-            return sourceRootURL
-        case .platformDir:
-            return platformURL
-        }
     }
 }
