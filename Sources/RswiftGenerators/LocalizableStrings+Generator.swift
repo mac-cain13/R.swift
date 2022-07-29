@@ -44,11 +44,15 @@ extension LocalizableStrings {
 
         let strings = computeStringsWithParams(filename: filename, resources: resources, developmentLanguage: developmentLanguage, warning: warning)
         let letbindings = strings.map { $0.generateLetBinding() }
+        let functions = strings
+            .filter { $0.params.count > 0 }
+            .map { $0.generateFunction() }
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) localization keys."]
 
         return Struct(comments: comments, name: structName) {
             letbindings
+            functions
         }
     }
 
@@ -202,13 +206,38 @@ private struct StringWithParams {
     func generateLetBinding() -> LetBinding {
         LetBinding(
             comments: self.comments,
+            isStatic: true,
             name: SwiftIdentifier(name: key),
-            valueCodeString: valueCodeString
+            valueCodeString: letValueCodeString
         )
     }
 
-    private var valueCodeString: String {
-        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", developmentValue: "\#(developmentValue)", locales: \#(values.compactMap(\.0.language))"#
+    func generateFunction() -> Function {
+        Function(
+            comments: self.comments,
+            isStatic: true,
+            name: SwiftIdentifier(name: key),
+            params: zip(params.indices, params).map { (ix, p) in
+                .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
+            },
+            returnType: .string,
+            valueCodeString: funcBodyCodeString
+        )
+    }
+
+    private var letValueCodeString: String {
+        #"\#(typeName)(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", locales: \#(values.compactMap(\.0.language)), developmentValue: "\#(developmentValue)")"#
+    }
+
+    private var funcBodyCodeString: String {
+
+        var args = params.indices.map { "value\($0 + 1)" }
+        args.insert("format: format", at: 0)
+
+        return """
+        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", comment: "")
+        return String(\(args.joined(separator: ", ")))
+        """
     }
 
     private var typeName: String {

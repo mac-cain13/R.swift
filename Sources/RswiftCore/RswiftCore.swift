@@ -137,6 +137,7 @@ public struct RswiftCore {
 
         let s = Struct(name: structName) {
             projectStruct
+            stringStruct
         }
 
         print(s.prettyPrint())

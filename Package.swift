@@ -4,11 +4,13 @@ import PackageDescription
 let package = Package(
   name: "rswift",
   platforms: [
-    .macOS(.v10_15)
+    .macOS(.v10_15),
+    .iOS(.v11),
   ],
   products: [
     .executable(name: "rswift", targets: ["rswift"]),
     .executable(name: "rswift-legacy", targets: ["rswift-legacy"]),
+    .library(name: "RswiftCombined", targets: ["RswiftResources", "RswiftGenerators"])
   ],
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
