@@ -37,7 +37,7 @@ extension NibResource {
 extension NibResource {
     var genericTypeReference: TypeReference {
         TypeReference(
-            module: .rswift,
+            module: .rswiftResources,
             name: "NibReference",
             genericArgs: [rootViews.first ?? TypeReference.uiView]
         )

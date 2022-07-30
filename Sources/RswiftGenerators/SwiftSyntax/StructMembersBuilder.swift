@@ -13,6 +13,7 @@ public struct StructMembers {
     var inits: [Init] = []
     var funcs: [Function] = []
     var structs: [Struct] = []
+    var typealiasses: [TypeAlias] = []
 
     func sorted() -> StructMembers {
         var new = self
@@ -20,6 +21,7 @@ public struct StructMembers {
         new.vars.sort { $0.name < $1.name }
         new.funcs.sort { $0.name < $1.name }
         new.structs.sort { $0.name < $1.name }
+        new.typealiasses.sort { $0.name < $1.name }
         return new
     }
 }
@@ -70,6 +72,14 @@ public struct StructMembersBuilder {
         StructMembers(structs: expressions)
     }
 
+    public static func buildExpression(_ expression: TypeAlias) -> StructMembers {
+        StructMembers(typealiasses: [expression])
+    }
+
+    public static func buildExpression(_ expressions: [TypeAlias]) -> StructMembers {
+        StructMembers(typealiasses: expressions)
+    }
+
     public static func buildExpression(_ members: StructMembers) -> StructMembers {
         members
     }
@@ -80,7 +90,8 @@ public struct StructMembersBuilder {
             vars: members.flatMap(\.vars),
             inits: members.flatMap(\.inits),
             funcs: members.flatMap(\.funcs),
-            structs: members.flatMap(\.structs)
+            structs: members.flatMap(\.structs),
+            typealiasses: members.flatMap(\.typealiasses)
         )
     }
 
@@ -90,7 +101,8 @@ public struct StructMembersBuilder {
             vars: members.flatMap(\.vars),
             inits: members.flatMap(\.inits),
             funcs: members.flatMap(\.funcs),
-            structs: members.flatMap(\.structs)
+            structs: members.flatMap(\.structs),
+            typealiasses: members.flatMap(\.typealiasses)
         )
     }
 

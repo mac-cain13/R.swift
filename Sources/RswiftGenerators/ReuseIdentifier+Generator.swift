@@ -37,7 +37,11 @@ extension Reusable {
 
 extension Reusable {
     var genericTypeReference: TypeReference {
-        TypeReference(module: .rswift, name: "ReusableIdentifier", genericArgs: [type])
+        TypeReference(
+            module: .rswiftResources,
+            name: "ReusableIdentifier",
+            genericArgs: [type]
+        )
     }
 
     func generateLetBinding() -> LetBinding {

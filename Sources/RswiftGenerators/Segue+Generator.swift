@@ -161,7 +161,7 @@ struct SegueWithInfo {
 
     var genericTypeReference: TypeReference {
         TypeReference(
-            module: .host,
+            module: .rswiftResources,
             name: "SegueIdentifier",
             genericArgs: [segue.type, sourceType, destinationType]
         )

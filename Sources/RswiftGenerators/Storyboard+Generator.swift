@@ -25,6 +25,13 @@ extension StoryboardResource {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(structs.count) storyboards."]
 
         return Struct(comments: comments, name: structName) {
+            Init.bundle
+
+            for s in structs {
+                s.generateBundleVarGetter(name: s.name.value)
+                s.generateBundleFunction(name: s.name.value)
+            }
+
             structs
         }
     }
@@ -58,18 +65,27 @@ extension StoryboardResource {
             .sorted { $0.name < $1.name }
 
         let letName = LetBinding(
-            isStatic: true,
             name: nameIdentifier,
             valueCodeString: "\"\(name)\"")
+        let varBundle = VarGetter(
+            name: SwiftIdentifier(name: "bundle"),
+            typeReference: TypeReference.bundle,
+            valueCodeString: "_bundle")
 
         let identifier = SwiftIdentifier(name: name)
-        let storyboardIdentifier = TypeReference(module: .rswift, rawName: "StoryboardIdentifier")
+        let storyboardReference = TypeReference(module: .rswiftResources, rawName: "StoryboardReference")
+        let initialContainer = initialViewController == nil ? nil : TypeReference(module: .rswiftResources, rawName: "InitialControllerContainer")
 
         return Struct(
             comments: ["Storyboard `\(name)`."],
             name: identifier,
-            protocols: [storyboardIdentifier]
+            protocols: [storyboardReference, initialContainer].compactMap { $0 }
         ) {
+            if let initialViewController = initialViewController {
+                TypeAlias(name: "InitialController", value: initialViewController.type)
+            }
+            Init.bundle
+            varBundle
             letName
 
             letbindings
@@ -81,7 +97,7 @@ extension StoryboardResource.ViewController {
 
     var genericTypeReference: TypeReference {
         TypeReference(
-            module: .rswift,
+            module: .rswiftResources,
             name: "ViewControllerIdentifier",
             genericArgs: [self.type]
         )
@@ -89,7 +105,6 @@ extension StoryboardResource.ViewController {
 
     func generateLetBinding(identifier: String) -> LetBinding {
         LetBinding(
-            isStatic: true,
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,
             valueCodeString: #"ViewControllerIdentifier(identifier: "\#(identifier)")"#

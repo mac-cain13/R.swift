@@ -9,11 +9,21 @@
 
 import Foundation
 
-/// Storyboard identifier
-public protocol StoryboardIdentifier {
-    /// Storyboard identifier of this view controller
-    static var identifier: String { get }
+/// Storyboard reference
+public protocol StoryboardReference {
+    /// Name of the storyboard file on disk
+    var name: String { get }
+
+    /// Bundle this storyboard is in
+    var bundle: Bundle { get }
 }
+
+
+public protocol InitialControllerContainer {
+    /// Type of the inital controller
+    associatedtype InitialController
+}
+
 
 /// Nib reference
 public struct NibReference<FirstView> {
@@ -22,12 +32,44 @@ public struct NibReference<FirstView> {
     public let name: String
 
     /**
-     Create a new NibRefence based on the string name
+     Create a new NibRefence based on the name string
      - parameter name: The string name for this nib
      - returns: A new NibReference
     */
     public init(name: String) {
         self.name = name
+    }
+}
+//
+///// View controller reference
+//public struct ViewControllerReference<ViewController> {
+//
+//    /// String name of this view controller
+//    public let name: String
+//
+//    /**
+//     Create a new ViewControllerReference based on the name string
+//     - parameter name: The string name for this view controller
+//     - returns: A new ViewControllerReference
+//    */
+//    public init(name: String) {
+//        self.name = name
+//    }
+//}
+
+/// View controller identifier
+public struct ViewControllerIdentifier<ViewController> {
+
+    /// Identifier of this view controller
+    public let identifier: String
+
+    /**
+     Create a new ViewControllerIdentifier based on the identifier string
+     - parameter identifier: The string identifier for this view controller
+     - returns: A new ViewControllerIdentifier
+    */
+    public init(identifier: String) {
+        self.identifier = identifier
     }
 }
 
@@ -57,22 +99,6 @@ public struct SegueIdentifier<Segue, Source, Destination> {
      Create a new SegueIdentifier based on the identifier string
      - parameter identifier: The string identifier for this segue
      - returns: A new SegueIdentifier
-    */
-    public init(identifier: String) {
-        self.identifier = identifier
-    }
-}
-
-/// View controller identifier
-public struct ViewControllerIdentifier<ViewController> {
-
-    /// Identifier string of this view controller
-    public let identifier: String
-
-    /**
-     Create a new ViewControllerIdentifier based on the identifier string
-     - parameter identifier: The string identifier for this view controller
-     - returns: A new ViewControllerIdentifier
     */
     public init(identifier: String) {
         self.identifier = identifier

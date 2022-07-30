@@ -265,6 +265,37 @@ public struct Init {
     }
 }
 
+public struct TypeAlias {
+    public let comments: [String]
+    public var accessControl = AccessControl.none
+    public let name: String
+    public let value: TypeReference
+
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: String, value: TypeReference) {
+        self.comments = comments
+        self.accessControl = accessControl
+        self.name = name
+        self.value = value
+    }
+
+    func render(_ pp: inout PrettyPrinter) {
+
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+
+        let words: [String?] = [
+            accessControl.code(),
+            "typealias",
+            name,
+            "=",
+            value.codeString()
+        ]
+
+        pp.append(words: words)
+    }
+}
+
 public struct Struct {
     public let comments: [String]
     public var accessControl = AccessControl.none
@@ -275,6 +306,7 @@ public struct Struct {
     public var inits: [Init] = []
     public var funcs: [Function] = []
     public var structs: [Struct] = []
+    public var typealiasses: [TypeAlias] = []
 
     public var isEmpty: Bool { lets.isEmpty && funcs.isEmpty && structs.isEmpty }
 
@@ -298,6 +330,7 @@ public struct Struct {
         self.inits = members.inits
         self.funcs = members.funcs
         self.structs = members.structs
+        self.typealiasses = members.typealiasses
     }
 
     public func prettyPrint() -> String {
@@ -314,6 +347,19 @@ public struct Struct {
         let ps = protocols.map { $0.codeString() }.joined(separator: ", ")
         let implements = ps.isEmpty ? "" : ": \(ps)"
         pp.append(line: "struct \(name.value)\(implements) {")
+
+        pp.indented { pp in
+            for talias in typealiasses {
+                if !talias.comments.isEmpty {
+                    pp.append(line: "")
+                }
+                talias.render(&pp)
+            }
+        }
+
+        if !typealiasses.isEmpty && !inits.isEmpty {
+            pp.append(line: "")
+        }
 
         pp.indented { pp in
             for inib in inits {

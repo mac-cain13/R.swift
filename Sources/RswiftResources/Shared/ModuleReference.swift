@@ -32,5 +32,5 @@ public enum ModuleReference: Hashable {
 extension ModuleReference {
     public static var foundation: ModuleReference { .custom(name: "Foundation") }
     public static var uiKit: ModuleReference { .custom(name: "UIKit") }
-    public static var rswift: ModuleReference { .custom(name: "Rswift") }
+    public static var rswiftResources: ModuleReference { .custom(name: "RswiftResources") }
 }

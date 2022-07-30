@@ -94,10 +94,10 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-//        let storyboardStruct = StoryboardResource.generateStruct(
-//            storyboards: storyboards,
-//            prefix: qualifiedName
-//        )
+        let storyboardStruct = StoryboardResource.generateStruct(
+            storyboards: project.storyboards,
+            prefix: qualifiedName
+        )
 
 //        let infoStruct = PropertyListResource.generateStruct(
 //            resourceName: "info",
@@ -146,6 +146,10 @@ public struct RswiftCore {
 //            imageStruct.generateBundleFunction(name: "segue")
             segueStruct.generateLetBinding()
             segueStruct
+
+            storyboardStruct.generateBundleVarGetter(name: "storyboard")
+            storyboardStruct.generateBundleFunction(name: "storyboard")
+            storyboardStruct
         }
 
         print(s.prettyPrint())
@@ -158,6 +162,7 @@ public struct RswiftCore {
 //        print("  static let string = S.string")
 //        print("  static let image = S.image")
         print("  static let segue = S.segue")
+        print("  static let storyboard = S.storyboard")
         print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))
