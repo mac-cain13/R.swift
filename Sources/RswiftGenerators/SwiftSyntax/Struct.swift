@@ -416,6 +416,13 @@ struct PrettyPrinter {
 
 
 extension Struct {
+    public func generateLetBinding() -> LetBinding {
+        LetBinding(
+            name: name,
+            valueCodeString: "\(name.value)()"
+        )
+    }
+
     public func generateBundleVarGetter(name: String) -> VarGetter {
         VarGetter(
             name: SwiftIdentifier(name: name),

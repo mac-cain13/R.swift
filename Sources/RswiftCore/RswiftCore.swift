@@ -59,7 +59,10 @@ public struct RswiftCore {
         let structName = SwiftIdentifier(rawValue: "_S")
         let qualifiedName = structName
 
-//        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
+        let segueStruct = Segue.generateStruct(
+            storyboards: project.storyboards,
+            prefix: qualifiedName
+        )
 
         let imageStruct = ImageResource.generateStruct(
             catalogs: project.assetCatalogs,
@@ -139,9 +142,10 @@ public struct RswiftCore {
             Init.bundle
             projectStruct
 
-            imageStruct.generateBundleVarGetter(name: "image")
-            imageStruct.generateBundleFunction(name: "image")
-            imageStruct
+//            imageStruct.generateBundleVarGetter(name: "segue")
+//            imageStruct.generateBundleFunction(name: "segue")
+            segueStruct.generateLetBinding()
+            segueStruct
         }
 
         print(s.prettyPrint())
@@ -152,7 +156,8 @@ public struct RswiftCore {
         print("")
         print("extension R {")
 //        print("  static let string = S.string")
-        print("  static let image = S.image")
+//        print("  static let image = S.image")
+        print("  static let segue = S.segue")
         print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))

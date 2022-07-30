@@ -24,6 +24,10 @@ public struct Segue {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(structs.count) view controllers."]
 
         return Struct(comments: comments, name: structName) {
+            for s in structs {
+                s.generateLetBinding()
+            }
+
             structs
         }
     }
@@ -157,7 +161,7 @@ struct SegueWithInfo {
 
     var genericTypeReference: TypeReference {
         TypeReference(
-            module: .rswift,
+            module: .host,
             name: "SegueIdentifier",
             genericArgs: [segue.type, sourceType, destinationType]
         )
@@ -166,7 +170,6 @@ struct SegueWithInfo {
     func generateLetBinding() -> LetBinding {
         LetBinding(
             comments: ["Segue identifier `\(segue.identifier)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: segue.identifier),
             typeReference: genericTypeReference,
             valueCodeString: "SegueIdentifier(identifier: \"\(segue.identifier)\")"
