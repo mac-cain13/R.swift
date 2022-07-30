@@ -11,7 +11,7 @@ extension LocaleReference {
     func codeString() -> String {
         switch self {
         case .none:
-            return ".none"
+            return "LocaleReference.none" // Plain `.none` is ambiguous whith Optional<LocaleReference>
         case .base:
             return ".base"
         case .language(let string):

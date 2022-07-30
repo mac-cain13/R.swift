@@ -6,25 +6,22 @@ let package = Package(
   platforms: [
     .macOS(.v10_15),
     .iOS(.v11),
+    .tvOS(.v11),
+    .watchOS(.v4),
   ],
   products: [
     .executable(name: "rswift", targets: ["rswift"]),
     .executable(name: "rswift-legacy", targets: ["rswift-legacy"]),
-    .library(name: "RswiftCombined", targets: ["RswiftResources", "RswiftGenerators"])
+    .library(name: "RswiftCombined", targets: ["RswiftResources"])
   ],
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
-//    .package(url: "https://github.com/apple/swift-syntax.git", .branchItem("swift-5.6-RELEASE")),
   ],
   targets: [
     .target(name: "RswiftResources"),
+    .target(name: "RswiftGenerators", dependencies: ["RswiftResources"]),
     .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
-    .target(name: "RswiftGenerators", dependencies: [
-        "RswiftResources",
-//        .product(name: "SwiftSyntax", package: "swift-syntax"),
-//        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
-    ]),
 
     // Core of R.swift, brings all previous parts together
     .target(name: "RswiftCore", dependencies: ["RswiftParsers", "RswiftGenerators"]),

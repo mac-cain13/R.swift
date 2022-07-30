@@ -63,7 +63,7 @@ extension AssetCatalog.Namespace {
             .sorted { $0.key < $1.key }
             .map { (name, namespace) in
                 namespace.generateStruct(
-                    resourceName: resourceName,
+                    resourceName: name.value,
                     resourcesSelector: resourcesSelector,
                     prefix: qualifiedName
                 )
@@ -78,6 +78,7 @@ extension AssetCatalog.Namespace {
 
         let comments = [comment]
         return Struct(comments: comments, name: structName) {
+            Init.bundle
             letbindings
             structs
         }
@@ -90,7 +91,6 @@ extension ColorResource: AssetCatalogContent {
         let code = "ColorResource(name: \"\(fullname)\")"
         return LetBinding(
             comments: ["Color `\(fullname)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: name),
             valueCodeString: code
         )
@@ -103,7 +103,6 @@ extension DataResource: AssetCatalogContent {
         let code = "DataResource(name: \"\(fullname)\")"
         return LetBinding(
             comments: ["Data asset `\(fullname)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: name),
             valueCodeString: code
         )
@@ -115,10 +114,9 @@ extension ImageResource: AssetCatalogContent {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
         let fullname = (path + [name]).joined(separator: "/")
-        let code = "ImageResource(name: \"\(fullname)\", locale: \(locs), onDemandResourceTags: \(odrt))"
+        let code = "ImageResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, locale: \(locs), onDemandResourceTags: \(odrt))"
         return LetBinding(
             comments: ["Image `\(fullname)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: name),
             valueCodeString: code
         )

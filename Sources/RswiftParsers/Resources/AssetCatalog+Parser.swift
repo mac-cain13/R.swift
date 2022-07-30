@@ -41,7 +41,13 @@ extension AssetCatalog: SupportedExtensions {
             assertionFailure((error as NSError).debugDescription)
             return true
         }
-        guard let directoryEnumerator = fileManager.enumerator(at: catalogURL, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles, .producesRelativePathURLs], errorHandler: errorHandler) else {
+        let options: FileManager.DirectoryEnumerationOptions
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
+            options = [.skipsHiddenFiles, .producesRelativePathURLs]
+        } else {
+            options = [.skipsHiddenFiles]
+        }
+        guard let directoryEnumerator = fileManager.enumerator(at: catalogURL, includingPropertiesForKeys: [.isDirectoryKey], options: options, errorHandler: errorHandler) else {
             throw ResourceParsingError("Supposed AssetCatalog \(catalogURL) can't be enumerated")
         }
 
@@ -115,7 +121,7 @@ extension AssetCatalog: SupportedExtensions {
         for fileURL in directory.images {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            images.append(.init(name: name, path: path, locale: nil, onDemandResourceTags: tags))
+            images.append(.init(name: name, path: path, bundle: nil, locale: nil, onDemandResourceTags: tags))
         }
 
         var dataAssets: [DataResource] = []

@@ -61,11 +61,11 @@ public struct RswiftCore {
 
 //        let segueStruct = Segue.generateStruct(storyboards: storyboards, prefix: qualifiedName)
 
-//        let imageStruct = ImageResource.generateStruct(
-//            catalogs: assetCatalogs,
-//            toplevel: images,
-//            prefix: qualifiedName
-//        )
+        let imageStruct = ImageResource.generateStruct(
+            catalogs: project.assetCatalogs,
+            toplevel: project.images,
+            prefix: qualifiedName
+        )
 //        let colorStruct = ColorResource.generateStruct(
 //            catalogs: assetCatalogs,
 //            prefix: qualifiedName
@@ -121,11 +121,11 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-        let stringStruct = LocalizableStrings.generateStruct(
-            resources: project.localizableStrings,
-            developmentLanguage: project.xcodeproj.developmentRegion,
-            prefix: qualifiedName
-        )
+//        let stringStruct = LocalizableStrings.generateStruct(
+//            resources: project.localizableStrings,
+//            developmentLanguage: project.xcodeproj.developmentRegion,
+//            prefix: qualifiedName
+//        )
 
         let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
             LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(project.xcodeproj.developmentRegion)""#)
@@ -139,9 +139,9 @@ public struct RswiftCore {
             Init.bundle
             projectStruct
 
-            stringStruct.generateBundleVarGetter(name: "string")
-            stringStruct.generateBundleFunction(name: "string")
-            stringStruct
+            imageStruct.generateBundleVarGetter(name: "image")
+            imageStruct.generateBundleFunction(name: "image")
+            imageStruct
         }
 
         print(s.prettyPrint())
@@ -151,7 +151,8 @@ public struct RswiftCore {
         print("let S = _S(bundle: Bundle.main)")
         print("")
         print("extension R {")
-        print("  static let string = S.string")
+//        print("  static let string = S.string")
+        print("  static let image = S.image")
         print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))

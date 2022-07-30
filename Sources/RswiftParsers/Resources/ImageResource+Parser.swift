@@ -31,6 +31,6 @@ extension ImageResource: SupportedExtensions {
         let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
         let name = regex.stringByReplacingMatches(in: filename, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
 
-        return ImageResource(name: name, path: [], locale: locale, onDemandResourceTags: assetTags)
+        return ImageResource(name: name, path: [], bundle: nil, locale: locale, onDemandResourceTags: assetTags)
     }
 }
