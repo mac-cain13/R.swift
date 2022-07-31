@@ -32,7 +32,6 @@ extension FontResource {
         let code = "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
         return LetBinding(
             comments: ["Font `\(name)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: name),
             valueCodeString: code)
     }

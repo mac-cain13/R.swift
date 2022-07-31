@@ -20,7 +20,7 @@ extension UIViewController: SeguePerformer {}
 
 extension SeguePerformer {
     /**
-     Initiates the segue with the specified identifier (R.segue.\*) from the current view controller's storyboard file.
+     Initiates the segue with the specified identifier (`R.segue.*`) from the current view controller's storyboard file.
      - parameter identifier: The R.segue.\* that identifies the triggered segue.
      - parameter sender: The object that you want to use to initiate the segue. This object is made available for informational purposes during the actual segue.
      - SeeAlso: Library for typed block based segues: [tomlokhorst/SegueManager](https://github.com/tomlokhorst/SegueManager)

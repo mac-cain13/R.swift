@@ -16,9 +16,9 @@ import AppKit
 extension NSDataAsset {
 
     /**
-     Returns the data asset from this resource (R.data.\*)
+     Returns the data asset from this resource (`R.data.*`)
 
-     - parameter resource: The resource you want the data asset of (R.data.\*)
+     - parameter resource: The resource you want the data asset of (`R.data.*`)
      */
     public convenience init?(resource: DataResource) {
         self.init(name: resource.name, bundle: resource.bundle ?? .main)

@@ -89,10 +89,10 @@ public struct RswiftCore {
 //            prefix: qualifiedName
 //        )
 
-//        let fontStruct = FontResource.generateStruct(
-//            resources: fonts,
-//            prefix: qualifiedName
-//        )
+        let fontStruct = FontResource.generateStruct(
+            resources: project.fonts,
+            prefix: qualifiedName
+        )
 
         let storyboardStruct = StoryboardResource.generateStruct(
             storyboards: project.storyboards,
@@ -154,6 +154,9 @@ public struct RswiftCore {
             imageStruct.generateBundleFunction(name: "image")
             imageStruct
 
+            fontStruct.generateLetBinding()
+            fontStruct
+
             segueStruct.generateLetBinding()
             segueStruct
 
@@ -173,6 +176,7 @@ public struct RswiftCore {
         print("  static let data = S.data")
         print("  static let color = S.color")
         print("  static let image = S.image")
+        print("  static let font = S.font")
         print("  static let segue = S.segue")
         print("  static let storyboard = S.storyboard")
         print("}")
