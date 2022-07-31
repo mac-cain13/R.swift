@@ -114,7 +114,7 @@ extension AssetCatalog: SupportedExtensions {
         var colors: [ColorResource] = []
         for fileURL in directory.colors {
             let name = fileURL.filenameWithoutExtension!
-            colors.append(.init(name: name, path: path))
+            colors.append(.init(name: name, path: path, bundle: nil))
         }
 
         var images: [ImageResource] = []
@@ -128,7 +128,7 @@ extension AssetCatalog: SupportedExtensions {
         for fileURL in directory.dataAssets {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            dataAssets.append(.init(name: name, path: path, onDemandResourceTags: tags))
+            dataAssets.append(.init(name: name, path: path, bundle: nil, onDemandResourceTags: tags))
         }
 
         return AssetCatalog.Namespace(

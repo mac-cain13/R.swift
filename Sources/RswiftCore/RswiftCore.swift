@@ -69,10 +69,10 @@ public struct RswiftCore {
             toplevel: project.images,
             prefix: qualifiedName
         )
-//        let colorStruct = ColorResource.generateStruct(
-//            catalogs: assetCatalogs,
-//            prefix: qualifiedName
-//        )
+        let colorStruct = ColorResource.generateStruct(
+            catalogs: project.assetCatalogs,
+            prefix: qualifiedName
+        )
 //        let dataStruct = DataResource.generateStruct(
 //            catalogs: assetCatalogs,
 //            prefix: qualifiedName
@@ -142,10 +142,16 @@ public struct RswiftCore {
             Init.bundle
             projectStruct
 
-//            imageStruct.generateBundleVarGetter(name: "segue")
-//            imageStruct.generateBundleFunction(name: "segue")
+            imageStruct.generateBundleVarGetter(name: "image")
+            imageStruct.generateBundleFunction(name: "image")
+            imageStruct
+
             segueStruct.generateLetBinding()
             segueStruct
+
+            colorStruct.generateBundleVarGetter(name: "color")
+            colorStruct.generateBundleFunction(name: "color")
+            colorStruct
 
             storyboardStruct.generateBundleVarGetter(name: "storyboard")
             storyboardStruct.generateBundleFunction(name: "storyboard")
@@ -160,7 +166,8 @@ public struct RswiftCore {
         print("")
         print("extension R {")
 //        print("  static let string = S.string")
-//        print("  static let image = S.image")
+        print("  static let image = S.image")
+        print("  static let color = S.color")
         print("  static let segue = S.segue")
         print("  static let storyboard = S.storyboard")
         print("}")

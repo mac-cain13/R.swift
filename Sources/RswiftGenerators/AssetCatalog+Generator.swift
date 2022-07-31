@@ -81,6 +81,11 @@ extension AssetCatalog.Namespace {
             Init.bundle
             letbindings
             structs
+
+            for s in structs {
+                s.generateBundleVarGetter(name: s.name.value)
+                s.generateBundleFunction(name: s.name.value)
+            }
         }
     }
 }
@@ -88,7 +93,7 @@ extension AssetCatalog.Namespace {
 extension ColorResource: AssetCatalogContent {
     public func generateLetBinding() -> LetBinding {
         let fullname = (path + [name]).joined(separator: "/")
-        let code = "ColorResource(name: \"\(fullname)\")"
+        let code = "ColorResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil)"
         return LetBinding(
             comments: ["Color `\(fullname)`."],
             name: SwiftIdentifier(name: name),
@@ -100,7 +105,8 @@ extension ColorResource: AssetCatalogContent {
 extension DataResource: AssetCatalogContent {
     public func generateLetBinding() -> LetBinding {
         let fullname = (path + [name]).joined(separator: "/")
-        let code = "DataResource(name: \"\(fullname)\")"
+        let odrt = onDemandResourceTags?.debugDescription ?? "nil"
+        let code = "DataResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, onDemandResourceTags: \(odrt))"
         return LetBinding(
             comments: ["Data asset `\(fullname)`."],
             name: SwiftIdentifier(name: name),
