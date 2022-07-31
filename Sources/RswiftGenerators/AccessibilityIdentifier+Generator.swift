@@ -41,7 +41,10 @@ public struct AccessibilityIdentifier {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(structs.count) accessibility identifiers."]
 
         return Struct(comments: comments, name: structName) {
-            structs
+            for s in structs {
+                s.generateLetBinding()
+                s
+            }
         }
     }
 
@@ -53,7 +56,6 @@ public struct AccessibilityIdentifier {
             .map { id in
                 LetBinding(
                     comments: ["Accessibility identifier `\(id)`."],
-                    isStatic: true,
                     name: SwiftIdentifier(name: id),
                     valueCodeString: "\"\(id)\""
                 )

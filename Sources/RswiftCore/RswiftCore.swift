@@ -83,11 +83,11 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-//        let idStruct = AccessibilityIdentifier.generateStruct(
-//            nibs: nibs,
-//            storyboards: storyboards,
-//            prefix: qualifiedName
-//        )
+        let idStruct = AccessibilityIdentifier.generateStruct(
+            nibs: project.nibs,
+            storyboards: project.storyboards,
+            prefix: qualifiedName
+        )
 
         let fontStruct = FontResource.generateStruct(
             resources: project.fonts,
@@ -169,6 +169,9 @@ public struct RswiftCore {
             segueStruct.generateLetBinding()
             segueStruct
 
+            idStruct.generateLetBinding()
+            idStruct
+
             storyboardStruct.generateBundleVarGetter(name: "storyboard")
             storyboardStruct.generateBundleFunction(name: "storyboard")
             storyboardStruct
@@ -191,6 +194,7 @@ public struct RswiftCore {
         print("  static let storyboard = S.storyboard")
         print("  static let entitlements = S.entitlements")
         print("  static let info = S.info")
+        print("  static let id = S.id")
         print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))
