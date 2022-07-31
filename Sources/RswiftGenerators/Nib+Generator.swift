@@ -21,14 +21,16 @@ extension NibResource {
         let groupedNibs = nibs.grouped(bySwiftIdentifier: \.name)
         groupedNibs.reportWarningsForDuplicatesAndEmpties(source: "nib", result: "nib", warning: warning)
 
-        let letbindings = groupedNibs.uniques
-            .map { $0.generateLetBinding() }
+        let vargetters = groupedNibs.uniques
+            .map { $0.generateVarGetter() }
             .sorted { $0.name < $1.name }
 
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) nibs."]
+        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) nibs."]
 
         return Struct(comments: comments, name: structName) {
-            letbindings
+            Init.bundle
+
+            vargetters
         }
     }
 
@@ -43,13 +45,12 @@ extension NibResource {
         )
     }
 
-    func generateLetBinding() -> LetBinding {
-        LetBinding(
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
             comments: ["Nib `\(name)`."],
-            isStatic: true,
             name: SwiftIdentifier(name: name),
             typeReference: genericTypeReference,
-            valueCodeString: "NibReference(name: \"\(name)\")"
+            valueCodeString: "NibReference(name: \"\(name)\", bundle: _bundle)"
         )
     }
 }

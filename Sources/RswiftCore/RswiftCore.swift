@@ -111,14 +111,14 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
+        let nibStruct = NibResource.generateStruct(
+            nibs: project.nibs,
+            prefix: qualifiedName
+        )
+
 //        let reuseIdentifierStruct = Reusable.generateStruct(
 //            nibs: nibs,
 //            storyboards: storyboards,
-//            prefix: qualifiedName
-//        )
-
-//        let nibStruct = NibResource.generateStruct(
-//            nibs: nibs,
 //            prefix: qualifiedName
 //        )
 
@@ -172,6 +172,10 @@ public struct RswiftCore {
             idStruct.generateLetBinding()
             idStruct
 
+            nibStruct.generateBundleVarGetter(name: "nib")
+            nibStruct.generateBundleFunction(name: "nib")
+            nibStruct
+
             storyboardStruct.generateBundleVarGetter(name: "storyboard")
             storyboardStruct.generateBundleFunction(name: "storyboard")
             storyboardStruct
@@ -194,6 +198,7 @@ public struct RswiftCore {
         print("  static let storyboard = S.storyboard")
         print("  static let entitlements = S.entitlements")
         print("  static let info = S.info")
+        print("  static let nib = S.nib")
         print("  static let id = S.id")
         print("}")
 

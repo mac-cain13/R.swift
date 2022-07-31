@@ -31,31 +31,19 @@ public struct NibReference<FirstView> {
     /// String name of this nib
     public let name: String
 
+    /// Bundle this nib is in
+    public let bundle: Bundle
+
     /**
      Create a new NibRefence based on the name string
      - parameter name: The string name for this nib
-     - returns: A new NibReference
+     - parameter bundle: The bundle the nib is in
     */
-    public init(name: String) {
+    public init(name: String, bundle: Bundle) {
         self.name = name
+        self.bundle = bundle
     }
 }
-//
-///// View controller reference
-//public struct ViewControllerReference<ViewController> {
-//
-//    /// String name of this view controller
-//    public let name: String
-//
-//    /**
-//     Create a new ViewControllerReference based on the name string
-//     - parameter name: The string name for this view controller
-//     - returns: A new ViewControllerReference
-//    */
-//    public init(name: String) {
-//        self.name = name
-//    }
-//}
 
 /// Storyboard view controller identifier
 public struct StoryboardViewControllerIdentifier<ViewController> {
