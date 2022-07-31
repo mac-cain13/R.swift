@@ -25,26 +25,6 @@ public protocol InitialControllerContainer {
 }
 
 
-/// Nib reference
-public struct NibReference<FirstView> {
-
-    /// String name of this nib
-    public let name: String
-
-    /// Bundle this nib is in
-    public let bundle: Bundle
-
-    /**
-     Create a new NibRefence based on the name string
-     - parameter name: The string name for this nib
-     - parameter bundle: The bundle the nib is in
-    */
-    public init(name: String, bundle: Bundle) {
-        self.name = name
-        self.bundle = bundle
-    }
-}
-
 /// Storyboard view controller identifier
 public struct StoryboardViewControllerIdentifier<ViewController> {
 
@@ -70,8 +50,39 @@ public struct StoryboardViewControllerIdentifier<ViewController> {
     }
 }
 
+public protocol NibReferenceContainer {
+    associatedtype FirstView
+    var name: String { get }
+    var bundle: Bundle { get }
+}
+
+public protocol ReuseIdentifierContainer {
+    associatedtype Reusable
+    var identifier: String { get }
+}
+
+/// Nib reference
+public struct NibReference<FirstView>: NibReferenceContainer {
+
+    /// String name of this nib
+    public let name: String
+
+    /// Bundle this nib is in
+    public let bundle: Bundle
+
+    /**
+     Create a new NibRefence based on the name string
+     - parameter name: The string name for this nib
+     - parameter bundle: The bundle the nib is in
+    */
+    public init(name: String, bundle: Bundle) {
+        self.name = name
+        self.bundle = bundle
+    }
+}
+
 /// Reuse identifier
-public struct ReuseIdentifier<Reusable> {
+public struct ReuseIdentifier<Reusable>: ReuseIdentifierContainer {
 
     /// String identifier of this reusable
     public let identifier: String
@@ -82,6 +93,31 @@ public struct ReuseIdentifier<Reusable> {
      - returns: A new ReuseIdentifier
     */
     public init(identifier: String) {
+        self.identifier = identifier
+    }
+}
+
+/// Nib reference, reuse identifier
+public struct NibReferenceReuseIdentifier<FirstView, Reusable>: NibReferenceContainer, ReuseIdentifierContainer {
+
+    /// String name of this nib
+    public let name: String
+
+    /// Bundle this nib is in
+    public let bundle: Bundle
+
+    /// String identifier of this reusable
+    public let identifier: String
+
+    /**
+     Create a new NibRefence based on the name string
+     - parameter name: The string name for this nib
+     - parameter bundle: The bundle the nib is in
+     - parameter identifier: The string identifier for this reusable
+    */
+    public init(name: String, bundle: Bundle, identifier: String) {
+        self.name = name
+        self.bundle = bundle
         self.identifier = identifier
     }
 }

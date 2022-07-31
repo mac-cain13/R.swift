@@ -46,11 +46,30 @@ extension NibResource {
     }
 
     func generateVarGetter() -> VarGetter {
-        VarGetter(
-            comments: ["Nib `\(name)`."],
-            name: SwiftIdentifier(name: name),
-            typeReference: genericTypeReference,
-            valueCodeString: "NibReference(name: \"\(name)\", bundle: _bundle)"
-        )
+        if let reusable = reusables.first {
+            let typeReference = TypeReference(
+                module: .rswiftResources,
+                name: "NibReferenceReuseIdentifier",
+                genericArgs: [rootViews.first ?? TypeReference.uiView, reusable.type]
+            )
+            return VarGetter(
+                comments: ["Nib `\(name)`."],
+                name: SwiftIdentifier(name: name),
+                typeReference: typeReference,
+                valueCodeString: "NibReferenceReuseIdentifier(name: \"\(name.escapedStringLiteral)\", bundle: _bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
+            )
+        } else {
+            let typeReference = TypeReference(
+                module: .rswiftResources,
+                name: "NibReference",
+                genericArgs: [rootViews.first ?? TypeReference.uiView]
+            )
+            return VarGetter(
+                comments: ["Nib `\(name)`."],
+                name: SwiftIdentifier(name: name),
+                typeReference: typeReference,
+                valueCodeString: "NibReference(name: \"\(name.escapedStringLiteral)\", bundle: _bundle)"
+            )
+        }
     }
 }

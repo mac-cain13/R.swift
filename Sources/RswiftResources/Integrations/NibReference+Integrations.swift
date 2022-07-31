@@ -12,7 +12,7 @@
 import UIKit
 
 
-public extension NibReference {
+public extension NibReferenceContainer {
 
     /**
      Instantiate the nib to get first object from this nib
@@ -65,7 +65,7 @@ public extension UINib {
 
      - returns: The initialized UINib object. An exception is thrown if there were errors during initialization or the nib file could not be located.
      */
-    convenience init<FirstView>(resource: NibReference<FirstView>) {
+    convenience init<Nib: NibReferenceContainer>(resource: Nib) {
         self.init(nibName: resource.name, bundle: resource.bundle)
     }
 }
@@ -78,7 +78,7 @@ public extension UIViewController {
 
      - returns: A newly initialized UIViewController object.
      */
-    convenience init<FirstView>(nib: NibReference<FirstView>) {
+    convenience init<Nib: NibReferenceContainer>(nib: Nib) {
         self.init(nibName: nib.name, bundle: nib.bundle)
     }
 }

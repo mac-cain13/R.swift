@@ -10,7 +10,7 @@ import RswiftResources
 
 extension Reusable {
     public static func generateStruct(nibs: [NibResource], storyboards: [StoryboardResource], prefix: SwiftIdentifier) -> Struct {
-        let structName = SwiftIdentifier(name: "reuseableIdentifier")
+        let structName = SwiftIdentifier(name: "reuseIdentifier")
         let qualifiedName = prefix + structName
 
         let warning: (String) -> Void = { print("warning:", $0) }
@@ -39,18 +39,17 @@ extension Reusable {
     var genericTypeReference: TypeReference {
         TypeReference(
             module: .rswiftResources,
-            name: "ReusableIdentifier",
+            name: "ReuseIdentifier",
             genericArgs: [type]
         )
     }
 
     func generateLetBinding() -> LetBinding {
         LetBinding(
-            comments: ["Reuseable identifier `\(identifier)`."],
-            isStatic: true,
+            comments: ["Reuse identifier `\(identifier)`."],
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,
-            valueCodeString: "ReuseableIdentifier(identifier: \"\(identifier)\")"
+            valueCodeString: "ReuseIdentifier(identifier: \"\(identifier)\")"
         )
     }
 }
