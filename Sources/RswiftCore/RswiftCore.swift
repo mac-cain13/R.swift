@@ -122,11 +122,11 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-//        let stringStruct = LocalizableStrings.generateStruct(
-//            resources: project.localizableStrings,
-//            developmentLanguage: project.xcodeproj.developmentRegion,
-//            prefix: qualifiedName
-//        )
+        let stringStruct = LocalizableStrings.generateStruct(
+            resources: project.localizableStrings,
+            developmentLanguage: project.xcodeproj.developmentRegion,
+            prefix: qualifiedName
+        )
 
         let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
             LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(project.xcodeproj.developmentRegion)""#)
@@ -139,6 +139,10 @@ public struct RswiftCore {
         let s = Struct(name: structName) {
             Init.bundle
             projectStruct
+
+            stringStruct.generateBundleVarGetter(name: "string")
+            stringStruct.generateBundleFunction(name: "string")
+            stringStruct
 
             dataStruct.generateBundleVarGetter(name: "data")
             dataStruct.generateBundleFunction(name: "data")
@@ -191,7 +195,7 @@ public struct RswiftCore {
         print("let S = _S(bundle: Bundle.main)")
         print("")
         print("extension R {")
-//        print("  static let string = S.string")
+        print("  static let string = S.string")
         print("  static let data = S.data")
         print("  static let color = S.color")
         print("  static let image = S.image")

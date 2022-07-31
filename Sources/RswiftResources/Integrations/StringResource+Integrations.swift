@@ -64,6 +64,12 @@ extension StringResource {
         NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
     }
 
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(preferredLanguages: [String]) -> String {
+        let (bundle, _) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        return NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+    }
+
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     public var localizedStringResource: LocalizedStringResource {
         LocalizedStringResource(key, defaultValue: String.LocalizationValue(stringLiteral: defaultValue), bundle: bundle == .main ? .main : .atURL(bundle.bundleURL), comment: comment)
@@ -75,10 +81,24 @@ extension StringResource1 {
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1])
     }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1])
+    }
 }
 
 extension StringResource2 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2) -> String {
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2])
+    }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2])
     }
@@ -89,10 +109,24 @@ extension StringResource3 {
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3])
     }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3])
+    }
 }
 
 extension StringResource4 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4) -> String {
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4])
+    }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4])
     }
@@ -103,10 +137,24 @@ extension StringResource5 {
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5])
     }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5])
+    }
 }
 
 extension StringResource6 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6) -> String {
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6])
+    }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6])
     }
@@ -117,6 +165,13 @@ extension StringResource7 {
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7])
     }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+    }
 }
 
 extension StringResource8 {
@@ -124,10 +179,24 @@ extension StringResource8 {
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
     }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+    }
 }
 
 extension StringResource9 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, _ arg9: Arg9) -> String {
+        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
+        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+    }
+
+    @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
+    public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, _ arg9: Arg9, preferredLanguages: [String]) -> String {
+        let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) ?? (bundle, locale)
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
         return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
     }

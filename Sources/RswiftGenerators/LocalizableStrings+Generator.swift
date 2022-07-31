@@ -285,7 +285,7 @@ private struct StringWithParams {
     }
 
     private var typeReference: TypeReference {
-        TypeReference(module: .host, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
+        TypeReference(module: .rswiftResources, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
     }
 
     private var typeName: String {
