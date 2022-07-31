@@ -21,12 +21,12 @@ extension FileResource {
     .reduce([]) { $0.union($1) }
 
     static public func parse(url: URL) throws -> FileResource {
-        guard let basename = url.filenameWithoutExtension else {
-            throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
-        }
+//        guard let basename = url.filenameWithoutExtension else {
+//            throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
+//        }
 
         let locale = LocaleReference(url: url)
 
-        return FileResource(fullname: url.lastPathComponent, locale: locale, name: basename, pathExtension: url.pathExtension)
+        return FileResource(filename: url.lastPathComponent, bundle: nil, locale: locale)
     }
 }

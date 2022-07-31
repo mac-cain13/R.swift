@@ -78,10 +78,10 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-//        let fileStruct = FileResource.generateStruct(
-//            resources: files,
-//            prefix: qualifiedName
-//        )
+        let fileStruct = FileResource.generateStruct(
+            resources: project.files,
+            prefix: qualifiedName
+        )
 
 //        let idStruct = AccessibilityIdentifier.generateStruct(
 //            nibs: nibs,
@@ -162,6 +162,10 @@ public struct RswiftCore {
             fontStruct.generateLetBinding()
             fontStruct
 
+            fileStruct.generateBundleVarGetter(name: "file")
+            fileStruct.generateBundleFunction(name: "file")
+            fileStruct
+
             segueStruct.generateLetBinding()
             segueStruct
 
@@ -183,6 +187,7 @@ public struct RswiftCore {
         print("  static let image = S.image")
         print("  static let font = S.font")
         print("  static let segue = S.segue")
+        print("  static let file = S.file")
         print("  static let storyboard = S.storyboard")
         print("  static let entitlements = S.entitlements")
         print("  static let info = S.info")

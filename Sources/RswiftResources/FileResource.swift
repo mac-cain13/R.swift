@@ -10,15 +10,16 @@
 import Foundation
 
 public struct FileResource {
-    public let fullname: String
-    public let locale: LocaleReference?
-    public let name: String
-    public let pathExtension: String
 
-    public init(fullname: String, locale: LocaleReference?, name: String, pathExtension: String) {
-        self.fullname = fullname
+    public let filename: String
+//    public let name: String
+//    public let pathExtension: String
+    public let bundle: Bundle?
+    public let locale: LocaleReference?
+
+    public init(filename: String, bundle: Bundle?, locale: LocaleReference?) {
+        self.filename = filename
+        self.bundle = bundle
         self.locale = locale
-        self.name = name
-        self.pathExtension = pathExtension
     }
 }

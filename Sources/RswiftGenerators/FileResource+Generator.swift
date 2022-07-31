@@ -15,31 +15,31 @@ extension FileResource {
         let warning: (String) -> Void = { print("warning:", $0) }
 
         // For resource files, the contents of the different locales don't matter, so we just use the first one
-        let firstLocales = Dictionary(grouping: resources, by: \.fullname)
+        let firstLocales = Dictionary(grouping: resources, by: \.filename)
             .values.map(\.first!)
-        let groupedFiles = firstLocales.grouped(bySwiftIdentifier: \.fullname)
+        let groupedFiles = firstLocales.grouped(bySwiftIdentifier: \.filename)
 
         groupedFiles.reportWarningsForDuplicatesAndEmpties(source: "resource file", result: "file", warning: warning)
 
-        let letbindings = groupedFiles.uniques.map { $0.generateLetBinding() }
+        let vargetters = groupedFiles.uniques.map { $0.generateVarGetter() }
 //            .sorted { $0.name < $1.name }
 
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) resource files."]
+        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) resource files."]
 
         return Struct(comments: comments, name: structName) {
-            letbindings
+            Init.bundle
+            vargetters
         }
     }
 }
 
 extension FileResource {
-    func generateLetBinding() -> LetBinding {
-        let code = "FileResource(name: \"\(name)\", filename: \"\(fullname)\")"
-        return LetBinding(
-            comments: ["Resource file `\(fullname)`."],
-            isStatic: true,
-            name: SwiftIdentifier(name: fullname),
-            valueCodeString: code
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
+            comments: ["Resource file `\(filename)`."],
+            name: SwiftIdentifier(name: filename),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "FileResource"),
+            valueCodeString: "FileResource(filename: \"\(filename.escapedStringLiteral)\", bundle: _bundle, locale: \(locale?.codeString() ?? "nil"))"
         )
     }
 }
