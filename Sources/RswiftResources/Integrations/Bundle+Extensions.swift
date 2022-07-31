@@ -8,8 +8,20 @@
 import Foundation
 
 extension Bundle {
+
+    // Locale of first preferred localization, fallback to current Locale
     public var firstPreferredLocale: Foundation.Locale {
         self.preferredLocalizations.first.flatMap { Foundation.Locale(identifier: $0) } ?? Foundation.Locale.current
+    }
+
+    /// Returns the string associated with the specified path + key in the receiver's information property list.
+    public func infoDictionaryString(path: [String], key: String) -> String? {
+        var dict = infoDictionary
+        for step in path {
+          guard let obj = dict?[step] as? [String: Any] else { return nil }
+          dict = obj
+        }
+        return dict?[key] as? String
     }
 
     /// Find first bundle and locale for which the table exists

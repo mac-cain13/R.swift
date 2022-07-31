@@ -33,7 +33,14 @@ struct EnvironmentKeys {
 let processInfo = ProcessInfo()
 let targetName = processInfo.environment[EnvironmentKeys.target] ?? "ResourceApp"
 
-let xcodeprojURL = URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.xcodeproj] ?? "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp.xcodeproj")
+let xcodeprojURL = processInfo.environment[EnvironmentKeys.xcodeproj].map { URL(fileURLWithPath: $0) }
+//    ?? URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp.xcodeproj")
+    ?? URL(fileURLWithPath: "/Users/tom/Projects/Ratemp/Examples/ResourceApp/ResourceApp.xcodeproj")
+let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile].map { URL(fileURLWithPath: $0) }
+//    ?? URL(fileURLWithPath: "/Users/tom/Projects/R.swift/Examples/ResourceApp/ResourceApp/Info.plist")
+    ?? URL(fileURLWithPath: "/Users/tom/Projects/Ratemp/Examples/ResourceApp/ResourceApp/Info.plist")
+let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements].map { URL(fileURLWithPath: $0) }
+    ?? URL(fileURLWithPath: "/Users/tom/Projects/Ratemp/Examples/ResourceApp/ResourceApp/ResourceApp.entitlements")
 let sourceRootURL = xcodeprojURL.deletingLastPathComponent()
 let rswiftIgnoreURL = sourceRootURL.appendingPathComponent(".rswiftignore")
 let fakeURL = URL(fileURLWithPath: "/FAKE")
@@ -50,8 +57,8 @@ let core = RswiftCore(
     xcodeprojURL: xcodeprojURL,
     targetName: targetName,
     productModuleName: processInfo.environment[EnvironmentKeys.productModuleName],
-    infoPlistFile: processInfo.environment[EnvironmentKeys.infoPlistFile].map { URL(fileURLWithPath: $0) },
-    codeSignEntitlements: processInfo.environment[EnvironmentKeys.codeSignEntitlements].map { URL(fileURLWithPath: $0) },
+    infoPlistFile: infoPlistFile,
+    codeSignEntitlements: codeSignEntitlements,
     rswiftIgnoreURL: rswiftIgnoreURL,
     sourceTreeURLs: sourceTreeURLs
 )

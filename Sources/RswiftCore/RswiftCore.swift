@@ -99,19 +99,17 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-//        let infoStruct = PropertyListResource.generateStruct(
-//            resourceName: "info",
-//            plists: [plist],
-//            toplevelKeysWhitelist: infoPlistWhitelist,
-//            prefix: qualifiedName
-//        )
+        let infoStruct = PropertyListResource.generateInfoStruct(
+            resourceName: "info",
+            plists: project.infoPlists,
+            prefix: qualifiedName
+        )
 
-//        let entitlementsStruct = PropertyListResource.generateStruct(
-//            resourceName: "entitlements",
-//            plists: [entitlements],
-//            toplevelKeysWhitelist: nil,
-//            prefix: qualifiedName
-//        )
+        let entitlementsStruct = PropertyListResource.generateStruct(
+            resourceName: "entitlements",
+            plists: project.codeSignEntitlements,
+            prefix: qualifiedName
+        )
 
 //        let reuseIdentifierStruct = Reusable.generateStruct(
 //            nibs: nibs,
@@ -154,6 +152,13 @@ public struct RswiftCore {
             imageStruct.generateBundleFunction(name: "image")
             imageStruct
 
+            infoStruct.generateBundleVarGetter(name: "info")
+            infoStruct.generateBundleFunction(name: "info")
+            infoStruct
+
+            entitlementsStruct.generateLetBinding()
+            entitlementsStruct
+
             fontStruct.generateLetBinding()
             fontStruct
 
@@ -179,6 +184,8 @@ public struct RswiftCore {
         print("  static let font = S.font")
         print("  static let segue = S.segue")
         print("  static let storyboard = S.storyboard")
+        print("  static let entitlements = S.entitlements")
+        print("  static let info = S.info")
         print("}")
 
         print("TOTAL", Date().timeIntervalSince(start))
