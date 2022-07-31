@@ -57,19 +57,28 @@ public struct NibReference<FirstView> {
 //    }
 //}
 
-/// View controller identifier
-public struct ViewControllerIdentifier<ViewController> {
+/// Storyboard view controller identifier
+public struct StoryboardViewControllerIdentifier<ViewController> {
 
-    /// Identifier of this view controller
+    /// Storyboard identifier of this view controller
     public let identifier: String
 
+    /// Name of the storyboard file on disk
+    public let storyboard: String
+
+    /// Bundle this storyboard is in
+    public let bundle: Bundle
+
     /**
-     Create a new ViewControllerIdentifier based on the identifier string
+     Create a new StoryboardViewControllerIdentifier based on the identifier string
      - parameter identifier: The string identifier for this view controller
-     - returns: A new ViewControllerIdentifier
+     - parameter storyboard: The name of the storyboard file
+     - parameter bundle: The bundle the storyboard is in
     */
-    public init(identifier: String) {
+    public init(identifier: String, storyboard: String, bundle: Bundle) {
         self.identifier = identifier
+        self.storyboard = storyboard
+        self.bundle = bundle
     }
 }
 

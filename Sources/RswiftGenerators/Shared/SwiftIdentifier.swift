@@ -84,7 +84,8 @@ struct SwiftNameGroups<T> {
         let resultPlural = "\(result)s"
 
         for (sanitizedName, dups) in duplicates {
-            warning("Skipping \(dups.count) \(sourcePlural) because symbol '\(sanitizedName.value)' would be generated for all of these \(resultPlural): \(dups.joined(separator: ", "))")
+            let source = dups.count == 1 ? sourceSingular : sourcePlural
+            warning("Skipping \(dups.count) \(source) because symbol '\(sanitizedName.value)' would be generated for all of these \(resultPlural): \(dups.joined(separator: ", "))")
         }
 
         if let empty = empties.first , empties.count == 1 {
@@ -92,6 +93,17 @@ struct SwiftNameGroups<T> {
         }
         else if empties.count > 1 {
             warning("Skipping \(empties.count) \(sourcePlural) because no swift identifier can be generated for all of these \(resultPlural): \(empties.joined(separator: ", "))")
+        }
+    }
+
+    func reportWarningsForReservedNames(source: String, container: String? = nil, result: String, warning: (String) -> Void) {
+        let sourceSingular = [source, container].compactMap { $0 }.joined(separator: " ")
+        let sourcePlural = ["\(source)s", container].compactMap { $0 }.joined(separator: " ")
+
+        for (sanitizedName, dups) in duplicates {
+            let count = dups.count - 1
+            let source = count == 1 ? sourceSingular : sourcePlural
+            warning("Skipping \(count) \(source) because symbol '\(sanitizedName.value)' would conflict with reserved name")
         }
     }
 }

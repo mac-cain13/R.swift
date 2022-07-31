@@ -15,9 +15,9 @@ import SwiftUI
 extension Image {
 
     /**
-     Creates a labelled image from this resource (R.image.*).
+     Creates a labelled image from this resource (R.image.\*).
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      */
     public init(_ resource: ImageResource) {
         self.init(resource.name, bundle: resource.bundle)
@@ -25,9 +25,9 @@ extension Image {
 
 
     /**
-     Creates a labelled image from this resource (R.image.*), with the variable value.
+     Creates a labelled image from this resource (R.image.\*), with the variable value.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter variableValue: Optional value between 1 and 0
      */
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
@@ -37,9 +37,9 @@ extension Image {
 
 
     /**
-     Creates a labelled image from this resource (R.image.*), with the specified label
+     Creates a labelled image from this resource (R.image.\*), with the specified label
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter label: The label associated with the image, for accessibility
      */
     public init(_ resource: ImageResource, label: Text) {
@@ -48,9 +48,9 @@ extension Image {
 
 
     /**
-     Creates a labelled image from this resource (R.image.*), with the specified label and variable value.
+     Creates a labelled image from this resource (R.image.\*), with the specified label and variable value.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter variableValue: Optional value between 1 and 0
      - parameter label: The label associated with the image, for accessibility
      */
@@ -61,9 +61,9 @@ extension Image {
 
 
     /**
-     Creates an unlabelled, decorative image from this resource (R.image.*).
+     Creates an unlabelled, decorative image from this resource (R.image.\*).
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      */
     public init(decorative resource: ImageResource) {
         self.init(decorative: resource.name, bundle: resource.bundle)
@@ -71,9 +71,9 @@ extension Image {
 
 
     /**
-     Creates an unlabelled, decorative image from this resource (R.image.*), with variable value.
+     Creates an unlabelled, decorative image from this resource (R.image.\*), with variable value.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter variableValue: Optional value between 1 and 0
      */
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
@@ -89,12 +89,12 @@ import UIKit
 extension ImageResource {
 
     /**
-     Returns the image from this resource (R.image.*) that is compatible with the trait collection.
+     Returns the image from this resource (R.image.\*) that is compatible with the trait collection.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter traitCollection: Traits that describe the desired image to retrieve, pass nil to use traits that describe the main screen.
 
-     - returns: An image that exactly or best matches the desired traits with the given resource (R.image.*), or nil if no suitable image was found.
+     - returns: An image that exactly or best matches the desired traits with the given resource (R.image.\*), or nil if no suitable image was found.
     */
     @available(*, deprecated, message: "Use UIImage(resource:) initializer instead")
     public func callAsFunction(compatibleWith traitCollection: UITraitCollection? = nil) -> UIImage? {
@@ -105,24 +105,24 @@ extension ImageResource {
 extension UIImage {
 
     /**
-     Returns the image from this resource (R.image.*) that is compatible with the trait collection.
+     Returns the image from this resource (R.image.\*) that is compatible with the trait collection.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter traitCollection: Traits that describe the desired image to retrieve, pass nil to use traits that describe the main screen.
 
-     - returns: An image that exactly or best matches the desired traits with the given resource (R.image.*), or nil if no suitable image was found.
+     - returns: An image that exactly or best matches the desired traits with the given resource (R.image.\*), or nil if no suitable image was found.
     */
     public convenience init?(resource: ImageResource, compatibleWith traitCollection: UITraitCollection? = nil) {
         self.init(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
     }
 
     /**
-     Returns the image from this resource (R.image.*) using the configuration specified.
+     Returns the image from this resource (R.image.\*) using the configuration specified.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter configuration: The image configuration the system appllies to the image
 
-     - returns: An image that exactly or best matches the configuration of the given resource (R.image.*), or nil if no suitable image was found.
+     - returns: An image that exactly or best matches the configuration of the given resource (R.image.\*), or nil if no suitable image was found.
     */
     @available(iOS 13, tvOS 13, watchOS 6, *)
     public convenience init?(resource: ImageResource, with configuration: UIImage.Configuration?) {
@@ -131,13 +131,13 @@ extension UIImage {
 
 
     /**
-     Returns the image from this resource (R.image.*) using the configuration, and variable value specified.
+     Returns the image from this resource (R.image.\*) using the configuration, and variable value specified.
 
-     - parameter resource: The resource you want the image of (R.image.*)
+     - parameter resource: The resource you want the image of (R.image.\*)
      - parameter variableValue: The value the system uses to customize the image content, between 0 and 1
      - parameter configuration: The image configuration the system appllies to the image
 
-     - returns: An image that exactly or best matches the configuration of the given resource (R.image.*), or nil if no suitable image was found.
+     - returns: An image that exactly or best matches the configuration of the given resource (R.image.\*), or nil if no suitable image was found.
     */
     @available(iOS 16, tvOS 16, watchOS 9, *)
     public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {

@@ -41,6 +41,8 @@ extension StoryboardResource {
 
     func generateStruct(prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
         let nameIdentifier = SwiftIdentifier(rawValue: "name")
+        let bundleIdentifier = SwiftIdentifier(name: "bundle")
+        let reservedIdentifiers: Set<SwiftIdentifier> = [nameIdentifier, bundleIdentifier]
 
         // View controllers with identifiers
         let grouped = viewControllers
@@ -52,23 +54,21 @@ extension StoryboardResource {
 
         grouped.reportWarningsForDuplicatesAndEmpties(source: "view controller", result: "view controller identifier", warning: warning)
 
-        let skip = grouped.uniques
-            .map(\.identifier)
-            .first { SwiftIdentifier(rawValue: $0) == nameIdentifier }
-        if let skip = skip {
-            warning("Skipping 1 view controller because symbol '\(skip)' conflicts with reserved name '\(nameIdentifier.value)'")
-        }
+        // Warning about conflicts with reserved identifiers
+        (grouped.uniques.map(\.identifier) + reservedIdentifiers.map(\.value))
+            .grouped(bySwiftIdentifier: { $0 })
+            .reportWarningsForReservedNames(source: "view controller", container: "in storyboard '\(name)'", result: "view controller", warning: warning)
 
-        let letbindings = grouped.uniques
-            .filter { (id, _) in SwiftIdentifier(rawValue: id) != nameIdentifier }
-            .map { (id, vc) in vc.generateLetBinding(identifier: id) }
+        let vargetters = grouped.uniques
+            .filter { !reservedIdentifiers.contains(SwiftIdentifier(rawValue: $0.identifier)) }
+            .map { (id, vc) in vc.generateVarGetter(identifier: id) }
             .sorted { $0.name < $1.name }
 
         let letName = LetBinding(
             name: nameIdentifier,
             valueCodeString: "\"\(name)\"")
         let varBundle = VarGetter(
-            name: SwiftIdentifier(name: "bundle"),
+            name: bundleIdentifier,
             typeReference: TypeReference.bundle,
             valueCodeString: "_bundle")
 
@@ -88,7 +88,7 @@ extension StoryboardResource {
             varBundle
             letName
 
-            letbindings
+            vargetters
         }
     }
 }
@@ -98,16 +98,16 @@ extension StoryboardResource.ViewController {
     var genericTypeReference: TypeReference {
         TypeReference(
             module: .rswiftResources,
-            name: "ViewControllerIdentifier",
+            name: "StoryboardViewControllerIdentifier",
             genericArgs: [self.type]
         )
     }
 
-    func generateLetBinding(identifier: String) -> LetBinding {
-        LetBinding(
+    func generateVarGetter(identifier: String) -> VarGetter {
+        VarGetter(
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,
-            valueCodeString: #"ViewControllerIdentifier(identifier: "\#(identifier)")"#
+            valueCodeString: #"StoryboardViewControllerIdentifier(identifier: "\#(identifier.escapedStringLiteral)", storyboard: name, bundle: bundle)"#
         )
     }
 }
