@@ -71,6 +71,7 @@ struct ResourceFileStructGenerator: ExternalOnlyStructGenerator {
             comments: ["`bundle.url(forResource: \"\(filename)\", withExtension: \"\(pathExtension)\")`"],
             accessModifier: externalAccessLevel,
             isStatic: true,
+            isMainActor: false,
             name: SwiftIdentifier(name: fullname),
             generics: nil,
             parameters: [

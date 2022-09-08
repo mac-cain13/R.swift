@@ -44,6 +44,7 @@ extension Struct {
         comments: ["Load string from Info.plist file"],
         accessModifier: .filePrivate,
         isStatic: true,
+        isMainActor: false,
         name: "infoPlistString",
         generics: nil,
         parameters: [
@@ -67,6 +68,7 @@ extension Struct {
         comments: ["Find first language and bundle for which the table exists"],
         accessModifier: .filePrivate,
         isStatic: true,
+        isMainActor: false,
         name: "localeBundle",
         generics: nil,
         parameters: [

@@ -38,6 +38,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
         comments: ["`UIFont(name: \"\(font.name)\", size: ...)`"],
         accessModifier: externalAccessLevel,
         isStatic: true,
+        isMainActor: false,
         name: SwiftIdentifier(name: font.name),
         generics: nil,
         parameters: [
@@ -66,6 +67,7 @@ struct FontStructGenerator: ExternalOnlyStructGenerator {
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,
+        isMainActor: false,
         name: "validate",
         generics: nil,
         parameters: [],

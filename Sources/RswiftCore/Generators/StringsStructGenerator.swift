@@ -241,6 +241,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
+      isMainActor: false,
       name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: [
@@ -291,6 +292,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       comments: values.comments,
       accessModifier: externalAccessLevel,
       isStatic: true,
+      isMainActor: false,
       name: SwiftIdentifier(name: values.key),
       generics: nil,
       parameters: params,

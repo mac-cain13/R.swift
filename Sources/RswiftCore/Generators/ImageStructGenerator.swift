@@ -82,6 +82,7 @@ struct ImageStructGenerator: ExternalOnlyStructGenerator {
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
+      isMainActor: false,
       name: structName,
       generics: nil,
       parameters: [
@@ -158,6 +159,7 @@ private extension NamespacedAssetSubfolder {
       comments: ["`UIImage(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
       accessModifier: externalAccessLevel,
       isStatic: true,
+      isMainActor: false,
       name: structName,
       generics: nil,
       parameters: [

@@ -14,6 +14,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   let comments: [String]
   let accessModifier: AccessLevel
   let isStatic: Bool
+  let isMainActor: Bool
   let name: SwiftIdentifier
   let generics: String?
   let parameters: [Parameter]
@@ -34,6 +35,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
   var swiftCode: String {
     let commentsString = comments.map { $0.isEmpty ? "///\n" : "/// \($0)\n" }.joined(separator: "")
     let availablesString = availables.map { "@available(\($0))\n" }.joined(separator: "")
+    let mainActorString = isMainActor ? "@MainActor\n" : ""
     let accessModifierString = accessModifier.swiftCode
     let staticString = isStatic ? "static " : ""
     let genericsString = generics.map { "<\($0)>" } ?? ""
@@ -42,7 +44,7 @@ struct Function: UsedTypesProvider, SwiftCodeConverible {
     let returnString = Type._Void == returnType ? "" : " -> \(returnType)"
     let bodyString = body.indent(with: "  ")
 
-    return OSPrinter(code: "\(commentsString)\(availablesString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}", supportedOS: os).swiftCode
+    return OSPrinter(code: "\(commentsString)\(availablesString)\(mainActorString)\(accessModifierString)\(staticString)func \(name)\(genericsString)(\(parameterString))\(throwString)\(returnString) {\n\(bodyString)\n}", supportedOS: os).swiftCode
   }
 
   struct Parameter: UsedTypesProvider, CustomStringConvertible {

@@ -144,6 +144,7 @@ struct SegueStructGenerator: ExternalOnlyStructGenerator {
         ],
         accessModifier: externalAccessLevel,
         isStatic: true,
+        isMainActor: true,
         name: SwiftIdentifier(name: segueWithInfo.segue.identifier),
         generics: nil,
         parameters: [

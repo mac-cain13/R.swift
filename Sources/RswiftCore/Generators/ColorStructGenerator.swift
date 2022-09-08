@@ -128,6 +128,7 @@ private func generateColorFunction(for name: String, at externalAccessLevel: Acc
     comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
     accessModifier: externalAccessLevel,
     isStatic: true,
+    isMainActor: false,
     name: structName,
     generics: nil,
     parameters: [
@@ -154,6 +155,7 @@ private func generateWatchOSColorFunction(for name: String, at externalAccessLev
     comments: ["`UIColor(named: \"\(name)\", bundle: ..., traitCollection: ...)`"],
     accessModifier: externalAccessLevel,
     isStatic: true,
+    isMainActor: false,
     name: structName,
     generics: nil,
     parameters: [

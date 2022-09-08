@@ -42,6 +42,7 @@ struct StoryboardStructGenerator: StructGenerator {
           comments: ["`UIStoryboard(name: \"\(storyboard.name)\", bundle: ...)`"],
           accessModifier: externalAccessLevel,
           isStatic: true,
+          isMainActor: true,
           name: _struct.type.name,
           generics: nil,
           parameters: [
@@ -148,6 +149,7 @@ struct StoryboardStructGenerator: StructGenerator {
           comments: [],
           accessModifier: externalAccessLevel,
           isStatic: false,
+          isMainActor: true,
           name: resource.name,
           generics: nil,
           parameters: [
@@ -193,6 +195,7 @@ struct StoryboardStructGenerator: StructGenerator {
         comments: [],
         accessModifier: externalAccessLevel,
         isStatic: true,
+        isMainActor: true,
         name: "validate",
         generics: nil,
         parameters: [],
