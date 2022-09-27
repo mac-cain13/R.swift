@@ -6,12 +6,38 @@
 //
 
 import Foundation
+import ArgumentParser
 import XcodeEdit
 import RswiftParsers
 import RswiftResources
 import RswiftGenerators
 
+public enum Generator: String, CaseIterable, ExpressibleByArgument {
+    case image
+    case string
+    case color
+    case file
+    case font
+    case nib
+    case segue
+    case storyboard
+    case reuseIdentifier
+    case entitlements
+    case info
+    case id
+}
+
+public enum AccessLevel: String, ExpressibleByArgument {
+  case publicLevel = "public"
+  case internalLevel = "internal"
+  case filePrivate = "fileprivate"
+  case privateLevel = "private"
+}
+
+
 public struct RswiftCore {
+    let outputURL: URL
+    let generators: [Generator]
     let xcodeprojURL: URL
     let targetName: String
     let productModuleName: String?
@@ -23,6 +49,8 @@ public struct RswiftCore {
     let rswiftIgnoreURL: URL
 
     public init(
+        outputURL: URL,
+        generators: [Generator],
         xcodeprojURL: URL,
         targetName: String,
         productModuleName: String?,
@@ -31,6 +59,8 @@ public struct RswiftCore {
         rswiftIgnoreURL: URL,
         sourceTreeURLs: SourceTreeURLs
     ) {
+        self.outputURL = outputURL
+        self.generators = generators
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
         self.productModuleName = productModuleName
@@ -188,6 +218,7 @@ public struct RswiftCore {
             storyboardStruct
         }
 
+        try s.prettyPrint().write(to: outputURL, atomically: true, encoding: .utf8)
         print(s.prettyPrint())
 
         print()

@@ -70,10 +70,10 @@ extension StringResource {
         return NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue, comment: "")
     }
 
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public var localizedStringResource: LocalizedStringResource {
-        LocalizedStringResource(key, defaultValue: String.LocalizationValue(stringLiteral: defaultValue), bundle: bundle == .main ? .main : .atURL(bundle.bundleURL), comment: comment)
-    }
+//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+//    public var localizedStringResource: LocalizedStringResource {
+//        LocalizedStringResource(key, defaultValue: String.LocalizationValue(stringLiteral: defaultValue), bundle: bundle == .main ? .main : .atURL(bundle.bundleURL), comment: comment)
+//    }
 }
 
 extension StringResource1 {

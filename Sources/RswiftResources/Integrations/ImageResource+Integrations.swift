@@ -30,10 +30,10 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public init(_ resource: ImageResource, variableValue: Double?) {
-        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
-    }
+//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+//    public init(_ resource: ImageResource, variableValue: Double?) {
+//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
+//    }
 
 
     /**
@@ -54,10 +54,10 @@ extension Image {
      - parameter variableValue: Optional value between 1 and 0
      - parameter label: The label associated with the image, for accessibility
      */
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
-        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
-    }
+//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+//    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
+//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
+//    }
 
 
     /**
@@ -76,10 +76,10 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public init(decorative resource: ImageResource, variableValue: Double?) {
-        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
-    }
+//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+//    public init(decorative resource: ImageResource, variableValue: Double?) {
+//        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
+//    }
 }
 
 

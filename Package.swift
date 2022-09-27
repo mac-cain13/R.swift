@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
@@ -17,6 +17,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.1.0"),
   ],
   targets: [
     .target(name: "RswiftResources"),
@@ -24,10 +25,17 @@ let package = Package(
     .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
 
     // Core of R.swift, brings all previous parts together
-    .target(name: "RswiftCore", dependencies: ["RswiftParsers", "RswiftGenerators"]),
+    .target(name: "RswiftCore", dependencies: [
+        .target(name: "RswiftParsers"),
+        .target(name: "RswiftGenerators"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+    ]),
 
     // Executable that calls Core
-    .target(name: "rswift", dependencies: ["RswiftCore"]),
+    .executableTarget(name: "rswift", dependencies: [
+        .target(name: "RswiftCore"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+    ]),
 
     // Legacy code
     .target(name: "rswift-legacy", dependencies: ["RswiftCoreLegacy"]),
