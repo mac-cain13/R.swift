@@ -39,7 +39,7 @@ extension FileResource {
             comments: ["Resource file `\(filename)`."],
             name: SwiftIdentifier(name: filename),
             typeReference: TypeReference(module: .rswiftResources, rawName: "FileResource"),
-            valueCodeString: "FileResource(name: \"\(name.escapedStringLiteral)\", pathExtension: \"\(pathExtension.escapedStringLiteral)\", bundle: _bundle, locale: \(locale?.codeString() ?? "nil"))"
+            valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", pathExtension: \"\(pathExtension.escapedStringLiteral)\", bundle: _bundle, locale: \(locale?.codeString() ?? "nil"))"
         )
     }
 }

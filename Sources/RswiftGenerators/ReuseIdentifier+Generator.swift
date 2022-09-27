@@ -49,7 +49,7 @@ extension Reusable {
             comments: ["Reuse identifier `\(identifier)`."],
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,
-            valueCodeString: "ReuseIdentifier(identifier: \"\(identifier)\")"
+            valueCodeString: ".init(identifier: \"\(identifier)\")"
         )
     }
 }

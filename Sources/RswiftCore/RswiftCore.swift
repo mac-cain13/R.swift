@@ -174,74 +174,74 @@ public struct RswiftCore {
             Init.bundle
             projectStruct
 
-            if generators.contains(.string) {
+            if generators.contains(.string) && !stringStruct.isEmpty {
                 stringStruct.generateBundleVarGetter(name: "string")
                 stringStruct.generateBundleFunction(name: "string")
                 stringStruct
             }
 
-            if generators.contains(.data) {
+            if generators.contains(.data) && !dataStruct.isEmpty {
                 dataStruct.generateBundleVarGetter(name: "data")
                 dataStruct.generateBundleFunction(name: "data")
                 dataStruct
             }
 
-            if generators.contains(.color) {
+            if generators.contains(.color) && !colorStruct.isEmpty {
                 colorStruct.generateBundleVarGetter(name: "color")
                 colorStruct.generateBundleFunction(name: "color")
                 colorStruct
             }
 
-            if generators.contains(.image) {
+            if generators.contains(.image) && !imageStruct.isEmpty {
                 imageStruct.generateBundleVarGetter(name: "image")
                 imageStruct.generateBundleFunction(name: "image")
                 imageStruct
             }
 
-            if generators.contains(.info) {
+            if generators.contains(.info) && !infoStruct.isEmpty {
                 infoStruct.generateBundleVarGetter(name: "info")
                 infoStruct.generateBundleFunction(name: "info")
                 infoStruct
             }
 
-            if generators.contains(.entitlements) {
+            if generators.contains(.entitlements) && !entitlementsStruct.isEmpty {
                 entitlementsStruct.generateLetBinding()
                 entitlementsStruct
             }
 
-            if generators.contains(.font) {
+            if generators.contains(.font) && !fontStruct.isEmpty {
                 fontStruct.generateLetBinding()
                 fontStruct
             }
 
-            if generators.contains(.file) {
+            if generators.contains(.file) && !fileStruct.isEmpty {
                 fileStruct.generateBundleVarGetter(name: "file")
                 fileStruct.generateBundleFunction(name: "file")
                 fileStruct
             }
 
-            if generators.contains(.segue) {
+            if generators.contains(.segue) && !segueStruct.isEmpty {
                 segueStruct.generateLetBinding()
                 segueStruct
             }
 
-            if generators.contains(.id) {
+            if generators.contains(.id) && !idStruct.isEmpty {
                 idStruct.generateLetBinding()
                 idStruct
             }
 
-            if generators.contains(.nib) {
+            if generators.contains(.nib) && !nibStruct.isEmpty {
                 nibStruct.generateBundleVarGetter(name: "nib")
                 nibStruct.generateBundleFunction(name: "nib")
                 nibStruct
             }
 
-            if generators.contains(.reuseIdentifier) {
+            if generators.contains(.reuseIdentifier) && !reuseIdentifierStruct.isEmpty {
                 reuseIdentifierStruct.generateLetBinding()
                 reuseIdentifierStruct
             }
 
-            if generators.contains(.storyboard) {
+            if generators.contains(.storyboard) && !storyboardStruct.isEmpty {
                 storyboardStruct.generateBundleVarGetter(name: "storyboard")
                 storyboardStruct.generateBundleFunction(name: "storyboard")
                 storyboardStruct

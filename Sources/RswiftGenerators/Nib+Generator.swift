@@ -56,7 +56,7 @@ extension NibResource {
                 comments: ["Nib `\(name)`."],
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
-                valueCodeString: "NibReferenceReuseIdentifier(name: \"\(name.escapedStringLiteral)\", bundle: _bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
+                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: _bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
             )
         } else {
             let typeReference = TypeReference(
@@ -68,7 +68,7 @@ extension NibResource {
                 comments: ["Nib `\(name)`."],
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
-                valueCodeString: "NibReference(name: \"\(name.escapedStringLiteral)\", bundle: _bundle)"
+                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: _bundle)"
             )
         }
     }

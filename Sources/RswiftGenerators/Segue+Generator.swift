@@ -172,7 +172,7 @@ struct SegueWithInfo {
             comments: ["Segue identifier `\(segue.identifier)`."],
             name: SwiftIdentifier(name: segue.identifier),
             typeReference: genericTypeReference,
-            valueCodeString: "SegueIdentifier(identifier: \"\(segue.identifier)\")"
+            valueCodeString: ".init(identifier: \"\(segue.identifier)\")"
         )
     }
 }

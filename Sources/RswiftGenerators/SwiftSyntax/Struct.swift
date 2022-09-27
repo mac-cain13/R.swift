@@ -306,7 +306,9 @@ public struct Struct {
     public var structs: [Struct] = []
     public var typealiasses: [TypeAlias] = []
 
-    public var isEmpty: Bool { lets.isEmpty && funcs.isEmpty && structs.isEmpty }
+    public var isEmpty: Bool {
+        lets.isEmpty && vars.isEmpty && funcs.isEmpty && structs.isEmpty
+    }
 
     public static var empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
 
