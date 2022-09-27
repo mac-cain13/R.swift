@@ -250,7 +250,6 @@ private struct StringWithParams {
     func generateVarGetter() -> VarGetter {
         VarGetter(
             comments: self.comments,
-            isLazy: true,
             name: SwiftIdentifier(name: key),
             typeReference: typeReference,
             valueCodeString: varValueCodeString

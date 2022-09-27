@@ -10,7 +10,7 @@ import RswiftResources
 
 public protocol AssetCatalogContent {
     var name: String { get }
-    func generateLetBinding() -> LetBinding
+    func generateVarGetter() -> VarGetter
 }
 
 extension ColorResource {
@@ -53,7 +53,7 @@ extension AssetCatalog.Namespace {
         let groupedResources = allResources.grouped(bySwiftIdentifier: { $0.name })
         groupedResources.reportWarningsForDuplicatesAndEmpties(source: resourceName, result: resourceName, warning: warning)
 
-        let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
+        let vargetters = groupedResources.uniques.map { $0.generateVarGetter() }
         let otherIdentifiers = groupedResources.uniques.map { SwiftIdentifier(name: $0.name) }
 
         let mergedNamespaces = AssetCatalogMergedNamespaces(all: subnamespaces, otherIdentifiers: otherIdentifiers)
@@ -71,7 +71,7 @@ extension AssetCatalog.Namespace {
             .filter { !$0.isEmpty }
 
         let comment = [
-            "This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) \(resourceName)s",
+            "This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) \(resourceName)s",
             structs.isEmpty ? "" : ", and \(structs.count) namespaces",
             "."
         ].joined()
@@ -79,7 +79,7 @@ extension AssetCatalog.Namespace {
         let comments = [comment]
         return Struct(comments: comments, name: structName) {
             Init.bundle
-            letbindings
+            vargetters
             structs
 
             for s in structs {
@@ -91,39 +91,42 @@ extension AssetCatalog.Namespace {
 }
 
 extension ColorResource: AssetCatalogContent {
-    public func generateLetBinding() -> LetBinding {
+    public func generateVarGetter() -> VarGetter {
         let fullname = (path + [name]).joined(separator: "/")
-        let code = "ColorResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil)"
-        return LetBinding(
+        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: _bundle)"
+        return VarGetter(
             comments: ["Color `\(fullname)`."],
             name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: "ColorResource"),
             valueCodeString: code
         )
     }
 }
 
 extension DataResource: AssetCatalogContent {
-    public func generateLetBinding() -> LetBinding {
+    public func generateVarGetter() -> VarGetter {
         let fullname = (path + [name]).joined(separator: "/")
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
-        let code = "DataResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, onDemandResourceTags: \(odrt))"
-        return LetBinding(
+        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, onDemandResourceTags: \(odrt))"
+        return VarGetter(
             comments: ["Data asset `\(fullname)`."],
             name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: "DataResource"),
             valueCodeString: code
         )
     }
 }
 
 extension ImageResource: AssetCatalogContent {
-    public func generateLetBinding() -> LetBinding {
+    public func generateVarGetter() -> VarGetter {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
         let fullname = (path + [name]).joined(separator: "/")
-        let code = "ImageResource(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, locale: \(locs), onDemandResourceTags: \(odrt))"
-        return LetBinding(
+        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, locale: \(locs), onDemandResourceTags: \(odrt))"
+        return VarGetter(
             comments: ["Image `\(fullname)`."],
             name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: "ImageResource"),
             valueCodeString: code
         )
     }

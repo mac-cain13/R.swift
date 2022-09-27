@@ -75,7 +75,7 @@ public struct VarGetter {
     public let typeReference: TypeReference
     public let valueCodeString: String
 
-    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isLazy: Bool = false, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String) {
+    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String) {
         self.comments = comments
         self.accessControl = accessControl
         self.name = name
@@ -90,16 +90,14 @@ public struct VarGetter {
             "\(name.value):",
             typeReference.codeString(),
             "{",
+            valueCodeString,
+            "}"
         ]
 
         for c in comments {
             pp.append(words: ["///", c == "" ? nil : c])
         }
         pp.append(words: words)
-        pp.indented { pp in
-            pp.append(line: valueCodeString)
-        }
-        pp.append(line: "}")
     }
 }
 
@@ -333,6 +331,28 @@ public struct Struct {
         self.typealiasses = members.typealiasses
     }
 
+    public mutating func setAccessControl(_ accessControl: AccessControl) {
+        self.accessControl = accessControl
+        for i in lets.indices {
+            lets[i].accessControl = accessControl
+        }
+        for i in vars.indices {
+            vars[i].accessControl = accessControl
+        }
+        for i in inits.indices {
+            inits[i].accessControl = accessControl
+        }
+        for i in funcs.indices {
+            funcs[i].accessControl = accessControl
+        }
+        for i in structs.indices {
+            structs[i].setAccessControl(accessControl)
+        }
+        for i in typealiasses.indices {
+            typealiasses[i].accessControl = accessControl
+        }
+    }
+
     public func prettyPrint() -> String {
         var pp = PrettyPrinter()
         render(&pp)
@@ -346,7 +366,7 @@ public struct Struct {
 
         let ps = protocols.map { $0.codeString() }.joined(separator: ", ")
         let implements = ps.isEmpty ? "" : ": \(ps)"
-        pp.append(line: "struct \(name.value)\(implements) {")
+        pp.append(words: [accessControl.code(), "struct", "\(name.value)\(implements)", "{"])
 
         pp.indented { pp in
             for talias in typealiasses {

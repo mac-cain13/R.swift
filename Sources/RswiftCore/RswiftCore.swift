@@ -39,6 +39,7 @@ public enum AccessLevel: String, ExpressibleByArgument {
 public struct RswiftCore {
     let outputURL: URL
     let generators: [Generator]
+    let accessLevel: AccessLevel
     let xcodeprojURL: URL
     let targetName: String
     let productModuleName: String?
@@ -52,6 +53,7 @@ public struct RswiftCore {
     public init(
         outputURL: URL,
         generators: [Generator],
+        accessLevel: AccessLevel,
         xcodeprojURL: URL,
         targetName: String,
         productModuleName: String?,
@@ -62,6 +64,7 @@ public struct RswiftCore {
     ) {
         self.outputURL = outputURL
         self.generators = generators
+        self.accessLevel = accessLevel
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
         self.productModuleName = productModuleName
@@ -167,7 +170,7 @@ public struct RswiftCore {
             }
         }
 
-        let s = Struct(name: structName) {
+        var s = Struct(name: structName) {
             Init.bundle
             projectStruct
 
@@ -245,14 +248,27 @@ public struct RswiftCore {
             }
         }
 
+        if accessLevel == .publicLevel {
+            s.setAccessControl(.public)
+        }
+
+        let mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle(for: BundleClass.self))"
+
         let str = s.prettyPrint()
         let code = """
+        import UIKit
         import Foundation
         import RswiftResources
 
         \(str)
 
-        let R = _R(bundle: Bundle.main)
+        extension _R {
+          func validate() throws {
+          }
+        }
+
+        private class BundleClass {}
+        \(mainLet)
         """
         try code.write(to: outputURL, atomically: true, encoding: .utf8)
         /*

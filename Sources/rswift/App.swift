@@ -110,6 +110,7 @@ extension App {
             let core = RswiftCore(
                 outputURL: outputURL,
                 generators: generators.isEmpty ? Generator.allCases : generators,
+                accessLevel: accessLevel,
                 xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
                 targetName: targetName,
                 productModuleName: nil,
