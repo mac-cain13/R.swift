@@ -15,8 +15,18 @@ public extension FileResource {
 
      - returns: The file URL for the resource file (`R.file.*`) or nil if the file could not be located.
      */
+    func url() -> URL? {
+        (bundle ?? .main).url(forResource: name, withExtension: pathExtension)
+    }
+
+    /**
+     Returns the file URL for the given resource (`R.file.*`).
+
+     - returns: The file URL for the resource file (`R.file.*`) or nil if the file could not be located.
+     */
+    @available(*, renamed: "url()")
     func callAsFunction() -> URL? {
-        (bundle ?? .main).url(forResource: filename, withExtension: nil)
+        url()
     }
 }
 
@@ -29,7 +39,7 @@ public extension Bundle {
      - returns: The file URL for the resource file (`R.file.*`) or nil if the file could not be located.
      */
     func url(forResource resource: FileResource) -> URL? {
-        url(forResource: resource.filename, withExtension: nil)
+        url(forResource: resource.name, withExtension: resource.pathExtension)
     }
 
     /**
@@ -40,6 +50,6 @@ public extension Bundle {
      - returns: The full pathname for the resource file (`R.file.*`) or nil if the file could not be located.
      */
     func path(forResource resource: FileResource) -> String? {
-        path(forResource: resource.filename, ofType: nil)
+        path(forResource: resource.name, ofType: resource.pathExtension)
     }
 }

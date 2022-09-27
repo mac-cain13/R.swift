@@ -16,6 +16,7 @@ public enum Generator: String, CaseIterable, ExpressibleByArgument {
     case image
     case string
     case color
+    case data
     case file
     case font
     case nib
@@ -86,7 +87,7 @@ public struct RswiftCore {
             warning: { print("[warning]", $0) }
         )
 
-        let structName = SwiftIdentifier(rawValue: "_S")
+        let structName = SwiftIdentifier(rawValue: "_R")
         let qualifiedName = structName
 
         let segueStruct = Segue.generateStruct(
@@ -170,55 +171,91 @@ public struct RswiftCore {
             Init.bundle
             projectStruct
 
-            stringStruct.generateBundleVarGetter(name: "string")
-            stringStruct.generateBundleFunction(name: "string")
-            stringStruct
+            if generators.contains(.string) {
+                stringStruct.generateBundleVarGetter(name: "string")
+                stringStruct.generateBundleFunction(name: "string")
+                stringStruct
+            }
 
-            dataStruct.generateBundleVarGetter(name: "data")
-            dataStruct.generateBundleFunction(name: "data")
-            dataStruct
+            if generators.contains(.data) {
+                dataStruct.generateBundleVarGetter(name: "data")
+                dataStruct.generateBundleFunction(name: "data")
+                dataStruct
+            }
 
-            colorStruct.generateBundleVarGetter(name: "color")
-            colorStruct.generateBundleFunction(name: "color")
-            colorStruct
+            if generators.contains(.color) {
+                colorStruct.generateBundleVarGetter(name: "color")
+                colorStruct.generateBundleFunction(name: "color")
+                colorStruct
+            }
 
-            imageStruct.generateBundleVarGetter(name: "image")
-            imageStruct.generateBundleFunction(name: "image")
-            imageStruct
+            if generators.contains(.image) {
+                imageStruct.generateBundleVarGetter(name: "image")
+                imageStruct.generateBundleFunction(name: "image")
+                imageStruct
+            }
 
-            infoStruct.generateBundleVarGetter(name: "info")
-            infoStruct.generateBundleFunction(name: "info")
-            infoStruct
+            if generators.contains(.info) {
+                infoStruct.generateBundleVarGetter(name: "info")
+                infoStruct.generateBundleFunction(name: "info")
+                infoStruct
+            }
 
-            entitlementsStruct.generateLetBinding()
-            entitlementsStruct
+            if generators.contains(.entitlements) {
+                entitlementsStruct.generateLetBinding()
+                entitlementsStruct
+            }
 
-            fontStruct.generateLetBinding()
-            fontStruct
+            if generators.contains(.font) {
+                fontStruct.generateLetBinding()
+                fontStruct
+            }
 
-            fileStruct.generateBundleVarGetter(name: "file")
-            fileStruct.generateBundleFunction(name: "file")
-            fileStruct
+            if generators.contains(.file) {
+                fileStruct.generateBundleVarGetter(name: "file")
+                fileStruct.generateBundleFunction(name: "file")
+                fileStruct
+            }
 
-            segueStruct.generateLetBinding()
-            segueStruct
+            if generators.contains(.segue) {
+                segueStruct.generateLetBinding()
+                segueStruct
+            }
 
-            idStruct.generateLetBinding()
-            idStruct
+            if generators.contains(.id) {
+                idStruct.generateLetBinding()
+                idStruct
+            }
 
-            nibStruct.generateBundleVarGetter(name: "nib")
-            nibStruct.generateBundleFunction(name: "nib")
-            nibStruct
+            if generators.contains(.nib) {
+                nibStruct.generateBundleVarGetter(name: "nib")
+                nibStruct.generateBundleFunction(name: "nib")
+                nibStruct
+            }
 
-            reuseIdentifierStruct.generateLetBinding()
-            reuseIdentifierStruct
+            if generators.contains(.reuseIdentifier) {
+                reuseIdentifierStruct.generateLetBinding()
+                reuseIdentifierStruct
+            }
 
-            storyboardStruct.generateBundleVarGetter(name: "storyboard")
-            storyboardStruct.generateBundleFunction(name: "storyboard")
-            storyboardStruct
+            if generators.contains(.storyboard) {
+                storyboardStruct.generateBundleVarGetter(name: "storyboard")
+                storyboardStruct.generateBundleFunction(name: "storyboard")
+                storyboardStruct
+            }
         }
 
-        try s.prettyPrint().write(to: outputURL, atomically: true, encoding: .utf8)
+        let str = s.prettyPrint()
+        let code = """
+        import Foundation
+        import RswiftResources
+
+        \(str)
+
+        let R = _R(bundle: Bundle.main)
+        """
+        try code.write(to: outputURL, atomically: true, encoding: .utf8)
+        /*
         print(s.prettyPrint())
 
         print()
@@ -240,6 +277,7 @@ public struct RswiftCore {
         print("  static let reuseIdentifier = S.reuseIdentifier")
         print("  static let id = S.id")
         print("}")
+        */
 
         print("TOTAL", Date().timeIntervalSince(start))
         print()
