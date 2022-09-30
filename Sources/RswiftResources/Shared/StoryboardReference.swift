@@ -56,7 +56,7 @@ public protocol NibReferenceContainer {
     var bundle: Bundle { get }
 }
 
-public protocol ReuseIdentifierContainer {
+public protocol ReuseIdentifierContainer<Reusable> {
     associatedtype Reusable
     var identifier: String { get }
 }
@@ -168,3 +168,13 @@ public struct TypedSegue<Segue, Source, Destination> {
         self.identifier = identifier
     }
 }
+
+
+@available(*, renamed: "ReuseIdentifierContainer")
+public protocol ReuseIdentifierType {}
+
+@available(*, renamed: "SegueIdentifier")
+public struct StoryboardSegueIdentifier<Segue, Self, Destination> {}
+
+@available(*, renamed: "TypedSegue")
+public struct TypedStoryboardSegueInfo<Segue, Source, Destination> {}

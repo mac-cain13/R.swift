@@ -21,7 +21,7 @@ public struct AccessibilityIdentifier {
         let structName = SwiftIdentifier(name: "id")
         let qualifiedName = prefix + structName
 
-//        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning:", $0) }
 
         let containers: [AccessibilityIdentifierContainer] = nibs + storyboards
         let mergedContainers = Dictionary(grouping: containers, by: \.name)
@@ -33,7 +33,8 @@ public struct AccessibilityIdentifier {
                 generateStruct(
                     viewControllerName: name,
                     usedAccessibilityIdentifiers: ids,
-                    prefix: qualifiedName
+                    prefix: qualifiedName,
+                    warning: warning
                 )
             }
             .sorted { $0.name < $1.name }
@@ -48,11 +49,16 @@ public struct AccessibilityIdentifier {
         }
     }
 
-    static func generateStruct(viewControllerName: String, usedAccessibilityIdentifiers: [String], prefix: SwiftIdentifier) -> Struct {
+    static func generateStruct(viewControllerName: String, usedAccessibilityIdentifiers: [String], prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
         let structName = SwiftIdentifier(name: viewControllerName)
         let qualifiedName = prefix + structName
 
-        let letbindings = usedAccessibilityIdentifiers
+        // Deduplicate identifiers, report warnings for empties
+        let groupedIdentifiers = Array(Set(usedAccessibilityIdentifiers))
+            .grouped(bySwiftIdentifier: { $0 })
+        groupedIdentifiers.reportWarningsForDuplicatesAndEmpties(source: "accessibility identifier", container: "in \(viewControllerName)", result: "accessibility identifier", warning: warning)
+
+        let letbindings = groupedIdentifiers.uniques
             .map { id in
                 LetBinding(
                     comments: ["Accessibility identifier `\(id)`."],

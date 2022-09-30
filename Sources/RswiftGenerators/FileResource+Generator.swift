@@ -17,8 +17,8 @@ extension FileResource {
         // For resource files, the contents of the different locales don't matter, so we just use the first one
         let firstLocales = Dictionary(grouping: resources, by: \.filename)
             .values.map(\.first!)
-        let groupedFiles = firstLocales.grouped(bySwiftIdentifier: \.filename)
 
+        let groupedFiles = firstLocales.grouped(bySwiftIdentifier: \.filename)
         groupedFiles.reportWarningsForDuplicatesAndEmpties(source: "resource file", result: "file", warning: warning)
 
         let vargetters = groupedFiles.uniques.map { $0.generateVarGetter() }
