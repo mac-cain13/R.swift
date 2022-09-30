@@ -14,7 +14,7 @@ public struct FileResource {
 //    public let filename: String
     public let name: String
     public let pathExtension: String
-    public let bundle: Bundle?
+    public let bundle: Bundle
     public let locale: LocaleReference?
 //
 //    public init(filename: String, bundle: Bundle?, locale: LocaleReference?) {
@@ -29,7 +29,7 @@ public struct FileResource {
             : "\(name).\(pathExtension)"
     }
 
-    public init(name: String, pathExtension: String, bundle: Bundle?, locale: LocaleReference?) {
+    public init(name: String, pathExtension: String, bundle: Bundle, locale: LocaleReference?) {
         self.name = name
         self.pathExtension = pathExtension
         self.bundle = bundle

@@ -16,7 +16,7 @@ public extension FileResource {
      - returns: The file URL for the resource file (`R.file.*`) or nil if the file could not be located.
      */
     func url() -> URL? {
-        (bundle ?? .main).url(forResource: name, withExtension: pathExtension)
+        bundle.url(forResource: name, withExtension: pathExtension)
     }
 
     /**

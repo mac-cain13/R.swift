@@ -30,7 +30,7 @@ extension FileResource {
         return FileResource(
             name: basename,
             pathExtension: url.pathExtension,
-            bundle: nil,
+            bundle: .temp,
             locale: locale
         )
     }

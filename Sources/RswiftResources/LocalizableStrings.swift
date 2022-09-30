@@ -10,6 +10,16 @@
 import Foundation
 
 public struct LocalizableStrings {
+    public let filename: String
+    public let locale: LocaleReference
+    public let dictionary: [Key: Value]
+
+    public init(filename: String, locale: LocaleReference, dictionary: [Key: Value]) {
+        self.filename = filename
+        self.locale = locale
+        self.dictionary = dictionary
+    }
+
     public typealias Key = String
     public struct Value {
         public let params: [StringParam]
@@ -19,15 +29,5 @@ public struct LocalizableStrings {
             self.params = params
             self.originalValue = originalValue
         }
-    }
-
-    public let filename: String
-    public let locale: LocaleReference
-    public let dictionary: [Key: Value]
-
-    public init(filename: String, locale: LocaleReference, dictionary: [Key: Value]) {
-        self.filename = filename
-        self.locale = locale
-        self.dictionary = dictionary
     }
 }

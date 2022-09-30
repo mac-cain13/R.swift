@@ -114,21 +114,21 @@ extension AssetCatalog: SupportedExtensions {
         var colors: [ColorResource] = []
         for fileURL in directory.colors {
             let name = fileURL.filenameWithoutExtension!
-            colors.append(.init(name: name, path: path, bundle: nil))
+            colors.append(.init(name: name, path: path, bundle: .temp))
         }
 
         var images: [ImageResource] = []
         for fileURL in directory.images {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            images.append(.init(name: name, path: path, bundle: nil, locale: nil, onDemandResourceTags: tags))
+            images.append(.init(name: name, path: path, bundle: .temp, locale: nil, onDemandResourceTags: tags))
         }
 
         var dataAssets: [DataResource] = []
         for fileURL in directory.dataAssets {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
-            dataAssets.append(.init(name: name, path: path, bundle: nil, onDemandResourceTags: tags))
+            dataAssets.append(.init(name: name, path: path, bundle: .temp, onDemandResourceTags: tags))
         }
 
         return AssetCatalog.Namespace(

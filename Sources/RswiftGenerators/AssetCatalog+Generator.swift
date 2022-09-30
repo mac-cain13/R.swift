@@ -107,7 +107,7 @@ extension DataResource: AssetCatalogContent {
     public func generateVarGetter() -> VarGetter {
         let fullname = (path + [name]).joined(separator: "/")
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
-        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, onDemandResourceTags: \(odrt))"
+        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: _bundle, onDemandResourceTags: \(odrt))"
         return VarGetter(
             comments: ["Data asset `\(fullname)`."],
             name: SwiftIdentifier(name: name),
@@ -122,7 +122,7 @@ extension ImageResource: AssetCatalogContent {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
         let fullname = (path + [name]).joined(separator: "/")
-        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: nil, locale: \(locs), onDemandResourceTags: \(odrt))"
+        let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: _bundle, locale: \(locs), onDemandResourceTags: \(odrt))"
         return VarGetter(
             comments: ["Image `\(fullname)`."],
             name: SwiftIdentifier(name: name),
