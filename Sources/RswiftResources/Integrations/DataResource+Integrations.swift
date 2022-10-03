@@ -21,7 +21,7 @@ extension NSDataAsset {
      - parameter resource: The resource you want the data asset of (`R.data.*`)
      */
     public convenience init?(resource: DataResource) {
-        self.init(name: resource.name, bundle: resource.bundle ?? .main)
+        self.init(name: resource.name, bundle: resource.bundle)
     }
 
 }

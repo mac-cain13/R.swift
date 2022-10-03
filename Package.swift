@@ -12,7 +12,7 @@ let package = Package(
   products: [
     .executable(name: "rswift", targets: ["rswift"]),
     .executable(name: "rswift-legacy", targets: ["rswift-legacy"]),
-    .library(name: "RswiftCombined", targets: ["RswiftResources"])
+    .library(name: "RswiftLibrary", targets: ["RswiftResources"])
   ],
   dependencies: [
     .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),

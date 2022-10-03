@@ -25,18 +25,6 @@ extension Image {
 
 
     /**
-     Creates a labelled image from this resource (`R.image.*`), with the variable value.
-
-     - parameter resource: The resource you want the image of (`R.image.*`)
-     - parameter variableValue: Optional value between 1 and 0
-     */
-//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-//    public init(_ resource: ImageResource, variableValue: Double?) {
-//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
-//    }
-
-
-    /**
      Creates a labelled image from this resource (`R.image.*`), with the specified label
 
      - parameter resource: The resource you want the image of (`R.image.*`)
@@ -48,25 +36,41 @@ extension Image {
 
 
     /**
-     Creates a labelled image from this resource (`R.image.*`), with the specified label and variable value.
-
-     - parameter resource: The resource you want the image of (`R.image.*`)
-     - parameter variableValue: Optional value between 1 and 0
-     - parameter label: The label associated with the image, for accessibility
-     */
-//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-//    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
-//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
-//    }
-
-
-    /**
      Creates an unlabelled, decorative image from this resource (`R.image.*`).
 
      - parameter resource: The resource you want the image of (`R.image.*`)
      */
     public init(decorative resource: ImageResource) {
         self.init(decorative: resource.name, bundle: resource.bundle)
+    }
+}
+
+
+// For some reason, this requires Xcode 14.1, doesn't work in Xcode 14.0
+#if swift(>=5.8)
+@available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+extension Image {
+
+    /**
+     Creates a labelled image from this resource (`R.image.*`), with the variable value.
+
+     - parameter resource: The resource you want the image of (`R.image.*`)
+     - parameter variableValue: Optional value between 1 and 0
+     */
+    public init(_ resource: ImageResource, variableValue: Double?) {
+        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
+    }
+
+
+    /**
+     Creates a labelled image from this resource (`R.image.*`), with the specified label and variable value.
+
+     - parameter resource: The resource you want the image of (`R.image.*`)
+     - parameter variableValue: Optional value between 1 and 0
+     - parameter label: The label associated with the image, for accessibility
+     */
+    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
+        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
     }
 
 
@@ -76,11 +80,11 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-//    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-//    public init(decorative resource: ImageResource, variableValue: Double?) {
-//        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
-//    }
+    public init(decorative resource: ImageResource, variableValue: Double?) {
+        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
+    }
 }
+#endif
 
 
 #if os(iOS) || os(tvOS)
