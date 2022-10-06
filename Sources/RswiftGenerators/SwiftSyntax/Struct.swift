@@ -48,6 +48,14 @@ public struct LetBinding {
         self.valueCodeString = valueCodeString
     }
 
+    public var allModuleReferences: Set<ModuleReference> {
+        if let typeReference {
+            return Set([typeReference.module])
+        } else {
+            return Set()
+        }
+    }
+
     func render(_ pp: inout PrettyPrinter) {
         var words: [String?] = [
             accessControl.code(),
@@ -81,6 +89,10 @@ public struct VarGetter {
         self.name = name
         self.typeReference = typeReference
         self.valueCodeString = valueCodeString
+    }
+
+    public var allModuleReferences: Set<ModuleReference> {
+        Set([typeReference.module])
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -146,6 +158,10 @@ public struct Function {
 
             return result
         }
+    }
+
+    public var allModuleReferences: Set<ModuleReference> {
+        Set(params.map(\.typeReference.module)).union([returnType.module])
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -216,6 +232,10 @@ public struct Init {
         }
     }
 
+    public var allModuleReferences: Set<ModuleReference> {
+        Set(params.map(\.typeReference.module))
+    }
+
     func render(_ pp: inout PrettyPrinter) {
 
         for param in params {
@@ -276,6 +296,10 @@ public struct TypeAlias {
         self.value = value
     }
 
+    public var allModuleReferences: Set<ModuleReference> {
+        Set([value.module])
+    }
+
     func render(_ pp: inout PrettyPrinter) {
 
         for c in comments {
@@ -306,10 +330,6 @@ public struct Struct {
     public var structs: [Struct] = []
     public var typealiasses: [TypeAlias] = []
 
-    public var isEmpty: Bool {
-        lets.isEmpty && vars.isEmpty && funcs.isEmpty && structs.isEmpty
-    }
-
     public static var empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
 
     public init(
@@ -331,6 +351,23 @@ public struct Struct {
         self.funcs = members.funcs
         self.structs = members.structs
         self.typealiasses = members.typealiasses
+    }
+
+    public var isEmpty: Bool {
+        lets.isEmpty && vars.isEmpty && funcs.isEmpty && structs.isEmpty
+    }
+
+    public var allModuleReferences: Set<ModuleReference> {
+        var result: Set<ModuleReference> = []
+        result.formUnion(protocols.map(\.module))
+        result.formUnion(lets.flatMap(\.allModuleReferences))
+        result.formUnion(vars.flatMap(\.allModuleReferences))
+        result.formUnion(inits.flatMap(\.allModuleReferences))
+        result.formUnion(funcs.flatMap(\.allModuleReferences))
+        result.formUnion(structs.flatMap(\.allModuleReferences))
+        result.formUnion(typealiasses.flatMap(\.allModuleReferences))
+
+        return result
     }
 
     public mutating func setAccessControl(_ accessControl: AccessControl) {
