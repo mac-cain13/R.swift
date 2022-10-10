@@ -37,11 +37,63 @@ struct RswiftPlugin: BuildToolPlugin {
                     "generate",
                     "\(generatedFilePath)"
                 ],
+                environment: getEnvironmentVariables(xcodeproj: xcodeproj, target: target),
+                outputFilesDirectory: generatedFileDirectory
+            )
+        ]
+    }
+
+    func getEnvironmentVariables(xcodeproj: String, target: Target) -> [String : String] {
+        return [
+            "PROJECT_FILE_PATH": xcodeproj,
+            "TARGET_NAME": target.name,
+            "PRODUCT_MODULE_NAME": target.name,
+            "SOURCE_ROOT": "\(target.directory)",
+
+            // These variables must be set or R.swift will complain and not run
+            "PRODUCT_BUNDLE_IDENTIFIER": "",
+            "BUILT_PRODUCTS_DIR": "",
+            "DEVELOPER_DIR": "",
+            "BUILT_PRODUCTS_DIR": "",
+            "DEVELOPER_DIR": "",
+            "SDKROOT": "",
+            "PLATFORM_DIR": "",
+        ]
+    }
+}
+
+#if canImport(XcodeProjectPlugin)
+import XcodeProjectPlugin
+
+extension RswiftPlugin: XcodeBuildToolPlugin {
+    func createBuildCommands(
+        context: XcodePluginContext,
+        target: XcodeTarget
+    ) throws -> [Command] {
+        // Directory where R.generated.swift will be stored
+        let generatedFileDirectory = context.pluginWorkDirectory
+            .appending(subpath: "GeneratedSources")
+        let generatedFilePath = generatedFileDirectory
+            .appending(subpath: "R.generated.swift")
+
+        let xcodeProjects = try FileManager.default.contentsOfDirectory(atPath: context.xcodeProject.directory.string)
+            .filter { $0.hasSuffix(".xcodeproj") }
+        guard xcodeProjects.count == 1, let xcodeproj = xcodeProjects.first
+        else { throw RswiftPluginError.xcodeprojectNotFound }
+
+        return [
+            .prebuildCommand(
+                displayName: "R.swift",
+                executable: try context.tool(named: "rswift").path,
+                arguments: [
+                    "generate",
+                    "\(generatedFilePath)"
+                ],
                 environment: [
                     "PROJECT_FILE_PATH": xcodeproj,
-                    "TARGET_NAME": target.name,
-                    "PRODUCT_MODULE_NAME": target.name,
-                    "SOURCE_ROOT": target.directory,
+                    "TARGET_NAME": target.displayName,
+                    "PRODUCT_MODULE_NAME": target.product!.name,
+                    "SOURCE_ROOT": "\(context.xcodeProject.directory)",
 
                     // These variables must be set or R.swift will complain and not run
                     "PRODUCT_BUNDLE_IDENTIFIER": "",
@@ -57,3 +109,4 @@ struct RswiftPlugin: BuildToolPlugin {
         ]
     }
 }
+#endif
