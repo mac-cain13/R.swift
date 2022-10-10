@@ -50,7 +50,7 @@ public struct LetBinding {
 
     public var allModuleReferences: Set<ModuleReference> {
         if let typeReference {
-            return Set([typeReference.module])
+            return typeReference.allModuleReferences
         } else {
             return Set()
         }
@@ -92,7 +92,7 @@ public struct VarGetter {
     }
 
     public var allModuleReferences: Set<ModuleReference> {
-        Set([typeReference.module])
+        typeReference.allModuleReferences
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -161,7 +161,8 @@ public struct Function {
     }
 
     public var allModuleReferences: Set<ModuleReference> {
-        Set(params.map(\.typeReference.module)).union([returnType.module])
+        Set(params.flatMap(\.typeReference.allModuleReferences))
+            .union(returnType.allModuleReferences)
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -233,7 +234,7 @@ public struct Init {
     }
 
     public var allModuleReferences: Set<ModuleReference> {
-        Set(params.map(\.typeReference.module))
+        Set(params.flatMap(\.typeReference.allModuleReferences))
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -297,7 +298,7 @@ public struct TypeAlias {
     }
 
     public var allModuleReferences: Set<ModuleReference> {
-        Set([value.module])
+        value.allModuleReferences
     }
 
     func render(_ pp: inout PrettyPrinter) {
@@ -359,7 +360,7 @@ public struct Struct {
 
     public var allModuleReferences: Set<ModuleReference> {
         var result: Set<ModuleReference> = []
-        result.formUnion(protocols.map(\.module))
+        result.formUnion(protocols.flatMap(\.allModuleReferences))
         result.formUnion(lets.flatMap(\.allModuleReferences))
         result.formUnion(vars.flatMap(\.allModuleReferences))
         result.formUnion(inits.flatMap(\.allModuleReferences))

@@ -289,7 +289,7 @@ private struct StringWithParams {
 
     private var typeName: String {
         "StringResource"
-        + (params.isEmpty ? "" : "\(params.count)<\(params.map(\.spec.typeReference.rawName).joined(separator: ", "))>")
+        + (params.isEmpty ? "" : "\(params.count)<\(params.map(\.spec.typeReference.name).joined(separator: ", "))>")
     }
 
     private var primaryLanguageValues: [(LocaleReference, String)] {

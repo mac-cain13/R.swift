@@ -40,6 +40,7 @@ public struct RswiftCore {
     let outputURL: URL
     let generators: [Generator]
     let accessLevel: AccessLevel
+    let importModules: [String]
     let xcodeprojURL: URL
     let targetName: String
     let productModuleName: String?
@@ -54,6 +55,7 @@ public struct RswiftCore {
         outputURL: URL,
         generators: [Generator],
         accessLevel: AccessLevel,
+        importModules: [String],
         xcodeprojURL: URL,
         targetName: String,
         productModuleName: String?,
@@ -65,6 +67,7 @@ public struct RswiftCore {
         self.outputURL = outputURL
         self.generators = generators
         self.accessLevel = accessLevel
+        self.importModules = importModules
         self.xcodeprojURL = xcodeprojURL
         self.targetName = targetName
         self.productModuleName = productModuleName
@@ -252,13 +255,17 @@ public struct RswiftCore {
             s.setAccessControl(.public)
         }
 
+        let imports = Set(s.allModuleReferences.compactMap(\.name))
+            .union(importModules)
+            .sorted()
+            .map { "import \($0)" }
+            .joined(separator: "\n")
+
         let mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle(for: BundleClass.self))"
 
         let str = s.prettyPrint()
         let code = """
-        import UIKit
-        import Foundation
-        import RswiftResources
+        \(imports)
 
         \(str)
 

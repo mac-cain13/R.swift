@@ -111,6 +111,7 @@ extension App {
                 outputURL: outputURL,
                 generators: generators.isEmpty ? Generator.allCases : generators,
                 accessLevel: accessLevel,
+                importModules: imports,
                 xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
                 targetName: targetName,
                 productModuleName: nil,

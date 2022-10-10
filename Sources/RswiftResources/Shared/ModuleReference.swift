@@ -14,7 +14,12 @@ public enum ModuleReference: Hashable {
     case stdLib
     case custom(name: String)
 
-    var isCustom: Bool {
+    public init(name: String?, fallback: ModuleReference = .host) {
+        let cleaned = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        self = cleaned.isEmpty ? fallback : .custom(name: cleaned)
+    }
+
+    public var isCustom: Bool {
         switch self {
         case .custom:
             return true
@@ -23,9 +28,12 @@ public enum ModuleReference: Hashable {
         }
     }
 
-    public init(name: String?, fallback: ModuleReference = .host) {
-        let cleaned = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        self = cleaned.isEmpty ? fallback : .custom(name: cleaned)
+    public var name: String? {
+        if case .custom(let name) = self {
+            return name
+        } else {
+            return nil
+        }
     }
 }
 

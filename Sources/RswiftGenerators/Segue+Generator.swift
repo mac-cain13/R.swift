@@ -33,8 +33,8 @@ public struct Segue {
     }
 
     private static func generateStruct(sourceType: TypeReference, segues: [SegueWithInfo]) -> Struct {
-        let comments = ["This struct is generated for `\(sourceType.rawName)`, and contains static references to \(segues.count) segues."]
-        return Struct(comments: comments, name: SwiftIdentifier(name: sourceType.rawName)) {
+        let comments = ["This struct is generated for `\(sourceType.name)`, and contains static references to \(segues.count) segues."]
+        return Struct(comments: comments, name: SwiftIdentifier(name: sourceType.name)) {
             segues.map { $0.generateLetBinding() }
         }
     }
@@ -45,7 +45,7 @@ public struct Segue {
         let grouped = Dictionary(grouping: segues, by: \.sourceType)
         for (sourceType, seguesBySourceType) in grouped {
             let segues = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
-            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.rawName)'", result: "segue", warning: warning)
+            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.name)'", result: "segue", warning: warning)
 
             result[sourceType] = segues.uniques
         }
@@ -64,7 +64,7 @@ public struct Segue {
                         allStoryboards: storyboards)
                     else
                     {
-                        warning("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type.rawName) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
+                        warning("Destination view controller with id \(segue.destination) for segue \(segue.identifier) in \(viewController.type.codeString()) not found in storyboard \(storyboard.name). Is this storyboard corrupt?")
                         return nil
                     }
 
