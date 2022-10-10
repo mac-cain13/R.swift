@@ -18,9 +18,7 @@ let package = Package(
     .plugin(
       name: "RswiftPlugin",
       capability: .buildTool(),
-      dependencies: [
-          .target(name: "rswift")
-      ]
+      dependencies: ["rswift"]
     ),
     .executableTarget(name: "rswift", dependencies: ["RswiftCore"]),
     .target(name: "RswiftCore", dependencies: ["Commander", "XcodeEdit"]),
