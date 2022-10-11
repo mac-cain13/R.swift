@@ -173,82 +173,115 @@ public struct RswiftCore {
             }
         }
 
+        let generateString = generators.contains(.string) && !stringStruct.isEmpty
+        let generateData = generators.contains(.data) && !dataStruct.isEmpty
+        let generateColor = generators.contains(.color) && !colorStruct.isEmpty
+        let generateImage = generators.contains(.image) && !imageStruct.isEmpty
+        let generateInfo = generators.contains(.info) && !infoStruct.isEmpty
+        let generateEntitlements = generators.contains(.entitlements) && !entitlementsStruct.isEmpty
+        let generateFont = generators.contains(.font) && !fontStruct.isEmpty
+        let generateFile = generators.contains(.file) && !fileStruct.isEmpty
+        let generateSegue = generators.contains(.segue) && !segueStruct.isEmpty
+        let generateId = generators.contains(.id) && !idStruct.isEmpty
+        let generateNib = generators.contains(.nib) && !nibStruct.isEmpty
+        let generateReuseIdentifier = generators.contains(.reuseIdentifier) && !reuseIdentifierStruct.isEmpty
+        let generateStoryboard = generators.contains(.storyboard) && !storyboardStruct.isEmpty
+
+        let validateLines = [
+            generateFont ? "try self.font.validate()" : "",
+            generateNib ? "try self.nib.validate()" : "",
+            generateStoryboard ? "try self.storyboard.validate()" : "",
+        ]
+        .filter { $0 != "" }
+        .joined(separator: "\n")
+
+        let validate = Function(
+            comments: [],
+            name: SwiftIdentifier(name: "validate"),
+            params: [],
+            returnThrows: true,
+            returnType: .init(module: .stdLib, rawName: "Void"),
+            valueCodeString: validateLines
+        )
+
         var s = Struct(name: structName) {
             Init.bundle
             projectStruct
 
-            if generators.contains(.string) && !stringStruct.isEmpty {
+            if generateString {
                 stringStruct.generateBundleVarGetter(name: "string")
                 stringStruct.generateBundleFunction(name: "string")
                 stringStruct
             }
 
-            if generators.contains(.data) && !dataStruct.isEmpty {
+            if generateData {
                 dataStruct.generateBundleVarGetter(name: "data")
                 dataStruct.generateBundleFunction(name: "data")
                 dataStruct
             }
 
-            if generators.contains(.color) && !colorStruct.isEmpty {
+            if generateColor {
                 colorStruct.generateBundleVarGetter(name: "color")
                 colorStruct.generateBundleFunction(name: "color")
                 colorStruct
             }
 
-            if generators.contains(.image) && !imageStruct.isEmpty {
+            if generateImage {
                 imageStruct.generateBundleVarGetter(name: "image")
                 imageStruct.generateBundleFunction(name: "image")
                 imageStruct
             }
 
-            if generators.contains(.info) && !infoStruct.isEmpty {
+            if generateInfo {
                 infoStruct.generateBundleVarGetter(name: "info")
                 infoStruct.generateBundleFunction(name: "info")
                 infoStruct
             }
 
-            if generators.contains(.entitlements) && !entitlementsStruct.isEmpty {
+            if generateEntitlements {
                 entitlementsStruct.generateLetBinding()
                 entitlementsStruct
             }
 
-            if generators.contains(.font) && !fontStruct.isEmpty {
+            if generateFont {
                 fontStruct.generateLetBinding()
                 fontStruct
             }
 
-            if generators.contains(.file) && !fileStruct.isEmpty {
+            if generateFile {
                 fileStruct.generateBundleVarGetter(name: "file")
                 fileStruct.generateBundleFunction(name: "file")
                 fileStruct
             }
 
-            if generators.contains(.segue) && !segueStruct.isEmpty {
+            if generateSegue {
                 segueStruct.generateLetBinding()
                 segueStruct
             }
 
-            if generators.contains(.id) && !idStruct.isEmpty {
+            if generateId {
                 idStruct.generateLetBinding()
                 idStruct
             }
 
-            if generators.contains(.nib) && !nibStruct.isEmpty {
+            if generateNib {
                 nibStruct.generateBundleVarGetter(name: "nib")
                 nibStruct.generateBundleFunction(name: "nib")
                 nibStruct
             }
 
-            if generators.contains(.reuseIdentifier) && !reuseIdentifierStruct.isEmpty {
+            if generateReuseIdentifier {
                 reuseIdentifierStruct.generateLetBinding()
                 reuseIdentifierStruct
             }
 
-            if generators.contains(.storyboard) && !storyboardStruct.isEmpty {
+            if generateStoryboard {
                 storyboardStruct.generateBundleVarGetter(name: "storyboard")
                 storyboardStruct.generateBundleFunction(name: "storyboard")
                 storyboardStruct
             }
+
+            validate
         }
 
         if accessLevel == .publicLevel {
@@ -268,11 +301,6 @@ public struct RswiftCore {
         \(imports)
 
         \(str)
-
-        extension _R {
-          func validate() throws {
-          }
-        }
 
         private class BundleClass {}
         \(mainLet)

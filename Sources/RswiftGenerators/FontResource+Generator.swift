@@ -32,7 +32,7 @@ extension FontResource {
     }
 
     private static func generateMakeIterator(names: [SwiftIdentifier]) -> Function {
-        .init(
+        Function(
             comments: [],
             name: .init(name: "makeIterator"),
             params: [],
@@ -42,7 +42,7 @@ extension FontResource {
     }
 
     private static func generateValidate() -> Function {
-        .init(
+        Function(
             comments: [],
             name: .init(name: "validate"),
             params: [],
@@ -59,10 +59,10 @@ extension FontResource {
 
 extension FontResource {
     func generateLetBinding() -> LetBinding {
-        let code = "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
-        return LetBinding(
+        LetBinding(
             comments: ["Font `\(name)`."],
             name: SwiftIdentifier(name: name),
-            valueCodeString: code)
+            valueCodeString: "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
+        )
     }
 }
