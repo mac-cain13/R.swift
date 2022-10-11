@@ -120,15 +120,17 @@ public struct Function {
     public let isStatic: Bool
     public let name: SwiftIdentifier
     public let params: [Parameter]
+    public var returnThrows: Bool
     public let returnType: TypeReference
     public let valueCodeString: String
 
-    public init(comments: [String], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, params: [Parameter], returnType: TypeReference, valueCodeString: String) {
+    public init(comments: [String], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, params: [Parameter], returnThrows: Bool = false, returnType: TypeReference, valueCodeString: String) {
         self.comments = comments
         self.accessControl = accessControl
         self.isStatic = isStatic
         self.name = name
         self.params = params
+        self.returnThrows = returnThrows
         self.returnType = returnType
         self.valueCodeString = valueCodeString
     }
@@ -172,8 +174,8 @@ public struct Function {
             isStatic ? "static" : nil,
             "func",
             "\(name.value)(\(prs))",
-            "->",
-            returnType.codeString(),
+            returnThrows ? "throws" : nil,
+            returnType != .void ? "-> \(returnType.codeString())" : nil,
             "{"
         ]
 

@@ -12,7 +12,7 @@ import Foundation
 public struct TypeReference: Hashable {
     public let module: ModuleReference
     public let name: String
-    public let genericArgs: [TypeReference]
+    public var genericArgs: [TypeReference]
 
     public init(module: ModuleReference, rawName: String) {
         self.module = module
