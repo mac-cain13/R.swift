@@ -14,6 +14,8 @@ extension LocalizableStrings: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["strings", "stringsdict"]
 
     static public func parse(url: URL) throws -> LocalizableStrings {
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
+
         guard let basename = url.filenameWithoutExtension else {
             throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
         }
@@ -32,7 +34,7 @@ extension LocalizableStrings: SupportedExtensions {
         case "strings":
             dictionary = try parseStrings(nsDictionary, source: locale.debugDescription(filename: "\(basename).strings"))
         case "stringsdict":
-            dictionary = try parseStringsdict(nsDictionary, source: locale.debugDescription(filename: "\(basename).stringsdict"))
+            dictionary = try parseStringsdict(nsDictionary, source: locale.debugDescription(filename: "\(basename).stringsdict"), warning: warning)
         default:
             throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
         }
@@ -72,7 +74,7 @@ private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -
     return dictionary
 }
 
-private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) throws -> [LocalizableStrings.Key: LocalizableStrings.Value] {
+private func parseStringsdict(_ nsDictionary: NSDictionary, source: String, warning: (String) -> Void) throws -> [LocalizableStrings.Key: LocalizableStrings.Value] {
     var dictionary: [LocalizableStrings.Key: LocalizableStrings.Value] = [:]
 
     for (key, obj) in nsDictionary {
@@ -88,8 +90,7 @@ private func parseStringsdict(_ nsDictionary: NSDictionary, source: String) thro
                 let params = try parseStringsdictParams(localizedFormat, dict: dict)
                 dictionary[key] = .init(params: params, originalValue: localizedFormat)
             } catch let error as ResourceParsingError {
-                // TODO: Log warning
-//                warn("\(error) in '\(key)' \(source)")
+                warning("\(error.description) in '\(key)' \(source)")
             }
         }
         else {
