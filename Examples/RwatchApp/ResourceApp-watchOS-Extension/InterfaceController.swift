@@ -11,6 +11,8 @@ import Foundation
 
 import Rswift
 
+
+
 class InterfaceController: WKInterfaceController {
 
     @IBOutlet weak var label: WKInterfaceLabel!
@@ -19,7 +21,7 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
 
         label.setText(R.string.localizable.quote(11))
-        label.setTextColor(R.color.myColor())
+        label.setTextColor(UIColor(named: R.color.myColor.name))
     }
     
     override func willActivate() {

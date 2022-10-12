@@ -82,6 +82,7 @@
 		E296935A1CAD64D100401D53 /* associatedtype in Resources */ = {isa = PBXBuildFile; fileRef = E29693591CAD64D100401D53 /* associatedtype */; };
 		E296935C1CAD666200401D53 /* #column in Resources */ = {isa = PBXBuildFile; fileRef = E296935B1CAD666200401D53 /* #column */; };
 		E2A10EF81CD13779006BFC63 /* RelativeToProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */; };
+		E2C415D028EED7890028D537 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E2C415CF28EED7890028D537 /* RswiftLibrary */; };
 		E2CD68671D7CADEA00BEBE59 /* hello.txt in Resources */ = {isa = PBXBuildFile; fileRef = E2CD68641D7CACC100BEBE59 /* hello.txt */; };
 		E2DB0EB02334DCC100815AAF /* InfoPlistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB0EAF2334DCC100815AAF /* InfoPlistTests.swift */; };
 		E2F768FC244D92A200761E14 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F768FB244D92A200761E14 /* SceneDelegate.swift */; };
@@ -221,6 +222,7 @@
 		E29693591CAD64D100401D53 /* associatedtype */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = associatedtype; sourceTree = "<group>"; };
 		E296935B1CAD666200401D53 /* #column */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "#column"; sourceTree = "<group>"; };
 		E2A10EF71CD13779006BFC63 /* RelativeToProject.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelativeToProject.xib; sourceTree = "<group>"; };
+		E2C415CE28EED7580028D537 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = R.swift; path = ../..; sourceTree = "<group>"; };
 		E2CD68631D7CACC100BEBE59 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text; name = Base; path = Base.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68651D7CACCA00BEBE59 /* es */ = {isa = PBXFileReference; lastKnownFileType = text; name = es; path = es.lproj/hello.txt; sourceTree = "<group>"; };
 		E2CD68661D7CACCB00BEBE59 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text; name = nl; path = nl.lproj/hello.txt; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C30DF7218982DFFDAFAD2A11 /* Pods_ResourceApp.framework in Frameworks */,
+				E2C415D028EED7890028D537 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +314,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				E2C415CD28EED7580028D537 /* Packages */,
 				E243EFA32510DFA600DC653F /* RswiftUI.xcodeproj */,
 				D5DE480D1B5E1CC7000F6A85 /* R.generated.swift */,
 				D5EE1B5722DEEFBF00A901EC /* R.UITest.generated.swift */,
@@ -457,6 +461,14 @@
 			path = "ResourceApp/Relative To Project";
 			sourceTree = SOURCE_ROOT;
 		};
+		E2C415CD28EED7580028D537 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E2C415CE28EED7580028D537 /* R.swift */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		E2CD68611D7CAC9200BEBE59 /* Localized */ = {
 			isa = PBXGroup;
 			children = (
@@ -485,6 +497,9 @@
 			dependencies = (
 			);
 			name = ResourceApp;
+			packageProductDependencies = (
+				E2C415CF28EED7890028D537 /* RswiftLibrary */,
+			);
 			productName = ResourceApp;
 			productReference = D55C6CB81B5D757300301B0D /* ResourceApp.app */;
 			productType = "com.apple.product-type.application";
@@ -727,12 +742,13 @@
 			);
 			name = R.swift;
 			outputPaths = (
-				"$(SRCROOT)/R.generated.swift",
+				"$(SRCROOT)/R.generated.swif",
 				"$(SRCROOT)/R.UITest.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# \"$SRCROOT/../../build/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n# /Users/tom/Library/Developer/Xcode/DerivedData/R-gzdnepbnjmlzctbxokifiegoyhmk/Build/Products/Debug/rswift generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n";
+			shellScript = "# \"$SRCROOT/../../build/rswift\" generate --generateUITestFile \"$SRCROOT/R.UITest.generated.swift\" --import SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n/Users/tom/Projects/R.swift/.build/debug/rswift generate --imports SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n/Users/tom/Projects/R.swift/.build/debug/rswift generate \"$SRCROOT/R.UITest.generated.swift\" --generators id\n";
+			showEnvVarsInLog = 0;
 		};
 		ED8FCF67313DC003391627B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -981,7 +997,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ResourceApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -999,7 +1015,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ResourceApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1023,6 +1039,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = ResourceAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1042,6 +1059,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ResourceAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1087,6 +1105,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E2C415CF28EED7890028D537 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RswiftLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D55C6CB01B5D757300301B0D /* Project object */;
 }

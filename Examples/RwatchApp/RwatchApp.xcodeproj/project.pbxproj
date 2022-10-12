@@ -17,6 +17,7 @@
 		2F5FBC5D21355F8A00A83A69 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FBC5C21355F8A00A83A69 /* R.generated.swift */; };
 		2F5FBC622135665000A83A69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F5FBC642135665000A83A69 /* Localizable.strings */; };
 		42A84FB2DF3030B3B1476BA0 /* Pods_ResourceApp_watchOS_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB9FAA28BAEEE5C813ABC9FD /* Pods_ResourceApp_watchOS_Extension.framework */; };
+		E2C415D828F6F9A90028D537 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E2C415D728F6F9A90028D537 /* RswiftLibrary */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		503417A0BA42879EF1F80A75 /* Pods-ResourceApp-watchOS-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp-watchOS-Extension.release.xcconfig"; path = "Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		C5E806140ACB19BACD937511 /* Pods-ResourceApp-watchOS-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp-watchOS-Extension.debug.xcconfig"; path = "Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		E2C415D628F6F99A0028D537 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = R.swift; path = ../..; sourceTree = "<group>"; };
 		FB9FAA28BAEEE5C813ABC9FD /* Pods_ResourceApp_watchOS_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp_watchOS_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42A84FB2DF3030B3B1476BA0 /* Pods_ResourceApp_watchOS_Extension.framework in Frameworks */,
+				E2C415D828F6F9A90028D537 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +142,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				E2C415D528F6F99A0028D537 /* Packages */,
 				2F5FBC162135561200A83A69 /* ResourceApp-watchOS */,
 				2F5FBC252135561300A83A69 /* ResourceApp-watchOS-Extension */,
 				D55C6CB91B5D757300301B0D /* Products */,
@@ -157,6 +161,14 @@
 				2F5FBC212135561300A83A69 /* ResourceApp-watchOS-Extension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E2C415D528F6F99A0028D537 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E2C415D628F6F99A0028D537 /* R.swift */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +208,9 @@
 			dependencies = (
 			);
 			name = "ResourceApp-watchOS-Extension";
+			packageProductDependencies = (
+				E2C415D728F6F9A90028D537 /* RswiftLibrary */,
+			);
 			productName = "ResourceApp-watchOS Extension";
 			productReference = 2F5FBC212135561300A83A69 /* ResourceApp-watchOS-Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
@@ -306,7 +321,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n";
+			shellScript = "# \"$SRCROOT/../../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n/Users/tom/Projects/R.swift/.build/debug/rswift generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\" \n";
 		};
 		F052DE37060C47522CB0DCDD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -637,6 +652,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E2C415D728F6F9A90028D537 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RswiftLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D55C6CB01B5D757300301B0D /* Project object */;
 }

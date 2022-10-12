@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E223B7AF2510E43300060B16 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = E223B7AE2510E43300060B16 /* Rswift */; };
 		E243EF952510DF9100DC653F /* RswiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EF942510DF9100DC653F /* RswiftUIApp.swift */; };
 		E243EF972510DF9100DC653F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EF962510DF9100DC653F /* ContentView.swift */; };
 		E243EF992510DF9200DC653F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF982510DF9200DC653F /* Assets.xcassets */; };
@@ -19,7 +18,6 @@
 		E243EFBC2510E08E00DC653F /* RswiftUIAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E2CD1B072510EFE0000ACEFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CD1B062510EFE0000ACEFB /* R.generated.swift */; };
 		E2CD1B092510EFF8000ACEFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CD1B082510EFF8000ACEFB /* R.generated.swift */; };
-		E2CD1B0B2510F8A4000ACEFB /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = E2CD1B0A2510F8A4000ACEFB /* Rswift */; };
 		E2CD1B0C2510F900000ACEFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF982510DF9200DC653F /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -71,7 +69,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E223B7AF2510E43300060B16 /* Rswift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,7 +76,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2CD1B0B2510F8A4000ACEFB /* Rswift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +172,6 @@
 			);
 			name = RswiftUI;
 			packageProductDependencies = (
-				E223B7AE2510E43300060B16 /* Rswift */,
 			);
 			productName = RswiftUI;
 			productReference = E243EF912510DF9100DC653F /* RswiftUI.app */;
@@ -197,7 +192,6 @@
 			);
 			name = RswiftUIAppClip;
 			packageProductDependencies = (
-				E2CD1B0A2510F8A4000ACEFB /* Rswift */,
 			);
 			productName = RswiftUIAppClip;
 			productReference = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */;
@@ -230,7 +224,6 @@
 			);
 			mainGroup = E243EF882510DF9100DC653F;
 			packageReferences = (
-				E223B7AD2510E43300060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */,
 			);
 			productRefGroup = E243EF922510DF9100DC653F /* Products */;
 			projectDirPath = "";
@@ -574,30 +567,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E223B7AD2510E43300060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mac-cain13/R.swift.Library.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		E223B7AE2510E43300060B16 /* Rswift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E223B7AD2510E43300060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */;
-			productName = Rswift;
-		};
-		E2CD1B0A2510F8A4000ACEFB /* Rswift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E223B7AD2510E43300060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */;
-			productName = Rswift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E243EF892510DF9100DC653F /* Project object */;
 }
