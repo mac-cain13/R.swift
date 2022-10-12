@@ -7,17 +7,23 @@
 
 import Foundation
 import PackagePlugin
-import XcodeProjectPlugin
 
 enum RswiftPluginError: Error {
     case xcodeprojectNotFound
+    case notSupported
 }
 
 @main
-struct RswiftPlugin: BuildToolPlugin, XcodeBuildToolPlugin {
-    func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) async throws -> [PackagePlugin.Command] {
-        fatalError("R.swift is not supported in Swift packages")
-    }
+struct RswiftPlugin: BuildToolPlugin {
+  func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) throws -> [PackagePlugin.Command] {
+    throw RswiftPluginError.notSupported
+  }
+}
+
+#if canImport(XcodeProjectPlugin)
+import XcodeProjectPlugin
+
+extension RswiftPlugin: XcodeBuildToolPlugin {
 
     func createBuildCommands(
         context: XcodePluginContext,
@@ -39,7 +45,8 @@ struct RswiftPlugin: BuildToolPlugin, XcodeBuildToolPlugin {
                 executable: try context.tool(named: "rswift").path,
                 arguments: [
                     "generate",
-                    "\(generatedFilePath)"
+                    "\(generatedFilePath)",
+                    "--accessLevel", "public"
                 ],
                 environment: [
                     "PROJECT_FILE_PATH": xcodeproj,
@@ -59,3 +66,4 @@ struct RswiftPlugin: BuildToolPlugin, XcodeBuildToolPlugin {
         ]
     }
 }
+#endif
