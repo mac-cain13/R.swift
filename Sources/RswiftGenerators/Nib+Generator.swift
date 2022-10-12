@@ -13,7 +13,7 @@ extension NibResource {
         let structName = SwiftIdentifier(name: "nib")
         let qualifiedName = prefix + structName
 
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         // TODO: Generate warnings for mismatched identifier/root view in different locales
 //        let firstLocales = Dictionary(grouping: nibs, by: \.name)

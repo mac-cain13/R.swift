@@ -47,7 +47,7 @@ extension AssetCatalog.Namespace {
     public func generateStruct(resourceName: String, resourcesSelector: (Self) -> [AssetCatalogContent], prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: resourceName)
         let qualifiedName = prefix + structName
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let allResources = resourcesSelector(self)
         let groupedResources = allResources.grouped(bySwiftIdentifier: { $0.name })

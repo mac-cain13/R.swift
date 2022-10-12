@@ -13,7 +13,7 @@ public struct Segue {
         let structName = SwiftIdentifier(name: "segue")
         let qualifiedName = prefix + structName
 
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let allSegues = allSegueInfos(storyboards: storyboards, warning: warning)
         let viewControllers = viewControllers(segues: allSegues, warning: warning)

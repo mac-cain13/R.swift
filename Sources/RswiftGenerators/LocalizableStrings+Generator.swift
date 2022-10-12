@@ -12,7 +12,7 @@ extension LocalizableStrings {
     public static func generateStruct(resources: [LocalizableStrings], developmentLanguage: String, prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "string", lowercaseStartingCharacters: false)
         let qualifiedName = prefix + structName
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let localized = Dictionary(grouping: resources, by: \.filename)
         let groupedLocalized = localized.grouped(bySwiftIdentifier: \.key)

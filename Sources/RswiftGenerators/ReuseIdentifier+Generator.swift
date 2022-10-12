@@ -13,7 +13,7 @@ extension Reusable {
         let structName = SwiftIdentifier(name: "reuseIdentifier")
         let qualifiedName = prefix + structName
 
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let reusables = nibs.flatMap(\.reusables) + storyboards.flatMap(\.reusables)
         let deduplicatedReusables = Dictionary(grouping: reusables, by: \.hashValue)

@@ -13,7 +13,7 @@ extension StoryboardResource {
         let structName = SwiftIdentifier(name: "storyboard")
         let qualifiedName = prefix + structName
 
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
         groupedStoryboards.reportWarningsForDuplicatesAndEmpties(source: "storyboard", result: "storyboard", warning: warning)

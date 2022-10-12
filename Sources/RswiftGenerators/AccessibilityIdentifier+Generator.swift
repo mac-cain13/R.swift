@@ -21,7 +21,7 @@ public struct AccessibilityIdentifier {
         let structName = SwiftIdentifier(name: "id")
         let qualifiedName = prefix + structName
 
-        let warning: (String) -> Void = { print("warning:", $0) }
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let containers: [AccessibilityIdentifierContainer] = nibs + storyboards
         let mergedContainers = Dictionary(grouping: containers, by: \.name)
