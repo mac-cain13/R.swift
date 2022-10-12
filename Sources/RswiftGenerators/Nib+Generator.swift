@@ -19,7 +19,7 @@ extension NibResource {
 //        let firstLocales = Dictionary(grouping: nibs, by: \.name)
 //            .values.map(\.first!)
         let groupedNibs = nibs.grouped(bySwiftIdentifier: \.name)
-        groupedNibs.reportWarningsForDuplicatesAndEmpties(source: "nib", result: "nib", warning: warning)
+        groupedNibs.reportWarningsForDuplicatesAndEmpties(source: "xib", result: "file", warning: warning)
 
         let vargetters = groupedNibs.uniques
             .map { $0.generateVarGetter() }

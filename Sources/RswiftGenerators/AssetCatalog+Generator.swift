@@ -17,7 +17,7 @@ extension ColorResource {
     public static func generateStruct(catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
         let merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
 
-        return merged.generateStruct(resourceName: "color", resourcesSelector: { $0.colors }, prefix: prefix)
+        return merged.generateStruct(name: "color", resourcesSelector: { $0.colors }, prefix: prefix)
     }
 }
 
@@ -25,7 +25,7 @@ extension DataResource {
     public static func generateStruct(catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
         let merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
 
-        return merged.generateStruct(resourceName: "data", resourcesSelector: { $0.dataAssets }, prefix: prefix)
+        return merged.generateStruct(name: "data", resourcesSelector: { $0.dataAssets }, prefix: prefix)
     }
 }
 
@@ -39,19 +39,24 @@ extension ImageResource {
         var merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
         merged.images += namedResources
 
-        return merged.generateStruct(resourceName: "image", resourcesSelector: { $0.images }, prefix: prefix)
+        return merged.generateStruct(name: "image", resourcesSelector: { $0.images }, prefix: prefix)
     }
 }
 
 extension AssetCatalog.Namespace {
-    public func generateStruct(resourceName: String, resourcesSelector: (Self) -> [AssetCatalogContent], prefix: SwiftIdentifier) -> Struct {
+    public func generateStruct(name: String, resourcesSelector: (Self) -> [AssetCatalogContent], prefix: SwiftIdentifier) -> Struct {
+        generateStruct(resourceName: name, source: name, path: [], resourcesSelector: resourcesSelector, prefix: prefix)
+    }
+
+    private func generateStruct(resourceName: String, source: String, path: [String], resourcesSelector: (Self) -> [AssetCatalogContent], prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: resourceName)
         let qualifiedName = prefix + structName
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
+        let container = path.isEmpty ? nil : path.joined(separator: "/")
         let allResources = resourcesSelector(self)
         let groupedResources = allResources.grouped(bySwiftIdentifier: { $0.name })
-        groupedResources.reportWarningsForDuplicatesAndEmpties(source: resourceName, result: resourceName, warning: warning)
+        groupedResources.reportWarningsForDuplicatesAndEmpties(source: source, container: container, result: source, warning: warning)
 
         let vargetters = groupedResources.uniques.map { $0.generateVarGetter() }
         let otherIdentifiers = groupedResources.uniques.map { SwiftIdentifier(name: $0.name) }
@@ -64,6 +69,8 @@ extension AssetCatalog.Namespace {
             .map { (name, namespace) in
                 namespace.generateStruct(
                     resourceName: name.value,
+                    source: source,
+                    path: path + [name.value],
                     resourcesSelector: resourcesSelector,
                     prefix: qualifiedName
                 )

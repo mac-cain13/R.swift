@@ -16,7 +16,7 @@ extension StoryboardResource {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
-        groupedStoryboards.reportWarningsForDuplicatesAndEmpties(source: "storyboard", result: "storyboard", warning: warning)
+        groupedStoryboards.reportWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file", warning: warning)
 
         let structs = groupedStoryboards.uniques
             .map { $0.generateStruct(prefix: qualifiedName, warning: warning) }
@@ -123,7 +123,7 @@ extension StoryboardResource {
         let validateColorLines = self.usedColorResources.uniqueAndSorted()
             .filter { !$0.isSystemCatalog }
             .map { nameCatalog in
-                "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: _bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: _bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in storyboard '\(self.name)', but couldn't be loaded.\") }"
             }
         let validateViewControllersLines = viewControllers
             .compactMap { vc -> String? in

@@ -76,7 +76,6 @@ struct SwiftNameGroups<T> {
     // source: "segue", container: "for MyViewController", result: "segue"
     // "Skipping 2 segues for MyViewController, because ... for all these segues"
     func reportWarningsForDuplicatesAndEmpties(source: String, container: String? = nil, result: String, warning: (String) -> Void) {
-
         let sourceSingular = [source, container].compactMap { $0 }.joined(separator: " ")
         let sourcePlural = ["\(source)s", container].compactMap { $0 }.joined(separator: " ")
 

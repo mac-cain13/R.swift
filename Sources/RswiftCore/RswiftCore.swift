@@ -330,7 +330,8 @@ public struct RswiftCore {
         print("}")
         */
 
-        print("TOTAL", Date().timeIntervalSince(start))
-        print()
+        let _ = Date().timeIntervalSince(start)
+//        print("TOTAL", Date().timeIntervalSince(start))
+//        print()
     }
 }
