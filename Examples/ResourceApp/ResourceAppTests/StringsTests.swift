@@ -30,17 +30,25 @@ class StringsTests: XCTestCase {
 
   func testCorrectValues() {
 
-    // Question: Why is this different between iOS 12 and 13?
-    // "precision1" = "one   - %012.2f";
-    if #available(iOS 13, *) {
-      XCTAssertEqual(R.string.generic.precision1(12345.678), "one   -    12,345.68")
-    } else {
-      XCTAssertEqual(R.string.generic.precision1(12345.678), "one   - 0,000,012,345.68")
-    }
+    // Force locales, for decimal point and decimal comma versions
+    let genericEN = R.string.generic(bundle: .main, locale: Locale(identifier: "en_US"))
+    let genericNL = R.string.generic(bundle: .main, locale: Locale(identifier: "nl_NL"))
+    let genericFR = R.string.generic(bundle: .main, locale: Locale(identifier: "fr_FR"))
 
-    XCTAssertEqual(R.string.generic.precision2(12345.678), "two   -    12,345.68")
-    XCTAssertEqual(R.string.generic.precision3(12345.678), "three -  12,345.6780")
-    XCTAssertEqual(R.string.generic.precision4(12345.678), "four  - 12,345.68")
+    XCTAssertEqual(genericEN.precision1(12345.678), "one   -    12,345.68")
+    XCTAssertEqual(genericEN.precision2(12345.678), "two   -    12,345.68")
+    XCTAssertEqual(genericEN.precision3(12345.678), "three -  12,345.6780")
+    XCTAssertEqual(genericEN.precision4(12345.678), "four  - 12,345.68")
+
+    XCTAssertEqual(genericNL.precision1(12345.678), "one   -    12.345,68")
+    XCTAssertEqual(genericNL.precision2(12345.678), "two   -    12.345,68")
+    XCTAssertEqual(genericNL.precision3(12345.678), "three -  12.345,6780")
+    XCTAssertEqual(genericNL.precision4(12345.678), "four  - 12.345,68")
+
+    XCTAssertEqual(genericFR.precision1(12345.678), "one   -    12\u{202F}345,68")
+    XCTAssertEqual(genericFR.precision2(12345.678), "two   -    12\u{202F}345,68")
+    XCTAssertEqual(genericFR.precision3(12345.678), "three -  12\u{202F}345,6780")
+    XCTAssertEqual(genericFR.precision4(12345.678), "four  - 12\u{202F}345,68")
 
     XCTAssertEqual(
       R.string.settings.multilineKeyWeird(),
