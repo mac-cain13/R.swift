@@ -222,17 +222,6 @@ public struct Init {
 
             return result
         }
-
-        var privateLetCodeString: String {
-            let words: [String] = [
-                "private",
-                "let",
-                "\(localName ?? name):",
-                typeReference.codeString()
-            ]
-
-            return words.joined(separator: " ")
-        }
     }
 
     public var allModuleReferences: Set<ModuleReference> {
@@ -242,32 +231,40 @@ public struct Init {
     func render(_ pp: inout PrettyPrinter) {
 
         for param in params {
-            pp.append(line: param.privateLetCodeString)
+            let words: [String?] = [
+                accessControl.code(),
+                "let",
+                "\(param.localName ?? param.name):",
+                param.typeReference.codeString()
+            ]
+            pp.append(words: words)
         }
 
-        for c in comments {
-            pp.append(words: ["///", c == "" ? nil : c])
-        }
+        if accessControl != .none {
+            for c in comments {
+                pp.append(words: ["///", c == "" ? nil : c])
+            }
 
-        let prs = params.map { $0.codeString() }.joined(separator: ", ")
-        let words: [String?] = [
-            accessControl.code(),
-            "init(\(prs))",
-            "{"
-        ]
+            let prs = params.map { $0.codeString() }.joined(separator: ", ")
+            let words: [String?] = [
+                accessControl.code(),
+                "init(\(prs))",
+                "{"
+            ]
 
-        pp.append(words: words)
-        pp.indented { pp in
-            pp.append(line: valueCodeString)
+            pp.append(words: words)
+            pp.indented { pp in
+                pp.append(line: valueCodeString)
+            }
+            pp.append(line: "}")
         }
-        pp.append(line: "}")
     }
 
     public static var bundle: Init {
         Init(
             comments: [],
-            params: [Parameter(name: "bundle", localName: "_bundle", typeReference: .bundle, defaultValue: nil),],
-            valueCodeString: "self._bundle = _bundle"
+            params: [Parameter(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),],
+            valueCodeString: "self.bundle = bundle"
         )
     }
 
@@ -275,12 +272,12 @@ public struct Init {
         Init(
             comments: [],
             params: [
-                Parameter(name: "bundle", localName: "_bundle", typeReference: .bundle, defaultValue: nil),
-                Parameter(name: "locale", localName: "_locale", typeReference: .locale, defaultValue: nil),
+                Parameter(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),
+                Parameter(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil),
             ],
             valueCodeString: """
-                self._bundle = _bundle
-                self._locale = _locale
+                self.bundle = bundle
+                self.locale = locale
                 """
         )
     }
@@ -516,7 +513,9 @@ struct PrettyPrinter {
 
     func render() -> String {
         let ls = lines.map { (indent, line) in
-            String(repeating: "  ", count: indent) + line
+            line.isEmpty
+                ? line
+                : String(repeating: "  ", count: indent) + line
         }
         return ls.joined(separator: "\n")
     }
@@ -535,7 +534,7 @@ extension Struct {
         VarGetter(
             name: SwiftIdentifier(name: name),
             typeReference: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: _bundle)"
+            valueCodeString: ".init(bundle: bundle)"
         )
     }
 

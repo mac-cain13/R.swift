@@ -32,7 +32,9 @@ extension NibResource {
 
             vargetters
 
-            generateValidate(nibs: groupedNibs.uniques)
+            if groupedNibs.uniques.count > 0 {
+                generateValidate(nibs: groupedNibs.uniques)
+            }
         }
     }
 
@@ -68,7 +70,7 @@ extension NibResource {
                 comments: ["Nib `\(name)`."],
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
-                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: _bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
+                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
             )
         } else {
             let typeReference = TypeReference(
@@ -80,7 +82,7 @@ extension NibResource {
                 comments: ["Nib `\(name)`."],
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
-                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: _bundle)"
+                valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: bundle)"
             )
         }
     }
@@ -91,14 +93,14 @@ extension NibResource {
                 if nameCatalog.isSystemCatalog {
                     return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw RswiftResources.ValidationError(\"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") } }"
                 } else {
-                    return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: _bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                    return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
                 }
             }
 
         let validateColorLines = self.usedColorResources.uniqueAndSorted()
             .filter { !$0.isSystemCatalog }
             .map { nameCatalog in
-                "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: _bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
             }
 
 

@@ -34,6 +34,7 @@ extension LocalizableStrings {
 
         return Struct(comments: comments, name: structName) {
             Init.bundle
+
             for name in groupedLocalized.uniques.map(\.0) {
                 generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name))
                 generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
@@ -65,7 +66,7 @@ extension LocalizableStrings {
         VarGetter(
             name: name,
             typeReference: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: ".init(bundle: _bundle, locale: _bundle.firstPreferredLocale)"
+            valueCodeString: ".init(bundle: bundle, locale: bundle.firstPreferredLocale)"
         )
     }
 
@@ -91,11 +92,8 @@ extension LocalizableStrings {
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
             valueCodeString: """
-                if let (bundle, locale) = _bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) {
-                    return .init(bundle: bundle, locale: locale)
-                } else {
-                    return .init(bundle: _bundle, locale: _bundle.firstPreferredLocale)
-                }
+                let (bundle, locale) = bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) ?? (bundle, bundle.firstPreferredLocale)
+                return .init(bundle: bundle, locale: locale)
                 """
         )
     }
@@ -270,15 +268,15 @@ private struct StringWithParams {
 
 
     private var varValueCodeString: String {
-        #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: _bundle, locale: _locale, defaultValue: "\#(fallbackValue.escapedStringLiteral)", comment: nil)"#
+        #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: "\#(fallbackValue.escapedStringLiteral)", comment: nil)"#
     }
 
     private var funcBodyCodeString: String {
         let ps = params.indices.map { "value\($0 + 1)" }
-        let args = ["format: format", "locale: _locale"] + ps
+        let args = ["format: format", "locale: locale"] + ps
 
         return """
-        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: _bundle, value: "\(fallbackValue.escapedStringLiteral)", comment: "")
+        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: bundle, value: "\(fallbackValue.escapedStringLiteral)", comment: "")
         return String(\(args.joined(separator: ", ")))
         """
     }

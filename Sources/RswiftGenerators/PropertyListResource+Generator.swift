@@ -73,7 +73,7 @@ extension PropertyListResource.Contents {
                     VarGetter(
                         name: SwiftIdentifier(name: key),
                         typeReference: .string,
-                        valueCodeString: "_bundle.infoDictionaryString(path: \(path), key: \"\(key.escapedStringLiteral)\") ?? \"\(value.escapedStringLiteral)\""
+                        valueCodeString: "bundle.infoDictionaryString(path: \(path), key: \"\(key.escapedStringLiteral)\") ?? \"\(value.escapedStringLiteral)\""
                     )
                 } else {
                     LetBinding(
