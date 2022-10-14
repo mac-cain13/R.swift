@@ -16,9 +16,9 @@ public struct NibResource {
     public let rootViews: [TypeReference]
     public let reusables: [Reusable]
     public let generatedIds: [String]
-    public let usedImageIdentifiers: [NameCatalog]
-    public let usedColorResources: [NameCatalog]
-    public let usedAccessibilityIdentifiers: [String]
+    public var usedImageIdentifiers: [NameCatalog]
+    public var usedColorResources: [NameCatalog]
+    public var usedAccessibilityIdentifiers: [String]
 
     public init(
         name: String,

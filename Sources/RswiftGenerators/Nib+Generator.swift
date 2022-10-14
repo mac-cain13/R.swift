@@ -15,10 +15,10 @@ extension NibResource {
 
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
-        // TODO: Generate warnings for mismatched identifier/root view in different locales
-//        let firstLocales = Dictionary(grouping: nibs, by: \.name)
-//            .values.map(\.first!)
-        let groupedNibs = nibs.grouped(bySwiftIdentifier: \.name)
+        // Unify different localizations of nibs
+        let unifiedNibs = unify(nibs: nibs, warning: warning)
+
+        let groupedNibs = unifiedNibs.grouped(bySwiftIdentifier: \.name)
         groupedNibs.reportWarningsForDuplicatesAndEmpties(source: "xib", result: "file", warning: warning)
 
         let vargetters = groupedNibs.uniques
@@ -48,9 +48,68 @@ extension NibResource {
             valueCodeString: nibs.flatMap { $0.generateValidateLines() }.joined(separator: "\n")
         )
     }
+
+    private static func unify(nibs: [NibResource], warning: (String) -> Void) -> [NibResource] {
+        var result: [NibResource] = []
+
+        for siblings in Dictionary(grouping: nibs, by: \.name).values {
+            guard let merged = unify(siblings: siblings, warning: warning) else { continue }
+            result.append(merged)
+        }
+
+        return result
+    }
+
+    private static func unify(siblings: [NibResource], warning: (String) -> Void) -> NibResource? {
+        guard var result = siblings.first else { return nil }
+        var warnings: [String] = []
+
+        for nib in siblings {
+            let (merged, fields, warns) = result.unify(nib)
+            warnings.append(contentsOf: warns)
+
+            guard let merged else {
+                let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
+                if let fields {
+                    warning("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
+                } else {
+                    warning("Skipping generation of nib '\(nib.name)', because localizations \(locales) are different from each other")
+                }
+                return nil
+            }
+            result = merged
+        }
+
+        // Only report warnings, if all siblings merged successfully
+        for w in warnings {
+            warning(w)
+        }
+
+        return result
+    }
 }
 
 extension NibResource {
+    func unify(_ other: NibResource) -> (NibResource?, String?, [String]) {
+        if rootViews.first != other.rootViews.first { return (nil, "root views", []) }
+        if reusables.first != other.reusables.first { return (nil, "reuseIdentifiers", []) }
+        if name != other.name { return (nil, "names", []) }
+
+        let diffImages = Set(self.usedImageIdentifiers).symmetricDifference(other.usedImageIdentifiers)
+        let diffColors = Set(self.usedColorResources).symmetricDifference(other.usedColorResources)
+
+        let warnings: [String?] = [
+            diffImages.count > 0 ? "Skipping validation of \(diffImages.count) images in `validate` function, because these don't exist in all localizations: \(diffImages.map(\.name).joined(separator: ", "))" : nil,
+            diffColors.count > 0 ? "Skipping validation of \(diffColors.count) colors in `validate` function, because these don't exist in all localizations: \(diffColors.map(\.name).joined(separator: ", "))" : nil
+        ]
+
+        var result = self
+        result.usedImageIdentifiers = Array(Set(self.usedImageIdentifiers).union(other.usedImageIdentifiers))
+        result.usedColorResources = Array(Set(self.usedColorResources).union(other.usedColorResources))
+
+        return (result, nil, warnings.compactMap { $0 })
+    }
+
     var genericTypeReference: TypeReference {
         TypeReference(
             module: .rswiftResources,
