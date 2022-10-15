@@ -62,27 +62,17 @@ extension NibResource {
 
     private static func unify(siblings: [NibResource], warning: (String) -> Void) -> NibResource? {
         guard var result = siblings.first else { return nil }
-        var warnings: [String] = []
 
         for nib in siblings {
-            let (merged, fields, warns) = result.unify(nib)
-            warnings.append(contentsOf: warns)
-
-            guard let merged else {
+            switch result.unify(nib) {
+            case let .failed(fields):
                 let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
-                if let fields {
-                    warning("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
-                } else {
-                    warning("Skipping generation of nib '\(nib.name)', because localizations \(locales) are different from each other")
-                }
+                warning("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
                 return nil
-            }
-            result = merged
-        }
 
-        // Only report warnings, if all siblings merged successfully
-        for w in warnings {
-            warning(w)
+            case let .success(merged):
+                result = merged
+            }
         }
 
         return result
@@ -90,24 +80,25 @@ extension NibResource {
 }
 
 extension NibResource {
-    func unify(_ other: NibResource) -> (NibResource?, String?, [String]) {
-        if rootViews.first != other.rootViews.first { return (nil, "root views", []) }
-        if reusables.first != other.reusables.first { return (nil, "reuseIdentifiers", []) }
-        if name != other.name { return (nil, "names", []) }
+    enum UnifyResult {
+        case success(NibResource)
+        case failed(String)
+    }
 
-        let diffImages = Set(self.usedImageIdentifiers).symmetricDifference(other.usedImageIdentifiers)
-        let diffColors = Set(self.usedColorResources).symmetricDifference(other.usedColorResources)
+    func unify(_ other: NibResource) -> UnifyResult {
+        if rootViews.first != other.rootViews.first { return .failed("root views") }
+        if reusables.first != other.reusables.first { return .failed("reuseIdentifiers") }
+        if name != other.name { return .failed("names") }
 
-        let warnings: [String?] = [
-            diffImages.count > 0 ? "Skipping validation of \(diffImages.count) images in `validate` function, because these don't exist in all localizations: \(diffImages.map(\.name).joined(separator: ", "))" : nil,
-            diffColors.count > 0 ? "Skipping validation of \(diffColors.count) colors in `validate` function, because these don't exist in all localizations: \(diffColors.map(\.name).joined(separator: ", "))" : nil
-        ]
-
+        // Merged used images/colors from both localizations, they all need to be validated
         var result = self
         result.usedImageIdentifiers = Array(Set(self.usedImageIdentifiers).union(other.usedImageIdentifiers))
         result.usedColorResources = Array(Set(self.usedColorResources).union(other.usedColorResources))
 
-        return (result, nil, warnings.compactMap { $0 })
+        // Remove locale, this is a merger of both
+        result.locale = .none
+
+        return .success(result)
     }
 
     var genericTypeReference: TypeReference {

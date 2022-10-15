@@ -11,7 +11,7 @@ import Foundation
 
 public struct NibResource {
     public let name: String
-    public let locale: LocaleReference
+    public var locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
     public let rootViews: [TypeReference]
     public let reusables: [Reusable]
