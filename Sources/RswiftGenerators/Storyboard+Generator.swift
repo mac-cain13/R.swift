@@ -15,7 +15,10 @@ extension StoryboardResource {
 
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
-        let groupedStoryboards = storyboards.grouped(bySwiftIdentifier: { $0.name })
+        // Unify different localizations of storyboards
+        let unifiedStoryboards = unify(storyboards: storyboards, warning: warning)
+
+        let groupedStoryboards = unifiedStoryboards.grouped(bySwiftIdentifier: { $0.name })
         groupedStoryboards.reportWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file", warning: warning)
 
         let structs = groupedStoryboards.uniques
@@ -54,9 +57,74 @@ extension StoryboardResource {
             valueCodeString: lines.joined(separator: "\n")
         )
     }
+
+    private static func unify(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
+        var result: [StoryboardResource] = []
+
+        for siblings in Dictionary(grouping: storyboards, by: \.name).values {
+            guard let storyboard = siblings.first else { continue }
+            let (merged, vcs) = storyboard.unify(siblings: siblings)
+            result.append(merged)
+
+            if vcs.count > 0 {
+                let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
+                warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist in all localizations, or have different classes")
+            }
+        }
+
+        return result
+    }
 }
 
 extension StoryboardResource {
+    private func unify(siblings: [StoryboardResource]) -> (StoryboardResource, [String]) {
+        var result = self
+        var vcs: [String] = []
+
+        for storyboard in siblings {
+            let (merged, names) = result.unify(storyboard)
+            vcs.append(contentsOf: names)
+            result = merged
+        }
+
+        return (result, vcs)
+    }
+
+    func unify(_ other: StoryboardResource) -> (StoryboardResource, [String]) {
+        let lhsPairs = self.viewControllers.compactMap { vc -> (String, ViewController)? in
+            guard let identifier = vc.storyboardIdentifier else { return nil }
+            return (identifier, vc)
+        }
+        let rhsPairs = other.viewControllers.compactMap { vc -> (String, ViewController)? in
+            guard let identifier = vc.storyboardIdentifier else { return nil }
+            return (identifier, vc)
+        }
+        let lhsVcs = Dictionary(uniqueKeysWithValues: lhsPairs)
+        let rhsVcs = Dictionary(uniqueKeysWithValues: rhsPairs)
+
+        let vcs = lhsVcs.compactMap { (id, lhs) -> ViewController? in
+            guard let rhs = rhsVcs[id] else { return nil }
+            return lhs.canUnify(with: rhs) ? lhs : nil
+        }
+
+        var result = self
+        result.viewControllers = vcs
+
+        // Merged used images/colors from both localizations, they all need to be validated
+        result.usedImageIdentifiers = Array(Set(self.usedImageIdentifiers).union(other.usedImageIdentifiers))
+        result.usedColorResources = Array(Set(self.usedColorResources).union(other.usedColorResources))
+
+        // Remove locale, this is a merger of both
+        result.locale = .none
+
+        let allVcs = self.viewControllers + other.viewControllers
+        let usedIds = Set(vcs.map(\.id))
+        let skipped = allVcs.compactMap { vc -> String? in
+            usedIds.contains(vc.id) ? nil : vc.storyboardIdentifier
+        }
+
+        return (result, skipped.uniqueAndSorted())
+    }
 
     func generateStruct(prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
         let nameIdentifier = SwiftIdentifier(rawValue: "name")
@@ -144,6 +212,12 @@ extension StoryboardResource {
 }
 
 extension StoryboardResource.ViewController {
+
+    func canUnify(with other: Self) -> Bool {
+        self.id == other.id
+        && self.storyboardIdentifier == other.storyboardIdentifier
+        && self.type == other.type
+    }
 
     var genericTypeReference: TypeReference {
         TypeReference(

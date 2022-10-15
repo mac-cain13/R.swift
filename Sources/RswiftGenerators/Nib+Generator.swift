@@ -53,25 +53,12 @@ extension NibResource {
         var result: [NibResource] = []
 
         for siblings in Dictionary(grouping: nibs, by: \.name).values {
-            guard let merged = unify(siblings: siblings, warning: warning) else { continue }
-            result.append(merged)
-        }
-
-        return result
-    }
-
-    private static func unify(siblings: [NibResource], warning: (String) -> Void) -> NibResource? {
-        guard var result = siblings.first else { return nil }
-
-        for nib in siblings {
-            switch result.unify(nib) {
-            case let .failed(fields):
-                let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
-                warning("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
-                return nil
-
-            case let .success(merged):
-                result = merged
+            guard let first = siblings.first else { continue }
+            switch first.unify(siblings: siblings) {
+            case .failed(let message):
+                warning(message)
+            case .success(let merged):
+                result.append(merged)
             }
         }
 
@@ -83,6 +70,23 @@ extension NibResource {
     enum UnifyResult {
         case success(NibResource)
         case failed(String)
+    }
+
+    private func unify(siblings: [NibResource]) -> UnifyResult {
+        var result = self
+
+        for nib in siblings {
+            switch result.unify(nib) {
+            case let .failed(fields):
+                let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
+                return .failed("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
+
+            case let .success(merged):
+                result = merged
+            }
+        }
+
+        return .success(result)
     }
 
     func unify(_ other: NibResource) -> UnifyResult {

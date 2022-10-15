@@ -11,15 +11,15 @@ import Foundation
 
 public struct StoryboardResource {
     public let name: String
-    public let locale: LocaleReference
+    public var locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
     public let initialViewControllerIdentifier: String?
-    public let viewControllers: [ViewController]
+    public var viewControllers: [ViewController]
     public let viewControllerPlaceholders: [ViewControllerPlaceholder]
     public let generatedIds: [String]
-    public let usedAccessibilityIdentifiers: [String]
-    public let usedImageIdentifiers: [NameCatalog]
-    public let usedColorResources: [NameCatalog]
+    public var usedAccessibilityIdentifiers: [String]
+    public var usedImageIdentifiers: [NameCatalog]
+    public var usedColorResources: [NameCatalog]
     public let reusables: [Reusable]
 
     public var initialViewController: ViewController? {
