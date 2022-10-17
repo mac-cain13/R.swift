@@ -91,7 +91,8 @@ extension NibResource {
 
     func unify(_ other: NibResource) -> UnifyResult {
         if rootViews.first != other.rootViews.first { return .differentFields("root views") }
-        if reusables.first != other.reusables.first { return .differentFields("reuseIdentifiers") }
+//        if reusables.first != other.reusables.first { return .differentFields("reuseIdentifiers") }
+        if deploymentTarget != other.deploymentTarget { return .differentFields("deployment targets") }
         if name != other.name { return .differentFields("names") }
 
         // Merged used images/colors from both localizations, they all need to be validated
@@ -122,6 +123,7 @@ extension NibResource {
             )
             return VarGetter(
                 comments: ["Nib `\(name)`."],
+                deploymentTarget: deploymentTarget,
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
                 valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: bundle, identifier: \"\(reusable.identifier.escapedStringLiteral)\")"
@@ -134,6 +136,7 @@ extension NibResource {
             )
             return VarGetter(
                 comments: ["Nib `\(name)`."],
+                deploymentTarget: deploymentTarget,
                 name: SwiftIdentifier(name: name),
                 typeReference: typeReference,
                 valueCodeString: ".init(name: \"\(name.escapedStringLiteral)\", bundle: bundle)"

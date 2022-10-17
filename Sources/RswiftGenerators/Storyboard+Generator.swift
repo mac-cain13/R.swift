@@ -38,15 +38,16 @@ extension StoryboardResource {
             structs
 
             if structs.count > 0 {
-                generateValidate(names: structs.map(\.name))
+                generateValidate(structs: structs)
             }
         }
     }
 
-    private static func generateValidate(names: [SwiftIdentifier]) -> Function {
-        let lines = names
-            .map { name -> String in
-                "try self.\(name.value).validate()"
+    private static func generateValidate(structs: [Struct]) -> Function {
+        let lines = structs
+            .map { s -> String in
+                let code = "try self.\(s.name.value).validate()"
+                return s.deploymentTarget?.codeIf(around: code) ?? code
             }
         return Function(
             comments: [],
@@ -72,8 +73,12 @@ extension StoryboardResource {
                     let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
                     warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist in all localizations, or have different classes")
                 }
+
             case .differentInitialViewController:
                 warning("Skipping generation of storyboard '\(storyboard.name)', it has different initial view controllers in different localizations")
+
+            case .differentDeploymentTargets:
+                warning("Skipping generation of storyboard '\(storyboard.name)', it has different deployment targets in different localizations")
             }
         }
 
@@ -85,7 +90,7 @@ private extension StoryboardResource {
     enum UnifyResult {
         case success(Result)
         case differentInitialViewController
-//        case differentDeploymentTargets // TODO
+        case differentDeploymentTargets
 
         struct Result {
             let storyboard: StoryboardResource
@@ -105,9 +110,16 @@ private extension StoryboardResource {
 
                 case .differentInitialViewController:
                     return .differentInitialViewController
+
+                case .differentDeploymentTargets:
+                    return .differentDeploymentTargets
                 }
+
             case .differentInitialViewController:
                 return .differentInitialViewController
+
+            case .differentDeploymentTargets:
+                return .differentDeploymentTargets
             }
         }
     }
@@ -151,6 +163,10 @@ private extension StoryboardResource {
             return .differentInitialViewController
         }
 
+        if self.deploymentTarget != other.deploymentTarget {
+            return .differentDeploymentTargets
+        }
+
         return .success(.init(
             storyboard: result,
             notUnifiedStoryboardIDs: skipped.uniqueAndSorted()
@@ -192,6 +208,7 @@ private extension StoryboardResource {
 
         return Struct(
             comments: ["Storyboard `\(name)`."],
+            deploymentTarget: deploymentTarget,
             name: identifier,
             protocols: [storyboardReference, initialContainer].compactMap { $0 }
         ) {

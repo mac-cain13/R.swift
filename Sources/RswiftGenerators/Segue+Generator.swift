@@ -35,10 +35,24 @@ public struct Segue {
         }
     }
 
+    private static func viewControllers(segues: [SegueWithInfo], warning: (String) -> Void) -> [TypeReference: [SegueWithInfo]] {
+        var result: [TypeReference: [SegueWithInfo]] = [:]
+
+        let grouped = Dictionary(grouping: segues, by: \.sourceType)
+        for (sourceType, seguesBySourceType) in grouped {
+            let segues = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
+            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.name)'", result: "segue", warning: warning)
+
+            result[sourceType] = segues.uniques
+        }
+
+        return result
+    }
+
     private static func generateStruct(sourceType: TypeReference, segues: [SegueWithInfo]) -> Struct {
         let comments = ["This struct is generated for `\(sourceType.name)`, and contains static references to \(segues.count) segues."]
         return Struct(comments: comments, name: SwiftIdentifier(name: sourceType.name)) {
-            segues.map { $0.generateLetBinding() }
+            segues.map { $0.generateVarGetter() }
         }
     }
 
@@ -62,6 +76,7 @@ public struct Segue {
                     }
 
                     return SegueWithInfo(
+                        deploymentTarget: storyboard.deploymentTarget,
                         segue: segue,
                         sourceType: viewController.type,
                         destinationType: destinationType
@@ -76,20 +91,6 @@ public struct Segue {
           .compactMap { $0.first }
 
         return deduplicatedSeguesWithInfo
-    }
-
-    private static func viewControllers(segues: [SegueWithInfo], warning: (String) -> Void) -> [TypeReference: [SegueWithInfo]] {
-        var result: [TypeReference: [SegueWithInfo]] = [:]
-
-        let grouped = Dictionary(grouping: segues, by: \.sourceType)
-        for (sourceType, seguesBySourceType) in grouped {
-            let segues = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
-            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.name)'", result: "segue", warning: warning)
-
-            result[sourceType] = segues.uniques
-        }
-
-        return result
     }
 
     private static func resolveDestinationType(for segue: StoryboardResource.Segue, inViewController: StoryboardResource.ViewController, inStoryboard storyboard: StoryboardResource, allStoryboards storyboards: [StoryboardResource]) -> TypeReference? {
@@ -244,12 +245,13 @@ private extension StoryboardResource.ViewControllerPlaceholder {
 }
 
 struct SegueWithInfo {
+    let deploymentTarget: DeploymentTarget?
     let segue: StoryboardResource.Segue
     let sourceType: TypeReference
     let destinationType: TypeReference
 
     var groupKey: String {
-        "\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
+        "\(String(describing: deploymentTarget))|\(segue.identifier)|\(segue.type)|\(sourceType)|\(destinationType)"
     }
 
     var genericTypeReference: TypeReference {
@@ -260,9 +262,10 @@ struct SegueWithInfo {
         )
     }
 
-    func generateLetBinding() -> LetBinding {
-        LetBinding(
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
             comments: ["Segue identifier `\(segue.identifier)`."],
+            deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: segue.identifier),
             typeReference: genericTypeReference,
             valueCodeString: ".init(identifier: \"\(segue.identifier)\")"

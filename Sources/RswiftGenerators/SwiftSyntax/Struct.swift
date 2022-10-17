@@ -30,7 +30,14 @@ public struct LetBinding {
     public let typeReference: TypeReference?
     public let valueCodeString: String?
 
-    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String?) {
+    public init(
+        comments: [String] = [],
+        accessControl: AccessControl = AccessControl.none,
+        isStatic: Bool = false,
+        name: SwiftIdentifier,
+        typeReference: TypeReference,
+        valueCodeString: String?
+    ) {
         self.comments = comments
         self.accessControl = accessControl
         self.isStatic = isStatic
@@ -39,7 +46,13 @@ public struct LetBinding {
         self.valueCodeString = valueCodeString
     }
 
-    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, valueCodeString: String) {
+    public init(
+        comments: [String] = [],
+        accessControl: AccessControl = AccessControl.none,
+        isStatic: Bool = false,
+        name: SwiftIdentifier,
+        valueCodeString: String
+    ) {
         self.comments = comments
         self.accessControl = accessControl
         self.isStatic = isStatic
@@ -57,6 +70,10 @@ public struct LetBinding {
     }
 
     func render(_ pp: inout PrettyPrinter) {
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+
         var words: [String?] = [
             accessControl.code(),
             isStatic ? "static" : nil,
@@ -69,22 +86,28 @@ public struct LetBinding {
             words.append(valueCodeString)
         }
 
-        for c in comments {
-            pp.append(words: ["///", c == "" ? nil : c])
-        }
         pp.append(words: words)
     }
 }
 
 public struct VarGetter {
     public let comments: [String]
+    public let deploymentTarget: DeploymentTarget?
     public var accessControl = AccessControl.none
     public let name: SwiftIdentifier
     public let typeReference: TypeReference
     public let valueCodeString: String
 
-    public init(comments: [String] = [], accessControl: AccessControl = AccessControl.none, name: SwiftIdentifier, typeReference: TypeReference, valueCodeString: String) {
+    public init(
+        comments: [String] = [],
+        deploymentTarget: DeploymentTarget? = nil,
+        accessControl: AccessControl = AccessControl.none,
+        name: SwiftIdentifier,
+        typeReference: TypeReference,
+        valueCodeString: String
+    ) {
         self.comments = comments
+        self.deploymentTarget = deploymentTarget
         self.accessControl = accessControl
         self.name = name
         self.typeReference = typeReference
@@ -96,6 +119,12 @@ public struct VarGetter {
     }
 
     func render(_ pp: inout PrettyPrinter) {
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+
+        deploymentTarget?.render(&pp)
+
         let words: [String?] = [
             accessControl.code(),
             "var",
@@ -106,15 +135,13 @@ public struct VarGetter {
             "}"
         ]
 
-        for c in comments {
-            pp.append(words: ["///", c == "" ? nil : c])
-        }
         pp.append(words: words)
     }
 }
 
 
 public struct Function {
+    public let deploymentTarget: DeploymentTarget?
     public let comments: [String]
     public var accessControl = AccessControl.none
     public let isStatic: Bool
@@ -124,8 +151,19 @@ public struct Function {
     public let returnType: TypeReference
     public let valueCodeString: String
 
-    public init(comments: [String], accessControl: AccessControl = AccessControl.none, isStatic: Bool = false, name: SwiftIdentifier, params: [Parameter], returnThrows: Bool = false, returnType: TypeReference, valueCodeString: String) {
+    public init(
+        comments: [String],
+        deploymentTarget: DeploymentTarget? = nil,
+        accessControl: AccessControl = AccessControl.none,
+        isStatic: Bool = false,
+        name: SwiftIdentifier,
+        params: [Parameter],
+        returnThrows: Bool = false,
+        returnType: TypeReference,
+        valueCodeString: String
+    ) {
         self.comments = comments
+        self.deploymentTarget = deploymentTarget
         self.accessControl = accessControl
         self.isStatic = isStatic
         self.name = name
@@ -168,6 +206,12 @@ public struct Function {
     }
 
     func render(_ pp: inout PrettyPrinter) {
+        for c in comments {
+            pp.append(words: ["///", c == "" ? nil : c])
+        }
+
+        deploymentTarget?.render(&pp)
+
         let prs = params.map { $0.codeString() }.joined(separator: ", ")
         let words: [String?] = [
             accessControl.code(),
@@ -179,9 +223,6 @@ public struct Function {
             "{"
         ]
 
-        for c in comments {
-            pp.append(words: ["///", c == "" ? nil : c])
-        }
         pp.append(words: words)
         pp.indented { pp in
             pp.append(line: valueCodeString)
@@ -320,6 +361,7 @@ public struct TypeAlias {
 
 public struct Struct {
     public let comments: [String]
+    public let deploymentTarget: DeploymentTarget?
     public var accessControl = AccessControl.none
     public let name: SwiftIdentifier
     public var protocols: [TypeReference] = []
@@ -334,12 +376,14 @@ public struct Struct {
 
     public init(
         comments: [String] = [],
+        deploymentTarget: DeploymentTarget? = nil,
         accessControl: AccessControl = AccessControl.none,
         name: SwiftIdentifier,
         protocols: [TypeReference] = [],
         @StructMembersBuilder membersBuilder: () -> StructMembers
     ) {
         self.comments = comments
+        self.deploymentTarget = deploymentTarget
         self.accessControl = accessControl
         self.name = name
         self.protocols = protocols
@@ -402,6 +446,8 @@ public struct Struct {
         for c in comments {
             pp.append(words: ["///", c == "" ? nil : c])
         }
+
+        deploymentTarget?.render(&pp)
 
         let ps = protocols.map { $0.codeString() }.joined(separator: ", ")
         let implements = ps.isEmpty ? "" : ": \(ps)"
@@ -485,6 +531,51 @@ public struct Struct {
     }
 }
 
+extension Struct {
+    public func generateLetBinding() -> LetBinding {
+        LetBinding(
+            name: name,
+            valueCodeString: "\(name.value)()"
+        )
+    }
+
+    public func generateBundleVarGetter(name: String) -> VarGetter {
+        VarGetter(
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle)"
+        )
+    }
+
+    public func generateBundleFunction(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle)"
+        )
+    }
+}
+
+extension DeploymentTarget {
+    func render(_ pp: inout PrettyPrinter) {
+        if let version {
+            pp.append(line: "@available(\(platform) \(version.major).\(version.minor), *)")
+        }
+    }
+
+    func codeIf(around code: String) -> String {
+        if let version {
+            return "if #available(\(platform) \(version.major).\(version.minor), *) { \(code) }"
+        } else {
+            return code
+        }
+    }
+}
+
 struct PrettyPrinter {
     private var indent = 0
     private var lines: [(Int, String)] = []
@@ -518,33 +609,5 @@ struct PrettyPrinter {
                 : String(repeating: "  ", count: indent) + line
         }
         return ls.joined(separator: "\n")
-    }
-}
-
-
-extension Struct {
-    public func generateLetBinding() -> LetBinding {
-        LetBinding(
-            name: name,
-            valueCodeString: "\(name.value)()"
-        )
-    }
-
-    public func generateBundleVarGetter(name: String) -> VarGetter {
-        VarGetter(
-            name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle)"
-        )
-    }
-
-    public func generateBundleFunction(name: String) -> Function {
-        Function(
-            comments: [],
-            name: SwiftIdentifier(name: name),
-            params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
-            returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle)"
-        )
     }
 }

@@ -20,7 +20,7 @@ public struct StoryboardResource {
     public var usedAccessibilityIdentifiers: [String]
     public var usedImageIdentifiers: [NameCatalog]
     public var usedColorResources: [NameCatalog]
-    public let reusables: [Reusable]
+    public var reusables: [Reusable]
 
     public init(
         name: String,
