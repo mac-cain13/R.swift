@@ -15,7 +15,10 @@ public struct Segue {
 
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
-        let allSegues = allSegueInfos(storyboards: storyboards, warning: warning)
+        // Unify different localizations of storyboards
+        let unifiedStoryboards = unify(storyboards: storyboards, warning: warning)
+
+        let allSegues = allSegueInfos(storyboards: unifiedStoryboards, warning: warning)
         let viewControllers = viewControllers(segues: allSegues, warning: warning)
         let structs = viewControllers
             .map { generateStruct(sourceType: $0.key, segues: $0.value) }
@@ -39,26 +42,12 @@ public struct Segue {
         }
     }
 
-    private static func viewControllers(segues: [SegueWithInfo], warning: (String) -> Void) -> [TypeReference: [SegueWithInfo]] {
-        var result: [TypeReference: [SegueWithInfo]] = [:]
-
-        let grouped = Dictionary(grouping: segues, by: \.sourceType)
-        for (sourceType, seguesBySourceType) in grouped {
-            let segues = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
-            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.name)'", result: "segue", warning: warning)
-
-            result[sourceType] = segues.uniques
-        }
-
-        return result
-    }
-
     private static func allSegueInfos(storyboards: [StoryboardResource], warning: (String) -> Void) -> [SegueWithInfo] {
         let allSegues = storyboards.flatMap { storyboard in
             storyboard.viewControllers.flatMap { viewController in
                 viewController.segues.compactMap { segue -> SegueWithInfo? in
                     guard let destinationType = resolveDestinationType(
-                        for:segue,
+                        for: segue,
                         inViewController: viewController,
                         inStoryboard: storyboard,
                         allStoryboards: storyboards)
@@ -89,6 +78,20 @@ public struct Segue {
         return deduplicatedSeguesWithInfo
     }
 
+    private static func viewControllers(segues: [SegueWithInfo], warning: (String) -> Void) -> [TypeReference: [SegueWithInfo]] {
+        var result: [TypeReference: [SegueWithInfo]] = [:]
+
+        let grouped = Dictionary(grouping: segues, by: \.sourceType)
+        for (sourceType, seguesBySourceType) in grouped {
+            let segues = seguesBySourceType.grouped(bySwiftIdentifier: { $0.segue.identifier })
+            segues.reportWarningsForDuplicatesAndEmpties(source: "segue", container: "for '\(sourceType.name)'", result: "segue", warning: warning)
+
+            result[sourceType] = segues.uniques
+        }
+
+        return result
+    }
+
     private static func resolveDestinationType(for segue: StoryboardResource.Segue, inViewController: StoryboardResource.ViewController, inStoryboard storyboard: StoryboardResource, allStoryboards storyboards: [StoryboardResource]) -> TypeReference? {
         let uiViewController = TypeReference.uiViewController
 
@@ -114,6 +117,96 @@ public struct Segue {
             }
 
         return destinationViewControllerType ?? destinationViewControllerPlaceholderType
+    }
+
+    private static func unify(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
+        var result: [StoryboardResource] = []
+
+        for siblings in Dictionary(grouping: storyboards, by: \.name).values {
+            guard let storyboard = siblings.first else { continue }
+            let r = storyboard.unify(siblings: siblings)
+            result.append(r.storyboard)
+
+            let segues = r.differentSegueIDs
+            if segues.count > 0 {
+                let ns = segues.map { "'\($0)'" }.joined(separator: ", ")
+                warning("Skipping generation of \(segues.count) segues in storyboard '\(storyboard.name)', because segues \(ns) aren't identical in all localizations")
+            }
+        }
+
+        return result
+    }
+}
+
+fileprivate extension StoryboardResource {
+    struct UnifyResult {
+        let storyboard: StoryboardResource
+        let differentSegueIDs: [String]
+    }
+
+    func unify(siblings: [StoryboardResource]) -> UnifyResult {
+        var result = self
+        var segues: [String] = []
+
+        for storyboard in siblings {
+            let r = result.unify(storyboard)
+            segues.append(contentsOf: r.differentSegueIDs)
+            result = r.storyboard
+        }
+
+        return UnifyResult(storyboard: result, differentSegueIDs: segues)
+    }
+
+    func unify(_ other: StoryboardResource) -> UnifyResult {
+        let lhsVcs = self.viewControllersByIdentifier
+        let rhsVcs = other.viewControllersByIdentifier
+
+        let vcs = lhsVcs.compactMap { (id, lhs) -> ViewController.UnifyResult? in
+            guard let rhs = rhsVcs[id] else { return nil }
+            return lhs.unify(rhs)
+        }
+
+        var result = self
+        result.viewControllers = vcs.map(\.viewcontroller)
+
+        // Remove fields that haven't been merged
+        result.locale = .none
+        result.usedImageIdentifiers = []
+        result.usedColorResources = []
+
+        let different = vcs.flatMap(\.differentSegueIDs)
+
+        return UnifyResult(storyboard: result, differentSegueIDs: different.uniqueAndSorted())
+    }
+}
+
+private extension StoryboardResource.ViewController {
+    struct UnifyResult {
+        let viewcontroller: StoryboardResource.ViewController
+        let differentSegueIDs: [String]
+    }
+
+    func unify(_ other: Self) -> UnifyResult {
+        let rhsSegues = Dictionary(grouping: other.segues, by: \.identifier)
+
+        var result = self
+        result.segues = result.segues.filter { l in
+            guard let ss = rhsSegues[l.identifier], let r = ss.first else { return false }
+            return l.canUnify(r)
+        }
+
+        let usedIDs = Set(result.segues.map(\.identifier))
+        let different = (self.segues + other.segues).filter { s in
+            !usedIDs.contains(s.identifier)
+        }
+
+        return .init(viewcontroller: result, differentSegueIDs: different.map(\.identifier))
+    }
+}
+
+private extension StoryboardResource.Segue {
+    func canUnify(_ other: Self) -> Bool {
+        self == other
     }
 }
 

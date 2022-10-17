@@ -22,12 +22,6 @@ public struct StoryboardResource {
     public var usedColorResources: [NameCatalog]
     public let reusables: [Reusable]
 
-    public var initialViewController: ViewController? {
-        viewControllers
-            .filter { $0.id == self.initialViewControllerIdentifier }
-            .first
-    }
-
     public init(
         name: String,
         locale: LocaleReference,
@@ -54,7 +48,7 @@ public struct StoryboardResource {
         self.reusables = reusables
     }
 
-    public struct ViewController {
+    public struct ViewController: Equatable {
         public let id: String
         public let storyboardIdentifier: String?
         public let type: TypeReference
@@ -68,7 +62,7 @@ public struct StoryboardResource {
         }
     }
 
-    public struct ViewControllerPlaceholder {
+    public struct ViewControllerPlaceholder: Equatable {
         public let id: String
         public let storyboardName: String?
         public let referencedIdentifier: String?
@@ -82,7 +76,7 @@ public struct StoryboardResource {
         }
     }
 
-    public struct Segue {
+    public struct Segue: Equatable {
         public let identifier: String
         public let type: TypeReference
         public let destination: String
@@ -94,5 +88,20 @@ public struct StoryboardResource {
             self.destination = destination
             self.kind = kind
         }
+    }
+
+    public var initialViewController: ViewController? {
+        viewControllers
+            .filter { $0.id == self.initialViewControllerIdentifier }
+            .first
+    }
+
+    public var viewControllersByIdentifier: [String: ViewController] {
+        let pairs = self.viewControllers.compactMap { vc -> (String, ViewController)? in
+            guard let identifier = vc.storyboardIdentifier else { return nil }
+            return (identifier, vc)
+        }
+
+        return Dictionary(uniqueKeysWithValues: pairs)
     }
 }

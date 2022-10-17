@@ -16,7 +16,7 @@ extension StoryboardResource {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         // Unify different localizations of storyboards
-        let unifiedStoryboards = unify(storyboards: storyboards, warning: warning)
+        let unifiedStoryboards = unifyLocalizations(storyboards: storyboards, warning: warning)
 
         let groupedStoryboards = unifiedStoryboards.grouped(bySwiftIdentifier: { $0.name })
         groupedStoryboards.reportWarningsForDuplicatesAndEmpties(source: "storyboard", result: "file", warning: warning)
@@ -58,17 +58,22 @@ extension StoryboardResource {
         )
     }
 
-    private static func unify(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
+    private static func unifyLocalizations(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
         var result: [StoryboardResource] = []
 
-        for siblings in Dictionary(grouping: storyboards, by: \.name).values {
-            guard let storyboard = siblings.first else { continue }
-            let (merged, vcs) = storyboard.unify(siblings: siblings)
-            result.append(merged)
+        for localizations in Dictionary(grouping: storyboards, by: \.name).values {
+            guard let storyboard = localizations.first else { continue }
+            switch storyboard.unify(localizations: localizations) {
+            case .success(let r):
+                result.append(r.storyboard)
 
-            if vcs.count > 0 {
-                let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
-                warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist in all localizations, or have different classes")
+                let vcs = r.notUnifiedStoryboardIDs
+                if vcs.count > 0 {
+                    let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
+                    warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist in all localizations, or have different classes")
+                }
+            case .differentInitialViewController:
+                warning("Skipping generation of storyboard '\(storyboard.name)', it has different initial view controllers in different localizations")
             }
         }
 
@@ -76,31 +81,50 @@ extension StoryboardResource {
     }
 }
 
-extension StoryboardResource {
-    private func unify(siblings: [StoryboardResource]) -> (StoryboardResource, [String]) {
-        var result = self
-        var vcs: [String] = []
+private extension StoryboardResource {
+    enum UnifyResult {
+        case success(Result)
+        case differentInitialViewController
+//        case differentDeploymentTargets // TODO
 
-        for storyboard in siblings {
-            let (merged, names) = result.unify(storyboard)
-            vcs.append(contentsOf: names)
-            result = merged
+        struct Result {
+            let storyboard: StoryboardResource
+            let notUnifiedStoryboardIDs: [String]
         }
 
-        return (result, vcs)
+        func flatMap(_ transform: (StoryboardResource) -> UnifyResult) -> UnifyResult {
+            switch self {
+            case .success(let lhs):
+                switch transform(lhs.storyboard) {
+                case .success(let merged):
+                    let r = Result(
+                        storyboard: merged.storyboard,
+                        notUnifiedStoryboardIDs: (lhs.notUnifiedStoryboardIDs + merged.notUnifiedStoryboardIDs).uniqueAndSorted()
+                    )
+                    return .success(r)
+
+                case .differentInitialViewController:
+                    return .differentInitialViewController
+                }
+            case .differentInitialViewController:
+                return .differentInitialViewController
+            }
+        }
     }
 
-    func unify(_ other: StoryboardResource) -> (StoryboardResource, [String]) {
-        let lhsPairs = self.viewControllers.compactMap { vc -> (String, ViewController)? in
-            guard let identifier = vc.storyboardIdentifier else { return nil }
-            return (identifier, vc)
+    func unify(localizations: [StoryboardResource]) -> UnifyResult {
+        var result = UnifyResult.success(.init(storyboard: self, notUnifiedStoryboardIDs: []))
+
+        for storyboard in localizations {
+            result = result.flatMap { $0.unify(storyboard) }
         }
-        let rhsPairs = other.viewControllers.compactMap { vc -> (String, ViewController)? in
-            guard let identifier = vc.storyboardIdentifier else { return nil }
-            return (identifier, vc)
-        }
-        let lhsVcs = Dictionary(uniqueKeysWithValues: lhsPairs)
-        let rhsVcs = Dictionary(uniqueKeysWithValues: rhsPairs)
+
+        return result
+    }
+
+    func unify(_ other: StoryboardResource) -> UnifyResult {
+        let lhsVcs = self.viewControllersByIdentifier
+        let rhsVcs = other.viewControllersByIdentifier
 
         let vcs = lhsVcs.compactMap { (id, lhs) -> ViewController? in
             guard let rhs = rhsVcs[id] else { return nil }
@@ -123,7 +147,14 @@ extension StoryboardResource {
             usedIds.contains(vc.id) ? nil : vc.storyboardIdentifier
         }
 
-        return (result, skipped.uniqueAndSorted())
+        if self.initialViewControllerIdentifier != other.initialViewControllerIdentifier {
+            return .differentInitialViewController
+        }
+
+        return .success(.init(
+            storyboard: result,
+            notUnifiedStoryboardIDs: skipped.uniqueAndSorted()
+        ))
     }
 
     func generateStruct(prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
@@ -211,7 +242,7 @@ extension StoryboardResource {
     }
 }
 
-extension StoryboardResource.ViewController {
+private extension StoryboardResource.ViewController {
 
     func canUnify(with other: Self) -> Bool {
         self.id == other.id

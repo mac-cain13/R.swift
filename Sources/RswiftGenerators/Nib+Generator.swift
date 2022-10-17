@@ -16,7 +16,7 @@ extension NibResource {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         // Unify different localizations of nibs
-        let unifiedNibs = unify(nibs: nibs, warning: warning)
+        let unifiedNibs = unifyLocalizations(nibs: nibs, warning: warning)
 
         let groupedNibs = unifiedNibs.grouped(bySwiftIdentifier: \.name)
         groupedNibs.reportWarningsForDuplicatesAndEmpties(source: "xib", result: "file", warning: warning)
@@ -49,13 +49,13 @@ extension NibResource {
         )
     }
 
-    private static func unify(nibs: [NibResource], warning: (String) -> Void) -> [NibResource] {
+    private static func unifyLocalizations(nibs: [NibResource], warning: (String) -> Void) -> [NibResource] {
         var result: [NibResource] = []
 
-        for siblings in Dictionary(grouping: nibs, by: \.name).values {
-            guard let first = siblings.first else { continue }
-            switch first.unify(siblings: siblings) {
-            case .failed(let message):
+        for localizations in Dictionary(grouping: nibs, by: \.name).values {
+            guard let first = localizations.first else { continue }
+            switch first.unify(localizations: localizations) {
+            case .differentFields(let message):
                 warning(message)
             case .success(let merged):
                 result.append(merged)
@@ -69,17 +69,17 @@ extension NibResource {
 extension NibResource {
     enum UnifyResult {
         case success(NibResource)
-        case failed(String)
+        case differentFields(String)
     }
 
-    private func unify(siblings: [NibResource]) -> UnifyResult {
+    private func unify(localizations: [NibResource]) -> UnifyResult {
         var result = self
 
-        for nib in siblings {
+        for nib in localizations {
             switch result.unify(nib) {
-            case let .failed(fields):
+            case let .differentFields(fields):
                 let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
-                return .failed("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
+                return .differentFields("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
 
             case let .success(merged):
                 result = merged
@@ -90,9 +90,9 @@ extension NibResource {
     }
 
     func unify(_ other: NibResource) -> UnifyResult {
-        if rootViews.first != other.rootViews.first { return .failed("root views") }
-        if reusables.first != other.reusables.first { return .failed("reuseIdentifiers") }
-        if name != other.name { return .failed("names") }
+        if rootViews.first != other.rootViews.first { return .differentFields("root views") }
+        if reusables.first != other.reusables.first { return .differentFields("reuseIdentifiers") }
+        if name != other.name { return .differentFields("names") }
 
         // Merged used images/colors from both localizations, they all need to be validated
         var result = self
