@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct StoryboardResource {
+public struct StoryboardResource: Equatable {
     public let name: String
     public var locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
@@ -96,13 +96,8 @@ public struct StoryboardResource {
             .first
     }
 
-    public var viewControllersByIdentifier: [String: ViewController] {
-        let pairs = self.viewControllers.compactMap { vc -> (String, ViewController)? in
-            guard let identifier = vc.storyboardIdentifier else { return nil }
-            return (identifier, vc)
-        }
-
-        return Dictionary(uniqueKeysWithValues: pairs)
+    public var viewControllersById: [String: ViewController] {
+        Dictionary(uniqueKeysWithValues: viewControllers.map { ($0.id, $0) })
     }
 }
 
@@ -117,7 +112,6 @@ extension StoryboardResource {
 
         public func flatMap(_ transform: (StoryboardResource) -> UnifyResult) -> UnifyResult {
             let r = transform(storyboard)
-
 
             return UnifyResult(
                 storyboard: r.storyboard,
@@ -148,8 +142,8 @@ extension StoryboardResource {
     }
 
     public func unify(_ other: StoryboardResource) -> UnifyResult {
-        let lhsVcs = self.viewControllersByIdentifier
-        let rhsVcs = other.viewControllersByIdentifier
+        let lhsVcs = self.viewControllersById
+        let rhsVcs = other.viewControllersById
 
         let unifiedViewControllers = lhsVcs.compactMap { (id, lhs) -> StoryboardResource.ViewController.UnifyResult? in
             guard let rhs = rhsVcs[id] else { return nil }

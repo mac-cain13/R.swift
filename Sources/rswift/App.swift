@@ -53,8 +53,8 @@ extension App {
         @Option(help: "Override environment variable \(EnvironmentKeys.target)")
         var target: String?
 
-//        @Option(help: "Override environment variable \(EnvironmentKeys.productModuleName)")
-//        var productModuleName: String?
+        @Option(help: "Override environment variable \(EnvironmentKeys.productModuleName)")
+        var productModuleName: String?
 
         @Option(help: "Override environment variable \(EnvironmentKeys.infoPlistFile)")
         var infoPlistFile: String?
@@ -91,7 +91,7 @@ extension App {
 
             let xcodeprojPath = try self.xcodeproj ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
             let targetName = try self.target ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
-//            let productModuleName = try self.productModuleName ?? processInfo.environmentVariable(name: EnvironmentKeys.productModuleName)
+            let productModuleName = self.productModuleName ?? processInfo.environment[EnvironmentKeys.productModuleName]
             let infoPlistFile = self.infoPlistFile ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
             let codeSignEntitlements = self.codeSignEntitlements ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
@@ -114,7 +114,7 @@ extension App {
                 importModules: imports,
                 xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
                 targetName: targetName,
-                productModuleName: nil,
+                productModuleName: productModuleName,
                 infoPlistFile: infoPlistFile.map(URL.init(fileURLWithPath:)),
                 codeSignEntitlements: codeSignEntitlements.map(URL.init(fileURLWithPath:)),
                 rswiftIgnoreURL: rswiftIgnoreURL,

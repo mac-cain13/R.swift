@@ -123,11 +123,9 @@ public struct Segue {
     private static func unifyLocalizations(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
         var result: [StoryboardResource] = []
 
-
         for localizations in Dictionary(grouping: storyboards, by: \.name).values {
             guard let storyboard = localizations.first else { continue }
             let ur = storyboard.unify(localizations: localizations)
-
 
             for vur in ur.viewControllerResults.values {
                 if vur.differentSegueIDs.isEmpty { continue }

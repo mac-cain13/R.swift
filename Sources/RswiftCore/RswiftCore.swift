@@ -290,6 +290,7 @@ public struct RswiftCore {
 
         let imports = Set(s.allModuleReferences.compactMap(\.name))
             .union(importModules)
+            .subtracting([productModuleName].compactMap { $0 })
             .sorted()
             .map { "import \($0)" }
             .joined(separator: "\n")
