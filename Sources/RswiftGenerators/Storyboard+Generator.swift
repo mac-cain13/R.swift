@@ -64,22 +64,27 @@ extension StoryboardResource {
 
         for localizations in Dictionary(grouping: storyboards, by: \.name).values {
             guard let storyboard = localizations.first else { continue }
-            switch storyboard.unify(localizations: localizations) {
-            case .success(let r):
-                result.append(r.storyboard)
+            let ur = storyboard.unify(localizations: localizations)
 
-                let vcs = r.notUnifiedStoryboardIDs
-                if vcs.count > 0 {
-                    let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
-                    warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist in all localizations, or have different classes")
-                }
 
-            case .differentInitialViewController:
-                warning("Skipping generation of storyboard '\(storyboard.name)', it has different initial view controllers in different localizations")
+            let diffs: [String] = [
+                ur.differentInitialViewController ? "initial view controllers" : nil,
+                ur.differentDeploymentTargets ? "deployment targets" : nil,
+            ].compactMap { $0 }
 
-            case .differentDeploymentTargets:
-                warning("Skipping generation of storyboard '\(storyboard.name)', it has different deployment targets in different localizations")
+            if diffs.count > 0 {
+                warning("Skipping generation of storyboard '\(storyboard.name)', because \(diffs.joined(separator: ", ")) don't match in all localizations")
+                continue
             }
+
+            let vcs = ur.differentViewControllerIDs.sorted()
+            if vcs.count > 0 {
+                let ns = vcs.map { "'\($0)'" }.joined(separator: ", ")
+                warning("Skipping generation of \(vcs.count) view controllers in storyboard '\(storyboard.name)', because view controllers \(ns) don't exist (with same class) in all localizations")
+            }
+
+
+            result.append(ur.storyboard)
         }
 
         return result
@@ -87,92 +92,6 @@ extension StoryboardResource {
 }
 
 private extension StoryboardResource {
-    enum UnifyResult {
-        case success(Result)
-        case differentInitialViewController
-        case differentDeploymentTargets
-
-        struct Result {
-            let storyboard: StoryboardResource
-            let notUnifiedStoryboardIDs: [String]
-        }
-
-        func flatMap(_ transform: (StoryboardResource) -> UnifyResult) -> UnifyResult {
-            switch self {
-            case .success(let lhs):
-                switch transform(lhs.storyboard) {
-                case .success(let merged):
-                    let r = Result(
-                        storyboard: merged.storyboard,
-                        notUnifiedStoryboardIDs: (lhs.notUnifiedStoryboardIDs + merged.notUnifiedStoryboardIDs).uniqueAndSorted()
-                    )
-                    return .success(r)
-
-                case .differentInitialViewController:
-                    return .differentInitialViewController
-
-                case .differentDeploymentTargets:
-                    return .differentDeploymentTargets
-                }
-
-            case .differentInitialViewController:
-                return .differentInitialViewController
-
-            case .differentDeploymentTargets:
-                return .differentDeploymentTargets
-            }
-        }
-    }
-
-    func unify(localizations: [StoryboardResource]) -> UnifyResult {
-        var result = UnifyResult.success(.init(storyboard: self, notUnifiedStoryboardIDs: []))
-
-        for storyboard in localizations {
-            result = result.flatMap { $0.unify(storyboard) }
-        }
-
-        return result
-    }
-
-    func unify(_ other: StoryboardResource) -> UnifyResult {
-        let lhsVcs = self.viewControllersByIdentifier
-        let rhsVcs = other.viewControllersByIdentifier
-
-        let vcs = lhsVcs.compactMap { (id, lhs) -> ViewController? in
-            guard let rhs = rhsVcs[id] else { return nil }
-            return lhs.canUnify(with: rhs) ? lhs : nil
-        }
-
-        var result = self
-        result.viewControllers = vcs
-
-        // Merged used images/colors from both localizations, they all need to be validated
-        result.usedImageIdentifiers = Array(Set(self.usedImageIdentifiers).union(other.usedImageIdentifiers))
-        result.usedColorResources = Array(Set(self.usedColorResources).union(other.usedColorResources))
-
-        // Remove locale, this is a merger of both
-        result.locale = .none
-
-        let allVcs = self.viewControllers + other.viewControllers
-        let usedIds = Set(vcs.map(\.id))
-        let skipped = allVcs.compactMap { vc -> String? in
-            usedIds.contains(vc.id) ? nil : vc.storyboardIdentifier
-        }
-
-        if self.initialViewControllerIdentifier != other.initialViewControllerIdentifier {
-            return .differentInitialViewController
-        }
-
-        if self.deploymentTarget != other.deploymentTarget {
-            return .differentDeploymentTargets
-        }
-
-        return .success(.init(
-            storyboard: result,
-            notUnifiedStoryboardIDs: skipped.uniqueAndSorted()
-        ))
-    }
-
     func generateStruct(prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct {
         let nameIdentifier = SwiftIdentifier(rawValue: "name")
         let bundleIdentifier = SwiftIdentifier(name: "bundle")
@@ -260,13 +179,6 @@ private extension StoryboardResource {
 }
 
 private extension StoryboardResource.ViewController {
-
-    func canUnify(with other: Self) -> Bool {
-        self.id == other.id
-        && self.storyboardIdentifier == other.storyboardIdentifier
-        && self.type == other.type
-    }
-
     var genericTypeReference: TypeReference {
         TypeReference(
             module: .rswiftResources,

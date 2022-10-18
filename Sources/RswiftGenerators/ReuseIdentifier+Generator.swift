@@ -15,7 +15,10 @@ extension Reusable {
 
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
-        let reusables = nibs.flatMap(\.reusables) + storyboards.flatMap(\.reusables)
+        let unifiedNibs = unifyLocalizations(nibs: nibs, warning: warning)
+        let unifiedStoryboards = unifyLocalizations(storyboards: storyboards, warning: warning)
+
+        let reusables = unifiedNibs.flatMap(\.reusables) + unifiedStoryboards.flatMap(\.reusables)
         let deduplicatedReusables = Dictionary(grouping: reusables, by: \.hashValue)
             .values.compactMap(\.first)
 
@@ -33,6 +36,41 @@ extension Reusable {
         }
     }
 
+    private static func unifyLocalizations(nibs: [NibResource], warning: (String) -> Void) -> [NibResource] {
+        var result: [NibResource] = []
+
+        for localizations in Dictionary(grouping: nibs, by: \.name).values {
+            guard let nib = localizations.first else { continue }
+            let ur = nib.unify(localizations: localizations)
+
+            let rs = ur.differentReusables.map { "'\($0.identifier)'" }.uniqueAndSorted()
+            if rs.count > 0 {
+                warning("Skipping generation of \(rs.count) reuseIdentifiers in nib '\(nib.name)', because \(rs.joined(separator: ", ")) don't match in all localizations")
+                continue
+            }
+            result.append(ur.resource)
+        }
+
+        return result
+    }
+
+    private static func unifyLocalizations(storyboards: [StoryboardResource], warning: (String) -> Void) -> [StoryboardResource] {
+        var result: [StoryboardResource] = []
+
+        for localizations in Dictionary(grouping: storyboards, by: \.name).values {
+            guard let storyboard = localizations.first else { continue }
+            let ur = storyboard.unify(localizations: localizations)
+
+            let rs = ur.differentReusables.map { "'\($0.identifier)'" }.uniqueAndSorted()
+            if rs.count > 0 {
+                warning("Skipping generation of \(rs.count) reuseIdentifiers in storyboard '\(storyboard.name)', because \(rs.joined(separator: ", ")) don't match in all localizations")
+                continue
+            }
+            result.append(ur.storyboard)
+        }
+
+        return result
+    }
 }
 
 extension Reusable {

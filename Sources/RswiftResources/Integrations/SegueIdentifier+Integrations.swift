@@ -39,6 +39,14 @@ extension SegueIdentifier where Segue: UIStoryboardSegue {
     }
 }
 
+extension SegueIdentifier where Segue: UIStoryboardSegue, Source: UIViewController, Destination: UIViewController {
+    /// Trigger a segue by providing a source, destination and handler
+    public func perform(source: Source, destination: Destination, handler: @escaping () -> Void) {
+        let segue = Segue(identifier: identifier, source: source, destination: destination, performHandler: handler)
+        segue.perform()
+    }
+}
+
 extension TypedSegue {
     /**
      Returns typed information about the given segue, fails if the segue types don't exactly match types.

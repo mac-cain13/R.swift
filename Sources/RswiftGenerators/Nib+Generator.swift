@@ -53,13 +53,21 @@ extension NibResource {
         var result: [NibResource] = []
 
         for localizations in Dictionary(grouping: nibs, by: \.name).values {
-            guard let first = localizations.first else { continue }
-            switch first.unify(localizations: localizations) {
-            case .differentFields(let message):
-                warning(message)
-            case .success(let merged):
-                result.append(merged)
+            guard let nib = localizations.first else { continue }
+            let ur = nib.unify(localizations: localizations)
+
+            let diffs: [String] = [
+                ur.differentNames ? "names" : nil,
+                ur.differentRootViews ? "root views" : nil,
+                ur.differentInitialReusables ? "initial reusables" : nil,
+                ur.differentDeploymentTargets ? "deployment targets" : nil,
+            ].compactMap { $0 }
+
+            if diffs.count > 0 {
+                warning("Skipping generation of nib '\(nib.name)', because \(diffs.joined(separator: ", ")) don't match in all localizations")
+                continue
             }
+            result.append(ur.resource)
         }
 
         return result
@@ -67,45 +75,6 @@ extension NibResource {
 }
 
 extension NibResource {
-    enum UnifyResult {
-        case success(NibResource)
-        case differentFields(String)
-    }
-
-    private func unify(localizations: [NibResource]) -> UnifyResult {
-        var result = self
-
-        for nib in localizations {
-            switch result.unify(nib) {
-            case let .differentFields(fields):
-                let locales = "\(result.locale.localeDescription ?? "-") and \(nib.locale.localeDescription ?? "-")"
-                return .differentFields("Skipping generation of nib '\(nib.name)', because \(fields) don't match in localizations \(locales)")
-
-            case let .success(merged):
-                result = merged
-            }
-        }
-
-        return .success(result)
-    }
-
-    func unify(_ other: NibResource) -> UnifyResult {
-        if rootViews.first != other.rootViews.first { return .differentFields("root views") }
-//        if reusables.first != other.reusables.first { return .differentFields("reuseIdentifiers") }
-        if deploymentTarget != other.deploymentTarget { return .differentFields("deployment targets") }
-        if name != other.name { return .differentFields("names") }
-
-        // Merged used images/colors from both localizations, they all need to be validated
-        var result = self
-        result.usedImageIdentifiers = Array(Set(self.usedImageIdentifiers).union(other.usedImageIdentifiers))
-        result.usedColorResources = Array(Set(self.usedColorResources).union(other.usedColorResources))
-
-        // Remove locale, this is a merger of both
-        result.locale = .none
-
-        return .success(result)
-    }
-
     var genericTypeReference: TypeReference {
         TypeReference(
             module: .rswiftResources,
