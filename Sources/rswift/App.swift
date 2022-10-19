@@ -90,17 +90,20 @@ extension App {
             let processInfo = ProcessInfo()
 
             let xcodeprojPath = try self.xcodeproj ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
-            let targetName = try self.target ?? processInfo.environmentVariable(name: EnvironmentKeys.target)
+            let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
+
+            let targetName = try self.getTargetName(xcodeprojURL: xcodeprojURL)
             let productModuleName = self.productModuleName ?? processInfo.environment[EnvironmentKeys.productModuleName]
             let infoPlistFile = self.infoPlistFile ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
             let codeSignEntitlements = self.codeSignEntitlements ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
 
-            let sourceTreeURLs = try SourceTreeURLs(
-                builtProductsDirURL: URL(fileURLWithPath: builtProductsDir ?? processInfo.environmentVariable(name: EnvironmentKeys.builtProductsDir)),
-                developerDirURL: URL(fileURLWithPath: developerDir ?? processInfo.environmentVariable(name: EnvironmentKeys.developerDir)),
-                sourceRootURL: URL(fileURLWithPath: sourceRoot ?? processInfo.environmentVariable(name: EnvironmentKeys.sourceRoot)),
-                sdkRootURL: URL(fileURLWithPath: sdkRoot ?? processInfo.environmentVariable(name: EnvironmentKeys.sdkRoot)),
-                platformURL: URL(fileURLWithPath: platformDir ?? processInfo.environmentVariable(name: EnvironmentKeys.platformDir))
+            // If no environment is provided, we're not running inside Xcode, fallback to names
+            let sourceTreeURLs = SourceTreeURLs(
+                builtProductsDirURL: URL(fileURLWithPath: builtProductsDir ?? processInfo.environment[EnvironmentKeys.builtProductsDir] ?? EnvironmentKeys.builtProductsDir),
+                developerDirURL: URL(fileURLWithPath: developerDir ?? processInfo.environment[EnvironmentKeys.developerDir] ?? EnvironmentKeys.developerDir),
+                sourceRootURL: URL(fileURLWithPath: sourceRoot ?? processInfo.environment[EnvironmentKeys.sourceRoot] ?? EnvironmentKeys.sourceRoot),
+                sdkRootURL: URL(fileURLWithPath: sdkRoot ?? processInfo.environment[EnvironmentKeys.sdkRoot] ?? EnvironmentKeys.sdkRoot),
+                platformURL: URL(fileURLWithPath: platformDir ?? processInfo.environment[EnvironmentKeys.platformDir] ?? EnvironmentKeys.platformDir)
             )
 
             let outputURL = URL(fileURLWithPath: outputPath)
@@ -112,7 +115,7 @@ extension App {
                 generators: generators.isEmpty ? Generator.allCases : generators,
                 accessLevel: accessLevel,
                 importModules: imports,
-                xcodeprojURL: URL(fileURLWithPath: xcodeprojPath),
+                xcodeprojURL: xcodeprojURL,
                 targetName: targetName,
                 productModuleName: productModuleName,
                 infoPlistFile: infoPlistFile.map(URL.init(fileURLWithPath:)),
@@ -122,7 +125,35 @@ extension App {
             )
 
 //            print("RSWIFT", outputURL)
-            try core.developRun()
+            do {
+                try core.developRun()
+            } catch let error as ResourceParsingError {
+                throw ValidationError(error.description)
+            }
+        }
+
+        func getTargetName(xcodeprojURL: URL) throws -> String {
+            let processInfo = ProcessInfo()
+            if let targetName = self.target ?? processInfo.environment[EnvironmentKeys.target] {
+                return targetName
+            }
+
+            let targets = try? Xcodeproj(url: xcodeprojURL, warning: { _ in }).allTargets
+
+            if let targets, let target = targets.first, targets.count == 1 {
+                return target.name
+            }
+
+            if let targets, targets.count > 0 {
+                let lines = [
+                    "Missing argument --target",
+                    "Available targets:"
+                ] + targets.map { "- \($0.name)" }
+
+                throw ValidationError(lines.joined(separator: "\n"))
+            }
+
+            throw ValidationError("Missing argument --target")
         }
     }
 }

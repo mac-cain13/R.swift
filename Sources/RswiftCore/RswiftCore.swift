@@ -90,7 +90,7 @@ public struct RswiftCore {
             infoPlistFile: infoPlistFile,
             codeSignEntitlements: codeSignEntitlements,
             sourceTreeURLs: sourceTreeURLs,
-            warning: { print("[warning]", $0) }
+            warning: { print("warning: [R.swift]", $0) }
         )
 
         let structName = SwiftIdentifier(rawValue: "_R")

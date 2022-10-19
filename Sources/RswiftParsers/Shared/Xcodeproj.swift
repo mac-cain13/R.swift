@@ -42,6 +42,10 @@ public struct Xcodeproj: SupportedExtensions {
         self.knownAssetTags = projectFile.project.knownAssetTags
     }
 
+    public var allTargets: [PBXTarget] {
+        projectFile.project.targets.compactMap { $0.value }
+    }
+
     private func findTarget(name: String) throws -> PBXTarget {
         // Look for target in project file
         let allTargets = projectFile.project.targets.compactMap { $0.value }
