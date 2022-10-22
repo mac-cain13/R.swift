@@ -11,11 +11,10 @@ let package = Package(
   ],
   products: [
     .executable(name: "rswift", targets: ["rswift"]),
-    .executable(name: "rswift-legacy", targets: ["rswift-legacy"]),
-    .library(name: "RswiftLibrary", targets: ["RswiftResources"])
+    .library(name: "RswiftLibrary", targets: ["RswiftResources"]),
+    .plugin(name: "RswiftGenerateResources", targets: ["RswiftGenerateResources"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/kylef/Commander.git", from: "0.8.0"),
     .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.1.0"),
   ],
@@ -37,9 +36,6 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
     ]),
 
-    // Legacy code
-    .target(name: "rswift-legacy", dependencies: ["RswiftCoreLegacy"]),
-    .target(name: "RswiftCoreLegacy", dependencies: ["Commander", "XcodeEdit"]),
-    .testTarget(name: "RswiftCoreLegacyTests", dependencies: ["RswiftCoreLegacy"]),
+    .plugin(name: "RswiftGenerateResources", capability: .buildTool(), dependencies: ["rswift", "RswiftCore"]),
   ]
 )

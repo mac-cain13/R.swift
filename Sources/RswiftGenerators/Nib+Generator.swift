@@ -38,7 +38,7 @@ extension NibResource {
         }
     }
 
-    private static func generateValidate(nibs: some Collection<NibResource>) -> Function {
+    private static func generateValidate(nibs: [NibResource]) -> Function {
         Function(
             comments: [],
             name: .init(name: "validate"),

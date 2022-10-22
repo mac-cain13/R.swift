@@ -144,7 +144,7 @@ private extension StoryboardResource {
         }
     }
 
-    func generateValidate(viewControllers: some Collection<StoryboardResource.ViewController>) -> Function {
+    func generateValidate(viewControllers: [StoryboardResource.ViewController]) -> Function {
         let validateImagesLines = self.usedImageIdentifiers.uniqueAndSorted()
             .map { nameCatalog -> String in
                 if nameCatalog.isSystemCatalog {

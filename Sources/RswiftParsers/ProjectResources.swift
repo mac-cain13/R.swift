@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ProjectResources.swift
 //  
 //
 //  Created by Tom Lokhorst on 2022-07-29.
@@ -9,7 +9,7 @@ import Foundation
 import XcodeEdit
 import RswiftResources
 
-public struct Project {
+public struct ProjectResources {
     public let assetCatalogs: [AssetCatalog]
     public let files: [FileResource]
     public let fonts: [FontResource]
@@ -19,20 +19,17 @@ public struct Project {
     public let storyboards: [StoryboardResource]
     public let infoPlists: [PropertyListResource]
     public let codeSignEntitlements: [PropertyListResource]
-    public let xcodeproj: Xcodeproj
 
-    public static func parseTarget(
-        name targetName: String,
-        xcodeprojURL: URL,
+    public static func parseXcodeproj(
+        xcodeproj: Xcodeproj,
+        targetName: String,
         rswiftIgnoreURL: URL?,
         infoPlistFile: URL?,
         codeSignEntitlements: URL?,
         sourceTreeURLs: SourceTreeURLs,
-        parseFontsAsFiles: Bool = true,
-        parseImagesAsFiles: Bool = true,
-        warning: (String) -> Void
-    ) throws -> Project {
-        let xcodeproj = try Xcodeproj(url: xcodeprojURL, warning: warning)
+        parseFontsAsFiles: Bool,
+        parseImagesAsFiles: Bool
+    ) throws -> ProjectResources {
         let ignoreFile = rswiftIgnoreURL.flatMap { try? IgnoreFile(ignoreFileURL: $0) } ?? IgnoreFile()
 
         let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
@@ -42,10 +39,36 @@ public struct Project {
             .map { $0.url(with: sourceTreeURLs.url(for:)) }
             .filter { !ignoreFile.matches(url: $0) }
 
+        let infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
+            guard let url = infoPlistFile else { return nil }
+            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+        }
 
-    let assetCatalogs = try urls
-        .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-        .map { try AssetCatalog.parse(url: $0) }
+        let codeSignEntitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
+            guard let url = codeSignEntitlements else { return nil }
+            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+        }
+
+        return try parseURLs(
+            urls: urls,
+            infoPlists: infoPlists,
+            codeSignEntitlements: codeSignEntitlements,
+            parseFontsAsFiles: parseFontsAsFiles,
+            parseImagesAsFiles: parseImagesAsFiles
+        )
+    }
+
+    public static func parseURLs(
+        urls: [URL],
+        infoPlists: [PropertyListResource],
+        codeSignEntitlements: [PropertyListResource],
+        parseFontsAsFiles: Bool,
+        parseImagesAsFiles: Bool
+    ) throws -> ProjectResources {
+
+        let assetCatalogs = try urls
+            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+            .map { try AssetCatalog.parse(url: $0) }
 
         let dontParseFileForFonts = !parseFontsAsFiles
         let dontParseFileForImages = !parseImagesAsFiles
@@ -75,17 +98,7 @@ public struct Project {
             .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
             .map { try StoryboardResource.parse(url: $0) }
 
-        let infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
-            guard let url = infoPlistFile else { return nil }
-            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
-        }
-
-        let codeSignEntitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
-            guard let url = codeSignEntitlements else { return nil }
-            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
-        }
-
-        return Project(
+        return ProjectResources(
             assetCatalogs: assetCatalogs,
             files: files,
             fonts: fonts,
@@ -94,8 +107,7 @@ public struct Project {
             nibs: nibs,
             storyboards: storyboards,
             infoPlists: infoPlists,
-            codeSignEntitlements: codeSignEntitlements,
-            xcodeproj: xcodeproj
+            codeSignEntitlements: codeSignEntitlements
         )
     }
 }

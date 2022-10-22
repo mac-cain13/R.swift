@@ -22,100 +22,111 @@ struct App: ParsableCommand {
     )
 }
 
-extension App {
-    struct Generate: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Generates R.generated.swift file")
+struct GlobalOptions: ParsableArguments {
 
-        @Option(help: "Only run specified generators, options: \(Generator.allCases.map(\.rawValue).joined(separator: ", "))")
-        var generators: [Generator] = []
+    @Option(help: "Only run specified generators, options: \(Generator.allCases.map(\.rawValue).joined(separator: ", "))", transform: { str in
+        str.components(separatedBy: ",").map { Generator(rawValue: $0)! }
+    })
+    var generators: [Generator] = []
 
 //        @Option(help: "Output path for an extra generated file that contains resources commonly used in UI tests such as accessibility identifiers")
 //        var generateUITestFile: String?
 
-        @Option(help: "Add extra modules as import in the generated file")
-        var imports: [String] = []
+    @Option(help: "Add extra modules as import in the generated file")
+    var imports: [String] = []
 
-        @Option(help: "The access level [public|internal] to use for the generated R-file")
-        var accessLevel: AccessLevel = .internalLevel
+    @Option(help: "The access level [public|internal] to use for the generated R-file")
+    var accessLevel: AccessLevel = .internalLevel
 
-        @Option(help: "Path to pattern file that describes files that should be ignored")
-        var rswiftignore = ".rswiftignore"
+    @Option(help: "Path to pattern file that describes files that should be ignored")
+    var rswiftignore = ".rswiftignore"
 
-        @Option(help: "Override bundle from which resources are loaded")
-        var hostingBundle: String?
+//        @Option(help: "Override bundle from which resources are loaded")
+//        var hostingBundle: String?
 
 
-        // MARK: Project specific - Environment variable overrides
+    // MARK: Project specific - Environment variable overrides
 
-        @Option(help: "Override environment variable \(EnvironmentKeys.xcodeproj)")
+    @Option(help: "Override environment variable \(EnvironmentKeys.targetName)")
+    var target: String?
+
+//    @Option(help: "Override environment variable \(EnvironmentKeys.productModuleName)")
+//    var productModuleName: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.infoPlistFile)")
+//    var infoPlistFile: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.codeSignEntitlements)")
+//    var codeSignEntitlements: String?
+
+    @Option()
+    var inputFiles: [String] = []
+
+    // MARK: Xcode build - Environment variable overrides
+
+//    @Option(help: "Override environment variable \(EnvironmentKeys.builtProductsDir)")
+//    var builtProductsDir: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.developerDir)")
+//    var developerDir: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.platformDir)")
+//    var platformDir: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.sdkRoot)")
+//    var sdkRoot: String?
+//
+//    @Option(help: "Override environment variable \(EnvironmentKeys.sourceRoot)")
+//    var sourceRoot: String?
+}
+
+extension App {
+    struct Generate: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Generates R.generated.swift file")
+
+        @OptionGroup var globals: GlobalOptions
+
+
+        @Option(help: "Override environment variable \(EnvironmentKeys.productFilePath)")
         var xcodeproj: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.target)")
-        var target: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.productModuleName)")
-        var productModuleName: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.infoPlistFile)")
-        var infoPlistFile: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.codeSignEntitlements)")
-        var codeSignEntitlements: String?
-
-
-        // MARK: Xcode build - Environment variable overrides
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.builtProductsDir)")
-        var builtProductsDir: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.developerDir)")
-        var developerDir: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.platformDir)")
-        var platformDir: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.sdkRoot)")
-        var sdkRoot: String?
-
-        @Option(help: "Override environment variable \(EnvironmentKeys.sourceRoot)")
-        var sourceRoot: String?
-
 
         // MARK: Output path argument
 
         @Argument(help: "Output path for the generated file")
+//        @Option(name: .shortAndLong, help: "Output path for the generated file")
         var outputPath: String
 
         mutating func run() throws {
             let processInfo = ProcessInfo()
 
-            let xcodeprojPath = try self.xcodeproj ?? processInfo.environmentVariable(name: EnvironmentKeys.xcodeproj)
+            let xcodeprojPath = try xcodeproj ?? processInfo.environmentVariable(name: EnvironmentKeys.productFilePath)
             let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
 
-            let targetName = try self.getTargetName(xcodeprojURL: xcodeprojURL)
-            let productModuleName = self.productModuleName ?? processInfo.environment[EnvironmentKeys.productModuleName]
-            let infoPlistFile = self.infoPlistFile ?? processInfo.environment[EnvironmentKeys.infoPlistFile]
-            let codeSignEntitlements = self.codeSignEntitlements ?? processInfo.environment[EnvironmentKeys.codeSignEntitlements]
+            let targetName = try getTargetName(xcodeprojURL: xcodeprojURL)
+            let productModuleName = processInfo.environment[EnvironmentKeys.productModuleName]
+            let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
+            let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
+
 
             // If no environment is provided, we're not running inside Xcode, fallback to names
             let sourceTreeURLs = SourceTreeURLs(
-                builtProductsDirURL: URL(fileURLWithPath: builtProductsDir ?? processInfo.environment[EnvironmentKeys.builtProductsDir] ?? EnvironmentKeys.builtProductsDir),
-                developerDirURL: URL(fileURLWithPath: developerDir ?? processInfo.environment[EnvironmentKeys.developerDir] ?? EnvironmentKeys.developerDir),
-                sourceRootURL: URL(fileURLWithPath: sourceRoot ?? processInfo.environment[EnvironmentKeys.sourceRoot] ?? EnvironmentKeys.sourceRoot),
-                sdkRootURL: URL(fileURLWithPath: sdkRoot ?? processInfo.environment[EnvironmentKeys.sdkRoot] ?? EnvironmentKeys.sdkRoot),
-                platformURL: URL(fileURLWithPath: platformDir ?? processInfo.environment[EnvironmentKeys.platformDir] ?? EnvironmentKeys.platformDir)
+                builtProductsDirURL: URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.builtProductsDir] ?? EnvironmentKeys.builtProductsDir),
+                developerDirURL: URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.developerDir] ?? EnvironmentKeys.developerDir),
+                sourceRootURL: URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.sourceRoot] ?? EnvironmentKeys.sourceRoot),
+                sdkRootURL: URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.sdkRoot] ?? EnvironmentKeys.sdkRoot),
+                platformURL: URL(fileURLWithPath: processInfo.environment[EnvironmentKeys.platformDir] ?? EnvironmentKeys.platformDir)
             )
 
             let outputURL = URL(fileURLWithPath: outputPath)
 //            let uiTestOutputURL = generateUITestFile.map(URL.init(fileURLWithPath:))
-            let rswiftIgnoreURL = sourceTreeURLs.sourceRootURL.appendingPathComponent(rswiftignore, isDirectory: false)
+            let rswiftIgnoreURL = sourceTreeURLs.sourceRootURL
+                .appendingPathComponent(globals.rswiftignore, isDirectory: false)
 
             let core = RswiftCore(
                 outputURL: outputURL,
-                generators: generators.isEmpty ? Generator.allCases : generators,
-                accessLevel: accessLevel,
-                importModules: imports,
-                xcodeprojURL: xcodeprojURL,
+                generators: globals.generators.isEmpty ? Generator.allCases : globals.generators,
+                accessLevel: globals.accessLevel,
+                importModules: globals.imports,
                 targetName: targetName,
                 productModuleName: productModuleName,
                 infoPlistFile: infoPlistFile.map(URL.init(fileURLWithPath:)),
@@ -124,9 +135,9 @@ extension App {
                 sourceTreeURLs: sourceTreeURLs
             )
 
-//            print("RSWIFT", outputURL)
+            print("RSWIFT inputfiles", globals.inputFiles)
             do {
-                try core.developRun()
+                try core.generateFromXcodeproj(url: xcodeprojURL)
             } catch let error as ResourceParsingError {
                 throw ValidationError(error.description)
             }
@@ -134,7 +145,7 @@ extension App {
 
         func getTargetName(xcodeprojURL: URL) throws -> String {
             let processInfo = ProcessInfo()
-            if let targetName = self.target ?? processInfo.environment[EnvironmentKeys.target] {
+            if let targetName = globals.target ?? processInfo.environment[EnvironmentKeys.targetName] {
                 return targetName
             }
 
@@ -172,11 +183,10 @@ extension App {
 struct EnvironmentKeys {
     static let action = "ACTION"
 
-    static let bundleIdentifier = "PRODUCT_BUNDLE_IDENTIFIER"
-    static let productModuleName = "PRODUCT_MODULE_NAME"
-    static let target = "TARGET_NAME"
-    static let xcodeproj = "PROJECT_FILE_PATH"
+    static let targetName = "TARGET_NAME"
     static let infoPlistFile = "INFOPLIST_FILE"
+    static let productFilePath = "PROJECT_FILE_PATH"
+    static let productModuleName = "PRODUCT_MODULE_NAME"
     static let codeSignEntitlements = "CODE_SIGN_ENTITLEMENTS"
 
     static let builtProductsDir = SourceTreeFolder.buildProductsDir.rawValue
