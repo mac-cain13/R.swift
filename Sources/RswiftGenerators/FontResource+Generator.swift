@@ -49,7 +49,7 @@ extension FontResource {
             returnType: .void,
             valueCodeString: #"""
             for font in self {
-              if UIFont(resource: font, size: 42) == nil { throw RswiftResources.ValidationError("[R.swift] Font '\(font.name)' could not be loaded, is '\(font.filename)' added to the UIAppFonts array in this targets Info.plist?") }
+              if !font.canBeLoaded() { throw RswiftResources.ValidationError("[R.swift] Font '\(font.name)' could not be loaded, is '\(font.filename)' added to the UIAppFonts array in this targets Info.plist?") }
             }
             """#
         )

@@ -10,6 +10,7 @@
 import Foundation
 import SwiftUI
 
+
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Font {
 
@@ -36,6 +37,25 @@ extension Font {
         .custom(resource.name, size: size, relativeTo: textStyle)
     }
 }
+
+
+#if os(iOS) || os(tvOS) || os(watchOS)
+import UIKit
+
+extension FontResource {
+    public func canBeLoaded() -> Bool {
+        UIFont(name: name, size: 42) != nil
+    }
+}
+#elseif os(macOS)
+import AppKit
+
+extension FontResource {
+    public func canBeLoaded() -> Bool {
+        NSFont(name: name, size: 42) != nil
+    }
+}
+#endif
 
 
 #if os(iOS) || os(tvOS)

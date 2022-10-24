@@ -38,7 +38,8 @@ public enum ModuleReference: Hashable {
 }
 
 extension ModuleReference {
-    public static var foundation: ModuleReference { .custom(name: "Foundation") }
     public static var uiKit: ModuleReference { .custom(name: "UIKit") }
+    public static var coreText: ModuleReference { .custom(name: "CoreText") }
+    public static var foundation: ModuleReference { .custom(name: "Foundation") }
     public static var rswiftResources: ModuleReference { .custom(name: "RswiftResources") }
 }
