@@ -12,31 +12,31 @@ import Foundation
 import UIKit
 
 
-public extension StoryboardReference where Self: InitialControllerContainer {
+extension StoryboardReference where Self: InitialControllerContainer {
     /**
      Instantiates and returns the initial view controller in the view controller graph.
 
      - returns: The initial view controller in the storyboard.
      */
-    func instantiateInitialViewController() -> InitialController? {
+    public func instantiateInitialViewController() -> InitialController? {
         UIStoryboard(name: name, bundle: bundle).instantiateInitialViewController() as? InitialController
     }
 }
 
 
-public extension StoryboardViewControllerIdentifier {
+extension StoryboardViewControllerIdentifier {
     /**
      Instantiates and returns the view controller with the specified resource (`R.storyboard.*.*`).
 
      - returns: The view controller corresponding to the specified resource (`R.storyboard.*.*`). If no view controller is associated, this method throws an exception.
      */
-    func callAsFunction() -> ViewController? {
+    public func callAsFunction() -> ViewController? {
         UIStoryboard(name: storyboard, bundle: bundle).instantiateViewController(withIdentifier: identifier) as? ViewController
     }
 }
 
 
-public extension UIStoryboard {
+extension UIStoryboard {
     /**
      Creates and returns a storyboard object for the specified storyboard resource (`R.storyboard.*`) file.
 
@@ -44,7 +44,7 @@ public extension UIStoryboard {
 
      - returns: A storyboard object for the specified file. If no storyboard resource file matching name exists, an exception is thrown with description: `Could not find a storyboard named 'XXXXXX' in bundle....`
      */
-    convenience init<Reference: StoryboardReference>(resource: Reference) {
+    public convenience init<Reference: StoryboardReference>(resource: Reference) {
         self.init(name: resource.name, bundle: resource.bundle)
     }
 
@@ -56,7 +56,7 @@ public extension UIStoryboard {
 
      - returns: The view controller corresponding to the specified resource (`R.storyboard.*.*`). If no view controller is associated, this method throws an exception.
      */
-    func instantiateViewController<ViewController: UIViewController>(withIdentifier identifier: StoryboardViewControllerIdentifier<ViewController>) -> ViewController?  {
+    public func instantiateViewController<ViewController: UIViewController>(withIdentifier identifier: StoryboardViewControllerIdentifier<ViewController>) -> ViewController?  {
         self.instantiateViewController(withIdentifier: identifier.identifier) as? ViewController
     }
 }

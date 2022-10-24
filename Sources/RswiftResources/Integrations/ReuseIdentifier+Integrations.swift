@@ -12,14 +12,14 @@
 import UIKit
 
 
-public extension UITableView {
+extension UITableView {
 
     /**
      Register a `R.nib.*` containing a cell with the table view under it's contained identifier.
 
      - parameter resource: A nib resource (`R.nib.*`) containing a table view cell that has a reuse identifier
      */
-    func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewCell {
+    public func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewCell {
         register(UINib(resource: resource), forCellReuseIdentifier: resource.identifier)
     }
 
@@ -28,7 +28,7 @@ public extension UITableView {
 
      - parameter resource: A reuse identifier
      */
-    func register<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewCell {
+    public func register<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewCell {
         register(Resource.Reusable.self, forCellReuseIdentifier: resource.identifier)
     }
 
@@ -37,7 +37,7 @@ public extension UITableView {
 
      - parameter resource: A nib resource (`R.nib.*`) containing a view that has a reuse identifier
      */
-    func registerHeaderFooterView<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UIView {
+    public func registerHeaderFooterView<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UIView {
         register(UINib(resource: resource), forHeaderFooterViewReuseIdentifier: resource.identifier)
     }
 
@@ -46,7 +46,7 @@ public extension UITableView {
 
      - parameter resource: A reuse identifier
      */
-    func registerHeaderFooterView<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewHeaderFooterView {
+    public func registerHeaderFooterView<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UITableViewHeaderFooterView {
         register(Resource.Reusable.self, forHeaderFooterViewReuseIdentifier: resource.identifier)
     }
 
@@ -60,7 +60,7 @@ public extension UITableView {
 
      - precondition: You must register a class or nib file using the registerNib: or registerClass:forCellReuseIdentifier: method before calling this method.
      */
-    func dequeueReusableCell<Identifier: ReuseIdentifierContainer>(withIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UITableViewCell {
+    public func dequeueReusableCell<Identifier: ReuseIdentifierContainer>(withIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UITableViewCell {
         dequeueReusableCell(withIdentifier: identifier.identifier, for: indexPath) as? Identifier.Reusable
     }
 
@@ -72,20 +72,20 @@ public extension UITableView {
 
      - returns: A UITableViewHeaderFooterView object with the associated identifier or nil if no such object exists in the reusable view queue or if it couldn't be cast correctly.
      */
-    func dequeueReusableHeaderFooterView<Identifier: ReuseIdentifierContainer>(withIdentifier identifier: Identifier) -> Identifier.Reusable? where Identifier.Reusable: UITableViewHeaderFooterView {
+    public func dequeueReusableHeaderFooterView<Identifier: ReuseIdentifierContainer>(withIdentifier identifier: Identifier) -> Identifier.Reusable? where Identifier.Reusable: UITableViewHeaderFooterView {
         dequeueReusableHeaderFooterView(withIdentifier: identifier.identifier) as? Identifier.Reusable
     }
 }
 
 
-public extension UICollectionView {
+extension UICollectionView {
 
     /**
      Register a `R.nib.*` for use in creating new collection view cells.
 
      - parameter resource: A nib resource (`R.nib.*`) containing a object of type UICollectionViewCell that has a reuse identifier
      */
-    func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UICollectionViewCell {
+    public func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UICollectionViewCell {
         register(UINib(resource: resource), forCellWithReuseIdentifier: resource.identifier)
     }
 
@@ -94,7 +94,7 @@ public extension UICollectionView {
 
      - parameter resource: A reuse identifier
      */
-    func register<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UICollectionViewCell {
+    public func register<Resource: ReuseIdentifierContainer>(_ resource: Resource) where Resource.Reusable: UICollectionViewCell {
         register(Resource.Reusable.self, forCellWithReuseIdentifier: resource.identifier)
     }
 
@@ -103,7 +103,7 @@ public extension UICollectionView {
 
      - parameter resource: A nib resource (`R.nib.*`) containing a object of type UICollectionReusableView. that has a reuse identifier
      */
-    func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource, forSupplementaryViewOfKind kind: String) where Resource.Reusable: UICollectionReusableView {
+    public func register<Resource: NibReferenceContainer & ReuseIdentifierContainer>(_ resource: Resource, forSupplementaryViewOfKind kind: String) where Resource.Reusable: UICollectionReusableView {
         register(UINib(resource: resource), forSupplementaryViewOfKind: kind, withReuseIdentifier: resource.identifier)
     }
 
@@ -112,7 +112,7 @@ public extension UICollectionView {
 
      - parameter resource: A reuseIdentifier
      */
-    func register<Resource: ReuseIdentifierContainer>(_ resource: Resource, forSupplementaryViewOfKind kind: String) where Resource.Reusable: UICollectionReusableView {
+    public func register<Resource: ReuseIdentifierContainer>(_ resource: Resource, forSupplementaryViewOfKind kind: String) where Resource.Reusable: UICollectionReusableView {
         register(Resource.Reusable.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: resource.identifier)
     }
 
@@ -124,7 +124,7 @@ public extension UICollectionView {
 
      - returns: A subclass of UICollectionReusableView or nil if the cast fails.
      */
-    func dequeueReusableCell<Identifier: ReuseIdentifierContainer>(withReuseIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UICollectionReusableView {
+    public func dequeueReusableCell<Identifier: ReuseIdentifierContainer>(withReuseIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UICollectionReusableView {
         dequeueReusableCell(withReuseIdentifier: identifier.identifier, for: indexPath) as? Identifier.Reusable
     }
 
@@ -137,7 +137,7 @@ public extension UICollectionView {
 
      - returns: A subclass of UICollectionReusableView or nil if the cast fails.
      */
-    func dequeueReusableSupplementaryView<Identifier: ReuseIdentifierContainer>(ofKind elementKind: String, withReuseIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UICollectionReusableView {
+    public func dequeueReusableSupplementaryView<Identifier: ReuseIdentifierContainer>(ofKind elementKind: String, withReuseIdentifier identifier: Identifier, for indexPath: IndexPath) -> Identifier.Reusable? where Identifier.Reusable: UICollectionReusableView {
         dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: identifier.identifier, for: indexPath) as? Identifier.Reusable
     }
 

@@ -12,7 +12,7 @@
 import UIKit
 
 
-public extension NibReferenceContainer {
+extension NibReferenceContainer {
 
     /**
      Instantiate the nib to get first object from this nib
@@ -20,12 +20,12 @@ public extension NibReferenceContainer {
      - parameter ownerOrNil: The owner, if the owner parameter is nil, connections to File's Owner are not permitted.
      - parameter options: Options are identical to the options specified with` -[NSBundle loadNibNamed:owner:options:]`
      */
-    func callAsFunction(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
+    public func callAsFunction(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
         UINib(nibName: name, bundle: bundle).instantiate(withOwner: ownerOrNil, options: optionsOrNil).first as? FirstView
     }
 
     @available(*, deprecated, message: "renamed to (withOwner:options:)")
-    func callAsFunction(owner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
+    public func callAsFunction(owner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
         UINib(nibName: name, bundle: bundle).instantiate(withOwner: ownerOrNil, options: optionsOrNil).first as? FirstView
     }
 
@@ -35,12 +35,12 @@ public extension NibReferenceContainer {
      - parameter ownerOrNil: The owner, if the owner parameter is nil, connections to File's Owner are not permitted.
      - parameter options: Options are identical to the options specified with` -[NSBundle loadNibNamed:owner:options:]`
      */
-    func firstView(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
+    public func firstView(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
         UINib(nibName: name, bundle: bundle).instantiate(withOwner: ownerOrNil, options: optionsOrNil).first as? FirstView
     }
 
     @available(*, deprecated, renamed: "firstView(withOwner:options:)")
-    func firstView(owner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
+    public func firstView(owner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> FirstView? {
         UINib(nibName: name, bundle: bundle).instantiate(withOwner: ownerOrNil, options: optionsOrNil).first as? FirstView
     }
 
@@ -52,12 +52,12 @@ public extension NibReferenceContainer {
 
      - returns: An array containing the top-level objects from the NIB
      */
-    func instantiate(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = [:]) -> [Any] {
+    public func instantiate(withOwner ownerOrNil: Any?, options optionsOrNil: [UINib.OptionsKey : Any]? = [:]) -> [Any] {
         UINib(nibName: name, bundle: bundle).instantiate(withOwner: ownerOrNil, options: optionsOrNil)
     }
 }
 
-public extension UINib {
+extension UINib {
     /**
      Returns a UINib object initialized to the nib file of the specified resource (`R.nib.*`).
 
@@ -65,12 +65,12 @@ public extension UINib {
 
      - returns: The initialized UINib object. An exception is thrown if there were errors during initialization or the nib file could not be located.
      */
-    convenience init<Nib: NibReferenceContainer>(resource: Nib) {
+    public convenience init<Nib: NibReferenceContainer>(resource: Nib) {
         self.init(nibName: resource.name, bundle: resource.bundle)
     }
 }
 
-public extension UIViewController {
+extension UIViewController {
     /**
      Returns a newly initialized view controller with the nib resource (`R.nib.*`).
 
@@ -78,7 +78,7 @@ public extension UIViewController {
 
      - returns: A newly initialized UIViewController object.
      */
-    convenience init<Nib: NibReferenceContainer>(nib: Nib) {
+    public convenience init<Nib: NibReferenceContainer>(nib: Nib) {
         self.init(nibName: nib.name, bundle: nib.bundle)
     }
 }

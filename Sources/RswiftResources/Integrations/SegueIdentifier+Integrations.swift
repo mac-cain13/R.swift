@@ -27,7 +27,7 @@ extension SeguePerformer {
      */
     public func performSegue<Segue, Destination>(withIdentifier identifier: SegueIdentifier<Segue, Self, Destination>, sender: Any?) {
         performSegue(withIdentifier: identifier.identifier, sender: sender)
-      }
+    }
 }
 
 extension SegueIdentifier where Segue: UIStoryboardSegue {

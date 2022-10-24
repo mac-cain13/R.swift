@@ -17,7 +17,7 @@ extension Font {
     /**
      Create a custom font from this resource (`R.font.*`) and and size that scales with the body text style.
      */
-    static func custom(_ resource: FontResource, size: CGFloat) -> Font {
+    public static func custom(_ resource: FontResource, size: CGFloat) -> Font {
         .custom(resource.name, size: size)
     }
 
@@ -25,7 +25,7 @@ extension Font {
      Create a custom font from this resource (`R.font.*`) and a fixed size that does not scale with Dynamic Type.
      */
     @available(macOS 11, iOS 14, tvOS 14, watchOS 7, *)
-    static func custom(_ resource: FontResource, fixedSize: CGFloat) -> Font {
+    public static func custom(_ resource: FontResource, fixedSize: CGFloat) -> Font {
         .custom(resource.name, fixedSize: fixedSize)
     }
 
@@ -33,32 +33,13 @@ extension Font {
      Create a custom font from this resource (`R.font.*`) and and size that is relative to the given `textStyle`.
      */
     @available(macOS 11, iOS 14, tvOS 14, watchOS 7, *)
-    static func custom(_ resource: FontResource, size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
+    public static func custom(_ resource: FontResource, size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
         .custom(resource.name, size: size, relativeTo: textStyle)
     }
 }
 
 
-#if os(iOS) || os(tvOS) || os(watchOS)
-import UIKit
-
-extension FontResource {
-    public func canBeLoaded() -> Bool {
-        UIFont(name: name, size: 42) != nil
-    }
-}
-#elseif os(macOS)
-import AppKit
-
-extension FontResource {
-    public func canBeLoaded() -> Bool {
-        NSFont(name: name, size: 42) != nil
-    }
-}
-#endif
-
-
-#if os(iOS) || os(tvOS)
+#if canImport(UIKit)
 import UIKit
 
 extension FontResource {
@@ -89,5 +70,32 @@ public extension UIFont {
   convenience init?(resource: FontResource, size: CGFloat) {
     self.init(name: resource.name, size: size)
   }
+}
+#endif
+
+
+#if canImport(UIKit)
+import UIKit
+
+extension FontResource {
+    /**
+     Returns true if the font can be loaded.
+     Custom fonts may not be loaded if not properly configured in Info.plist
+     */
+    public func canBeLoaded() -> Bool {
+        UIFont(name: name, size: 42) != nil
+    }
+}
+#elseif canImport(AppKit)
+import AppKit
+
+extension FontResource {
+    /**
+     Returns true if the font can be loaded.
+     Custom fonts may not be loaded if not properly configured in Info.plist
+     */
+    public func canBeLoaded() -> Bool {
+        NSFont(name: name, size: 42) != nil
+    }
 }
 #endif
