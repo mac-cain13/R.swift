@@ -17,16 +17,17 @@ extension FontResource {
         let groupedResources = resources.grouped(bySwiftIdentifier: { $0.name })
         groupedResources.reportWarningsForDuplicatesAndEmpties(source: "font resource", result: "font", warning: warning)
 
-        let letbindings = groupedResources.uniques.map { $0.generateLetBinding() }
+        let vargetters = groupedResources.uniques.map { $0.generateVarGetter() }
 
-        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) fonts."]
+        let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) fonts."]
 
         return Struct(comments: comments, name: structName, protocols: [.sequence]) {
-            if letbindings.count > 0 {
-                generateMakeIterator(names: letbindings.map(\.name))
+            Init.bundle
+            if vargetters.count > 0 {
+                generateMakeIterator(names: vargetters.map(\.name))
                 generateValidate()
             }
-            letbindings
+            vargetters
         }
     }
 
@@ -57,11 +58,12 @@ extension FontResource {
 }
 
 extension FontResource {
-    func generateLetBinding() -> LetBinding {
-        LetBinding(
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
             comments: ["Font `\(name)`."],
             name: SwiftIdentifier(name: name),
-            valueCodeString: "FontResource(name: \"\(name)\", filename: \"\(filename)\")"
+            typeReference: TypeReference(module: .rswiftResources, rawName: "FontResource"),
+            valueCodeString: ".init(name: \"\(name)\", bundle: bundle, filename: \"\(filename)\")"
         )
     }
 }

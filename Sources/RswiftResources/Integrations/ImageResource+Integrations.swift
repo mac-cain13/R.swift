@@ -46,8 +46,6 @@ extension Image {
 }
 
 
-// For some reason, this requires Xcode 14.1, doesn't work in Xcode 14.0
-#if swift(>=5.8)
 @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
 extension Image {
 
@@ -84,7 +82,6 @@ extension Image {
         self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
     }
 }
-#endif
 
 
 #if os(iOS) || os(tvOS)
