@@ -99,10 +99,7 @@ extension App {
         mutating func run() throws {
             let processInfo = ProcessInfo()
 
-            let xcodeprojPath = try xcodeproj ?? processInfo.environmentVariable(name: EnvironmentKeys.productFilePath)
-            let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
-
-            let targetName = try getTargetName(xcodeprojURL: xcodeprojURL)
+            let targetName = try getTargetName()
             let productModuleName = processInfo.environment[EnvironmentKeys.productModuleName]
             let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
             let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
@@ -135,36 +132,56 @@ extension App {
                 sourceTreeURLs: sourceTreeURLs
             )
 
-            print("RSWIFT inputfiles", globals.inputFiles)
+            print("YOYO ", processInfo.environment)
+
             do {
-                try core.generateFromXcodeproj(url: xcodeprojURL)
+                let xcodeprojURL = try getXcodeprojURL()
+                if xcodeprojURL.pathExtension == "xcodeproj" {
+                    try core.generateFromXcodeproj(url: xcodeprojURL)
+                } else {
+                    print("FILE STARGEDT", outputURL)
+                    print("FILE STARGEDT", FileManager().fileExists(atPath: outputURL.path))
+                    try core.generateFromFiles(inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)))
+                    print("FILE GENERATED", outputURL)
+                }
             } catch let error as ResourceParsingError {
                 throw ValidationError(error.description)
             }
         }
 
-        func getTargetName(xcodeprojURL: URL) throws -> String {
-            let processInfo = ProcessInfo()
-            if let targetName = globals.target ?? processInfo.environment[EnvironmentKeys.targetName] {
+        func getXcodeprojURL() throws -> URL {
+            let xcodeprojPath = try xcodeproj ?? ProcessInfo().environmentVariable(name: EnvironmentKeys.productFilePath)
+            let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
+
+            return xcodeprojURL
+        }
+
+        func getTargetName() throws -> String {
+            if let targetName = globals.target ?? ProcessInfo().environment[EnvironmentKeys.targetName] {
                 return targetName
             }
 
-            let targets = try? Xcodeproj(url: xcodeprojURL, warning: { _ in }).allTargets
+            do {
+                let xcodeproj = try Xcodeproj(url: getXcodeprojURL(), warning: { _ in })
+                let targets = xcodeproj.allTargets
 
-            if let targets, let target = targets.first, targets.count == 1 {
-                return target.name
+                if let target = targets.first, targets.count == 1 {
+                    return target.name
+                }
+
+                if targets.count > 0 {
+                    let lines = [
+                        "Missing argument --target",
+                        "Available targets:"
+                    ] + targets.map { "- \($0.name)" }
+
+                    throw ValidationError(lines.joined(separator: "\n"))
+                }
+
+                throw ValidationError("Missing argument --target")
+            } catch {
+                throw ValidationError("Missing argument --target")
             }
-
-            if let targets, targets.count > 0 {
-                let lines = [
-                    "Missing argument --target",
-                    "Available targets:"
-                ] + targets.map { "- \($0.name)" }
-
-                throw ValidationError(lines.joined(separator: "\n"))
-            }
-
-            throw ValidationError("Missing argument --target")
         }
     }
 }

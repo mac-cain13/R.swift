@@ -17,6 +17,8 @@ struct RswiftGenerateResources: BuildToolPlugin {
             .appending(subpath: target.name)
             .appending(subpath: "Resources")
 
+        try FileManager.default.createDirectory(atPath: resourcesDirectoryPath.string, withIntermediateDirectories: true)
+
         let rswiftPath = resourcesDirectoryPath.appending(subpath: "R.generated.swift")
 
         let sourceFiles = target.sourceFiles
@@ -25,12 +27,22 @@ struct RswiftGenerateResources: BuildToolPlugin {
         let inputFilesArguments = sourceFiles
             .flatMap { ["--input-files", $0 ] }
 
+        Diagnostics.warning("FILES " + sourceFiles.joined(separator: "}, {"))
+
 //        let rswift = try context.tool(named: "rswift")
         return [
+//            .prebuildCommand(
+//                displayName: "My display name 1",
+//                executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
+//                arguments: ["generate", rswiftPath.string, "--target", target.name] + inputFilesArguments,
+////                environment: [:],
+//                outputFilesDirectory: resourcesDirectoryPath
+//            ),
             .buildCommand(
                 displayName: "My display name 1",
                 executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
-                arguments: ["generate", rswiftPath.string, "--target", target.name] + inputFilesArguments
+                arguments: ["generate", rswiftPath.string, "--target", target.name] + inputFilesArguments,
+                outputFiles: [rswiftPath]
             ),
         ]
     }

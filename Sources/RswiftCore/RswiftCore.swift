@@ -94,8 +94,7 @@ public struct RswiftCore {
         try generateFromProjectResources(resources: resources, developmentRegion: xcodeproj.developmentRegion, knownAssetTags: xcodeproj.knownAssetTags)
     }
 
-    public func generateFromFiles(inputFiles: [String]) throws {
-        let urls = inputFiles.compactMap(URL.init(string:))
+    public func generateFromFiles(inputFileURLs urls: [URL]) throws {
         let resources = try ProjectResources.parseURLs(
             urls: urls,
             infoPlists: [],
@@ -259,7 +258,8 @@ public struct RswiftCore {
             }
 
             if generateFont {
-                fontStruct.generateLetBinding()
+                fontStruct.generateBundleVarGetter(name: "font")
+                fontStruct.generateBundleFunction(name: "font")
                 fontStruct
             }
 
@@ -310,7 +310,7 @@ public struct RswiftCore {
             .map { "import \($0)" }
             .joined(separator: "\n")
 
-        let mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle(for: BundleClass.self))"
+        let mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle.module)"
 
         let str = s.prettyPrint()
         let code = """
@@ -318,7 +318,9 @@ public struct RswiftCore {
 
         \(str)
 
-        private class BundleClass {}
+        private class BundleFinder {}
+        private let classBundle = Bundle(for: BundleFinder.self)
+        private let resolvedBundle = classBundle.resourceURL.flatMap(Bundle.init(url:)) ?? classBundle
         \(mainLet)
         """
         try code.write(to: outputURL, atomically: true, encoding: .utf8)
