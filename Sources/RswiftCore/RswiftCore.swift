@@ -35,13 +35,17 @@ public enum AccessLevel: String, ExpressibleByArgument {
   case privateLevel = "private"
 }
 
+public enum BundleSource: String, ExpressibleByArgument {
+    case module
+    case finder
+}
 
 public struct RswiftCore {
     let outputURL: URL
     let generators: [Generator]
     let accessLevel: AccessLevel
+    let bundleSource: BundleSource
     let importModules: [String]
-    let targetName: String
     let productModuleName: String?
     let infoPlistFile: URL?
     let codeSignEntitlements: URL?
@@ -54,8 +58,8 @@ public struct RswiftCore {
         outputURL: URL,
         generators: [Generator],
         accessLevel: AccessLevel,
+        bundleSource: BundleSource,
         importModules: [String],
-        targetName: String,
         productModuleName: String?,
         infoPlistFile: URL?,
         codeSignEntitlements: URL?,
@@ -65,8 +69,8 @@ public struct RswiftCore {
         self.outputURL = outputURL
         self.generators = generators
         self.accessLevel = accessLevel
+        self.bundleSource = bundleSource
         self.importModules = importModules
-        self.targetName = targetName
         self.productModuleName = productModuleName
         self.infoPlistFile = infoPlistFile
         self.codeSignEntitlements = codeSignEntitlements
@@ -76,7 +80,7 @@ public struct RswiftCore {
         self.sourceTreeURLs = sourceTreeURLs
     }
 
-    public func generateFromXcodeproj(url xcodeprojURL: URL) throws {
+    public func generateFromXcodeproj(url xcodeprojURL: URL, targetName: String) throws {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         let xcodeproj = try Xcodeproj(url: xcodeprojURL, warning: warning)
@@ -310,7 +314,16 @@ public struct RswiftCore {
             .map { "import \($0)" }
             .joined(separator: "\n")
 
-        let mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle.module)"
+        let mainLet: String
+        switch bundleSource {
+        case .module:
+            mainLet = "\(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle.module)"
+        case .finder:
+            mainLet = """
+                private class BundleFinder {}
+                \(accessLevel == .publicLevel ? "public " : "")let R = _R(bundle: Bundle(for: BundleFinder.self))
+                """
+        }
 
         let str = s.prettyPrint()
         let code = """
@@ -318,9 +331,6 @@ public struct RswiftCore {
 
         \(str)
 
-        private class BundleFinder {}
-        private let classBundle = Bundle(for: BundleFinder.self)
-        private let resolvedBundle = classBundle.resourceURL.flatMap(Bundle.init(url:)) ?? classBundle
         \(mainLet)
         """
         try code.write(to: outputURL, atomically: true, encoding: .utf8)

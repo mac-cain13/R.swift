@@ -22,26 +22,22 @@ struct RswiftGenerateResources: BuildToolPlugin {
         let rswiftPath = resourcesDirectoryPath.appending(subpath: "R.generated.swift")
 
         let sourceFiles = target.sourceFiles
+            .filter { $0.type == .resource || $0.type == .unknown }
             .map(\.path.string)
 
         let inputFilesArguments = sourceFiles
             .flatMap { ["--input-files", $0 ] }
 
-        Diagnostics.warning("FILES " + sourceFiles.joined(separator: "}, {"))
-
 //        let rswift = try context.tool(named: "rswift")
         return [
-//            .prebuildCommand(
-//                displayName: "My display name 1",
-//                executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
-//                arguments: ["generate", rswiftPath.string, "--target", target.name] + inputFilesArguments,
-////                environment: [:],
-//                outputFilesDirectory: resourcesDirectoryPath
-//            ),
             .buildCommand(
-                displayName: "My display name 1",
+                displayName: "R.swift generate resources",
                 executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
-                arguments: ["generate", rswiftPath.string, "--target", target.name] + inputFilesArguments,
+                arguments: [
+                    "generate", rswiftPath.string,
+                    "--input-type", "input-files",
+                    "--bundle-source", "module",
+                ] + inputFilesArguments,
                 outputFiles: [rswiftPath]
             ),
         ]
@@ -53,22 +49,27 @@ import XcodeProjectPlugin
 
 extension RswiftGenerateResources: XcodeBuildToolPlugin {
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
-        Diagnostics.error("\(context)")
+
         let resourcesDirectoryPath = context.pluginWorkDirectory
             .appending(subpath: target.displayName)
             .appending(subpath: "Resources")
 
+        try FileManager.default.createDirectory(atPath: resourcesDirectoryPath.string, withIntermediateDirectories: true)
+
         let rswiftPath = resourcesDirectoryPath.appending(subpath: "R.generated.swift")
 
-        Diagnostics.warning("HELLO WORLD " + target.inputFiles.filter { $0.type == .resource }.map(\.path.string).joined(separator: ", "))
-
         return [
-            .prebuildCommand(
-                displayName: "My display name 2",
+            .buildCommand(
+                displayName: "R.swift generate resources",
                 executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
-                arguments: ["generate", rswiftPath.string, "--target", target.displayName],
-                outputFilesDirectory: resourcesDirectoryPath
-            )
+                arguments: [
+                    "generate", rswiftPath.string,
+                    "--target", target.displayName,
+                    "--input-type", "xcodeproj",
+                    "--bundle-source", "finder",
+                ],
+                outputFiles: [rswiftPath]
+            ),
         ]
     }
 }

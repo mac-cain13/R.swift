@@ -51,7 +51,11 @@ extension LocalizableStrings {
 
         let strings = computeStringsWithParams(filename: filename, resources: resources, developmentLanguage: developmentLanguage, warning: warning)
         let vargetters = strings.map { $0.generateVarGetter() }
-        let functions = strings.filter { $0.params.count > 0 }.map { $0.generateFunction() }
+
+        // only functions with named parameters
+        let functions = strings
+            .filter { $0.params.contains { $0.name != nil } }
+            .map { $0.generateFunction() }
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) localization keys."]
 

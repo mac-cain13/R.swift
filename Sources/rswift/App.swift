@@ -22,7 +22,15 @@ struct App: ParsableCommand {
     )
 }
 
+enum InputType: String, ExpressibleByArgument {
+    case xcodeproj
+    case inputFiles
+}
+
 struct GlobalOptions: ParsableArguments {
+
+    @Option(help: "The type of input for generation")
+    var inputType: InputType = .xcodeproj
 
     @Option(help: "Only run specified generators, options: \(Generator.allCases.map(\.rawValue).joined(separator: ", "))", transform: { str in
         str.components(separatedBy: ",").map { Generator(rawValue: $0)! }
@@ -44,6 +52,11 @@ struct GlobalOptions: ParsableArguments {
 //        @Option(help: "Override bundle from which resources are loaded")
 //        var hostingBundle: String?
 
+    @Option(help: "Paths of files for which resources should be generated")
+    var inputFiles: [String] = []
+
+    @Option(help: "Source of default bundle to use")
+    var bundleSource: BundleSource = .finder
 
     // MARK: Project specific - Environment variable overrides
 
@@ -58,9 +71,6 @@ struct GlobalOptions: ParsableArguments {
 //
 //    @Option(help: "Override environment variable \(EnvironmentKeys.codeSignEntitlements)")
 //    var codeSignEntitlements: String?
-
-    @Option()
-    var inputFiles: [String] = []
 
     // MARK: Xcode build - Environment variable overrides
 
@@ -84,22 +94,18 @@ extension App {
     struct Generate: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Generates R.generated.swift file")
 
-        @OptionGroup var globals: GlobalOptions
-
+        @OptionGroup
+        var globals: GlobalOptions
 
         @Option(help: "Override environment variable \(EnvironmentKeys.productFilePath)")
         var xcodeproj: String?
 
-        // MARK: Output path argument
-
         @Argument(help: "Output path for the generated file")
-//        @Option(name: .shortAndLong, help: "Output path for the generated file")
         var outputPath: String
 
         mutating func run() throws {
             let processInfo = ProcessInfo()
 
-            let targetName = try getTargetName()
             let productModuleName = processInfo.environment[EnvironmentKeys.productModuleName]
             let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
             let codeSignEntitlements = processInfo.environment[EnvironmentKeys.codeSignEntitlements]
@@ -123,8 +129,8 @@ extension App {
                 outputURL: outputURL,
                 generators: globals.generators.isEmpty ? Generator.allCases : globals.generators,
                 accessLevel: globals.accessLevel,
+                bundleSource: globals.bundleSource,
                 importModules: globals.imports,
-                targetName: targetName,
                 productModuleName: productModuleName,
                 infoPlistFile: infoPlistFile.map(URL.init(fileURLWithPath:)),
                 codeSignEntitlements: codeSignEntitlements.map(URL.init(fileURLWithPath:)),
@@ -132,37 +138,29 @@ extension App {
                 sourceTreeURLs: sourceTreeURLs
             )
 
-            print("YOYO ", processInfo.environment)
-
             do {
-                let xcodeprojURL = try getXcodeprojURL()
-                if xcodeprojURL.pathExtension == "xcodeproj" {
-                    try core.generateFromXcodeproj(url: xcodeprojURL)
-                } else {
-                    print("FILE STARGEDT", outputURL)
-                    print("FILE STARGEDT", FileManager().fileExists(atPath: outputURL.path))
+                switch globals.inputType {
+                case .xcodeproj:
+                    let xcodeprojPath = try xcodeproj ?? ProcessInfo().environmentVariable(name: EnvironmentKeys.productFilePath)
+                    let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
+                    let targetName = try getTargetName(xcodeprojURL: xcodeprojURL)
+                    try core.generateFromXcodeproj(url: xcodeprojURL, targetName: targetName)
+
+                case .inputFiles:
                     try core.generateFromFiles(inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)))
-                    print("FILE GENERATED", outputURL)
                 }
             } catch let error as ResourceParsingError {
                 throw ValidationError(error.description)
             }
         }
 
-        func getXcodeprojURL() throws -> URL {
-            let xcodeprojPath = try xcodeproj ?? ProcessInfo().environmentVariable(name: EnvironmentKeys.productFilePath)
-            let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
-
-            return xcodeprojURL
-        }
-
-        func getTargetName() throws -> String {
+        func getTargetName(xcodeprojURL: URL) throws -> String {
             if let targetName = globals.target ?? ProcessInfo().environment[EnvironmentKeys.targetName] {
                 return targetName
             }
 
             do {
-                let xcodeproj = try Xcodeproj(url: getXcodeprojURL(), warning: { _ in })
+                let xcodeproj = try Xcodeproj(url: xcodeprojURL, warning: { _ in })
                 let targets = xcodeproj.allTargets
 
                 if let target = targets.first, targets.count == 1 {
