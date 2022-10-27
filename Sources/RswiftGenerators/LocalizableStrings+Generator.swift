@@ -32,7 +32,7 @@ extension LocalizableStrings {
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."]
 
-        return Struct(comments: comments, name: structName) {
+        return Struct(comments: comments, name: structName, additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
 
             for name in groupedLocalized.uniques.map(\.0) {

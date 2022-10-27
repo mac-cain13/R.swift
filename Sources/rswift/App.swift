@@ -23,8 +23,8 @@ struct App: ParsableCommand {
 }
 
 enum InputType: String, ExpressibleByArgument {
-    case xcodeproj
-    case inputFiles
+    case xcodeproj = "xcodeproj"
+    case inputFiles = "input-files"
 }
 
 struct GlobalOptions: ParsableArguments {

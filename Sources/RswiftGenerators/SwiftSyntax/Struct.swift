@@ -371,6 +371,7 @@ public struct Struct {
     public var funcs: [Function] = []
     public var structs: [Struct] = []
     public var typealiasses: [TypeAlias] = []
+    public var additionalModuleReferences: Set<ModuleReference> = []
 
     public static var empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
 
@@ -380,6 +381,7 @@ public struct Struct {
         accessControl: AccessControl = AccessControl.none,
         name: SwiftIdentifier,
         protocols: [TypeReference] = [],
+        additionalModuleReferences: Set<ModuleReference> = [],
         @StructMembersBuilder membersBuilder: () -> StructMembers
     ) {
         self.comments = comments
@@ -387,6 +389,7 @@ public struct Struct {
         self.accessControl = accessControl
         self.name = name
         self.protocols = protocols
+        self.additionalModuleReferences = additionalModuleReferences
 
         let members = membersBuilder()
         self.lets = members.lets
@@ -410,6 +413,7 @@ public struct Struct {
         result.formUnion(funcs.flatMap(\.allModuleReferences))
         result.formUnion(structs.flatMap(\.allModuleReferences))
         result.formUnion(typealiasses.flatMap(\.allModuleReferences))
+        result.formUnion(additionalModuleReferences)
 
         return result
     }
