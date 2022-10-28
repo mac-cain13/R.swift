@@ -114,7 +114,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
    ```bash
    if mint list | grep -q 'R.swift'; then
-     mint run R.swift rswift generate "$SRCROOT/R.generated.swift"
+     mint run R.swift@v6.1.0 rswift generate "$SRCROOT/R.generated.swift"
    else
      echo "error: R.swift not installed; run 'mint bootstrap' to install"
      return -1
