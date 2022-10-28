@@ -74,7 +74,7 @@ jobs:
 
     - name: Publish to Cocoapods
       run: |
-        export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
+        export POD_VERSION=$TAG_NAME
         pod trunk push
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
