@@ -183,13 +183,7 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-        let projectStruct = Struct(name: SwiftIdentifier(name: "project")) {
-            LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(developmentRegion)""#)
-
-            if let knownAssetTags {
-                LetBinding(name: SwiftIdentifier(name: "knownAssetTags"), valueCodeString: "\(knownAssetTags)")
-            }
-        }
+        let projectStruct = XcodeProjectGenerator.generateProject(developmentRegion: developmentRegion, knownAssetTags: knownAssetTags)
 
         let generateString = generators.contains(.string) && !stringStruct.isEmpty
         let generateData = generators.contains(.data) && !dataStruct.isEmpty
