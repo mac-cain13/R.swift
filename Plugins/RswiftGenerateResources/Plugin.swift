@@ -28,15 +28,17 @@ struct RswiftGenerateResources: BuildToolPlugin {
         let inputFilesArguments = sourceFiles
             .flatMap { ["--input-files", $0 ] }
 
-//        let rswift = try context.tool(named: "rswift")
+        let bundleSource = target.kind == .generic ? "module" : "finder"
+        let description = "\(target.kind) module \(target.name)"
+
         return [
             .buildCommand(
-                displayName: "R.swift generate resources",
-                executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
+                displayName: "R.swift generate resources for \(description)",
+                executable: try context.tool(named: "rswift").path,
                 arguments: [
                     "generate", rswiftPath.string,
                     "--input-type", "input-files",
-                    "--bundle-source", "module",
+                    "--bundle-source", bundleSource,
                 ] + inputFilesArguments,
                 outputFiles: [rswiftPath]
             ),
@@ -58,10 +60,17 @@ extension RswiftGenerateResources: XcodeBuildToolPlugin {
 
         let rswiftPath = resourcesDirectoryPath.appending(subpath: "R.generated.swift")
 
+        let description: String
+        if let product = target.product {
+            description = "\(product.kind) \(target.displayName)"
+        } else {
+            description = target.displayName
+        }
+
         return [
             .buildCommand(
-                displayName: "R.swift generate resources",
-                executable: Path("/Users/tom/Projects/R.swift/.build/debug/rswift"),
+                displayName: "R.swift generate resources for \(description)",
+                executable: try context.tool(named: "rswift").path,
                 arguments: [
                     "generate", rswiftPath.string,
                     "--target", target.displayName,

@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "rswift",
+  name: "Rswift",
   platforms: [
     .macOS(.v10_15),
     .iOS(.v11),
@@ -36,6 +36,6 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
     ]),
 
-    .plugin(name: "RswiftGenerateResources", capability: .buildTool(), dependencies: ["rswift", "RswiftCore"]),
+    .plugin(name: "RswiftGenerateResources", capability: .buildTool(), dependencies: ["rswift"]),
   ]
 )
