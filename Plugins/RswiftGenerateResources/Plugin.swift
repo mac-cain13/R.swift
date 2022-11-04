@@ -39,6 +39,7 @@ struct RswiftGenerateResources: BuildToolPlugin {
                     "generate", rswiftPath.string,
                     "--input-type", "input-files",
                     "--bundle-source", bundleSource,
+                    "--access-level", "public",
                 ] + inputFilesArguments,
                 outputFiles: [rswiftPath]
             ),
@@ -76,6 +77,7 @@ extension RswiftGenerateResources: XcodeBuildToolPlugin {
                     "--target", target.displayName,
                     "--input-type", "xcodeproj",
                     "--bundle-source", "finder",
+                    "--access-level", "public",
                 ],
                 outputFiles: [rswiftPath]
             ),
