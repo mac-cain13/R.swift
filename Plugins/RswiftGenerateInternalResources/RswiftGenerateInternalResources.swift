@@ -1,5 +1,5 @@
 //
-//  Plugin.swift
+//  RswiftGenerateInternalResources.swift
 //  
 //
 //  Created by Tom Lokhorst on 2022-10-19.
@@ -9,7 +9,7 @@ import Foundation
 import PackagePlugin
 
 @main
-struct RswiftGenerateResources: BuildToolPlugin {
+struct RswiftGenerateInternalResources: BuildToolPlugin {
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
         guard let target = target as? SourceModuleTarget else { return [] }
 
@@ -39,7 +39,6 @@ struct RswiftGenerateResources: BuildToolPlugin {
                     "generate", rswiftPath.string,
                     "--input-type", "input-files",
                     "--bundle-source", bundleSource,
-                    "--access-level", "public",
                 ] + inputFilesArguments,
                 outputFiles: [rswiftPath]
             ),
@@ -50,7 +49,7 @@ struct RswiftGenerateResources: BuildToolPlugin {
 #if canImport(XcodeProjectPlugin)
 import XcodeProjectPlugin
 
-extension RswiftGenerateResources: XcodeBuildToolPlugin {
+extension RswiftGenerateInternalResources: XcodeBuildToolPlugin {
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
 
         let resourcesDirectoryPath = context.pluginWorkDirectory
@@ -77,7 +76,6 @@ extension RswiftGenerateResources: XcodeBuildToolPlugin {
                     "--target", target.displayName,
                     "--input-type", "xcodeproj",
                     "--bundle-source", "finder",
-                    "--access-level", "public",
                 ],
                 outputFiles: [rswiftPath]
             ),

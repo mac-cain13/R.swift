@@ -12,7 +12,9 @@ let package = Package(
     products: [
         .executable(name: "rswift", targets: ["rswift"]),
         .library(name: "RswiftLibrary", targets: ["RswiftResources"]),
-        .plugin(name: "RswiftGenerateResources", targets: ["RswiftGenerateResources"]),
+        .plugin(name: "RswiftGenerateInternalResources", targets: ["RswiftGenerateInternalResources"]),
+        .plugin(name: "RswiftGeneratePublicResources", targets: ["RswiftGeneratePublicResources"]),
+        .plugin(name: "RswiftGenerateResourcesCommand", targets: ["RswiftGenerateResourcesCommand"]),
     ],
     dependencies: [
         .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
@@ -35,7 +37,21 @@ let package = Package(
             .target(name: "RswiftCore"),
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
         ]),
-        
-            .plugin(name: "RswiftGenerateResources", capability: .buildTool(), dependencies: ["rswift"]),
+
+        .plugin(name: "RswiftGenerateInternalResources", capability: .buildTool(), dependencies: ["rswift"]),
+        .plugin(name: "RswiftGeneratePublicResources", capability: .buildTool(), dependencies: ["rswift"]),
+        .plugin(
+            name: "RswiftGenerateResourcesCommand",
+            capability: .command(
+                intent: .custom(
+                    verb: "rswift-generate-resources",
+                    description: "Rswift generate resources"
+                ),
+                permissions: [
+                    .writeToPackageDirectory(reason: "Rswift generates a file with statically typed, autocompleted resources")
+                ]
+            ),
+            dependencies: ["rswift"]
+        ),
     ]
 )
