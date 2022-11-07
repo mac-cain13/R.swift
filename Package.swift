@@ -24,17 +24,11 @@ let package = Package(
         .target(name: "RswiftResources"),
         .target(name: "RswiftGenerators", dependencies: ["RswiftResources"]),
         .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
-        
-        // Core of R.swift, brings all previous parts together
-        .target(name: "RswiftCore", dependencies: [
+
+        // Executable that brings all previous parts together
+        .executableTarget(name: "rswift", dependencies: [
             .target(name: "RswiftParsers"),
             .target(name: "RswiftGenerators"),
-            .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        ]),
-        
-        // Executable that calls Core
-        .executableTarget(name: "rswift", dependencies: [
-            .target(name: "RswiftCore"),
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
         ]),
 
