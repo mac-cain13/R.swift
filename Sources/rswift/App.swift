@@ -17,7 +17,7 @@ struct App: ParsableCommand {
         commandName: "rswift",
         abstract: "Generate static references for autocompleted resources like images, fonts and localized strings in Swift projects",
         version: Config.version,
-        subcommands: [Generate.self, PrintCommand.self]
+        subcommands: [Generate.self, ModifyXcodePackages.self]
     )
 }
 
@@ -31,13 +31,8 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "The type of input for generation")
     var inputType: InputType = .xcodeproj
 
-    @Option(help: "Only run specified generators, options: \(Generator.allCases.map(\.rawValue).joined(separator: ", "))", transform: { str in
-        str.components(separatedBy: ",").map { Generator(rawValue: $0)! }
-    })
+    @Option(help: "Only run specified generators, options: \(generatorsString)", transform: parseGenerators)
     var generators: [Generator] = []
-
-//        @Option(help: "Output path for an extra generated file that contains resources commonly used in UI tests such as accessibility identifiers")
-//        var generateUITestFile: String?
 
     @Option(help: "Add extra modules as import in the generated file")
     var imports: [String] = []
@@ -47,9 +42,6 @@ struct GlobalOptions: ParsableArguments {
 
     @Option(help: "Path to pattern file that describes files that should be ignored")
     var rswiftignore = ".rswiftignore"
-
-//        @Option(help: "Override bundle from which resources are loaded")
-//        var hostingBundle: String?
 
     @Option(help: "Paths of files for which resources should be generated")
     var inputFiles: [String] = []
@@ -61,32 +53,11 @@ struct GlobalOptions: ParsableArguments {
 
     @Option(help: "Override environment variable \(EnvironmentKeys.targetName)")
     var target: String?
+}
 
-//    @Option(help: "Override environment variable \(EnvironmentKeys.productModuleName)")
-//    var productModuleName: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.infoPlistFile)")
-//    var infoPlistFile: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.codeSignEntitlements)")
-//    var codeSignEntitlements: String?
-
-    // MARK: Xcode build - Environment variable overrides
-
-//    @Option(help: "Override environment variable \(EnvironmentKeys.builtProductsDir)")
-//    var builtProductsDir: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.developerDir)")
-//    var developerDir: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.platformDir)")
-//    var platformDir: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.sdkRoot)")
-//    var sdkRoot: String?
-//
-//    @Option(help: "Override environment variable \(EnvironmentKeys.sourceRoot)")
-//    var sourceRoot: String?
+private var generatorsString = Generator.allCases.map(\.rawValue).joined(separator: ", ")
+private func parseGenerators(_ str: String) -> [Generator] {
+    str.components(separatedBy: ",").map { Generator(rawValue: $0)! }
 }
 
 extension App {
@@ -184,12 +155,31 @@ extension App {
 }
 
 extension App {
-    struct PrintCommand: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Prints the command rswift for use in CLI")
+    struct ModifyXcodePackages: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Modifies Xcode project to fix package reference for plugins")
 
+        @Option(help: "Path to xcodeproj file")
+        var xcodeproj: String
 
-        mutating func run() {
-            print("PRINT COMMAND")
+        @Option(help: "Targets for which to remove package reference")
+        var target: [String] = []
+
+        mutating func run() throws {
+            let url = URL(fileURLWithPath: xcodeproj)
+            let file = try XCProjectFile(xcodeprojURL: url, ignoreReferenceErrors: true)
+
+            for target in file.project.targets.compactMap(\.value) {
+                guard self.target.contains(target.name) else { continue }
+
+                for product in target.dependencies.compactMap(\.value?.productRef?.value) {
+                    let plugins = ["plugin:RswiftGenerateInternalResources", "plugin:RswiftGeneratePublicResources"]
+                    if let name = product.productName, plugins.contains(name) {
+                        product.removePackage()
+                    }
+                }
+            }
+
+            try file.write(to: url)
         }
     }
 }

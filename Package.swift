@@ -15,9 +15,10 @@ let package = Package(
         .plugin(name: "RswiftGenerateInternalResources", targets: ["RswiftGenerateInternalResources"]),
         .plugin(name: "RswiftGeneratePublicResources", targets: ["RswiftGeneratePublicResources"]),
         .plugin(name: "RswiftGenerateResourcesCommand", targets: ["RswiftGenerateResourcesCommand"]),
+        .plugin(name: "RswiftModifyXcodePackages", targets: ["RswiftModifyXcodePackages"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.8.0"),
+        .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.9.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.1.0"),
     ],
     targets: [
@@ -43,6 +44,19 @@ let package = Package(
                 ),
                 permissions: [
                     .writeToPackageDirectory(reason: "Rswift generates a file with statically typed, autocompleted resources")
+                ]
+            ),
+            dependencies: ["rswift"]
+        ),
+        .plugin(
+            name: "RswiftModifyXcodePackages",
+            capability: .command(
+                intent: .custom(
+                    verb: "rswift-modify-xcode-packages",
+                    description: "Rswift modify Xcode packages"
+                ),
+                permissions: [
+                    .writeToPackageDirectory(reason: "Modifies Xcode project to fix package reference for plugins")
                 ]
             ),
             dependencies: ["rswift"]

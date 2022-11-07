@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tomlokhorst/XcodeEdit",
       "state" : {
-        "revision" : "99547c5af5850155b52c43b716ba1b094b02a3b2",
-        "version" : "2.8.0"
+        "revision" : "cd466d6e8c5ffd2f2b61165d37b0646f09068e1e",
+        "version" : "2.9.0"
       }
     }
   ],

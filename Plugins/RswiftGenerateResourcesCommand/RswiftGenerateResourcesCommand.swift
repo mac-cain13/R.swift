@@ -83,14 +83,12 @@ extension RswiftGenerateResourcesCommand: XcodeCommandPlugin {
             }
 
             do {
-                Diagnostics.warning("RUN \(arguments)")
                 try rswift.run(arguments: arguments, environment: environment)
             } catch let error as RunError {
                 Diagnostics.error(error.description)
             }
         }
 
-        Diagnostics.warning("DONE@!@!!! \(externalArgs)")
     }
 }
 
