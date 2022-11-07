@@ -52,7 +52,7 @@ jobs:
         path: .build/apple/Products/Release/rswift
 
     - name: Archive ZIP
-      run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/apple/Products/Release/rswift License
+      run: cd Sources && zip -r ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip ../.build/apple/Products/Release/rswift ../License RswiftCore
     - name: Notarize ZIP
       run: |
         sh notarize.sh
