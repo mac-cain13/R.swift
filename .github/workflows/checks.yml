@@ -7,11 +7,11 @@ on:
     branches: '*'
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
 
 jobs:
   unit-tests:
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -55,7 +55,7 @@ jobs:
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
 
   test-tvOS:
-    runs-on: macos-11
+    runs-on: macos-13
     needs: build
     steps:
     - name: Checkout
@@ -84,7 +84,7 @@ jobs:
       run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
 
   build:
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
     - name: Checkout
       uses: actions/checkout@v2
