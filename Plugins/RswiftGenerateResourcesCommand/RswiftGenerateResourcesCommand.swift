@@ -13,12 +13,12 @@ struct RswiftGenerateResourcesCommand: CommandPlugin {
     func performCommand(context: PluginContext, arguments externalArgs: [String]) async throws {
 
         let rswift = try context.tool(named: "rswift")
-        let selectedTargets = targets(from: externalArgs)
-        let outputSubpath = outputFile(from: externalArgs) ?? "R.generated.swift"
+        let parsedArguments = ParsedArguments.parse(arguments: externalArgs)
+        let outputSubpath = parsedArguments.outputFile ?? "R.generated.swift"
 
         for target in context.package.targets {
             guard let target = target as? SourceModuleTarget else { continue }
-            guard selectedTargets.contains(target.name) || selectedTargets.isEmpty else { continue }
+            guard parsedArguments.targets.contains(target.name) || parsedArguments.targets.isEmpty else { continue }
 
             let outputPath = target.directory.appending(subpath: outputSubpath)
 
@@ -35,7 +35,7 @@ struct RswiftGenerateResourcesCommand: CommandPlugin {
                 "generate", outputPath.string,
                 "--input-type", "input-files",
                 "--bundle-source", bundleSource,
-            ] + inputFilesArguments + externalArgs
+            ] + inputFilesArguments + parsedArguments.remaining
 
             do {
                 try rswift.run(arguments: arguments, environment: nil)
@@ -54,43 +54,75 @@ extension RswiftGenerateResourcesCommand: XcodeCommandPlugin {
     func performCommand(context: XcodePluginContext, arguments externalArgs: [String]) throws {
 
         let rswift = try context.tool(named: "rswift")
-        let selectedTargets = targets(from: externalArgs)
-        let outputSubpath = outputFile(from: externalArgs) ?? "R.generated.swift"
+        let parsedArguments = ParsedArguments.parse(arguments: externalArgs)
+        let outputSubpath = parsedArguments.outputFile ?? "R.generated.swift"
 
         for target in context.xcodeProject.targets {
-            guard let target = target as? SourceModuleTarget else { continue }
-            guard selectedTargets.contains(target.name) || selectedTargets.isEmpty else { continue }
+            guard parsedArguments.targets.contains(target.displayName) || parsedArguments.targets.isEmpty else { continue }
 
-            let outputPath = target.directory.appending(subpath: outputSubpath)
+            let outputPath = context.xcodeProject.directory.appending(subpath: outputSubpath)
+
+            let sourceFiles = target.inputFiles
+                .filter { $0.type == .resource || $0.type == .unknown }
+                .map(\.path.string)
+
+            let inputFilesArguments = sourceFiles
+                .flatMap { ["--input-files", $0 ] }
 
             let arguments: [String] = [
                 "generate", outputPath.string,
-                "--target", target.name,
-                "--input-type", "xcodeproj",
+                "--input-type", "input-files",
                 "--bundle-source", "finder",
-            ] + externalArgs
+            ] + inputFilesArguments + parsedArguments.remaining
+
+            var environment: [String: String] = [
+                "SOURCE_ROOT": context.xcodeProject.directory.string,
+            ]
+            if let product = target.product {
+                environment["PRODUCT_MODULE_NAME"] = product.name
+            }
 
             do {
-                try rswift.run(arguments: arguments, environment: nil)
+                Diagnostics.warning("RUN \(arguments)")
+                try rswift.run(arguments: arguments, environment: environment)
             } catch let error as RunError {
                 Diagnostics.error(error.description)
             }
         }
 
+        Diagnostics.warning("DONE@!@!!! \(externalArgs)")
     }
 }
 
 #endif
 
-private func targets(from arguments: [String]) -> [String] {
-    zip(arguments, arguments.dropFirst())
-        .compactMap { (key, value) in
-            key == "--target" ? value : nil
-        }
-}
+struct ParsedArguments {
+    var targets: [String] = []
+    var remaining: [String] = []
+    var outputFile: String?
 
-private func outputFile(from arguments: [String]) -> String? {
-    arguments.first { $0.hasSuffix(".swift") }
+    static func parse(arguments: [String]) -> ParsedArguments {
+        var result = ParsedArguments()
+
+        for (key, value) in zip(arguments, arguments.dropFirst()) {
+            if result.outputFile == nil && key.hasSuffix(".swift") {
+                result.outputFile = key
+                continue
+            }
+            if result.outputFile == nil && value.hasSuffix(".swift") {
+                result.outputFile = value
+                continue
+            }
+
+            if key == "--target" {
+                result.targets.append(value)
+            } else if value != "--target" {
+                result.remaining.append(value)
+            }
+        }
+
+        return result
+    }
 }
 
 struct RunError: Error {

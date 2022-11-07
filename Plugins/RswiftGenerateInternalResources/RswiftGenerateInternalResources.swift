@@ -13,13 +13,12 @@ struct RswiftGenerateInternalResources: BuildToolPlugin {
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
         guard let target = target as? SourceModuleTarget else { return [] }
 
-        let resourcesDirectoryPath = context.pluginWorkDirectory
+        let outputDirectoryPath = context.pluginWorkDirectory
             .appending(subpath: target.name)
-            .appending(subpath: "Resources")
 
-        try FileManager.default.createDirectory(atPath: resourcesDirectoryPath.string, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(atPath: outputDirectoryPath.string, withIntermediateDirectories: true)
 
-        let rswiftPath = resourcesDirectoryPath.appending(subpath: "R.generated.swift")
+        let rswiftPath = outputDirectoryPath.appending(subpath: "R.generated.swift")
 
         let sourceFiles = target.sourceFiles
             .filter { $0.type == .resource || $0.type == .unknown }
