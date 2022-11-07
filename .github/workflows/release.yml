@@ -5,11 +5,11 @@ on:
     types: created
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
 
 jobs:
   release-build:
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
     - name: Checkout
       uses: actions/checkout@v2
