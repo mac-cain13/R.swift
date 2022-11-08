@@ -97,7 +97,7 @@ jobs:
           ${{ runner.os }}spm
     - name: Set version
       run: |
-        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Rswift.swift
+        sed -i "" "s/\(static let version = \"\)Unknown\(\"\)/\1Development build: ${GITHUB_SHA}\2/" Sources/rswift/Config.swift
     - name: Build
       run: swift build -v -c release
     - name: Store artifact

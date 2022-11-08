@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Set version
       run: |
-        sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Rswift.swift
+        sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Config.swift
       env:
         TAG: ${{ github.event.release.tag_name }}
     - name: Tarball source
