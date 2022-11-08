@@ -52,7 +52,7 @@ jobs:
         path: .build/apple/Products/Release/rswift
 
     - name: Archive ZIP
-      run: zip --junk-paths $FILENAME .build/apple/Products/Release/rswift License && zip --recurse-paths $FILENAME Sources/RswiftCore
+      run: zip --junk-paths $FILENAME .build/apple/Products/Release/rswift License && zip --recurse-paths $FILENAME Sources/RswiftResources
       env:
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Notarize ZIP
