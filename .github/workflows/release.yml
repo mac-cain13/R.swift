@@ -5,11 +5,11 @@ on:
     types: created
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
 
 jobs:
   release-build:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -52,7 +52,9 @@ jobs:
         path: .build/apple/Products/Release/rswift
 
     - name: Archive ZIP
-      run: zip --junk-paths ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip .build/apple/Products/Release/rswift License
+      run: zip --junk-paths $FILENAME .build/apple/Products/Release/rswift License && zip --recurse-paths $FILENAME Sources/RswiftCore
+      env:
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Notarize ZIP
       run: |
         sh notarize.sh
@@ -74,7 +76,7 @@ jobs:
 
     - name: Publish to Cocoapods
       run: |
-        export POD_VERSION=$(echo $TAG_NAME | cut -c2-)
+        export POD_VERSION=$TAG_NAME
         pod trunk push
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
