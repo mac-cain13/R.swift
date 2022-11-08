@@ -55,9 +55,9 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-    public init(_ resource: ImageResource, variableValue: Double?) {
-        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
-    }
+//    public init(_ resource: ImageResource, variableValue: Double?) {
+//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
+//    }
 
 
     /**
@@ -67,9 +67,9 @@ extension Image {
      - parameter variableValue: Optional value between 1 and 0
      - parameter label: The label associated with the image, for accessibility
      */
-    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
-        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
-    }
+//    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
+//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
+//    }
 
 
     /**
@@ -78,9 +78,9 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-    public init(decorative resource: ImageResource, variableValue: Double?) {
-        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
-    }
+//    public init(decorative resource: ImageResource, variableValue: Double?) {
+//        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
+//    }
 }
 
 
@@ -140,9 +140,9 @@ extension UIImage {
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
     */
-    @available(iOS 16, tvOS 16, watchOS 9, *)
-    public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
-        self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)
-    }
+//    @available(iOS 16, tvOS 16, watchOS 9, *)
+//    public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
+//        self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)
+//    }
 }
 #endif
