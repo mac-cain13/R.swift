@@ -216,7 +216,7 @@ public struct RswiftCore {
             valueCodeString: validateLines
         )
 
-        var s = Struct(name: structName) {
+        var s = Struct(name: structName, additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
             projectStruct
 

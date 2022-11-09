@@ -39,14 +39,11 @@ extension PropertyListResource {
             contents = plist.contents
         }
 
-        // Used in Bundle.infoDictionaryString
-        let moduleReference = ModuleReference.rswiftResources
-
         let members = contents.generateMembers(resourceName: resourceName, path: [], isInfoPlist: isInfoPlist, warning: warning)
             .sorted()
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(members.structs.count) properties."]
 
-        return Struct(comments: comments, name: structName, additionalModuleReferences: [moduleReference]) {
+        return Struct(comments: comments, name: structName) {
             if isInfoPlist {
                 Init.bundle
             }
