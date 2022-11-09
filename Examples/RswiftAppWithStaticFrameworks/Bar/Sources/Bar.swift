@@ -1,5 +1,7 @@
 import UIKit
 
+let bundle = Bundle.main.path(forResource: "Bar", ofType: "bundle").flatMap(Bundle.init(path:))!
+
 public final class BarClass {
     public init() {}
     public func bar() {
@@ -7,6 +9,6 @@ public final class BarClass {
     }
     
     public func sampleImage() -> UIImage {
-        R.image.colorsJpg()!
+        R.image(bundle: bundle).colorsJpg()!
     }
 }

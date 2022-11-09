@@ -12,11 +12,11 @@ struct ContentView: View {
         Text("Hello, App Clip!")
             .padding()
 
-        Image(uiImage: R.image.handIgnoreme()!)
+        Image(R.image.handIgnoreme)
             .resizable()
             .aspectRatio(1, contentMode: .fit)
             .frame(width: 140)
-            .border(Color(R.color.myColor()!))
+            .border(Color(R.color.myColor))
     }
 }
 

@@ -12,7 +12,7 @@ struct ContentView: View {
         Text("Hello, SwiftUI App!")
             .padding()
 
-        Image(uiImage: R.image.handIgnoreme()!)
+        Image(R.image.handIgnoreme)
             .resizable()
             .aspectRatio(1, contentMode: .fit)
             .frame(width: 140)

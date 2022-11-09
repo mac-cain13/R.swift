@@ -9,7 +9,7 @@
 import WatchKit
 import Foundation
 
-import Rswift
+import RswiftResources
 
 
 

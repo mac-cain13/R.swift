@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E212C64E291BE24B000E4F65 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E212C64D291BE24B000E4F65 /* RswiftLibrary */; };
+		E212C650291BE252000E4F65 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E212C64F291BE252000E4F65 /* RswiftLibrary */; };
 		E243EF952510DF9100DC653F /* RswiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EF942510DF9100DC653F /* RswiftUIApp.swift */; };
 		E243EF972510DF9100DC653F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E243EF962510DF9100DC653F /* ContentView.swift */; };
 		E243EF992510DF9200DC653F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF982510DF9200DC653F /* Assets.xcassets */; };
@@ -16,8 +18,6 @@
 		E243EFB42510E08E00DC653F /* ClipAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EFB32510E08E00DC653F /* ClipAssets.xcassets */; };
 		E243EFB72510E08E00DC653F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EFB62510E08E00DC653F /* Preview Assets.xcassets */; };
 		E243EFBC2510E08E00DC653F /* RswiftUIAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E2CD1B072510EFE0000ACEFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CD1B062510EFE0000ACEFB /* R.generated.swift */; };
-		E2CD1B092510EFF8000ACEFB /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CD1B082510EFF8000ACEFB /* R.generated.swift */; };
 		E2CD1B0C2510F900000ACEFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E243EF982510DF9200DC653F /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E212C64C291BE1DB000E4F65 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = R.swift; path = ../..; sourceTree = "<group>"; };
 		E243EF912510DF9100DC653F /* RswiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RswiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E243EF942510DF9100DC653F /* RswiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RswiftUIApp.swift; sourceTree = "<group>"; };
 		E243EF962510DF9100DC653F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,8 +61,6 @@
 		E243EFB82510E08E00DC653F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E243EFB92510E08E00DC653F /* RswiftUIAppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RswiftUIAppClip.entitlements; sourceTree = "<group>"; };
 		E243EFC22510E0D900DC653F /* Rswift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Rswift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E2CD1B062510EFE0000ACEFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
-		E2CD1B082510EFF8000ACEFB /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E212C64E291BE24B000E4F65 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,15 +76,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E212C650291BE252000E4F65 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E212C64B291BE1DB000E4F65 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E212C64C291BE1DB000E4F65 /* R.swift */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		E243EF882510DF9100DC653F = {
 			isa = PBXGroup;
 			children = (
+				E212C64B291BE1DB000E4F65 /* Packages */,
 				E243EF932510DF9100DC653F /* RswiftUI */,
 				E243EFAE2510E08D00DC653F /* RswiftUIAppClip */,
 				E243EF922510DF9100DC653F /* Products */,
@@ -104,7 +114,6 @@
 		E243EF932510DF9100DC653F /* RswiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				E2CD1B062510EFE0000ACEFB /* R.generated.swift */,
 				E243EF942510DF9100DC653F /* RswiftUIApp.swift */,
 				E243EF962510DF9100DC653F /* ContentView.swift */,
 				E243EF982510DF9200DC653F /* Assets.xcassets */,
@@ -125,7 +134,6 @@
 		E243EFAE2510E08D00DC653F /* RswiftUIAppClip */ = {
 			isa = PBXGroup;
 			children = (
-				E2CD1B082510EFF8000ACEFB /* R.generated.swift */,
 				E243EFAF2510E08D00DC653F /* RswiftUIAppClipApp.swift */,
 				E243EFB12510E08D00DC653F /* ContentView.swift */,
 				E243EFB32510E08E00DC653F /* ClipAssets.xcassets */,
@@ -159,7 +167,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E243EFA02510DF9200DC653F /* Build configuration list for PBXNativeTarget "RswiftUI" */;
 			buildPhases = (
-				E2CD1B012510E593000ACEFB /* R.swift */,
 				E243EF8D2510DF9100DC653F /* Sources */,
 				E243EF8E2510DF9100DC653F /* Frameworks */,
 				E243EF8F2510DF9100DC653F /* Resources */,
@@ -168,10 +175,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				E212C655291BE2D9000E4F65 /* PBXTargetDependency */,
 				E243EFBB2510E08E00DC653F /* PBXTargetDependency */,
 			);
 			name = RswiftUI;
 			packageProductDependencies = (
+				E212C64D291BE24B000E4F65 /* RswiftLibrary */,
 			);
 			productName = RswiftUI;
 			productReference = E243EF912510DF9100DC653F /* RswiftUI.app */;
@@ -181,7 +190,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E243EFC02510E08E00DC653F /* Build configuration list for PBXNativeTarget "RswiftUIAppClip" */;
 			buildPhases = (
-				E2CD1B052510EF53000ACEFB /* R.swift */,
 				E243EFA92510E08D00DC653F /* Sources */,
 				E243EFAA2510E08D00DC653F /* Frameworks */,
 				E243EFAB2510E08D00DC653F /* Resources */,
@@ -189,9 +197,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				E212C652291BE2C0000E4F65 /* PBXTargetDependency */,
 			);
 			name = RswiftUIAppClip;
 			packageProductDependencies = (
+				E212C64F291BE252000E4F65 /* RswiftLibrary */,
 			);
 			productName = RswiftUIAppClip;
 			productReference = E243EFAD2510E08D00DC653F /* RswiftUIAppClip.app */;
@@ -223,8 +233,6 @@
 				Base,
 			);
 			mainGroup = E243EF882510DF9100DC653F;
-			packageReferences = (
-			);
 			productRefGroup = E243EF922510DF9100DC653F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -257,49 +265,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		E2CD1B012510E593000ACEFB /* R.swift */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = R.swift;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				$SRCROOT/RswiftUI/R.generated.swift,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../build/Debug/rswift\" generate \"$SRCROOT/RswiftUI/R.generated.swift\"\n";
-		};
-		E2CD1B052510EF53000ACEFB /* R.swift */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = R.swift;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				$SRCROOT/RswiftUIAppClip/R.generated.swift,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../build/Debug/rswift\" generate \"$SRCROOT/RswiftUIAppClip/R.generated.swift\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		E243EF8D2510DF9100DC653F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -307,7 +272,6 @@
 			files = (
 				E243EF972510DF9100DC653F /* ContentView.swift in Sources */,
 				E243EF952510DF9100DC653F /* RswiftUIApp.swift in Sources */,
-				E2CD1B072510EFE0000ACEFB /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,13 +281,20 @@
 			files = (
 				E243EFB22510E08D00DC653F /* ContentView.swift in Sources */,
 				E243EFB02510E08D00DC653F /* RswiftUIAppClipApp.swift in Sources */,
-				E2CD1B092510EFF8000ACEFB /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E212C652291BE2C0000E4F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = E212C651291BE2C0000E4F65 /* RswiftGenerateInternalResources */;
+		};
+		E212C655291BE2D9000E4F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = E212C654291BE2D9000E4F65 /* RswiftGenerateInternalResources */;
+		};
 		E243EFBB2510E08E00DC653F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E243EFAC2510E08D00DC653F /* RswiftUIAppClip */;
@@ -567,6 +538,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E212C64D291BE24B000E4F65 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RswiftLibrary;
+		};
+		E212C64F291BE252000E4F65 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RswiftLibrary;
+		};
+		E212C651291BE2C0000E4F65 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		E212C654291BE2D9000E4F65 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:RswiftGenerateInternalResources";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E243EF892510DF9100DC653F /* Project object */;
 }
