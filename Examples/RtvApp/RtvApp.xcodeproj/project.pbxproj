@@ -143,7 +143,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				E212C648291BE0CB000E4F65 /* PBXTargetDependency */,
+				E2E58383291D6428006E17D9 /* PBXTargetDependency */,
 			);
 			name = "ResourceApp-tvOS";
 			packageProductDependencies = (
@@ -261,9 +261,9 @@
 			target = DEF559961CA4873D009B8C51 /* ResourceApp-tvOS */;
 			targetProxy = DEF559B01CA48892009B8C51 /* PBXContainerItemProxy */;
 		};
-		E212C648291BE0CB000E4F65 /* PBXTargetDependency */ = {
+		E2E58383291D6428006E17D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = E212C647291BE0CB000E4F65 /* RswiftGenerateInternalResources */;
+			productRef = E2E58382291D6428006E17D9 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
 
@@ -510,13 +510,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E212C647291BE0CB000E4F65 /* RswiftGenerateInternalResources */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = "plugin:RswiftGenerateInternalResources";
-		};
 		E2C415D328F6E5E00028D537 /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RswiftLibrary;
+		};
+		E2E58382291D6428006E17D9 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:RswiftGenerateInternalResources";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

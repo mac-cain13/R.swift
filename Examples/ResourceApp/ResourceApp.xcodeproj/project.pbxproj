@@ -710,8 +710,8 @@
 			);
 			name = R.swift;
 			outputPaths = (
-				"$(SRCROOT)/R.generated.swif",
-				"$(SRCROOT)/R.UITest.generated.swift",
+				$SRCROOT/R.generated.swift,
+				$SRCROOT/R.UITest.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
