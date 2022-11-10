@@ -715,7 +715,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "../../.build/debug/rswift generate --imports SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n../../.build/debug/rswift generate \"$SRCROOT/R.UITest.generated.swift\" --generators id\n";
+			shellScript = "../../.build/release/rswift generate --imports SWRevealViewController \"$SRCROOT/R.generated.swift\" > \"$SRCROOT/rswift.log\"\n../../.build/release/rswift generate \"$SRCROOT/R.UITest.generated.swift\" --generators id\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

@@ -7,7 +7,7 @@ on:
     branches: '*'
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
 
 jobs:
   unit-tests:
@@ -25,9 +25,9 @@ jobs:
     - name: Test
       run: swift test -v
 
-  test-iOS:
+  test-iOS-ResourceApp:
     runs-on: macos-12
-    needs: build
+    needs: build-rswift
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -37,9 +37,9 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir -p build/Debug
-        mv rswift-dev/rswift build/Debug/rswift
-        chmod +x build/Debug/rswift
+        mkdir -p .build/release
+        mv rswift-dev/rswift .build/release/rswift
+        chmod +x .build/release/rswift
     - name: Pull cache
       uses: actions/cache@v2
       id: podcache-ios
@@ -50,13 +50,13 @@ jobs:
           ${{ runner.os }}pods
     - name: Install pods
       if: steps.podcache-ios.outputs.cache-hit != 'true'
-      run: pod install --project-directory=Examples
+      run: pod install --project-directory=Examples/ResourceApp
     - name: Test
-      run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp"
+      run: fastlane scan --workspace "Examples/ResourceApp/RswiftExamples.xcworkspace" --scheme "ResourceApp"
 
-  test-tvOS:
+  test-iOS-StaticFrameworks:
     runs-on: macos-12
-    needs: build
+    needs: build-rswift
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -66,24 +66,31 @@ jobs:
         name: rswift-dev
     - name: Put build into place
       run: |
-        mkdir -p build/Debug
-        mv rswift-dev/rswift build/Debug/rswift
-        chmod +x build/Debug/rswift
-    - name: Pull cache
-      uses: actions/cache@v2
-      id: podcache-tvos
-      with:
-        path: Examples/Pods
-        key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}pods
-    - name: Install pods
-      if: steps.podcache-tvos.outputs.cache-hit != 'true'
-      run: pod install --project-directory=Examples
+        mkdir -p .build/release
+        mv rswift-dev/rswift .build/release/rswift
+        chmod +x .build/release/rswift
     - name: Test
-      run: fastlane scan --workspace "Examples/RswiftExamples.xcworkspace" --scheme "ResourceApp-tvOS"
+      run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcworkspace"
 
-  build:
+  test-tvOS:
+    runs-on: macos-12
+    needs: build-rswift
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
+      with:
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir -p .build/release
+        mv rswift-dev/rswift .build/release/rswift
+        chmod +x .build/release/rswift
+    - name: Test
+      run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj"
+
+  build-rswift:
     runs-on: macos-12
     steps:
     - name: Checkout

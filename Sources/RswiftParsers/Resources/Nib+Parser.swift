@@ -54,7 +54,7 @@ private let ElementNameToTypeMapping: [String: TypeReference] = [
     "collectionReusableView": TypeReference(module: .uiKit, rawName: "UICollectionReusableView"),
 ]
 
-private class NibParserDelegate: NSObject, XMLParserDelegate {
+internal class NibParserDelegate: NSObject, XMLParserDelegate {
     let ignoredRootViewElements = ["placeholder"]
     var deploymentTarget: DeploymentTarget?
     var rootViews: [TypeReference] = []

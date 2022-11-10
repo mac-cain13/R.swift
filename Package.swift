@@ -26,6 +26,9 @@ let package = Package(
         .target(name: "RswiftGenerators", dependencies: ["RswiftResources"]),
         .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
 
+        .testTarget(name: "RswiftGeneratorsTests", dependencies: ["RswiftGenerators"]),
+        .testTarget(name: "RswiftParsersTests", dependencies: ["RswiftParsers"]),
+
         // Executable that brings all previous parts together
         .executableTarget(name: "rswift", dependencies: [
             .target(name: "RswiftParsers"),

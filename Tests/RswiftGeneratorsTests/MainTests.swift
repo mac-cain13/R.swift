@@ -8,7 +8,7 @@
 //
 
 import XCTest
-@testable import RswiftCoreLegacy
+@testable import RswiftGenerators
 
 class MainTests: XCTestCase {
   override func setUp() {
@@ -44,7 +44,7 @@ class MainTests: XCTestCase {
   
   func testSwiftNameSanitization() {
     swiftNameData.forEach {
-      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseStartingCharacters: true).description
+      let sanitizedResult = SwiftIdentifier(name: $0.0, lowercaseStartingCharacters: true).value
       XCTAssertEqual(sanitizedResult, $0.1)
     }
   }

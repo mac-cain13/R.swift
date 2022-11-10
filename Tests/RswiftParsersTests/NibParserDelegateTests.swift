@@ -6,7 +6,8 @@
 //
 
 import XCTest
-@testable import RswiftCoreLegacy
+@testable import RswiftResources
+@testable import RswiftParsers
 
 class NibParserTests: XCTestCase {
 
@@ -87,6 +88,6 @@ class NibParserTests: XCTestCase {
             return XCTFail("Invalid XML")
         }
         
-        XCTAssert(parserDelegate.rootViews.first != Type._UIView)
+        XCTAssert(parserDelegate.rootViews.first != TypeReference(module: .uiKit, rawName: "UIView"))
     }
 }
