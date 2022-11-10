@@ -1,8 +1,0 @@
-platform :ios, '10.0'
-
-project 'LocalizedStringApp'
-
-pod 'R.swift.Library', :git => 'https://github.com/mac-cain13/R.swift.Library.git'
-
-target 'LocalizedStringApp'
-target 'LocalizedStringAppTests'

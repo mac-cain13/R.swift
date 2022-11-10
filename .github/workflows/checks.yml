@@ -70,7 +70,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Test
-      run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcworkspace"
+      run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj" --scheme
 
   test-tvOS:
     runs-on: macos-12
@@ -88,7 +88,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Test
-      run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj"
+      run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj" --scheme "ResourceAppTests-tvOS"
 
   build-rswift:
     runs-on: macos-12
