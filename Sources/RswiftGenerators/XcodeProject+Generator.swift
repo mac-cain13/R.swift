@@ -29,7 +29,7 @@ public struct XcodeProjectGenerator {
             comments: [],
             name: .init(name: "makeIterator"),
             params: [],
-            returnType: .someIteratorProtocol(.string),
+            returnType: .indexingIterator(.string),
             valueCodeString: "[\(names.map(\.value).joined(separator: ", "))].makeIterator()"
         )
     }

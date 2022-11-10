@@ -20,9 +20,15 @@ extension TypeReference {
         }
     }
 
-    static func someIteratorProtocol(_ element: TypeReference) -> TypeReference {
-        var result = TypeReference(module: .stdLib, rawName: "some IteratorProtocol")
-        result.genericArgs = [element]
+//    static func someIteratorProtocol(_ element: TypeReference) -> TypeReference {
+//        var result = TypeReference(module: .stdLib, rawName: "some IteratorProtocol")
+//        result.genericArgs = [element]
+//        return result
+//    }
+
+    static func indexingIterator(_ element: TypeReference) -> TypeReference {
+        var result = TypeReference(module: .stdLib, rawName: "IndexingIterator")
+        result.genericArgs = [TypeReference(module: .stdLib, rawName: "[\(element.codeString())]")]
         return result
     }
 

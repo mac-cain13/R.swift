@@ -36,7 +36,7 @@ extension FontResource {
             comments: [],
             name: .init(name: "makeIterator"),
             params: [],
-            returnType: .someIteratorProtocol(.fontResource),
+            returnType: .indexingIterator(.fontResource),
             valueCodeString: "[\(names.map(\.value).joined(separator: ", "))].makeIterator()"
         )
     }
