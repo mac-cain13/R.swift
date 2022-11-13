@@ -46,7 +46,7 @@ This is only the beginning, check out [more examples](Documentation/Examples.md)
 Mathijs Kadijk presented R.swift at the September 2016 CocoaHeadsNL meetup.
 Talking about the ideas behind R.swift and demonstrating how to move from plain stringly-typed iOS code to statically typed code.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/C8kRUTV9TOA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/embed/C8kRUTV9TOA"><img src="https://i.ytimg.com/vi/C8kRUTV9TOA/maxresdefault.jpg" width="560" alt="R.swift presentation at CocoaHeadsNL"></a>
 
 ## Features
 
@@ -87,7 +87,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 As of Rswift 7, Swift Package Manager is the recommended method of installation.
 
-[Demo video: Updating from R.swift 6 to Rswift 7](https://www.youtube.com/watch?v=icihJ_hin3I?t=66) (Starting at 1:06, this describes the installation of Rswift 7).
+[Demo video: Updating from R.swift 6 to Rswift 7](https://youtu.be/icihJ_hin3I?t=66) (Starting at 1:06, this describes the installation of Rswift 7).
 
 ### Xcode project - SPM
 
@@ -118,9 +118,7 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/RunBuild
 3. Build your project, now the `R` struct should be available in your code, use auto-complete to explore all static references
 
 <details>
-<summary>
-### CocoaPods
-</summary>
+<summary><h3>CocoaPods</h3></summary>
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
@@ -138,17 +136,13 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 </details>
 
 <details>
-<summary>
-### [Homebrew](https://brew.sh)
-</summary>
+<summary><h3>[Homebrew](https://brew.sh)</h3></summary>
 
 R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
 </details>
 
 <details>
-<summary>
-### Manually
-</summary>
+<summary><h3>Manually</h3></summary>
 
 0. Add the [R.swift](https://github.com/mac-cain13/R.swift) library to your project
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
