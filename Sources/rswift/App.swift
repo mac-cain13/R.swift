@@ -34,7 +34,7 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "Only run specified generators, options: \(generatorsString)", transform: parseGenerators)
     var generators: [Generator] = []
 
-    @Option(help: "Add extra modules as import in the generated file")
+    @Option(name: .customLong("import", withSingleDash: false), help: "Add extra modules as import in the generated file")
     var imports: [String] = []
 
     @Option(help: "The access level [public|internal] to use for the generated R-file")
