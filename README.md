@@ -136,7 +136,7 @@ _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent 
 </details>
 
 <details>
-<summary><h3>[Homebrew](https://brew.sh)</h3></summary>
+<summary><h3>Homebrew</h3></summary>
 
 R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
 </details>
