@@ -51,7 +51,7 @@ struct Resources {
       }
 
       // All previous assets can also possibly be used as files
-      if let resourceFile = tryResourceParsing({ try ResourceFile(url: url) }) {
+      if let resourceFile = tryResourceParsing({ try ResourceFile(url: url, fileManager: fileManager) }) {
         resourceFiles.append(resourceFile)
       }
     }
