@@ -45,7 +45,9 @@ extension Image {
     }
 }
 
-
+// Xcode 14 doesn't recognize `variableValue` init, Xcode 14.1 does know `variableValue`
+// Xcode 14.1 is first to ship with swift 5.7.1
+#if swift(>=5.7.1)
 @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
 extension Image {
 
@@ -55,9 +57,9 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-//    public init(_ resource: ImageResource, variableValue: Double?) {
-//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
-//    }
+    public init(_ resource: ImageResource, variableValue: Double?) {
+        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle)
+    }
 
 
     /**
@@ -67,9 +69,9 @@ extension Image {
      - parameter variableValue: Optional value between 1 and 0
      - parameter label: The label associated with the image, for accessibility
      */
-//    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
-//        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
-//    }
+    public init(_ resource: ImageResource, variableValue: Double?, label: Text) {
+        self.init(resource.name, variableValue: variableValue, bundle: resource.bundle, label: label)
+    }
 
 
     /**
@@ -78,10 +80,11 @@ extension Image {
      - parameter resource: The resource you want the image of (`R.image.*`)
      - parameter variableValue: Optional value between 1 and 0
      */
-//    public init(decorative resource: ImageResource, variableValue: Double?) {
-//        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
-//    }
+    public init(decorative resource: ImageResource, variableValue: Double?) {
+        self.init(decorative: resource.name, variableValue: variableValue, bundle: resource.bundle)
+    }
 }
+#endif
 
 
 #if os(iOS) || os(tvOS)
@@ -112,7 +115,7 @@ extension UIImage {
      - parameter traitCollection: Traits that describe the desired image to retrieve, pass nil to use traits that describe the main screen.
 
      - returns: An image that exactly or best matches the desired traits with the given resource (`R.image.*`), or nil if no suitable image was found.
-    */
+     */
     public convenience init?(resource: ImageResource, compatibleWith traitCollection: UITraitCollection? = nil) {
         self.init(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
     }
@@ -124,13 +127,19 @@ extension UIImage {
      - parameter configuration: The image configuration the system appllies to the image
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
-    */
-    @available(iOS 13, tvOS 13, watchOS 6, *)
+     */
+    @available(iOS 13, tvOS 13, *)
     public convenience init?(resource: ImageResource, with configuration: UIImage.Configuration?) {
         self.init(named: resource.name, in: resource.bundle, with: configuration)
     }
+}
+#endif
 
 
+// Xcode 14 doesn't recognize `variableValue` init, Xcode 14.1 does know `variableValue`
+// Xcode 14.1 is first to ship with swift 5.7.1
+#if swift(>=5.7.1) && (os(iOS) || os(tvOS))
+extension UIImage {
     /**
      Returns the image from this resource (`R.image.*`) using the configuration, and variable value specified.
 
@@ -140,9 +149,9 @@ extension UIImage {
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
     */
-//    @available(iOS 16, tvOS 16, watchOS 9, *)
-//    public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
-//        self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)
-//    }
+    @available(iOS 16, tvOS 16, *)
+    public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
+        self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)
+    }
 }
 #endif
