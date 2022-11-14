@@ -31,6 +31,7 @@ struct ImportPrinter: SwiftCodeConverible {
     modulesToImport.append(contentsOf: extractedModulesArray)
 
     swiftCode = modulesToImport
+      .filter { !($0 == "Foundation" && modulesToImport.contains("UIKit")) }
       .map { "import \($0)" }
       .joined(separator: "\n")
   }
