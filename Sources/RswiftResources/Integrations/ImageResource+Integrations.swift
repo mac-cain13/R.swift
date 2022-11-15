@@ -100,7 +100,7 @@ extension ImageResource {
 
      - returns: An image that exactly or best matches the desired traits with the given resource (`R.image.*`), or nil if no suitable image was found.
     */
-    @available(*, deprecated, message: "Use UIImage(resource:) initializer instead")
+//    @available(*, deprecated, message: "Use UIImage(resource:) initializer instead")
     public func callAsFunction(compatibleWith traitCollection: UITraitCollection? = nil) -> UIImage? {
         UIImage(named: name, in: bundle, compatibleWith: traitCollection)
     }
