@@ -28,7 +28,8 @@ public struct ProjectResources {
         codeSignEntitlements: URL?,
         sourceTreeURLs: SourceTreeURLs,
         parseFontsAsFiles: Bool,
-        parseImagesAsFiles: Bool
+        parseImagesAsFiles: Bool,
+        warning: (String) -> Void
     ) throws -> ProjectResources {
         let ignoreFile = rswiftIgnoreURL.flatMap { try? IgnoreFile(ignoreFileURL: $0) } ?? IgnoreFile()
 
@@ -41,12 +42,14 @@ public struct ProjectResources {
 
         let infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
             guard let url = infoPlistFile else { return nil }
-            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+            return try parse(with: warning) {
+                try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+            }
         }
 
         let codeSignEntitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
             guard let url = codeSignEntitlements else { return nil }
-            return try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+            return try parse(with: warning) { try PropertyListResource.parse(url: url, buildConfigurationName: config.name) }
         }
 
         return try parseURLs(
@@ -54,7 +57,8 @@ public struct ProjectResources {
             infoPlists: infoPlists,
             codeSignEntitlements: codeSignEntitlements,
             parseFontsAsFiles: parseFontsAsFiles,
-            parseImagesAsFiles: parseImagesAsFiles
+            parseImagesAsFiles: parseImagesAsFiles,
+            warning: warning
         )
     }
 
@@ -63,12 +67,13 @@ public struct ProjectResources {
         infoPlists: [PropertyListResource],
         codeSignEntitlements: [PropertyListResource],
         parseFontsAsFiles: Bool,
-        parseImagesAsFiles: Bool
+        parseImagesAsFiles: Bool,
+        warning: (String) -> Void
     ) throws -> ProjectResources {
 
         let assetCatalogs = try urls
             .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-            .map { try AssetCatalog.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try AssetCatalog.parse(url: url) } }
 
         let dontParseFileForFonts = !parseFontsAsFiles
         let dontParseFileForImages = !parseImagesAsFiles
@@ -76,27 +81,27 @@ public struct ProjectResources {
             .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
             .filter { !(dontParseFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
             .filter { !(dontParseFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
-            .map { try FileResource.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try FileResource.parse(url: url) } }
 
         let fonts = try urls
             .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try FontResource.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try FontResource.parse(url: url) } }
 
         let images = try urls
             .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try ImageResource.parse(url: $0, assetTags: nil) }
+            .compactMap { url in try parse(with: warning) { try ImageResource.parse(url: url, assetTags: nil) } }
 
         let localizableStrings = try urls
             .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
-            .map { try LocalizableStrings.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try LocalizableStrings.parse(url: url) } }
 
         let nibs = try urls
             .filter { NibResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try NibResource.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try NibResource.parse(url: url) } }
 
         let storyboards = try urls
             .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
-            .map { try StoryboardResource.parse(url: $0) }
+            .compactMap { url in try parse(with: warning) { try StoryboardResource.parse(url: url) } }
 
         return ProjectResources(
             assetCatalogs: assetCatalogs,
@@ -109,5 +114,14 @@ public struct ProjectResources {
             infoPlists: infoPlists,
             codeSignEntitlements: codeSignEntitlements
         )
+    }
+}
+
+private func parse<R>(with warning: (String) -> Void, closure: () throws -> R) throws -> R? {
+    do {
+        return try closure()
+    } catch let error as ResourceParsingError {
+        warning(error.description)
+        return nil
     }
 }

@@ -92,19 +92,23 @@ public struct RswiftCore {
             codeSignEntitlements: codeSignEntitlements,
             sourceTreeURLs: sourceTreeURLs,
             parseFontsAsFiles: true,
-            parseImagesAsFiles: true
+            parseImagesAsFiles: true,
+            warning: warning
         )
 
         try generateFromProjectResources(resources: resources, developmentRegion: xcodeproj.developmentRegion, knownAssetTags: xcodeproj.knownAssetTags)
     }
 
     public func generateFromFiles(inputFileURLs urls: [URL]) throws {
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
+
         let resources = try ProjectResources.parseURLs(
             urls: urls,
             infoPlists: [],
             codeSignEntitlements: [],
             parseFontsAsFiles: true,
-            parseImagesAsFiles: true
+            parseImagesAsFiles: true,
+            warning: warning
         )
 
         try generateFromProjectResources(resources: resources, developmentRegion: nil, knownAssetTags: nil)
