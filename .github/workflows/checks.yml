@@ -52,7 +52,8 @@ jobs:
       if: steps.podcache-ios.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples/ResourceApp
     - name: Test
-      run: fastlane scan --workspace "Examples/ResourceApp/RswiftExamples.xcworkspace" --scheme "ResourceApp"
+      #run: fastlane scan --workspace "Examples/ResourceApp/RswiftExamples.xcworkspace" --scheme "ResourceApp"
+      run: xcodebuild -workspace Examples/ResourceApp/RswiftExamples.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-iOS-StaticFrameworks:
     runs-on: macos-12
@@ -70,7 +71,8 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Test
-      run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj" --scheme "App"
+      #run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj" --scheme "App"
+      run: xcodebuild -project Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj -scheme App -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-tvOS:
     runs-on: macos-12
@@ -88,7 +90,8 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Test
-      run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj" --scheme "ResourceAppTests-tvOS"
+      #run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj" --scheme "ResourceApp-tvOS"
+      run: xcodebuild -project Examples/RtvApp/RtvApp.xcodeproj -scheme ResourceApp-tvOS -destination 'platform=tvOS Simulator,name=Apple TV,OS=16.0' test
 
   build-rswift:
     runs-on: macos-12
