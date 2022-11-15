@@ -9,7 +9,7 @@ import Foundation
 import RswiftResources
 
 extension LocalizableStrings {
-    public static func generateStruct(resources: [LocalizableStrings], developmentLanguage: String, prefix: SwiftIdentifier) -> Struct {
+    public static func generateStruct(resources: [LocalizableStrings], developmentLanguage: String?, prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "string", lowercaseStartingCharacters: false)
         let qualifiedName = prefix + structName
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
@@ -44,7 +44,7 @@ extension LocalizableStrings {
         }
     }
 
-    private static func generateStruct(filename: String, resources: [LocalizableStrings], developmentLanguage: String, prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct? {
+    private static func generateStruct(filename: String, resources: [LocalizableStrings], developmentLanguage: String?, prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct? {
 
         let structName = SwiftIdentifier(name: filename)
         let qualifiedName = prefix + structName
@@ -103,10 +103,10 @@ extension LocalizableStrings {
     }
 
     // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
-    private static func computeStringsWithParams(filename: String, resources: [LocalizableStrings], developmentLanguage: String, warning: (String) -> Void) -> [StringWithParams] {
+    private static func computeStringsWithParams(filename: String, resources: [LocalizableStrings], developmentLanguage: String?, warning: (String) -> Void) -> [StringWithParams] {
 
         var allParams: [String: [(LocaleReference, String, [StringParam])]] = [:]
-        let primaryLanguage: String
+        let primaryLanguage: String?
         let primaryKeys: Set<String>?
         let bases = resources.filter { $0.locale.isBase }
         let developments = resources.filter { $0.locale.localeDescription == developmentLanguage }
@@ -174,7 +174,11 @@ extension LocalizableStrings {
             let paddedKeys = extra.sorted().map { "'\($0)'" }
             let paddedKeysString = paddedKeys.joined(separator: ", ")
 
-            warning("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+            if let primaryLanguage {
+                warning("Strings file \(filenameLocale) has extra translations (not in \(primaryLanguage)) for keys: \(paddedKeysString)")
+            } else {
+                warning("Strings file \(filenameLocale) has extra translations for keys: \(paddedKeysString)")
+            }
         }
 
         // Only include translation if it exists in the primary language
@@ -247,7 +251,7 @@ private struct StringWithParams {
     let params: [StringParam]
     let tableName: String
     let values: [(LocaleReference, String)]
-    let developmentLanguage: String
+    let developmentLanguage: String?
 
     func generateVarGetter() -> VarGetter {
         VarGetter(

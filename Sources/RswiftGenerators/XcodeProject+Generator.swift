@@ -8,9 +8,11 @@
 import Foundation
 
 public struct XcodeProjectGenerator {
-    public static func generateProject(developmentRegion: String, knownAssetTags: [String]?) -> Struct {
+    public static func generateProject(developmentRegion: String?, knownAssetTags: [String]?) -> Struct {
         Struct(name: SwiftIdentifier(name: "project")) {
-            LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(developmentRegion)""#)
+            if let developmentRegion {
+                LetBinding(name: SwiftIdentifier(name: "developmentRegion"), valueCodeString: #""\#(developmentRegion)""#)
+            }
 
             if let knownAssetTags {
                 Struct(name: SwiftIdentifier(name: "knownAssetTags"), protocols: [.sequence]) {

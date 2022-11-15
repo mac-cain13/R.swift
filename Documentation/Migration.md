@@ -32,6 +32,7 @@ Changes to the commandline tool `rswift` (not relevant when using SPM):
 Internal changes in the Rswift support library:
  - Renamed internal module, update `import Rswift` to `import RswiftResources`
  - Removed protocols: `ColorResourceType`, `FileResourceType`, `FontResourceType`, `IdentifierType`, `ImageResourceType`, `StoryboardViewControllerResourceType`, `StringResourceType`, `Validatable`
+ - Added `StringResource1` up to `StringResource9`, for strings with parameters
  - Renamed types:
     * `ReuseIdentifierType` to `ReuseIdentifierContainer`
     * `NibResourceType` to `NibReferenceContainer`

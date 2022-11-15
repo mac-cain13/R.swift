@@ -107,10 +107,10 @@ public struct RswiftCore {
             parseImagesAsFiles: true
         )
 
-        try generateFromProjectResources(resources: resources, developmentRegion: "en", knownAssetTags: nil)
+        try generateFromProjectResources(resources: resources, developmentRegion: nil, knownAssetTags: nil)
     }
 
-    private func generateFromProjectResources(resources: ProjectResources, developmentRegion: String, knownAssetTags: [String]?) throws {
+    private func generateFromProjectResources(resources: ProjectResources, developmentRegion: String?, knownAssetTags: [String]?) throws {
         let structName = SwiftIdentifier(rawValue: "_R")
         let qualifiedName = structName
 
@@ -218,7 +218,10 @@ public struct RswiftCore {
 
         var s = Struct(name: structName, additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
-            projectStruct
+
+            if !projectStruct.isEmpty {
+                projectStruct
+            }
 
             if generateString {
                 stringStruct.generateBundleVarGetter(name: "string")
