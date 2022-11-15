@@ -12,21 +12,7 @@ import RswiftParsers
 import RswiftResources
 import RswiftGenerators
 
-public enum Generator: String, CaseIterable, ExpressibleByArgument {
-    case image
-    case string
-    case color
-    case data
-    case file
-    case font
-    case nib
-    case segue
-    case storyboard
-    case reuseIdentifier
-    case entitlements
-    case info
-    case id
-}
+extension ResourceType: ExpressibleByArgument {}
 
 public enum AccessLevel: String, ExpressibleByArgument {
   case publicLevel = "public"
@@ -42,7 +28,7 @@ public enum BundleSource: String, ExpressibleByArgument {
 
 public struct RswiftCore {
     let outputURL: URL
-    let generators: [Generator]
+    let generators: [ResourceType]
     let accessLevel: AccessLevel
     let bundleSource: BundleSource
     let importModules: [String]
@@ -56,7 +42,7 @@ public struct RswiftCore {
 
     public init(
         outputURL: URL,
-        generators: [Generator],
+        generators: [ResourceType],
         accessLevel: AccessLevel,
         bundleSource: BundleSource,
         importModules: [String],
@@ -93,6 +79,7 @@ public struct RswiftCore {
             sourceTreeURLs: sourceTreeURLs,
             parseFontsAsFiles: true,
             parseImagesAsFiles: true,
+            resourceTypes: generators,
             warning: warning
         )
 
@@ -108,6 +95,7 @@ public struct RswiftCore {
             codeSignEntitlements: [],
             parseFontsAsFiles: true,
             parseImagesAsFiles: true,
+            resourceTypes: generators,
             warning: warning
         )
 

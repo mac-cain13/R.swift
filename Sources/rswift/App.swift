@@ -32,7 +32,7 @@ struct GlobalOptions: ParsableArguments {
     var inputType: InputType = .xcodeproj
 
     @Option(help: "Only run specified generators, options: \(generatorsString)", transform: parseGenerators)
-    var generators: [Generator] = []
+    var generators: [ResourceType] = []
 
     @Option(name: .customLong("import", withSingleDash: false), help: "Add extra modules as import in the generated file")
     var imports: [String] = []
@@ -55,9 +55,9 @@ struct GlobalOptions: ParsableArguments {
     var target: String?
 }
 
-private var generatorsString = Generator.allCases.map(\.rawValue).joined(separator: ", ")
-private func parseGenerators(_ str: String) -> [Generator] {
-    str.components(separatedBy: ",").map { Generator(rawValue: $0)! }
+private var generatorsString = ResourceType.allCases.map(\.rawValue).joined(separator: ", ")
+private func parseGenerators(_ str: String) -> [ResourceType] {
+    str.components(separatedBy: ",").map { ResourceType(rawValue: $0)! }
 }
 
 extension App {
@@ -97,7 +97,7 @@ extension App {
 
             let core = RswiftCore(
                 outputURL: outputURL,
-                generators: globals.generators.isEmpty ? Generator.allCases : globals.generators,
+                generators: globals.generators.isEmpty ? ResourceType.allCases : globals.generators,
                 accessLevel: globals.accessLevel,
                 bundleSource: globals.bundleSource,
                 importModules: globals.imports,

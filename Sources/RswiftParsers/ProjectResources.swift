@@ -9,6 +9,22 @@ import Foundation
 import XcodeEdit
 import RswiftResources
 
+public enum ResourceType: String, CaseIterable {
+    case image
+    case string
+    case color
+    case data
+    case file
+    case font
+    case nib
+    case segue
+    case storyboard
+    case reuseIdentifier
+    case entitlements
+    case info
+    case id
+}
+
 public struct ProjectResources {
     public let assetCatalogs: [AssetCatalog]
     public let files: [FileResource]
@@ -29,6 +45,7 @@ public struct ProjectResources {
         sourceTreeURLs: SourceTreeURLs,
         parseFontsAsFiles: Bool,
         parseImagesAsFiles: Bool,
+        resourceTypes: [ResourceType],
         warning: (String) -> Void
     ) throws -> ProjectResources {
         let ignoreFile = rswiftIgnoreURL.flatMap { try? IgnoreFile(ignoreFileURL: $0) } ?? IgnoreFile()
@@ -40,24 +57,36 @@ public struct ProjectResources {
             .map { $0.url(with: sourceTreeURLs.url(for:)) }
             .filter { !ignoreFile.matches(url: $0) }
 
-        let infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
-            guard let url = infoPlistFile else { return nil }
-            return try parse(with: warning) {
-                try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+        let infoPlists: [PropertyListResource]
+        let entitlements: [PropertyListResource]
+
+        if resourceTypes.contains(.info) {
+            infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
+                guard let url = infoPlistFile else { return nil }
+                return try parse(with: warning) {
+                    try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
+                }
             }
+        } else {
+            infoPlists = []
         }
 
-        let codeSignEntitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
-            guard let url = codeSignEntitlements else { return nil }
-            return try parse(with: warning) { try PropertyListResource.parse(url: url, buildConfigurationName: config.name) }
+        if resourceTypes.contains(.entitlements) {
+            entitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
+                guard let url = codeSignEntitlements else { return nil }
+                return try parse(with: warning) { try PropertyListResource.parse(url: url, buildConfigurationName: config.name) }
+            }
+        } else {
+            entitlements = []
         }
 
         return try parseURLs(
             urls: urls,
             infoPlists: infoPlists,
-            codeSignEntitlements: codeSignEntitlements,
+            codeSignEntitlements: entitlements,
             parseFontsAsFiles: parseFontsAsFiles,
             parseImagesAsFiles: parseImagesAsFiles,
+            resourceTypes: resourceTypes,
             warning: warning
         )
     }
@@ -68,40 +97,77 @@ public struct ProjectResources {
         codeSignEntitlements: [PropertyListResource],
         parseFontsAsFiles: Bool,
         parseImagesAsFiles: Bool,
+        resourceTypes: [ResourceType],
         warning: (String) -> Void
     ) throws -> ProjectResources {
 
-        let assetCatalogs = try urls
-            .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try AssetCatalog.parse(url: url) } }
+        let assetCatalogs: [AssetCatalog]
+        let files: [FileResource]
+        let fonts: [FontResource]
+        let images: [ImageResource]
+        let localizableStrings: [LocalizableStrings]
+        let nibs: [NibResource]
+        let storyboards: [StoryboardResource]
 
-        let dontParseFileForFonts = !parseFontsAsFiles
-        let dontParseFileForImages = !parseImagesAsFiles
-        let files = try urls
-            .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-            .filter { !(dontParseFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
-            .filter { !(dontParseFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
-            .compactMap { url in try parse(with: warning) { try FileResource.parse(url: url) } }
+        if resourceTypes.contains(.image) || resourceTypes.contains(.color) || resourceTypes.contains(.data) {
+            assetCatalogs = try urls
+                .filter { AssetCatalog.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try AssetCatalog.parse(url: url) } }
+        } else {
+            assetCatalogs = []
+        }
 
-        let fonts = try urls
-            .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try FontResource.parse(url: url) } }
+        if resourceTypes.contains(.file) {
+            let dontParseFileForFonts = !parseFontsAsFiles
+            let dontParseFileForImages = !parseImagesAsFiles
+            files = try urls
+                .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
+                .filter { !(dontParseFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
+                .filter { !(dontParseFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
+                .compactMap { url in try parse(with: warning) { try FileResource.parse(url: url) } }
+        } else {
+            files = []
+        }
 
-        let images = try urls
-            .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try ImageResource.parse(url: url, assetTags: nil) } }
+        if resourceTypes.contains(.font) {
+            fonts = try urls
+                .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try FontResource.parse(url: url) } }
+        } else {
+            fonts = []
+        }
 
-        let localizableStrings = try urls
-            .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try LocalizableStrings.parse(url: url) } }
+        if resourceTypes.contains(.image) {
+            images = try urls
+                .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try ImageResource.parse(url: url, assetTags: nil) } }
+        } else {
+            images = []
+        }
 
-        let nibs = try urls
-            .filter { NibResource.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try NibResource.parse(url: url) } }
+        if resourceTypes.contains(.string) {
+            localizableStrings = try urls
+                .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try LocalizableStrings.parse(url: url) } }
+        } else {
+            localizableStrings = []
+        }
 
-        let storyboards = try urls
-            .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
-            .compactMap { url in try parse(with: warning) { try StoryboardResource.parse(url: url) } }
+        if resourceTypes.contains(.nib) {
+            nibs = try urls
+                .filter { NibResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try NibResource.parse(url: url) } }
+        } else {
+            nibs = []
+        }
+
+        if resourceTypes.contains(.storyboard) {
+            storyboards = try urls
+                .filter { StoryboardResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try StoryboardResource.parse(url: url) } }
+        } else {
+            storyboards = []
+        }
 
         return ProjectResources(
             assetCatalogs: assetCatalogs,
