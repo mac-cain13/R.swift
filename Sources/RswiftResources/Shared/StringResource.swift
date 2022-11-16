@@ -12,10 +12,10 @@ public struct StringResource {
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -30,10 +30,10 @@ public struct StringResource1<Arg1: CVarArg> {
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -48,10 +48,10 @@ public struct StringResource2<Arg1: CVarArg, Arg2: CVarArg> {
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -66,10 +66,10 @@ public struct StringResource3<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg> {
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -84,10 +84,10 @@ public struct StringResource4<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -102,10 +102,10 @@ public struct StringResource5<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -120,10 +120,10 @@ public struct StringResource6<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -138,10 +138,10 @@ public struct StringResource7<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -156,10 +156,10 @@ public struct StringResource8<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle
@@ -174,10 +174,10 @@ public struct StringResource9<Arg1: CVarArg, Arg2: CVarArg, Arg3: CVarArg, Arg4:
     public let tableName: String
     public let bundle: Bundle
     public let locale: Locale
-    public let defaultValue: String
+    public let defaultValue: String?
     public let comment: StaticString?
 
-    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String, comment: StaticString?) {
+    public init(key: StaticString, tableName: String, bundle: Bundle, locale: Locale, defaultValue: String?, comment: StaticString?) {
         self.key = key
         self.tableName = tableName
         self.bundle = bundle

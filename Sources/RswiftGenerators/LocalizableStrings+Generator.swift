@@ -276,7 +276,7 @@ private struct StringWithParams {
 
 
     private var varValueCodeString: String {
-        #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: "\#(fallbackValue.escapedStringLiteral)", comment: nil)"#
+        #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: \#(developmentValueCode), comment: nil)"#
     }
 
     private var funcBodyCodeString: String {
@@ -284,7 +284,7 @@ private struct StringWithParams {
         let args = ["format: format", "locale: locale"] + ps
 
         return """
-        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: bundle, value: "\(fallbackValue.escapedStringLiteral)", comment: "")
+        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: bundle, value: \(developmentValueCode), comment: "")
         return String(\(args.joined(separator: ", ")))
         """
     }
@@ -302,8 +302,13 @@ private struct StringWithParams {
         values.filter { $0.0.isBase } + values.filter { $0.0.localeDescription == developmentLanguage }
     }
 
-    private var fallbackValue: String {
-        (primaryLanguageValues + values).first?.1 ?? ""
+    private var developmentValueCode: String {
+        let value = primaryLanguageValues.first?.1
+        if let value {
+            return #""\#(value.escapedStringLiteral)""#
+        } else {
+            return "nil"
+        }
     }
 
     private var comments: [String] {
