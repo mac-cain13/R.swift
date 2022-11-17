@@ -8,3 +8,7 @@
 
 "seven1" = "seven 1, localized english";
 "seven2" = "seven 2, localized english";
+
+
+"sevenArg1" = "seven 1 %@, localized english";
+"sevenArg2" = "seven 2 %@, localized english";

@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+/*
     let myprefs: [String] = ["fr-CA"]
 
     print("Locale.preferredLanguages:")
@@ -124,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     print(R.string.nine.nine3())
     print(R.string.nine.nine3(preferredLanguages: myprefs))
     print()
-
+*/
 
 
     return true

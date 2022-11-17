@@ -8,3 +8,7 @@
 
 "nine1" = "nine 1, localized english";
 "nine2" = "nine 2, localized english";
+
+
+"nineArg1" = "nine 1 %@, localized english";
+"nineArg2" = "nine 2 %@, localized english";

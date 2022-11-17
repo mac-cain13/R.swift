@@ -9,3 +9,7 @@
 "nine1" = "nine 1, localized base";
 "nine2" = "nine 2, localized base";
 "nine3" = "nine 3, localized base";
+
+"nineArg1" = "nine 1 %@, localized base";
+"nineArg2" = "nine 2 %@, localized base";
+"nineArg3" = "nine 3 %@, localized base";

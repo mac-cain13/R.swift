@@ -8,3 +8,7 @@
 
 "eight1" = "eight 1, localized french";
 "eight2" = "eight 2, localized french";
+
+
+"eightArg1" = "eight 1 %@, localized french";
+"eightArg2" = "eight 2 %@, localized french";

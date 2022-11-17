@@ -9,3 +9,7 @@
 "eight1" = "eight 1, localized base";
 "eight2" = "eight 2, localized base";
 "eight3" = "eight 3, localized base";
+
+"eightArg1" = "eight 1 %@, localized base";
+"eightArg2" = "eight 2 %@, localized base";
+"eightArg3" = "eight 3 %@, localized base";

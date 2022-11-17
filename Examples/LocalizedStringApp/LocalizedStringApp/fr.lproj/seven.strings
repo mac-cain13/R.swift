@@ -10,3 +10,7 @@
 "seven2" = "seven 2, localized french";
 "seven3" = "seven 3, localized french";
 "seven4" = "seven 4, localized french";
+"sevenArg1" = "seven 1 %@, localized french";
+"sevenArg2" = "seven 2 %@, localized french";
+"sevenArg3" = "seven 3 %@, localized french";
+"sevenArg4" = "seven 4 %@, localized french";

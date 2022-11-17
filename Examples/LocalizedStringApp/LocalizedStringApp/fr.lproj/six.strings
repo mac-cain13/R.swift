@@ -8,3 +8,5 @@
 
 "six1" = "six 1, localized french";
 "six2" = "six 2, localized french";
+"sixArg1" = "six 1 %@, localized french";
+"sixArg2" = "six 2 %@, localized french";

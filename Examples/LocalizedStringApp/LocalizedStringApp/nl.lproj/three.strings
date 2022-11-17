@@ -9,3 +9,6 @@
 "three1" = "three 1, localized dutch";
 
 "three3" = "three 3, localized dutch";
+"threeArg1" = "three 1 %@, localized dutch";
+
+"threeArg3" = "three 3 %@, localized dutch";

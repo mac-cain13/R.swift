@@ -10,3 +10,7 @@
 "five2" = "five 2, localized french";
 
 "five4" = "five 4, localized french";
+"fiveArg1" = "five 1 %@, localized french";
+"fiveArg2" = "five 2 %@, localized french";
+
+"fiveArg4" = "five 4 %@, localized french";

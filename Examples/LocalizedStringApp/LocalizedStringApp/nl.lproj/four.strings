@@ -7,3 +7,4 @@
 */
 
 "four1" = "four 1, localized dutch";
+"fourArg" = "four %@, localized dutch";

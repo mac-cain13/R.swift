@@ -9,3 +9,7 @@
 "five1" = "five 1, localized english";
 "five2" = "five 2, localized english";
 "five3" = "five 3, localized english";
+
+"fiveArg1" = "five 1 %@, localized english";
+"fiveArg2" = "five 2 %@, localized english";
+"fiveArg3" = "five 3 %@, localized english";

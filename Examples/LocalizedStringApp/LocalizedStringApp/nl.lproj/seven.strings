@@ -10,3 +10,7 @@
 
 
 "seven4" = "seven 4, localized dutch";
+"sevenArg1" = "seven 1 %@, localized dutch";
+
+
+"sevenArg4" = "seven 4 %@, localized dutch";

@@ -91,7 +91,9 @@
 				E264FB9E2319055A008E0DB5 /* Products */,
 				E2E5836F291D3AC2006E17D9 /* Frameworks */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		E264FB9E2319055A008E0DB5 /* Products */ = {
 			isa = PBXGroup;

@@ -8,3 +8,4 @@
 
 "one1" = "one 1, not localized";
 "one2" = "one 2, not localized";
+"oneArg" = "one %@, not localized";

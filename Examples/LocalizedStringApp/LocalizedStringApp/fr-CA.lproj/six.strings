@@ -7,3 +7,5 @@
 */
 
 "six1" = "six 1, localized french canada";
+
+"sixArg1" = "six 1 %@, localized french canada";
