@@ -52,8 +52,8 @@ jobs:
       if: steps.podcache-ios.outputs.cache-hit != 'true'
       run: pod install --project-directory=Examples/ResourceApp
     - name: Test
-      #run: fastlane scan --workspace "Examples/ResourceApp/RswiftExamples.xcworkspace" --scheme "ResourceApp"
-      run: xcodebuild -workspace Examples/ResourceApp/RswiftExamples.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+      #run: fastlane scan --workspace "Examples/ResourceApp/ResourceApp.xcworkspace" --scheme "ResourceApp"
+      run: xcodebuild -workspace Examples/ResourceApp/ResourceApp.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-iOS-StaticFrameworks:
     runs-on: macos-12
