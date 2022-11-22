@@ -1,5 +1,5 @@
 //
-//  LocalizableStrings+Generator.swift
+//  StringsTable+Generator.swift
 //  
 //
 //  Created by Tom Lokhorst on 2022-06-24.
@@ -8,22 +8,22 @@
 import Foundation
 import RswiftResources
 
-extension LocalizableStrings {
-    public static func generateStruct(resources: [LocalizableStrings], developmentLanguage: String?, prefix: SwiftIdentifier) -> Struct {
+extension StringsTable {
+    public static func generateStruct(tables: [StringsTable], developmentLanguage: String?, prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "string", lowercaseStartingCharacters: false)
         let qualifiedName = prefix + structName
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
-        let localized = Dictionary(grouping: resources, by: \.filename)
+        let localized = Dictionary(grouping: tables, by: \.filename)
         let groupedLocalized = localized.grouped(bySwiftIdentifier: \.key)
 
         groupedLocalized.reportWarningsForDuplicatesAndEmpties(source: "strings file", result: "file", warning: warning)
 
         let structs = groupedLocalized.uniques
-            .compactMap { (filename, resources) -> Struct? in
+            .compactMap { (filename, tables) -> Struct? in
                 generateStruct(
                     filename: filename,
-                    resources: resources,
+                    tables: tables,
                     developmentLanguage: developmentLanguage,
                     prefix: qualifiedName,
                     warning: warning
@@ -44,12 +44,12 @@ extension LocalizableStrings {
         }
     }
 
-    private static func generateStruct(filename: String, resources: [LocalizableStrings], developmentLanguage: String?, prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct? {
+    private static func generateStruct(filename: String, tables: [StringsTable], developmentLanguage: String?, prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct? {
 
         let structName = SwiftIdentifier(name: filename)
         let qualifiedName = prefix + structName
 
-        let strings = computeStringsWithParams(filename: filename, resources: resources, developmentLanguage: developmentLanguage, warning: warning)
+        let strings = computeStringsWithParams(filename: filename, tables: tables, developmentLanguage: developmentLanguage, warning: warning)
         let vargetters = strings.map { $0.generateVarGetter() }
 
         // only functions with named parameters
@@ -103,13 +103,13 @@ extension LocalizableStrings {
     }
 
     // Ahem, this code is a bit of a mess. It might need cleaning up... ;-)
-    private static func computeStringsWithParams(filename: String, resources: [LocalizableStrings], developmentLanguage: String?, warning: (String) -> Void) -> [StringWithParams] {
+    private static func computeStringsWithParams(filename: String, tables: [StringsTable], developmentLanguage: String?, warning: (String) -> Void) -> [StringWithParams] {
 
         var allParams: [String: [(LocaleReference, String, [StringParam])]] = [:]
         let primaryLanguage: String?
         let primaryKeys: Set<String>?
-        let bases = resources.filter { $0.locale.isBase }
-        let developments = resources.filter { $0.locale.localeDescription == developmentLanguage }
+        let bases = tables.filter { $0.locale.isBase }
+        let developments = tables.filter { $0.locale.localeDescription == developmentLanguage }
 
         if !bases.isEmpty {
             primaryKeys = Set(bases.flatMap { $0.dictionary.keys })
@@ -123,7 +123,7 @@ extension LocalizableStrings {
         }
 
         // Warnings about duplicates and empties
-        for ls in resources {
+        for ls in tables {
             let filenameLocale = ls.locale.debugDescription(filename: filename)
             let groupedKeys = ls.dictionary.keys.grouped(bySwiftIdentifier: { $0 })
 
@@ -143,7 +143,7 @@ extension LocalizableStrings {
         }
 
         // Warnings about missing translations
-        for (locale, lss) in Dictionary(grouping: resources, by: \.locale) {
+        for (locale, lss) in Dictionary(grouping: tables, by: \.locale) {
             let filenameLocale = locale.debugDescription(filename: filename)
             let sourceKeys = primaryKeys ?? Set(allParams.keys)
 
@@ -160,7 +160,7 @@ extension LocalizableStrings {
         }
 
         // Warnings about extra translations
-        for (locale, lss) in Dictionary(grouping: resources, by: \.locale) {
+        for (locale, lss) in Dictionary(grouping: tables, by: \.locale) {
             let filenameLocale = locale.debugDescription(filename: filename)
             let sourceKeys = primaryKeys ?? Set(allParams.keys)
 

@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct LocalizableStrings {
+public struct StringsTable {
     public let filename: String
     public let locale: LocaleReference
     public let dictionary: [Key: Value]

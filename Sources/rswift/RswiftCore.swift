@@ -169,8 +169,8 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-        let stringStruct = LocalizableStrings.generateStruct(
-            resources: resources.localizableStrings,
+        let stringStruct = StringsTable.generateStruct(
+            tables: resources.strings,
             developmentLanguage: developmentRegion,
             prefix: qualifiedName
         )

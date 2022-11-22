@@ -30,7 +30,7 @@ public struct ProjectResources {
     public let files: [FileResource]
     public let fonts: [FontResource]
     public let images: [ImageResource]
-    public let localizableStrings: [LocalizableStrings]
+    public let strings: [StringsTable]
     public let nibs: [NibResource]
     public let storyboards: [StoryboardResource]
     public let infoPlists: [PropertyListResource]
@@ -105,7 +105,7 @@ public struct ProjectResources {
         let files: [FileResource]
         let fonts: [FontResource]
         let images: [ImageResource]
-        let localizableStrings: [LocalizableStrings]
+        let strings: [StringsTable]
         let nibs: [NibResource]
         let storyboards: [StoryboardResource]
 
@@ -146,11 +146,11 @@ public struct ProjectResources {
         }
 
         if resourceTypes.contains(.string) {
-            localizableStrings = try urls
-                .filter { LocalizableStrings.supportedExtensions.contains($0.pathExtension) }
-                .compactMap { url in try parse(with: warning) { try LocalizableStrings.parse(url: url) } }
+            strings = try urls
+                .filter { StringsTable.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try StringsTable.parse(url: url) } }
         } else {
-            localizableStrings = []
+            strings = []
         }
 
         if resourceTypes.contains(.nib) {
@@ -174,7 +174,7 @@ public struct ProjectResources {
             files: files,
             fonts: fonts,
             images: images,
-            localizableStrings: localizableStrings,
+            strings: strings,
             nibs: nibs,
             storyboards: storyboards,
             infoPlists: infoPlists,

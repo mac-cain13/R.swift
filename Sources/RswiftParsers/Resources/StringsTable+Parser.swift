@@ -10,10 +10,10 @@
 import Foundation
 import RswiftResources
 
-extension LocalizableStrings: SupportedExtensions {
+extension StringsTable: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["strings", "stringsdict"]
 
-    static public func parse(url: URL) throws -> LocalizableStrings {
+    static public func parse(url: URL) throws -> StringsTable {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
 
         guard let basename = url.filenameWithoutExtension else {
@@ -29,7 +29,7 @@ extension LocalizableStrings: SupportedExtensions {
         }
 
         // Parse dicts from NSDictionary
-        let dictionary: [LocalizableStrings.Key: LocalizableStrings.Value]
+        let dictionary: [StringsTable.Key: StringsTable.Value]
         switch url.pathExtension {
         case "strings":
             dictionary = try parseStrings(nsDictionary, source: locale.debugDescription(filename: "\(basename).strings"))
@@ -39,12 +39,12 @@ extension LocalizableStrings: SupportedExtensions {
             throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
         }
 
-        return LocalizableStrings(filename: basename, locale: locale, dictionary: dictionary)
+        return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
     }
 }
 
-private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -> [LocalizableStrings.Key: LocalizableStrings.Value] {
-    var dictionary: [LocalizableStrings.Key: LocalizableStrings.Value] = [:]
+private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -> [StringsTable.Key: StringsTable.Value] {
+    var dictionary: [StringsTable.Key: StringsTable.Value] = [:]
 
     for (key, obj) in nsDictionary {
         if let
@@ -74,8 +74,8 @@ private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -
     return dictionary
 }
 
-private func parseStringsdict(_ nsDictionary: NSDictionary, source: String, warning: (String) -> Void) throws -> [LocalizableStrings.Key: LocalizableStrings.Value] {
-    var dictionary: [LocalizableStrings.Key: LocalizableStrings.Value] = [:]
+private func parseStringsdict(_ nsDictionary: NSDictionary, source: String, warning: (String) -> Void) throws -> [StringsTable.Key: StringsTable.Value] {
+    var dictionary: [StringsTable.Key: StringsTable.Value] = [:]
 
     for (key, obj) in nsDictionary {
         if let
