@@ -74,6 +74,24 @@ jobs:
       #run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj" --scheme "App"
       run: xcodebuild -project Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj -scheme App -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
+  test-iOS-LocalizedStringApp:
+    runs-on: macos-12
+    needs: build-rswift
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download build
+      uses: actions/download-artifact@v1
+      with:
+        name: rswift-dev
+    - name: Put build into place
+      run: |
+        mkdir -p .build/release
+        mv rswift-dev/rswift .build/release/rswift
+        chmod +x .build/release/rswift
+    - name: Test
+      run: xcodebuild -project Examples/LocalizedStringApp/LocalizedStringApp.xcodeproj -scheme LocalizedStringApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+
   test-tvOS:
     runs-on: macos-12
     needs: build-rswift
