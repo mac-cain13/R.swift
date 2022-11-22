@@ -44,7 +44,7 @@ jobs:
       uses: actions/cache@v2
       id: podcache-ios
       with:
-        path: Examples/Pods
+        path: Examples/ResourceApp/Pods
         key: ${{ runner.os }}pods${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}pods
