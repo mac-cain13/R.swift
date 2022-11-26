@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E258099B29325C1F008EA19C /* ten.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E258099929325C1F008EA19C /* ten.stringsdict */; };
 		E264FBA12319055A008E0DB5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E264FBA02319055A008E0DB5 /* AppDelegate.swift */; };
 		E264FBB82319055D008E0DB5 /* LocalizedStringAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E264FBB72319055D008E0DB5 /* LocalizedStringAppTests.swift */; };
 		E264FBCF2319082F008E0DB5 /* one.strings in Resources */ = {isa = PBXBuildFile; fileRef = E264FBCE2319082E008E0DB5 /* one.strings */; };
@@ -32,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E258099A29325C1F008EA19C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/ten.stringsdict; sourceTree = "<group>"; };
+		E258099C29325C29008EA19C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/ten.stringsdict; sourceTree = "<group>"; };
 		E264FB9D2319055A008E0DB5 /* LocalizedStringApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocalizedStringApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E264FBA02319055A008E0DB5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E264FBAE2319055D008E0DB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 				E264FBE423190A2F008E0DB5 /* seven.strings */,
 				E264FBE923190A49008E0DB5 /* eight.strings */,
 				E264FBF6231A7335008E0DB5 /* nine.strings */,
+				E258099929325C1F008EA19C /* ten.stringsdict */,
 			);
 			path = LocalizedStringApp;
 			sourceTree = "<group>";
@@ -240,6 +244,7 @@
 				E264FBE223190A19008E0DB5 /* six.strings in Resources */,
 				E264FBF4231A7335008E0DB5 /* nine.strings in Resources */,
 				E264FBCF2319082F008E0DB5 /* one.strings in Resources */,
+				E258099B29325C1F008EA19C /* ten.stringsdict in Resources */,
 				E264FBD22319083B008E0DB5 /* two.strings in Resources */,
 				E264FBDD231909F6008E0DB5 /* five.strings in Resources */,
 				E264FBE623190A2F008E0DB5 /* seven.strings in Resources */,
@@ -289,6 +294,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		E258099929325C1F008EA19C /* ten.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E258099A29325C1F008EA19C /* fr */,
+				E258099C29325C29008EA19C /* nl */,
+			);
+			name = ten.stringsdict;
+			sourceTree = "<group>";
+		};
 		E264FBD02319083B008E0DB5 /* two.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

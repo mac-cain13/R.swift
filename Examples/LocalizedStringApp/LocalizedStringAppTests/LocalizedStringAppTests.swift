@@ -154,27 +154,27 @@ class LocalizedStringAppTests: XCTestCase {
     /* eight */
     XCTAssertEqual(
       R.string.eight.eight1(),
-      NSLocalizedString("eight1", tableName: "eight", value: "eight 1, localized base", comment: "")
+      NSLocalizedString("eight1", tableName: "eight", comment: "")
     )
     XCTAssertEqual(
       R.string.eight.eight2(),
-      NSLocalizedString("eight2", tableName: "eight", value: "eight 2, localized base", comment: "")
+      NSLocalizedString("eight2", tableName: "eight", value: "eight 2, localized french", comment: "")
     )
     XCTAssertEqual(
       R.string.eight.eight3(),
-      NSLocalizedString("eight3", tableName: "eight", value: "eight 3, localized base", comment: "")
+      NSLocalizedString("eight3", tableName: "eight", comment: "")
     )
     XCTAssertEqual(
       R.string.eight.eightArg1("ARG"),
-      String(format: NSLocalizedString("eightArg1", tableName: "eight", value: "eight 2 %@, localized base", comment: ""), "ARG")
+      String(format: NSLocalizedString("eightArg1", tableName: "eight", comment: ""), "ARG")
     )
     XCTAssertEqual(
       R.string.eight.eightArg2("ARG"),
-      String(format: NSLocalizedString("eightArg2", tableName: "eight", value: "eight 2 %@, localized base", comment: ""), "ARG")
+      String(format: NSLocalizedString("eightArg2", tableName: "eight", value: "eight 2 %@, localized french", comment: ""), "ARG")
     )
     XCTAssertEqual(
       R.string.eight.eightArg3("ARG"),
-      String(format: NSLocalizedString("eightArg3", tableName: "eight", value: "eight 3 %@, localized base", comment: ""), "ARG")
+      String(format: NSLocalizedString("eightArg3", tableName: "eight", comment: ""), "ARG")
     )
 
     /* nine */
@@ -184,11 +184,11 @@ class LocalizedStringAppTests: XCTestCase {
     )
     XCTAssertEqual(
       R.string.nine.nine2(),
-      NSLocalizedString("nine2", tableName: "nine", value: "nine 2, localized base", comment: "")
+      NSLocalizedString("nine2", tableName: "nine", value: "nine 2, localized french", comment: "")
     )
     XCTAssertEqual(
       R.string.nine.nine3(),
-      NSLocalizedString("nine3", tableName: "nine", value: "nine 3, localized base", comment: "")
+      NSLocalizedString("nine3", tableName: "nine", comment: "")
     )
     XCTAssertEqual(
       R.string.nine.nineArg1("ARG"),
@@ -196,13 +196,20 @@ class LocalizedStringAppTests: XCTestCase {
     )
     XCTAssertEqual(
       R.string.nine.nineArg2("ARG"),
-      String(format: NSLocalizedString("nineArg2", tableName: "nine", value: "nine 2 %@, localized base", comment: ""), "ARG")
+      String(format: NSLocalizedString("nineArg2", tableName: "nine", value: "nine 2 %@, localized french", comment: ""), "ARG")
     )
     XCTAssertEqual(
       R.string.nine.nineArg3("ARG"),
-      String(format: NSLocalizedString("nineArg3", tableName: "nine", value: "nine 3 %@, localized base", comment: ""), "ARG")
+      String(format: NSLocalizedString("nineArg3", tableName: "nine", comment: ""), "ARG")
+    )
+
+    /* ten */
+    XCTAssertEqual(
+      R.string.ten.ten1(things: 1),
+      String(format: NSLocalizedString("ten1", tableName: "ten", comment: ""), 1)
     )
   }
+
 
   func testTurkish() {
     let myprefs = ["tr"]
@@ -310,6 +317,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nine 2 ARG, localized french")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nineArg3")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized french")
   }
 
 
@@ -419,6 +430,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nineArg2")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nineArg3")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized dutch")
   }
 
   func testEnglish() {
@@ -527,6 +542,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nine 2 ARG, localized english")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nineArg3")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized french")
   }
 
 
@@ -636,6 +655,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nine 2 ARG, localized base")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nine 3 ARG, localized base")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized french")
   }
 
 
@@ -745,6 +768,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nine 2 ARG, localized french")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nineArg3")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized french")
   }
 
 
@@ -854,6 +881,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "nine 2 ARG, localized base")
     XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
                    "nine 3 ARG, localized base")
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   "ten 1 - 1 thing, localized french")
   }
 
 }
