@@ -253,58 +253,41 @@ private struct StringWithParams {
     let values: [(LocaleReference, String)]
     let developmentLanguage: String?
 
+    func generateFunction() -> Function {
+        let parameters: [Function.Parameter] = zip(params.indices, params).map { (ix, p) in
+                .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
+            }
+        let languages: Function.Parameter = .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]?"), defaultValue: "nil")
+        let arguments = parameters.map { $0.localName ?? $0.name }.joined(separator: ", ")
+        return Function(
+            comments: self.comments,
+            name: SwiftIdentifier(name: key),
+            params: parameters + [languages],
+            returnType: .string,
+            valueCodeString: """
+                if let preferredLanguages = preferredLanguages {
+                  return \(SwiftIdentifier(name: key).value)(\(arguments), preferredLanguages: preferredLanguages)
+                } else {
+                  return \(SwiftIdentifier(name: key).value)(\(arguments))
+                }
+                """
+        )
+    }
+
     func generateVarGetter() -> VarGetter {
-        VarGetter(
+        let developmentLanguageValue = values.filter { $0.0.localeDescription == developmentLanguage }.first?.1
+        let defaultValue = developmentLanguageValue.map { "\"\($0.escapedStringLiteral)\"" } ?? "nil"
+
+        let typeReference = TypeReference(module: .rswiftResources, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
+
+        let varValueCodeString = #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: \#(defaultValue), comment: nil)"#
+
+        return VarGetter(
             comments: self.comments,
             name: SwiftIdentifier(name: key),
             typeReference: typeReference,
             valueCodeString: varValueCodeString
         )
-    }
-
-    func generateFunction() -> Function {
-        Function(
-            comments: self.comments,
-            name: SwiftIdentifier(name: key),
-            params: zip(params.indices, params).map { (ix, p) in
-                .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
-            },
-            returnType: .string,
-            valueCodeString: funcBodyCodeString
-        )
-    }
-
-
-    private var varValueCodeString: String {
-        let defaultValue: String
-        if let value = primaryLanguageValues.first?.1 {
-            defaultValue = #""\#(value.escapedStringLiteral)""#
-        } else {
-            defaultValue = "nil"
-        }
-        return #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: \#(defaultValue), comment: nil)"#
-    }
-
-    private var funcBodyCodeString: String {
-        let ps = params.indices.map { "value\($0 + 1)" }
-        let args = ["format: format", "locale: locale"] + ps
-
-        let value = primaryLanguageValues.first?.1.escapedStringLiteral ?? ""
-        let valueString = #""\#(value.escapedStringLiteral)""#
-
-        return """
-        let format = NSLocalizedString("\(key.escapedStringLiteral)", tableName: "\(tableName)", bundle: bundle, value: \(valueString), comment: "")
-        return String(\(args.joined(separator: ", ")))
-        """
-    }
-
-    private var typeReference: TypeReference {
-        TypeReference(module: .rswiftResources, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
-    }
-
-    private var typeName: String {
-        "StringResource"
-        + (params.isEmpty ? "" : "\(params.count)<\(params.map(\.spec.typeReference.name).joined(separator: ", "))>")
     }
 
     private var primaryLanguageValues: [(LocaleReference, String)] {
