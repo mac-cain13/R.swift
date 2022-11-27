@@ -214,6 +214,8 @@ class LocalizedStringAppTests: XCTestCase {
   func testTurkish() {
     let myprefs = ["tr"]
 
+    testPrefferedLanguages(myprefs: myprefs)
+
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
                    "one 1, not localized")
@@ -323,9 +325,10 @@ class LocalizedStringAppTests: XCTestCase {
                    "ten 1 - 1 thing, localized french")
   }
 
-
   func testDutch() {
     let myprefs = ["nl"]
+
+    testPrefferedLanguages(myprefs: myprefs)
 
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
@@ -438,6 +441,8 @@ class LocalizedStringAppTests: XCTestCase {
 
   func testEnglish() {
     let myprefs = ["en"]
+
+    testPrefferedLanguages(myprefs: myprefs)
 
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
@@ -552,6 +557,8 @@ class LocalizedStringAppTests: XCTestCase {
   func testEnglishGB() {
     let myprefs = ["en-GB"]
 
+    testPrefferedLanguages(myprefs: myprefs)
+
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
                    "one 1, not localized")
@@ -664,6 +671,8 @@ class LocalizedStringAppTests: XCTestCase {
 
   func testFrench() {
     let myprefs = ["fr"]
+
+    testPrefferedLanguages(myprefs: myprefs)
 
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
@@ -778,6 +787,8 @@ class LocalizedStringAppTests: XCTestCase {
   func testFrenchCanada() {
     let myprefs = ["fr-CA"]
 
+    testPrefferedLanguages(myprefs: myprefs)
+
     /* one */
     XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
                    "one 1, not localized")
@@ -885,6 +896,118 @@ class LocalizedStringAppTests: XCTestCase {
     /* ten */
     XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
                    "ten 1 - 1 thing, localized french")
+  }
+
+
+  func testPrefferedLanguages(myprefs: [String]) {
+
+    /* one */
+    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+                   R.string.one(preferredLanguages: myprefs).one1())
+    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+                   R.string.one(preferredLanguages: myprefs).one2())
+    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+                   R.string.one(preferredLanguages: myprefs).oneArg("ARG"))
+
+    /* two */
+    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+                   R.string.two(preferredLanguages: myprefs).two1())
+    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+                   R.string.two(preferredLanguages: myprefs).two2("Hello"))
+
+    /* three */
+    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).three1())
+    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).three2())
+    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).three3())
+    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).threeArg1("ARG"))
+    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).threeArg2("ARG"))
+    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+                   R.string.three(preferredLanguages: myprefs).threeArg3("ARG"))
+
+    /* four */
+    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+                   R.string.four(preferredLanguages: myprefs).four1())
+    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+                   R.string.four(preferredLanguages: myprefs).fourArg("ARG"))
+
+    /* five */
+    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).five1())
+    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).five2())
+    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).five4())
+    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).fiveArg1("ARG"))
+    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).fiveArg2("ARG"))
+    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+                   R.string.five(preferredLanguages: myprefs).fiveArg4("ARG"))
+
+    /* six */
+    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+                   R.string.six(preferredLanguages: myprefs).six1())
+    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+                   R.string.six(preferredLanguages: myprefs).six2())
+    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+                   R.string.six(preferredLanguages: myprefs).sixArg1("ARG"))
+    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+                   R.string.six(preferredLanguages: myprefs).sixArg2("ARG"))
+
+    /* seven */
+    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).seven1())
+    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).seven2())
+    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).seven3())
+    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).seven4())
+    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).sevenArg1("ARG"))
+    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).sevenArg2("ARG"))
+    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).sevenArg3("ARG"))
+    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+                   R.string.seven(preferredLanguages: myprefs).sevenArg4("ARG"))
+
+    /* eight */
+    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eight1())
+    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eight2())
+    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eight3())
+    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eightArg1("ARG"))
+    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eightArg2("ARG"))
+    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+                   R.string.eight(preferredLanguages: myprefs).eightArg3("ARG"))
+
+    /* nine */
+    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nine1())
+    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nine2())
+    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nine3())
+    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nineArg1("ARG"))
+    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nineArg2("ARG"))
+    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+                   R.string.nine(preferredLanguages: myprefs).nineArg3("ARG"))
+
+    /* ten */
+    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+                   R.string.ten(preferredLanguages: myprefs).ten1(things: 1))
   }
 
 }

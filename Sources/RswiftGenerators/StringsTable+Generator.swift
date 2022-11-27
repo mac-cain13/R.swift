@@ -60,17 +60,29 @@ extension StringsTable {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) localization keys."]
 
         return Struct(comments: comments, name: structName) {
-            Init.bundleLocale
+            initStringSource
             vargetters
             functions
         }
+    }
+
+    private static var initStringSource: Init {
+        Init(
+            comments: [],
+            params: [
+                .init(name: "source", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.Source"), defaultValue: nil),
+            ],
+            valueCodeString: """
+                self.source = source
+                """
+        )
     }
 
     public static func generateBundleLocaleVarGetter(name: SwiftIdentifier) -> VarGetter {
         VarGetter(
             name: name,
             typeReference: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: ".init(bundle: bundle, locale: bundle.firstPreferredLocale)"
+            valueCodeString: ".init(source: .hosting(bundle))"
         )
     }
 
@@ -83,7 +95,7 @@ extension StringsTable {
                 .init(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil),
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: ".init(bundle: bundle, locale: locale)"
+            valueCodeString: ".init(source: .selected(bundle, locale))"
         )
     }
 
@@ -96,8 +108,11 @@ extension StringsTable {
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
             valueCodeString: """
-                let (bundle, locale) = bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) ?? (bundle, bundle.firstPreferredLocale)
-                return .init(bundle: bundle, locale: locale)
+                if let (bundle, locale) = bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) {
+                  return .init(source: .selected(bundle, locale))
+                } else {
+                  return .init(source: .none)
+                }
                 """
         )
     }
@@ -276,11 +291,11 @@ private struct StringWithParams {
 
     func generateVarGetter() -> VarGetter {
         let developmentLanguageValue = values.filter { $0.0.localeDescription == developmentLanguage }.first?.1
-        let defaultValue = developmentLanguageValue.map { "\"\($0.escapedStringLiteral)\"" } ?? "nil"
+        let developmentValue = developmentLanguageValue.map { "\"\($0.escapedStringLiteral)\"" } ?? "nil"
 
         let typeReference = TypeReference(module: .rswiftResources, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
 
-        let varValueCodeString = #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, locale: locale, defaultValue: \#(defaultValue), comment: nil)"#
+        let varValueCodeString = #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", source: source, developmentValue: \#(developmentValue), comment: nil)"#
 
         return VarGetter(
             comments: self.comments,

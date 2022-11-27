@@ -60,13 +60,23 @@ extension Text {
 
 extension StringResource {
     public func callAsFunction() -> String {
-//        bundle.localizedString(forKey: key, value: defaultValue, table: table)
-        NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            return NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+
+        case let .selected(bundle, _):
+            // Don't use developmentValue with selected bundle/locale
+            return NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(preferredLanguages: [String]) -> String {
-        guard let (bundle, _) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, _) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         return NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -80,13 +90,25 @@ extension StringResource {
 
 extension StringResource1 {
     public func callAsFunction(_ arg1: Arg1) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -96,13 +118,24 @@ extension StringResource1 {
 
 extension StringResource2 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2])
+
+        case let .selected(bundle, locale):
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -112,13 +145,25 @@ extension StringResource2 {
 
 extension StringResource3 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -128,13 +173,25 @@ extension StringResource3 {
 
 extension StringResource4 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -144,13 +201,25 @@ extension StringResource4 {
 
 extension StringResource5 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4, arg5])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -160,13 +229,25 @@ extension StringResource5 {
 
 extension StringResource6 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4, arg5, arg6])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -176,13 +257,25 @@ extension StringResource6 {
 
 extension StringResource7 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -192,13 +285,25 @@ extension StringResource7 {
 
 extension StringResource8 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
@@ -208,13 +313,25 @@ extension StringResource8 {
 
 extension StringResource9 {
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, _ arg9: Arg9) -> String {
-        let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: defaultValue ?? "", comment: "")
-        return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+        switch source {
+        case let .hosting(bundle):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+
+        case let .selected(bundle, locale):
+            // Don't use developmentValue with selected bundle/locale
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            return String(format: format, locale: locale, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9])
+
+        case .none:
+            return key.description
+        }
     }
 
     @available(*, deprecated, message: "Use R.string(preferredLanguages:).*.* instead")
     public func callAsFunction(_ arg1: Arg1, _ arg2: Arg2, _ arg3: Arg3, _ arg4: Arg4, _ arg5: Arg5, _ arg6: Arg6, _ arg7: Arg7, _ arg8: Arg8, _ arg9: Arg9, preferredLanguages: [String]) -> String {
-        guard let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
+        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
             return key.description
         }
         let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
