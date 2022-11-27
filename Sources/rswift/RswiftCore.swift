@@ -216,8 +216,9 @@ public struct RswiftCore {
             }
 
             if generateString {
-                stringStruct.generateBundleVarGetter(name: "string")
-                stringStruct.generateBundleFunction(name: "string")
+                stringStruct.generateBundleVarGetterForString(name: "string")
+                stringStruct.generateBundleFunctionForString(name: "string")
+                stringStruct.generatePreferredLanguagesFunctionForString(name: "string")
                 stringStruct
             }
 

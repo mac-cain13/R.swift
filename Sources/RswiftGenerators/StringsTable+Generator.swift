@@ -8,7 +8,9 @@
 import Foundation
 import RswiftResources
 
+
 extension StringsTable {
+
     public static func generateStruct(tables: [StringsTable], developmentLanguage: String?, prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "string", lowercaseStartingCharacters: false)
         let qualifiedName = prefix + structName
@@ -33,15 +35,29 @@ extension StringsTable {
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."]
 
         return Struct(comments: comments, name: structName, additionalModuleReferences: [.rswiftResources]) {
-            Init.bundle
+            initBundlePreferredLanguages
 
             for name in groupedLocalized.uniques.map(\.0) {
-                generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name))
-                generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
+                generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name), tableName: name)
+//                generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
                 generatePreferredLanguagesFunction(name: SwiftIdentifier(name: name), tableName: name)
             }
             structs
         }
+    }
+
+    private static var initBundlePreferredLanguages: Init {
+        Init(
+            comments: [],
+            params: [
+                .init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),
+                .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]?"), defaultValue: "nil"),
+            ],
+            valueCodeString: """
+                self.bundle = bundle
+                self.preferredLanguages = preferredLanguages
+                """
+        )
     }
 
     private static func generateStruct(filename: String, tables: [StringsTable], developmentLanguage: String?, prefix: SwiftIdentifier, warning: (String) -> Void) -> Struct? {
@@ -78,11 +94,11 @@ extension StringsTable {
         )
     }
 
-    public static func generateBundleLocaleVarGetter(name: SwiftIdentifier) -> VarGetter {
+    public static func generateBundleLocaleVarGetter(name: SwiftIdentifier, tableName: String) -> VarGetter {
         VarGetter(
             name: name,
             typeReference: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: ".init(source: .hosting(bundle))"
+            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages))"#
         )
     }
 
@@ -107,13 +123,7 @@ extension StringsTable {
                 .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil),
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: """
-                if let (bundle, locale) = bundle.firstBundleAndLocale(tableName: "\(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages) {
-                  return .init(source: .selected(bundle, locale))
-                } else {
-                  return .init(source: .none)
-                }
-                """
+            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages))"#
         )
     }
 

@@ -10,7 +10,7 @@ import Foundation
 extension Bundle {
 
     // Locale of first preferred localization, fallback to current Locale
-    public var firstPreferredLocale: Foundation.Locale {
+    internal var firstPreferredLocale: Foundation.Locale {
         self.preferredLocalizations.first.flatMap { Foundation.Locale(identifier: $0) } ?? Foundation.Locale.current
     }
 
@@ -25,7 +25,7 @@ extension Bundle {
     }
 
     /// Find first bundle and locale for which the table exists
-    public func firstBundleAndLocale(tableName: String, preferredLanguages: [String]) -> (bundle: Foundation.Bundle, locale: Foundation.Locale)? {
+    internal func firstBundleAndLocale(tableName: String, preferredLanguages: [String]) -> (bundle: Foundation.Bundle, locale: Foundation.Locale)? {
         let hostingBundle = self
 
         // Filter preferredLanguages to localizations, use first locale

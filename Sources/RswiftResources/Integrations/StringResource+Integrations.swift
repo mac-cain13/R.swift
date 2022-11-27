@@ -58,6 +58,20 @@ extension Text {
     }
 }
 
+extension StringResource.Source {
+    public init(bundle: Bundle, tableName: String, preferredLanguages: [String]?) {
+        guard let preferredLanguages = preferredLanguages else {
+            self = .hosting(bundle)
+            return
+        }
+        if let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) {
+            self = .selected(bundle, locale)
+        } else {
+            self = .none
+        }
+    }
+}
+
 extension StringResource {
     public func callAsFunction() -> String {
         switch source {
