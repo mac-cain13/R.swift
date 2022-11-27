@@ -9,6 +9,39 @@ import Foundation
 import RswiftResources
 
 
+extension Struct {
+    public func generateBundleVarGetterForString(name: String) -> VarGetter {
+        VarGetter(
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil)"
+        )
+    }
+
+    public func generateBundleFunctionForString(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil)"
+        )
+    }
+
+    public func generatePreferredLanguagesFunctionForString(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [.init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil)],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages)"
+        )
+    }
+}
+
 extension StringsTable {
 
     public static func generateStruct(tables: [StringsTable], developmentLanguage: String?, prefix: SwiftIdentifier) -> Struct {
