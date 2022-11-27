@@ -215,113 +215,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["tr"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two1")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two2")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three1")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three2")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three3")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "threeArg1")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "threeArg2")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "threeArg3")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four1")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "fourArg")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized french")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five 2, localized french")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five 4, localized french")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "five 2 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "five 4 ARG, localized french")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six 2, localized french")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "six 2 ARG, localized french")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized french")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven 2, localized french")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven 3, localized french")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven 4, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "seven 2 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "seven 3 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "seven 4 ARG, localized french")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized french")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight 2, localized french")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight3")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized french")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eight 2 ARG, localized french")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eightArg3")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized french")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine 2, localized french")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine3")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized french")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nine 2 ARG, localized french")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nineArg3")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized french")
   }
 
@@ -329,113 +330,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["nl"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two1")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two2")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three 1, localized dutch")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three2")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three 3, localized dutch")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "three 1 ARG, localized dutch")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "threeArg2")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "three 3 ARG, localized dutch")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four 1, localized dutch")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "four ARG, localized dutch")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized french")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five 2, localized french")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five 4, localized french")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "five 2 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "five 4 ARG, localized french")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six 2, localized french")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "six 2 ARG, localized french")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized dutch")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven2")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven3")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven 4, localized dutch")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized dutch")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "sevenArg2")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "sevenArg3")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "seven 4 ARG, localized dutch")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized dutch")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight2")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight3")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized dutch")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eightArg2")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eightArg3")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized dutch")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine2")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine3")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized dutch")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nineArg2")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nineArg3")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized dutch")
   }
 
@@ -443,113 +445,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["en"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two 1, localized english")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two 2, Hello localized english")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three 1, localized english")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three 2, localized english")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three3")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "three 1 ARG, localized english")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "three 2 ARG, localized english")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "threeArg3")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four1")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "fourArg")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized english")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five 2, localized english")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five4")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized english")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "five 2 ARG, localized english")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "fiveArg4")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six 2, localized french")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "six 2 ARG, localized french")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized english")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven 2, localized english")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven3")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven4")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized english")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "seven 2 ARG, localized english")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "sevenArg3")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "sevenArg4")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized base")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight 2, localized base")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight 3, localized base")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eight 2 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eight 3 ARG, localized base")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized english")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine 2, localized english")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine3")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized english")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nine 2 ARG, localized english")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nineArg3")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized french")
   }
 
@@ -558,113 +561,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["en-GB"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two 1, localized english")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two 2, Hello localized english")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three 1, localized english")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three 2, localized english")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three3")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "three 1 ARG, localized english")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "three 2 ARG, localized english")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "threeArg3")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four1")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "fourArg")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized english gb")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five2")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five4")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized english gb")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "fiveArg2")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "fiveArg4")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six 2, localized french")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "six 2 ARG, localized french")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized english")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven 2, localized english")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven3")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven4")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized english")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "seven 2 ARG, localized english")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "sevenArg3")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "sevenArg4")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized base")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight 2, localized base")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight 3, localized base")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eight 2 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eight 3 ARG, localized base")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized base")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine 2, localized base")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine 3, localized base")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized base")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nine 2 ARG, localized base")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nine 3 ARG, localized base")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized french")
   }
 
@@ -673,113 +677,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["fr"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two1")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two2")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three1")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three2")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three3")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "threeArg1")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "threeArg2")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "threeArg3")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four1")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "fourArg")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized french")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five 2, localized french")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five 4, localized french")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "five 2 ARG, localized french")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "five 4 ARG, localized french")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six 2, localized french")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "six 2 ARG, localized french")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized french")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven 2, localized french")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven 3, localized french")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven 4, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "seven 2 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "seven 3 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "seven 4 ARG, localized french")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized french")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight 2, localized french")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight3")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized french")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eight 2 ARG, localized french")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eightArg3")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized french")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine 2, localized french")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine3")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized french")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nine 2 ARG, localized french")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nineArg3")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized french")
   }
 
@@ -788,113 +793,114 @@ class LocalizedStringAppTests: XCTestCase {
     let myprefs = ["fr-CA"]
 
     testPrefferedLanguages(myprefs: myprefs)
+    let strings = R.string(preferredLanguages: myprefs)
 
     /* one */
-    XCTAssertEqual(R.string.one.one1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one1(),
                    "one 1, not localized")
-    XCTAssertEqual(R.string.one.one2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.one2(),
                    "one 2, not localized")
-    XCTAssertEqual(R.string.one.oneArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.one.oneArg("ARG"),
                    "one ARG, not localized")
 
     /* two */
-    XCTAssertEqual(R.string.two.two1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two1(),
                    "two1")
-    XCTAssertEqual(R.string.two.two2("Hello", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.two.two2("Hello"),
                    "two2")
 
     /* three */
-    XCTAssertEqual(R.string.three.three1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three1(),
                    "three1")
-    XCTAssertEqual(R.string.three.three2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three2(),
                    "three2")
-    XCTAssertEqual(R.string.three.three3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.three3(),
                    "three3")
-    XCTAssertEqual(R.string.three.threeArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg1("ARG"),
                    "threeArg1")
-    XCTAssertEqual(R.string.three.threeArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg2("ARG"),
                    "threeArg2")
-    XCTAssertEqual(R.string.three.threeArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.three.threeArg3("ARG"),
                    "threeArg3")
 
     /* four */
-    XCTAssertEqual(R.string.four.four1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.four1(),
                    "four1")
-    XCTAssertEqual(R.string.four.fourArg("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.four.fourArg("ARG"),
                    "fourArg")
 
     /* five */
-    XCTAssertEqual(R.string.five.five1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five1(),
                    "five 1, localized french canada")
-    XCTAssertEqual(R.string.five.five2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five2(),
                    "five2")
-    XCTAssertEqual(R.string.five.five4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.five4(),
                    "five4")
-    XCTAssertEqual(R.string.five.fiveArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg1("ARG"),
                    "five 1 ARG, localized french canada")
-    XCTAssertEqual(R.string.five.fiveArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg2("ARG"),
                    "fiveArg2")
-    XCTAssertEqual(R.string.five.fiveArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.five.fiveArg4("ARG"),
                    "fiveArg4")
 
     /* six */
-    XCTAssertEqual(R.string.six.six1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six1(),
                    "six 1, localized french canada")
-    XCTAssertEqual(R.string.six.six2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.six2(),
                    "six2")
-    XCTAssertEqual(R.string.six.sixArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg1("ARG"),
                    "six 1 ARG, localized french canada")
-    XCTAssertEqual(R.string.six.sixArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.six.sixArg2("ARG"),
                    "sixArg2")
 
     /* seven */
-    XCTAssertEqual(R.string.seven.seven1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven1(),
                    "seven 1, localized french")
-    XCTAssertEqual(R.string.seven.seven2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven2(),
                    "seven 2, localized french")
-    XCTAssertEqual(R.string.seven.seven3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven3(),
                    "seven 3, localized french")
-    XCTAssertEqual(R.string.seven.seven4(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.seven4(),
                    "seven 4, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg1("ARG"),
                    "seven 1 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg2("ARG"),
                    "seven 2 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg3("ARG"),
                    "seven 3 ARG, localized french")
-    XCTAssertEqual(R.string.seven.sevenArg4("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.seven.sevenArg4("ARG"),
                    "seven 4 ARG, localized french")
 
     /* eight */
-    XCTAssertEqual(R.string.eight.eight1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight1(),
                    "eight 1, localized base")
-    XCTAssertEqual(R.string.eight.eight2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight2(),
                    "eight 2, localized base")
-    XCTAssertEqual(R.string.eight.eight3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eight3(),
                    "eight 3, localized base")
-    XCTAssertEqual(R.string.eight.eightArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg1("ARG"),
                    "eight 1 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg2("ARG"),
                    "eight 2 ARG, localized base")
-    XCTAssertEqual(R.string.eight.eightArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.eight.eightArg3("ARG"),
                    "eight 3 ARG, localized base")
 
     /* nine */
-    XCTAssertEqual(R.string.nine.nine1(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine1(),
                    "nine 1, localized base")
-    XCTAssertEqual(R.string.nine.nine2(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine2(),
                    "nine 2, localized base")
-    XCTAssertEqual(R.string.nine.nine3(preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nine3(),
                    "nine 3, localized base")
-    XCTAssertEqual(R.string.nine.nineArg1("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg1("ARG"),
                    "nine 1 ARG, localized base")
-    XCTAssertEqual(R.string.nine.nineArg2("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg2("ARG"),
                    "nine 2 ARG, localized base")
-    XCTAssertEqual(R.string.nine.nineArg3("ARG", preferredLanguages: myprefs),
+    XCTAssertEqual(strings.nine.nineArg3("ARG"),
                    "nine 3 ARG, localized base")
 
     /* ten */
-    XCTAssertEqual(R.string.ten.ten1(things: 1, preferredLanguages: myprefs),
+    XCTAssertEqual(strings.ten.ten1(things: 1),
                    "ten 1 - 1 thing, localized french")
   }
 
