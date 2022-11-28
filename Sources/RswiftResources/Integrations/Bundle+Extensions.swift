@@ -9,11 +9,6 @@ import Foundation
 
 extension Bundle {
 
-    // Locale of first preferred localization, fallback to current Locale
-    internal var firstPreferredLocale: Foundation.Locale {
-        self.preferredLocalizations.first.flatMap { Foundation.Locale(identifier: $0) } ?? Foundation.Locale.current
-    }
-
     /// Returns the string associated with the specified path + key in the receiver's information property list.
     public func infoDictionaryString(path: [String], key: String) -> String? {
         var dict = infoDictionary
@@ -79,9 +74,10 @@ extension Bundle {
         // If table is available in main bundle, don't look for localized resources
         let strings = hostingBundle.url(forResource: tableName, withExtension: "strings", subdirectory: nil, localization: nil)
         let stringsdict = hostingBundle.url(forResource: tableName, withExtension: "stringsdict", subdirectory: nil, localization: nil)
+        let hostingLocale = hostingBundle.preferredLocalizations.first.flatMap { Foundation.Locale(identifier: $0) }
 
-        if strings != nil || stringsdict != nil {
-            return (hostingBundle, hostingBundle.firstPreferredLocale)
+        if let hostingLocale = hostingLocale, strings != nil || stringsdict != nil {
+            return (hostingBundle, hostingLocale)
         }
 
         // If table is not found for requested languages, key will be shown
