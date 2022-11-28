@@ -21,16 +21,16 @@ class ResourceAppTests: XCTestCase {
     warning: [R.swift] Missing reference 'first' in 'incorrect in dutch' 'Settings.stringsdict' (nl)
     warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, second
     warning: [R.swift] Skipping 2 images because symbol 'theAppIcon' would be generated for all of these images: The App Icon, TheAppIcon
-    warning: [R.swift] Skipping asset subfolder because symbol 'conflicting' would conflict with image: conflicting
-    warning: [R.swift] Skipping 2 images because symbol 'second' would be generated for all of these images: Second, Second
+    warning: [R.swift] Skipping asset namespace 'conflicting' because symbol 'conflicting' would conflict with image: conflicting
+    warning: [R.swift] Skipping 2 images namespace because symbol 'second' would be generated for all of these images: Second, Second
     warning: [R.swift] Skipping 2 colors because symbol 'myRed' would be generated for all of these colors: My Red, My Red
     warning: [R.swift] Destination view controller with id Zbd-89-K73 for segue toUnknown in FirstViewController not found in storyboard References. Is this storyboard corrupt?
     warning: [R.swift] Skipping 2 segues for 'SecondViewController' because symbol 'toFirst' would be generated for all of these segues: ToFirst, toFirst
     warning: [R.swift] Skipping 2 storyboards because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate
     warning: [R.swift] Skipping 2 view controllers because symbol 'validationClash' would be generated for all of these view controller identifiers: Validation clash, ValidationClash
     warning: [R.swift] Skipping 2 xibs because symbol 'duplicate' would be generated for all of these files: Duplicate, duplicate
-    warning: [R.swift] Skipping 2 reuseIdentifiers because symbol 'duplicateCellView' would be generated for all of these reuseIdentifiers: DuplicateCellView, duplicateCellView
-    warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuseIdentifier: ' '
+    warning: [R.swift] Skipping 2 reuseIdentifiers because symbol 'duplicateCellView' would be generated for all of these reuse identifiers: DuplicateCellView, duplicateCellView
+    warning: [R.swift] Skipping 1 reuseIdentifier because no swift identifier can be generated for reuse identifier: ' '
     warning: [R.swift] Skipping 2 resource files because symbol 'duplicateJson' would be generated for all of these files: Duplicate.json, duplicateJson
     warning: [R.swift] Skipping 2 strings files because symbol 'duplicate' would be generated for all of these files: Duplicate, Duplicate#
     warning: [R.swift] Skipping 1 strings file because no swift identifier can be generated for file: '@@'

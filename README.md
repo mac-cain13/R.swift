@@ -46,7 +46,7 @@ This is only the beginning, check out [more examples](Documentation/Examples.md)
 Mathijs Kadijk presented R.swift at the September 2016 CocoaHeadsNL meetup.
 Talking about the ideas behind R.swift and demonstrating how to move from plain stringly-typed iOS code to statically typed code.
 
-<a href="https://vimeo.com/185173151"><img src="https://i.vimeocdn.com/video/594835658.jpg?mw=1920&mh=1080&q=70" width="560" alt="R.swift presentation at CocoaHeadsNL"></a>
+<a href="https://www.youtube.com/embed/C8kRUTV9TOA"><img src="https://i.ytimg.com/vi/C8kRUTV9TOA/maxresdefault.jpg" width="560" alt="R.swift presentation at CocoaHeadsNL"></a>
 
 ## Features
 
@@ -85,15 +85,44 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 
 ## Installation
 
-[CocoaPods](http://cocoapods.org) is the recommended way of installation, as this avoids including any binary files into your project.
+As of Rswift 7, Swift Package Manager is the recommended method of installation.
 
-_Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic library. Therefore [it is not possible](https://github.com/mac-cain13/R.swift/issues/42) to install it with Carthage._
+[Demo video: Updating from R.swift 6 to Rswift 7](https://youtu.be/icihJ_hin3I?t=66) (Starting at 1:06, this describes the installation of Rswift 7).
 
-### CocoaPods (recommended)
+### Xcode project - SPM
+
+1. In Project Settings, on the tab "Package Dependencies", click "+" and add `github.com/mac-cain13/R.swift`
+2. Select your target, on the tab "General", in the section "Frameworks, Libraries, and Embeded Content", click "+" and add `RswiftLibrary`
+3. Select your target, on the tab "Build Phases", in the section "Run Build Tool Plug-ins", click "+" and add `RswiftGenerateInternalResources`
+4. Right-click on your project, click `RswiftModifyXcodePackages`, click `Run`, click `Allow Command to Change Files`
+5. Build your project, now the `R` struct should be available in your code, use auto-complete to explore all static references
+
+_Screenshot of the Build Phase can be found [here](Documentation/Images/RunBuildToolPluginsRswift.png)_
+
+### Package.swift based SPM project
+
+1. Add a dependency in Package.swift:
+    ```swift
+    dependencies: [
+        .package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0")
+    ]
+    ```
+2. For each relevant target, add a dependency and a plugin
+    ```swift
+    .target(
+        name: "Example",
+        dependencies: [.product(name: "RswiftLibrary", package: "R.swift")],
+        plugins: [.plugin(name: "RswiftGeneratePublicResources", package: "R.swift")]
+    )
+    ```
+3. Build your project, now the `R` struct should be available in your code, use auto-complete to explore all static references
+
+<details>
+<summary><h3>CocoaPods</h3></summary>
 
 1. Add `pod 'R.swift'` to your [Podfile](http://cocoapods.org/#get_started) and run `pod install`
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
-3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:  
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase and **below** `Check Pods Manifest.lock`, expand it and paste the following script:
    ```bash
    "$PODS_ROOT/R.swift/rswift" generate "$SRCROOT/R.generated.swift"
    ```
@@ -104,41 +133,18 @@ _Note on Carthage: R.swift is a tool used in a build step, it is not a dynamic l
 _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+</details>
 
-### [Mint](https://github.com/yonaskolb/mint)
-
-#### First, Install `R.Swift` Binary and Run Script Phase
-
-1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
-2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
-3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
-   ```bash
-   if mint list | grep -q 'R.swift'; then
-     mint run R.swift@v6.1.0 rswift generate "$SRCROOT/R.generated.swift"
-   else
-     echo "error: R.swift not installed; run 'mint bootstrap' to install"
-     return -1
-   fi
-   ```
-4. Add `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
-5. Uncheck "Based on dependency analysis" so that R.swift is run on each build
-6. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
-
-_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
-
-#### Second, Install `R.Swift.Library` via the Swift Package Manager (requires Xcode 11)
-
-If you see a build error `No such module 'Rswift'` when trying to `#import Rswift` at the top of the `R.generated.swift` file, then you will also need to install the *library* via the Swift Package Manager available in Xcode 11+.
-
-Head over to the [R.Swift.Library](https://github.com/mac-cain13/R.swift.Library) repo and follow the [Swift Package Manager installation instructions](https://github.com/mac-cain13/R.swift.Library#swift-package-manager-requires-xcode-11).
-
-### [Homebrew](https://brew.sh)
+<details>
+<summary><h3>Homebrew</h3></summary>
 
 R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
+</details>
 
-### Manually
+<details>
+<summary><h3>Manually</h3></summary>
 
-0. Add the [R.swift.Library](https://github.com/mac-cain13/R.swift.Library#Installation) to your project
+0. Add the [R.swift](https://github.com/mac-cain13/R.swift) library to your project
 1. [Download](https://github.com/mac-cain13/R.swift/releases) a R.swift release, unzip it and put it into your source root directory
 2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
 3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
@@ -152,16 +158,8 @@ R.swift is also available through [Homebrew](http://brew.sh). This makes it poss
 _Screenshot of the Build Phase can be found [here](Documentation/Images/ManualBuildPhaseExample.png)_
 
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+</details>
 
-### Building from source
-
-R.swift is built using [Swift Package Manager (SPM)](https://github.com/apple/swift-package-manager).
-
-1. Check out the code
-2. Run `swift build -c release` from the root directory
-3. Follow the manual installation steps with the binary you now have
-
-For developing on R.swift in Xcode, run `swift package generate-xcodeproj --xcconfig-overrides RswiftConfig.xcconfig`.
 
 ## Contribute
 

@@ -1,5 +1,7 @@
 import UIKit
 
+let bundle = Bundle.main.path(forResource: "Foo", ofType: "bundle").flatMap(Bundle.init(path:))!
+
 public final class FooClass {
     public init() {}
     public func foo() {
@@ -7,6 +9,6 @@ public final class FooClass {
     }
     
     public func sampleImage() -> UIImage {
-        R.image.user()!
+        R.image(bundle: bundle).user()!
     }
 }

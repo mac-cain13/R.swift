@@ -1,34 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Commander",
-        "repositoryURL": "https://github.com/kylef/Commander.git",
-        "state": {
-          "branch": null,
-          "revision": "4a1f2fb82fb6cef613c4a25d2e38f702e4d812c2",
-          "version": "0.9.2"
-        }
-      },
-      {
-        "package": "Spectre",
-        "repositoryURL": "https://github.com/kylef/Spectre.git",
-        "state": {
-          "branch": null,
-          "revision": "26cc5e9ae0947092c7139ef7ba612e34646086c7",
-          "version": "0.10.1"
-        }
-      },
-      {
-        "package": "XcodeEdit",
-        "repositoryURL": "https://github.com/tomlokhorst/XcodeEdit",
-        "state": {
-          "branch": null,
-          "revision": "99547c5af5850155b52c43b716ba1b094b02a3b2",
-          "version": "2.8.0"
-        }
+  "pins" : [
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "9f39744e025c7d377987f30b03770805dcb0bcd1",
+        "version" : "1.1.4"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "xcodeedit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomlokhorst/XcodeEdit",
+      "state" : {
+        "revision" : "cd466d6e8c5ffd2f2b61165d37b0646f09068e1e",
+        "version" : "2.9.0"
+      }
+    }
+  ],
+  "version" : 2
 }

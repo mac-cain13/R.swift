@@ -1,0 +1,16 @@
+PODS:
+  - SWRevealViewController (2.3.0)
+
+DEPENDENCIES:
+  - SWRevealViewController
+
+SPEC REPOS:
+  trunk:
+    - SWRevealViewController
+
+SPEC CHECKSUMS:
+  SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
+
+PODFILE CHECKSUM: d26d2eef2a0dde8b4346e946f571932e6e11cf9b
+
+COCOAPODS: 1.11.3

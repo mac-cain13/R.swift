@@ -1,0 +1,14 @@
+/* 
+  three.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-21.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"three1" = "three 1, localized dutch";
+
+"three3" = "three 3, localized dutch";
+"threeArg1" = "three 1 %@, localized dutch";
+
+"threeArg3" = "three 3 %@, localized dutch";

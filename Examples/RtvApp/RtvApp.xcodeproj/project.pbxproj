@@ -3,18 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		D56470312258CA8A005F5E7A /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56470302258CA8A005F5E7A /* ValidationTests.swift */; };
-		D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */ = {isa = PBXBuildFile; fileRef = D5CE930C1CA966D9009D0E62 /* rswift-tv.log */; };
 		DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559991CA4873D009B8C51 /* AppDelegate.swift */; };
 		DEF5599F1CA4873D009B8C51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEF5599D1CA4873D009B8C51 /* Main.storyboard */; };
 		DEF559A11CA4873D009B8C51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF559A01CA4873D009B8C51 /* Assets.xcassets */; };
-		DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF559B61CA48DC2009B8C51 /* R.generated.swift */; };
-		E223B7B22510E46700060B16 /* Rswift in Frameworks */ = {isa = PBXBuildFile; productRef = E223B7B12510E46700060B16 /* Rswift */; };
 		E26B761B2451E7D100E1170F /* ImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B761A2451E7D100E1170F /* ImageTests.swift */; };
+		E2C415D428F6E5E00028D537 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E2C415D328F6E5E00028D537 /* RswiftLibrary */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +28,6 @@
 /* Begin PBXFileReference section */
 		D56470302258CA8A005F5E7A /* ValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		D5CE930C1CA966D9009D0E62 /* rswift-tv.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "rswift-tv.log"; sourceTree = SOURCE_ROOT; };
 		DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ResourceApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559991CA4873D009B8C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEF5599E1CA4873D009B8C51 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,8 +35,8 @@
 		DEF559A21CA4873D009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEF559AB1CA48892009B8C51 /* ResourceAppTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ResourceAppTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF559AF1CA48892009B8C51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DEF559B61CA48DC2009B8C51 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = R.generated.swift; sourceTree = "<group>"; };
 		E26B761A2451E7D100E1170F /* ImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTests.swift; sourceTree = "<group>"; };
+		E2C415D228F6E5C60028D537 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = R.swift; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E223B7B22510E46700060B16 /* Rswift in Frameworks */,
+				E2C415D428F6E5E00028D537 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +69,7 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				E2C415D128F6E5C60028D537 /* Packages */,
 				DEF559981CA4873D009B8C51 /* ResourceApp-tvOS */,
 				DEF559AC1CA48892009B8C51 /* ResourceAppTests-tvOS */,
 				D55C6CB91B5D757300301B0D /* Products */,
@@ -94,7 +92,6 @@
 		D5CE930B1CA966C6009D0E62 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D5CE930C1CA966D9009D0E62 /* rswift-tv.log */,
 				DEF559AF1CA48892009B8C51 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -103,7 +100,6 @@
 		DEF559981CA4873D009B8C51 /* ResourceApp-tvOS */ = {
 			isa = PBXGroup;
 			children = (
-				DEF559B61CA48DC2009B8C51 /* R.generated.swift */,
 				DEF559991CA4873D009B8C51 /* AppDelegate.swift */,
 				DEF5599D1CA4873D009B8C51 /* Main.storyboard */,
 				DEF559A01CA4873D009B8C51 /* Assets.xcassets */,
@@ -122,6 +118,14 @@
 			path = "ResourceAppTests-tvOS";
 			sourceTree = "<group>";
 		};
+		E2C415D128F6E5C60028D537 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E2C415D228F6E5C60028D537 /* R.swift */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,7 +133,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DEF559A31CA4873D009B8C51 /* Build configuration list for PBXNativeTarget "ResourceApp-tvOS" */;
 			buildPhases = (
-				DEF559A61CA487D6009B8C51 /* R.swift */,
 				DEF559931CA4873D009B8C51 /* Sources */,
 				DEF559941CA4873D009B8C51 /* Frameworks */,
 				DEF559951CA4873D009B8C51 /* Resources */,
@@ -137,10 +140,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				E2E58383291D6428006E17D9 /* PBXTargetDependency */,
 			);
 			name = "ResourceApp-tvOS";
 			packageProductDependencies = (
-				E223B7B12510E46700060B16 /* Rswift */,
+				E2C415D328F6E5E00028D537 /* RswiftLibrary */,
 			);
 			productName = "ResourceApp-tvOS";
 			productReference = DEF559971CA4873D009B8C51 /* ResourceApp-tvOS.app */;
@@ -172,7 +176,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 1000;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = "Mathijs Kadijk";
 				TargetAttributes = {
 					DEF559961CA4873D009B8C51 = {
@@ -188,10 +192,9 @@
 			};
 			buildConfigurationList = D55C6CB31B5D757300301B0D /* Build configuration list for PBXProject "RtvApp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 				es,
@@ -199,9 +202,6 @@
 				nl,
 			);
 			mainGroup = D55C6CAF1B5D757300301B0D;
-			packageReferences = (
-				E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */,
-			);
 			productRefGroup = D55C6CB91B5D757300301B0D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -226,30 +226,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5CE930D1CA966D9009D0E62 /* rswift-tv.log in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		DEF559A61CA487D6009B8C51 /* R.swift */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = R.swift;
-			outputPaths = (
-				"$SRCROOT/ResourceApp-tvOS/R.generated.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../build/Debug/rswift\" generate \"$SRCROOT/ResourceApp-tvOS/R.generated.swift\" > \"$SRCROOT/rswift-tv.log\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DEF559931CA4873D009B8C51 /* Sources */ = {
@@ -257,7 +237,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEF5599A1CA4873D009B8C51 /* AppDelegate.swift in Sources */,
-				DEF559B71CA48DC2009B8C51 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +256,10 @@
 			isa = PBXTargetDependency;
 			target = DEF559961CA4873D009B8C51 /* ResourceApp-tvOS */;
 			targetProxy = DEF559B01CA48892009B8C51 /* PBXContainerItemProxy */;
+		};
+		E2E58383291D6428006E17D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = E2E58382291D6428006E17D9 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
 
@@ -315,6 +298,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -340,14 +324,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -374,6 +359,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -392,12 +378,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -408,6 +395,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = BQF78J8BF9;
 				INFOPLIST_FILE = "ResourceApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -418,6 +406,7 @@
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -426,6 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				DEVELOPMENT_TEAM = BQF78J8BF9;
 				INFOPLIST_FILE = "ResourceApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -438,6 +428,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -458,6 +449,7 @@
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -479,6 +471,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ResourceApp-tvOS.app/ResourceApp-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -514,22 +507,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mac-cain13/R.swift.Library.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		E223B7B12510E46700060B16 /* Rswift */ = {
+		E2C415D328F6E5E00028D537 /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E223B7B02510E46700060B16 /* XCRemoteSwiftPackageReference "R.swift.Library" */;
-			productName = Rswift;
+			productName = RswiftLibrary;
+		};
+		E2E58382291D6428006E17D9 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:RswiftGenerateInternalResources";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

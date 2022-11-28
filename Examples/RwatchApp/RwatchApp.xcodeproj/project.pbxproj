@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,9 +14,8 @@
 		2F5FBC292135561300A83A69 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FBC282135561300A83A69 /* ExtensionDelegate.swift */; };
 		2F5FBC2B2135561300A83A69 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FBC2A2135561300A83A69 /* NotificationController.swift */; };
 		2F5FBC2D2135561400A83A69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F5FBC2C2135561400A83A69 /* Assets.xcassets */; };
-		2F5FBC5D21355F8A00A83A69 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FBC5C21355F8A00A83A69 /* R.generated.swift */; };
 		2F5FBC622135665000A83A69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F5FBC642135665000A83A69 /* Localizable.strings */; };
-		42A84FB2DF3030B3B1476BA0 /* Pods_ResourceApp_watchOS_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB9FAA28BAEEE5C813ABC9FD /* Pods_ResourceApp_watchOS_Extension.framework */; };
+		E2C415D828F6F9A90028D537 /* RswiftLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = E2C415D728F6F9A90028D537 /* RswiftLibrary */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,14 +54,11 @@
 		2F5FBC2C2135561400A83A69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F5FBC2E2135561400A83A69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F5FBC2F2135561400A83A69 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		2F5FBC5C21355F8A00A83A69 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		2F5FBC632135665000A83A69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F5FBC652135665400A83A69 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2F5FBC662135665600A83A69 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		503417A0BA42879EF1F80A75 /* Pods-ResourceApp-watchOS-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp-watchOS-Extension.release.xcconfig"; path = "Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension.release.xcconfig"; sourceTree = "<group>"; };
-		C5E806140ACB19BACD937511 /* Pods-ResourceApp-watchOS-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResourceApp-watchOS-Extension.debug.xcconfig"; path = "Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		D5B799881C1B8F0C009EA901 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		FB9FAA28BAEEE5C813ABC9FD /* Pods_ResourceApp_watchOS_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ResourceApp_watchOS_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2C415D628F6F99A0028D537 /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = R.swift; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42A84FB2DF3030B3B1476BA0 /* Pods_ResourceApp_watchOS_Extension.framework in Frameworks */,
+				E2C415D828F6F9A90028D537 /* RswiftLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,19 +84,8 @@
 			isa = PBXGroup;
 			children = (
 				D5B799881C1B8F0C009EA901 /* AVKit.framework */,
-				FB9FAA28BAEEE5C813ABC9FD /* Pods_ResourceApp_watchOS_Extension.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		1D01D08160B71A0F68100D6D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C5E806140ACB19BACD937511 /* Pods-ResourceApp-watchOS-Extension.debug.xcconfig */,
-				503417A0BA42879EF1F80A75 /* Pods-ResourceApp-watchOS-Extension.release.xcconfig */,
-			);
-			name = Pods;
-			path = ../Pods;
 			sourceTree = "<group>";
 		};
 		2F5FBC162135561200A83A69 /* ResourceApp-watchOS */ = {
@@ -116,7 +101,6 @@
 		2F5FBC252135561300A83A69 /* ResourceApp-watchOS-Extension */ = {
 			isa = PBXGroup;
 			children = (
-				2F5FBC5C21355F8A00A83A69 /* R.generated.swift */,
 				2F5FBC262135561300A83A69 /* InterfaceController.swift */,
 				2F5FBC282135561300A83A69 /* ExtensionDelegate.swift */,
 				2F5FBC2A2135561300A83A69 /* NotificationController.swift */,
@@ -139,11 +123,11 @@
 		D55C6CAF1B5D757300301B0D = {
 			isa = PBXGroup;
 			children = (
+				E2C415D528F6F99A0028D537 /* Packages */,
 				2F5FBC162135561200A83A69 /* ResourceApp-watchOS */,
 				2F5FBC252135561300A83A69 /* ResourceApp-watchOS-Extension */,
 				D55C6CB91B5D757300301B0D /* Products */,
 				065D32753EEB6C7AE2FA201F /* Frameworks */,
-				1D01D08160B71A0F68100D6D /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -157,6 +141,14 @@
 				2F5FBC212135561300A83A69 /* ResourceApp-watchOS-Extension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E2C415D528F6F99A0028D537 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E2C415D628F6F99A0028D537 /* R.swift */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,18 +176,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F5FBC332135561400A83A69 /* Build configuration list for PBXNativeTarget "ResourceApp-watchOS-Extension" */;
 			buildPhases = (
-				26F5B49DAE85BE3F40F40B51 /* [CP] Check Pods Manifest.lock */,
-				2F5FBC5B21355F2000A83A69 /* R.swift */,
 				2F5FBC1D2135561300A83A69 /* Sources */,
 				2F5FBC1E2135561300A83A69 /* Frameworks */,
 				2F5FBC1F2135561300A83A69 /* Resources */,
-				F052DE37060C47522CB0DCDD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E212C641291BD9DF000E4F65 /* PBXTargetDependency */,
 			);
 			name = "ResourceApp-watchOS-Extension";
+			packageProductDependencies = (
+				E2C415D728F6F9A90028D537 /* RswiftLibrary */,
+			);
 			productName = "ResourceApp-watchOS Extension";
 			productReference = 2F5FBC212135561300A83A69 /* ResourceApp-watchOS-Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
@@ -265,69 +258,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		26F5B49DAE85BE3F40F40B51 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ResourceApp-watchOS-Extension-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2F5FBC5B21355F2000A83A69 /* R.swift */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = R.swift;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$SRCROOT/../../build/debug/rswift\" generate \"$SRCROOT/ResourceApp-watchOS-Extension/R.generated.swift\" > \"$SRCROOT/rswift-watchos.log\"\n";
-		};
-		F052DE37060C47522CB0DCDD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/R.swift.Library-watchOS/Rswift.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ResourceApp-watchOS-Extension/Pods-ResourceApp-watchOS-Extension-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		2F5FBC1D2135561300A83A69 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -336,7 +266,6 @@
 				2F5FBC2B2135561300A83A69 /* NotificationController.swift in Sources */,
 				2F5FBC292135561300A83A69 /* ExtensionDelegate.swift in Sources */,
 				2F5FBC272135561300A83A69 /* InterfaceController.swift in Sources */,
-				2F5FBC5D21355F8A00A83A69 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +276,10 @@
 			isa = PBXTargetDependency;
 			target = 2F5FBC202135561300A83A69 /* ResourceApp-watchOS-Extension */;
 			targetProxy = 2F5FBC232135561300A83A69 /* PBXContainerItemProxy */;
+		};
+		E212C641291BD9DF000E4F65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = E212C640291BD9DF000E4F65 /* RswiftGenerateInternalResources */;
 		};
 /* End PBXTargetDependency section */
 
@@ -374,7 +307,6 @@
 /* Begin XCBuildConfiguration section */
 		2F5FBC342135561400A83A69 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5E806140ACB19BACD937511 /* Pods-ResourceApp-watchOS-Extension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -401,13 +333,11 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Debug;
 		};
 		2F5FBC352135561400A83A69 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 503417A0BA42879EF1F80A75 /* Pods-ResourceApp-watchOS-Extension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -433,7 +363,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Release;
 		};
@@ -463,7 +392,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Debug;
 		};
@@ -492,7 +420,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Release;
 		};
@@ -548,10 +475,12 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Debug;
 		};
@@ -599,10 +528,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 5.0;
 			};
 			name = Release;
 		};
@@ -637,6 +568,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E212C640291BD9DF000E4F65 /* RswiftGenerateInternalResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:RswiftGenerateInternalResources";
+		};
+		E2C415D728F6F9A90028D537 /* RswiftLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RswiftLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D55C6CB01B5D757300301B0D /* Project object */;
 }

@@ -1,0 +1,16 @@
+/* 
+  eight.strings
+  LocalizedStringApp
+
+  Created by Tom Lokhorst on 2019-08-26.
+  Copyright © 2019 R.swift. All rights reserved.
+*/
+
+"eight1" = "eight 1, localized dutch";
+
+
+"eight4" = "eight 4, localized dutch";
+"eightArg1" = "eight 1 %@, localized dutch";
+
+
+"eightArg4" = "eight 4 %@, localized dutch";

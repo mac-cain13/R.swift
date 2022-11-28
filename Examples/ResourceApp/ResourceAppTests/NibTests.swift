@@ -22,7 +22,7 @@ class NibTests: XCTestCase {
   }
 
   func testNibIsOfCorrectType() {
-    XCTAssertTrue(type(of: R.nib.supplementaryElement).ReusableType.classForCoder() == UICollectionReusableView.classForCoder())
+    XCTAssertTrue(type(of: R.nib.supplementaryElement).Reusable.classForCoder() == UICollectionReusableView.classForCoder())
   }
 
 }

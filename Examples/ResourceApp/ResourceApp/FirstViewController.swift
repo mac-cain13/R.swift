@@ -16,6 +16,7 @@ class FirstViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     titleLabel.font = R.font.averiaLibreBoldItalic(size: 36)
+    tabBarItem.image = R.image.userWhite()
   }
 
   override func didReceiveMemoryWarning() {

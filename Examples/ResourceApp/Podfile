@@ -1,0 +1,10 @@
+use_frameworks!
+workspace 'ResourceApp'
+
+target 'ResourceApp' do
+  platform :ios, '11.0'
+  project 'ResourceApp'
+
+  pod 'SWRevealViewController'
+end
+

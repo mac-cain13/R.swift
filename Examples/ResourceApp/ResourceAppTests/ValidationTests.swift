@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import Rswift
+import RswiftResources
 @testable import ResourceApp
 
 class ValidationTests: XCTestCase {
@@ -26,13 +26,13 @@ class ValidationTests: XCTestCase {
 
   func testRunSpecificValidateMethods() {
     do {
-      try _R.storyboard.main.validate()
+      try R.storyboard.main.validate()
     } catch {
       XCTFail("Wrong error thrown")
     }
 
     do {
-      try _R.storyboard.secondary.validate()
+      try R.storyboard.secondary.validate()
       XCTFail("No error thrown")
     } catch let error as ValidationError {
       XCTAssertEqual(error.description, "[R.swift] Image named 'First' is used in storyboard 'Secondary', but couldn't be loaded.")

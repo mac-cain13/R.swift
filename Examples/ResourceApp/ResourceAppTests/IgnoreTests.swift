@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-import Rswift
+import RswiftResources
 @testable import ResourceApp
 
 class IgnoreTests: XCTestCase {

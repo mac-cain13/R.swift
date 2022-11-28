@@ -2,6 +2,46 @@
 
 Pointers for migration between major versions.
 
+## Upgrading to 7.0
+
+[Demo video: Updating from R.swift 6 to Rswift 7](https://www.youtube.com/watch?v=icihJ_hin3I)
+
+#### Running the executable
+
+If you're using Swift Package Manager:
+ - Separate R.swift.Library is no longer needed, remove dependency on that package
+ - Add SPM dependency on `github.com/mac-cain13/R.swift.git` package
+ - Add `RswiftLibrary` to your targets
+ - Remove custom Run Script Build Phase that invokes `rswift` binary
+ - Under "Run Build Tool Plug-ins" Build Phase, add `RswiftGenerateInternalResources` or `RswiftGeneratePublicResources` ([Screenshot](Images/RunBuildToolPluginsRswift.png))
+ - Right-click on your project, and run `RswiftXcodeModifyPackages` to modify your Xcode project so that the build tool plug-in will actually run during builds (this seems to fix a bug in Xcode?) ([Screenshot](Images/RunXcodeModifyPackages.png))
+
+If you're using Mint or manual call `rswift` executable:
+ - Separate R.swift.Library is no longer needed, remove dependency on that package
+ - Add SPM dependency on `github.com/mac-cain13/R.swift.git` package
+ - Add `RswiftLibrary` to your targets
+
+Changes to the commandline tool `rswift` (not relevant when using SPM):
+ - Argument `accessLevel` renamed to `access-level`
+ - Argument `generateUITestFile` removed, if you need a separate file with just ids, call rswift a second time with `--generators id`
+ - Argument `hostingBundle` removed, bundle can be specified in code: `_R(bundle: someBundle)`
+ - Arguments removed: `bundleIdentifier`, `productModuleName`, `infoPlistFile`, `codeSignEntitlements`, `builtProductsDir`, `developerDir`, `platformDir`, `sdkRoot`, `sourceRoot`. Use environment variables instead.
+
+#### Library changes
+
+Internal changes in the Rswift support library:
+ - Renamed internal module, update `import Rswift` to `import RswiftResources`
+ - Removed protocols: `ColorResourceType`, `FileResourceType`, `FontResourceType`, `IdentifierType`, `ImageResourceType`, `StoryboardViewControllerResourceType`, `StringResourceType`, `Validatable`
+ - Added `StringResource1` up to `StringResource9`, for strings with parameters
+ - Renamed types:
+    * `ReuseIdentifierType` to `ReuseIdentifierContainer`
+    * `NibResourceType` to `NibReferenceContainer`
+    * `StoryboardResourceType` to `StoryboardReference`
+    * `StoryboardResourceWithInitialControllerType` to `InitialControllerContainer`
+    * `TypedStoryboardSegueInfo` to `TypedSegue`
+    * `StoryboardSegueIdentifier` to `SegueIdentifier`
+
+
 ## Upgrading to 6.0
 
 - In the Build Phase, some changes are needed, [see an example screenshot](Images/BuildPhaseExample.png):
