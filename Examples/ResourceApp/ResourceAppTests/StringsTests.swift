@@ -50,6 +50,12 @@ class StringsTests: XCTestCase {
     XCTAssertEqual(stringsFR.generic.precision3(12345.678), "three -  12\u{202F}345,6780")
     XCTAssertEqual(stringsFR.generic.precision4(12345.678), "four  - 12\u{202F}345,68")
 
+    XCTAssertEqual(R.string.generic.discount10(), "Today, 10% off!")
+    XCTAssertEqual(R.string.generic.discountX(20), "Today, 20% off!")
+    XCTAssertEqual(R.string.localizable.discount10(), "Today, 10% off!")
+    XCTAssertEqual(R.string.localizable.discountX(20), "Today, 20% off!")
+    XCTAssertEqual(R.string.generic.url(), "http%3A%2F%2Fwww.abc.xyz")
+
     XCTAssertEqual(
       R.string.settings.multilineKeyWeird(),
       NSLocalizedString("Multiline\t\\key/\n\"weird\"?!", tableName: "Settings", comment: ""))

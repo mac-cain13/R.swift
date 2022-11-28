@@ -11,3 +11,5 @@ one = One;
 two = 2;
 
 "quote" = "There are %d lights!";
+"discount10" = "Today, 10%% off!";
+"discountX" = "Today, %d%% off!";

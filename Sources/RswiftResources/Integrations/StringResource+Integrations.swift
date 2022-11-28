@@ -9,30 +9,6 @@ import Foundation
 import SwiftUI
 
 extension String {
-    init(key: StaticString, tableName: String, source: StringResource.Source, developmentValue: String?) {
-        switch source {
-        case let .hosting(bundle):
-            // With fallback to developmentValue
-            self = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
-
-        case let .selected(bundle, _):
-            // Don't use developmentValue with selected bundle/locale
-            self = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
-
-        case .none:
-            self = key.description
-        }
-    }
-
-    init(key: StaticString, tableName: String, source: StringResource.Source, developmentValue: String?, preferredLanguages: [String]) {
-        guard let (bundle, locale) = source.bundle?.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) else {
-            self = key.description
-            return
-        }
-
-        self.init(key: key, tableName: tableName, source: .selected(bundle, locale), developmentValue: developmentValue)
-    }
-
     init(key: StaticString, tableName: String, source: StringResource.Source, developmentValue: String?, locale overrideLocale: Locale?, arguments: [CVarArg]) {
         switch source {
         case let .hosting(bundle):
@@ -62,11 +38,11 @@ extension String {
 
 extension String {
     public init(resource: StringResource) {
-        self.init(key: resource.key, tableName: resource.tableName, source: resource.source, developmentValue: resource.developmentValue)
+        self.init(key: resource.key, tableName: resource.tableName, source: resource.source, developmentValue: resource.developmentValue, locale: nil, arguments: [])
     }
 
     public init(resource: StringResource, preferredLanguages: [String], locale overrideLocale: Locale? = nil) {
-        self.init(key: resource.key, tableName: resource.tableName, source: resource.source, developmentValue: resource.developmentValue, preferredLanguages: preferredLanguages)
+        self.init(key: resource.key, tableName: resource.tableName, source: resource.source, developmentValue: resource.developmentValue, preferredLanguages: preferredLanguages, locale: nil, arguments: [])
     }
 
     public init<Arg1: CVarArg>(format resource: StringResource1<Arg1>, locale overrideLocale: Locale? = nil, _ arg1: Arg1) {
