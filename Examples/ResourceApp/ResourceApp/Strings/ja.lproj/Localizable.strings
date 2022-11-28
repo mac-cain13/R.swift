@@ -11,4 +11,6 @@ one = "一つ";
 two = 2;
 
 "quote" = "%dつの光があります！";
+"discount10" = "Today, 10%% off!";
+"discountX" = "Today, %d%% off!";
 "japanese only" = "Not translated in other languages, and there is no Base";

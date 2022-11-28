@@ -11,3 +11,5 @@ one = Uno;
 two = 2;
 
 "quote" = "Hay %d luces!";
+"discount10" = "Today, 10%% off!";
+"discountX" = "Today, %d%% off!";
