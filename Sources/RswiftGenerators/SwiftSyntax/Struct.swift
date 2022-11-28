@@ -141,8 +141,9 @@ public struct VarGetter {
 
 
 public struct Function {
-    public let deploymentTarget: DeploymentTarget?
     public let comments: [String]
+    public let deploymentTarget: DeploymentTarget?
+    public var deprecated: String?
     public var accessControl = AccessControl.none
     public let isStatic: Bool
     public let name: SwiftIdentifier
@@ -154,6 +155,7 @@ public struct Function {
     public init(
         comments: [String],
         deploymentTarget: DeploymentTarget? = nil,
+        deprecated: String? = nil,
         accessControl: AccessControl = AccessControl.none,
         isStatic: Bool = false,
         name: SwiftIdentifier,
@@ -164,6 +166,7 @@ public struct Function {
     ) {
         self.comments = comments
         self.deploymentTarget = deploymentTarget
+        self.deprecated = deprecated
         self.accessControl = accessControl
         self.isStatic = isStatic
         self.name = name
@@ -211,6 +214,9 @@ public struct Function {
         }
 
         deploymentTarget?.render(&pp)
+        if let deprecated = deprecated {
+            pp.append(line: #"@available(*, deprecated, message: "\#(deprecated.escapedStringLiteral)")"#)
+        }
 
         let prs = params.map { $0.codeString() }.joined(separator: ", ")
         let words: [String?] = [

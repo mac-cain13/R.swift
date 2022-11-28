@@ -104,7 +104,7 @@ extension StringsTable {
         // only functions with named parameters
         let functions = strings
             .filter { $0.params.contains { $0.name != nil } }
-            .map { $0.generateFunction() }
+            .flatMap { [$0.generateFunctionBlank(), $0.generateFunctionPreferredLanguages()] }
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) localization keys."]
 
@@ -311,24 +311,33 @@ private struct StringWithParams {
     let values: [(LocaleReference, String)]
     let developmentLanguage: String?
 
-    func generateFunction() -> Function {
+    func generateFunctionBlank() -> Function {
         let parameters: [Function.Parameter] = zip(params.indices, params).map { (ix, p) in
                 .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
             }
-        let languages: Function.Parameter = .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]?"), defaultValue: "nil")
         let arguments = parameters.map { $0.localName ?? $0.name }.joined(separator: ", ")
         return Function(
             comments: self.comments,
             name: SwiftIdentifier(name: key),
+            params: parameters,
+            returnType: .string,
+            valueCodeString: "String(format: \(SwiftIdentifier(name: key).value), \(arguments))"
+        )
+    }
+
+    func generateFunctionPreferredLanguages() -> Function {
+        let parameters: [Function.Parameter] = zip(params.indices, params).map { (ix, p) in
+                .init(name: p.name ?? "_", localName: "value\(ix + 1)", typeReference: p.spec.typeReference, defaultValue: nil)
+            }
+        let languages: Function.Parameter = .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil)
+        let arguments = parameters.map { $0.localName ?? $0.name }.joined(separator: ", ")
+        return Function(
+            comments: self.comments,
+            deprecated: "Use R.string(preferredLanguages:).*.* instead",
+            name: SwiftIdentifier(name: key),
             params: parameters + [languages],
             returnType: .string,
-            valueCodeString: """
-                if let preferredLanguages = preferredLanguages {
-                  return String(format: \(SwiftIdentifier(name: key).value), preferredLanguages: preferredLanguages, \(arguments))
-                } else {
-                  return String(format: \(SwiftIdentifier(name: key).value), \(arguments))
-                }
-                """
+            valueCodeString: "String(format: \(SwiftIdentifier(name: key).value), preferredLanguages: preferredLanguages, \(arguments))"
         )
     }
 
