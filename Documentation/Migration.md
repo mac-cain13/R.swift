@@ -6,6 +6,10 @@ Pointers for migration between major versions.
 
 [Demo video: Updating from R.swift 6 to Rswift 7](https://www.youtube.com/watch?v=icihJ_hin3I)
 
+#### R.string changes
+ - Strings are always formatted using `String(format:)`, even strings without arguments, make sure to escape any percentage signs (`%`) with `%%`
+ - Use a custom language: `R.string(preferredLanguages: ["fr"]).example.hello()`
+
 #### Running the executable
 
 If you're using Swift Package Manager:
