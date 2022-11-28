@@ -15,7 +15,7 @@ extension Struct {
             deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: name),
             typeReference: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil)"
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
         )
     }
 
@@ -26,7 +26,18 @@ extension Struct {
             name: SwiftIdentifier(name: name),
             params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
             returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil)"
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
+        )
+    }
+
+    public func generateLocaleFunctionForString(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [.init(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil)],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: locale)"
         )
     }
 
@@ -35,9 +46,12 @@ extension Struct {
             comments: [],
             deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: name),
-            params: [.init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil)],
+            params: [
+                .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil),
+                .init(name: "locale", localName: nil, typeReference: .init(module: .stdLib, rawName: "Locale?"), defaultValue: "nil")
+            ],
             returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages)"
+            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages, locale: locale)"
         )
     }
 }
@@ -85,10 +99,12 @@ extension StringsTable {
             params: [
                 .init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),
                 .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]?"), defaultValue: "nil"),
+                .init(name: "locale", localName: nil, typeReference: .init(module: .stdLib, rawName: "Locale?"), defaultValue: "nil"),
             ],
             valueCodeString: """
                 self.bundle = bundle
                 self.preferredLanguages = preferredLanguages
+                self.locale = locale
                 """
         )
     }
@@ -131,7 +147,7 @@ extension StringsTable {
         VarGetter(
             name: name,
             typeReference: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages))"#
+            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages, locale: locale))"#
         )
     }
 
@@ -156,7 +172,7 @@ extension StringsTable {
                 .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil),
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages))"#
+            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages, locale: locale))"#
         )
     }
 

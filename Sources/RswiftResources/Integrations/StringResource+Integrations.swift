@@ -187,13 +187,18 @@ extension Text {
 }
 
 extension StringResource.Source {
-    public init(bundle: Bundle, tableName: String, preferredLanguages: [String]?) {
+    public init(bundle: Bundle, tableName: String, preferredLanguages: [String]?, locale overrideLocale: Locale?) {
         guard let preferredLanguages = preferredLanguages else {
-            self = .hosting(bundle)
+            if let locale = overrideLocale {
+                self = .selected(bundle, locale)
+            } else {
+                self = .hosting(bundle)
+            }
+
             return
         }
         if let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) {
-            self = .selected(bundle, locale)
+            self = .selected(bundle, overrideLocale ?? locale)
         } else {
             self = .none
         }

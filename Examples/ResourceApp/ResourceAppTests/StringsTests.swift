@@ -30,27 +30,25 @@ class StringsTests: XCTestCase {
 
   func testCorrectValues() {
 
-    /*
     // Force locales, for decimal point and decimal comma versions
-    let genericEN = R.string.generic(preferredLanguages: ["en_US"]) // (bundle: .main, locale: Locale(identifier: "en_US"))
-    let genericNL = R.string.generic(preferredLanguages: ["nl_NL"]) // (bundle: .main, locale: Locale(identifier: "nl_NL"))
-    let genericFR = R.string.generic(preferredLanguages: ["fr_FR"]) //(bundle: .main, locale: Locale(identifier: "fr_FR"))
+    let stringsEN = R.string(locale: Locale(identifier: "en_US"))
+    let stringsNL = R.string(locale: Locale(identifier: "nl_NL"))
+    let stringsFR = R.string(locale: Locale(identifier: "fr_FR"))
 
-    XCTAssertEqual(genericEN.precision1(12345.678), "one   -    12,345.68")
-    XCTAssertEqual(genericEN.precision2(12345.678), "two   -    12,345.68")
-    XCTAssertEqual(genericEN.precision3(12345.678), "three -  12,345.6780")
-    XCTAssertEqual(genericEN.precision4(12345.678), "four  - 12,345.68")
+    XCTAssertEqual(stringsEN.generic.precision1(12345.678), "one   -    12,345.68")
+    XCTAssertEqual(stringsEN.generic.precision2(12345.678), "two   -    12,345.68")
+    XCTAssertEqual(stringsEN.generic.precision3(12345.678), "three -  12,345.6780")
+    XCTAssertEqual(stringsEN.generic.precision4(12345.678), "four  - 12,345.68")
 
-    XCTAssertEqual(genericNL.precision1(12345.678), "one   -    12.345,68")
-    XCTAssertEqual(genericNL.precision2(12345.678), "two   -    12.345,68")
-    XCTAssertEqual(genericNL.precision3(12345.678), "three -  12.345,6780")
-    XCTAssertEqual(genericNL.precision4(12345.678), "four  - 12.345,68")
+    XCTAssertEqual(stringsNL.generic.precision1(12345.678), "one   -    12.345,68")
+    XCTAssertEqual(stringsNL.generic.precision2(12345.678), "two   -    12.345,68")
+    XCTAssertEqual(stringsNL.generic.precision3(12345.678), "three -  12.345,6780")
+    XCTAssertEqual(stringsNL.generic.precision4(12345.678), "four  - 12.345,68")
 
-    XCTAssertEqual(genericFR.precision1(12345.678), "one   -    12\u{202F}345,68")
-    XCTAssertEqual(genericFR.precision2(12345.678), "two   -    12\u{202F}345,68")
-    XCTAssertEqual(genericFR.precision3(12345.678), "three -  12\u{202F}345,6780")
-    XCTAssertEqual(genericFR.precision4(12345.678), "four  - 12\u{202F}345,68")
-     */
+    XCTAssertEqual(stringsFR.generic.precision1(12345.678), "one   -    12\u{202F}345,68")
+    XCTAssertEqual(stringsFR.generic.precision2(12345.678), "two   -    12\u{202F}345,68")
+    XCTAssertEqual(stringsFR.generic.precision3(12345.678), "three -  12\u{202F}345,6780")
+    XCTAssertEqual(stringsFR.generic.precision4(12345.678), "four  - 12\u{202F}345,68")
 
     XCTAssertEqual(
       R.string.settings.multilineKeyWeird(),
