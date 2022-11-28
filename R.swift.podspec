@@ -27,7 +27,7 @@ Pod::Spec.new do |spec|
   spec.osx.deployment_target     = '10.15'
   spec.ios.deployment_target     = '11'
   spec.tvos.deployment_target    = '11'
-  spec.watchos.deployment_target = '4'
+  #spec.watchos.deployment_target = '4'
 
   spec.preserve_paths = "rswift"
   spec.source_files   = "Sources/RswiftResources/**/*.swift"
