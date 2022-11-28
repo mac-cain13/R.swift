@@ -324,9 +324,9 @@ private struct StringWithParams {
             returnType: .string,
             valueCodeString: """
                 if let preferredLanguages = preferredLanguages {
-                  return \(SwiftIdentifier(name: key).value)(\(arguments), preferredLanguages: preferredLanguages)
+                  return String(format: \(SwiftIdentifier(name: key).value), preferredLanguages: preferredLanguages, \(arguments))
                 } else {
-                  return \(SwiftIdentifier(name: key).value)(\(arguments))
+                  return String(format: \(SwiftIdentifier(name: key).value), \(arguments))
                 }
                 """
         )
