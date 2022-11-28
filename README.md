@@ -135,6 +135,30 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPha
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 </details>
 
+
+<details>
+<summary><h3>Mint</h3></summary>
+
+0. Add the [R.swift](https://github.com/mac-cain13/R.swift) library to your project
+1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
+2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
+3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
+   ```bash
+   if mint list | grep -q 'R.swift'; then
+     mint run R.swiftt@v7.0.1 rswift generate "$SRCROOT/R.generated.swift"
+   else
+     echo "error: R.swift not installed; run 'mint bootstrap' to install"
+     return -1
+   fi
+   ```
+4. Add `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
+5. Uncheck "Based on dependency analysis" so that R.swift is run on each build
+6. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
+
+_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
+</details>
+
+
 <details>
 <summary><h3>Homebrew</h3></summary>
 
