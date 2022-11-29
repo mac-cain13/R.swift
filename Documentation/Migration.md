@@ -45,6 +45,24 @@ Internal changes in the Rswift support library:
     * `TypedStoryboardSegueInfo` to `TypedSegue`
     * `StoryboardSegueIdentifier` to `SegueIdentifier`
 
+#### Configuring Continuous Integration system
+
+When using a Swift Package Manager Plugin on a Continuous Integration (CI) server, you may see the following error:
+
+> The following build commands failed:
+>   Validate plug-in “RswiftGeneratePublicResources” in package “r.swift”
+
+To allow the running of plugins, pass `-skipPackagePluginValidation` to xcbuildtool.  See also this discussion on the Swift forums: https://forums.swift.org/t/telling-xcode-14-beta-4-to-trust-build-tool-plugins-programatically/59305
+
+For users of Fastlane, pass the extra argument like so:
+```
+build_app(
+  ...
+  xcargs: "-skipPackagePluginValidation"
+  ...
+)
+```
+
 
 ## Upgrading to 6.0
 
