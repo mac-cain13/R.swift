@@ -23,6 +23,22 @@ extension StoryboardReference where Self: InitialControllerContainer {
     }
 }
 
+extension StoryboardReference where Self: InitialControllerContainer, InitialController: UIViewController {
+    /**
+     Instantiates and returns the initial view controller in the view controller graph with native dependency injection.
+
+     - parameter creator: The function to inject dependency.
+
+     - returns: The initial view controller in the storyboard.
+     */
+    @available(iOS 13.0, tvOS 13.0, *)
+    public func instantiateInitialViewController(
+        _ creator: @escaping (NSCoder) -> InitialController?
+    ) -> InitialController? {
+        UIStoryboard(name: name, bundle: bundle)
+            .instantiateInitialViewController(creator: creator)
+    }
+}
 
 extension StoryboardViewControllerIdentifier {
     /**
@@ -35,6 +51,22 @@ extension StoryboardViewControllerIdentifier {
     }
 }
 
+extension StoryboardViewControllerIdentifier where ViewController: UIViewController {
+    /**
+     Instantiates and returns the view controller with the specified resource (`R.storyboard.*.*`) and native dependency injection.
+
+     - parameter creator: The function to inject dependency.
+
+     - returns: The view controller corresponding to the specified resource (`R.storyboard.*.*`).
+     */
+    @available(iOS 13.0, tvOS 13.0, *)
+    public func callAsFunction(
+        _ creator: @escaping (NSCoder) -> ViewController?
+    ) -> ViewController? where ViewController: UIViewController {
+        UIStoryboard(name: storyboard, bundle: bundle)
+            .instantiateViewController(identifier: identifier, creator: creator)
+    }
+}
 
 extension UIStoryboard {
     /**
