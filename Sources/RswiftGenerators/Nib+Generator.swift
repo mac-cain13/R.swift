@@ -116,17 +116,27 @@ extension NibResource {
     func generateValidateLines() -> [String] {
         let validateImagesLines = self.usedImageIdentifiers.uniqueAndSorted()
             .map { nameCatalog -> String in
-                if nameCatalog.isSystemCatalog {
-                    return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw RswiftResources.ValidationError(\"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") } }"
+                if isAppKit {
+                    if nameCatalog.isSystemCatalog {
+                        return "if #available(macOS 11.0, *) { if AppKit.NSImage(systemSymbolName: \"\(nameCatalog.name)\", accessibilityDescription: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") } }"
+                    } else {
+                        return "if bundle.image(forResource: \"\(nameCatalog.name)\") == nil { throw RswiftResources.ValidationError(\"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                    }
                 } else {
-                    return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                    if nameCatalog.isSystemCatalog {
+                        return "if #available(iOS 13.0, *) { if UIKit.UIImage(systemName: \"\(nameCatalog.name)\") == nil { throw RswiftResources.ValidationError(\"[R.swift] System image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") } }"
+                    } else {
+                        return "if UIKit.UIImage(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Image named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                    }
                 }
             }
 
         let validateColorLines = self.usedColorResources.uniqueAndSorted()
             .filter { !$0.isSystemCatalog }
             .map { nameCatalog in
-                "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                isAppKit
+                ? "if AppKit.NSColor(named: \"\(nameCatalog.name)\", bundle: bundle) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
+                : "if UIKit.UIColor(named: \"\(nameCatalog.name)\", in: bundle, compatibleWith: nil) == nil { throw RswiftResources.ValidationError(\"[R.swift] Color named '\(nameCatalog.name)' is used in nib '\(self.name)', but couldn't be loaded.\") }"
             }
 
 

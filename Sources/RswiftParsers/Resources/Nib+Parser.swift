@@ -41,7 +41,8 @@ extension NibResource: SupportedExtensions {
             generatedIds: parserDelegate.generatedIds,
             usedImageIdentifiers: parserDelegate.usedImageIdentifiers,
             usedColorResources: parserDelegate.usedColorReferences,
-            usedAccessibilityIdentifiers: parserDelegate.usedAccessibilityIdentifiers
+            usedAccessibilityIdentifiers: parserDelegate.usedAccessibilityIdentifiers,
+            isAppKit: parserDelegate.isAppKit
         )
     }
 }

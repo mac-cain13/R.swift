@@ -78,7 +78,8 @@ extension StoryboardResource: SupportedExtensions {
             usedAccessibilityIdentifiers: parserDelegate.usedAccessibilityIdentifiers,
             usedImageIdentifiers: parserDelegate.usedImageIdentifiers,
             usedColorResources: parserDelegate.usedColorReferences,
-            reusables: parserDelegate.reusables
+            reusables: parserDelegate.reusables,
+            isAppKit: parserDelegate.isAppKit
         )
     }
 }

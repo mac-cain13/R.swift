@@ -19,6 +19,7 @@ public struct NibResource {
     public var usedImageIdentifiers: [NameCatalog]
     public var usedColorResources: [NameCatalog]
     public var usedAccessibilityIdentifiers: [String]
+    public let isAppKit: Bool
 
     public init(
         name: String,
@@ -29,7 +30,8 @@ public struct NibResource {
         generatedIds: [String],
         usedImageIdentifiers: [NameCatalog],
         usedColorResources: [NameCatalog],
-        usedAccessibilityIdentifiers: [String]
+        usedAccessibilityIdentifiers: [String],
+        isAppKit: Bool
     ) {
         self.name = name
         self.locale = locale
@@ -40,6 +42,7 @@ public struct NibResource {
         self.usedImageIdentifiers = usedImageIdentifiers
         self.usedColorResources = usedColorResources
         self.usedAccessibilityIdentifiers = usedAccessibilityIdentifiers
+        self.isAppKit = isAppKit
     }
 }
 

@@ -21,6 +21,7 @@ public struct StoryboardResource: Equatable {
     public var usedImageIdentifiers: [NameCatalog]
     public var usedColorResources: [NameCatalog]
     public var reusables: [Reusable]
+    public var isAppKit: Bool
 
     public init(
         name: String,
@@ -33,7 +34,8 @@ public struct StoryboardResource: Equatable {
         usedAccessibilityIdentifiers: [String],
         usedImageIdentifiers: [NameCatalog],
         usedColorResources: [NameCatalog],
-        reusables: [Reusable]
+        reusables: [Reusable],
+        isAppKit: Bool
     ) {
         self.name = name
         self.locale = locale
@@ -46,6 +48,7 @@ public struct StoryboardResource: Equatable {
         self.usedImageIdentifiers = usedImageIdentifiers
         self.usedColorResources = usedColorResources
         self.reusables = reusables
+        self.isAppKit = isAppKit
     }
 
     public struct ViewController: Equatable {
