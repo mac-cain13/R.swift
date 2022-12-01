@@ -25,3 +25,9 @@ extension NSDataAsset {
     }
 
 }
+
+extension DataResource {
+    public func callAsFunction() -> Data? {
+        NSDataAsset(resource: self)?.data
+    }
+}
