@@ -27,6 +27,12 @@ extension NSDataAsset {
 }
 
 extension DataResource {
+
+    /**
+     Returns the raw data values from this resource (`R.data.*`)
+
+     - parameter resource: The resource you want the data asset of (`R.data.*`)
+     */
     public func callAsFunction() -> Data? {
         NSDataAsset(resource: self)?.data
     }
