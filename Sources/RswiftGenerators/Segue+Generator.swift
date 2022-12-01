@@ -94,7 +94,7 @@ public struct Segue {
     }
 
     private static func resolveDestinationType(for segue: StoryboardResource.Segue, inViewController: StoryboardResource.ViewController, inStoryboard storyboard: StoryboardResource, allStoryboards storyboards: [StoryboardResource]) -> TypeReference? {
-        let uiViewController = TypeReference.uiViewController
+        let uiViewController: TypeReference = storyboard.isAppKit ? .nsViewController : .uiViewController
 
         if segue.kind == "unwind" {
             return uiViewController

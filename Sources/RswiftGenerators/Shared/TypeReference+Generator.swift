@@ -41,6 +41,7 @@ extension TypeReference {
     static var someIteratorProtocol: TypeReference = .init(module: .stdLib, rawName: "some IteratorProtocol")
     static var uiView: TypeReference = .init(module: .uiKit, rawName: "UIView")
     static var uiViewController: TypeReference = .init(module: .uiKit, rawName: "UIViewController")
+    static var nsViewController: TypeReference = .init(module: .appKit, rawName: "NSViewController")
 
 
     static var fontResource: TypeReference = .init(module: .rswiftResources, rawName: "FontResource")
