@@ -48,12 +48,12 @@ extension StoryboardResource: SupportedExtensions {
     }
 }
 
-private let ElementNameToTypeMapping: [String: TypeReference] = [
+private let uikitElementToTypes: [String: TypeReference] = [
     "viewController": TypeReference(module: .uiKit, rawName: "UIViewController"),
     "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
     "tabBarController": TypeReference(module: .uiKit, rawName: "UITabBarController"),
     "glkViewController": TypeReference(module: .custom(name: "GLKit"), rawName: "GLKViewController"),
-    "hostingController": TypeReference(module: .custom(name: "SwiftUI"), rawName: "UIHostingController"),
+    "hostingController": .uiViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "UIHostingController"),
     "pageViewController": TypeReference(module: .uiKit, rawName: "UIPageViewController"),
     "tableViewController": TypeReference(module: .uiKit, rawName: "UITableViewController"),
     "splitViewController": TypeReference(module: .uiKit, rawName: "UISplitViewController"),
@@ -63,7 +63,20 @@ private let ElementNameToTypeMapping: [String: TypeReference] = [
     "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
 ]
 
+private let macosElementTypes: [String: TypeReference] = [
+    "viewController": TypeReference(module: .appKit, rawName: "NSViewController"),
+    "tabViewController": TypeReference(module: .appKit, rawName: "NSTabViewController"),
+    "splitViewController": TypeReference(module: .appKit, rawName: "NSSplitViewController"),
+    "hostingController": .nsViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "NSHostingController"),
+    "pagecontroller": TypeReference(module: .appKit, rawName: "NSPageController"),
+    "windowController": TypeReference(module: .appKit, rawName: "NSWindowController"),
+    "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
+]
+
+private let ElementNameToTypeMapping = macosElementTypes
+
 private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
+    var isAppKit = false
     var initialViewControllerIdentifier: String?
     var deploymentTarget: DeploymentTarget?
     var viewControllers: [StoryboardResource.ViewController] = []
@@ -93,6 +106,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
             if let initialViewController = attributeDict["initialViewController"] {
                 initialViewControllerIdentifier = initialViewController
             }
+            isAppKit = attributeDict["targetRuntime"] == "MacOSX.Cocoa"
 
         case "segue":
             let customModuleProvider = attributeDict["customModuleProvider"]
@@ -105,7 +119,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
                let destination = attributeDict["destination"],
                let kind = attributeDict["kind"]
             {
-                let type = customType ?? TypeReference.uiStoryboardSegue
+                let type = customType ?? (isAppKit ? .nsStoryboardSegue : .uiStoryboardSegue)
 
                 let segue = StoryboardResource.Segue(identifier: segueIdentifier, type: type, destination: destination, kind: kind)
                 currentViewController?.segues.append(segue)
@@ -183,7 +197,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiViewController
+        let type = customType ?? (isAppKit ? (macosElementTypes[elementName] ?? .nsViewController) : (uikitElementToTypes[elementName] ?? .uiViewController))
 
         return StoryboardResource.ViewController(id: id, storyboardIdentifier: storyboardIdentifier, type: type, segues: [])
     }
@@ -199,7 +213,7 @@ private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
+        let type = customType ?? (isAppKit ? (macosElementTypes[elementName] ?? .nsView) : (uikitElementToTypes[elementName] ?? .uiView))
 
         return Reusable(identifier: reuseIdentifier, type: type)
     }
