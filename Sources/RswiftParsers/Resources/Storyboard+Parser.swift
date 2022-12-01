@@ -11,6 +11,41 @@ import Foundation
 import RswiftResources
 
 
+let uikitElementToTypes: [String: TypeReference] = [
+    "viewController": TypeReference(module: .uiKit, rawName: "UIViewController"),
+    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
+    "tabBarController": TypeReference(module: .uiKit, rawName: "UITabBarController"),
+    "glkViewController": TypeReference(module: .custom(name: "GLKit"), rawName: "GLKViewController"),
+    "hostingController": .uiViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "UIHostingController"),
+    "pageViewController": TypeReference(module: .uiKit, rawName: "UIPageViewController"),
+    "tableViewController": TypeReference(module: .uiKit, rawName: "UITableViewController"),
+    "splitViewController": TypeReference(module: .uiKit, rawName: "UISplitViewController"),
+    "navigationController": TypeReference(module: .uiKit, rawName: "UINavigationController"),
+    "avPlayerViewController": TypeReference(module: .custom(name: "AVKit"), rawName: "AVPlayerViewController"),
+    "collectionViewController": TypeReference(module: .uiKit, rawName: "UICollectionViewController"),
+    "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
+
+    "view": TypeReference.uiView,
+    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
+    "collectionViewCell": TypeReference(module: .uiKit, rawName: "UICollectionViewCell"),
+    "collectionReusableView": TypeReference(module: .uiKit, rawName: "UICollectionReusableView"),
+]
+
+let macosElementTypes: [String: TypeReference] = [
+    "viewController": TypeReference(module: .appKit, rawName: "NSViewController"),
+    "tabViewController": TypeReference(module: .appKit, rawName: "NSTabViewController"),
+    "splitViewController": TypeReference(module: .appKit, rawName: "NSSplitViewController"),
+    "hostingController": .nsViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "NSHostingController"),
+    "pagecontroller": TypeReference(module: .appKit, rawName: "NSPageController"),
+    "windowController": TypeReference(module: .appKit, rawName: "NSWindowController"),
+    "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
+
+    "view": TypeReference.nsView,
+    "scrollView": TypeReference(module: .appKit, rawName: "NSScrollView"),
+    "tableCellView": TypeReference(module: .appKit, rawName: "NSTableCellView"),
+    "collectionViewItem": TypeReference(module: .appKit, rawName: "NSCollectionViewItem"),
+]
+
 extension StoryboardResource: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["storyboard"]
     
@@ -47,33 +82,6 @@ extension StoryboardResource: SupportedExtensions {
         )
     }
 }
-
-private let uikitElementToTypes: [String: TypeReference] = [
-    "viewController": TypeReference(module: .uiKit, rawName: "UIViewController"),
-    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
-    "tabBarController": TypeReference(module: .uiKit, rawName: "UITabBarController"),
-    "glkViewController": TypeReference(module: .custom(name: "GLKit"), rawName: "GLKViewController"),
-    "hostingController": .uiViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "UIHostingController"),
-    "pageViewController": TypeReference(module: .uiKit, rawName: "UIPageViewController"),
-    "tableViewController": TypeReference(module: .uiKit, rawName: "UITableViewController"),
-    "splitViewController": TypeReference(module: .uiKit, rawName: "UISplitViewController"),
-    "navigationController": TypeReference(module: .uiKit, rawName: "UINavigationController"),
-    "avPlayerViewController": TypeReference(module: .custom(name: "AVKit"), rawName: "AVPlayerViewController"),
-    "collectionViewController": TypeReference(module: .uiKit, rawName: "UICollectionViewController"),
-    "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
-]
-
-private let macosElementTypes: [String: TypeReference] = [
-    "viewController": TypeReference(module: .appKit, rawName: "NSViewController"),
-    "tabViewController": TypeReference(module: .appKit, rawName: "NSTabViewController"),
-    "splitViewController": TypeReference(module: .appKit, rawName: "NSSplitViewController"),
-    "hostingController": .nsViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "NSHostingController"),
-    "pagecontroller": TypeReference(module: .appKit, rawName: "NSPageController"),
-    "windowController": TypeReference(module: .appKit, rawName: "NSWindowController"),
-    "lookAroundViewController": TypeReference(module: .custom(name: "MapKit"), rawName: "MKLookAroundViewController"),
-]
-
-private let ElementNameToTypeMapping = macosElementTypes
 
 private class StoryboardParserDelegate: NSObject, XMLParserDelegate {
     var isAppKit = false

@@ -46,15 +46,8 @@ extension NibResource: SupportedExtensions {
     }
 }
 
-private let ElementNameToTypeMapping: [String: TypeReference] = [
-    // TODO: Should contain all standard view elements, like button -> UIButton, view -> UIView etc
-    "view": TypeReference.uiView,
-    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
-    "collectionViewCell": TypeReference(module: .uiKit, rawName: "UICollectionViewCell"),
-    "collectionReusableView": TypeReference(module: .uiKit, rawName: "UICollectionReusableView"),
-]
-
 internal class NibParserDelegate: NSObject, XMLParserDelegate {
+    var isAppKit = false
     let ignoredRootViewElements = ["placeholder"]
     var deploymentTarget: DeploymentTarget?
     var rootViews: [TypeReference] = []
@@ -86,6 +79,9 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
             if let platform = attributeDict["identifier"] {
                 deploymentTarget = DeploymentTarget(version: version.flatMap(parseDeploymentTargetVersion(_:)), platform: platform)
             }
+
+        case "document":
+            isAppKit = attributeDict["targetRuntime"] == "MacOSX.Cocoa"
 
         case "image":
             if let imageIdentifier = attributeDict["name"] {
@@ -137,7 +133,7 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        return customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
+        return customType ?? (isAppKit ? (macosElementTypes[elementName] ?? .nsView) : (uikitElementToTypes[elementName] ?? .uiView))
     }
 
     func reusableFromAttributes(_ attributeDict: [String : String], elementName: String) -> Reusable? {
@@ -151,7 +147,7 @@ internal class NibParserDelegate: NSObject, XMLParserDelegate {
         let customType = customClass
             .map { TypeReference(module: ModuleReference(name: customModule), rawName: $0) }
 
-        let type = customType ?? ElementNameToTypeMapping[elementName] ?? TypeReference.uiView
+        let type = customType ?? (isAppKit ? (macosElementTypes[elementName] ?? .nsView) : (uikitElementToTypes[elementName] ?? .uiView))
 
         return Reusable(identifier: reuseIdentifier, type: type)
     }
