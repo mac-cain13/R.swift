@@ -14,9 +14,9 @@ jobs:
     runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v2
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
@@ -30,9 +30,9 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Download build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v1
       with:
         name: rswift-dev
     - name: Put build into place
@@ -41,7 +41,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v2
       id: podcache-ios
       with:
         path: Examples/ResourceApp/Pods
@@ -60,9 +60,9 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Download build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v1
       with:
         name: rswift-dev
     - name: Put build into place
@@ -79,9 +79,9 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Download build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v1
       with:
         name: rswift-dev
     - name: Put build into place
@@ -97,9 +97,9 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Download build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v1
       with:
         name: rswift-dev
     - name: Put build into place
@@ -115,9 +115,9 @@ jobs:
     runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v2
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
@@ -130,7 +130,7 @@ jobs:
       run: swift build -v -c release
     - run: echo "UPLOAD_PATH=$(readlink -f .build/release/rswift)" >> $GITHUB_ENV
     - name: Store artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v1
       with:
         name: rswift-dev
         path: ${{ env.UPLOAD_PATH }}
