@@ -13,7 +13,6 @@ import RswiftResources
 
 let uikitElementToTypes: [String: TypeReference] = [
     "viewController": TypeReference(module: .uiKit, rawName: "UIViewController"),
-    "tableViewCell": TypeReference(module: .uiKit, rawName: "UITableViewCell"),
     "tabBarController": TypeReference(module: .uiKit, rawName: "UITabBarController"),
     "glkViewController": TypeReference(module: .custom(name: "GLKit"), rawName: "GLKViewController"),
     "hostingController": .uiViewController, // TypeReference(module: .custom(name: "SwiftUI"), rawName: "UIHostingController"),
