@@ -34,6 +34,7 @@ Changes to the commandline tool `rswift` (not relevant when using SPM):
 #### Library changes
 
 Internal changes in the Rswift support library:
+ - Support for `R.nib.XXX.secondView` to `.twentiethView` has been removed, only `.firstView` remains
  - Renamed internal module, update `import Rswift` to `import RswiftResources`
  - Removed protocols: `ColorResourceType`, `FileResourceType`, `FontResourceType`, `IdentifierType`, `ImageResourceType`, `StoryboardViewControllerResourceType`, `StringResourceType`, `Validatable`
  - Added `StringResource1` up to `StringResource9`, for strings with parameters
