@@ -15,7 +15,7 @@ extension LocaleReference {
         case .base:
             return ".base"
         case .language(let string):
-            return ".language(\(string))"
+            return #".language("\#(string)")"#
         }
     }
 }
