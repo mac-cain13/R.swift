@@ -202,7 +202,7 @@ private extension StoryboardResource.ViewController {
         VarGetter(
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,
-            valueCodeString: #"StoryboardViewControllerIdentifier(identifier: "\#(identifier.escapedStringLiteral)", storyboard: name, bundle: bundle)"#
+            valueCodeString: #".init(identifier: "\#(identifier.escapedStringLiteral)", storyboard: name, bundle: bundle)"#
         )
     }
 }

@@ -104,7 +104,7 @@ extension ColorResource: AssetCatalogContent {
         return VarGetter(
             comments: ["Color `\(fullname)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .host, rawName: "ColorResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "ColorResource"),
             valueCodeString: code
         )
     }
@@ -118,7 +118,7 @@ extension DataResource: AssetCatalogContent {
         return VarGetter(
             comments: ["Data asset `\(fullname)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .host, rawName: "DataResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "DataResource"),
             valueCodeString: code
         )
     }
@@ -133,7 +133,7 @@ extension ImageResource: AssetCatalogContent {
         return VarGetter(
             comments: ["Image `\(fullname)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .host, rawName: "ImageResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "ImageResource"),
             valueCodeString: code
         )
     }
