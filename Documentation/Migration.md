@@ -14,10 +14,10 @@ Pointers for migration between major versions.
 
 If you're using Swift Package Manager:
  - Separate R.swift.Library is no longer needed, remove dependency on that package
- - `R.generated.swift` is no longer needed on Xcode, delete and move to trash
+ - `R.generated.swift` file is no longer needed in the project, delete the file
+ - Remove custom Run Script Build Phase that invokes `rswift` binary
  - Add SPM dependency on `github.com/mac-cain13/R.swift.git` package
  - Add `RswiftLibrary` to your targets
- - Remove custom Run Script Build Phase that invokes `rswift` binary
  - Under "Run Build Tool Plug-ins" Build Phase, add `RswiftGenerateInternalResources` or `RswiftGeneratePublicResources` ([Screenshot](Images/RunBuildToolPluginsRswift.png))
  - Right-click on your project, and run `RswiftXcodeModifyPackages` to modify your Xcode project so that the build tool plug-in will actually run during builds (this seems to fix a bug in Xcode?) ([Screenshot](Images/RunXcodeModifyPackages.png))
 
