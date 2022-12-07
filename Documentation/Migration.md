@@ -14,6 +14,7 @@ Pointers for migration between major versions.
 
 If you're using Swift Package Manager:
  - Separate R.swift.Library is no longer needed, remove dependency on that package
+ - `R.generated.swift` is no longer needed on Xcode, delete and move to trash
  - Add SPM dependency on `github.com/mac-cain13/R.swift.git` package
  - Add `RswiftLibrary` to your targets
  - Remove custom Run Script Build Phase that invokes `rswift` binary
