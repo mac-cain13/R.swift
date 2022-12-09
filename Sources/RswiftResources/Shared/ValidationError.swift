@@ -1,10 +1,9 @@
 //
 //  Validatable.swift
-//  R.swift.Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 17-12-15.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
+//  From: https://github.com/mac-cain13/R.swift
 //
 
 import Foundation

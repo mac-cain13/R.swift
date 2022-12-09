@@ -1,6 +1,6 @@
 //
 //  NameCatalog.swift
-//  RswiftCore
+//  R.swift
 //
 //  Created by Tom Lokhorst on 2020-05-08.
 //

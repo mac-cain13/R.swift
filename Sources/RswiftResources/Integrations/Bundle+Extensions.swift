@@ -1,6 +1,6 @@
 //
 //  Bundle+Extensions.swift
-//  
+//  R.swift
 //
 //  Created by Tom Lokhorst on 2022-07-30.
 //
@@ -13,8 +13,8 @@ extension Bundle {
     public func infoDictionaryString(path: [String], key: String) -> String? {
         var dict = infoDictionary
         for step in path {
-          guard let obj = dict?[step] as? [String: Any] else { return nil }
-          dict = obj
+            guard let obj = dict?[step] as? [String: Any] else { return nil }
+            dict = obj
         }
         return dict?[key] as? String
     }

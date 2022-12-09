@@ -91,7 +91,6 @@ extension App {
             )
 
             let outputURL = URL(fileURLWithPath: outputPath)
-//            let uiTestOutputURL = generateUITestFile.map(URL.init(fileURLWithPath:))
             let rswiftIgnoreURL = sourceTreeURLs.sourceRootURL
                 .appendingPathComponent(globals.rswiftignore, isDirectory: false)
 
@@ -206,4 +205,3 @@ extension ProcessInfo {
         return value
     }
 }
-

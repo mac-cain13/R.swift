@@ -1,6 +1,6 @@
 //
 //  ResourceParsingError.swift
-//  RswiftCore
+//  R.swift
 //
 //  Created by Tom Lokhorst on 2021-04-16.
 //

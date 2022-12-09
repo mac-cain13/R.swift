@@ -3,8 +3,6 @@
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2018-07-08.
-//  From: https://github.com/mac-cain13/R.swift
-//  License: MIT License
 //
 
 import Foundation

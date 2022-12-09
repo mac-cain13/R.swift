@@ -1,10 +1,8 @@
 //
 //  UIFont+FontResource.swift
-//  R.swift.Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 06-01-16.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
 //
 
 import Foundation
@@ -38,7 +36,6 @@ extension Font {
     }
 }
 
-
 #if canImport(UIKit)
 import UIKit
 
@@ -52,24 +49,24 @@ extension FontResource {
 
      - returns: A color that exactly or best matches the desired traits with the given resource (R.color.\*), or nil if no suitable color was found.
      */
-//    @available(*, deprecated, message: "Use UIFont(resource:size:) initializer instead")
+    //    @available(*, deprecated, message: "Use UIFont(resource:size:) initializer instead")
     public func callAsFunction(size: CGFloat) -> UIFont? {
         UIFont(name: name, size: size)
     }
 }
 
 public extension UIFont {
-  /**
-   Creates and returns a font object for the specified font resource (`R.font.*`) and size.
+    /**
+     Creates and returns a font object for the specified font resource (`R.font.*`) and size.
 
-   - parameter resource: The font resource (`R.font.*`) for the specific font to load
-   - parameter size: The size (in points) to which the font is scaled. This value must be greater than 0.0.
+     - parameter resource: The font resource (`R.font.*`) for the specific font to load
+     - parameter size: The size (in points) to which the font is scaled. This value must be greater than 0.0.
 
-   - returns: A font object of the specified font resource and size.
-   */
-  convenience init?(resource: FontResource, size: CGFloat) {
-    self.init(name: resource.name, size: size)
-  }
+     - returns: A font object of the specified font resource and size.
+     */
+    convenience init?(resource: FontResource, size: CGFloat) {
+        self.init(name: resource.name, size: size)
+    }
 }
 #endif
 

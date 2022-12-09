@@ -1,10 +1,9 @@
 //
 //  UIViewController+StoryboardSegueIdentifierProtocol.swift
-//  R.swift Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 06-12-15.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
+//  From: https://github.com/mac-cain13/R.swift
 //
 
 import Foundation
@@ -13,7 +12,7 @@ import Foundation
 import UIKit
 
 public protocol SeguePerformer {
-  func performSegue(withIdentifier identifier: String, sender: Any?)
+    func performSegue(withIdentifier identifier: String, sender: Any?)
 }
 
 extension UIViewController: SeguePerformer {}

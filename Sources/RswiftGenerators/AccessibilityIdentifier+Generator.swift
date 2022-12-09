@@ -9,8 +9,8 @@ import Foundation
 import RswiftResources
 
 private protocol AccessibilityIdentifierContainer {
-  var name: String { get }
-  var usedAccessibilityIdentifiers: [String] { get }
+    var name: String { get }
+    var usedAccessibilityIdentifiers: [String] { get }
 }
 
 extension NibResource: AccessibilityIdentifierContainer {}

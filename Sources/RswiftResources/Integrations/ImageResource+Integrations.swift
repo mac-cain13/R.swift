@@ -1,10 +1,8 @@
 //
 //  UIImage+ImageResource.swift
-//  R.swift.Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 11-01-16.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
 //
 
 import Foundation
@@ -99,8 +97,8 @@ extension ImageResource {
      - parameter traitCollection: Traits that describe the desired image to retrieve, pass nil to use traits that describe the main screen.
 
      - returns: An image that exactly or best matches the desired traits with the given resource (`R.image.*`), or nil if no suitable image was found.
-    */
-//    @available(*, deprecated, message: "Use UIImage(resource:) initializer instead")
+     */
+    //    @available(*, deprecated, message: "Use UIImage(resource:) initializer instead")
     public func callAsFunction(compatibleWith traitCollection: UITraitCollection? = nil) -> UIImage? {
         UIImage(named: name, in: bundle, compatibleWith: traitCollection)
     }
@@ -148,7 +146,7 @@ extension UIImage {
      - parameter configuration: The image configuration the system appllies to the image
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
-    */
+     */
     @available(iOS 16, tvOS 16, *)
     public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
         self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)

@@ -1,10 +1,8 @@
 //
 //  Bundle+FileResource.swift
-//  R.swift.Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 10-01-16.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
 //
 
 import Foundation

@@ -1,10 +1,9 @@
 //
 //  UITableView+ReuseIdentifierProtocol.swift
-//  R.swift Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 06-12-15.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
+//  From: https://github.com/mac-cain13/R.swift
 //
 
 

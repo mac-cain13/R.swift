@@ -3,8 +3,6 @@
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 11-12-15.
-//  From: https://github.com/mac-cain13/R.swift
-//  License: MIT License
 //
 
 import Foundation
@@ -165,4 +163,3 @@ private let SwiftKeywords = [
     // Keywords from Swift 2 that are still reserved
     "__COLUMN__", "__FILE__", "__FUNCTION__", "__LINE__",
 ]
-

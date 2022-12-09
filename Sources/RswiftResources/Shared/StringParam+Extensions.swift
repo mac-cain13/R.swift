@@ -3,8 +3,6 @@
 //  R.swift
 //
 //  Created by Tom Lokhorst on 2016-04-18.
-//  From: https://github.com/mac-cain13/R.swift
-//  License: MIT License
 //
 //  Parts of the content of this file are loosly based on StringsFileParser.swift from SwiftGen/GenumKit.
 //  We don't feel this is a "substantial portion of the Software" so are not including their MIT license,

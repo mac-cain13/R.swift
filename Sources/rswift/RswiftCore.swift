@@ -15,10 +15,10 @@ import RswiftGenerators
 extension ResourceType: ExpressibleByArgument {}
 
 public enum AccessLevel: String, ExpressibleByArgument {
-  case publicLevel = "public"
-  case internalLevel = "internal"
-  case filePrivate = "fileprivate"
-  case privateLevel = "private"
+    case publicLevel = "public"
+    case internalLevel = "internal"
+    case filePrivate = "fileprivate"
+    case privateLevel = "private"
 }
 
 public enum BundleSource: String, ExpressibleByArgument {
@@ -196,8 +196,8 @@ public struct RswiftCore {
             generateNib ? "try self.nib.validate()" : "",
             generateStoryboard ? "try self.storyboard.validate()" : "",
         ]
-        .filter { $0 != "" }
-        .joined(separator: "\n")
+            .filter { $0 != "" }
+            .joined(separator: "\n")
 
         let validate = Function(
             comments: [],

@@ -1,10 +1,8 @@
 //
 //  UINib+NibResource.swift
-//  R.swift.Library
+//  R.swift
 //
 //  Created by Mathijs Kadijk on 08-01-16.
-//  From: https://github.com/mac-cain13/R.swift.Library
-//  License: MIT License
 //
 
 
