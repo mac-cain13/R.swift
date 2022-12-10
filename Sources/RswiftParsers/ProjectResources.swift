@@ -23,6 +23,7 @@ public enum ResourceType: String, CaseIterable {
     case entitlements
     case info
     case id
+    case project
 }
 
 public struct ProjectResources {

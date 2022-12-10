@@ -177,18 +177,8 @@ public struct RswiftCore {
 
         let projectStruct = XcodeProjectGenerator.generateProject(developmentRegion: developmentRegion, knownAssetTags: knownAssetTags)
 
-        let generateString = generators.contains(.string) && !stringStruct.isEmpty
-        let generateData = generators.contains(.data) && !dataStruct.isEmpty
-        let generateColor = generators.contains(.color) && !colorStruct.isEmpty
-        let generateImage = generators.contains(.image) && !imageStruct.isEmpty
-        let generateInfo = generators.contains(.info) && !infoStruct.isEmpty
-        let generateEntitlements = generators.contains(.entitlements) && !entitlementsStruct.isEmpty
         let generateFont = generators.contains(.font) && !fontStruct.isEmpty
-        let generateFile = generators.contains(.file) && !fileStruct.isEmpty
-        let generateSegue = generators.contains(.segue) && !segueStruct.isEmpty
-        let generateId = generators.contains(.id) && !idStruct.isEmpty
         let generateNib = generators.contains(.nib) && !nibStruct.isEmpty
-        let generateReuseIdentifier = generators.contains(.reuseIdentifier) && !reuseIdentifierStruct.isEmpty
         let generateStoryboard = generators.contains(.storyboard) && !storyboardStruct.isEmpty
 
         let validateLines = [
@@ -211,11 +201,11 @@ public struct RswiftCore {
         var s = Struct(name: structName, additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
 
-            if !projectStruct.isEmpty {
+            if generators.contains(.project), !projectStruct.isEmpty {
                 projectStruct
             }
 
-            if generateString {
+            if generators.contains(.string), !stringStruct.isEmpty {
                 stringStruct.generateBundleVarGetterForString(name: "string")
                 stringStruct.generateBundleFunctionForString(name: "string")
                 stringStruct.generateLocaleFunctionForString(name: "string")
@@ -223,31 +213,31 @@ public struct RswiftCore {
                 stringStruct
             }
 
-            if generateData {
+            if generators.contains(.data), !dataStruct.isEmpty {
                 dataStruct.generateBundleVarGetter(name: "data")
                 dataStruct.generateBundleFunction(name: "data")
                 dataStruct
             }
 
-            if generateColor {
+            if generators.contains(.color), !colorStruct.isEmpty {
                 colorStruct.generateBundleVarGetter(name: "color")
                 colorStruct.generateBundleFunction(name: "color")
                 colorStruct
             }
 
-            if generateImage {
+            if generators.contains(.image), !imageStruct.isEmpty {
                 imageStruct.generateBundleVarGetter(name: "image")
                 imageStruct.generateBundleFunction(name: "image")
                 imageStruct
             }
 
-            if generateInfo {
+            if generators.contains(.info), !infoStruct.isEmpty {
                 infoStruct.generateBundleVarGetter(name: "info")
                 infoStruct.generateBundleFunction(name: "info")
                 infoStruct
             }
 
-            if generateEntitlements {
+            if generators.contains(.entitlements), !entitlementsStruct.isEmpty {
                 entitlementsStruct.generateLetBinding()
                 entitlementsStruct
             }
@@ -258,18 +248,18 @@ public struct RswiftCore {
                 fontStruct
             }
 
-            if generateFile {
+            if generators.contains(.file), !fileStruct.isEmpty {
                 fileStruct.generateBundleVarGetter(name: "file")
                 fileStruct.generateBundleFunction(name: "file")
                 fileStruct
             }
 
-            if generateSegue {
+            if generators.contains(.segue), !segueStruct.isEmpty {
                 segueStruct.generateLetBinding()
                 segueStruct
             }
 
-            if generateId {
+            if generators.contains(.id), !idStruct.isEmpty {
                 idStruct.generateLetBinding()
                 idStruct
             }
@@ -280,7 +270,7 @@ public struct RswiftCore {
                 nibStruct
             }
 
-            if generateReuseIdentifier {
+            if generators.contains(.reuseIdentifier), !reuseIdentifierStruct.isEmpty {
                 reuseIdentifierStruct.generateLetBinding()
                 reuseIdentifierStruct
             }
