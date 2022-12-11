@@ -28,13 +28,19 @@ extension Bundle {
             .map { Foundation.Locale(identifier: $0) }
             .prefix(1)
             .flatMap { locale -> [String] in
+                let language: String?
+                if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
+                    language = locale.language.languageCode?.identifier
+                } else {
+                    language = locale.languageCode
+                }
                 if hostingBundle.localizations.contains(locale.identifier) {
-                    if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+                    if let language = language, hostingBundle.localizations.contains(language) {
                         return [locale.identifier, language]
                     } else {
                         return [locale.identifier]
                     }
-                } else if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+                } else if let language = language, hostingBundle.localizations.contains(language) {
                     return [language]
                 } else {
                     return []
