@@ -30,7 +30,13 @@ extension Bundle {
             .flatMap { locale -> [String] in
                 let language: String?
                 if #available(macOS 13, iOS 16, tvOS 16, watchOS 9, *) {
+                    // Xcode 14 doesn't recognize `Locale.language`, Xcode 14.1 does know `Locale.language`
+                    // Xcode 14.1 is first to ship with swift 5.7.1
+                    #if swift(>=5.7.1)
                     language = locale.language.languageCode?.identifier
+                    #else
+                    language = locale.languageCode
+                    #endif
                 } else {
                     language = locale.languageCode
                 }
