@@ -125,11 +125,15 @@ private extension StoryboardResource {
         let storyboardReference = TypeReference(module: .rswiftResources, rawName: "StoryboardReference")
         let initialContainer = initialViewController == nil ? nil : TypeReference(module: .rswiftResources, rawName: "InitialControllerContainer")
 
+        // additional module reference, for use in validate function
+        let additionalModuleReference = isAppKit ? ModuleReference.appKit : ModuleReference.uiKit
+
         return Struct(
             comments: ["Storyboard `\(name)`."],
             deploymentTarget: deploymentTarget,
             name: identifier,
-            protocols: [storyboardReference, initialContainer].compactMap { $0 }
+            protocols: [storyboardReference, initialContainer].compactMap { $0 },
+            additionalModuleReferences: [additionalModuleReference]
         ) {
             if let initialViewController = initialViewController {
                 TypeAlias(name: "InitialController", value: initialViewController.type)

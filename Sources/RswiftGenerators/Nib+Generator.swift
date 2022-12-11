@@ -27,7 +27,10 @@ extension NibResource {
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(vargetters.count) nibs."]
 
-        return Struct(comments: comments, name: structName) {
+        // additional module references, for use in validate function
+        let additionalModuleReferences = Set(nibs.map { $0.isAppKit ? ModuleReference.appKit : ModuleReference.uiKit })
+
+        return Struct(comments: comments, name: structName, additionalModuleReferences: additionalModuleReferences) {
             Init.bundle
 
             vargetters
