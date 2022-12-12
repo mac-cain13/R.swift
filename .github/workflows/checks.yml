@@ -14,9 +14,9 @@ jobs:
     runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Pull cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
@@ -30,7 +30,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Download build
       uses: actions/download-artifact@v1
       with:
@@ -41,7 +41,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Pull cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: podcache-ios
       with:
         path: Examples/ResourceApp/Pods
@@ -60,7 +60,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Download build
       uses: actions/download-artifact@v1
       with:
@@ -79,7 +79,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Download build
       uses: actions/download-artifact@v1
       with:
@@ -97,7 +97,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Download build
       uses: actions/download-artifact@v1
       with:
@@ -115,9 +115,9 @@ jobs:
     runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Pull cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
