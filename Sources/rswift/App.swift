@@ -34,6 +34,9 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "Only run specified generators, options: \(generatorsString)", transform: parseGenerators)
     var generators: [ResourceType] = []
 
+    @Flag(help: "Don't generate main `R` let")
+    var omitMainLet = false
+
     @Option(name: .customLong("import", withSingleDash: false), help: "Add extra modules as import in the generated file")
     var imports: [String] = []
 
@@ -48,9 +51,6 @@ struct GlobalOptions: ParsableArguments {
 
     @Option(help: "Source of default bundle to use")
     var bundleSource: BundleSource = .finder
-
-    @Flag(help: "Don't generate main let")
-    var omitMainLet = false
 
     // MARK: Project specific - Environment variable overrides
 
