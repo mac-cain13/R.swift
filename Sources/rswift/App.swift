@@ -49,6 +49,9 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "Source of default bundle to use")
     var bundleSource: BundleSource = .finder
 
+    @Flag(help: "Don't generate main let")
+    var omitMainLet = false
+
     // MARK: Project specific - Environment variable overrides
 
     @Option(help: "Override environment variable \(EnvironmentKeys.targetName)")
@@ -103,6 +106,7 @@ extension App {
                 productModuleName: productModuleName,
                 infoPlistFile: infoPlistFile.map(URL.init(fileURLWithPath:)),
                 codeSignEntitlements: codeSignEntitlements.map(URL.init(fileURLWithPath:)),
+                omitMainLet: globals.omitMainLet,
                 rswiftIgnoreURL: rswiftIgnoreURL,
                 sourceTreeURLs: sourceTreeURLs
             )
