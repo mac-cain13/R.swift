@@ -39,7 +39,7 @@ jobs:
 
     - name: Delete temp keychain
       run: |
-        /usr/bin/security delete-keychain signing_temp.keychain
+        /usr/bin/security delete-keychain signing_temp.keychain || true
     - name: Import Signing Certificates
       uses: apple-actions/import-codesign-certs@v1
       with:
