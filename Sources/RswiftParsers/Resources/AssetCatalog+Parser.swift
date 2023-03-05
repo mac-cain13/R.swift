@@ -53,7 +53,7 @@ extension AssetCatalog: SupportedExtensions {
         var namespaces: [URL: NamespaceDirectory] = [URL(fileURLWithPath: ".", relativeTo: catalogURL): root]
 
         for case let fileURL as URL in directoryEnumerator {
-            guard fileURL.baseURL == catalogURL else {
+            guard fileURL.baseURL?.resolvingSymlinksInPath() == catalogURL.resolvingSymlinksInPath() else {
                 throw ResourceParsingError("File \(fileURL) is not in AssetCatalog \(catalogURL)")
             }
 
