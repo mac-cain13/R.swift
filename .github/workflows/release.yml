@@ -45,6 +45,9 @@ jobs:
     - name: Code Sign
       run: |
         codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/apple/Products/Release/rswift
+    - name: Delete temp keychain
+      run: |
+        /usr/bin/security delete-keychain signing_temp.keychai
     - name: Store build artifact
       uses: actions/upload-artifact@v3
       with:
