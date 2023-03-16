@@ -13,11 +13,7 @@ The `R.validate()` method will throw a detailed error about the problems that oc
 
 *Example testcase*
 ```swift
-do {
-  try R.validate()
-} catch {
-	XCTFail(error)
-}
+XCTAssertNoThrow(try R.validate())
 ```
 
 ## Images
