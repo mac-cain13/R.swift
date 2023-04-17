@@ -1,4 +1,4 @@
-# R.swift [![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat)](https://cocoapods.org/pods/R.swift) [![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat)](blob/master/License) ![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat)
+# R.swift [![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat)](https://cocoapods.org/pods/R.swift) [![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat)](License) ![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat)
 
 _Get strong typed, autocompleted resources like images, fonts and segues in Swift projects_
 
@@ -81,7 +81,7 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 - [Can I use R.swift in a library?](Documentation/QandA.md#can-i-use-rswift-in-a-library)
 - [How does R.swift work?](Documentation/QandA.md#how-does-rswift-work)
 - [How to upgrade to a new major version?](Documentation/Migration.md)
-- [How can I only run specific generators?](https://github.com/mac-cain13/R.swift/blob/master/Documentation/Ignoring.md#only-run-specific-generators-exclude-rsomething)
+- [How can I only run specific generators?](Documentation/Ignoring.md#only-run-specific-generators-exclude-rsomething)
 
 ## Installation
 
