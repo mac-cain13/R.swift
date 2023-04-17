@@ -8,8 +8,8 @@ Thank you for taking some of your precious time helping this project move forwar
 
 Most important is to read the docs and scan the issue tracker before so you're sure your question/idea/bugreport isn't already answered/in the make/being fixed:
 
-- [Read the Readme](https://github.com/mac-cain13/R.swift/blob/master/Readme.md)
-- [Read the other documentation](https://github.com/mac-cain13/R.swift/tree/master/Documentation)
+- [Read the Readme](/README.md)
+- [Read the other documentation](/Documentation)
 - [Check open pull requests](https://github.com/mac-cain13/R.swift/pulls)
 - [Search the issue tracker](https://github.com/mac-cain13/R.swift/issues)
 
