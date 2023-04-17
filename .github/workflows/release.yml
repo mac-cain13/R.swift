@@ -33,7 +33,7 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}-source.tar.gz
         asset_content_type: application/tar+gzip
 
-    - name: Build fat binary
+    - name: Build universal binary
       run: |
         swift build -c release --arch x86_64 --arch arm64
 
@@ -43,11 +43,13 @@ jobs:
     - name: Import Signing Certificates
       uses: apple-actions/import-codesign-certs@v1
       with:
-        p12-file-base64: ${{ secrets.APPLE_CERTS }}
-        p12-password: ${{ secrets.APPLE_CERTS_PASSWORD }}
+        p12-file-base64: ${{ secrets.APPLE_CERTIFICATES }}
+        p12-password: ${{ secrets.APPLE_CERTIFICATES_PASSWORD }}
     - name: Code Sign
       run: |
-        codesign --force --options runtime --sign 'Developer ID Application: Mathijs Kadijk (5Z49PA849J)' .build/apple/Products/Release/rswift
+        codesign --force --options runtime --sign "$IDENTITY" .build/apple/Products/Release/rswift
+      env:
+        IDENTITY: 'Developer ID Application: Nonstrict B.V. (WT5N9FK54M)'
     - name: Store build artifact
       uses: actions/upload-artifact@v3
       with:
@@ -60,12 +62,12 @@ jobs:
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Notarize ZIP
       run: |
-        sh notarize.sh
+        xcrun notarytool submit $FILENAME --apple-id $APPLE_ID --password $APP_PASSWORD --team-id $TEAM_ID --wait
       env:
-        BUNDLE_ID: nl.mathijskadijk.rswift
-        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
-        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: 5Z49PA849J
+        BUNDLE_ID: com.nonstrict.rswift
+        APPLE_ID: ${{ secrets.APPLE_IDENTIFIER }}
+        APP_PASSWORD: ${{ secrets.APPLE_IDENTIFIER_PASSWORD }}
+        TEAM_ID: WT5N9FK54M
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Attach ZIP to release
       uses: actions/upload-release-asset@v1
@@ -89,21 +91,23 @@ jobs:
       run: |
         mkdir -p $PKG_ROOT/$BINARY_ROOT
         cp .build/apple/Products/Release/rswift $PKG_ROOT/$BINARY_ROOT
-        pkgbuild --root $PKG_ROOT --identifier "nl.mathijskadijk.rswift" --version $TAG_NAME --install-location "/" --sign "Developer ID Installer: Mathijs Kadijk (5Z49PA849J)" $FILENAME
+        pkgbuild --root $PKG_ROOT --identifier $BUNDLE_ID --version $TAG_NAME --install-location "/" --sign "$IDENTITY" $FILENAME
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
-        BUNDLE_ID: nl.mathijskadijk.rswift
+        BUNDLE_ID: com.nonstrict.rswift
+        IDENTITY: 'Developer ID Installer: Nonstrict B.V. (WT5N9FK54M)'
         PKG_ROOT: ${{ runner.temp }}/pkgroot
         BINARY_ROOT: /usr/local/bin
     - name: Notarize PKG
       run: |
-        sh notarize.sh && xcrun stapler staple "$FILENAME"
+        xcrun notarytool submit $FILENAME --apple-id $APPLE_ID --password $APP_PASSWORD --team-id $TEAM_ID --wait
+        xcrun stapler staple $FILENAME
       env:
-        BUNDLE_ID: nl.mathijskadijk.rswift
-        DEV_ACCOUNT: ${{ secrets.APPLE_ID_EMAIL }}
-        PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        DEV_TEAM: 5Z49PA849J
+        BUNDLE_ID: com.nonstrict.rswift
+        APPLE_ID: ${{ secrets.APPLE_IDENTIFIER }}
+        APP_PASSWORD: ${{ secrets.APPLE_IDENTIFIER_PASSWORD }}
+        TEAM_ID: WT5N9FK54M
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
     - name: Attach PKG to release
       uses: actions/upload-release-asset@v1
@@ -117,3 +121,4 @@ jobs:
 
     - name: Publish to Homebrew
       run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
+
