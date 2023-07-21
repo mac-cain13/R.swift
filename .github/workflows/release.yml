@@ -91,7 +91,7 @@ jobs:
         {
             "schemaVersion": "1.0",
             "artifacts": {
-                "swiftgen": {
+                "rswift": {
                     "type": "executable",
                     "version": "$VERSION",
                     "variants": [
