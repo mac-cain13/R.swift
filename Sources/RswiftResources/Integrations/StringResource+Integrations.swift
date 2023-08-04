@@ -8,17 +8,24 @@
 import Foundation
 import SwiftUI
 
+/// The function called when loading a localized string from R.swift generated code. By default, `Foundation.NSLocalizedString(_:tableName:bundle:value:comment:)` is used
+/// Assign a custom function to this property in order to customise the behaviour. 
+public var RswiftLocalizedString = Foundation.NSLocalizedString(_:tableName:bundle:value:comment:)
+func RswiftLocalizedString(_ key: String, tableName: String?, bundle: Bundle, value: String, comment: String) -> String {
+    RswiftLocalizedString(key, tableName, bundle, value, comment)
+}
+
 extension String {
     init(key: StaticString, tableName: String, source: StringResource.Source, developmentValue: String?, locale overrideLocale: Locale?, arguments: [CVarArg]) {
         switch source {
         case let .hosting(bundle):
             // With fallback to developmentValue
-            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            let format = RswiftLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
             self = String(format: format, locale: overrideLocale, arguments: arguments)
 
         case let .selected(bundle, locale):
             // Don't use developmentValue with selected bundle/locale
-            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+            let format = RswiftLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
             self = String(format: format, locale: overrideLocale ?? locale, arguments: arguments)
 
         case .none:
