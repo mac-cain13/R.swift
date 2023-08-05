@@ -904,6 +904,14 @@ class LocalizedStringAppTests: XCTestCase {
                    "ten 1 - 1 thing, localized french")
   }
 
+  func testCustom() {
+    XCTAssertEqual(R.string(loadingStrategy: .custom({ key, tableName, _, _, _, _ in "\(tableName)/\(key)" })).six.six2(),
+                   "six/six2")
+
+    XCTAssertEqual(R.string.six(loadingStrategy: .custom({ key, tableName, _, _, _, _ in "\(tableName)/\(key)" })).six2(),
+                   "six/six2")
+  }
+
 
   func testPrefferedLanguages(myprefs: [String]) {
 

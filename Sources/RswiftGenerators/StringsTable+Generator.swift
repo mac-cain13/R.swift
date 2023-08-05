@@ -15,7 +15,7 @@ extension Struct {
             deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: name),
             typeReference: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: .default)"
         )
     }
 
@@ -26,7 +26,7 @@ extension Struct {
             name: SwiftIdentifier(name: name),
             params: [.init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil)],
             returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: .default)"
         )
     }
 
@@ -34,10 +34,11 @@ extension Struct {
         Function(
             comments: [],
             deploymentTarget: deploymentTarget,
+            deprecated: "Use \(name)(loadingStrategy: .default(locale: myLocale)) instead",
             name: SwiftIdentifier(name: name),
             params: [.init(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil)],
             returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: locale)"
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: .default(locale: locale))"
         )
     }
 
@@ -45,13 +46,27 @@ extension Struct {
         Function(
             comments: [],
             deploymentTarget: deploymentTarget,
+            deprecated: "Use \(name)(loadingStrategy: .preferredLanguages(myLanguages, locale: myLocale)) instead",
             name: SwiftIdentifier(name: name),
             params: [
                 .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil),
                 .init(name: "locale", localName: nil, typeReference: .init(module: .stdLib, rawName: "Locale?"), defaultValue: "nil")
             ],
             returnType: TypeReference(module: .host, rawName: self.name.value),
-            valueCodeString: ".init(bundle: bundle, preferredLanguages: preferredLanguages, locale: locale)"
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: .preferredLanguages(preferredLanguages, locale: locale))"
+        )
+    }
+
+    public func generateLoadingStrategyFunctionForString(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [
+                .init(name: "loadingStrategy", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil)
+            ],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: loadingStrategy)"
         )
     }
 }
@@ -85,9 +100,10 @@ extension StringsTable {
             initBundlePreferredLanguages
 
             for name in groupedLocalized.uniques.map(\.0) {
-                generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name), tableName: name)
+                generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name))
 //                generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
-                generatePreferredLanguagesFunction(name: SwiftIdentifier(name: name), tableName: name)
+                generatePreferredLanguagesFunction(name: SwiftIdentifier(name: name))
+                generateLoadingStrategyFunction(name: SwiftIdentifier(name: name))
             }
             structs
         }
@@ -98,13 +114,11 @@ extension StringsTable {
             comments: [],
             params: [
                 .init(name: "bundle", localName: nil, typeReference: .bundle, defaultValue: nil),
-                .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]?"), defaultValue: "nil"),
-                .init(name: "locale", localName: nil, typeReference: .init(module: .stdLib, rawName: "Locale?"), defaultValue: "nil"),
+                .init(name: "loadingStrategy", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil),
             ],
             valueCodeString: """
                 self.bundle = bundle
-                self.preferredLanguages = preferredLanguages
-                self.locale = locale
+                self.loadingStrategy = loadingStrategy
                 """
         )
     }
@@ -135,19 +149,21 @@ extension StringsTable {
         Init(
             comments: [],
             params: [
-                .init(name: "source", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.Source"), defaultValue: nil),
+                .init(name: "bundle", localName: nil, typeReference: .init(module: .stdLib, rawName: "Bundle"), defaultValue: nil),
+                .init(name: "loadingStrategy", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil),
             ],
             valueCodeString: """
-                self.source = source
+                self.bundle = bundle
+                self.loadingStrategy = loadingStrategy
                 """
         )
     }
 
-    public static func generateBundleLocaleVarGetter(name: SwiftIdentifier, tableName: String) -> VarGetter {
+    public static func generateBundleLocaleVarGetter(name: SwiftIdentifier) -> VarGetter {
         VarGetter(
             name: name,
             typeReference: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages, locale: locale))"#
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: loadingStrategy)"
         )
     }
 
@@ -164,15 +180,28 @@ extension StringsTable {
         )
     }
 
-    public static func generatePreferredLanguagesFunction(name: SwiftIdentifier, tableName: String) -> Function {
+    public static func generatePreferredLanguagesFunction(name: SwiftIdentifier) -> Function {
         Function(
             comments: [],
+            deprecated: "Use \(name.value)(loadingStrategy: .preferredLanguages(...)) instead",
             name: name,
             params: [
                 .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil),
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
-            valueCodeString: #".init(source: .init(bundle: bundle, tableName: "\#(tableName.escapedStringLiteral)", preferredLanguages: preferredLanguages, locale: locale))"#
+            valueCodeString: #".init(bundle: bundle, loadingStrategy: .preferredLanguages(preferredLanguages, locale: nil))"#
+        )
+    }
+
+    public static func generateLoadingStrategyFunction(name: SwiftIdentifier) -> Function {
+        Function(
+            comments: [],
+            name: name,
+            params: [
+                .init(name: "loadingStrategy", localName: nil, typeReference: TypeReference(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil),
+            ],
+            returnType: TypeReference(module: .host, rawName: name.value),
+            valueCodeString: #".init(bundle: bundle, loadingStrategy: loadingStrategy)"#
         )
     }
 
@@ -363,7 +392,7 @@ private struct StringWithParams {
 
         let typeReference = TypeReference(module: .rswiftResources, name: "StringResource\(params.isEmpty ? "" : "\(params.count)")", genericArgs: params.map(\.spec.typeReference))
 
-        let varValueCodeString = #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", source: source, developmentValue: \#(developmentValue), comment: nil)"#
+        let varValueCodeString = #".init(key: "\#(key.escapedStringLiteral)", tableName: "\#(tableName)", bundle: bundle, loadingStrategy: loadingStrategy, developmentValue: \#(developmentValue), comment: nil)"#
 
         return VarGetter(
             comments: self.comments,
