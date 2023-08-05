@@ -147,7 +147,26 @@ extension Text {
 
 extension StringResource.LoadingStrategy {
     public func load(key: StaticString, tableName: String, bundle: Bundle, developmentValue: String?, locale overrideLocale: Locale?, arguments: [CVarArg]) -> String {
-        fatalError()
+        switch self {
+        case .default(let formatLocale):
+            // With fallback to developmentValue
+            let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
+            return String(format: format, locale: overrideLocale ?? formatLocale ?? .current, arguments: arguments)
+
+        case .preferredLanguages(let preferredLanguages, let formatLocale):
+            if let (bundle, locale) = bundle.firstBundleAndLocale(tableName: tableName, preferredLanguages: preferredLanguages) {
+                // Don't use developmentValue with selected bundle/locale
+                let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: "", comment: "")
+                return String(format: format, locale: overrideLocale ?? formatLocale ?? locale, arguments: arguments)
+            } else {
+                // A localization doesn't exist in the given languages, fallback to the key instead
+                return key.description
+            }
+
+        case .custom(let loader):
+            // Use the custom loader implementation
+            return loader(key, tableName, bundle, developmentValue, overrideLocale, arguments)
+        }
     }
 }
 
