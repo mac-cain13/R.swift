@@ -34,6 +34,7 @@ extension Struct {
         Function(
             comments: [],
             deploymentTarget: deploymentTarget,
+            deprecated: "Use \(name)(loadingStrategy: .default(locale: myLocale)) instead",
             name: SwiftIdentifier(name: name),
             params: [.init(name: "locale", localName: nil, typeReference: .locale, defaultValue: nil)],
             returnType: TypeReference(module: .host, rawName: self.name.value),
@@ -45,6 +46,7 @@ extension Struct {
         Function(
             comments: [],
             deploymentTarget: deploymentTarget,
+            deprecated: "Use \(name)(loadingStrategy: .preferredLanguages(myLanguages, locale: myLocale)) instead",
             name: SwiftIdentifier(name: name),
             params: [
                 .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil),
@@ -52,6 +54,19 @@ extension Struct {
             ],
             returnType: TypeReference(module: .host, rawName: self.name.value),
             valueCodeString: ".init(bundle: bundle, loadingStrategy: .preferredLanguages(preferredLanguages, locale: locale))"
+        )
+    }
+
+    public func generateLoadingStrategyFunctionForString(name: String) -> Function {
+        Function(
+            comments: [],
+            deploymentTarget: deploymentTarget,
+            name: SwiftIdentifier(name: name),
+            params: [
+                .init(name: "loadingStrategy", localName: nil, typeReference: .init(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil)
+            ],
+            returnType: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init(bundle: bundle, loadingStrategy: loadingStrategy)"
         )
     }
 }
@@ -88,6 +103,7 @@ extension StringsTable {
                 generateBundleLocaleVarGetter(name: SwiftIdentifier(name: name))
 //                generateBundleLocaleFunction(name: SwiftIdentifier(name: name))
                 generatePreferredLanguagesFunction(name: SwiftIdentifier(name: name))
+                generateLoadingStrategyFunction(name: SwiftIdentifier(name: name))
             }
             structs
         }
@@ -151,7 +167,6 @@ extension StringsTable {
         )
     }
 
-    // TODO: Liam - Remove
     public static func generateBundleLocaleFunction(name: SwiftIdentifier) -> Function {
         Function(
             comments: [],
@@ -165,16 +180,28 @@ extension StringsTable {
         )
     }
 
-    // TODO: Liam - Deprecate and replace with `loadingStrategy` alternative
     public static func generatePreferredLanguagesFunction(name: SwiftIdentifier) -> Function {
         Function(
             comments: [],
+            deprecated: "Use \(name.value)(loadingStrategy: .preferredLanguages(...)) instead",
             name: name,
             params: [
                 .init(name: "preferredLanguages", localName: nil, typeReference: TypeReference(module: .stdLib, rawName: "[String]"), defaultValue: nil),
             ],
             returnType: TypeReference(module: .host, rawName: name.value),
             valueCodeString: #".init(bundle: bundle, loadingStrategy: .preferredLanguages(preferredLanguages, locale: nil))"#
+        )
+    }
+
+    public static func generateLoadingStrategyFunction(name: SwiftIdentifier) -> Function {
+        Function(
+            comments: [],
+            name: name,
+            params: [
+                .init(name: "loadingStrategy", localName: nil, typeReference: TypeReference(module: .rswiftResources, rawName: "StringResource.LoadingStrategy"), defaultValue: nil),
+            ],
+            returnType: TypeReference(module: .host, rawName: name.value),
+            valueCodeString: #".init(bundle: bundle, loadingStrategy: loadingStrategy)"#
         )
     }
 
