@@ -27,7 +27,7 @@ extension StoryboardReference where Self: InitialControllerContainer {
 
      - returns: The initial view controller in the storyboard.
      */
-    @available(iOS 13.0, tvOS 13.0, *)
+    @available(iOS 13.0, tvOS 13.0, visionOS 1, *)
     public func instantiateInitialViewController(creator: @escaping (NSCoder) -> InitialController?) -> InitialController? where InitialController: UIViewController {
         UIStoryboard(name: name, bundle: bundle).instantiateInitialViewController(creator: creator)
     }
@@ -51,7 +51,7 @@ extension StoryboardViewControllerIdentifier {
 
      - returns: The view controller corresponding to the specified resource (`R.storyboard.*.*`).
      */
-    @available(iOS 13.0, tvOS 13.0, *)
+    @available(iOS 13.0, tvOS 13.0, visionOS 1, *)
     public func callAsFunction(creator: @escaping (NSCoder) -> ViewController?) -> ViewController? where ViewController: UIViewController {
         UIStoryboard(name: storyboard, bundle: bundle).instantiateViewController(identifier: identifier, creator: creator)
     }

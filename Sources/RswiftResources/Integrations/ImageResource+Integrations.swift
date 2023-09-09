@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-@available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+@available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
 extension Image {
 
     /**
@@ -46,7 +46,7 @@ extension Image {
 // Xcode 14 doesn't recognize `variableValue` init, Xcode 14.1 does know `variableValue`
 // Xcode 14.1 is first to ship with swift 5.7.1
 #if swift(>=5.7.1)
-@available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+@available(macOS 13, iOS 16, tvOS 16, watchOS 9, visionOS 1, *)
 extension Image {
 
     /**
@@ -85,7 +85,7 @@ extension Image {
 #endif
 
 
-#if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS) || os(visionOS)
 import UIKit
 
 extension ImageResource {
@@ -126,7 +126,7 @@ extension UIImage {
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
      */
-    @available(iOS 13, tvOS 13, *)
+    @available(iOS 13, tvOS 13, visionOS 1, *)
     public convenience init?(resource: ImageResource, with configuration: UIImage.Configuration?) {
         self.init(named: resource.name, in: resource.bundle, with: configuration)
     }
@@ -136,7 +136,7 @@ extension UIImage {
 
 // Xcode 14 doesn't recognize `variableValue` init, Xcode 14.1 does know `variableValue`
 // Xcode 14.1 is first to ship with swift 5.7.1
-#if swift(>=5.7.1) && (os(iOS) || os(tvOS))
+#if swift(>=5.7.1) && (os(iOS) || os(tvOS)) || os(visionOS)
 extension UIImage {
     /**
      Returns the image from this resource (`R.image.*`) using the configuration, and variable value specified.
@@ -147,7 +147,7 @@ extension UIImage {
 
      - returns: An image that exactly or best matches the configuration of the given resource (`R.image.*`), or nil if no suitable image was found.
      */
-    @available(iOS 16, tvOS 16, *)
+    @available(iOS 16, tvOS 16, visionOS 1, *)
     public convenience init?(resource: ImageResource, variableValue: Double, with configuration: UIImage.Configuration? = nil) {
         self.init(named: resource.name, in: resource.bundle, variableValue: variableValue, configuration: configuration)
     }

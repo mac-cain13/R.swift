@@ -119,7 +119,7 @@ extension String {
 }
 
 
-@available(macOS 10, iOS 13, tvOS 13, watchOS 6, *)
+@available(macOS 10, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
 extension Text {
     public init(_ resource: StringResource) {
         self.init(String(resource: resource))
@@ -191,7 +191,7 @@ extension StringResource {
         String(resource: self, preferredLanguages: preferredLanguages)
     }
 
-    //    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+    //    @available(macOS 13, iOS 16, tvOS 16, watchOS 9, visionOS 1, *)
     //    public var localizedStringResource: LocalizedStringResource {
     //        LocalizedStringResource(key, defaultValue: String.LocalizationValue(stringLiteral: defaultValue), bundle: bundle == .main ? .main : .atURL(bundle.bundleURL), comment: comment)
     //    }
