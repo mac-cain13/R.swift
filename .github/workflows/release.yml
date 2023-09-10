@@ -78,6 +78,56 @@ jobs:
         asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
         asset_name: rswift-${{ github.event.release.tag_name }}.zip
         asset_content_type: application/zip
+        
+    - name: Make artifact bundle
+      run: |
+        set -ex
+        
+        mkdir -p $ARTIFACT_BUNDLE_DIR/rswift/bin
+        cp .build/apple/Products/Release/rswift $ARTIFACT_BUNDLE_DIR/rswift/bin
+        cp License $ARTIFACT_BUNDLE_DIR/rswift
+        
+        cat <<EOF > $ARTIFACT_BUNDLE_DIR/info.json
+        {
+            "schemaVersion": "1.0",
+            "artifacts": {
+                "rswift": {
+                    "type": "executable",
+                    "version": "$VERSION",
+                    "variants": [
+                        {
+                            "path": "rswift/bin/rswift",
+                            "supportedTriples": ["x86_64-apple-macosx", "arm64-apple-macosx"]
+                        },
+                    ]
+                }
+            }
+        }
+        EOF
+        
+        zip -r $FILENAME $ARTIFACT_BUNDLE_DIR
+      env:
+        VERSION: ${{ github.event.release.tag_name }}
+        ARTIFACT_BUNDLE_DIR: ${{ runner.temp }}/rswift.artifactbundle
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.artifactbundle.zip
+    - name: Notarize artifact bundle
+      run: |
+        xcrun notarytool submit $FILENAME --apple-id $APPLE_ID --password $APP_PASSWORD --team-id $TEAM_ID --wait
+      env:
+        BUNDLE_ID: com.nonstrict.rswift
+        APPLE_ID: ${{ secrets.APPLE_IDENTIFIER }}
+        APP_PASSWORD: ${{ secrets.APPLE_IDENTIFIER_PASSWORD }}
+        TEAM_ID: WT5N9FK54M
+        FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.artifactbundle.zip
+    - name: Attach artifact bundle to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.artifactbundle.zip
+        asset_name: rswift-${{ github.event.release.tag_name }}.artifactbundle.zip
+        asset_content_type: application/zip
 
     - name: Archive PKG
       run: |
