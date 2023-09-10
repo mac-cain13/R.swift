@@ -96,7 +96,7 @@ jobs:
                     "version": "$VERSION",
                     "variants": [
                         {
-                            "path": "rswift",
+                            "path": "rswift/bin/rswift",
                             "supportedTriples": ["x86_64-apple-macosx", "arm64-apple-macosx"]
                         },
                     ]
