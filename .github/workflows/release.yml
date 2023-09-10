@@ -114,7 +114,7 @@ jobs:
     - name: Publish to Cocoapods
       run: |
         export POD_VERSION=$TAG_NAME
-        pod trunk push
+        pod trunk push --allow-warnings
       env:
         TAG_NAME: ${{ github.event.release.tag_name }}
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
