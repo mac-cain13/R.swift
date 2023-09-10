@@ -14,7 +14,7 @@ extension String {
         case let .hosting(bundle):
             // With fallback to developmentValue
             let format = NSLocalizedString(key.description, tableName: tableName, bundle: bundle, value: developmentValue ?? "", comment: "")
-            self = String(format: format, locale: overrideLocale, arguments: arguments)
+            self = String(format: format, locale: overrideLocale ?? Locale.current, arguments: arguments)
 
         case let .selected(bundle, locale):
             // Don't use developmentValue with selected bundle/locale
