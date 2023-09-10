@@ -96,7 +96,7 @@ jobs:
                     "version": "$VERSION",
                     "variants": [
                         {
-                            "path": "rswift/bin/rswift",
+                            "path": "rswift",
                             "supportedTriples": ["x86_64-apple-macosx", "arm64-apple-macosx"]
                         },
                     ]
@@ -104,8 +104,10 @@ jobs:
             }
         }
         EOF
-        
-        zip -r $FILENAME $ARTIFACT_BUNDLE_DIR
+
+        pushd $ARTIFACT_BUNDLE_DIR
+        zip -r $FILENAME .
+        popd
       env:
         VERSION: ${{ github.event.release.tag_name }}
         ARTIFACT_BUNDLE_DIR: ${{ runner.temp }}/rswift.artifactbundle
