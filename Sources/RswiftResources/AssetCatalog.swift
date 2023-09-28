@@ -20,8 +20,8 @@ public struct AssetCatalog {
 extension AssetCatalog {
     public struct Namespace {
         public var subnamespaces: [String: Namespace] = [:]
-        public var colors: [ColorResource] = []
-        public var images: [ImageResource] = []
+        public var colors: [RColorResource] = []
+        public var images: [RImageResource] = []
         public var dataAssets: [DataResource] = []
 
         public init() {
@@ -29,8 +29,8 @@ extension AssetCatalog {
 
         public init(
             subnamespaces: [String: Namespace],
-            colors: [ColorResource],
-            images: [ImageResource],
+            colors: [RColorResource],
+            images: [RImageResource],
             dataAssets: [DataResource]
         ) {
             self.subnamespaces = subnamespaces

@@ -1,5 +1,5 @@
 //
-//  ImageResource.swift
+//  RImageResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -10,11 +10,11 @@ import RswiftResources
 import CoreGraphics
 
 
-extension ImageResource: SupportedExtensions {
+extension RImageResource: SupportedExtensions {
     // See "Supported Image Formats" on https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIImage_Class/
     static public let supportedExtensions: Set<String> = ["tiff", "tif", "jpg", "jpeg", "gif", "png", "bmp", "bmpf", "ico", "cur", "xbm"]
 
-    static public func parse(url: URL, assetTags: [String]?) throws -> ImageResource {
+    static public func parse(url: URL, assetTags: [String]?) throws -> RImageResource {
         let filename = url.lastPathComponent
         let pathExtension = url.pathExtension
         guard filename.count > 0 && pathExtension.count > 0 else {
@@ -23,12 +23,12 @@ extension ImageResource: SupportedExtensions {
 
         let locale = LocaleReference(url: url)
 
-        let extensions = ImageResource.supportedExtensions.joined(separator: "|")
+        let extensions = RImageResource.supportedExtensions.joined(separator: "|")
         let regex = try! NSRegularExpression(pattern: "(~(ipad|iphone))?(@[2,3]x)?\\.(\(extensions))$", options: .caseInsensitive)
         let fullFileNameRange = NSRange(location: 0, length: filename.count)
         let pathExtensionToUse = (pathExtension == "png") ? "" : ".\(pathExtension)"
         let name = regex.stringByReplacingMatches(in: filename, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: fullFileNameRange, withTemplate: pathExtensionToUse)
 
-        return ImageResource(name: name, path: [], bundle: .temp, locale: locale, onDemandResourceTags: assetTags)
+        return RImageResource(name: name, path: [], bundle: .temp, locale: locale, onDemandResourceTags: assetTags)
     }
 }

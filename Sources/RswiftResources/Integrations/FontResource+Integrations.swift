@@ -15,7 +15,7 @@ extension Font {
     /**
      Create a custom font from this resource (`R.font.*`) and and size that scales with the body text style.
      */
-    public static func custom(_ resource: FontResource, size: CGFloat) -> Font {
+    public static func custom(_ resource: RFontResource, size: CGFloat) -> Font {
         .custom(resource.name, size: size)
     }
 
@@ -23,7 +23,7 @@ extension Font {
      Create a custom font from this resource (`R.font.*`) and a fixed size that does not scale with Dynamic Type.
      */
     @available(macOS 11, iOS 14, tvOS 14, watchOS 7, visionOS 1, *)
-    public static func custom(_ resource: FontResource, fixedSize: CGFloat) -> Font {
+    public static func custom(_ resource: RFontResource, fixedSize: CGFloat) -> Font {
         .custom(resource.name, fixedSize: fixedSize)
     }
 
@@ -31,7 +31,7 @@ extension Font {
      Create a custom font from this resource (`R.font.*`) and and size that is relative to the given `textStyle`.
      */
     @available(macOS 11, iOS 14, tvOS 14, watchOS 7, visionOS 1, *)
-    public static func custom(_ resource: FontResource, size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
+    public static func custom(_ resource: RFontResource, size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
         .custom(resource.name, size: size, relativeTo: textStyle)
     }
 }
@@ -39,7 +39,7 @@ extension Font {
 #if canImport(UIKit)
 import UIKit
 
-extension FontResource {
+extension RFontResource {
 
     /**
      Returns the font from this resource (`R.font.*`) at the specified zie.
@@ -64,7 +64,7 @@ public extension UIFont {
 
      - returns: A font object of the specified font resource and size.
      */
-    convenience init?(resource: FontResource, size: CGFloat) {
+    convenience init?(resource: RFontResource, size: CGFloat) {
         self.init(name: resource.name, size: size)
     }
 }
@@ -74,7 +74,7 @@ public extension UIFont {
 #if canImport(UIKit)
 import UIKit
 
-extension FontResource {
+extension RFontResource {
     /**
      Returns true if the font can be loaded.
      Custom fonts may not be loaded if not properly configured in Info.plist
@@ -86,7 +86,7 @@ extension FontResource {
 #elseif canImport(AppKit)
 import AppKit
 
-extension FontResource {
+extension RFontResource {
     /**
      Returns true if the font can be loaded.
      Custom fonts may not be loaded if not properly configured in Info.plist
