@@ -1,5 +1,5 @@
 //
-//  FontResource.swift
+// RFontResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FontResource {
+public struct RFontResource {
     public let name: String
     public let bundle: Bundle
     public let filename: String

@@ -16,7 +16,7 @@ extension Color {
 
      - parameter resource: The resource you want the color of (`R.color.*`)
      */
-    public init(_ resource: ColorResource) {
+    public init(_ resource: RColorResource) {
         self.init(resource.name, bundle: resource.bundle)
     }
 }
@@ -25,7 +25,7 @@ extension Color {
 #if os(iOS) || os(tvOS) || os(visionOS)
 import UIKit
 
-extension ColorResource {
+extension RColorResource {
 
     /**
      Returns the color from this resource (`R.color.*`) that is compatible with the trait collection.
@@ -51,7 +51,7 @@ extension UIColor {
 
      - returns: A color that exactly or best matches the desired traits with the given resource (`R.color.*`), or nil if no suitable color was found.
      */
-    public convenience init?(resource: ColorResource, compatibleWith traitCollection: UITraitCollection? = nil) {
+    public convenience init?(resource: RColorResource, compatibleWith traitCollection: UITraitCollection? = nil) {
         self.init(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
     }
 

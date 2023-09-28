@@ -1,5 +1,5 @@
 //
-//  FontResource+Generator.swift
+// RFontResource+Generator.swift
 //  rswift
 //
 //  Created by Tom Lokhorst on 2021-04-18.
@@ -8,8 +8,8 @@
 import Foundation
 import RswiftResources
 
-extension FontResource {
-    public static func generateStruct(resources: [FontResource], prefix: SwiftIdentifier) -> Struct {
+extension RFontResource {
+    public static func generateStruct(resources: [RFontResource], prefix: SwiftIdentifier) -> Struct {
         let structName = SwiftIdentifier(name: "font")
         let qualifiedName = prefix + structName
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
@@ -36,7 +36,7 @@ extension FontResource {
             comments: [],
             name: .init(name: "makeIterator"),
             params: [],
-            returnType: .indexingIterator(.fontResource),
+            returnType: .indexingIterator(.RFontResource),
             valueCodeString: "[\(names.map(\.value).joined(separator: ", "))].makeIterator()"
         )
     }
@@ -57,12 +57,12 @@ extension FontResource {
     }
 }
 
-extension FontResource {
+extension RFontResource {
     func generateVarGetter() -> VarGetter {
         VarGetter(
             comments: ["Font `\(name)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .rswiftResources, rawName: "FontResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "RFontResource"),
             valueCodeString: ".init(name: \"\(name)\", bundle: bundle, filename: \"\(filename)\")"
         )
     }

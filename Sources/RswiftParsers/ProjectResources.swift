@@ -29,8 +29,8 @@ public enum ResourceType: String, CaseIterable {
 public struct ProjectResources {
     public let assetCatalogs: [AssetCatalog]
     public let files: [FileResource]
-    public let fonts: [FontResource]
-    public let images: [ImageResource]
+    public let fonts: [RFontResource]
+    public let images: [RImageResource]
     public let strings: [StringsTable]
     public let nibs: [NibResource]
     public let storyboards: [StoryboardResource]
@@ -104,8 +104,8 @@ public struct ProjectResources {
 
         let assetCatalogs: [AssetCatalog]
         let files: [FileResource]
-        let fonts: [FontResource]
-        let images: [ImageResource]
+        let fonts: [RFontResource]
+        let images: [RImageResource]
         let strings: [StringsTable]
         let nibs: [NibResource]
         let storyboards: [StoryboardResource]
@@ -123,8 +123,8 @@ public struct ProjectResources {
             let dontParseFileForImages = !parseImagesAsFiles
             files = try urls
                 .filter { !FileResource.unsupportedExtensions.contains($0.pathExtension) }
-                .filter { !(dontParseFileForFonts && FontResource.supportedExtensions.contains($0.pathExtension)) }
-                .filter { !(dontParseFileForImages && ImageResource.supportedExtensions.contains($0.pathExtension)) }
+                .filter { !(dontParseFileForFonts && RFontResource.supportedExtensions.contains($0.pathExtension)) }
+                .filter { !(dontParseFileForImages && RImageResource.supportedExtensions.contains($0.pathExtension)) }
                 .compactMap { url in try parse(with: warning) { try FileResource.parse(url: url) } }
         } else {
             files = []
@@ -132,16 +132,16 @@ public struct ProjectResources {
 
         if resourceTypes.contains(.font) {
             fonts = try urls
-                .filter { FontResource.supportedExtensions.contains($0.pathExtension) }
-                .compactMap { url in try parse(with: warning) { try FontResource.parse(url: url) } }
+                .filter { RFontResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try RFontResource.parse(url: url) } }
         } else {
             fonts = []
         }
 
         if resourceTypes.contains(.image) {
             images = try urls
-                .filter { ImageResource.supportedExtensions.contains($0.pathExtension) }
-                .compactMap { url in try parse(with: warning) { try ImageResource.parse(url: url, assetTags: nil) } }
+                .filter { RImageResource.supportedExtensions.contains($0.pathExtension) }
+                .compactMap { url in try parse(with: warning) { try RImageResource.parse(url: url, assetTags: nil) } }
         } else {
             images = []
         }

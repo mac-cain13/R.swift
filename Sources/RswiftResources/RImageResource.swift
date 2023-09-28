@@ -1,5 +1,5 @@
 //
-//  ImageResource.swift
+// RImageResource.swift
 //  R.swift
 //
 //  Created by Mathijs Kadijk on 09-12-15.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ImageResource {
+public struct RImageResource {
     public let name: String
     public let path: [String]
     public let bundle: Bundle

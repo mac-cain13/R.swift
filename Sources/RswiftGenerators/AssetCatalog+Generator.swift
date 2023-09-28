@@ -13,7 +13,7 @@ public protocol AssetCatalogContent {
     func generateVarGetter() -> VarGetter
 }
 
-extension ColorResource {
+extension RColorResource {
     public static func generateStruct(catalogs: [AssetCatalog], prefix: SwiftIdentifier) -> Struct {
         let merged: AssetCatalog.Namespace = catalogs.map(\.root).reduce(.init(), { $0.merging($1) })
 
@@ -29,8 +29,8 @@ extension DataResource {
     }
 }
 
-extension ImageResource {
-    public static func generateStruct(catalogs: [AssetCatalog], toplevel resources: [ImageResource], prefix: SwiftIdentifier) -> Struct {
+extension RImageResource {
+    public static func generateStruct(catalogs: [AssetCatalog], toplevel resources: [RImageResource], prefix: SwiftIdentifier) -> Struct {
         // Multiple resources can share same name,
         // for example: Colors.jpg and Colors@2x.jpg are both named "Colors.jpg"
         // Deduplicate these
@@ -97,14 +97,14 @@ extension AssetCatalog.Namespace {
     }
 }
 
-extension ColorResource: AssetCatalogContent {
+extension RColorResource: AssetCatalogContent {
     public func generateVarGetter() -> VarGetter {
         let fullname = (path + [name]).joined(separator: "/")
         let code = ".init(name: \"\(fullname.escapedStringLiteral)\", path: \(path), bundle: bundle)"
         return VarGetter(
             comments: ["Color `\(fullname)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .rswiftResources, rawName: "ColorResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "RColorResource"),
             valueCodeString: code
         )
     }
@@ -124,7 +124,7 @@ extension DataResource: AssetCatalogContent {
     }
 }
 
-extension ImageResource: AssetCatalogContent {
+extension RImageResource: AssetCatalogContent {
     public func generateVarGetter() -> VarGetter {
         let locs = locale.map { $0.codeString() } ?? "nil"
         let odrt = onDemandResourceTags?.debugDescription ?? "nil"
@@ -133,7 +133,7 @@ extension ImageResource: AssetCatalogContent {
         return VarGetter(
             comments: ["Image `\(fullname)`."],
             name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .rswiftResources, rawName: "ImageResource"),
+            typeReference: TypeReference(module: .rswiftResources, rawName: "RImageResource"),
             valueCodeString: code
         )
     }

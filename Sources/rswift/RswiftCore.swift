@@ -114,12 +114,12 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-        let imageStruct = ImageResource.generateStruct(
+        let imageStruct = RImageResource.generateStruct(
             catalogs: resources.assetCatalogs,
             toplevel: resources.images,
             prefix: qualifiedName
         )
-        let colorStruct = ColorResource.generateStruct(
+        let colorStruct = RColorResource.generateStruct(
             catalogs: resources.assetCatalogs,
             prefix: qualifiedName
         )
@@ -139,7 +139,7 @@ public struct RswiftCore {
             prefix: qualifiedName
         )
 
-        let fontStruct = FontResource.generateStruct(
+        let fontStruct = RFontResource.generateStruct(
             resources: resources.fonts,
             prefix: qualifiedName
         )

@@ -44,5 +44,5 @@ extension TypeReference {
     static var nsViewController: TypeReference = .init(module: .appKit, rawName: "NSViewController")
 
 
-    static var fontResource: TypeReference = .init(module: .rswiftResources, rawName: "FontResource")
+    static var RFontResource: TypeReference = .init(module: .rswiftResources, rawName: "RFontResource")
 }

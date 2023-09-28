@@ -109,13 +109,13 @@ extension AssetCatalog: SupportedExtensions {
             subnamespaces[name] = namespace
         }
 
-        var colors: [ColorResource] = []
+        var colors: [RColorResource] = []
         for fileURL in directory.colors {
             let name = fileURL.filenameWithoutExtension!
             colors.append(.init(name: name, path: path, bundle: .temp))
         }
 
-        var images: [ImageResource] = []
+        var images: [RImageResource] = []
         for fileURL in directory.images {
             let name = fileURL.filenameWithoutExtension!
             let tags = parseOnDemandResourceTags(directory: fileURL)
