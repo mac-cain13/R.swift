@@ -51,7 +51,12 @@ extension FontResource {
      */
     //    @available(*, deprecated, message: "Use UIFont(resource:size:) initializer instead")
     public func callAsFunction(size: CGFloat) -> UIFont? {
-        UIFont(name: name, size: size)
+        UIFont(resource: self, size: size)
+    }
+    
+    fileprivate func register() {
+        let url = bundle.url(forResource: filename, withExtension: nil)!
+        CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
     }
 }
 
@@ -65,6 +70,9 @@ public extension UIFont {
      - returns: A font object of the specified font resource and size.
      */
     convenience init?(resource: FontResource, size: CGFloat) {
+        if !resource.canBeLoaded() {
+          resource.register()
+        }
         self.init(name: resource.name, size: size)
     }
 }
