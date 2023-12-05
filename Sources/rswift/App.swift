@@ -77,7 +77,7 @@ extension App {
         var outputPath: String
 
         mutating func run() throws {
-            let processInfo = ProcessInfo()
+            let processInfo = ProcessInfo.processInfo
 
             let productModuleName = processInfo.environment[EnvironmentKeys.productModuleName]
             let infoPlistFile = processInfo.environment[EnvironmentKeys.infoPlistFile]
@@ -114,7 +114,8 @@ extension App {
             do {
                 switch globals.inputType {
                 case .xcodeproj:
-                    let xcodeprojPath = try xcodeproj ?? ProcessInfo().environmentVariable(name: EnvironmentKeys.productFilePath)
+                    let xcodeprojPath = try xcodeproj ?? ProcessInfo.processInfo
+                        .environmentVariable(name: EnvironmentKeys.productFilePath)
                     let xcodeprojURL = URL(fileURLWithPath: xcodeprojPath)
                     let targetName = try getTargetName(xcodeprojURL: xcodeprojURL)
                     try core.generateFromXcodeproj(url: xcodeprojURL, targetName: targetName)
@@ -128,7 +129,8 @@ extension App {
         }
 
         func getTargetName(xcodeprojURL: URL) throws -> String {
-            if let targetName = globals.target ?? ProcessInfo().environment[EnvironmentKeys.targetName] {
+            if let targetName = globals.target ?? ProcessInfo.processInfo
+                .environment[EnvironmentKeys.targetName] {
                 return targetName
             }
 

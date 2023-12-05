@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if canImport(SwiftUI)
 import SwiftUI
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
@@ -20,7 +22,7 @@ extension Color {
         self.init(resource.name, bundle: resource.bundle)
     }
 }
-
+#endif
 
 #if os(iOS) || os(tvOS) || os(visionOS)
 import UIKit

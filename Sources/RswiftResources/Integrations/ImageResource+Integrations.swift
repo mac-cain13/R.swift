@@ -6,8 +6,9 @@
 //
 
 import Foundation
-import SwiftUI
 
+#if canImport(SwiftUI)
+import SwiftUI
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
 extension Image {
@@ -83,7 +84,7 @@ extension Image {
     }
 }
 #endif
-
+#endif
 
 #if os(iOS) || os(tvOS) || os(visionOS)
 import UIKit

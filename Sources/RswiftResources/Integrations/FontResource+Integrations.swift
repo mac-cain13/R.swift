@@ -6,8 +6,9 @@
 //
 
 import Foundation
-import SwiftUI
 
+#if canImport(SwiftUI)
+import SwiftUI
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
 extension Font {
@@ -35,6 +36,7 @@ extension Font {
         .custom(resource.name, size: size, relativeTo: textStyle)
     }
 }
+#endif
 
 #if canImport(UIKit)
 import UIKit
