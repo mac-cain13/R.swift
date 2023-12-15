@@ -33,6 +33,73 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       return stringStructFromLocalizableStrings(filename: key, strings: value, at: externalAccessLevel, prefix: qualifiedName)
     }
 
+    let AffirmLocalizedString = Function(
+      availables: [],
+      comments: ["Returns an NSLocalizedString with the key hidden for confidential strings."],
+      accessModifier: externalAccessLevel,
+      isStatic: true,
+      name: "AffirmLocalizedString",
+      generics: nil,
+      parameters: [
+        Function.Parameter(
+          name: "_",
+          localName: "key",
+          type: Type._String,
+          defaultValue: nil
+        ),
+        Function.Parameter(
+          name: "tableName",
+          type: Type._String,
+          defaultValue: nil
+        ),
+        Function.Parameter(
+          name: "bundle",
+          type: Type._Bundle,
+          defaultValue: nil
+        ),
+        Function.Parameter(
+          name: "comment",
+          type: Type._String,
+          defaultValue: nil
+        ),
+      ],
+      doesThrow: false,
+      returnType: Type._String,
+      body: """
+        let result = NSLocalizedString(key, tableName: tableName, bundle: bundle, comment: comment)
+        return (tableName.lowercased() == "confidential" && result == key) ? "" : result
+        """,
+      os: []
+    )
+    let AffirmDisplayKey = Function(
+      availables: [],
+      comments: ["Returns a sanitized key if tableName is 'confidential'."],
+      accessModifier: externalAccessLevel,
+      isStatic: true,
+      name: "AffirmDisplayKey",
+      generics: nil,
+      parameters: [
+        Function.Parameter(
+          name: "_",
+          localName: "key",
+          type: Type._String,
+          defaultValue: nil
+        ),
+        Function.Parameter(
+          name: "tableName",
+          type: Type._String,
+          defaultValue: nil
+        ),
+      ],
+      doesThrow: false,
+      returnType: Type._String,
+      body: """
+        return (tableName.lowercased() == "confidential") ? "" : key
+        """,
+      os: []
+    )
+
+
     return Struct(
       availables: [],
       comments: ["This `\(qualifiedName)` struct is generated, and contains static references to \(groupedLocalized.uniques.count) localization tables."],
@@ -41,7 +108,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
       implements: [],
       typealiasses: [],
       properties: [],
-      functions: [],
+      functions: [AffirmLocalizedString, AffirmDisplayKey],
       structs: structs,
       classes: [],
       os: []
@@ -264,7 +331,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
 
         guard let (_, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
+          return AffirmDisplayKey("\(values.key.escapedStringLiteral)", tableName: "\(values.tableName)")
         }
 
         return \(values.swiftCode(bundle: "bundle"))
@@ -309,7 +376,7 @@ struct StringsStructGenerator: ExternalOnlyStructGenerator {
         }
 
         guard let (locale, bundle) = localeBundle(tableName: "\(values.tableName)", preferredLanguages: preferredLanguages) else {
-          return "\(values.key.escapedStringLiteral)"
+          return AffirmDisplayKey("\(values.key.escapedStringLiteral)", tableName: "\(values.tableName)")
         }
 
         let format = \(values.swiftCode(bundle: "bundle"))
@@ -349,12 +416,7 @@ private struct StringValues {
       valueArgument = ", value: \"\(value.escapedStringLiteral)\""
     }
 
-    if tableName == "Localizable" {
-      return "NSLocalizedString(\"\(escapedKey)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
-    }
-    else {
-      return "NSLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
-    }
+    return "AffirmLocalizedString(\"\(escapedKey)\", tableName: \"\(tableName)\", bundle: \(bundle)\(valueArgument), comment: \"\")"
   }
 
   var baseLanguageValue: String? {
