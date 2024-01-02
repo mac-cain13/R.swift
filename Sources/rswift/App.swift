@@ -49,6 +49,9 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "Paths of files for which resources should be generated")
     var inputFiles: [String] = []
 
+    @Option(help: "The development region for the provided input files (i.e. \"en\"")
+    var developmentRegion: String?
+
     @Option(help: "Source of default bundle to use")
     var bundleSource: BundleSource = .finder
 
@@ -120,7 +123,7 @@ extension App {
                     try core.generateFromXcodeproj(url: xcodeprojURL, targetName: targetName)
 
                 case .inputFiles:
-                    try core.generateFromFiles(inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)))
+                    try core.generateFromFiles(inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)), developmentRegion: globals.developmentRegion)
                 }
             } catch let error as ResourceParsingError {
                 throw ValidationError(error.description)
