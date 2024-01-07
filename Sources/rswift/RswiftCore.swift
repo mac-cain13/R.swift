@@ -328,5 +328,5 @@ public struct RswiftCore {
 private func writeIfChanged(contents: String, toURL outputURL: URL) throws {
     let currentFileContents = try? String(contentsOf: outputURL, encoding: .utf8)
     guard currentFileContents != contents else { return }
-    try contents.write(to: outputURL, atomically: true, encoding: .utf8)
+    try contents.write(to: outputURL, atomically: false, encoding: .utf8)
 }
