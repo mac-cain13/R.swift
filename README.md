@@ -98,6 +98,11 @@ As of Rswift 7, Swift Package Manager is the recommended method of installation.
 
 _Screenshot of the Build Phase can be found [here](Documentation/Images/RunBuildToolPluginsRswift.png)_
 
+#### When running on Xcode Cloud
+
+5. Add a [custom build script](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts) in `ci_scripts/ci_post_clone.sh` with the content:
+    `defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES`
+
 ### Package.swift based SPM project
 
 1. Add a dependency in Package.swift:
