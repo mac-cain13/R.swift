@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 extension String {
     init(key: StaticString, tableName: String, source: StringResource.Source, developmentValue: String?, locale overrideLocale: Locale?, arguments: [CVarArg]) {
@@ -118,6 +117,8 @@ extension String {
     }
 }
 
+#if canImport(SwiftUI)
+import SwiftUI
 
 @available(macOS 10, iOS 13, tvOS 13, watchOS 6, visionOS 1, *)
 extension Text {
@@ -161,6 +162,7 @@ extension Text {
         self.init(String(key: resource.key, tableName: resource.tableName, source: resource.source, developmentValue: resource.developmentValue, locale: nil, arguments: [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9]))
     }
 }
+#endif
 
 extension StringResource.Source {
     public init(bundle: Bundle, tableName: String, preferredLanguages: [String]?, locale overrideLocale: Locale?) {

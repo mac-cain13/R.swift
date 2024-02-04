@@ -7,11 +7,15 @@
 
 import Foundation
 import RswiftResources
+
+#if canImport(CoreGraphics)
 import CoreGraphics
+#endif
 
 extension FontResource: SupportedExtensions {
     static public let supportedExtensions: Set<String> = ["otf", "ttf"]
 
+    #if canImport(CoreGraphics)
     static public func parse(url: URL) throws -> FontResource {
         guard let dataProvider = CGDataProvider(url: url as CFURL) else {
             throw ResourceParsingError("Unable to create data provider for font at \(url)")
@@ -28,4 +32,9 @@ extension FontResource: SupportedExtensions {
             filename: url.lastPathComponent
         )
     }
+    #else
+    static public func parse(url: URL) throws -> FontResource {
+        throw ResourceParsingError("Unsupported FontResource.parse")
+    }
+    #endif
 }

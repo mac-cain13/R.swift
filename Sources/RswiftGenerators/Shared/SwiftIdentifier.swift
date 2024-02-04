@@ -124,13 +124,13 @@ extension Sequence {
 }
 
 private let disallowedCharacters: CharacterSet = {
-    let disallowed = NSMutableCharacterSet(charactersIn: "")
-    disallowed.formUnion(with: CharacterSet.whitespacesAndNewlines)
-    disallowed.formUnion(with: CharacterSet.punctuationCharacters)
-    disallowed.formUnion(with: CharacterSet.symbols)
-    disallowed.formUnion(with: CharacterSet.illegalCharacters)
-    disallowed.formUnion(with: CharacterSet.controlCharacters)
-    disallowed.removeCharacters(in: "_")
+    var disallowed = CharacterSet(charactersIn: "")
+    disallowed.formUnion(CharacterSet.whitespacesAndNewlines)
+    disallowed.formUnion(CharacterSet.punctuationCharacters)
+    disallowed.formUnion(CharacterSet.symbols)
+    disallowed.formUnion(CharacterSet.illegalCharacters)
+    disallowed.formUnion(CharacterSet.controlCharacters)
+    disallowed.remove(charactersIn: "_")
 
     // Emoji ranges, roughly based on http://www.unicode.org/Public/emoji/1.0//emoji-data.txt
     [
@@ -138,12 +138,9 @@ private let disallowedCharacters: CharacterSet = {
         0x1F300...0x1F6FF,
         0x1F900...0x1F9FF,
         0x1F1E6...0x1F1FF,
-    ].forEach {
-        let range = NSRange(location: $0.lowerBound, length: $0.upperBound - $0.lowerBound)
-        disallowed.removeCharacters(in: range)
-    }
+    ].forEach { range in range.compactMap(UnicodeScalar.init).forEach { scalar in disallowed.remove(scalar) } }
 
-    return disallowed as CharacterSet
+    return disallowed
 }()
 
 // Based on https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID413

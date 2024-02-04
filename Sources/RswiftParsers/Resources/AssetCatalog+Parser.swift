@@ -7,7 +7,6 @@
 
 import Foundation
 import RswiftResources
-import CoreGraphics
 
 // Note: "appiconset" is not loadable by default, so it's not included here
 private let imageExtensions: Set<String> = ["launchimage", "imageset", "imagestack", "symbolset"]
@@ -41,7 +40,11 @@ extension AssetCatalog: SupportedExtensions {
         }
         let options: FileManager.DirectoryEnumerationOptions
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
+            #if !os(Linux)
             options = [.skipsHiddenFiles, .producesRelativePathURLs]
+            #else
+            options = [.skipsHiddenFiles]
+            #endif
         } else {
             options = [.skipsHiddenFiles]
         }
