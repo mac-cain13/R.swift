@@ -9,9 +9,9 @@
 import Foundation
 
 #if os(Linux)
-    import Glibc
+import Glibc
 #else
-    import Darwin
+import Darwin
 #endif
 
 public let GlobBehaviorBashV3 = Glob.Behavior(

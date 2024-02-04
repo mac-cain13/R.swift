@@ -139,7 +139,7 @@ private let disallowedCharacters: CharacterSet = {
         0x1F900...0x1F9FF,
         0x1F1E6...0x1F1FF,
     ].forEach { range in range.compactMap(UnicodeScalar.init).forEach { scalar in disallowed.remove(scalar) } }
-    
+
     return disallowed
 }()
 
