@@ -163,13 +163,13 @@ jobs:
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
 
-    - name: Publish to Cocoapods
-      run: |
-        export POD_VERSION=$TAG_NAME
-        pod trunk push --allow-warnings
-      env:
-        TAG_NAME: ${{ github.event.release.tag_name }}
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#    - name: Publish to Cocoapods
+#      run: |
+#        export POD_VERSION=$TAG_NAME
+#        pod trunk push --allow-warnings
+#      env:
+#        TAG_NAME: ${{ github.event.release.tag_name }}
+#        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
     - name: Publish to Homebrew
       run: brew bump-formula-pr --tag $TAG_NAME --revision $REVISION rswift || exit 0
