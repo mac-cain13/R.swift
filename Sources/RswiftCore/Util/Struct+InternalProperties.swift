@@ -90,12 +90,12 @@ extension Struct {
             .prefix(1)
             .flatMap { locale -> [String] in
               if hostingBundle.localizations.contains(locale.identifier) {
-                if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+                if let language = locale.language.languageCode?.identifier, hostingBundle.localizations.contains(language) {
                   return [locale.identifier, language]
                 } else {
                   return [locale.identifier]
                 }
-              } else if let language = locale.languageCode, hostingBundle.localizations.contains(language) {
+              } else if let language = locale.language.languageCode?.identifier, hostingBundle.localizations.contains(language) {
                 return [language]
               } else {
                 return []
