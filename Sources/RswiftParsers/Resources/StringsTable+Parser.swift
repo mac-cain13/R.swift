@@ -9,7 +9,7 @@ import Foundation
 import RswiftResources
 
 extension StringsTable: SupportedExtensions {
-    static public let supportedExtensions: Set<String> = ["strings", "stringsdict"]
+    static public let supportedExtensions: Set<String> = ["strings", "stringsdict", "xcstrings"]
 
     static public func parse(url: URL) throws -> StringsTable {
         let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
@@ -20,6 +20,13 @@ extension StringsTable: SupportedExtensions {
 
         // Get locale from url (second to last component)
         let locale = LocaleReference(url: url)
+
+        if url.pathExtension == "xcstrings" {
+            let dictionary: [StringsTable.Key: StringsTable.Value]
+            let xcstring = try JSONDecoder().decode(XCString.self, from: .init(contentsOf: url))
+            dictionary = try parseXcstrings(xcstring, source: locale.debugDescription(filename: "\(basename).xcstrings"))
+            return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
+        }
 
         // Check to make sure url can be parsed as a dictionary
         guard let nsDictionary = NSDictionary(contentsOf: url) else {
@@ -166,4 +173,80 @@ private func lookup(key: String, in dict: [String: AnyObject], processedReferenc
     }
 
     return results
+}
+
+private func parseXcstrings(_ xcString: XCString, source: String) throws -> [StringsTable.Key: StringsTable.Value] {
+    var dictionary: [StringsTable.Key: StringsTable.Value] = [:]
+    for item in xcString.strings {
+        let key = item.key
+        guard let val = item.value.localizations?[xcString.sourceLanguage] else {
+            dictionary[key] = .init(params: [], originalValue: "")
+            continue
+        }
+        let params: [StringParam] = try parse(localization: val, source: source, key: key)
+        dictionary[key] = .init(params: params, originalValue: val.stringUnit?.value ?? "")
+    }
+    return dictionary
+}
+
+private func parse(localization: XCLocalization, source: String, key: String) throws -> [StringParam] {
+    let val = parse(stringUnit: localization.stringUnit, orVariations: localization.variations, withSubstitutions: localization.substitutions)
+    let parts = FormatPart.formatParts(formatString: val)
+    var params: [StringParam] = []
+    for part in parts {
+        switch part {
+        case let .reference(reference):
+            throw ResourceParsingError("No value for reference \(reference) on \(source): \(key)")
+        case let .spec(formatSpecifier):
+            params.append(StringParam(name: nil, spec: formatSpecifier))
+        }
+    }
+    return params
+}
+
+private func parse(
+    stringUnit: XCStringUnit?,
+    orVariations variations: XCVariations?,
+    withSubstitutions substitutions: [String: XCSubstitution]?
+) -> String {
+    if let stringUnit = stringUnit {
+        return parse(stringUnit: stringUnit, withSubstitutions: substitutions)
+    } else if let deviceVariations = variations?.device {
+        return parse(variations: deviceVariations, withSubstitutions: substitutions)
+    } else if let pluralVariations = variations?.plural {
+        return parse(variations: pluralVariations, withSubstitutions: substitutions)
+    } else {
+        return ""
+    }
+}
+
+private func parse(stringUnit: XCStringUnit, withSubstitutions substitutions: [String: XCSubstitution]?) -> String {
+    var val = stringUnit.value
+    for (key, substitution) in substitutions ?? [:] {
+        val = val.replacingOccurrences(of: "%#@\(key)@", with: parse(substitution: substitution))
+    }
+    return val
+}
+
+private func parse(variations: [String: XCPluralVariationsValue], withSubstitutions substitutions: [String: XCSubstitution]?) -> String {
+    var longestVal = ""
+    var longestValArgCount = -1
+    for variation in variations.values {
+        let val = parse(stringUnit: variation.stringUnit, orVariations: variation.variations, withSubstitutions: substitutions)
+        let count = FormatPart.formatParts(formatString: val).count
+        if count > longestValArgCount {
+            longestVal = val
+            longestValArgCount = count
+        }
+    }
+    return longestVal
+}
+
+private func parse(substitution: XCSubstitution) -> String {
+    let val = parse(stringUnit: nil, orVariations: substitution.variations, withSubstitutions: nil)
+    if let argNum = substitution.argNum {
+        return val.replacingOccurrences(of: "%arg", with: "%\(argNum)$\(substitution.formatSpecifier)")
+    } else {
+        return val.replacingOccurrences(of: "%arg", with: "%\(substitution.formatSpecifier)")
+    }
 }
