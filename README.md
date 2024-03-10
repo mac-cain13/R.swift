@@ -1,4 +1,9 @@
-# R.swift [![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat)](https://cocoapods.org/pods/R.swift) [![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat)](License) ![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat)
+<p align="center"><img src="Documentation/Images/logo.jpg" width="200" /></p>
+
+# R.swift
+[![Version](https://img.shields.io/cocoapods/v/R.swift.svg?style=flat)](https://cocoapods.org/pods/R.swift)
+[![License](https://img.shields.io/cocoapods/l/R.swift.svg?style=flat)](License)
+![Platform](https://img.shields.io/cocoapods/p/R.swift.svg?style=flat)
 
 _Get strong typed, autocompleted resources like images, fonts and segues in Swift projects_
 
