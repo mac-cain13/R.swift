@@ -52,7 +52,7 @@ extension StoryboardViewControllerIdentifier {
      - returns: The view controller corresponding to the specified resource (`R.storyboard.*.*`).
      */
     @available(iOS 13.0, tvOS 13.0, visionOS 1, *)
-    public func callAsFunction(creator: @escaping (NSCoder) -> ViewController?) -> ViewController? where ViewController: UIViewController {
+    public func callAsFunction(creator: @escaping (NSCoder) -> ViewController?) -> ViewController where ViewController: UIViewController {
         UIStoryboard(name: storyboard, bundle: bundle).instantiateViewController(identifier: identifier, creator: creator)
     }
 }
