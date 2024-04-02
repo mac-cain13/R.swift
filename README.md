@@ -170,6 +170,12 @@ R.swift is also available through [Homebrew](http://brew.sh). This makes it poss
 </details>
 
 <details>
+<summary><h3>mise</h3></summary>
+
+R.swift is also available through [mise](https://mise.jdx.dev). This makes it possible to install R.swift globally on your system or within a directory. Adding R.swift as a plugin by running: `mise plugins install https://github.com/mustiikhalil/R.swift`, then `mise use --global rswift@X.Y.Z`. The mise plugin is maintained by [@mustiikhalil](https://github.com/mustiikhalil).
+</details>
+
+<details>
 <summary><h3>Manually</h3></summary>
 
 0. Add the [R.swift](https://github.com/mac-cain13/R.swift) library to your project
