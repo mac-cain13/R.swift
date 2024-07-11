@@ -8,23 +8,7 @@
 import Foundation
 import XcodeEdit
 import RswiftResources
-
-public enum ResourceType: String, CaseIterable {
-    case image
-    case string
-    case color
-    case data
-    case file
-    case font
-    case nib
-    case segue
-    case storyboard
-    case reuseIdentifier
-    case entitlements
-    case info
-    case id
-    case project
-}
+import RswiftShared
 
 public struct ProjectResources {
     public let assetCatalogs: [AssetCatalog]

@@ -14,29 +14,49 @@ struct RswiftGenerateResourcesCommand: CommandPlugin {
 
         let rswift = try context.tool(named: "rswift")
         let parsedArguments = ParsedArguments.parse(arguments: externalArgs)
-        let outputSubpath = parsedArguments.outputFile ?? "R.generated.swift"
 
         for target in context.package.targets {
             guard let target = target as? SourceModuleTarget else { continue }
             guard parsedArguments.targets.contains(target.name) || parsedArguments.targets.isEmpty else { continue }
 
-            let outputPath = target.directory.appending(subpath: outputSubpath)
+            let optionsFile = URL(fileURLWithPath: target.directory.appending(subpath: ".rswiftoptions").string)
 
-            let sourceFiles = target.sourceFiles
+            // Our base set of options contains just the output file. We do this since if when
+            // running the plugin an explicit output file was provided, this should take
+            // precedence any other argument that might have been provided by other means.
+            let options = RswiftOptions(outputPath: parsedArguments.outputFile)
+
+                // Next we merge in the "remaining" arguments that were provided when invoking the
+                // plugin. Like with the output file, these should take precedence over any other
+                // arguments provided by other means.
+                .merging(with: try .init(from: parsedArguments.remaining))
+
+                // Next we load and merge any options that may be present in an options file. These
+                // options don't override any of the previous options provided, but supplements
+                // those options.
+                .merging(with: try .init(contentsOf: optionsFile))
+
+                // Lastly, we provide a fallback bundle source and output file to ensure that these
+                // values are always set should no other values be provided
+                .merging(with: .init(bundleSource: target.kind == .generic ? .module : .finder,
+                                     outputPath: "R.generated.swift"))
+
+            // Get the input files for the current target being processed
+            let sourceFiles: [String] = target.sourceFiles
                 .filter { $0.type == .resource || $0.type == .unknown }
                 .map(\.path.string)
 
-            let inputFilesArguments = sourceFiles
+            let inputFilesArguments: [String] = sourceFiles
                 .flatMap { ["--input-files", $0 ] }
 
-            let bundleSource = target.kind == .generic ? "module" : "finder"
+            // Lastly, convert the options struct into an array of arguments, subsequently
+            // appending the input type and files, all of which will be provided to the
+            // `rswift` utility that we'll invoke.
+            let arguments: [String] =
+                options.makeArguments(sourceDirectory: URL(fileURLWithPath: target.directory.string)) +
+                ["--input-type", "input-files"] + inputFilesArguments
 
-            let arguments: [String] = [
-                "generate", outputPath.string,
-                "--input-type", "input-files",
-                "--bundle-source", bundleSource,
-            ] + inputFilesArguments + parsedArguments.remaining
-
+            // Finally, run the `rswift` utility
             do {
                 try rswift.run(arguments: arguments, environment: nil)
             } catch let error as RunError {
@@ -55,25 +75,52 @@ extension RswiftGenerateResourcesCommand: XcodeCommandPlugin {
 
         let rswift = try context.tool(named: "rswift")
         let parsedArguments = ParsedArguments.parse(arguments: externalArgs)
-        let outputSubpath = parsedArguments.outputFile ?? "R.generated.swift"
 
         for target in context.xcodeProject.targets {
             guard parsedArguments.targets.contains(target.displayName) || parsedArguments.targets.isEmpty else { continue }
 
-            let outputPath = context.xcodeProject.directory.appending(subpath: outputSubpath)
+            let projectOptionsFile = URL(fileURLWithPath: context.xcodeProject.directory.appending(subpath: ".rswiftoptions").string)
+            let targetOptionsFile = URL(fileURLWithPath: context.xcodeProject.directory.appending(subpath: target.displayName).appending(subpath: ".rswiftoptions").string)
 
-            let sourceFiles = target.inputFiles
+            // Our base set of options contains just the output file. We do this since if when
+            // running the plugin an explicit output file was provided, this should take
+            // precedence any other argument that might have been provided by other means.
+            let options = RswiftOptions(outputPath: parsedArguments.outputFile)
+
+                // Next we merge in the "remaining" arguments that were provided when invoking the
+                // plugin. Like with the output file, these should take precedence over any other
+                // arguments provided by other means.
+                .merging(with: try .init(from: parsedArguments.remaining))
+
+                // Next we load and merge any options that may be present in an options file
+                // specific to the target being processed. These options don't override any of the
+                // previous options provided, but supplements those options.
+                .merging(with: try .init(contentsOf: targetOptionsFile))
+
+                // Next we load and merge any options that may be present in an options file that
+                // applies to the entire project. These options don't override any of the previous
+                // options provided, but supplements those options.
+                .merging(with: try .init(contentsOf: projectOptionsFile))
+
+                // Lastly, we provide a fallback bundle source and output file to ensure that these
+                // values are always set should no other values be provided
+                .merging(with: .init(bundleSource: .finder,
+                                     outputPath: "R.generated.swift"))
+
+            // Get the input files for the current target being processed
+            let sourceFiles: [String] = target.inputFiles
                 .filter { $0.type == .resource || $0.type == .unknown }
                 .map(\.path.string)
 
-            let inputFilesArguments = sourceFiles
+            let inputFilesArguments: [String] = sourceFiles
                 .flatMap { ["--input-files", $0 ] }
 
-            let arguments: [String] = [
-                "generate", outputPath.string,
-                "--input-type", "input-files",
-                "--bundle-source", "finder",
-            ] + inputFilesArguments + parsedArguments.remaining
+            // Lastly, convert the options struct into an array of arguments, subsequently
+            // appending the input type and files, all of which will be provided to the
+            // `rswift` utility that we'll invoke.
+            let arguments: [String] =
+                options.makeArguments(sourceDirectory: URL(fileURLWithPath: context.xcodeProject.directory.string)) +
+                ["--input-type", "input-files"] + inputFilesArguments
 
             var environment: [String: String] = [
                 "SOURCE_ROOT": context.xcodeProject.directory.string,

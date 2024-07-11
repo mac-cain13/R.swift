@@ -8,8 +8,8 @@
 import ArgumentParser
 import Foundation
 import RswiftParsers
+import RswiftShared
 import XcodeEdit
-
 
 @main
 struct App: ParsableCommand {
@@ -211,3 +211,7 @@ extension ProcessInfo {
         return value
     }
 }
+
+extension ResourceType: ExpressibleByArgument {}
+extension AccessLevel: ExpressibleByArgument {}
+extension BundleSource: ExpressibleByArgument {}

@@ -23,8 +23,9 @@ let package = Package(
     ],
     targets: [
         .target(name: "RswiftResources"),
+        .target(name: "RswiftShared"),
         .target(name: "RswiftGenerators", dependencies: ["RswiftResources"]),
-        .target(name: "RswiftParsers", dependencies: ["RswiftResources", "XcodeEdit"]),
+        .target(name: "RswiftParsers", dependencies: ["RswiftResources", "RswiftShared", "XcodeEdit"]),
 
         .testTarget(name: "RswiftGeneratorsTests", dependencies: ["RswiftGenerators"]),
         .testTarget(name: "RswiftParsersTests", dependencies: ["RswiftParsers"]),
@@ -33,6 +34,7 @@ let package = Package(
         .executableTarget(name: "rswift", dependencies: [
             .target(name: "RswiftParsers"),
             .target(name: "RswiftGenerators"),
+            .target(name: "RswiftShared"),
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
         ]),
 
