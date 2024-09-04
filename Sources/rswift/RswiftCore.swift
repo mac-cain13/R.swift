@@ -201,7 +201,7 @@ public struct RswiftCore {
             valueCodeString: validateLines
         )
 
-        var s = Struct(name: structName, additionalModuleReferences: [.rswiftResources]) {
+        var s = Struct(name: structName, protocols: [.init(module: .host, rawName: "Sendable")], additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
 
             if generators.contains(.project), !projectStruct.isEmpty {
