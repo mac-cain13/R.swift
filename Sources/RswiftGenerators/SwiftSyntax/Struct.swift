@@ -549,6 +549,15 @@ extension Struct {
         )
     }
 
+    public func generateVarGetter() -> VarGetter {
+        VarGetter(
+            deploymentTarget: deploymentTarget,
+            name: name,
+            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            valueCodeString: ".init()"
+        )
+    }
+
     public func generateBundleVarGetter(name: String) -> VarGetter {
         VarGetter(
             deploymentTarget: deploymentTarget,

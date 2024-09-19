@@ -209,7 +209,7 @@ public struct RswiftCore {
             }
 
             if generators.contains(.string), !stringStruct.isEmpty {
-                stringStruct.generateBundleVarGetterForString(name: "string")
+                stringStruct.generateBundleVarGetterForString()
                 stringStruct.generateBundleFunctionForString(name: "string")
                 stringStruct.generateLocaleFunctionForString(name: "string")
                 stringStruct.generatePreferredLanguagesFunctionForString(name: "string")
@@ -241,7 +241,7 @@ public struct RswiftCore {
             }
 
             if generators.contains(.entitlements), !entitlementsStruct.isEmpty {
-                entitlementsStruct.generateLetBinding()
+                entitlementsStruct.generateVarGetter()
                 entitlementsStruct
             }
 
@@ -258,12 +258,12 @@ public struct RswiftCore {
             }
 
             if generators.contains(.segue), !segueStruct.isEmpty {
-                segueStruct.generateLetBinding()
+                segueStruct.generateVarGetter()
                 segueStruct
             }
 
             if generators.contains(.id), !idStruct.isEmpty {
-                idStruct.generateLetBinding()
+                idStruct.generateVarGetter()
                 idStruct
             }
 
@@ -274,7 +274,7 @@ public struct RswiftCore {
             }
 
             if generators.contains(.reuseIdentifier), !reuseIdentifierStruct.isEmpty {
-                reuseIdentifierStruct.generateLetBinding()
+                reuseIdentifierStruct.generateVarGetter()
                 reuseIdentifierStruct
             }
 

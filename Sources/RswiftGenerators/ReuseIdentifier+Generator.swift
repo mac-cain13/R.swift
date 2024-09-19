@@ -26,7 +26,7 @@ extension Reusable {
         groupedReusables.reportWarningsForDuplicatesAndEmpties(source: "reuseIdentifier", result: "reuse identifier", warning: warning)
 
         let letbindings = groupedReusables.uniques
-            .map { $0.generateLetBinding() }
+            .map { $0.generateVarGetter() }
             .sorted { $0.name < $1.name }
 
         let comments = ["This `\(qualifiedName.value)` struct is generated, and contains static references to \(letbindings.count) reuse identifiers."]
@@ -82,8 +82,8 @@ extension Reusable {
         )
     }
 
-    func generateLetBinding() -> LetBinding {
-        LetBinding(
+    func generateVarGetter() -> VarGetter {
+        VarGetter(
             comments: ["Reuse identifier `\(identifier)`."],
             name: SwiftIdentifier(name: identifier),
             typeReference: genericTypeReference,

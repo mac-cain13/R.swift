@@ -10,11 +10,11 @@ import RswiftResources
 
 
 extension Struct {
-    public func generateBundleVarGetterForString(name: String) -> VarGetter {
+    public func generateBundleVarGetterForString() -> VarGetter {
         VarGetter(
             deploymentTarget: deploymentTarget,
-            name: SwiftIdentifier(name: name),
-            typeReference: TypeReference(module: .host, rawName: self.name.value),
+            name: name,
+            typeReference: TypeReference(module: .host, rawName: name.value),
             valueCodeString: ".init(bundle: bundle, preferredLanguages: nil, locale: nil)"
         )
     }
