@@ -18,7 +18,7 @@ let package = Package(
         .plugin(name: "RswiftModifyXcodePackages", targets: ["RswiftModifyXcodePackages"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.9.0"),
+        .package(url: "https://github.com/tomlokhorst/XcodeEdit", from: "2.10.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.1.0"),
     ],
     targets: [
