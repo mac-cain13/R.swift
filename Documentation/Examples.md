@@ -256,3 +256,42 @@ class RecentsController: UICollectionViewController {
   }
 }
 ```
+
+## Project
+
+*Vanilla*
+```swift
+let developmentRegion = fatalError("Not available at runtime")
+let myTag = "myTag"
+```
+
+*With R.swift*
+
+Access the development region and any asset tags that are set on the project file.
+
+```swift
+let developmentRegion = R.project.developmentRegion
+let myTag = R.project.knownAssetTags.myTag
+```
+
+## Entitlements
+
+*With R.swift*
+
+Access the values in the entitlement file you embedded. This might differ from the entitlements your app actually has at runtime! But it's greate to get some identifiers in a consistent way.
+
+```swift
+let appGroupIdentifier = R.entitlements.comAppleSecurityApplicationGroups.groupMyAppGroup
+```
+
+## Info.plist
+
+Values under `UIApplicationShortcutItems`, `UIApplicationSceneManifest`, `NSUserActivityTypes`, `NSExtension` that are often needed in code are available directly through R.swift.
+
+*With R.swift*
+
+Access the values in the entitlement file you embedded. This might differ from the entitlements your app actually has at runtime! But it's greate to get some identifiers in a consistent way.
+
+```swift
+let sceneConfiguration = UISceneConfiguration(name: R.info.uiApplicationSceneManifest.uiSceneConfigurations.uiWindowSceneSessionRoleApplication.defaultConfiguration.uiSceneConfigurationName, sessionRole: .windowApplication)
+```

@@ -62,6 +62,9 @@ R.swift currently supports these types of resources:
 - [Segues](Documentation/Examples.md#segues)
 - [Nibs](Documentation/Examples.md#nibs)
 - [Reusable cells](Documentation/Examples.md#reusable-table-view-cells)
+- [Project](Documentation/Examples.md#project)
+- [Entitlements](Documentation/Examples.md#entitlements)
+- [Info.plist](Documentation/Examples.md#info-plist)
 
 Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-validation):
 - If all images used in storyboards and nibs are available
@@ -74,7 +77,6 @@ Runtime validation with [`R.validate()`](Documentation/Examples.md#runtime-valid
 - [Why was R.swift created?](Documentation/QandA.md#why-was-rswift-created)
 - [Why should I choose R.swift over alternative X or Y?](Documentation/QandA.md#why-should-i-choose-rswift-over-alternative-x-or-y)
 - [What are the requirements to run R.swift?](Documentation/QandA.md#what-are-the-requirements-to-run-rswift)
-- [How to use methods with a `Void` argument?](Documentation/QandA.md#how-to-use-methods-with-a-void-argument)
 - [How to fix missing imports in the generated file?](Documentation/QandA.md#how-to-fix-missing-imports-in-the-generated-file)
 - [How to use classes with the same name as their module?](Documentation/QandA.md#how-to-use-classes-with-the-same-name-as-their-module)
 - [Can I ignore resources?](Documentation/Ignoring.md)
@@ -89,19 +91,24 @@ As of Rswift 7, Swift Package Manager is the recommended method of installation.
 
 [Demo video: Updating from R.swift 6 to Rswift 7](https://youtu.be/icihJ_hin3I?t=66) (Starting at 1:06, this describes the installation of Rswift 7).
 
-### Xcode project - SPM
+### Xcode project using SPM (Recommended)
 
-1. In Project Settings, on the tab "Package Dependencies", click "+" and add `github.com/mac-cain13/R.swift`
-2. Select your target, on the tab "General", in the section "Frameworks, Libraries, and Embeded Content", click "+" and add `RswiftLibrary`
-3. Select your target, on the tab "Build Phases", in the section "Run Build Tool Plug-ins", click "+" and add `RswiftGenerateInternalResources`
-4. Build your project, now the `R` struct should be available in your code, use auto-complete to explore all static references
+[Demo Video: Install R.swift in Xcode with SPM](Documentation/RswiftSPMInstallation.mp4)
 
-_Screenshot of the Build Phase can be found [here](Documentation/Images/RunBuildToolPluginsRswift.png)_
+1. In Project Settings, on the tab "Package Dependencies", click "+", search for `github.com/mac-cain13/R.swift` and click "Add Package".
+2. Select the target that will use R.swift next to "RswiftLibrary" and click "Add Package".
+4. Now click on your target, on the tab "Build Phases", in the section "Run Build Tool Plug-ins", click "+" and add `RswiftGenerateInternalResources`. ([Screenshot](Documentation/Images/RunBuildToolPluginsRswift.png))
+5. Now the `R` struct should be available in your code, use auto-complete to explore all static references.
 
-#### When running on Xcode Cloud
+Note: The first build you might need to approve the new plugin by clicking the build error warning you about the new plugin.
 
-5. Add a [custom build script](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts) in `ci_scripts/ci_post_clone.sh` with the content:
-    `defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES`
+#### R.swift on Xcode Cloud or any other CI
+
+On your CI server you can't explicitly allow the build plugin to run, so you need to disable plugin validation to be able to build without user interaction:
+
+5. Run a script on your CI that runs: `defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES` before Xcode starts building.
+
+On Xcode Cloud you can add a [custom build script](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts) in `ci_scripts/ci_post_clone.sh` with this line that Xcode will run.
 
 ### Package.swift based SPM project
 
@@ -139,36 +146,6 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/BuildPha
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 </details>
 
-
-<details>
-<summary><h3>Mint</h3></summary>
-
-0. Add the [R.swift](https://github.com/mac-cain13/R.swift) library to your project
-1. Add `mac-cain13/R.swift` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile) and run `mint bootstrap`  to install this package without linking it globally (recommended)
-2. In Xcode: Click on your project in the file list, choose your target under `TARGETS`, click the `Build Phases` tab and add a `New Run Script Phase` by clicking the little plus icon in the top left
-3. Drag the new `Run Script` phase **above** the `Compile Sources` phase, expand it and paste the following script:  
-   ```bash
-   if mint list | grep -q 'R.swift'; then
-     mint run R.swift@v7.0.1 rswift generate "$SRCROOT/R.generated.swift"
-   else
-     echo "error: R.swift not installed; run 'mint bootstrap' to install"
-     return -1
-   fi
-   ```
-4. Add `$SRCROOT/R.generated.swift` to the "Output Files" of the Build Phase
-5. Uncheck "Based on dependency analysis" so that R.swift is run on each build
-6. Build your project, in Finder you will now see a `R.generated.swift` in the `$SRCROOT`-folder, drag the `R.generated.swift` files into your project and **uncheck** `Copy items if needed`
-
-_Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
-</details>
-
-
-<details>
-<summary><h3>Homebrew</h3></summary>
-
-R.swift is also available through [Homebrew](http://brew.sh). This makes it possible to install R.swift globally on your system. Install R.swift by running: `brew install rswift`. The Homebrew formula is maintained by [@tomasharkema](https://github.com/tomasharkema).
-</details>
-
 <details>
 <summary><h3>Manually</h3></summary>
 
@@ -188,13 +165,10 @@ _Screenshot of the Build Phase can be found [here](Documentation/Images/ManualBu
 _Tip:_ Add the `*.generated.swift` pattern to your `.gitignore` file to prevent unnecessary conflicts.
 </details>
 
-
 ## Contribute
 
 We'll love contributions, read the [contribute docs](Documentation/Contribute.md) for info on how to report issues, submit ideas and submit pull requests!
 
 ## License
 
-[R.swift](https://github.com/mac-cain13/R.swift) and [R.swift.Library](https://github.com/mac-cain13/R.swift.Library) are created by [Mathijs Kadijk](https://github.com/mac-cain13) and released under a [MIT License](License).
-
-Special thanks to [Tom Lokhorst](https://github.com/tomlokhorst) for his major contributions and help maintaining this project.
+[R.swift](https://github.com/mac-cain13/R.swift) is created by [Mathijs Kadijk](https://github.com/mac-cain13) and [Tom Lokhorst](https://github.com/tomlokhorst) released under a [MIT License](License).

@@ -4,11 +4,11 @@
 
 Swift is a beautiful language and one of it's main advantages is its increasing popularity. However, it can be frustrating to deal with errors that compile but fail during runtime due to missing resources. This makes refactoring difficult while making it easy to create bugs (e.g. missing images etc).
 
-Android tackles this problem by generating something called the R class. It inspired me to create this very project, R.swift, which, thankfully, was well received by colleagues, friends and Github stargazers, so here we are now.``
+Android tackles this problem by generating something called the R class. It inspired me to create this very project, R.swift, which, thankfully, was well received by colleagues, friends and Github stargazers, so here we are now.
 
 ## Why should I choose R.swift over alternative X or Y?
 
-There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliSoftware/SwiftGen), [Shark](https://github.com/kaandedeoglu/Shark) and [Natalie](https://github.com/krzyzanowskim/Natalie). However, I believe R.swift has these important advantages:
+There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliSoftware/SwiftGen) and [Shark](https://github.com/kaandedeoglu/Shark). However, I believe R.swift has these important advantages:
 - R.swift inspects your Xcodeproj file for resources instead of scanning folders or asking you for files
 - R.swift supports a lot of different assets
 - R.swift stays very close to the vanilla Apple API's, having minimal code change with maximum impact
@@ -16,12 +16,6 @@ There are many nice R.swift alternatives like [SwiftGen](https://github.com/AliS
 ## What are the requirements to run R.swift?
 
 R.swift works with Xcode 10 for apps targetting iOS 8 and tvOS 9 and higher.
-
-## How do I use methods with a `Void` argument?
-
-Xcode might autocomplete a function with a `Void` argument (`R.image.settingsIcon(Void)`); to solve this, simply remove the `Void` argument and you're good to go: `R.image.settingsIcon()`.
-
-The reason this happens is because of the availability of the var `R.image.settingsIcon.*` for information about the image and also having a function with named the same name.
 
 ## How do I fix missing imports in the generated file?
 
@@ -45,4 +39,3 @@ During installation you add R.swift as a Build phase to your target, basically t
 - Every time you build R.swift will run
 - It takes a look at your Xcode project file and inspects all resources linked with the target currently build
 - It generates a `R.generated.swift` file that contains a struct with types references to all of your resources 
-
