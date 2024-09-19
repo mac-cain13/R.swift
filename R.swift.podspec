@@ -25,8 +25,8 @@ Pod::Spec.new do |spec|
   spec.swift_version      = "5.7"
 
   spec.osx.deployment_target     = '10.15'
-  spec.ios.deployment_target     = '11'
-  spec.tvos.deployment_target    = '11'
+  spec.ios.deployment_target     = '12'
+  spec.tvos.deployment_target    = '12'
   spec.watchos.deployment_target = '4'
 
   spec.preserve_paths = "rswift"
