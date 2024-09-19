@@ -290,8 +290,8 @@ Values under `UIApplicationShortcutItems`, `UIApplicationSceneManifest`, `NSUser
 
 *With R.swift*
 
-Access the values in the entitlement file you embedded. This might differ from the entitlements your app actually has at runtime! But it's greate to get some identifiers in a consistent way.
+Access the values in the Info.plist file.
 
 ```swift
-let sceneConfiguration = UISceneConfiguration(name: R.info.uiApplicationSceneManifest.uiSceneConfigurations.uiWindowSceneSessionRoleApplication.defaultConfiguration.uiSceneConfigurationName, sessionRole: .windowApplication)
+let activity = NSUserActivity(activityType: R.info.nsUserActivityTypes.planTripIntent)
 ```
