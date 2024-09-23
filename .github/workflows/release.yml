@@ -37,7 +37,7 @@ jobs:
       run: |
         swift build -c release --arch x86_64 --arch arm64
 
-    - name: Delete temp keychain
+    - name: Delete temp keychain from previous run
       run: |
         /usr/bin/security delete-keychain signing_temp.keychain || true
     - name: Import Signing Certificates
@@ -50,6 +50,10 @@ jobs:
         codesign --force --options runtime --sign "$IDENTITY" .build/apple/Products/Release/rswift
       env:
         IDENTITY: 'Developer ID Application: Nonstrict B.V. (WT5N9FK54M)'
+    - name: Delete temp keychain from this run
+      if: always()
+      run: |
+        /usr/bin/security delete-keychain signing_temp.keychain || true
     - name: Store build artifact
       uses: actions/upload-artifact@v3
       with:
