@@ -50,10 +50,6 @@ jobs:
         codesign --force --options runtime --sign "$IDENTITY" .build/apple/Products/Release/rswift
       env:
         IDENTITY: 'Developer ID Application: Nonstrict B.V. (WT5N9FK54M)'
-    - name: Delete temp keychain from this run
-      if: always()
-      run: |
-        /usr/bin/security delete-keychain signing_temp.keychain || true
     - name: Store build artifact
       uses: actions/upload-artifact@v3
       with:
@@ -166,6 +162,11 @@ jobs:
         asset_path: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
         asset_name: rswift-${{ github.event.release.tag_name }}.pkg
         asset_content_type: application/pkg
+
+    - name: Delete temp keychain from this run
+      if: always()
+      run: |
+        /usr/bin/security delete-keychain signing_temp.keychain || true
 
     - name: Publish to Cocoapods
       run: |
