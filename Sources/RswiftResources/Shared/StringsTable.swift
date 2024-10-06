@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct StringsTable {
+public struct StringsTable: Sendable {
     public let filename: String
     public let locale: LocaleReference
     public let dictionary: [Key: Value]
@@ -19,7 +19,7 @@ public struct StringsTable {
     }
 
     public typealias Key = String
-    public struct Value {
+    public struct Value: Sendable {
         public let params: [StringParam]
         public let originalValue: String
 

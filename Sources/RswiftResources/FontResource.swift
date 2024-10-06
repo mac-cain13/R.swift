@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FontResource {
+public struct FontResource: Sendable {
     public let name: String
     public let bundle: Bundle
     public let filename: String

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct StoryboardResource: Equatable {
+public struct StoryboardResource: Equatable, Sendable {
     public let name: String
     public var locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?
@@ -49,7 +49,7 @@ public struct StoryboardResource: Equatable {
         self.isAppKit = isAppKit
     }
 
-    public struct ViewController: Equatable {
+    public struct ViewController: Equatable, Sendable {
         public let id: String
         public let storyboardIdentifier: String?
         public let type: TypeReference
@@ -63,7 +63,7 @@ public struct StoryboardResource: Equatable {
         }
     }
 
-    public struct ViewControllerPlaceholder: Equatable {
+    public struct ViewControllerPlaceholder: Equatable, Sendable {
         public let id: String
         public let storyboardName: String?
         public let referencedIdentifier: String?
@@ -77,7 +77,7 @@ public struct StoryboardResource: Equatable {
         }
     }
 
-    public struct Segue: Equatable {
+    public struct Segue: Equatable, Sendable {
         public let identifier: String
         public let type: TypeReference
         public let destination: String

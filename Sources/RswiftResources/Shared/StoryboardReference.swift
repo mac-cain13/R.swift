@@ -25,7 +25,7 @@ public protocol InitialControllerContainer {
 
 
 /// Storyboard view controller identifier
-public struct StoryboardViewControllerIdentifier<ViewController> {
+public struct StoryboardViewControllerIdentifier<ViewController>: Sendable {
 
     /// Storyboard identifier of this view controller
     public let identifier: String
@@ -61,7 +61,7 @@ public protocol ReuseIdentifierContainer<Reusable> {
 }
 
 /// Nib reference
-public struct NibReference<FirstView>: NibReferenceContainer {
+public struct NibReference<FirstView>: NibReferenceContainer, Sendable {
 
     /// String name of this nib
     public let name: String
@@ -81,7 +81,7 @@ public struct NibReference<FirstView>: NibReferenceContainer {
 }
 
 /// Reuse identifier
-public struct ReuseIdentifier<Reusable>: ReuseIdentifierContainer {
+public struct ReuseIdentifier<Reusable>: ReuseIdentifierContainer, Sendable {
 
     /// String identifier of this reusable
     public let identifier: String
@@ -97,7 +97,7 @@ public struct ReuseIdentifier<Reusable>: ReuseIdentifierContainer {
 }
 
 /// Nib reference, reuse identifier
-public struct NibReferenceReuseIdentifier<FirstView, Reusable>: NibReferenceContainer, ReuseIdentifierContainer {
+public struct NibReferenceReuseIdentifier<FirstView, Reusable>: NibReferenceContainer, ReuseIdentifierContainer, Sendable {
 
     /// String name of this nib
     public let name: String
@@ -122,7 +122,7 @@ public struct NibReferenceReuseIdentifier<FirstView, Reusable>: NibReferenceCont
 }
 
 /// Segue identifier
-public struct SegueIdentifier<Segue, Source, Destination> {
+public struct SegueIdentifier<Segue, Source, Destination>: Sendable {
 
     /// Identifier string of this segue
     public let identifier: String
@@ -168,6 +168,7 @@ public struct TypedSegue<Segue, Source, Destination> {
     }
 }
 
+extension TypedSegue: Sendable where Segue: Sendable, Source: Sendable, Destination: Sendable {}
 
 @available(*, renamed: "ReuseIdentifierContainer")
 public protocol ReuseIdentifierType {}

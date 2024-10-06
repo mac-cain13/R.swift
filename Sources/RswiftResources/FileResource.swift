@@ -7,8 +7,7 @@
 
 import Foundation
 
-public struct FileResource {
-
+public struct FileResource: Sendable {
     public let name: String
     public let pathExtension: String
     public let bundle: Bundle

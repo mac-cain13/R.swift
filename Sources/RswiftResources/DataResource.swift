@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DataResource {
+public struct DataResource: Sendable {
     public let name: String
     public let path: [String]
     public let bundle: Bundle

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NameCatalog: Hashable, Comparable {
+public struct NameCatalog: Hashable, Comparable, Sendable {
     public let name: String
     public let catalog: String?
 

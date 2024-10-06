@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct NibResource {
+public struct NibResource: Sendable {
     public let name: String
     public var locale: LocaleReference
     public let deploymentTarget: DeploymentTarget?

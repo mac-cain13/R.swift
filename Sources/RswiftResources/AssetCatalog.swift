@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AssetCatalog {
+public struct AssetCatalog: Sendable {
     public let filename: String
     public let root: Namespace
 
@@ -18,7 +18,7 @@ public struct AssetCatalog {
 }
 
 extension AssetCatalog {
-    public struct Namespace {
+    public struct Namespace: Sendable {
         public var subnamespaces: [String: Namespace] = [:]
         public var colors: [ColorResource] = []
         public var images: [ImageResource] = []

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DeploymentTarget: Equatable {
+public struct DeploymentTarget: Equatable, Sendable {
     public typealias Version = (major: Int, minor: Int)
 
     public let version: Version?

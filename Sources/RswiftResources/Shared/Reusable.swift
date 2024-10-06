@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Reusable: Hashable {
+public struct Reusable: Hashable, Sendable {
     public let identifier: String
     public let type: TypeReference
 

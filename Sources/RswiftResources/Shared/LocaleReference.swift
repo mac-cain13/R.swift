@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LocaleReference: Hashable {
+public enum LocaleReference: Hashable, Sendable {
     case none
     case base // Older projects use a "Base" locale
     case language(String)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ColorResource {
+public struct ColorResource: Sendable {
     public let name: String
     public let path: [String]
     public let bundle: Bundle

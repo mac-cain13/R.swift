@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ImageResource {
+public struct ImageResource: Sendable {
     public let name: String
     public let path: [String]
     public let bundle: Bundle

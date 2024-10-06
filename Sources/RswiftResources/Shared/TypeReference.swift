@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TypeReference: Hashable {
+public struct TypeReference: Hashable, Sendable {
     public let module: ModuleReference
     public let name: String
     public var genericArgs: [TypeReference]

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ModuleReference: Hashable {
+public enum ModuleReference: Hashable, Sendable {
     case host
     case stdLib
     case custom(name: String)
