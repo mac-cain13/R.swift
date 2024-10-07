@@ -201,7 +201,7 @@ public struct RswiftCore {
             valueCodeString: validateLines
         )
 
-        var s = Struct(name: structName, protocols: [.init(module: .host, rawName: "Sendable")], additionalModuleReferences: [.rswiftResources]) {
+        var s = Struct(name: structName, additionalModuleReferences: [.rswiftResources]) {
             Init.bundle
 
             if generators.contains(.project), !projectStruct.isEmpty {
@@ -289,6 +289,8 @@ public struct RswiftCore {
 
         if accessLevel == .publicLevel {
             s.setAccessControl(.public)
+
+            s.markSendable()
         }
 
         let imports = Set(s.allModuleReferences.compactMap(\.name))

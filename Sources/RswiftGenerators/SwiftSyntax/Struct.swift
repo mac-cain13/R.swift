@@ -446,6 +446,14 @@ public struct Struct {
         }
     }
 
+    public mutating func markSendable() {
+        self.protocols.append(.init(module: .host, rawName: "Sendable"))
+
+        for i in structs.indices {
+            structs[i].markSendable()
+        }
+    }
+
     public func prettyPrint() -> String {
         var pp = PrettyPrinter()
         render(&pp)
