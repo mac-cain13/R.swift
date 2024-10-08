@@ -11,20 +11,7 @@ import XcodeEdit
 import RswiftParsers
 import RswiftResources
 import RswiftGenerators
-
-extension ResourceType: ExpressibleByArgument {}
-
-public enum AccessLevel: String, ExpressibleByArgument {
-    case publicLevel = "public"
-    case internalLevel = "internal"
-    case filePrivate = "fileprivate"
-    case privateLevel = "private"
-}
-
-public enum BundleSource: String, ExpressibleByArgument {
-    case module
-    case finder
-}
+import RswiftShared
 
 public struct RswiftCore {
     let outputURL: URL
