@@ -3,7 +3,7 @@
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
       "state" : {
         "revision" : "8f4d2753f0e4778c76d5f05ad16c74f707390531",
         "version" : "1.2.3"
@@ -12,7 +12,7 @@
     {
       "identity" : "xcodeedit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tomlokhorst/XcodeEdit",
+      "location" : "https://github.com/tomlokhorst/XcodeEdit.git",
       "state" : {
         "revision" : "017d23f71fa8d025989610db26d548c44cacefae",
         "version" : "2.10.2"
