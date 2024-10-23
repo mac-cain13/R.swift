@@ -19,4 +19,34 @@ class InfoPlistTests: XCTestCase {
   func testVariable() {
     XCTAssertEqual(R.info.nsExtension.nsExtensionPrincipalClass, "ResourceApp.IntentHandler")
   }
+  
+  func testUIApplicationShortcutItems() {
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsQrScanning.uiApplicationShortcutItemIconFile, "ShortcutQrScanning")
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsQrScanning.uiApplicationShortcutItemTitle, "Scan QR-code")
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsQrScanning.uiApplicationShortcutItemType, "nl.mathijskadijk.shortcuts.qr-scanning")
+    
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsSendParcel.uiApplicationShortcutItemIconFile, "ShortcutSendParcel")
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsSendParcel.uiApplicationShortcutItemTitle, "Send a Parcel")
+    XCTAssertEqual(R.info.uiApplicationShortcutItems.nlMathijskadijkShortcutsSendParcel.uiApplicationShortcutItemType, "nl.mathijskadijk.shortcuts.send-parcel")
+  }
+  
+  func testUIApplicationSceneManifest() {
+    XCTAssertFalse(R.info.uiApplicationSceneManifest.uiApplicationSupportsMultipleScenes)
+    
+    XCTAssertEqual(R.info.uiApplicationSceneManifest.uiSceneConfigurations.uiWindowSceneSessionRoleApplication.defaultConfiguration.uiSceneConfigurationName, "Default Configuration")
+    XCTAssertEqual(R.info.uiApplicationSceneManifest.uiSceneConfigurations.uiWindowSceneSessionRoleApplication.defaultConfiguration.uiSceneDelegateClassName, "ResourceApp.SceneDelegate")
+  }
+  
+  func testNSUserActivityTypes() {
+    XCTAssertEqual(R.info.nsUserActivityTypes.planTripIntent, "PlanTripIntent")
+    XCTAssertEqual(R.info.nsUserActivityTypes.showDeparturesIntent, "ShowDeparturesIntent")
+  }
+  
+  func testNSExtension() {
+    XCTAssertEqual(R.info.nsExtension.nsExtensionAttributes.intentsSupported.planTripIntent, "PlanTripIntent")
+    XCTAssertEqual(R.info.nsExtension.nsExtensionAttributes.intentsSupported.showDeparturesIntent, "ShowDeparturesIntent")
+    
+    XCTAssertEqual(R.info.nsExtension.nsExtensionPrincipalClass, "ResourceApp.IntentHandler")
+    XCTAssertEqual(R.info.nsExtension.nsExtensionPointIdentifier, "com.apple.intents-service")
+  }
 }
