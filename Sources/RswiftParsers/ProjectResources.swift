@@ -53,10 +53,20 @@ public struct ProjectResources {
 
         let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
 
-        let paths = try xcodeproj.resourcePaths(forTarget: targetName)
-        let urls = paths
+        let resourcePaths = try xcodeproj.resourcePaths(forTarget: targetName)
+        let resourceUrls = resourcePaths
             .map { $0.url(with: sourceTreeURLs.url(for:)) }
             .filter { !ignoreFile.matches(url: $0) }
+        
+        let synchronizedRootPaths = try xcodeproj.synchronizedRootPaths(forTarget: targetName)
+        let synchronizedRootUrls = synchronizedRootPaths
+            .map { $0.url(with: sourceTreeURLs.url(for:)) }
+            .filter { !ignoreFile.matches(url: $0) }
+        let synchronizedResourceUrls = try synchronizedRootUrls.flatMap { url in
+            try FileManager.default.recursiveResourcesOfDirectory(at: url)
+        }
+        
+        let urls = resourceUrls + synchronizedResourceUrls
 
         let infoPlists: [PropertyListResource]
         let entitlements: [PropertyListResource]

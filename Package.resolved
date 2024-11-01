@@ -12,10 +12,10 @@
     {
       "identity" : "xcodeedit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tomlokhorst/XcodeEdit",
+      "location" : "https://github.com/fthdgn/XcodeEdit",
       "state" : {
-        "revision" : "017d23f71fa8d025989610db26d548c44cacefae",
-        "version" : "2.10.2"
+        "revision" : "c1774730b0acc21819d763bdaf378e62a46d8377",
+        "version" : "2.10.2-fthdgn-1"
       }
     }
   ],

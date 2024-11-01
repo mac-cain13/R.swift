@@ -76,6 +76,15 @@ public struct Xcodeproj: SupportedExtensions {
         return fileRefPaths + variantGroupPaths
     }
 
+    public func synchronizedRootPaths(forTarget targetName: String) throws -> [Path] {
+        let target = try findTarget(name: targetName)
+        return target.fileSystemSynchronizedGroups?
+            .compactMap({
+                guard let value = $0.value else { return Path?.none }
+                return value.fullPath
+            }) ?? []
+    }
+
     public func buildConfigurations(forTarget targetName: String) throws -> [XCBuildConfiguration] {
         let target = try findTarget(name: targetName)
 
