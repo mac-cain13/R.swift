@@ -408,7 +408,7 @@ private struct StringWithParams {
             }
 
             let locales = values.compactMap { $0.0.localeDescription }
-            results.append("Locales: \(locales.joined(separator: ", "))")
+            results.append("Locales: \(locales.sorted().joined(separator: ", "))")
         }
 
         return results
