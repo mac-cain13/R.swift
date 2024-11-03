@@ -129,7 +129,7 @@ jobs:
     - name: Build
       run: swift build -v -c release
     - name: Store artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: rswift-dev
         path: .build/release/rswift
