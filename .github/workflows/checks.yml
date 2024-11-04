@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
@@ -42,7 +42,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: podcache-ios
       with:
         path: Examples/ResourceApp/Pods
@@ -121,7 +121,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Pull cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .build
         key: ${{ runner.os }}spm${{ hashFiles('**/Package.resolved') }}
