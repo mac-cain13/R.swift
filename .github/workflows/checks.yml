@@ -2,7 +2,7 @@ name: Checks
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
     branches: '*'
 
@@ -11,7 +11,7 @@ env:
 
 jobs:
   unit-tests:
-    runs-on: macos-12
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
       run: swift test -v
 
   test-iOS-ResourceApp:
-    runs-on: macos-12
+    runs-on: self-hosted
     needs: build-rswift
     steps:
     - name: Checkout
@@ -56,7 +56,7 @@ jobs:
       run: xcodebuild -workspace Examples/ResourceApp/ResourceApp.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-iOS-StaticFrameworks:
-    runs-on: macos-12
+    runs-on: self-hosted
     needs: build-rswift
     steps:
     - name: Checkout
@@ -75,7 +75,7 @@ jobs:
       run: xcodebuild -project Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj -scheme App -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-iOS-LocalizedStringApp:
-    runs-on: macos-12
+    runs-on: self-hosted
     needs: build-rswift
     steps:
     - name: Checkout
@@ -93,7 +93,7 @@ jobs:
       run: xcodebuild -project Examples/LocalizedStringApp/LocalizedStringApp.xcodeproj -scheme LocalizedStringApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
 
   test-tvOS:
-    runs-on: macos-12
+    runs-on: self-hosted
     needs: build-rswift
     steps:
     - name: Checkout
@@ -112,7 +112,7 @@ jobs:
       run: xcodebuild -project Examples/RtvApp/RtvApp.xcodeproj -scheme ResourceApp-tvOS -destination 'platform=tvOS Simulator,name=Apple TV,OS=16.0' test
 
   build-rswift:
-    runs-on: macos-12
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v3
