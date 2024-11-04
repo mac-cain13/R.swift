@@ -7,7 +7,7 @@ on:
     branches: '*'
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode-16.0.0.app/Contents/Developer
 
 jobs:
   unit-tests:
@@ -54,7 +54,7 @@ jobs:
       run: pod install --project-directory=Examples/ResourceApp
     - name: Test
       #run: fastlane scan --workspace "Examples/ResourceApp/ResourceApp.xcworkspace" --scheme "ResourceApp"
-      run: xcodebuild -workspace Examples/ResourceApp/ResourceApp.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+      run: xcodebuild -workspace Examples/ResourceApp/ResourceApp.xcworkspace -scheme ResourceApp -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
 
   test-iOS-StaticFrameworks:
     runs-on: self-hosted
@@ -74,7 +74,7 @@ jobs:
         chmod +x .build/release/rswift
     - name: Test
       #run: fastlane scan --project "Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj" --scheme "App"
-      run: xcodebuild -project Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj -scheme App -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+      run: xcodebuild -project Examples/RswiftAppWithStaticFrameworks/RswiftAppWithStaticFrameworks.xcodeproj -scheme App -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
 
   test-iOS-LocalizedStringApp:
     runs-on: self-hosted
@@ -93,7 +93,7 @@ jobs:
         mv rswift-dev/rswift .build/release/rswift
         chmod +x .build/release/rswift
     - name: Test
-      run: xcodebuild -project Examples/LocalizedStringApp/LocalizedStringApp.xcodeproj -scheme LocalizedStringApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' test
+      run: xcodebuild -project Examples/LocalizedStringApp/LocalizedStringApp.xcodeproj -scheme LocalizedStringApp -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' test
 
   test-tvOS:
     runs-on: self-hosted
@@ -113,7 +113,7 @@ jobs:
         chmod +x .build/release/rswift
     - name: Test
       #run: fastlane scan --project "Examples/RtvApp/RtvApp.xcodeproj" --scheme "ResourceApp-tvOS"
-      run: xcodebuild -project Examples/RtvApp/RtvApp.xcodeproj -scheme ResourceApp-tvOS -destination 'platform=tvOS Simulator,name=Apple TV,OS=16.0' test
+      run: xcodebuild -project Examples/RtvApp/RtvApp.xcodeproj -scheme ResourceApp-tvOS -destination 'platform=tvOS Simulator,name=Apple TV,OS=18.0' test
 
   build-rswift:
     runs-on: self-hosted

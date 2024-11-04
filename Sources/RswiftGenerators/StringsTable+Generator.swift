@@ -310,7 +310,7 @@ extension StringsTable {
             let fewParams = allParams.filter { $0.0 == badKey }.map { $0.1 }
 
             if let params = fewParams.first {
-                let locales = params.compactMap { $0.0.localeDescription }.joined(separator: ", ")
+                let locales = params.compactMap { $0.0.localeDescription }.sorted().joined(separator: ", ")
                 warning("Skipping string for key \(badKey) (\(filename)), format specifiers don't match for all locales: \(locales)")
             }
         }
@@ -408,7 +408,7 @@ private struct StringWithParams {
             }
 
             let locales = values.compactMap { $0.0.localeDescription }
-            results.append("Locales: \(locales.joined(separator: ", "))")
+            results.append("Locales: \(locales.sorted().joined(separator: ", "))")
         }
 
         return results

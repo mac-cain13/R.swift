@@ -53,17 +53,14 @@ public struct ProjectResources {
 
         let buildConfigurations = try xcodeproj.buildConfigurations(forTarget: targetName)
 
-        let paths = try xcodeproj.resourcePaths(forTarget: targetName)
-        let urls = paths
-            .map { $0.url(with: sourceTreeURLs.url(for:)) }
-            .filter { !ignoreFile.matches(url: $0) }
-
+        var excludeURLs: [URL] = []
         let infoPlists: [PropertyListResource]
         let entitlements: [PropertyListResource]
 
         if resourceTypes.contains(.info) {
             infoPlists = try buildConfigurations.compactMap { config -> PropertyListResource? in
                 guard let url = infoPlistFile else { return nil }
+                excludeURLs.append(url)
                 return try parse(with: warning) {
                     try PropertyListResource.parse(url: url, buildConfigurationName: config.name)
                 }
@@ -75,11 +72,38 @@ public struct ProjectResources {
         if resourceTypes.contains(.entitlements) {
             entitlements = try buildConfigurations.compactMap { config -> PropertyListResource? in
                 guard let url = codeSignEntitlements else { return nil }
+                excludeURLs.append(url)
                 return try parse(with: warning) { try PropertyListResource.parse(url: url, buildConfigurationName: config.name) }
             }
         } else {
             entitlements = []
         }
+
+        let paths = try xcodeproj.resourcePaths(forTarget: targetName)
+        let pathURLs = paths.map { $0.url(with: sourceTreeURLs.url(for:)) }
+
+        let extraURLs = try xcodeproj.extraResourceURLs(forTarget: targetName, sourceTreeURLs: sourceTreeURLs)
+
+        // Combine URLs from Xcode project file with extra URLs found by scanning file system
+        var pathAndExtraURLs = Array(Set(pathURLs + extraURLs))
+
+        // Find all localized strings files for ignore extension so that those can be removed
+        let localizedExtensions = ["xib", "storyboard", "intentdefinition"]
+        let localizedStringURLs = findLocalizedStrings(inputURLs: pathAndExtraURLs, ignoreExtensions: localizedExtensions)
+
+        // These file types are compiled, and shouldn't be included as resources
+        // Note that this should be done after finding localized files
+        let sourceCodeExtensions = [
+            "swift", "h", "m", "mm", "c", "cpp", "metal",
+            "xcdatamodeld", "entitlements", "intentdefinition",
+        ]
+        pathAndExtraURLs.removeAll(where: { sourceCodeExtensions.contains($0.pathExtension) })
+
+        // Remove all ignored files, excluded files and localized strings files
+        let urls = pathAndExtraURLs
+            .filter { !ignoreFile.matches(url: $0) }
+            .filter { !excludeURLs.contains($0) }
+            .filter { !localizedStringURLs.contains($0) }
 
         return try parseURLs(
             urls: urls,
@@ -183,6 +207,71 @@ public struct ProjectResources {
         )
     }
 }
+
+// Finds strings files for Xcode generated files
+//
+// Example 1:
+// some-dir/Base.lproj/MyIntents.intentdefinition
+// some-dir/nl.lproj/MyIntents.string
+//
+// Example 2:
+// some-dir/Base.lproj/Main.storyboard
+// some-dir/nl.lproj/Main.string
+private func findLocalizedStrings(inputURLs: [URL], ignoreExtensions: [String]) -> [URL] {
+    // Dictionary to map each parent directory to its `.lproj` subdirectories
+    var parentToLprojDirectories = [URL: [URL]]()
+
+    // Dictionary to keep track of files in each `.lproj` directory
+    var directoryContents = [URL: [URL]]()
+
+    // Populate the dictionaries
+    for url in inputURLs {
+        let directoryURL = url.deletingLastPathComponent()
+        let parentDirectory = directoryURL.deletingLastPathComponent()
+        if directoryURL.lastPathComponent.hasSuffix(".lproj") {
+            parentToLprojDirectories[parentDirectory, default: []].append(directoryURL)
+            directoryContents[directoryURL, default: []].append(url)
+        }
+    }
+
+    // Set of URLs to remove
+    var urlsToRemove = Set<URL>()
+
+    // Analyze each group of sibling `.lproj` directories under the same parent
+    for (_, lprojDirectories) in parentToLprojDirectories {
+        var baseFilenameToFileUrls = [String: [URL]]()
+        var baseFilenamesWithIgnoreExtension = Set<String>()
+
+        // Collect all files by base filename and check for files with an ignoreExtension
+        for directory in lprojDirectories {
+            guard let files = directoryContents[directory] else { continue }
+            for file in files {
+                let baseFilename = file.deletingPathExtension().lastPathComponent
+                let fileExtension = file.pathExtension
+
+                baseFilenameToFileUrls[baseFilename, default: []].append(file)
+
+                if ignoreExtensions.contains(fileExtension) {
+                    baseFilenamesWithIgnoreExtension.insert(baseFilename)
+                }
+            }
+        }
+
+        // Determine which files to remove based on the presence of files with an ignoreExtension
+        for baseFilename in baseFilenamesWithIgnoreExtension {
+            if let files = baseFilenameToFileUrls[baseFilename] {
+                for file in files {
+                    if file.pathExtension == "strings" {
+                        urlsToRemove.insert(file)
+                    }
+                }
+            }
+        }
+    }
+
+    return Array(urlsToRemove)
+}
+
 
 private func parse<R>(with warning: (String) -> Void, closure: () throws -> R) throws -> R? {
     do {
