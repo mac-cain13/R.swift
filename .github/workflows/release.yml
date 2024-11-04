@@ -12,7 +12,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set version
       run: |
         sed -i "" "s/\(static let version = \"\).*\(\"\)/\1${TAG}\2/" Sources/rswift/Config.swift
