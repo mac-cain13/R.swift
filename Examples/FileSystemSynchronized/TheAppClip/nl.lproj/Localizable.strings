@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  FileSystemSynchronized
+
+  Created by Tom Lokhorst on 2024-11-03.
+  
+*/
+
+"hello.world" = "Hallo wereld";

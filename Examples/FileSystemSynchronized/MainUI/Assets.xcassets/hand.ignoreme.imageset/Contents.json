@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "hand.ignoreme.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
