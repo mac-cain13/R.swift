@@ -24,7 +24,7 @@ jobs:
       env:
         TARGET: ${{ runner.temp }}/source.tar.gz
     - name: Attach tarball to release
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -41,7 +41,7 @@ jobs:
       run: |
         /usr/bin/security delete-keychain signing_temp.keychain || true
     - name: Import Signing Certificates
-      uses: apple-actions/import-codesign-certs@v1
+      uses: apple-actions/import-codesign-certs@v3
       with:
         p12-file-base64: ${{ secrets.APPLE_CERTIFICATES }}
         p12-password: ${{ secrets.APPLE_CERTIFICATES_PASSWORD }}
@@ -70,7 +70,7 @@ jobs:
         TEAM_ID: WT5N9FK54M
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.zip
     - name: Attach ZIP to release
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -122,7 +122,7 @@ jobs:
         TEAM_ID: WT5N9FK54M
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.artifactbundle.zip
     - name: Attach artifact bundle to release
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -154,7 +154,7 @@ jobs:
         TEAM_ID: WT5N9FK54M
         FILENAME: ${{ runner.temp }}/rswift-${{ github.event.release.tag_name }}.pkg
     - name: Attach PKG to release
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
