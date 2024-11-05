@@ -14,7 +14,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Pull cache
       uses: actions/cache@v4
       with:
@@ -30,7 +30,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download build
       uses: actions/download-artifact@v4.1.7
       with:
@@ -61,7 +61,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download build
       uses: actions/download-artifact@v4.1.7
       with:
@@ -81,7 +81,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download build
       uses: actions/download-artifact@v4.1.7
       with:
@@ -100,7 +100,7 @@ jobs:
     needs: build-rswift
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download build
       uses: actions/download-artifact@v4.1.7
       with:
@@ -119,7 +119,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Pull cache
       uses: actions/cache@v4
       with:
