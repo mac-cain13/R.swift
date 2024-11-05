@@ -51,7 +51,7 @@ jobs:
       env:
         IDENTITY: 'Developer ID Application: Nonstrict B.V. (WT5N9FK54M)'
     - name: Store build artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: rswift-${{ github.event.release.tag_name }}
         path: .build/apple/Products/Release/rswift
