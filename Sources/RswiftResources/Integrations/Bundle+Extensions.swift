@@ -7,16 +7,41 @@
 
 import Foundation
 
-extension Bundle {
+public protocol PlistPathComponent {
+    typealias Key = String
+    typealias Index = Int
+}
 
+extension PlistPathComponent.Key: PlistPathComponent {}
+extension PlistPathComponent.Index: PlistPathComponent {}
+
+extension Bundle {
+    
     /// Returns the string associated with the specified path + key in the receiver's information property list.
-    public func infoDictionaryString(path: [String], key: String) -> String? {
-        var dict = infoDictionary
+    public func infoDictionaryString(path: [PlistPathComponent], key: PlistPathComponent.Key? = nil) -> String? {
+        var currentObject: Any? = infoDictionary
+
         for step in path {
-            guard let obj = dict?[step] as? [String: Any] else { return nil }
-            dict = obj
+            if let currentDict = currentObject as? [String: Any], let key = step as? String {
+                // If the current object is a dictionary, move to the next step using the dictionary key
+                currentObject = currentDict[key]
+            } else if let currentArray = currentObject as? [Any], let index = step as? Int, currentArray.indices.contains(index) {
+                // If the current object is an array, and the step is a valid index, move to the array element
+                currentObject = currentArray[index]
+            } else {
+                // If the path leads to an invalid object type or out of bounds index, return nil
+                return nil
+            }
         }
-        return dict?[key] as? String
+
+        // Attempt to extract a string from the final object using the provided key, else if key == nil, assume
+        // we have arrived at a string value.
+        if let dict = currentObject as? [String: Any], let key = key {
+            return dict[key] as? String
+        } else if key == nil, let value = currentObject as? String {
+            return value
+        }
+        return nil
     }
 
     /// Find first bundle and locale for which the table exists

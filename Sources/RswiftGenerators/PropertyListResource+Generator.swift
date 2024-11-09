@@ -52,8 +52,16 @@ extension PropertyListResource {
     }
 }
 
+protocol PlistPathComponent {
+    typealias Key = String
+    typealias Index = Int
+}
+
+extension PlistPathComponent.Key: PlistPathComponent {}
+extension PlistPathComponent.Index: PlistPathComponent {}
+
 extension PropertyListResource.Contents {
-    @StructMembersBuilder func generateMembers(resourceName: String, path: [String], isInfoPlist: Bool, warning: (String) -> Void) -> StructMembers {
+    @StructMembersBuilder func generateMembers(resourceName: String, path: [PlistPathComponent], includeKey: Bool = true, isInfoPlist: Bool, warning: (String) -> Void) -> StructMembers {
         let groupedContents = self.grouped(bySwiftIdentifier: { $0.key })
         groupedContents.reportWarningsForDuplicatesAndEmpties(source: resourceName, result: resourceName, warning: warning)
 
@@ -73,7 +81,7 @@ extension PropertyListResource.Contents {
                     VarGetter(
                         name: SwiftIdentifier(name: key),
                         typeReference: .string,
-                        valueCodeString: "bundle.infoDictionaryString(path: \(path), key: \"\(key.escapedStringLiteral)\") ?? \"\(value.escapedStringLiteral)\""
+                        valueCodeString: valueCodedString(path: path, includeKey: includeKey, key: key, value: value)
                     )
                 } else {
                     LetBinding(
@@ -86,12 +94,13 @@ extension PropertyListResource.Contents {
             case let duplicateArray as [String]:
                 let groupedArray = duplicateArray.grouped(bySwiftIdentifier: { $0 })
                 groupedArray.reportWarningsForDuplicatesAndEmpties(source: resourceName, result: resourceName, warning: warning)
-                let dicts = Dictionary(groupedArray.uniques.map { ($0, $0) }, uniquingKeysWith: { l, r in l })
 
                 bundleStruct(name: key, usesBundle: isInfoPlist) {
-                    dicts
-                        .generateMembers(resourceName: resourceName, path: newPath, isInfoPlist: isInfoPlist, warning: warning)
-                        .sorted()
+                    for (index, value) in groupedArray.uniques.enumerated() {
+                        [value: value]
+                            .generateMembers(resourceName: resourceName, path: newPath + [index], includeKey: false, isInfoPlist: isInfoPlist, warning: warning)
+                            .sorted()
+                    }
                 }
 
 
@@ -105,11 +114,11 @@ extension PropertyListResource.Contents {
 
             case let dicts as [[String: Any]] where arrayOfDictionariesPrimaryKeys.keys.contains(key):
                 bundleStruct(name: key, usesBundle: isInfoPlist) {
-                    for dict in dicts {
+                    for (index, dict) in dicts.enumerated() {
                         if let primaryKey = arrayOfDictionariesPrimaryKeys[key],
                            let primary = dict[primaryKey] as? String {
                             bundleStruct(name: primary, usesBundle: isInfoPlist) {
-                                dict.generateMembers(resourceName: resourceName, path: newPath, isInfoPlist: isInfoPlist, warning: warning)
+                                dict.generateMembers(resourceName: resourceName, path: newPath + [index], isInfoPlist: isInfoPlist, warning: warning)
                                     .sorted()
                             }
                         }
@@ -121,7 +130,16 @@ extension PropertyListResource.Contents {
             }
         }
     }
+    
+    private func valueCodedString(path: [PlistPathComponent], includeKey: Bool, key: String, value: String) -> String {
+        var string = "bundle.infoDictionaryString(path: \(path)"
 
+        if includeKey {
+            string += ", key: \"\(key.escapedStringLiteral)\""
+        }
+
+        return string + ") ?? \"\(value.escapedStringLiteral)\""
+    }
 }
 
 @StructMembersBuilder func bundleStruct(name: String, usesBundle: Bool, @StructMembersBuilder builder: () -> StructMembers) -> StructMembers {
