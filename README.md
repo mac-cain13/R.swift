@@ -95,7 +95,7 @@ As of Rswift 7, Swift Package Manager is the recommended method of installation.
 
 [Demo Video: Install R.swift in Xcode with SPM](Documentation/RswiftSPMInstallation.mp4)
 
-1. In Project Settings, on the tab "Package Dependencies", click "+", search for `github.com/mac-cain13/R.swift` and click "Add Package".
+1. In Project Settings, on the tab "Package Dependencies", click "+", search for `https://github.com/mac-cain13/R.swift` and click "Add Package".
 2. Select the target that will use R.swift next to "RswiftLibrary" and click "Add Package".
 4. Now click on your target, on the tab "Build Phases", in the section "Run Build Tool Plug-ins", click "+" and add `RswiftGenerateInternalResources`. ([Screenshot](Documentation/Images/RunBuildToolPluginsRswift.png))
 5. Now the `R` struct should be available in your code, use auto-complete to explore all static references.
