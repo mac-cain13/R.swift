@@ -208,6 +208,12 @@ class LocalizedStringAppTests: XCTestCase {
       R.string.ten.ten1(things: 1),
       String(format: NSLocalizedString("ten1", tableName: "ten", comment: ""), 1)
     )
+
+    /* default preferred language */
+    XCTAssertEqual(
+      R.string(preferredLanguages: nil).one.one1(),
+      NSLocalizedString("one1", tableName: "one", comment: "")
+    )
   }
 
 

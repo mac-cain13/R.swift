@@ -47,7 +47,7 @@ extension Struct {
             deploymentTarget: deploymentTarget,
             name: SwiftIdentifier(name: name),
             params: [
-                .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]"), defaultValue: nil),
+                .init(name: "preferredLanguages", localName: nil, typeReference: .init(module: .stdLib, rawName: "[String]?"), defaultValue: "nil"),
                 .init(name: "locale", localName: nil, typeReference: .init(module: .stdLib, rawName: "Locale?"), defaultValue: "nil")
             ],
             returnType: TypeReference(module: .host, rawName: self.name.value),
