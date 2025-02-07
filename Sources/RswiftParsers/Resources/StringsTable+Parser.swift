@@ -9,36 +9,97 @@ import Foundation
 import RswiftResources
 
 extension StringsTable: SupportedExtensions {
-    static public let supportedExtensions: Set<String> = ["strings", "stringsdict"]
+    static public let supportedExtensions: Set<String> = ["strings", "stringsdict", "xcstrings"]
 
     static public func parse(url: URL) throws -> StringsTable {
-        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
-
-        guard let basename = url.filenameWithoutExtension else {
-            throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
+        if url.pathExtension == "xcstrings" {
+            return try parseStringCatalog(url: url)
+        } else {
+            return try parseStringsFileOrStringsDict(url: url)
         }
-
-        // Get locale from url (second to last component)
-        let locale = LocaleReference(url: url)
-
-        // Check to make sure url can be parsed as a dictionary
-        guard let nsDictionary = NSDictionary(contentsOf: url) else {
-            throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
-        }
-
-        // Parse dicts from NSDictionary
-        let dictionary: [StringsTable.Key: StringsTable.Value]
-        switch url.pathExtension {
-        case "strings":
-            dictionary = try parseStrings(nsDictionary, source: locale.debugDescription(filename: "\(basename).strings"))
-        case "stringsdict":
-            dictionary = try parseStringsdict(nsDictionary, source: locale.debugDescription(filename: "\(basename).stringsdict"), warning: warning)
-        default:
-            throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
-        }
-
-        return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
     }
+}
+
+private func parseStringCatalog(url: URL) throws -> StringsTable {
+    guard let basename = url.filenameWithoutExtension else {
+        throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
+    }
+    let data = try Data(contentsOf: url)
+    let decoder = JSONDecoder()
+    let stringCatalog = try decoder.decode(StringCatalog.self, from: data)
+    let locale = LocaleReference.language(stringCatalog.sourceLanguage)
+    let source = locale.debugDescription(filename: "\(basename).xcstrings")
+    let dictionary = try parseStrings(strings: stringCatalog.strings, source: source)
+    return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
+}
+
+private func parseStrings(
+    strings: [StringCatalog.Key : StringCatalog.Translation],
+    source: String
+) throws -> [StringsTable.Key: StringsTable.Value] {
+    var dictionary: [StringsTable.Key: StringsTable.Value] = [:]
+    for (key, translation) in strings {
+        for (_, localization) in translation.localizations {
+            if let stringUnit = localization.stringUnit {
+                dictionary[key] = try parseStringUnit(key: key, val: stringUnit.value, source: source)
+            } else if let variations = localization.variations {
+                if let plural = variations.plural {
+                    dictionary[key] = try parseStringVariations(key: key, variations: plural, source: source)
+                }
+                if let device = variations.device {
+                    dictionary[key] = try parseStringVariations(key: key, variations: device, source: source)
+                }
+            }
+        }
+    }
+    return dictionary
+}
+
+private func parseStringVariations(
+    key: String,
+    variations: [String : StringCatalog.Localization],
+    source: String
+) throws -> StringsTable.Value {
+    let stringValues = variations.values.compactMap(\.stringUnit).map(\.value).sorted()
+    guard let stringValue = stringValues.first else {
+        throw ResourceParsingError("No variations given for string \(key) from \(source)")
+    }
+    let result = try parseStringUnit(key: key, val: stringValue, source: source)
+
+    for stringValue in stringValues {
+        let other = try parseStringUnit(key: key, val: stringValue, source: source)
+        if other.params != result.params {
+            throw ResourceParsingError("Parameters don't match in variations for string \(key) from \(source)")
+        }
+    }
+
+    return result
+}
+
+private func parseStringsFileOrStringsDict(url: URL) throws -> StringsTable {
+    guard let basename = url.filenameWithoutExtension else {
+        throw ResourceParsingError("Couldn't extract filename from URL: \(url)")
+    }
+
+    // Get locale from url (second to last component)
+    let locale = LocaleReference(url: url)
+
+    // Check to make sure url can be parsed as a dictionary
+    let nsDictionary = try NSDictionary(contentsOf: url, error: ())
+
+    // Parse dicts from NSDictionary
+    let dictionary: [StringsTable.Key: StringsTable.Value]
+    switch url.pathExtension {
+    case "strings":
+        dictionary = try parseStrings(nsDictionary, source: locale.debugDescription(filename: "\(basename).strings"))
+    case "stringsdict":
+        let warning: (String) -> Void = { print("warning: [R.swift]", $0) }
+        dictionary = try parseStringsdict(nsDictionary, source: locale.debugDescription(filename: "\(basename).stringsdict"), warning: warning)
+    default:
+        throw ResourceParsingError("File could not be parsed as a strings file: \(url.absoluteString)")
+    }
+
+    return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
 }
 
 private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -> [StringsTable.Key: StringsTable.Value] {
@@ -49,20 +110,7 @@ private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -
             key = key as? String,
            let val = obj as? String
         {
-            var params: [StringParam] = []
-
-            for part in FormatPart.formatParts(formatString: val) {
-                switch part {
-                case .reference:
-                    throw ResourceParsingError("Non-specifier reference in \(source): \(key) = \(val)")
-
-                case .spec(let formatSpecifier):
-                    params.append(StringParam(name: nil, spec: formatSpecifier))
-                }
-            }
-
-
-            dictionary[key] = .init(params: params, originalValue: val)
+            dictionary[key] = try parseStringUnit(key: key, val: val, source: source)
         }
         else {
             throw ResourceParsingError("Non-string value in \(source): \(key) = \(obj)")
@@ -70,6 +118,21 @@ private func parseStrings(_ nsDictionary: NSDictionary, source: String) throws -
     }
 
     return dictionary
+}
+
+private func parseStringUnit(key: String, val: String, source: String) throws -> StringsTable.Value {
+    var params: [StringParam] = []
+
+    for part in FormatPart.formatParts(formatString: val) {
+        switch part {
+        case .reference:
+            throw ResourceParsingError("Non-specifier reference in \(source): \(key) = \(val)")
+
+        case .spec(let formatSpecifier):
+            params.append(StringParam(name: nil, spec: formatSpecifier))
+        }
+    }
+    return StringsTable.Value(params: params, originalValue: val)
 }
 
 private func parseStringsdict(_ nsDictionary: NSDictionary, source: String, warning: (String) -> Void) throws -> [StringsTable.Key: StringsTable.Value] {

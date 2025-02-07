@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  Rswift
+
+  Created by Mathijs Bernson on 07/02/2025.
+  
+*/
+
+"hello-world" = "Hello World";
+"number_of_things" = "%d things";

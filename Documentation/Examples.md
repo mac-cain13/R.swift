@@ -99,7 +99,7 @@ let progress = String(format: NSLocalizedString("copy.progress", comment: ""), l
 
 *With R.swift*
 ```swift
-// Localized strings are grouped per table (.strings file)
+// Localized strings are grouped per table (.strings file or .xcstrings file)
 let welcomeMessage = R.string.localizable.welcomeMessage()
 let settingsTitle = R.string.settings.title()
 
