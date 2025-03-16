@@ -150,9 +150,10 @@ public struct Xcodeproj: SupportedExtensions {
 
                     let files = exception.membershipExceptions ?? []
 
-                    let localized = "/Localized/"
+                    // Xcode 16 project format uses "/Localized: ", earlier Xcode versions use "/Localized/"
+                    let localizeds = ["/Localized: ", "/Localized"]
                     for file in files {
-                        if file.hasPrefix(localized) {
+                        if let localized = localizeds.first(where: { file.hasPrefix($0) }) {
                             let cleanFile = String(file.dropFirst(localized.count))
                             let exPath = path.map { dir in "\(dir)/\(cleanFile)" }
                             extraLocalizedFiles.append(exPath)
