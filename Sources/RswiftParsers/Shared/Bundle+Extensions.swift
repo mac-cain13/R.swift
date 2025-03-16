@@ -8,5 +8,5 @@
 import Foundation
 
 extension Bundle {
-    public static var temp: Bundle = .main
+    public static let temp: Bundle = .main
 }

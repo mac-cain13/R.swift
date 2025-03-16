@@ -32,17 +32,17 @@ extension TypeReference {
         return result
     }
 
-    static var bundle: TypeReference = .init(module: .foundation, rawName: "Bundle")
-    static var locale: TypeReference = .init(module: .foundation, rawName: "Locale")
-    static var void: TypeReference = .init(module: .stdLib, rawName: "Void")
-    static var bool: TypeReference = .init(module: .stdLib, rawName: "Bool")
-    static var string: TypeReference = .init(module: .stdLib, rawName: "String")
-    static var sequence: TypeReference = .init(module: .stdLib, rawName: "Sequence")
-    static var someIteratorProtocol: TypeReference = .init(module: .stdLib, rawName: "some IteratorProtocol")
-    static var uiView: TypeReference = .init(module: .uiKit, rawName: "UIView")
-    static var uiViewController: TypeReference = .init(module: .uiKit, rawName: "UIViewController")
-    static var nsViewController: TypeReference = .init(module: .appKit, rawName: "NSViewController")
+    static let bundle: TypeReference = .init(module: .foundation, rawName: "Bundle")
+    static let locale: TypeReference = .init(module: .foundation, rawName: "Locale")
+    static let void: TypeReference = .init(module: .stdLib, rawName: "Void")
+    static let bool: TypeReference = .init(module: .stdLib, rawName: "Bool")
+    static let string: TypeReference = .init(module: .stdLib, rawName: "String")
+    static let sequence: TypeReference = .init(module: .stdLib, rawName: "Sequence")
+    static let someIteratorProtocol: TypeReference = .init(module: .stdLib, rawName: "some IteratorProtocol")
+    static let uiView: TypeReference = .init(module: .uiKit, rawName: "UIView")
+    static let uiViewController: TypeReference = .init(module: .uiKit, rawName: "UIViewController")
+    static let nsViewController: TypeReference = .init(module: .appKit, rawName: "NSViewController")
 
 
-    static var fontResource: TypeReference = .init(module: .rswiftResources, rawName: "FontResource")
+    static let fontResource: TypeReference = .init(module: .rswiftResources, rawName: "FontResource")
 }

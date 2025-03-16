@@ -13,7 +13,7 @@ import XcodeEdit
 
 @main
 struct App: ParsableCommand {
-    static var configuration = CommandConfiguration(
+    static let configuration = CommandConfiguration(
         commandName: "rswift",
         abstract: "Generate static references for autocompleted resources like images, fonts and localized strings in Swift projects",
         version: Config.version,
@@ -58,14 +58,14 @@ struct GlobalOptions: ParsableArguments {
     var target: String?
 }
 
-private var generatorsString = ResourceType.allCases.map(\.rawValue).joined(separator: ", ")
+private let generatorsString = ResourceType.allCases.map(\.rawValue).joined(separator: ", ")
 private func parseGenerators(_ str: String) -> [ResourceType] {
     str.components(separatedBy: ",").map { ResourceType(rawValue: $0)! }
 }
 
 extension App {
     struct Generate: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Generates R.generated.swift file")
+        static let configuration = CommandConfiguration(abstract: "Generates R.generated.swift file")
 
         @OptionGroup
         var globals: GlobalOptions
@@ -161,7 +161,7 @@ extension App {
 
 extension App {
     struct ModifyXcodePackages: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Modifies Xcode project to fix package reference for plugins")
+        static let configuration = CommandConfiguration(abstract: "Modifies Xcode project to fix package reference for plugins")
 
         @Option(help: "Path to xcodeproj file")
         var xcodeproj: String

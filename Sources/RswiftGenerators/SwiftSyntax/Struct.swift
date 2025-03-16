@@ -8,7 +8,7 @@
 import Foundation
 import RswiftResources
 
-public enum AccessControl {
+public enum AccessControl: Sendable {
     case none
     case `public`
 
@@ -22,7 +22,7 @@ public enum AccessControl {
     }
 }
 
-public struct LetBinding {
+public struct LetBinding: Sendable {
     public let comments: [String]
     public var accessControl = AccessControl.none
     public let isStatic: Bool
@@ -90,7 +90,7 @@ public struct LetBinding {
     }
 }
 
-public struct VarGetter {
+public struct VarGetter: Sendable {
     public let comments: [String]
     public let deploymentTarget: DeploymentTarget?
     public var accessControl = AccessControl.none
@@ -140,7 +140,7 @@ public struct VarGetter {
 }
 
 
-public struct Function {
+public struct Function: Sendable {
     public let comments: [String]
     public let deploymentTarget: DeploymentTarget?
     public var deprecated: String?
@@ -176,7 +176,7 @@ public struct Function {
         self.valueCodeString = valueCodeString
     }
 
-    public struct Parameter {
+    public struct Parameter: Sendable {
         public let name: String
         public let localName: String?
         public let typeReference: TypeReference
@@ -238,7 +238,7 @@ public struct Function {
 }
 
 
-public struct Init {
+public struct Init: Sendable {
     public let comments: [String]
     public var accessControl = AccessControl.none
     public let params: [Parameter]
@@ -251,7 +251,7 @@ public struct Init {
         self.valueCodeString = valueCodeString
     }
 
-    public struct Parameter {
+    public struct Parameter: Sendable {
         public let name: String
         public let localName: String?
         public let typeReference: TypeReference
@@ -330,7 +330,7 @@ public struct Init {
     }
 }
 
-public struct TypeAlias {
+public struct TypeAlias: Sendable {
     public let comments: [String]
     public var accessControl = AccessControl.none
     public let name: String
@@ -365,7 +365,7 @@ public struct TypeAlias {
     }
 }
 
-public struct Struct {
+public struct Struct: Sendable {
     public let comments: [String]
     public let deploymentTarget: DeploymentTarget?
     public var accessControl = AccessControl.none
@@ -379,7 +379,7 @@ public struct Struct {
     public var typealiasses: [TypeAlias] = []
     public var additionalModuleReferences: Set<ModuleReference> = []
 
-    public static var empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
+    public static let empty: Struct = Struct(name: SwiftIdentifier(name: "empty"), membersBuilder: {})
 
     public init(
         comments: [String] = [],
