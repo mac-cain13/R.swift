@@ -17,6 +17,18 @@
         }
       }
     },
+    "dutch-only" : {
+      "comment" : "Only translated in Dutch, not explicitly translated in the source language",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze vertaling is alleen in het Nederlands"
+          }
+        }
+      }
+    },
     "goodbye-world" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -29,17 +29,20 @@ private func parseStringCatalog(url: URL) throws -> StringsTable {
     let stringCatalog = try decoder.decode(StringCatalog.self, from: data)
     let locale = LocaleReference.language(stringCatalog.sourceLanguage)
     let source = locale.debugDescription(filename: "\(basename).xcstrings")
-    let dictionary = try parseStrings(strings: stringCatalog.strings, source: source)
+    let dictionary = try parseStrings(strings: stringCatalog.strings, source: source, sourceLanguage: stringCatalog.sourceLanguage)
     return StringsTable(filename: basename, locale: locale, dictionary: dictionary)
 }
 
 private func parseStrings(
     strings: [StringCatalog.Key : StringCatalog.Translation],
-    source: String
+    source: String,
+    sourceLanguage: String
 ) throws -> [StringsTable.Key: StringsTable.Value] {
     var dictionary: [StringsTable.Key: StringsTable.Value] = [:]
     for (key, translation) in strings {
-        for (_, localization) in translation.localizations {
+        // Ignore strings that aren't translated in the source language
+        for (language, localization) in translation.localizations where language == sourceLanguage {
+            assert(dictionary[key] == nil, "Should only be set once")
             if let stringUnit = localization.stringUnit {
                 dictionary[key] = try parseStringUnit(key: key, val: stringUnit.value, source: source)
             } else if let variations = localization.variations {

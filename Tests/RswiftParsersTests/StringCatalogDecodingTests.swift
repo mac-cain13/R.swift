@@ -19,7 +19,7 @@ struct StringCatalogDecodingTests {
             let data = try Data(contentsOf: url)
             let stringCatalog = try decoder.decode(StringCatalog.self, from: data)
             #expect(stringCatalog.sourceLanguage == "en")
-            #expect(stringCatalog.strings.count == 6)
+            #expect(stringCatalog.strings.count == 7)
 
             // Automatically extracted string
             let automatic = try #require(stringCatalog.strings["automatic"])
