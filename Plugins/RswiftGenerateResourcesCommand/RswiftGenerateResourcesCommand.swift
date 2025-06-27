@@ -101,21 +101,20 @@ struct ParsedArguments {
 
     static func parse(arguments: [String]) -> ParsedArguments {
         var result = ParsedArguments()
+        var index = 0
 
-        for (key, value) in zip(arguments, arguments.dropFirst()) {
-            if result.outputFile == nil && key.hasSuffix(".swift") {
-                result.outputFile = key
-                continue
-            }
-            if result.outputFile == nil && value.hasSuffix(".swift") {
-                result.outputFile = value
-                continue
-            }
+        while index < arguments.count {
+            let arg = arguments[index]
 
-            if key == "--target" {
-                result.targets.append(value)
-            } else if value != "--target" {
-                result.remaining.append(value)
+            if arg == "--target", index + 1 < arguments.count {
+                result.targets.append(arguments[index + 1])
+                index += 2
+            } else if arg.hasSuffix(".swift") {
+                result.outputFile = arg
+                index += 1
+            } else {
+                result.remaining.append(arg)
+                index += 1
             }
         }
 
