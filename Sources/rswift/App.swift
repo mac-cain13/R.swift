@@ -52,6 +52,9 @@ struct GlobalOptions: ParsableArguments {
     @Option(help: "Source of default bundle to use")
     var bundleSource: BundleSource = .finder
 
+    @Option(help: "Development region for provided inputFiles")
+    var developmentRegion: String?
+
     // MARK: Project specific - Environment variable overrides
 
     @Option(help: "Override environment variable \(EnvironmentKeys.targetName)")
@@ -121,7 +124,10 @@ extension App {
                     try core.generateFromXcodeproj(url: xcodeprojURL, targetName: targetName)
 
                 case .inputFiles:
-                    try core.generateFromFiles(inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)))
+                    try core.generateFromFiles(
+                        inputFileURLs: globals.inputFiles.map(URL.init(fileURLWithPath:)),
+                        developmentRegion: globals.developmentRegion
+                    )
                 }
             } catch let error as ResourceParsingError {
                 throw ValidationError(error.description)
